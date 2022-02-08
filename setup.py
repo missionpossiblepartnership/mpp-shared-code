@@ -15,11 +15,11 @@ else:
 
 # Basic setup information of the library
 setup(
-    name="{LIBRARY-NAME}",
+    name="MPP Shared",
     version="0.1",
-    description="{LIBRARY-DESCRIPTION}",
+    description="Library of shared code to support MPP STS Models",
     author="SYSTEMIQ",
-    packages=["{LIBRARY-NAME}"],
+    packages=["MPP Shared"],
     python_requires=">=3.9",
     install_requires=INSTALL_REQUIRES,
 )
