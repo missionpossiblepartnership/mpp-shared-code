@@ -1,44 +1,12 @@
-[![Tests](https://github.com/systemiqofficial/mpp-template-repository/actions/workflows/testing.yml/badge.svg)](https://github.com/systemiqofficial/mpp-template-repository/actions/workflows/testing.yml)
+[![Tests](https://github.com/systemiqofficial/MPP-SHARED-CODE/actions/workflows/testing.yml/badge.svg)](https://github.com/systemiqofficial/MPP-SHARED-CODE/actions/workflows/testing.yml)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
 
-# MPP Template Repository
+# MPP Shared Code
 
-This is a template repository with the base structure for a MPP repository. It contains the basic directories and python files to start on, a Python script to install the library, CI/CD workflow with automated testing.
+This is a repository with the shared utility and logic code for a MPP STS Models. It also scontains a Python script to install the library, CI/CD workflow with automated testing.
 
-## How to use it.
-
-There are a couple of things to follow/change while using this repository:
-
-### Changes
-
-1. Create a repository from the template.
-![](resources/imgs/template.png)
-
-Make the following changes to the repository:
-
-2. Rename `.src/` directory to the name of the library being created (e.g.`mppaluminium/` for aluminium).
-
-3. `setup.py` Change the following lines:
-  - [ ] 18. Add the name of the library
-  - [ ] 20. Write the description of the library
-  - [ ] 22. The library name
-
-3. `.github/workflows/test.yml` Change the Github workflow to test the library:
-  - [ ] Change `src` in line 81 to the name of the mpp library.
-  - [ ] Uncomment lines 50 and 51 if you want to enable building documentation with sphinx in the workflow.
-
-4. `README.md` Modify the README to reflect the content of your repository making the following changes:
-  - [ ] Change the name to the corresponding name of the repository
-  - [ ] Change the tests badge by modifying the first line in the file to:
-  ```Markdown
-  [![Tests](https://github.com/systemiqofficial/{REPOSITORY-NAME}/actions/workflows/testing.yml/badge.svg)](https://github.com/systemiqofficial/{YOUR-REPOSITORY}/actions/workflows/testing.yml)
-  ```
-  Where {REPOSITORY-NAME} is the name of the newly created repository.
-  - [ ] Change the installation section to add the name of the repository in the bash snipet.
-  - [ ] Modify the Contacts sections to reflect the people involved in the project.
-  - [ ] Delete the How to use it subsection
 
 ### How to use it
 
@@ -92,14 +60,14 @@ bash ./tests/black.sh
 To install it with pip directly from GitHub:
 
 ```bash
-pip install git+https://${YOUR_GITHUB_TOKEN}@github.com/systemiqofficial/{REPOSITORY-NAME}.git
+pip install git+https://${YOUR_GITHUB_TOKEN}@github.com/systemiqofficial/MPP-SHARED-CODE.git
 ```
 
 Change the `YOUR_GITHUB_TOKEN` to your personal access token. You can create one in https://github.com/settings/tokens.
 
 ### Installation from source
 
-To install {LIBRARY-NAME} from source you will need the dependencies, and in the mpp-aluminium-model folder execute:
+To install MPP-SHARED-CODE from source you will need the dependencies, and in the mpp-aluminium-model folder execute:
 
 ```bash
 python setup.py install
@@ -137,8 +105,6 @@ conda env create -f tests/environment-dev.yml
 
 ### Technical questions
 
+- [Andrew Isabirye](andrew.isabirye@systemiq.earth)
 - [Luis Natera](luis.natera@systemiq.earth)
-
-### Subject matter questions
-
-- [Person name](mail@systemiq.earth)
+- [Pim Sauter](pim.sauter@systemiq.earth)
