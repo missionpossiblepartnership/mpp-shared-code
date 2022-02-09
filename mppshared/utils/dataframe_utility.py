@@ -1,11 +1,11 @@
 """Utility script to manipulate DataFrames"""
 
-import pandas as pd
 import numpy as np
-from mppshared.utility.log_utility import get_logger
-from mppshared.utility.location_utility import get_region_from_country_code
+import pandas as pd
 
 from mppshared.utility.file_handling_utility import read_pickle_folder
+from mppshared.utility.location_utility import get_region_from_country_code
+from mppshared.utility.log_utility import get_logger
 
 logger = get_logger("DataFrame Utility")
 

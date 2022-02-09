@@ -1,7 +1,6 @@
 """Utility library for functions used throughout the module"""
 import itertools
 import sys
-
 from collections.abc import Iterable
 from datetime import datetime
 
