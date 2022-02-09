@@ -46,7 +46,7 @@ jobs:
         run: |
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
-          # pydocstyle ./src
+          # pydocstyle ./mppshared
   test:
     name: 🧪 Testing
     runs-on: ubuntu-latest
@@ -88,6 +88,6 @@ jobs:
           conda activate mpp-dev
           which conda
           which python
-          coverage run --source ./src --module pytest --verbose
+          coverage run --source ./mppshared --module pytest --verbose
           coverage xml -i
           coverage report -m
