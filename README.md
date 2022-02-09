@@ -1,4 +1,4 @@
-[![Tests](https://github.com/systemiqofficial/MPP-SHARED-CODE/actions/workflows/testing.yml/badge.svg)](https://github.com/systemiqofficial/MPP-SHARED-CODE/actions/workflows/testing.yml)
+[![Tests](https://github.com/systemiqofficial/mpp-shared-code/actions/workflows/testing.yml/badge.svg)](https://github.com/systemiqofficial/mpp-shared-code/actions/workflows/testing.yml)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
@@ -60,7 +60,7 @@ bash ./tests/black.sh
 To install it with pip directly from GitHub:
 
 ```bash
-pip install git+https://${YOUR_GITHUB_TOKEN}@github.com/systemiqofficial/MPP-SHARED-CODE.git
+pip install git+https://${YOUR_GITHUB_TOKEN}@github.com/systemiqofficial/mpp-shared-code.git
 ```
 
 Change the `YOUR_GITHUB_TOKEN` to your personal access token. You can create one in https://github.com/settings/tokens.
