@@ -8,7 +8,7 @@ from typing import Union, Iterable as it
 
 from currency_converter import CurrencyConverter
 
-from mppsteel.utility.log_utility import get_logger
+from mppshared.utils.log_utility import get_logger
 
 logger = get_logger("Utils")
 

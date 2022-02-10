@@ -4,14 +4,13 @@ from typing import List
 
 import pandas as pd
 import numpy as np
-from mppsteel.utility.log_utility import get_logger
-from mppsteel.utility.location_utility import get_region_from_country_code
+from mppshared.utils.log_utility import get_logger
+from mppshared.utils.location_utility import get_region_from_country_code
 
-from mppsteel.utility.file_handling_utility import read_pickle_folder
+from mppshared.utils.file_handling_utility import read_pickle_folder
 
-from mppsteel.model_config import (
+from mppshared.config import (
     PKL_DATA_INTERMEDIATE,
-    RESULTS_REGIONS_TO_MAP,
 )
 
 logger = get_logger("DataFrame Utility")
@@ -168,6 +167,7 @@ def add_results_metadata(
     df: pd.DataFrame,
     scenario_dict: dict,
     include_regions: bool = True,
+    regions_to_map: list = None,
     single_line: bool = False,
 ) -> pd.DataFrame:
     """Adds scenario and (optionally) regional metadata column(s) to each row in a DataFrame.
@@ -187,7 +187,7 @@ def add_results_metadata(
     df_c = df.copy()
     df_c = add_scenarios(df_c, scenario_dict, single_line)
     if include_regions:
-        for schema in RESULTS_REGIONS_TO_MAP:
+        for schema in regions_to_map:
             df_c = add_regions(df_c, country_reference_dict, "country_code", schema)
     return df_c
 

@@ -5,9 +5,9 @@ from collections import namedtuple
 import pandas as pd
 import pycountry
 
-from mppsteel.utility.log_utility import get_logger
+from mppshared.utils.log_utility import get_logger
 
-from mppsteel.utility.reference_lists import NEW_COUNTRY_COL_LIST, FILES_TO_REFRESH
+from mppshared.config import NEW_COUNTRY_COL_LIST, FILES_TO_REFRESH
 
 logger = get_logger("Location Utility")
 

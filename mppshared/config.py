@@ -42,8 +42,69 @@ PE_MODEL_SHEETNAME_DICT = {
     "hydrogen": ["Prices", "Emissions"],
 }
 
-MODEL_YEAR_START = 2020
-MODEL_YEAR_END = 2050
+MPP_COLOR_LIST = [
+    "#A0522D",
+    "#7F6000",
+    "#1E3B63",
+    "#9DB1CF",
+    "#FFC000",
+    "#59A270",
+    "#BCDAC6",
+    "#E76B67",
+    "#A5A5A5",
+    "#F2F2F2",
+]
 
-EMISSIONS_FACTOR_SLAG = 0.55
-ENERGY_DENSITY_MET_COAL = 28  # [MJ/kg]
+NEW_COUNTRY_COL_LIST = [
+    "country_code",
+    "country",
+    "official_name",
+    "m49_code",
+    "region",
+    "continent",
+    "wsa_region",
+    "rmi_region",
+]
+
+NEW_COUNTRY_COL_LIST = [
+    "country_code",
+    "country",
+    "official_name",
+    "m49_code",
+    "region",
+    "continent",
+    "wsa_region",
+    "rmi_region",
+]
+
+FILES_TO_REFRESH = []
+
+EU_COUNTRIES = [
+    "AUT",
+    "BEL",
+    "BGR",
+    "CYP",
+    "CZE",
+    "DEU",
+    "DNK",
+    "ESP",
+    "EST",
+    "FIN",
+    "FRA",
+    "GRC",
+    "HRV",
+    "HUN",
+    "IRL",
+    "ITA",
+    "LTU",
+    "LUX",
+    "LVA",
+    "MLT",
+    "NLD",
+    "POL",
+    "PRT",
+    "ROU",
+    "SVK",
+    "SVN",
+    "SWE",
+]

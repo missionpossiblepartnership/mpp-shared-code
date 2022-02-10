@@ -5,7 +5,7 @@ from typing import Tuple
 import pandas as pd
 import numpy as np
 
-from mppsteel.utility.log_utility import get_logger
+from mppshared.utils.log_utility import get_logger
 
 # Create logger
 logger = get_logger("Timeseries Extender")

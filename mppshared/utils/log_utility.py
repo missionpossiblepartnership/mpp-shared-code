@@ -9,7 +9,7 @@ from pathlib import Path
 from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
 
-from mppsteel.model_config import LOG_PATH
+from mppshared.config import LOG_PATH
 
 LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
@@ -39,7 +39,7 @@ def get_file_handler() -> TimedRotatingFileHandler:
             os.mkdir(LOG_PATH)
         except OSError as error:
             print(error)
-    log_filepath = f"{LOG_PATH}/mppsteel_{today_time}.log"
+    log_filepath = f"{LOG_PATH}/mppshared_{today_time}.log"
     file_handler = TimedRotatingFileHandler(log_filepath, when="midnight")
     file_handler.setFormatter(LOG_FORMATTER)
     return file_handler
