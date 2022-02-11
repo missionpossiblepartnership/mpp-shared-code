@@ -1,2 +1,2 @@
 from mppshared import config
-from mppshared.utils import *
+from mppshared import utils
