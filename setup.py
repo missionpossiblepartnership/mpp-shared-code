@@ -16,7 +16,7 @@ else:
 # Basic setup information of the library
 setup(
     name="MPP Shared Code",
-    version="0.1",
+    version="0.1.1",
     description="Library of shared code to support MPP STS Models",
     author="SYSTEMIQ",
     packages=["mppshared"],
