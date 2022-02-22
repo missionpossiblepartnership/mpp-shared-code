@@ -1,2 +1,2 @@
 from . import config
-from . import utils
+import utils
