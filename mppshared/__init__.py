@@ -1,2 +1,2 @@
-from mppshared import config
-from mppshared import utility
+from . import config
+from . import utility
