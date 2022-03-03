@@ -24,7 +24,7 @@ flake8 . --count --exit-zero --max-complexity=10 --max-line-length=88 --statisti
 make -C ./docs html
 
 # run the tests
-coverage run --source ./mppaluminium --module pytest --verbose
+coverage run --source ./mppshared --module pytest --verbose
 
 # report the test coverage
 coverage report -m

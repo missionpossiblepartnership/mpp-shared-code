@@ -12,7 +12,7 @@ This is a repository with the shared utility and logic code for a MPP STS Models
 
 Once the changes are made, the repository is ready to start coding on. The repository comes with two branches `main` and `develop` to follow the gitflow workflow. These branches are protected by default, so it cannot be pushed directly to them, and all the changes need to be made via a Pull Request.
 
-The library code should be written in corresponding folders and it is accessible by importing the library by the name (e.g.. `import mppaluminium`). It is possible to use the library in other scripts while developing it, any script written in the root directory can access the library without need to be installed, otherwise it is possible to install the library and make it accessible for all the computer with the following command.
+The library code should be written in corresponding folders and it is accessible by importing the library by the name (e.g.. `import mppshared`). It is possible to use the library in other scripts while developing it, any script written in the root directory can access the library without need to be installed, otherwise it is possible to install the library and make it accessible for all the computer with the following command.
 
 ```bash
 python setup.py develop
@@ -67,7 +67,7 @@ Change the `YOUR_GITHUB_TOKEN` to your personal access token. You can create one
 
 ### Installation from source
 
-To install MPP-SHARED-CODE from source you will need the dependencies, and in the mpp-aluminium-model folder execute:
+To install MPP-SHARED-CODE from source you will need the dependencies, and in the mppshared folder execute:
 
 ```bash
 python setup.py install

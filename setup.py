@@ -1,5 +1,5 @@
 """
-mppaluminium setup script.
+mppshared setup script.
 For licence information, see licence.txt
 """
 import os
