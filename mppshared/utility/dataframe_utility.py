@@ -4,10 +4,10 @@ from typing import List
 
 import pandas as pd
 import numpy as np
-from mppshared.utils.log_utility import get_logger
-from mppshared.utils.location_utility import get_region_from_country_code
+from mppshared.utility.log_utility import get_logger
+from mppshared.utility.location_utility import get_region_from_country_code
 
-from mppshared.utils.file_handling_utility import read_pickle_folder
+from mppshared.utility.file_handling_utility import read_pickle_folder
 
 from mppshared.config import (
     PKL_DATA_INTERMEDIATE,

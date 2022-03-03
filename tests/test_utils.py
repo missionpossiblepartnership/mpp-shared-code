@@ -1,6 +1,6 @@
 """Tests for Utility folder"""
 
-from mppshared.utils.dataframe_utility import move_cols_to_front
+from mppshared.utility.dataframe_utility import move_cols_to_front
 
 import pandas as pd
 
