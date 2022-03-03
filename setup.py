@@ -4,7 +4,7 @@ For licence information, see licence.txt
 """
 import os
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 # only specify install_requires if not in RTD environment
 if os.getenv("READTHEDOCS") == "True":
@@ -16,10 +16,10 @@ else:
 # Basic setup information of the library
 setup(
     name="MPP Shared Code",
-    version="0.1.12",
+    version="0.1.13",
     description="Library of shared code to support MPP STS Models",
     author="SYSTEMIQ",
-    packages=["mppshared"],
+    packages=find_packages(),
     python_requires=">=3.9",
     install_requires=INSTALL_REQUIRES,
 )
