@@ -1,5 +1,6 @@
 """Utility library for managing location"""
 
+import itertools
 from collections import namedtuple
 
 import pandas as pd
