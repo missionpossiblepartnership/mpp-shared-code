@@ -30,14 +30,14 @@ class CarbonBudgetClass:
     def create_emissions_pathway(self, year_start: int, year_end: int, end_value: float, line_shape: str):
         index = pd.RangeIndex(year_start, year_end + 1, step=1, name='year')
         if line_shape == 'straight':
-            values = np.linspace(0, end_value, num=len(index))
+            values = np.linspace(end_value, 0, num=len(index))
         elif line_shape == 'log':
-            values = np.logspace(0, end_value, num=len(index))
+            values = np.logspace(end_value, 0, num=len(index))
         elif line_shape == 'exp':
-            values = np.geomspace(0, end_value, num=len(index))
+            values = np.geomspace(end_value, 0, num=len(index))
         df = pd.DataFrame(data={'year': index, 'cumulative_limit': values}).set_index('year')
         df_a = df.diff(-1).fillna(0)
-        df['annual_limit'] = df_a['cumulative_limit'] * -1
+        df['annual_limit'] = df_a['cumulative_limit']
         return df
 
     def set_emissions_pathway(self, year_start: int, year_end: int, sector: str, line_shape: str = 'straight'):
