@@ -60,4 +60,4 @@ def carbon_budget_test():
     pathway = CarbonBudget.set_emissions_pathway(2020, 2050, 'steel', 'straight')
     print(pathway)
     CarbonBudget.plot_emissions_pathway('steel')
-    print(CarbonBudget.pathway_getter('steel', 2030, 'cumulative'))
+    print(CarbonBudget.pathway_getter('steel', 2030, 'annual'))
