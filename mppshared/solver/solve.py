@@ -1,12 +1,21 @@
 """ Execute the solver."""
 
-# MAIN FUNCTION TO EXECUTE SOLVER
+from mppshared.solver.implicit_forcing import apply_implicit_forcing
+from mppshared.solver.input_loading import load_and_validate_inputs
 
-# Validate input tables
-# Apply implicit forcing
-# Create ranking
-# Find optimum technology switches year-by-year
-# Process outputs
 
-# Import carbon budget
-# Grid search
+# TODO: which arguments are needed?
+def solve(sector: str):
+
+    # Load and validate input tables
+    input_dfs = load_and_validate_inputs(sector)
+
+    # Apply implicit forcing
+    input_dfs = apply_implicit_forcing(input_dfs)
+
+    # Create ranking
+    # Find optimum technology switches year-by-year
+    # Process outputs
+
+    # Import carbon budget
+    # Grid search
