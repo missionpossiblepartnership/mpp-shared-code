@@ -118,3 +118,13 @@ EU_COUNTRIES = [
     "SVN",
     "SWE",
 ]
+
+CARBON_BUDGET_REF = {
+    'aluminium': 11,
+    'cement': 42,
+    'chemicals': 32,
+    'steel': 56,
+    'aviation': 17,
+    'shipping': 16,
+    'trucking': 36
+}
