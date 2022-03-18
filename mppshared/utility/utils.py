@@ -1,11 +1,12 @@
 """Utility library for functions used throughout the module"""
 import itertools
 import sys
-
 from collections.abc import Iterable
 from datetime import datetime
-from typing import Union, Iterable as it
+from typing import Iterable as it
+from typing import Union
 
+import pandas as pd
 from currency_converter import CurrencyConverter
 
 from mppshared.utility.log_utility import get_logger
@@ -113,3 +114,8 @@ def cast_to_float(val: Union[float, int, Iterable]) -> float:
         return val
     elif isinstance(val, Iterable):
         return float(val.sum())
+
+
+def first(series: pd.Series):
+    """Return first element in a series"""
+    return series.values[0]
