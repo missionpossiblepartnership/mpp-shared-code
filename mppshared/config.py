@@ -1,5 +1,6 @@
 """Configuration file for the library."""
 import logging
+import numpy as np
 
 # Define Data Path
 CORE_DATA_PATH = "data"
@@ -25,6 +26,10 @@ SOLVER_INPUT_TABLES = [
     "technology_characteristics",
     "demand",
 ]
+
+START_YEAR = 2020
+END_YEAR = 2050
+MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 FOLDERS_TO_CHECK_IN_ORDER = [
     # Top level folders
