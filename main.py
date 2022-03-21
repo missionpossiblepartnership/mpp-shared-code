@@ -5,7 +5,6 @@ from mppshared.solver.solve import solve
 #! Only for development
 def main():
     sector = "chemicals"
-    carbon_budget_test()
     solve(sector)
 
 
