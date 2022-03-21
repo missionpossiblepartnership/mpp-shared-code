@@ -18,14 +18,30 @@ def load_and_validate_inputs(sector: str) -> dict:
 
     for input_table in input_dfs.keys():
         path = f"{SOLVER_INPUT_DATA_PATH}/{sector}/{input_table}.csv"
-
-        # Demand input table has one header row
-        if input_table == "demand":
-            df = pd.read_csv(path)
-        else:
-            df = pd.read_csv(path, header=[0, 1])
+        df = pd.read_csv(path)
+        #! Remove for production
+        df = filter_df_for_development(df)
         input_dfs[input_table] = df
 
     # TODO: implement input validation
 
     return input_dfs
+
+
+#! For development only
+def filter_df_for_development(df: pd.DataFrame) -> pd.DataFrame:
+
+    df = df.loc[df["product"] == "Ammonia"]
+    if "switch_type" in df.columns:
+        df = df.loc[df["switch_type"] == "Greenfield"]
+    if "technology_destination" in df.columns:
+        df = df.loc[
+            df["technology_destination"].isin(
+                [
+                    "Natural Gas SMR + ammonia synthesis",
+                    "Natural Gas SMR + CCS + ammonia synthesis",
+                    "Electrolyser - grid PPA + ammonia synthesis",
+                ]
+            )
+        ]
+    return df
