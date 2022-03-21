@@ -69,7 +69,7 @@ class Plant:
 
 
 def create_plants(n_plants: int, df_plant_capacities: pd.DataFrame, **kwargs) -> list:
-    """Convenience function to create a list of plants at once"""
+    """Convenience function to create a list of plant at once"""
     return [
         Plant(df_plant_capacities=df_plant_capacities, **kwargs)
         for _ in range(n_plants)
@@ -91,13 +91,13 @@ class PlantStack:
         self.new_ids.append(new_plant.uuid)
 
     def empty(self):
-        """Return True if no plants in stack"""
+        """Return True if no plant in stack"""
         return not self.plants
 
     def filter_plants(
         self, sector=None, region=None, technology=None, product=None, year=None
     ):
-        """Filter plants based on one or more criteria"""
+        """Filter plant based on one or more criteria"""
         plants = self.plants
         if sector is not None:
             plants = filter(lambda plant: plant.sector == sector, plants)
@@ -116,9 +116,9 @@ class PlantStack:
         # Commenting out the following lines as it is not cleare if we will need
         # something similar for ammonia and aluminium
         # if methanol_type is not None:
-        #     plants = filter(
+        #     plant = filter(
         #         lambda plant: plant.technology in METHANOL_SUPPLY_TECH[methanol_type],
-        #         plants,
+        #         plant,
         #     )
 
         return list(plants)
@@ -177,7 +177,7 @@ class PlantStack:
                 capacity=("capacity", "sum"), number_of_plants=("capacity", "count")
             )
         except KeyError:
-            # There are no plants
+            # There are no plant
             return pd.DataFrame()
 
     def get_new_plant_stack(self):
@@ -224,11 +224,11 @@ class PlantStack:
         else:
             plants = self.plants
 
-        # Keep only plants that were built in a year
+        # Keep only plant that were built in a year
         if this_year:
             plants = [plant for plant in plants if plant.uuid in self.new_ids]
 
-        # Calculate capacity and number of plants for new and retrofit
+        # Calculate capacity and number of plant for new and retrofit
         try:
             df_agg = (
                 pd.DataFrame(
@@ -287,7 +287,7 @@ class PlantStack:
                 df[("yearly_volume", "new_build")] + df[("yearly_volume", "retrofit")]
             )
 
-        # No plants exist
+        # No plant exist
         except KeyError:
             return pd.DataFrame()
 
