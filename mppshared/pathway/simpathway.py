@@ -89,7 +89,7 @@ class SimulationPathway:
         df_availability["used"] = 0
 
         # create chemical based availability columns
-        for chemical in CHEMICALS:
+        for product in SECTOR(CHEMICALS):
             df_availability[f"{chemical}_cap"] = 0
             df_availability[f"{chemical}_used"] = 0
             for material_constraints in ["CO2 storage",

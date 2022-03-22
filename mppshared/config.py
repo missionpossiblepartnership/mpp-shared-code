@@ -26,6 +26,8 @@ SOLVER_INPUT_TABLES = [
     "demand",
 ]
 
+sector_product = PRODUCT(SECTOR)
+
 FOLDERS_TO_CHECK_IN_ORDER = [
     # Top level folders
     CORE_DATA_PATH,
