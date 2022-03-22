@@ -28,9 +28,9 @@ def solve(sector: str):
 
     # Create ranking
     # placeholder for the pathway
-    # pathway = "bau"
-    # sensitivity = 0
-    # ranking = create_ranking(df_ranking, sensitivity, pathway)
+    pathway = "bau"
+    sensitivity = 0
+    ranking = create_ranking(df_ranking, sensitivity, pathway)
     # # Find optimum technology switches year-by-year
     # Process outputs
 
