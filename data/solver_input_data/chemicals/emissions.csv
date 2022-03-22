@@ -1,5 +1,4 @@
-technology,technology,technology,co2_emissions,co2_emissions,co2_emissions,co2_emissions,,
-product,technology_origin,year,region,scope_1,scope_1_captured,scope_2,scope_3_upstream,scope_3_downstream
+product,technology,year,region,co2_scope1,co2_scope1_captured,co2_scope2,co2_scope3_upstream,co2_scope3_downstream
 Ammonia,Biomass Digestion + ammonia synthesis,2020,Africa,0,0,0,0,0
 Ammonia,Biomass Digestion + ammonia synthesis,2020,China,0,0,0,0,0
 Ammonia,Biomass Digestion + ammonia synthesis,2020,Europe,0,0,0,0,0
