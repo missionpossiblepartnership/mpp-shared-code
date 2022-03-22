@@ -97,8 +97,9 @@ def apply_carbon_cost_to_tco(
     )
 
     # Additional cost from carbon cost is carbon cost multiplied with sum of scope 1 and scope 2 CO2 emissions
-    cc = CarbonCostTrajectory(trajectory="constant")
-    cc.set_carbon_cost()
+    cc = CarbonCostTrajectory(
+        trajectory="constant", initial_carbon_cost=50, final_carbon_cost=50
+    )
     df_cc = df.merge(cc.df_carbon_cost, on=["year"])
     df_cc["carbon_cost_addition"] = (df_cc["co2_scope1"] + df_cc["co2_scope2"]) * df_cc[
         "carbon_cost"
