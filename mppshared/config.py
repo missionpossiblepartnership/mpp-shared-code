@@ -2,6 +2,8 @@
 import logging
 import numpy as np
 
+LOG_LEVEL = "INFO"
+
 # Define Data Path
 CORE_DATA_PATH = "data"
 LOG_PATH = "logs/"
@@ -149,4 +151,40 @@ DECOMMISSION_RATES = {
     "PDH": 0.1,
 }
 
+# Scope of the model run - to be specified
 MODEL_SCOPE = "Global"
+
+# Override plant parameters
+PLANT_SPEC_OVERRIDE = {"assumed_plant_capacity": 3000}
+
+PATHWAYS = [
+    "bau",
+    "fa",
+    "lc",
+]
+
+# Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
+SENSITIVITIES = [
+    "def",
+]
+
+# Sectors
+SECTOR = "chemicals" #"aluminium, steel, ..."
+
+# Product
+PRODUCTS = {
+    "chemicals": "Ammonia",        
+}
+
+RUN_PARALLEL = False
+
+run_config = {
+    # "IMPORT_DATA",
+    # "CALCULATE_VARIABLES",
+    # "MAKE_RANKINGS",
+    "SIMULATE_PATHWAY",
+    # "CALCULATE_OUTPUTS",
+    # "EXPORT_OUTPUTS",
+    # "PLOT_AVAILABILITIES"
+    # "MERGE_OUTPUTS"
+}

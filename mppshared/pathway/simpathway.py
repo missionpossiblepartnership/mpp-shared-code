@@ -1,34 +1,21 @@
 import logging
 import math
-from collections import defaultdict
+# from collections import defaultdict
 
 import pandas as pd
 import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from flow.calculate.calculate_availability import (
-    update_availability_from_plant,
-    make_empty_methanol_availability,
-)
-from flow.calculate.recalculate_variables import recalculate_variables
-from flow.import_data.intermediate_data import IntermediateDataImporter
-from flow.rank.rank_technologies import import_tech_data, rank_tech
-from models.plant import PlantStack, create_plants
-from util.util import flatten_columns
-from config import (
-    METHANOL_SUPPLY_TECH,
-    METHANOL_TYPES,
-    CHEMICALS,
-    METHANOL_DEMAND_TECH,
-    METHANOL_DEPENDENCY,
-    METHANOL_AVAILABILITY_FACTOR,
-    MODEL_SCOPE,
-    METHANOL_MARGIN_USD,
-    CARRYOVER_METHANOL_EMISSIONS,
+
+from mppshared.import_data.intermediate_data import IntermediateDataImporter
+# from mppshared.rank.rank_technologies import import_tech_data, rank_tech
+from mppshared.plant.plant import PlantStack, create_plants
+# from util.util import flatten_columns
+from mppshared.config import (
+    PRODUCTS,
     LOG_LEVEL,
 )
-
 
 logger = logging.getLogger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -37,20 +24,18 @@ logger.setLevel(LOG_LEVEL)
 class SimulationPathway:
     """Contains the current state of the simulated pathway, and methods to adjust that state"""
 
-    def __init__(self, chemicals, start_year, end_year, pathway_name, sensitivity):
-        self.pathway_name = pathway_name
+    def __init__(self, start_year, end_year, pathway, sensitivity, sector, product):
+        self.pathway = pathway
         self.sensitivity = sensitivity
-        self.chemicals = chemicals
+        self.sector = sector
+        self.product = product
         self.start_year = start_year
         self.end_year = end_year
         self.importer = IntermediateDataImporter(
-            pathway=pathway_name, sensitivity=sensitivity, chemicals=chemicals
+            pathway=pathway, sensitivity=sensitivity, sector=sector, product=product
         )
         logger.debug("Getting plant capacities")
         self.df_plant_capacities = self.importer.get_plant_capacities()
-
-        # logger.debug("Getting multi product ratios")
-        # self.df_multi_product_ratio = self.importer.get_multi_product_ratio()
 
         logger.debug("Making plant stacks")
         self.stacks = self.make_initial_plant_stack()
@@ -64,17 +49,8 @@ class SimulationPathway:
         logger.debug("Getting emissions")
         self.emissions = self.importer.get_process_data(data_type="emissions")
 
-        logger.debug("Getting constraint share")
-        self.constraint_share = self.calculate_constraint_share(year=self.start_year)
-
         logger.debug("Getting availability")
         self.availability = self._import_availability()
-
-        logger.debug("Getting tech")
-        self.tech = self.importer.get_tech()
-
-        logger.debug("Getting inputs")
-        self.inputs = self.importer.get_inputs()
 
         logger.debug("Getting process data")
         self.process_data = self.importer.get_all_process_data()
@@ -125,47 +101,6 @@ class SimulationPathway:
         df_availability = pd.concat([df_availability, df_methanol])
         return df_availability.query(f"year <= {self.end_year}")
 
-    def update_methanol_availability_from_stack(self, year):
-        """
-        Update the available amount of green and black methanol that can be used for MTX
-
-        Args:
-            year: update the availability for this year
-        """
-        df = self.availability
-
-        # Calculate the total amount of methanol green and black
-        caps = {}
-        for methanol_type in METHANOL_TYPES:
-            cap = (
-                self.get_stack(year=year).get_yearly_volume(
-                    chemical="Methanol", methanol_type=methanol_type
-                )
-                * METHANOL_AVAILABILITY_FACTOR
-                * 1e6
-            )
-            df.loc[(df.name == methanol_type) & (df.year == year), "cap"] = cap
-            caps[methanol_type] = cap
-            logger.debug(f"{methanol_type} capacity: {cap}")
-
-        # Get the total Methanol demand (MTX + other), divide it pro rato over green/black
-        non_mtx_demand = self.get_demand(chemical="Methanol", year=year, mtx=False)
-        for methanol_type in METHANOL_TYPES:
-            try:
-                non_mtx_share = caps[methanol_type] / sum(caps.values())
-            except ZeroDivisionError:
-                non_mtx_share = 0
-
-            non_mtx_amount = non_mtx_share * non_mtx_demand
-
-            mtx_type = "Green" if "Green" in methanol_type else "Black"
-
-            mtx_amount = self._get_mtx_demand(mtx_type=mtx_type, year=year)
-
-            df.loc[(df.name == methanol_type) & (df.year == year), "used"] = (
-                non_mtx_amount + mtx_amount
-            ) * 1e6
-        return self
 
     def _import_rankings(self, japan_only=False):
         """Import ranking for all chemicals and rank types from the CSVs"""
@@ -274,62 +209,6 @@ class SimulationPathway:
                 ] = demand
 
         return demand
-
-    def _get_mtx_demand(self, mtx_type, year):
-        """
-        Get methanol demand from MTX technologies
-
-        Args:
-            demand: Existing non-mto demand
-            mtx_type: get for this methanol type
-            year: for this year
-
-        Returns:
-
-        """
-
-        if mtx_type in ["Black", "Green"]:
-            methanol_tech = [tech for tech in METHANOL_DEMAND_TECH if mtx_type in tech]
-        elif mtx_type == "both":
-            methanol_tech = METHANOL_DEMAND_TECH
-        else:
-            raise ValueError("Has to be 'Black', 'Green', 'both'")
-
-        # Get the capacity of MTO/MTP/MTA (Mton/annum)
-        df_mtx = flatten_columns(
-            self.stacks[year]
-            .aggregate_stack()
-            .query(f"technology.isin({methanol_tech})")
-        )
-        # Get the amount of Methanol used for each (Mton)
-        df_inputs = self.get_inputs(year=year)
-        df_inputs_mtx = df_inputs[
-            (df_inputs.technology.isin(methanol_tech))
-            & (df_inputs.name.str.contains("Methanol"))
-        ].drop_duplicates(["region", "technology"])
-        df = pd.merge(
-            df_mtx,
-            df_inputs_mtx,
-            on=["technology", "region"],
-            how="inner",
-        )
-        # Multiply by multi chemical total volume produced per tech
-        mtx_totals = (
-            self.df_multi_product_ratio[
-                self.df_multi_product_ratio.technology.str.contains("MT")
-            ]
-            .drop_duplicates(["chemical", "technology"])
-            .groupby("technology")
-            .agg(total=("ratio", "sum"))
-        )
-
-        df = df.merge(mtx_totals, on="technology", how="left").fillna(1)
-        df["input"] *= df["total"]
-
-        # filter only for chemicals that we are running for
-        chemical_list = list(set(CHEMICALS).intersection(set(METHANOL_DEPENDENCY)))
-        df = df[df.chemical.isin(chemical_list)]
-        return (df["yearly_volume_total"] * df["input"]).sum()
 
     def get_inputs(self, year, chemical=None):
         """Get the inputs for a chemical in a year"""
@@ -726,135 +605,3 @@ class SimulationPathway:
 
         # Return total capacity in Mton/annum
         return df_plants["capacity_total"].sum()
-
-    def re_rank_mtx_tech(self, year):
-        """
-        Re-rank MTX tech based on production of methanol in a year
-        """
-
-        # If there is no methanol tech, there is nothing to re-rank
-        if self.get_stack(year).get_capacity(chemical="Methanol") == 0:
-            return self
-
-        dict_lcox = {}
-        dict_emission = {}
-        chemical = "Methanol"
-
-        # Calculate LCOX and emissions of methanol and update availability
-        for methanol_type in METHANOL_TYPES:
-            dict_lcox[methanol_type] = self.get_average_levelized_cost(
-                chemical=chemical, year=year, methanol_type=methanol_type
-            )
-            dict_emission[methanol_type] = self.get_average_emissions(
-                chemical=chemical, year=year, methanol_type=methanol_type
-            )
-
-        # Add methanol margin
-        for methanol_type, lcox in dict_lcox.items():
-            if not math.isnan(dict_lcox[methanol_type]):
-                dict_lcox[methanol_type] += METHANOL_MARGIN_USD
-
-        # recalculate all variables for year+1 for all other technologies that need methanol
-        df_emissions, df_tco = recalculate_variables(
-            year=year + 1,
-            dict_lcox=dict_lcox,
-            dict_emission=dict_emission,
-            pathway=self.pathway_name,
-            sensitivity=self.sensitivity,
-        )
-
-        # replace/update the df_emissions in self
-        if CARRYOVER_METHANOL_EMISSIONS:
-            df_self_emissions = self.emissions
-            df_emissions = df_self_emissions.query(
-                f"~(year == {year} + 1 & technology == {METHANOL_DEMAND_TECH})"
-            ).append(df_emissions)
-            self.emissions = df_emissions
-        else:
-            df_emissions = self.emissions
-
-        # replace/update the df_cost in self
-        df_self_costs = self.cost
-        df_cost = df_self_costs.query(
-            f"~(year == {year} + 1 & technology == {METHANOL_DEMAND_TECH})"
-        ).append(df_tco)
-        self.cost = df_cost
-
-        df_tech, df_tech_transitions = import_tech_data(
-            pathway=self.pathway_name, sensitivity=self.sensitivity
-        )
-
-        # re-rank based on new variables
-        self.make_re_rankings(
-            df_cost=df_cost,
-            df_emissions=df_emissions,
-            df_tech=df_tech,
-            df_tech_transitions=df_tech_transitions,
-            year=year,
-        )
-
-        return self
-
-    def make_re_rankings(
-        self, df_cost, df_emissions, df_tech, df_tech_transitions, year
-    ):
-        """
-        Make rankings for new builds, retrofits and decommission for a year.
-        This is used to re-rank technologies based on the new methanol stack (with associated prices and emissions).
-
-        Uses the calculated variables from `calulate_variables`, data on allowed tech transitions,
-        and the pathway configuration and tech_asc to specify the rankings.
-
-        """
-
-        for rank_type in ["retrofit", "new_build", "decommission"]:
-            df_rank = rank_tech(
-                df_tech_transitions=df_tech_transitions,
-                df_tech=df_tech,
-                df_cost=df_cost,
-                df_emissions=df_emissions,
-                rank_type=rank_type,
-                year=year + 1,
-                pathway=self.pathway_name,
-            )
-
-            # Update ranking for each chemical
-            for chemical in self.chemicals:
-                df_chemical = df_rank.query(f"chemical == '{chemical}'")
-                self.update_ranking(
-                    df_rank=df_chemical,
-                    chemical=chemical,
-                    year=year,
-                    rank_type=rank_type,
-                )
-
-    def filter_tech_primary_chemical(self, df_tech, chemical, col="technology"):
-        """
-        Filter technologies in a dataframe to keep only the technologies for which this chemical is the primary chemical
-        Args:
-            df_tech: technologies dataframe
-            chemical: chemical we want to filter for
-            col: column where the technologies are in
-
-        Returns:
-
-        """
-        if ("technology" in df_tech.columns) and ("destination" in df_tech.columns):
-            df_tech.drop(columns="technology", inplace=True)
-
-        df = self.df_multi_product_ratio
-        primary_chemicals = df.drop_duplicates(["technology", "primary_chemical"])[
-            ["technology", "primary_chemical"]
-        ]
-        technologies = primary_chemicals[primary_chemicals.primary_chemical == chemical]
-
-        multi_product_idx = df_tech[col].isin(primary_chemicals.technology)
-        df_single = df_tech[~multi_product_idx]
-        df_multi = df_tech[multi_product_idx]
-
-        df_multi = df_multi.merge(
-            technologies,
-            left_on=[col, "chemical"],
-            right_on=["technology", "primary_chemical"],
-        )
-        return pd.concat([df_multi, df_single])

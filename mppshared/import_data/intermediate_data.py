@@ -1,8 +1,10 @@
 import pandas as pd
 from pandas.errors import ParserError
+from pathlib import Path
 
-from config import MODEL_SCOPE
-from util.util import make_multi_df
+
+from mppshared.config import MODEL_SCOPE
+# from util.util import make_multi_df
 
 
 class IntermediateDataImporter:
@@ -68,7 +70,7 @@ class IntermediateDataImporter:
     def get_plant_capacities(self):
         df_spec = self.get_plant_specs().reset_index()
         return df_spec.drop_duplicates(["product", "region", "technology"])[
-            ["chemical", "technology", "region", "assumed_plant_capacity"]
+            ["product", "technology", "region", "annual_production_capacity"]
         ]
 
     def get_demand(self, region):
@@ -78,19 +80,10 @@ class IntermediateDataImporter:
             )
         )
 
-    def get_process_economics(self):
-        return pd.read_csv(
-            self.intermediate_path.joinpath("process_economics.csv"),
-            index_col=["chemical", "technology", "origin", "year", "region"],
-        )
-
     def get_tech_transitions(self):
         return pd.read_csv(
             self.intermediate_path.joinpath("technology_transitions.csv")
         )
-
-    def get_tech(self):
-        return pd.read_csv(self.intermediate_path.joinpath("technologies.csv"))
 
     def get_process_data(self, data_type):
         """Get data outputted by the model on process level: cost/inputs/emissions"""
@@ -106,26 +99,27 @@ class IntermediateDataImporter:
 
     def get_all_process_data(self, chemical=None):
         """Get combined data outputted by the model on process level"""
-        df_inputs_pivot = self.get_process_data("inputs_pivot")
-        df_emissions = self.get_process_data("emissions")
-        df_cost = self.get_process_data("cost")
-        df_spec = self.get_plant_specs()
-
-        # Add multi index layers to join
-        # 2 levels for emissions/spec to get it on the right level
-        df_emissions = make_multi_df(
-            make_multi_df(df=df_emissions, name=""), name="emissions"
-        )
-        df_spec = make_multi_df(make_multi_df(df=df_spec, name=""), name="spec")
-        df_cost = make_multi_df(df=df_cost, name="cost")
-        df_inputs_pivot = make_multi_df(df=df_inputs_pivot, name="inputs")
-
-        df_all = df_spec.join(df_inputs_pivot).join(df_emissions).join(df_cost)
-        df_all.columns.names = ["group", "category", "name"]
-
-        if chemical is not None:
-            df_all = df_all.query(f"chemical == '{chemical}'").droplevel("chemical")
-        return df_all.query("year <= 2050")
+        # df_inputs_pivot = self.get_process_data("inputs_pivot")
+        # df_emissions = self.get_process_data("emissions")
+        # df_cost = self.get_process_data("cost")
+        # df_spec = self.get_plant_specs()
+        # 
+        # # Add multi index layers to join
+        # # 2 levels for emissions/spec to get it on the right level
+        # df_emissions = make_multi_df(
+        #     make_multi_df(df=df_emissions, name=""), name="emissions"
+        # )
+        # df_spec = make_multi_df(make_multi_df(df=df_spec, name=""), name="spec")
+        # df_cost = make_multi_df(df=df_cost, name="cost")
+        # df_inputs_pivot = make_multi_df(df=df_inputs_pivot, name="inputs")
+        # 
+        # df_all = df_spec.join(df_inputs_pivot).join(df_emissions).join(df_cost)
+        # df_all.columns.names = ["group", "category", "name"]
+        # 
+        # if chemical is not None:
+        #     df_all = df_all.query(f"chemical == '{chemical}'").droplevel("chemical")
+        # return df_all.query("year <= 2050")
+        pass
 
     def get_variable_per_year(self, chemical, variable):
         file_path = self.export_dir.joinpath("final", chemical, f"{variable}_per_year.csv")
@@ -142,36 +136,26 @@ class IntermediateDataImporter:
             return df.query("region == 'Japan'")
         return df
 
-    def get_post_ranking(self, rank_type, chemical, japan_only=False):
-        file_path = self.export_dir.joinpath(
-            "ranking", chemical, f"{rank_type}_post_rank.csv"
-        )
-        df = pd.read_csv(file_path)
+    # def get_technology_distribution(self, chemical, new=False):
+    #     suffix = "_new" if new else ""
+    #     file_path = self.export_dir.joinpath(
+    #         "final", product, f"technologies_over_time_region{suffix}.csv"
+    #     )
+    #     try:
+    #         df = pd.read_csv(file_path, index_col=[0, 1, 2], header=[0, 1]).fillna(0)
+    #     except ParserError:
+    #         # No plants, return empty df with right columns and index
+    #         parameters = ["capacity", "number_of_plants", "yearly_volume"]
+    #         build_types = ["new_build", "retrofit", "total"]
+    #         columns = pd.MultiIndex.from_product([parameters, build_types])
+    #         index = pd.MultiIndex.from_arrays(
+    #             [[], [], []], names=("region", "technology", "year")
+    #         )
+    #         return pd.DataFrame(columns=columns, index=index)
+    # 
+    #     # Only keep rows which have plants
+    #     return df[df[("number_of_plants", "total")] != 0]
 
-        if japan_only:
-            return df.query("region == 'Japan'")
-        return df
-
-    def get_technology_distribution(self, chemical, new=False):
-        suffix = "_new" if new else ""
-        file_path = self.export_dir.joinpath(
-            "final", chemical, f"technologies_over_time_region{suffix}.csv"
-        )
-        try:
-            df = pd.read_csv(file_path, index_col=[0, 1, 2], header=[0, 1]).fillna(0)
-        except ParserError:
-            # No plants, return empty df with right columns and index
-            parameters = ["capacity", "number_of_plants", "yearly_volume"]
-            build_types = ["new_build", "retrofit", "total"]
-            columns = pd.MultiIndex.from_product([parameters, build_types])
-            index = pd.MultiIndex.from_arrays(
-                [[], [], []], names=("region", "technology", "year")
-            )
-            return pd.DataFrame(columns=columns, index=index)
-
-        # Only keep rows which have plants
-        return df[df[("number_of_plants", "total")] != 0]
-
-    def get_availability_used(self):
-        path = self.final_path.joinpath("All", "availability_output.csv")
-        return pd.read_csv(path)
+    # def get_availability_used(self):
+    #     path = self.final_path.joinpath("All", "availability_output.csv")
+    #     return pd.read_csv(path)
