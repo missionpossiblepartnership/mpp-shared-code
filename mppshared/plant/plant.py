@@ -318,7 +318,10 @@ def make_new_plant(
     """
     df_process_data = df_process_data.reset_index()
     spec = df_process_data[
-        (df_process_data.technology == best_transition["destination"])
+        (df_process_data.sector == best_transition["sector"])
+        & (  # add the sector to the specs to map
+            df_process_data.technology == best_transition["destination"]
+        )
         & (df_process_data.year == best_transition["year"])
         & (df_process_data.region == best_transition["region"])
     ]
@@ -328,6 +331,7 @@ def make_new_plant(
     type_of_tech = types_of_tech[best_transition["type_of_tech_destination"]]
 
     return Plant(
+        sector=first(spec["sector"]),
         product=product,
         technology=first(spec["technology"]),
         region=first(spec["region"]),
