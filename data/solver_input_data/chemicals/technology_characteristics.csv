@@ -1,5 +1,4 @@
-technology,technology,location,technology_characteristics,technology_characteristics,technology_characteristics,technology_characteristics,technology_characteristics
-product,technology_origin,region,technology_lifetime,wacc,technology_classification,current_trl,expected_maturity
+product,technology,region,technology_lifetime,wacc,technology_classification,current_trl,expected_maturity
 Ammonia,Natural Gas SMR + ammonia synthesis,China,30,0.06,Conventional,9,2020
 Ammonia,Natural Gas SMR + ammonia synthesis,Rest of Asia,30,0.06,Conventional,9,2020
 Ammonia,Natural Gas SMR + ammonia synthesis,North America,30,0.06,Conventional,9,2020
