@@ -264,3 +264,24 @@ def add_column_header_suffix(df: pd.DataFrame, cols: list, suffix: str) -> pd.Da
     df = df.rename(columns=rename_dict)
 
     return df
+
+
+def get_grouping_columns_for_npv_calculation(sector: str) -> list:
+    """Return the grouping columns for calculating NPV (sector-specific)
+
+    Args:
+        sector (str): currently only "chemicals"
+
+    Returns:
+        list: headers of grouping columns
+    """
+    grouping_cols = {
+        "chemicals": [
+            "product",
+            "technology_origin",
+            "region",
+            "switch_type",
+            "technology_destination",
+        ]
+    }
+    return grouping_cols[sector]

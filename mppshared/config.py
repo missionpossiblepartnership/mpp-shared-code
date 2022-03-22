@@ -33,12 +33,13 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 # Emissions
 GHGS = [
-    "CO2",
-    # "CH4",
-    # "N2O"
+    "co2",
+    # "ch4",
+    # "n2o"
 ]
 
-EMISSION_SCOPES = ["scope1", "scope2", "scope33_upstream", "scope3_downstream"]
+EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
+
 
 FOLDERS_TO_CHECK_IN_ORDER = [
     # Top level folders
