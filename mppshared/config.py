@@ -31,6 +31,9 @@ START_YEAR = 2020
 END_YEAR = 2050
 MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
+# Emissions
+GHGS = ["CO2", "CH4", "N2O"]
+
 FOLDERS_TO_CHECK_IN_ORDER = [
     # Top level folders
     CORE_DATA_PATH,
