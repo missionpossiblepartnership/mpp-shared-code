@@ -77,9 +77,8 @@ def create_plants(n_plants: int, df_plant_capacities: pd.DataFrame, **kwargs) ->
 
 
 class PlantStack:
-    def __init__(self, year: int, plants: list):
+    def __init__(self, plants: list):
         self.plants = plants
-        self.year = year
         # Keep track of all plants added this year
         self.new_ids = []
 
@@ -94,9 +93,7 @@ class PlantStack:
         """Return True if no plant in stack"""
         return not self.plants
 
-    def filter_plants(
-        self, sector=None, region=None, technology=None, product=None, year=None
-    ):
+    def filter_plants(self, sector=None, region=None, technology=None, product=None):
         """Filter plant based on one or more criteria"""
         plants = self.plants
         if sector is not None:
@@ -111,8 +108,6 @@ class PlantStack:
                 or (product in plant.byproducts),
                 plants,
             )
-        if year is not None:
-            plants = filter(lambda plant: plant.year == year, plants)
         # Commenting out the following lines as it is not cleare if we will need
         # something similar for ammonia and aluminium
         # if methanol_type is not None:
