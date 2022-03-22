@@ -148,3 +148,5 @@ CARBON_BUDGET_REF = {
 DECOMMISSION_RATES = {
     "PDH": 0.1,
 }
+
+MODEL_SCOPE = "Global"
