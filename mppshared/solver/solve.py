@@ -1,8 +1,8 @@
 """ Execute the solver."""
 
+from mppshared.config import SOLVER_INPUT_DATA_PATH
 from mppshared.solver.implicit_forcing import apply_implicit_forcing
 from mppshared.solver.input_loading import load_and_validate_inputs
-from mppshared.config import SOLVER_INPUT_DATA_PATH
 
 
 # TODO: which arguments are needed?
@@ -20,6 +20,7 @@ def solve(sector: str):
         df_technology_characteristics=input_dfs["technology_characteristics"],
     )
 
+    df_ranking.to_csv(SOLVER_INPUT_DATA_PATH + f"{sector}_ranking.csv")
     pass
     # Output of this should be a technology switching table with cost, emissions and characteristics
 

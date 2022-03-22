@@ -3,6 +3,7 @@ from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
 
+
 def get_rank_config(rank_type: str, pathway: str):
     """
     Configuration to use for ranking
@@ -26,28 +27,6 @@ def get_rank_config(rank_type: str, pathway: str):
 
     config = {
         "new_build": {
-            # "me": {
-            #     "type_of_tech_destination": "max",
-            #     "lcox": "min",
-            #     "emissions_scope_1_2_delta": "min",
-            #     "emissions_scope_3_upstream_delta": "min",
-            # },
-            # "fa": {
-            #     "type_of_tech_destination": "max",
-            #     "emissions_scope_1_2_delta": "min",
-            #     "emissions_scope_3_upstream_delta": "min",
-            #     "lcox": "min",
-            # },
-            # "nf": {
-            #     "type_of_tech_destination": "max",
-            #     "emissions_scope_1_2_3_upstream_delta": "min",
-            #     "lcox": "min",
-            # },
-            # "nfs": {
-            #     "type_of_tech_destination": "max",
-            #     "emissions_scope_1_2_3_upstream_delta": "min",
-            #     "lcox": "min",
-            # },
             "bau": {
                 "lcox": "min",
                 "emissions_scope_1_2_delta": "min",
@@ -55,61 +34,13 @@ def get_rank_config(rank_type: str, pathway: str):
             },
         },
         "retrofit": {
-            # "me": {
-            #     "type_of_tech_origin": "min",
-            #     "type_of_tech_destination": "max",
-            #     "lcox": "min",
-            #     "emissions_scope_1_2_delta": "max",
-            #     "emissions_scope_3_upstream_delta": "max",
-            # },
-            # "fa": {
-            #     "type_of_tech_origin": "min",
-            #     "type_of_tech_destination": "max",
-            #     "emissions_scope_1_2_delta": "max",
-            #     "emissions_scope_3_upstream_delta": "max",
-            #     "lcox": "min",
-            # },
-            # "nf": {
-            #     "type_of_tech_origin": "min",
-            #     "type_of_tech_destination": "max",
-            #     "emissions_scope_1_2_3_upstream_delta": "max",
-            #     "lcox": "min",
-            # },
-            # "nfs": {
-            #     "type_of_tech_origin": "min",
-            #     "type_of_tech_destination": "max",
-            #     "emissions_scope_1_2_3_upstream_delta": "max",
-            #     "lcox": "min",
-            # },
             "bau": {
                 "lcox": "min",
                 "emissions_scope_1_2_delta": "max",
                 "emissions_scope_3_upstream_delta": "max",
             },
         },
-        # "decommission": {
-            # "me": {
-                # "type_of_tech_destination": "min",
-                # "lcox": "min",
-                # "emissions_scope_1_2_delta": "max",
-                # "emissions_scope_3_upstream_delta": "max",
-            # },
-            # "fa": {
-                # "type_of_tech_destination": "min",
-                # "emissions_scope_1_2_delta": "max",
-                # "emissions_scope_3_upstream_delta": "max",
-                # "lcox": "min",
-            # },
-            # "nf": {
-                # "type_of_tech_destination": "min",
-                # "emissions_scope_1_2_3_upstream_delta": "max",
-                # "lcox": "min",
-            # },
-            # "nfs": {
-                # "type_of_tech_destination": "min",
-                # "emissions_scope_1_2_3_upstream_delta": "max",
-                # "lcox": "min",
-            # },
+        "decommission": {
             "bau": {
                 "lcox": "min",
                 "emissions_scope_1_2_delta": "max",
