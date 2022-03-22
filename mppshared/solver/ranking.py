@@ -49,6 +49,13 @@ def get_rank_config(rank_type: str, pathway: str):
                 "delta_co2_scope3_upstream": 0.125,
                 'delta_co2_scope3_downstream': 0.125,
             },
+            "fa": {
+                "lcox": 0.0,
+                "delta_co2_scope1": 0.25,
+                'delta_co2_scope2': 0.25,
+                "delta_co2_scope3_upstream": 0.25,
+                'delta_co2_scope3_downstream': 0.25,
+            },
         },
     }
 
