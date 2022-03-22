@@ -509,28 +509,19 @@ class SimulationPathway:
     def _calculate_plants_from_production(self):
         """Calculate how many plants are there, based on current production"""
 
-        # If an ethylene by-product, we should check how many pants there already are
-        df_plant_size = self.importer.get_plant_sizes()
-
         # If Japan run, only create Japan plants
-        df_production = self.importer.get_current_production(
-            japan_only=(MODEL_SCOPE == "Japan")
-        )
-
-        # Validate we are only building tech for primary chemicals (to avoid duplication)
-        self._validate_only_primary_chemical(df_production)
-
-        df_plants = df_production.merge(df_plant_size, on=["technology", "chemical"])
+        df_plants = self.importer.get_current_production()
 
         df_plants["number_of_plants"] = (
             (
-                (df_plants["current_day_production"] / df_plants["capacity_factor"])
+                (df_plants["annual_production_capacity"] / df_plants["capacity_utilisation_factor"])
                 / df_plants["assumed_plant_capacity"]
             )
             .round()
             .astype(int)
         )
 
+        # TODO: Define the plants that are old based on the commission year
         # Calculate number of old and new plants
         df_plants["number_of_plants_old"] = (
             df_plants["number_of_plants"] * df_plants["old_share"]
@@ -572,23 +563,7 @@ class SimulationPathway:
                     start_year=self.start_year - 40
                     if plant_status == "old"
                     else self.start_year - 20,
-                    biomass_yearly=row["inputs_Raw material_biomass_yearly"],
-                    bio_oils_yearly=row["inputs_Raw material_bio_oils_yearly"],
-                    pyrolysis_oil_yearly=row[
-                        "inputs_Raw material_pyrolysis_oil_yearly"
-                    ],
-                    waste_water_yearly=row["inputs_Raw material_waste_water_yearly"],
-                    municipal_solid_waste_rdf_yearly=row[
-                        "inputs_Raw material_municipal_solid_waste_rdf_yearly"
-                    ],
-                    methanol_green_yearly=row[
-                        "inputs_Raw material_methanol_green_yearly"
-                    ],
-                    methanol_black_yearly=row[
-                        "inputs_Raw material_methanol_black_yearly"
-                    ],
-                    ccs_total=row["emissions__ccs_yearly"],
-                    plant_lifetime=40,
+                    plant_lifetime=row["technology"],
                     plant_status=plant_status,
                     capacity_factor=row["spec__capacity_factor"],
                     df_plant_capacities=self.df_plant_capacities,
