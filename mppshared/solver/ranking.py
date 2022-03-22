@@ -1,0 +1,1 @@
+""" Rank technology switches."""

@@ -2,7 +2,7 @@
 import logging
 
 # Define Data Path
-CORE_DATA_PATH = "mppshared/data"
+CORE_DATA_PATH = "data"
 LOG_PATH = "logs/"
 IMPORT_DATA_PATH = f"{CORE_DATA_PATH}/import_data"
 OUTPUT_FOLDER = f"{CORE_DATA_PATH}/output_data"
@@ -10,11 +10,23 @@ PKL_FOLDER = f"{CORE_DATA_PATH}/pkl_data"
 PKL_DATA_IMPORTS = f"{PKL_FOLDER}/imported_data"
 PKL_DATA_INTERMEDIATE = f"{PKL_FOLDER}/intermediate_data"
 PKL_DATA_FINAL = f"{PKL_FOLDER}/final_data"
+SOLVER_INPUT_DATA_PATH = f"{CORE_DATA_PATH}/solver_input_data"
 
 # Log formatter
 LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
 )
+
+# STANDARDISED SOLVER
+SOLVER_INPUT_TABLES = [
+    "technology_switches",
+    "emissions",
+    "initial_state",
+    "technology_characteristics",
+    "demand",
+]
+
+sector_product = PRODUCT(SECTOR)
 
 FOLDERS_TO_CHECK_IN_ORDER = [
     # Top level folders

@@ -9,6 +9,7 @@ from utility.utils import first
 class Plant:
     def __init__(
         self,
+        sector,
         product,
         technology,
         region,
@@ -21,6 +22,7 @@ class Plant:
         retrofit=False,
         plant_status="new",
     ):
+        self.sector = sector
         self.product = product
         self.technology = technology
         self.region = region
@@ -75,9 +77,10 @@ def create_plants(n_plants: int, df_plant_capacities: pd.DataFrame, **kwargs) ->
 
 
 class PlantStack:
-    def __init__(self, plants: list):
+    def __init__(self, year: int, plants: list):
         self.plants = plants
-        # Keep track of all plant added this year
+        self.year = year
+        # Keep track of all plants added this year
         self.new_ids = []
 
     def remove(self, remove_plant):
@@ -92,10 +95,12 @@ class PlantStack:
         return not self.plants
 
     def filter_plants(
-        self, region=None, technology=None, product=None, methanol_type=None
+        self, sector=None, region=None, technology=None, product=None, year=None
     ):
         """Filter plant based on one or more criteria"""
         plants = self.plants
+        if sector is not None:
+            plants = filter(lambda plant: plant.sector == sector, plants)
         if region is not None:
             plants = filter(lambda plant: plant.region == region, plants)
         if technology is not None:
@@ -106,6 +111,8 @@ class PlantStack:
                 or (product in plant.byproducts),
                 plants,
             )
+        if year is not None:
+            plants = filter(lambda plant: plant.year == year, plants)
         # Commenting out the following lines as it is not cleare if we will need
         # something similar for ammonia and aluminium
         # if methanol_type is not None:
