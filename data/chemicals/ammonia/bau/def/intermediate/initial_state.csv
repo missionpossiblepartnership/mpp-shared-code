@@ -1,5 +1,4 @@
-location,location,location,technology,technology,metrics_technology_unit,,
-region,country,coordinates,product,technology_origin,annual_production_capacity,year_commissioned,capacity_utilisation_factor
+region,country,coordinates,product,technology,annual_production_capacity,year_commissioned,capacity_utilisation_factor
 Africa,,,Ammonia,Natural Gas SMR + ammonia synthesis,100,2000,0.5
 Africa,,,Ammonia,Natural Gas SMR + ammonia synthesis,200,2010,0.75
 Africa,,,Ammonia,Natural Gas SMR + ammonia synthesis,500,2020,0.95
