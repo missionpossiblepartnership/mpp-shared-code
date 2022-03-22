@@ -3,6 +3,7 @@
 from mppshared.config import SOLVER_INPUT_DATA_PATH
 from mppshared.solver.implicit_forcing import apply_implicit_forcing
 from mppshared.solver.input_loading import load_and_validate_inputs
+from mppshared.solver.ranking import create_ranking
 
 
 # TODO: which arguments are needed?
@@ -25,7 +26,11 @@ def solve(sector: str):
     # Output of this should be a technology switching table with cost, emissions and characteristics
 
     # Create ranking
-    # Find optimum technology switches year-by-year
+    # placeholder for the pathway
+    # pathway = "bau"
+    # sensitivity = 0
+    # ranking = create_ranking(df_ranking, sensitivity, pathway)
+    # # Find optimum technology switches year-by-year
     # Process outputs
 
     # Import carbon budget
