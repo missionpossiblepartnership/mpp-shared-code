@@ -1,171 +1,171 @@
 product,technology,region,technology_lifetime,wacc,technology_classification,current_trl,expected_maturity
-Ammonia,Natural Gas SMR + ammonia synthesis,China,30,0.06,Conventional,9,2020
-Ammonia,Natural Gas SMR + ammonia synthesis,Rest of Asia,30,0.06,Conventional,9,2020
-Ammonia,Natural Gas SMR + ammonia synthesis,North America,30,0.06,Conventional,9,2020
-Ammonia,Natural Gas SMR + ammonia synthesis,Russia,30,0.06,Conventional,9,2020
-Ammonia,Natural Gas SMR + ammonia synthesis,Europe,30,0.06,Conventional,9,2020
-Ammonia,Natural Gas SMR + ammonia synthesis,India,30,0.06,Conventional,9,2020
-Ammonia,Natural Gas SMR + ammonia synthesis,Middle East,30,0.06,Conventional,9,2020
-Ammonia,Natural Gas SMR + ammonia synthesis,Africa,30,0.06,Conventional,9,2020
-Ammonia,Natural Gas SMR + ammonia synthesis,Latin America,30,0.06,Conventional,9,2020
-Ammonia,Natural Gas SMR + ammonia synthesis,Oceania,30,0.06,Conventional,9,2020
-Ammonia,Coal Gasification + ammonia synthesis,China,30,0.06,Conventional,9,2020
-Ammonia,Coal Gasification + ammonia synthesis,Rest of Asia,30,0.06,Conventional,9,2020
-Ammonia,Coal Gasification + ammonia synthesis,North America,30,0.06,Conventional,9,2020
-Ammonia,Coal Gasification + ammonia synthesis,Russia,30,0.06,Conventional,9,2020
-Ammonia,Coal Gasification + ammonia synthesis,Europe,30,0.06,Conventional,9,2020
-Ammonia,Coal Gasification + ammonia synthesis,India,30,0.06,Conventional,9,2020
-Ammonia,Coal Gasification + ammonia synthesis,Middle East,30,0.06,Conventional,9,2020
-Ammonia,Coal Gasification + ammonia synthesis,Africa,30,0.06,Conventional,9,2020
-Ammonia,Coal Gasification + ammonia synthesis,Latin America,30,0.06,Conventional,9,2020
-Ammonia,Coal Gasification + ammonia synthesis,Oceania,30,0.06,Conventional,9,2020
-Ammonia,Coal Gasification+ CCS + ammonia synthesis,China,30,0.06,Transition,9,2025
-Ammonia,Coal Gasification+ CCS + ammonia synthesis,Rest of Asia,30,0.06,Transition,9,2025
-Ammonia,Coal Gasification+ CCS + ammonia synthesis,North America,30,0.06,Transition,9,2025
-Ammonia,Coal Gasification+ CCS + ammonia synthesis,Russia,30,0.06,Transition,9,2025
-Ammonia,Coal Gasification+ CCS + ammonia synthesis,Europe,30,0.06,Transition,9,2025
-Ammonia,Coal Gasification+ CCS + ammonia synthesis,India,30,0.06,Transition,9,2025
-Ammonia,Coal Gasification+ CCS + ammonia synthesis,Middle East,30,0.06,Transition,9,2025
-Ammonia,Coal Gasification+ CCS + ammonia synthesis,Africa,30,0.06,Transition,9,2025
-Ammonia,Coal Gasification+ CCS + ammonia synthesis,Latin America,30,0.06,Transition,9,2025
-Ammonia,Coal Gasification+ CCS + ammonia synthesis,Oceania,30,0.06,Transition,9,2025
-Ammonia,Natural Gas ATR + CCS + ammonia synthesis,China,30,0.06,End-state,9,2025
-Ammonia,Natural Gas ATR + CCS + ammonia synthesis,Rest of Asia,30,0.06,End-state,9,2025
-Ammonia,Natural Gas ATR + CCS + ammonia synthesis,North America,30,0.06,End-state,9,2025
-Ammonia,Natural Gas ATR + CCS + ammonia synthesis,Russia,30,0.06,End-state,9,2025
-Ammonia,Natural Gas ATR + CCS + ammonia synthesis,Europe,30,0.06,End-state,9,2025
-Ammonia,Natural Gas ATR + CCS + ammonia synthesis,India,30,0.06,End-state,9,2025
-Ammonia,Natural Gas ATR + CCS + ammonia synthesis,Middle East,30,0.06,End-state,9,2025
-Ammonia,Natural Gas ATR + CCS + ammonia synthesis,Africa,30,0.06,End-state,9,2025
-Ammonia,Natural Gas ATR + CCS + ammonia synthesis,Latin America,30,0.06,End-state,9,2025
-Ammonia,Natural Gas ATR + CCS + ammonia synthesis,Oceania,30,0.06,End-state,9,2025
-Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,China,30,0.06,Transition,9,2020
-Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,Rest of Asia,30,0.06,Transition,9,2020
-Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,North America,30,0.06,Transition,9,2020
-Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,Russia,30,0.06,Transition,9,2020
-Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,Europe,30,0.06,Transition,9,2020
-Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,India,30,0.06,Transition,9,2020
-Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,Middle East,30,0.06,Transition,9,2020
-Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,Africa,30,0.06,Transition,9,2020
-Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,Latin America,30,0.06,Transition,9,2020
-Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,Oceania,30,0.06,Transition,9,2020
-Ammonia,Natural Gas SMR + CCS + ammonia synthesis,China,30,0.06,End-state,8,2025
-Ammonia,Natural Gas SMR + CCS + ammonia synthesis,Rest of Asia,30,0.06,End-state,8,2025
-Ammonia,Natural Gas SMR + CCS + ammonia synthesis,North America,30,0.06,End-state,8,2025
-Ammonia,Natural Gas SMR + CCS + ammonia synthesis,Russia,30,0.06,End-state,8,2025
-Ammonia,Natural Gas SMR + CCS + ammonia synthesis,Europe,30,0.06,End-state,8,2025
-Ammonia,Natural Gas SMR + CCS + ammonia synthesis,India,30,0.06,End-state,8,2025
-Ammonia,Natural Gas SMR + CCS + ammonia synthesis,Middle East,30,0.06,End-state,8,2025
-Ammonia,Natural Gas SMR + CCS + ammonia synthesis,Africa,30,0.06,End-state,8,2025
-Ammonia,Natural Gas SMR + CCS + ammonia synthesis,Latin America,30,0.06,End-state,8,2025
-Ammonia,Natural Gas SMR + CCS + ammonia synthesis,Oceania,30,0.06,End-state,8,2025
-Ammonia,Electrolyser + SMR + ammonia synthesis,China,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + SMR + ammonia synthesis,Rest of Asia,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + SMR + ammonia synthesis,North America,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + SMR + ammonia synthesis,Russia,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + SMR + ammonia synthesis,Europe,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + SMR + ammonia synthesis,India,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + SMR + ammonia synthesis,Middle East,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + SMR + ammonia synthesis,Africa,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + SMR + ammonia synthesis,Latin America,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + SMR + ammonia synthesis,Oceania,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,China,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,Rest of Asia,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,North America,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,Russia,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,Europe,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,India,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,Middle East,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,Africa,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,Latin America,30,0.06,Transition,8,2020
-Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,Oceania,30,0.06,Transition,8,2020
-Ammonia,GHR + CCS + ammonia synthesis,China,30,0.06,End-state,7,2025
-Ammonia,GHR + CCS + ammonia synthesis,Rest of Asia,30,0.06,End-state,7,2025
-Ammonia,GHR + CCS + ammonia synthesis,North America,30,0.06,End-state,7,2025
-Ammonia,GHR + CCS + ammonia synthesis,Russia,30,0.06,End-state,7,2025
-Ammonia,GHR + CCS + ammonia synthesis,Europe,30,0.06,End-state,7,2025
-Ammonia,GHR + CCS + ammonia synthesis,India,30,0.06,End-state,7,2025
-Ammonia,GHR + CCS + ammonia synthesis,Middle East,30,0.06,End-state,7,2025
-Ammonia,GHR + CCS + ammonia synthesis,Africa,30,0.06,End-state,7,2025
-Ammonia,GHR + CCS + ammonia synthesis,Latin America,30,0.06,End-state,7,2025
-Ammonia,GHR + CCS + ammonia synthesis,Oceania,30,0.06,End-state,7,2025
-Ammonia,Electrolyser - grid PPA + ammonia synthesis,China,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - grid PPA + ammonia synthesis,Rest of Asia,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - grid PPA + ammonia synthesis,North America,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - grid PPA + ammonia synthesis,Russia,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - grid PPA + ammonia synthesis,Europe,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - grid PPA + ammonia synthesis,India,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - grid PPA + ammonia synthesis,Middle East,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - grid PPA + ammonia synthesis,Africa,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - grid PPA + ammonia synthesis,Latin America,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - grid PPA + ammonia synthesis,Oceania,30,0.06,End-state,8,2025
-Ammonia,Biomass Digestion + ammonia synthesis,China,30,0.06,End-state,3,2030
-Ammonia,Biomass Digestion + ammonia synthesis,Rest of Asia,30,0.06,End-state,3,2030
-Ammonia,Biomass Digestion + ammonia synthesis,North America,30,0.06,End-state,3,2030
-Ammonia,Biomass Digestion + ammonia synthesis,Russia,30,0.06,End-state,3,2030
-Ammonia,Biomass Digestion + ammonia synthesis,Europe,30,0.06,End-state,3,2030
-Ammonia,Biomass Digestion + ammonia synthesis,India,30,0.06,End-state,3,2030
-Ammonia,Biomass Digestion + ammonia synthesis,Middle East,30,0.06,End-state,3,2030
-Ammonia,Biomass Digestion + ammonia synthesis,Africa,30,0.06,End-state,3,2030
-Ammonia,Biomass Digestion + ammonia synthesis,Latin America,30,0.06,End-state,3,2030
-Ammonia,Biomass Digestion + ammonia synthesis,Oceania,30,0.06,End-state,3,2030
-Ammonia,Biomass Gasification + ammonia synthesis,China,30,0.06,End-state,3,2030
-Ammonia,Biomass Gasification + ammonia synthesis,Rest of Asia,30,0.06,End-state,3,2030
-Ammonia,Biomass Gasification + ammonia synthesis,North America,30,0.06,End-state,3,2030
-Ammonia,Biomass Gasification + ammonia synthesis,Russia,30,0.06,End-state,3,2030
-Ammonia,Biomass Gasification + ammonia synthesis,Europe,30,0.06,End-state,3,2030
-Ammonia,Biomass Gasification + ammonia synthesis,India,30,0.06,End-state,3,2030
-Ammonia,Biomass Gasification + ammonia synthesis,Middle East,30,0.06,End-state,3,2030
-Ammonia,Biomass Gasification + ammonia synthesis,Africa,30,0.06,End-state,3,2030
-Ammonia,Biomass Gasification + ammonia synthesis,Latin America,30,0.06,End-state,3,2030
-Ammonia,Biomass Gasification + ammonia synthesis,Oceania,30,0.06,End-state,3,2030
-Ammonia,ESMR Gas + CCS + ammonia synthesis,China,30,0.06,End-state,4,2030
-Ammonia,ESMR Gas + CCS + ammonia synthesis,Rest of Asia,30,0.06,End-state,4,2030
-Ammonia,ESMR Gas + CCS + ammonia synthesis,North America,30,0.06,End-state,4,2030
-Ammonia,ESMR Gas + CCS + ammonia synthesis,Russia,30,0.06,End-state,4,2030
-Ammonia,ESMR Gas + CCS + ammonia synthesis,Europe,30,0.06,End-state,4,2030
-Ammonia,ESMR Gas + CCS + ammonia synthesis,India,30,0.06,End-state,4,2030
-Ammonia,ESMR Gas + CCS + ammonia synthesis,Middle East,30,0.06,End-state,4,2030
-Ammonia,ESMR Gas + CCS + ammonia synthesis,Africa,30,0.06,End-state,4,2030
-Ammonia,ESMR Gas + CCS + ammonia synthesis,Latin America,30,0.06,End-state,4,2030
-Ammonia,ESMR Gas + CCS + ammonia synthesis,Oceania,30,0.06,End-state,4,2030
-Ammonia,Methane Pyrolysis + ammonia synthesis,China,30,0.06,End-state,7,2030
-Ammonia,Methane Pyrolysis + ammonia synthesis,Rest of Asia,30,0.06,End-state,7,2030
-Ammonia,Methane Pyrolysis + ammonia synthesis,North America,30,0.06,End-state,7,2030
-Ammonia,Methane Pyrolysis + ammonia synthesis,Russia,30,0.06,End-state,7,2030
-Ammonia,Methane Pyrolysis + ammonia synthesis,Europe,30,0.06,End-state,7,2030
-Ammonia,Methane Pyrolysis + ammonia synthesis,India,30,0.06,End-state,7,2030
-Ammonia,Methane Pyrolysis + ammonia synthesis,Middle East,30,0.06,End-state,7,2030
-Ammonia,Methane Pyrolysis + ammonia synthesis,Africa,30,0.06,End-state,7,2030
-Ammonia,Methane Pyrolysis + ammonia synthesis,Latin America,30,0.06,End-state,7,2030
-Ammonia,Methane Pyrolysis + ammonia synthesis,Oceania,30,0.06,End-state,7,2030
-Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,China,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,Rest of Asia,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,North America,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,Russia,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,Europe,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,India,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,Middle East,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,Africa,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,Latin America,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,Oceania,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,China,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,Rest of Asia,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,North America,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,Russia,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,Europe,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,India,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,Middle East,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,Africa,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,Latin America,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,Oceania,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,China,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,Rest of Asia,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,North America,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,Russia,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,Europe,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,India,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,Middle East,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,Africa,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,Latin America,30,0.06,End-state,8,2025
-Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,Oceania,30,0.06,End-state,8,2025
+Ammonia,Natural Gas SMR + ammonia synthesis,China,30,0.06,initial,9,2020
+Ammonia,Natural Gas SMR + ammonia synthesis,Rest of Asia,30,0.06,initial,9,2020
+Ammonia,Natural Gas SMR + ammonia synthesis,North America,30,0.06,initial,9,2020
+Ammonia,Natural Gas SMR + ammonia synthesis,Russia,30,0.06,initial,9,2020
+Ammonia,Natural Gas SMR + ammonia synthesis,Europe,30,0.06,initial,9,2020
+Ammonia,Natural Gas SMR + ammonia synthesis,India,30,0.06,initial,9,2020
+Ammonia,Natural Gas SMR + ammonia synthesis,Middle East,30,0.06,initial,9,2020
+Ammonia,Natural Gas SMR + ammonia synthesis,Africa,30,0.06,initial,9,2020
+Ammonia,Natural Gas SMR + ammonia synthesis,Latin America,30,0.06,initial,9,2020
+Ammonia,Natural Gas SMR + ammonia synthesis,Oceania,30,0.06,initial,9,2020
+Ammonia,Coal Gasification + ammonia synthesis,China,30,0.06,initial,9,2020
+Ammonia,Coal Gasification + ammonia synthesis,Rest of Asia,30,0.06,initial,9,2020
+Ammonia,Coal Gasification + ammonia synthesis,North America,30,0.06,initial,9,2020
+Ammonia,Coal Gasification + ammonia synthesis,Russia,30,0.06,initial,9,2020
+Ammonia,Coal Gasification + ammonia synthesis,Europe,30,0.06,initial,9,2020
+Ammonia,Coal Gasification + ammonia synthesis,India,30,0.06,initial,9,2020
+Ammonia,Coal Gasification + ammonia synthesis,Middle East,30,0.06,initial,9,2020
+Ammonia,Coal Gasification + ammonia synthesis,Africa,30,0.06,initial,9,2020
+Ammonia,Coal Gasification + ammonia synthesis,Latin America,30,0.06,initial,9,2020
+Ammonia,Coal Gasification + ammonia synthesis,Oceania,30,0.06,initial,9,2020
+Ammonia,Coal Gasification+ CCS + ammonia synthesis,China,30,0.06,transition,9,2025
+Ammonia,Coal Gasification+ CCS + ammonia synthesis,Rest of Asia,30,0.06,transition,9,2025
+Ammonia,Coal Gasification+ CCS + ammonia synthesis,North America,30,0.06,transition,9,2025
+Ammonia,Coal Gasification+ CCS + ammonia synthesis,Russia,30,0.06,transition,9,2025
+Ammonia,Coal Gasification+ CCS + ammonia synthesis,Europe,30,0.06,transition,9,2025
+Ammonia,Coal Gasification+ CCS + ammonia synthesis,India,30,0.06,transition,9,2025
+Ammonia,Coal Gasification+ CCS + ammonia synthesis,Middle East,30,0.06,transition,9,2025
+Ammonia,Coal Gasification+ CCS + ammonia synthesis,Africa,30,0.06,transition,9,2025
+Ammonia,Coal Gasification+ CCS + ammonia synthesis,Latin America,30,0.06,transition,9,2025
+Ammonia,Coal Gasification+ CCS + ammonia synthesis,Oceania,30,0.06,transition,9,2025
+Ammonia,Natural Gas ATR + CCS + ammonia synthesis,China,30,0.06,end-state,9,2025
+Ammonia,Natural Gas ATR + CCS + ammonia synthesis,Rest of Asia,30,0.06,end-state,9,2025
+Ammonia,Natural Gas ATR + CCS + ammonia synthesis,North America,30,0.06,end-state,9,2025
+Ammonia,Natural Gas ATR + CCS + ammonia synthesis,Russia,30,0.06,end-state,9,2025
+Ammonia,Natural Gas ATR + CCS + ammonia synthesis,Europe,30,0.06,end-state,9,2025
+Ammonia,Natural Gas ATR + CCS + ammonia synthesis,India,30,0.06,end-state,9,2025
+Ammonia,Natural Gas ATR + CCS + ammonia synthesis,Middle East,30,0.06,end-state,9,2025
+Ammonia,Natural Gas ATR + CCS + ammonia synthesis,Africa,30,0.06,end-state,9,2025
+Ammonia,Natural Gas ATR + CCS + ammonia synthesis,Latin America,30,0.06,end-state,9,2025
+Ammonia,Natural Gas ATR + CCS + ammonia synthesis,Oceania,30,0.06,end-state,9,2025
+Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,China,30,0.06,transition,9,2020
+Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,Rest of Asia,30,0.06,transition,9,2020
+Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,North America,30,0.06,transition,9,2020
+Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,Russia,30,0.06,transition,9,2020
+Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,Europe,30,0.06,transition,9,2020
+Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,India,30,0.06,transition,9,2020
+Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,Middle East,30,0.06,transition,9,2020
+Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,Africa,30,0.06,transition,9,2020
+Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,Latin America,30,0.06,transition,9,2020
+Ammonia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,Oceania,30,0.06,transition,9,2020
+Ammonia,Natural Gas SMR + CCS + ammonia synthesis,China,30,0.06,end-state,8,2025
+Ammonia,Natural Gas SMR + CCS + ammonia synthesis,Rest of Asia,30,0.06,end-state,8,2025
+Ammonia,Natural Gas SMR + CCS + ammonia synthesis,North America,30,0.06,end-state,8,2025
+Ammonia,Natural Gas SMR + CCS + ammonia synthesis,Russia,30,0.06,end-state,8,2025
+Ammonia,Natural Gas SMR + CCS + ammonia synthesis,Europe,30,0.06,end-state,8,2025
+Ammonia,Natural Gas SMR + CCS + ammonia synthesis,India,30,0.06,end-state,8,2025
+Ammonia,Natural Gas SMR + CCS + ammonia synthesis,Middle East,30,0.06,end-state,8,2025
+Ammonia,Natural Gas SMR + CCS + ammonia synthesis,Africa,30,0.06,end-state,8,2025
+Ammonia,Natural Gas SMR + CCS + ammonia synthesis,Latin America,30,0.06,end-state,8,2025
+Ammonia,Natural Gas SMR + CCS + ammonia synthesis,Oceania,30,0.06,end-state,8,2025
+Ammonia,Electrolyser + SMR + ammonia synthesis,China,30,0.06,transition,8,2020
+Ammonia,Electrolyser + SMR + ammonia synthesis,Rest of Asia,30,0.06,transition,8,2020
+Ammonia,Electrolyser + SMR + ammonia synthesis,North America,30,0.06,transition,8,2020
+Ammonia,Electrolyser + SMR + ammonia synthesis,Russia,30,0.06,transition,8,2020
+Ammonia,Electrolyser + SMR + ammonia synthesis,Europe,30,0.06,transition,8,2020
+Ammonia,Electrolyser + SMR + ammonia synthesis,India,30,0.06,transition,8,2020
+Ammonia,Electrolyser + SMR + ammonia synthesis,Middle East,30,0.06,transition,8,2020
+Ammonia,Electrolyser + SMR + ammonia synthesis,Africa,30,0.06,transition,8,2020
+Ammonia,Electrolyser + SMR + ammonia synthesis,Latin America,30,0.06,transition,8,2020
+Ammonia,Electrolyser + SMR + ammonia synthesis,Oceania,30,0.06,transition,8,2020
+Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,China,30,0.06,transition,8,2020
+Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,Rest of Asia,30,0.06,transition,8,2020
+Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,North America,30,0.06,transition,8,2020
+Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,Russia,30,0.06,transition,8,2020
+Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,Europe,30,0.06,transition,8,2020
+Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,India,30,0.06,transition,8,2020
+Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,Middle East,30,0.06,transition,8,2020
+Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,Africa,30,0.06,transition,8,2020
+Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,Latin America,30,0.06,transition,8,2020
+Ammonia,Electrolyser + Coal Gasification + ammonia synthesis,Oceania,30,0.06,transition,8,2020
+Ammonia,GHR + CCS + ammonia synthesis,China,30,0.06,end-state,7,2025
+Ammonia,GHR + CCS + ammonia synthesis,Rest of Asia,30,0.06,end-state,7,2025
+Ammonia,GHR + CCS + ammonia synthesis,North America,30,0.06,end-state,7,2025
+Ammonia,GHR + CCS + ammonia synthesis,Russia,30,0.06,end-state,7,2025
+Ammonia,GHR + CCS + ammonia synthesis,Europe,30,0.06,end-state,7,2025
+Ammonia,GHR + CCS + ammonia synthesis,India,30,0.06,end-state,7,2025
+Ammonia,GHR + CCS + ammonia synthesis,Middle East,30,0.06,end-state,7,2025
+Ammonia,GHR + CCS + ammonia synthesis,Africa,30,0.06,end-state,7,2025
+Ammonia,GHR + CCS + ammonia synthesis,Latin America,30,0.06,end-state,7,2025
+Ammonia,GHR + CCS + ammonia synthesis,Oceania,30,0.06,end-state,7,2025
+Ammonia,Electrolyser - grid PPA + ammonia synthesis,China,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - grid PPA + ammonia synthesis,Rest of Asia,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - grid PPA + ammonia synthesis,North America,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - grid PPA + ammonia synthesis,Russia,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - grid PPA + ammonia synthesis,Europe,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - grid PPA + ammonia synthesis,India,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - grid PPA + ammonia synthesis,Middle East,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - grid PPA + ammonia synthesis,Africa,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - grid PPA + ammonia synthesis,Latin America,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - grid PPA + ammonia synthesis,Oceania,30,0.06,end-state,8,2025
+Ammonia,Biomass Digestion + ammonia synthesis,China,30,0.06,end-state,3,2030
+Ammonia,Biomass Digestion + ammonia synthesis,Rest of Asia,30,0.06,end-state,3,2030
+Ammonia,Biomass Digestion + ammonia synthesis,North America,30,0.06,end-state,3,2030
+Ammonia,Biomass Digestion + ammonia synthesis,Russia,30,0.06,end-state,3,2030
+Ammonia,Biomass Digestion + ammonia synthesis,Europe,30,0.06,end-state,3,2030
+Ammonia,Biomass Digestion + ammonia synthesis,India,30,0.06,end-state,3,2030
+Ammonia,Biomass Digestion + ammonia synthesis,Middle East,30,0.06,end-state,3,2030
+Ammonia,Biomass Digestion + ammonia synthesis,Africa,30,0.06,end-state,3,2030
+Ammonia,Biomass Digestion + ammonia synthesis,Latin America,30,0.06,end-state,3,2030
+Ammonia,Biomass Digestion + ammonia synthesis,Oceania,30,0.06,end-state,3,2030
+Ammonia,Biomass Gasification + ammonia synthesis,China,30,0.06,end-state,3,2030
+Ammonia,Biomass Gasification + ammonia synthesis,Rest of Asia,30,0.06,end-state,3,2030
+Ammonia,Biomass Gasification + ammonia synthesis,North America,30,0.06,end-state,3,2030
+Ammonia,Biomass Gasification + ammonia synthesis,Russia,30,0.06,end-state,3,2030
+Ammonia,Biomass Gasification + ammonia synthesis,Europe,30,0.06,end-state,3,2030
+Ammonia,Biomass Gasification + ammonia synthesis,India,30,0.06,end-state,3,2030
+Ammonia,Biomass Gasification + ammonia synthesis,Middle East,30,0.06,end-state,3,2030
+Ammonia,Biomass Gasification + ammonia synthesis,Africa,30,0.06,end-state,3,2030
+Ammonia,Biomass Gasification + ammonia synthesis,Latin America,30,0.06,end-state,3,2030
+Ammonia,Biomass Gasification + ammonia synthesis,Oceania,30,0.06,end-state,3,2030
+Ammonia,ESMR Gas + CCS + ammonia synthesis,China,30,0.06,end-state,4,2030
+Ammonia,ESMR Gas + CCS + ammonia synthesis,Rest of Asia,30,0.06,end-state,4,2030
+Ammonia,ESMR Gas + CCS + ammonia synthesis,North America,30,0.06,end-state,4,2030
+Ammonia,ESMR Gas + CCS + ammonia synthesis,Russia,30,0.06,end-state,4,2030
+Ammonia,ESMR Gas + CCS + ammonia synthesis,Europe,30,0.06,end-state,4,2030
+Ammonia,ESMR Gas + CCS + ammonia synthesis,India,30,0.06,end-state,4,2030
+Ammonia,ESMR Gas + CCS + ammonia synthesis,Middle East,30,0.06,end-state,4,2030
+Ammonia,ESMR Gas + CCS + ammonia synthesis,Africa,30,0.06,end-state,4,2030
+Ammonia,ESMR Gas + CCS + ammonia synthesis,Latin America,30,0.06,end-state,4,2030
+Ammonia,ESMR Gas + CCS + ammonia synthesis,Oceania,30,0.06,end-state,4,2030
+Ammonia,Methane Pyrolysis + ammonia synthesis,China,30,0.06,end-state,7,2030
+Ammonia,Methane Pyrolysis + ammonia synthesis,Rest of Asia,30,0.06,end-state,7,2030
+Ammonia,Methane Pyrolysis + ammonia synthesis,North America,30,0.06,end-state,7,2030
+Ammonia,Methane Pyrolysis + ammonia synthesis,Russia,30,0.06,end-state,7,2030
+Ammonia,Methane Pyrolysis + ammonia synthesis,Europe,30,0.06,end-state,7,2030
+Ammonia,Methane Pyrolysis + ammonia synthesis,India,30,0.06,end-state,7,2030
+Ammonia,Methane Pyrolysis + ammonia synthesis,Middle East,30,0.06,end-state,7,2030
+Ammonia,Methane Pyrolysis + ammonia synthesis,Africa,30,0.06,end-state,7,2030
+Ammonia,Methane Pyrolysis + ammonia synthesis,Latin America,30,0.06,end-state,7,2030
+Ammonia,Methane Pyrolysis + ammonia synthesis,Oceania,30,0.06,end-state,7,2030
+Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,China,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,Rest of Asia,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,North America,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,Russia,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,Europe,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,India,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,Middle East,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,Africa,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,Latin America,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,Oceania,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,China,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,Rest of Asia,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,North America,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,Russia,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,Europe,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,India,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,Middle East,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,Africa,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,Latin America,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,Oceania,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,China,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,Rest of Asia,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,North America,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,Russia,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,Europe,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,India,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,Middle East,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,Africa,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,Latin America,30,0.06,end-state,8,2025
+Ammonia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,Oceania,30,0.06,end-state,8,2025
