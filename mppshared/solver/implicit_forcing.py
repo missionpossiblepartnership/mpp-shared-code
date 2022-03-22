@@ -2,6 +2,8 @@
 
 import pandas as pd
 import numpy as np
+from timeit import default_timer as timer
+from datetime import timedelta
 
 from mppshared.model.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.calculations.cost_calculations import discount_costs
@@ -9,7 +11,12 @@ from mppshared.utility.dataframe_utility import (
     add_column_header_suffix,
     get_grouping_columns_for_npv_calculation,
 )
+from mppshared.utility.function_timer_utility import timer_func
 from mppshared.config import GHGS, EMISSION_SCOPES
+from mppshared.utility.function_timer_utility import timer_func
+from mppshared.utility.log_utility import get_logger
+
+logger = get_logger("Apply implicit forcing")
 
 
 def apply_implicit_forcing(
@@ -29,8 +36,14 @@ def apply_implicit_forcing(
     """
 
     # Add carbon cost to TCO
+    # TODO: improve runtime
+    start = timer()
     df_carbon_cost = apply_carbon_cost_to_tco(
         df_technology_switches, df_emissions, df_technology_characteristics
+    )
+    end = timer()
+    logger.info(
+        f"Time elapsed to apply carbon cost to {len(df_carbon_cost)} rows: {timedelta(seconds=end-start)}"
     )
 
     # TODO: add carbon cost to LCOX and other cost metrics
@@ -43,27 +56,12 @@ def apply_implicit_forcing(
     # df = apply_technology_availability_constraint(df_technology_switches, df_technology_characteristics)
 
     # Calculate emission deltas between origin and destination technology
-    df_emission_deltas = calculate_emission_reduction(
-        df_technology_switches, df_emissions
-    )
-
-    # Create DataFrame ready for ranking
-    df_ranking = df_carbon_cost.merge(
-        df_emission_deltas,
-        on=[
-            "product",
-            "technology_origin",
-            "region",
-            "year",
-            "switch_type",
-            "technology_destination",
-        ],
-        how="left",
-    )
+    df_ranking = calculate_emission_reduction(df_carbon_cost, df_emissions)
 
     return df_ranking
 
 
+@timer_func
 def apply_carbon_cost_to_tco(
     df_technology_switches: pd.DataFrame,
     df_emissions: pd.DataFrame,
@@ -133,7 +131,7 @@ def apply_carbon_cost_to_tco(
     df_technology_switches = df_technology_switches.set_index(grouping_cols + ["year"])
     df_technology_switches["tco"] = df["tco"] + df["carbon_cost_addition_tco"]
 
-    # Return technology switch DataFrame with updated TCO and reset index
+    # Return technology switch DataFrame with updated TCO
     return df_technology_switches.reset_index(drop=False)
 
 

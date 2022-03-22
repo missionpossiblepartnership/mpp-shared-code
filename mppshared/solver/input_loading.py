@@ -32,16 +32,27 @@ def load_and_validate_inputs(sector: str) -> dict:
 def filter_df_for_development(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.loc[df["product"] == "Ammonia"]
-    if "switch_type" in df.columns:
-        df = df.loc[df["switch_type"] == "Greenfield"]
-    if "technology_destination" in df.columns:
-        df = df.loc[
-            df["technology_destination"].isin(
-                [
-                    "Natural Gas SMR + ammonia synthesis",
-                    "Natural Gas SMR + CCS + ammonia synthesis",
-                    "Electrolyser - grid PPA + ammonia synthesis",
-                ]
-            )
-        ]
+    # if "technology_destination" in df.columns:
+    #     df = df.loc[
+    #         df["technology_destination"].isin(
+    #             [
+    #                 "Natural Gas SMR + ammonia synthesis",  # Initial
+    #                 "Natural Gas SMR + CCS + ammonia synthesis",  # End-state
+    #                 "Electrolyser - grid PPA + ammonia synthesis",  # End-state
+    #                 "Decommissioned",  # For decommission switch
+    #                 "Electrolyser + SMR + ammonia synthesis",  # Transition
+    #             ]
+    #         )
+    #     ]
+    # if "technology_origin" in df.columns:
+    #     df = df.loc[
+    #         df["technology_origin"].isin(
+    #             [
+    #                 "Natural Gas SMR + ammonia synthesis",  # Initial
+    #                 "Electrolyser + SMR + ammonia synthesis",  # Transition
+    #                 "New-build",  # For greenfield switch
+    #                 "Electrolyser - grid PPA + ammonia synthesis",  # "End-state"
+    #             ]
+    #         )
+    #     ]
     return df
