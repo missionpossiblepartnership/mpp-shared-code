@@ -14,6 +14,8 @@ def load_and_validate_inputs(sector: str) -> dict:
     Returns:
         dict: dictionary with the input DataFrames
     """
+
+    # TODO: use class IntermediateDataImporter for handling data import
     input_dfs = dict.fromkeys(SOLVER_INPUT_TABLES)
 
     for input_table in input_dfs.keys():
