@@ -77,9 +77,8 @@ def create_plants(n_plants: int, df_plant_capacities: pd.DataFrame, **kwargs) ->
 
 
 class PlantStack:
-    def __init__(self, year: int, plants: list):
+    def __init__(self, plants: list):
         self.plants = plants
-        self.year = year
         # Keep track of all plants added this year
         self.new_ids = []
 
@@ -94,9 +93,7 @@ class PlantStack:
         """Return True if no plant in stack"""
         return not self.plants
 
-    def filter_plants(
-        self, sector=None, region=None, technology=None, product=None, year=None
-    ):
+    def filter_plants(self, sector=None, region=None, technology=None, product=None):
         """Filter plant based on one or more criteria"""
         plants = self.plants
         if sector is not None:
@@ -111,8 +108,6 @@ class PlantStack:
                 or (product in plant.byproducts),
                 plants,
             )
-        if year is not None:
-            plants = filter(lambda plant: plant.year == year, plants)
         # Commenting out the following lines as it is not cleare if we will need
         # something similar for ammonia and aluminium
         # if methanol_type is not None:
@@ -323,7 +318,10 @@ def make_new_plant(
     """
     df_process_data = df_process_data.reset_index()
     spec = df_process_data[
-        (df_process_data.technology == best_transition["destination"])
+        (df_process_data.sector == best_transition["sector"])
+        & (  # add the sector to the specs to map
+            df_process_data.technology == best_transition["destination"]
+        )
         & (df_process_data.year == best_transition["year"])
         & (df_process_data.region == best_transition["region"])
     ]
@@ -333,6 +331,7 @@ def make_new_plant(
     type_of_tech = types_of_tech[best_transition["type_of_tech_destination"]]
 
     return Plant(
+        sector=first(spec["sector"]),
         product=product,
         technology=first(spec["technology"]),
         region=first(spec["region"]),
