@@ -245,3 +245,22 @@ def expand_melt_and_sort_years(
     years = [year_col for year_col in df_c.columns if isinstance(year_col, int)]
     df_c = df_c.melt(id_vars=set(df_c.columns).difference(set(years)), var_name="year")
     return df_c.sort_values(by=["year"], axis=0)
+
+
+def add_column_header_suffix(df: pd.DataFrame, cols: list, suffix: str) -> pd.DataFrame:
+    # sourcery skip: identity-comprehension
+    """Add a suffix with an underscore to each column header of the DataFrame that is in the cols list.
+
+    Args:
+        df (pd.DataFrame): contains column headers to be changed
+        cols (list): list of column headers to be changed
+        suffix (str): suffix to be appended to the selected column headers
+
+    Returns:
+        pd.DataFrame: selected column headers are appended with _suffix
+    """
+    suffix_cols = [f"{col_header}_{suffix}" for col_header in cols]
+    rename_dict = {k: v for k, v in zip(cols, suffix_cols)}
+    df = df.rename(columns=rename_dict)
+
+    return df
