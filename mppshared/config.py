@@ -38,7 +38,7 @@ GHGS = [
     # "N2O"
 ]
 
-SCOPES = ["scope1", "scope2", "scope33_upstream", "scope3_downstream"]
+EMISSION_SCOPES = ["scope1", "scope2", "scope33_upstream", "scope3_downstream"]
 
 FOLDERS_TO_CHECK_IN_ORDER = [
     # Top level folders
