@@ -16,7 +16,7 @@ def get_rank_config(rank_type: str, pathway: str):
     "new_build": {
         "me": {
             "type_of_tech_destination": "max",
-            "lcox": "min",
+            "tco": "min",
             "emissions_scope_1_2_delta": "min",
             "emissions_scope_3_upstream_delta": "min",
         }
@@ -31,32 +31,44 @@ def get_rank_config(rank_type: str, pathway: str):
     config = {
         "new_build": {
             "bau": {
-                "lcox": 0.5,
-                "emissions_scope_1_2_delta": 0.25,
-                "emissions_scope_3_upstream_delta": 0.25,
+                "tco": 1.0,
+                "emissions": 0.0,
+            },
+            "fa": {
+                "tco": 0.0,
+                "emissions": 1.0,
+            },
+            "lc": {
+                "tco": 0.8,
+                "emissions": 0.2,
             },
         },
         "retrofit": {
             "bau": {
-                "lcox": 0.5,
-                "emissions_scope_1_2_delta": 0.25,
-                "emissions_scope_3_upstream_delta": 0.25,
+                "tco": 0.5,
+                "emissions": 0.5,
+            },
+            "fa": {
+                "tco": 0.0,
+                "emissions": 1.0,
+            },
+            "lc": {
+                "tco": 0.8,
+                "emissions": 0.2,
             },
         },
         "decommission": {
             "bau": {
-                "lcox": 0.5,
-                "delta_co2_scope1": 0.125,
-                "delta_co2_scope2": 0.125,
-                "delta_co2_scope3_upstream": 0.125,
-                "delta_co2_scope3_downstream": 0.125,
+                "tco": 1,
+                "emissions": 0,
             },
             "fa": {
-                "lcox": 0.0,
-                "delta_co2_scope1": 0.25,
-                "delta_co2_scope2": 0.25,
-                "delta_co2_scope3_upstream": 0.25,
-                "delta_co2_scope3_downstream": 0.25,
+                "tco": 0.0,
+                "emissions": 1.0,
+            },
+            "lc": {
+                "tco": 0.8,
+                "emissions": 0.2,
             },
         },
     }
@@ -84,8 +96,13 @@ def rank_technology(df_ranking, rank_type, pathway, sensitivity):
         df = df_ranking[
             (df_ranking["switch_type"] == "Decommission") & (df_ranking["year"] == year)
         ].copy()
+        # Normalize the tco and sum of emissions delta
+        df["tco_normalized"] = df["tco"] / df["tco"].max()
+        df["sum_emissions_delta_normalized"] = (
+            df["sum_emissions_delta"] / df["sum_emissions_delta"].max()
+        )
         df[f"{rank_type}_{pathway}_score"] = (
-            (df["lcox"] * config["lcox"])
+            (df["tco"] * config["tco"])
             + (df["delta_co2_scope1"] * config["delta_co2_scope1"])
             + (df["delta_co2_scope2"] * config["delta_co2_scope2"])
             + (df["delta_co2_scope3_upstream"] + config["delta_co2_scope3_upstream"])
