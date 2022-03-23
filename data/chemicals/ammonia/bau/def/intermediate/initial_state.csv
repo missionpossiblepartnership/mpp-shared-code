@@ -1,0 +1,31 @@
+region,country,coordinates,product,technology,annual_production_capacity,year_commissioned,capacity_utilisation_factor
+Africa,,,Ammonia,Natural Gas SMR + ammonia synthesis,1,2000,0.5
+Africa,,,Ammonia,Natural Gas SMR + ammonia synthesis,2,2010,0.75
+Africa,,,Ammonia,Natural Gas SMR + ammonia synthesis,5,2020,0.95
+China,,,Ammonia,Natural Gas SMR + ammonia synthesis,1,2000,0.5
+China,,,Ammonia,Natural Gas SMR + ammonia synthesis,2,2010,0.75
+China,,,Ammonia,Natural Gas SMR + ammonia synthesis,5,2020,0.95
+Europe,,,Ammonia,Natural Gas SMR + ammonia synthesis,1,2000,0.5
+Europe,,,Ammonia,Natural Gas SMR + ammonia synthesis,2,2010,0.75
+Europe,,,Ammonia,Natural Gas SMR + ammonia synthesis,5,2020,0.95
+India,,,Ammonia,Natural Gas SMR + ammonia synthesis,1,2000,0.5
+India,,,Ammonia,Natural Gas SMR + ammonia synthesis,2,2010,0.75
+India,,,Ammonia,Natural Gas SMR + ammonia synthesis,5,2020,0.95
+Latin America,,,Ammonia,Natural Gas SMR + ammonia synthesis,1,2000,0.5
+Latin America,,,Ammonia,Natural Gas SMR + ammonia synthesis,2,2010,0.75
+Latin America,,,Ammonia,Natural Gas SMR + ammonia synthesis,5,2020,0.95
+Middle East,,,Ammonia,Natural Gas SMR + ammonia synthesis,1,2000,0.5
+Middle East,,,Ammonia,Natural Gas SMR + ammonia synthesis,2,2010,0.75
+Middle East,,,Ammonia,Natural Gas SMR + ammonia synthesis,5,2020,0.95
+North America,,,Ammonia,Natural Gas SMR + ammonia synthesis,1,2000,0.5
+North America,,,Ammonia,Natural Gas SMR + ammonia synthesis,2,2010,0.75
+North America,,,Ammonia,Natural Gas SMR + ammonia synthesis,5,2020,0.95
+Oceania,,,Ammonia,Natural Gas SMR + ammonia synthesis,1,2000,0.5
+Oceania,,,Ammonia,Natural Gas SMR + ammonia synthesis,2,2010,0.75
+Oceania,,,Ammonia,Natural Gas SMR + ammonia synthesis,5,2020,0.95
+Rest of Asia,,,Ammonia,Natural Gas SMR + ammonia synthesis,1,2000,0.5
+Rest of Asia,,,Ammonia,Natural Gas SMR + ammonia synthesis,2,2010,0.75
+Rest of Asia,,,Ammonia,Natural Gas SMR + ammonia synthesis,5,2020,0.95
+Russia,,,Ammonia,Natural Gas SMR + ammonia synthesis,1,2000,0.5
+Russia,,,Ammonia,Natural Gas SMR + ammonia synthesis,2,2010,0.75
+Russia,,,Ammonia,Natural Gas SMR + ammonia synthesis,5,2020,0.95

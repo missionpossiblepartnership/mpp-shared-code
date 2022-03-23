@@ -2,8 +2,8 @@
 from uuid import uuid4
 
 import pandas as pd
-from config import DECOMMISSION_RATES  # , METHANOL_SUPPLY_TECH
-from utility.utils import first
+from mppshared.config import DECOMMISSION_RATES  # , METHANOL_SUPPLY_TECH
+# from utility.utils import first
 
 
 class Plant:
