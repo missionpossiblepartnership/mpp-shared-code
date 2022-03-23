@@ -6,7 +6,7 @@ from timeit import default_timer as timer
 from datetime import timedelta
 
 from mppshared.model.carbon_cost_trajectory import CarbonCostTrajectory
-from mppshared.calculations.cost_calculations import discount_costs
+from mppshared.calculate.calculate_cost import discount_costs
 from mppshared.utility.dataframe_utility import (
     add_column_header_suffix,
     get_grouping_columns_for_npv_calculation,
