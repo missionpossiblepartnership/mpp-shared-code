@@ -1,6 +1,7 @@
 """ Rank technology switches."""
 import pandas as pd
 
+from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -103,12 +104,16 @@ def rank_technology(df_ranking, rank_type, pathway, sensitivity):
     return df_rank
 
 
-def make_rankings(df_ranking, sensitivity, pathway):
+def make_rankings(pathway, sensitivity, sector, product):
     """Create the ranking for all the possible rank types and scenarios.
 
     Args:
         df_ranking:
     """
+    importer = IntermediateDataImporter(
+        pathway=pathway, sensitivity=sensitivity, sector=sector, product=product
+    )
+    df_ranking = importer.get_technologies_to_rank()
     for rank_type in ["decommission"]:  # ["new_build", "retrofit", "decommission"]:
         df_rank = rank_technology(df_ranking, rank_type, pathway, sensitivity)
         df_rank.to_csv(f"{rank_type}_{pathway}.csv", index=False)
