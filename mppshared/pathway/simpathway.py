@@ -1,6 +1,6 @@
 import logging
 import math
-# from collections import defaultdict
+from collections import defaultdict
 
 import pandas as pd
 import plotly.express as px
@@ -11,7 +11,8 @@ from plotly.subplots import make_subplots
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.plant.plant import PlantStack, create_plants
-# from util.util import flatten_columns
+from mppshared.calculate.calculate_availability import update_availability_from_plant
+from mppshared.utility.dataframe_utility import flatten_columns
 from mppshared.config import (
     PRODUCTS,
     SECTOR,
@@ -66,10 +67,10 @@ class SimulationPathway:
         # df_availability = df_availability.rename(columns={"value": "cap"})
         # df_availability["used"] = 0
         #
-        # # create chemical based availability columns
-        # for chemical in CHEMICALS:
-        #     df_availability[f"{chemical}_cap"] = 0
-        #     df_availability[f"{chemical}_used"] = 0
+        # # create product based availability columns
+        # for product in productS:
+        #     df_availability[f"{product}_cap"] = 0
+        #     df_availability[f"{product}_used"] = 0
         #     for material_constraints in ["CO2 storage",
         #                                  "Biomass",
         #                                  "Waste water",
@@ -79,12 +80,12 @@ class SimulationPathway:
         #
         #         # If there is no current (on purpose) stack, constraint share should be 0
         #         try:
-        #             constraint_share = self.constraint_share[chemical]
+        #             constraint_share = self.constraint_share[product]
         #         except KeyError:
         #             constraint_share = 0
         #
         #         df_availability.loc[
-        #             (df_availability.name == material_constraints), f"{chemical}_cap"
+        #             (df_availability.name == material_constraints), f"{product}_cap"
         #         ] = (
         #             constraint_share
         #             * df_availability.loc[
@@ -105,7 +106,7 @@ class SimulationPathway:
         pass
 
     def _import_rankings(self, japan_only=False):
-        """Import ranking for all chemicals and rank types from the CSVs"""
+        """Import ranking for all products and rank types from the CSVs"""
         rankings = defaultdict(dict)
         for rank_type in ["new_build", "retrofit", "decommission"]:
             for product in self.product:
@@ -139,7 +140,7 @@ class SimulationPathway:
     def save_demand(self):
         df = self.demand
         df = df[df.year <= self.end_year]
-        df = df.pivot(index="chemical", columns="year", values="demand")
+        df = df.pivot(index="product", columns="year", values="demand")
         self.importer.export_data(
             df=df,
             filename="demand_output.csv",
@@ -154,79 +155,63 @@ class SimulationPathway:
             export_dir="final/All",
         )
 
-    def get_emissions(self, year, chemical=None):
-        """Get  the emissions for a chemical in a year"""
+    def get_emissions(self, year, product=None):
+        """Get  the emissions for a product in a year"""
         df = self.emissions.copy()
 
-        return df.query(f"chemical == '{chemical}' & year == {year}").droplevel(
-            ["chemical", "year"]
+        return df.query(f"product == '{product}' & year == {year}").droplevel(
+            ["product", "year"]
         )
 
-    def get_cost(self, chemical, year):
-        """Get  the cost for a chemical in a year"""
+    def get_cost(self, product, year):
+        """Get  the cost for a product in a year"""
         df = self.cost
-        return df.query(f"chemical == '{chemical}' & year == {year}").droplevel(
-            ["chemical", "year"]
+        return df.query(f"product == '{product}' & year == {year}").droplevel(
+            ["product", "year"]
         )
 
-    def get_inputs_pivot(self, chemical, year):
-        """Get  the cost for a chemical in a year"""
+    def get_inputs_pivot(self, product, year):
+        """Get  the cost for a product in a year"""
         df = self.inputs_pivot
-        return df.query(f"chemical == '{chemical}' & year == {year}").droplevel(
-            ["chemical", "year"]
+        return df.query(f"product == '{product}' & year == {year}").droplevel(
+            ["product", "year"]
         )
 
-    def get_specs(self, chemical, year):
+    def get_specs(self, product, year):
         df = self.plant_specs
-        return df.query(f"chemical == '{chemical}' & year == {year}").droplevel(
-            ["chemical", "year"]
+        return df.query(f"product == '{product}' & year == {year}").droplevel(
+            ["product", "year"]
         )
 
-    def get_demand(self, chemical, year, mtx=True, build_new=False):
+    def get_demand(self, product, year, mtx=True, build_new=False):
         """
-        Get the demand for a chemical in a year
+        Get the demand for a product in a year
         Args:
             build_new: overwrite demand after the new build step
-            chemical: get for this chemical
+            product: get for this product
             year: and this year
-            mtx: also add mtx demand for methanol
-
         Returns:
 
         """
         df = self.demand
-        demand = df.loc[(df.chemical == chemical) & (df.year == year), "demand"].item()
+        return df.loc[(df.product == product) & (df.year == year), "demand"].item()
 
-        # For Methanol, we have to take into account additional demand from MTO/MTP/MTA tech,
-        if chemical == "Methanol" and mtx:
-            logger.debug(f"Pre-demand: {demand}")
-            mtx_demand = self._get_mtx_demand(mtx_type="both", year=year)
-            demand += mtx_demand
-            logger.debug(f"Post-demand: {demand} & MTX-demand: {mtx_demand}")
-            if build_new:
-                self.demand.loc[
-                    (self.demand.chemical == chemical) & (self.demand.year == year),
-                    "demand",
-                ] = demand
-
-        return demand
-
-    def get_inputs(self, year, chemical=None):
-        """Get the inputs for a chemical in a year"""
+    def get_inputs(self, year, product=None):
+        """Get the inputs for a product in a year"""
         df = self.inputs
 
-        if chemical is not None:
-            df = df[df.chemical == chemical]
+        if product is not None:
+            df = df[df.product == product]
         return df[df.year == year]
 
-    def get_all_process_data(self, chemical, year):
-        """Get all process data for a chemical in a year"""
+    def get_all_process_data(self, product, year):
+        """Get all process data for a product in a year"""
         df = self.process_data
-        df = df.reset_index(level=["chemical", "year"])
-        return df[(df.chemical == chemical) & (df.year == year)]
+        df = df.reset_index(level=["product", "year"])
+        return df[(df.product == product) & (df.year == year)]
 
-    def get_ranking(self, chemical, year, rank_type):
-        """Get ranking df for a specific year/chemical"""
+    def get_ranking(self, product, year, rank_type):
+        """Get ranking df for a specific year/product"""
         allowed_types = ["new_build", "retrofit", "decommission"]
         if rank_type not in allowed_types:
             raise ValueError(
@@ -235,31 +220,30 @@ class SimulationPathway:
                 allowed_types,
             )
 
-        return self.rankings[chemical][rank_type][year]
+        return self.rankings[product][rank_type][year]
 
-    def update_ranking(self, df_rank, chemical, year, rank_type):
-        """Update ranking for a chemical, year, type"""
-        self.rankings[chemical][rank_type][year] = df_rank
+    def update_ranking(self, df_rank, product, year, rank_type):
+        """Update ranking for a product, year, type"""
+        self.rankings[product][rank_type][year] = df_rank
 
-    #TODO - checkin
     def calculate_emission_stack(self, year):
         # """
         # Calculate emission level of the current stack
         # """
         # df_tech = self.get_stack(year).get_tech(
-        #     id_vars=["technology", "chemical", "region"]
+        #     id_vars=["technology", "product", "region"]
         # )
         # df_tech = df_tech.reset_index()
-        # df_tech = df_tech[df_tech.chemical.isin(CHEMICALS)]
+        # df_tech = df_tech[df_tech.product.isin(productS)]
         #
         # df_emissions = self.emissions
         # df_emissions = df_emissions.reset_index()
         # df_emissions = df_emissions[
-        #     (df_emissions.year == year) & (df_emissions.chemical.isin(CHEMICALS))
+        #     (df_emissions.year == year) & (df_emissions.product.isin(productS))
         # ]
         #
         # df_emission_stack = pd.merge(
-        #     df_emissions, df_tech, how="right", on=["technology", "chemical", "region"]
+        #     df_emissions, df_tech, how="right", on=["technology", "product", "region"]
         # )
         #
         # emission_column = [
@@ -282,7 +266,7 @@ class SimulationPathway:
         # """
         # df_emission_stack = self.calculate_emission_stack(year)
         #
-        # df_scope_1_emission_stack = df_emission_stack.groupby(["chemical"])[
+        # df_scope_1_emission_stack = df_emission_stack.groupby(["product"])[
         #     "scope_1_stack_emissions"
         # ].sum()
         #
@@ -367,19 +351,20 @@ class SimulationPathway:
         stack = self.get_stack(year=year)
         return stack.get_capacity()
 
-    def aggregate_stacks(self, chemical, this_year=False):
+    def aggregate_stacks(self, product, this_year=False):
         return pd.concat(
             [
-                stack.aggregate_stack(year=year, this_year=this_year, chemical=chemical)
+                stack.aggregate_stack(year=year, this_year=this_year, product=product)
                 for year, stack in self.stacks.items()
             ]
         )
 
     def _calculate_plants_from_production(self):
         """Calculate how many plants are there, based on current production"""
+        df_plant_size = self.importer.get_plant_sizes()
+        df_production = self.importer.get_current_production()
 
-        # If Japan run, only create Japan plants
-        df_plants = self.importer.get_current_production()
+        df_plants = df_production.merge(df_plant_size, on=["technology", "production"])
 
         df_plants["number_of_plants"] = (
             (
@@ -412,11 +397,11 @@ class SimulationPathway:
 
         df_plants = df_plants.merge(
             df_process_data,
-            left_on=["region", "chemical", "technology", "year"],
-            right_on=["region__", "chemical__", "technology__", "year__"],
+            left_on=["region", "product", "technology", "year"],
+            right_on=["region__", "product__", "technology__", "year__"],
         )
         df_plants = df_plants.drop_duplicates(
-            subset=["region", "chemical", "technology"]
+            subset=["region", "product", "technology"]
         )
 
         # Build them
@@ -427,7 +412,7 @@ class SimulationPathway:
                     n_plants=row[f"number_of_plants_{plant_status}"],
                     technology=row["technology"],
                     region=row["region"],
-                    chemical=row["chemical"],
+                    product=row["product"],
                     # Assumption: old plants started 40 years ago, new ones just 20
                     start_year=self.start_year - 40
                     if plant_status == "old"
@@ -446,7 +431,7 @@ class SimulationPathway:
         stack = PlantStack(plants=all_plants)
         return {self.start_year: stack}
 
-    def plot_stacks(self, df_stack_agg, groupby, chemical):
+    def plot_stacks(self, df_stack_agg, groupby, product):
         """
         Plot the resulting stacks over the years
 
@@ -463,7 +448,7 @@ class SimulationPathway:
 
         wedge_fig = px.area(df, color=groupby, x="year", y="yearly_volume")
 
-        df_demand = self.demand.query(f"chemical=='{chemical}'").query(
+        df_demand = self.demand.query(f"product=='{product}'").query(
             f"year <= {df.year.max()}"
         )
         demand_fig = px.line(df_demand, x="year", y="demand")
@@ -474,9 +459,9 @@ class SimulationPathway:
 
         fig.layout.xaxis.title = "Year"
         fig.layout.yaxis.title = "Yearly volume (Mton / annum)"
-        fig.layout.title = f"{groupby} over time for {chemical} - {self.pathway_name} - {self.sensitivity}"
+        fig.layout.title = f"{groupby} over time for {product} - {self.pathway_name} - {self.sensitivity}"
 
-        filename = f"output/{self.pathway_name}/{self.sensitivity}/final/{chemical}/{groupby}_over_time"
+        filename = f"output/{self.pathway_name}/{self.sensitivity}/final/{product}/{groupby}_over_time"
 
         plot(
             fig,
@@ -513,11 +498,11 @@ class SimulationPathway:
         fig.write_image(filename + ".png")
 
     def _get_weighted_average(
-        self, df, vars, chemical, year, methanol_type: str = None, emissions=True
+        self, df, vars, product, year, methanol_type: str = None, emissions=True
     ):
         """Calculate the weighted average of variables over regions/technologies"""
         df_plants = flatten_columns(
-            self.stacks[year].aggregate_stack(chemical=chemical)
+            self.stacks[year].aggregate_stack(product=product)
         )
 
         df = pd.merge(
@@ -525,10 +510,6 @@ class SimulationPathway:
             df.reset_index(),
             on=["technology", "region"],
         )
-
-        # Keep only black/green methanol
-        if methanol_type is not None:
-            df = df.query(f"technology.isin({METHANOL_SUPPLY_TECH[methanol_type]})")
 
         return (
             (
@@ -543,55 +524,50 @@ class SimulationPathway:
         )
 
     def get_average_emissions(
-        self, chemical: str, year: int, methanol_type: str = None
+        self, product: str, year: int, methanol_type: str = None
     ) -> int:
         """
-        Calculate emissions of a chemical, based on the plants that produce it in a year
+        Calculate emissions of a product, based on the plants that produce it in a year
 
         Returns:
-            Emissions of producing the chemical in this year (averaged over technologies and locations)
+            Emissions of producing the product in this year (averaged over technologies and locations)
         """
-        df_emissions = self.get_emissions(chemical=chemical, year=year)
+        df_emissions = self.get_emissions(product=product, year=year)
 
         return self._get_weighted_average(
             df=df_emissions,
             vars=["scope_1", "scope_2", "scope_3_upstream", "scope_3_downstream"],
             year=year,
-            chemical=chemical,
+            product=product,
             methanol_type=methanol_type,
             emissions=True,
         )
 
     def get_average_levelized_cost(
-        self, chemical: str, year: int, methanol_type: str = None
+        self, product: str, year: int, methanol_type: str = None
     ) -> int:
         """
-        Calculate levelized cost of a chemical, based on the plants that produce it in a year
+        Calculate levelized cost of a product, based on the plants that produce it in a year
 
         Returns:
-            Levelized cost of producing the chemical in this year (averaged over technologies and locations)
+            Levelized cost of producing the product in this year (averaged over technologies and locations)
         """
 
-        df_lcox = self.get_cost(chemical=chemical, year=year)["lcox"]
+        df_lcox = self.get_cost(product=product, year=year)["lcox"]
         return self._get_weighted_average(
             df_lcox,
             vars=["new_build_brownfield"],
             year=year,
-            chemical=chemical,
+            product=product,
             methanol_type=methanol_type,
             emissions=False,
         )
 
-    def get_total_volume(self, chemical: str, year: int, methanol_type=None):
-        """Get total volume produced of a chemical in a year"""
+    def get_total_volume(self, product: str, year: int, methanol_type=None):
+        """Get total volume produced of a product in a year"""
         df_plants = flatten_columns(
-            self.stacks[year].aggregate_stack(chemical=chemical)
+            self.stacks[year].aggregate_stack(product=product)
         )
-        # Keep only black/green methanol
-        if methanol_type is not None:
-            df_plants = df_plants.query(
-                f"technology.isin({METHANOL_SUPPLY_TECH[methanol_type]})"
-            )
 
         # Return total capacity in Mton/annum
         return df_plants["capacity_total"].sum()

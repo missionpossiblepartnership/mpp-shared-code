@@ -62,23 +62,24 @@ class IntermediateDataImporter:
         return pd.read_csv(self.intermediate_path.joinpath("initial_state.csv"))
 
     def get_plant_specs(self):
-        return pd.read_csv(
+        df_spec = pd.read_csv(
             self.intermediate_path.joinpath("technology_characteristics.csv"),
             index_col=["product", "technology", "region"],
         )
-
-    def get_plant_sizes(self):
-        """Get plant sizes for each different chemical/process"""
-        df_spec = self.get_plant_specs()
-        return df_spec.reset_index()[
-            ["chemical", "technology", "assumed_plant_capacity", "capacity_factor"]
-        ].drop_duplicates(["chemical", "technology"])
-
-    def get_plant_capacities(self):
-        df_spec = self.get_plant_specs().reset_index()
         df_spec.annual_production_capacity = ASSUMED_PLANT_CAPACITY
         df_spec["yearly_volume"] = df_spec.annual_production_capacity * df_spec.capacity_factor
         df_spec["total_volume"] = df_spec.technology_lifetime * df_spec.yearly_volume
+        return df_spec
+
+    def get_plant_sizes(self):
+        """Get plant sizes for each different product/process"""
+        df_spec = self.get_plant_specs()
+        return df_spec.reset_index()[
+            ["product", "technology", "annual_production_capacity", "capacity_factor"]
+        ].drop_duplicates(["product", "technology"])
+
+    def get_plant_capacities(self):
+        df_spec = self.get_plant_specs().reset_index()
         return df_spec.drop_duplicates(["product", "region", "technology"])[
             ["product", "technology", "region", "annual_production_capacity", "yearly_volume", "total_volume"]
         ]
@@ -107,7 +108,7 @@ class IntermediateDataImporter:
 
         return pd.read_csv(file_path, header=header, index_col=index_cols)
 
-    def get_all_process_data(self, chemical=None):
+    def get_all_process_data(self, product=None):
         """Get combined data outputted by the model on process level"""
         # df_inputs_pivot = self.get_process_data("inputs_pivot")
         # df_emissions = self.get_process_data("emissions")
@@ -126,13 +127,13 @@ class IntermediateDataImporter:
         # df_all = df_spec.join(df_inputs_pivot).join(df_emissions).join(df_cost)
         # df_all.columns.names = ["group", "category", "name"]
         # 
-        # if chemical is not None:
-        #     df_all = df_all.query(f"chemical == '{chemical}'").droplevel("chemical")
+        # if product is not None:
+        #     df_all = df_all.query(f"product == '{product}'").droplevel("product")
         # return df_all.query("year <= 2050")
         pass
 
-    def get_variable_per_year(self, chemical, variable):
-        file_path = self.export_dir.joinpath("final", chemical, f"{variable}_per_year.csv")
+    def get_variable_per_year(self, product, variable):
+        file_path = self.export_dir.joinpath("final", product, f"{variable}_per_year.csv")
         index_col = 0 if variable == "outputs" else [0, 1]
         return pd.read_csv(file_path, header=[0, 1], index_col=index_col)
 
@@ -140,10 +141,9 @@ class IntermediateDataImporter:
         file_path = self.export_dir.joinpath(
             "ranking", product, f"{rank_type}_rank.csv"
         )
-        df = pd.read_csv(file_path)
-        return df
+        return pd.read_csv(file_path)
 
-    # def get_technology_distribution(self, chemical, new=False):
+    # def get_technology_distribution(self, product, new=False):
     #     suffix = "_new" if new else ""
     #     file_path = self.export_dir.joinpath(
     #         "final", product, f"technologies_over_time_region{suffix}.csv"

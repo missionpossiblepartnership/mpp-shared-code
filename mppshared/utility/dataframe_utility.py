@@ -285,3 +285,55 @@ def get_grouping_columns_for_npv_calculation(sector: str) -> list:
         ]
     }
     return grouping_cols[sector]
+
+
+def convert_df_to_regional(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Converts a dataframe that has both regional and global values to one that just has regional values.
+
+    Args:
+        df: Dataframe with mixed values
+
+    Returns:
+        Dataframe with only regional values
+    """
+
+    # Separate world and regional df
+    world_idx = df.region == "World"
+    df_world = df[world_idx].copy()
+    df_regional_1 = df[~world_idx]
+
+    # Regionalize the world df
+    df_world.drop(columns="region", inplace=True)
+    df_regions = pd.DataFrame({"region": list(REGIONS_OTHER)})
+    df_regional_2 = df_world.merge(df_regions, how="cross")
+
+    # Return the region df
+    return pd.concat([df_regional_1, df_regional_2])
+
+
+def flatten_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Return df with columns flattened from multi-index to normal index for columns
+    Args:
+        df: input df
+
+    Returns: the df with flattened column index
+
+    """
+    df.columns = ["_".join(col).strip() for col in df.columns.values]
+    return df
+
+
+def make_multi_df(df: pd.DataFrame, name: str) -> pd.DataFrame:
+    """
+    Make a df multi-column-indexed
+
+    Args:
+        df: Input df
+        name: Name of the multi-index top level
+
+    Returns:
+        multi-indexed df
+    """
+    return pd.concat({name: df}, axis=1)

@@ -5,6 +5,7 @@
       <option name="ignoredIdentifiers">
         <list>
           <option value="list.values" />
+          <option value="mppshared.calculate.calculate_availability" />
         </list>
       </option>
     </inspection_tool>
