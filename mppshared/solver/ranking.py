@@ -98,19 +98,28 @@ def rank_technology(df_ranking, rank_type, pathway, sensitivity):
         ].copy()
         # Normalize the tco and sum of emissions delta
         df["tco_normalized"] = df["tco"] / df["tco"].max()
+        df["sum_emissions_delta"] = (
+            df["delta_co2_scope1"]
+            + df["delta_co2_scope2"]
+            + df["delta_co2_scope3_downstream"]
+            + df["delta_co2_scope3_upstream"]
+        )
         df["sum_emissions_delta_normalized"] = (
             df["sum_emissions_delta"] / df["sum_emissions_delta"].max()
         )
         df[f"{rank_type}_{pathway}_score"] = (
-            (df["tco"] * config["tco"])
-            + (df["delta_co2_scope1"] * config["delta_co2_scope1"])
-            + (df["delta_co2_scope2"] * config["delta_co2_scope2"])
-            + (df["delta_co2_scope3_upstream"] + config["delta_co2_scope3_upstream"])
-            + (
-                df["delta_co2_scope3_downstream"]
-                + config["delta_co2_scope3_downstream"]
-            )
-        )
+            df["sum_emissions_delta_normalized"] * config["emissions"]
+        ) + (df["tco_normalized"] * config["tco"])
+        # df[f"{rank_type}_{pathway}_score"] = (
+        #     (df["tco"] * config["tco"])
+        #     + (df["delta_co2_scope1"] * config["delta_co2_scope1"])
+        #     + (df["delta_co2_scope2"] * config["delta_co2_scope2"])
+        #     + (df["delta_co2_scope3_upstream"] + config["delta_co2_scope3_upstream"])
+        #     + (
+        #         df["delta_co2_scope3_downstream"]
+        #         + config["delta_co2_scope3_downstream"]
+        #     )
+        # )
         # Get the ranking for the rank type
         df[f"{rank_type}_{pathway}_ranking"] = df[f"{rank_type}_{pathway}_score"].rank(
             ascending=False
