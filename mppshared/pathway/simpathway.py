@@ -14,7 +14,9 @@ from mppshared.plant.plant import PlantStack, create_plants
 # from util.util import flatten_columns
 from mppshared.config import (
     PRODUCTS,
+    SECTOR,
     LOG_LEVEL,
+    ASSUMED_PLANT_CAPACITY
 )
 
 logger = logging.getLogger(__name__)
@@ -60,79 +62,78 @@ class SimulationPathway:
 
     def _import_availability(self):
         """Import availabilities of biomass, waste, etc"""
-        df_availability = self.importer.get_availabilities()
-        df_availability = df_availability.rename(columns={"value": "cap"})
-        df_availability["used"] = 0
-
-        # create chemical based availability columns
-        for chemical in CHEMICALS:
-            df_availability[f"{chemical}_cap"] = 0
-            df_availability[f"{chemical}_used"] = 0
-            for material_constraints in ["CO2 storage",
-                                         "Biomass",
-                                         "Waste water",
-                                         "Municipal solid waste RdF",
-                                         "Pyrolysis oil",
-                                         "Bio-oils"]:
-
-                # If there is no current (on purpose) stack, constraint share should be 0
-                try:
-                    constraint_share = self.constraint_share[chemical]
-                except KeyError:
-                    constraint_share = 0
-
-                df_availability.loc[
-                    (df_availability.name == material_constraints), f"{chemical}_cap"
-                ] = (
-                    constraint_share
-                    * df_availability.loc[
-                        (df_availability.name == material_constraints), "cap"
-                    ]
-                )
-
-        for plant in self.get_stack(self.start_year).plants:
-            logger.debug(plant)
-            df_availability = update_availability_from_plant(
-                df_availability=df_availability, plant=plant, year=self.start_year
-            )
-
-        df_methanol = make_empty_methanol_availability()
-
-        df_availability = pd.concat([df_availability, df_methanol])
-        return df_availability.query(f"year <= {self.end_year}")
-
+        # df_availability = self.importer.get_availabilities()
+        # df_availability = df_availability.rename(columns={"value": "cap"})
+        # df_availability["used"] = 0
+        #
+        # # create chemical based availability columns
+        # for chemical in CHEMICALS:
+        #     df_availability[f"{chemical}_cap"] = 0
+        #     df_availability[f"{chemical}_used"] = 0
+        #     for material_constraints in ["CO2 storage",
+        #                                  "Biomass",
+        #                                  "Waste water",
+        #                                  "Municipal solid waste RdF",
+        #                                  "Pyrolysis oil",
+        #                                  "Bio-oils"]:
+        #
+        #         # If there is no current (on purpose) stack, constraint share should be 0
+        #         try:
+        #             constraint_share = self.constraint_share[chemical]
+        #         except KeyError:
+        #             constraint_share = 0
+        #
+        #         df_availability.loc[
+        #             (df_availability.name == material_constraints), f"{chemical}_cap"
+        #         ] = (
+        #             constraint_share
+        #             * df_availability.loc[
+        #                 (df_availability.name == material_constraints), "cap"
+        #             ]
+        #         )
+        #
+        # for plant in self.get_stack(self.start_year).plants:
+        #     logger.debug(plant)
+        #     df_availability = update_availability_from_plant(
+        #         df_availability=df_availability, plant=plant, year=self.start_year
+        #     )
+        #
+        # df_methanol = make_empty_methanol_availability()
+        #
+        # df_availability = pd.concat([df_availability, df_methanol])
+        # return df_availability.query(f"year <= {self.end_year}")
+        pass
 
     def _import_rankings(self, japan_only=False):
         """Import ranking for all chemicals and rank types from the CSVs"""
         rankings = defaultdict(dict)
         for rank_type in ["new_build", "retrofit", "decommission"]:
-            for chemical in self.chemicals:
+            for product in self.product:
                 df_rank = self.importer.get_ranking(
                     rank_type=rank_type,
-                    chemical=chemical,
-                    japan_only=(MODEL_SCOPE == "Japan"),
+                    product=product,
                 )
 
-                rankings[chemical][rank_type] = {}
+                rankings[product][rank_type] = {}
                 for year in range(self.start_year, self.end_year):
-                    rankings[chemical][rank_type][year] = df_rank.query(
+                    rankings[product][rank_type][year] = df_rank.query(
                         f"year == {year}"
                     )
         return rankings
 
     def save_rankings(self):
-        for chemical in CHEMICALS:
+        for product in PRODUCTS[SECTOR]:
             for ranking in ["decommission", "retrofit", "new_build"]:
                 df = pd.concat(
                     [
                         pd.concat([df_ranking])
-                        for year, df_ranking in self.rankings[chemical][ranking].items()
+                        for year, df_ranking in self.rankings[product][ranking].items()
                     ]
                 )
                 self.importer.export_data(
                     df=df,
-                    filename=f"{ranking}_post_rank.csv",
-                    export_dir=f"ranking/{chemical}",
+                    filename=f"{product}_post_rank.csv",
+                    export_dir=f"ranking/{product}",
                 )
 
     def save_demand(self):
@@ -240,62 +241,65 @@ class SimulationPathway:
         """Update ranking for a chemical, year, type"""
         self.rankings[chemical][rank_type][year] = df_rank
 
+    #TODO - checkin
     def calculate_emission_stack(self, year):
-        """
-        Calculate emission level of the current stack
-        """
-        df_tech = self.get_stack(year).get_tech(
-            id_vars=["technology", "chemical", "region"]
-        )
-        df_tech = df_tech.reset_index()
-        df_tech = df_tech[df_tech.chemical.isin(CHEMICALS)]
-
-        df_emissions = self.emissions
-        df_emissions = df_emissions.reset_index()
-        df_emissions = df_emissions[
-            (df_emissions.year == year) & (df_emissions.chemical.isin(CHEMICALS))
-        ]
-
-        df_emission_stack = pd.merge(
-            df_emissions, df_tech, how="right", on=["technology", "chemical", "region"]
-        )
-
-        emission_column = [
-            column
-            for column in df_emissions.columns
-            if column.startswith("scope") or column == "total"
-        ]
-
-        for emission_type in emission_column:
-            df_emission_stack[f"{emission_type}_stack_emissions"] = (
-                df_emission_stack[emission_type] * df_emission_stack.number_of_plants
-            )
-
-        return df_emission_stack
+        # """
+        # Calculate emission level of the current stack
+        # """
+        # df_tech = self.get_stack(year).get_tech(
+        #     id_vars=["technology", "chemical", "region"]
+        # )
+        # df_tech = df_tech.reset_index()
+        # df_tech = df_tech[df_tech.chemical.isin(CHEMICALS)]
+        #
+        # df_emissions = self.emissions
+        # df_emissions = df_emissions.reset_index()
+        # df_emissions = df_emissions[
+        #     (df_emissions.year == year) & (df_emissions.chemical.isin(CHEMICALS))
+        # ]
+        #
+        # df_emission_stack = pd.merge(
+        #     df_emissions, df_tech, how="right", on=["technology", "chemical", "region"]
+        # )
+        #
+        # emission_column = [
+        #     column
+        #     for column in df_emissions.columns
+        #     if column.startswith("scope") or column == "total"
+        # ]
+        #
+        # for emission_type in emission_column:
+        #     df_emission_stack[f"{emission_type}_stack_emissions"] = (
+        #         df_emission_stack[emission_type] * df_emission_stack.number_of_plants
+        #     )
+        #
+        # return df_emission_stack
+        pass
 
     def calculate_constraint_share(self, year):
-        """
-        Calculate constraint share based on scope 1 emission
-        """
-        df_emission_stack = self.calculate_emission_stack(year)
-
-        df_scope_1_emission_stack = df_emission_stack.groupby(["chemical"])[
-            "scope_1_stack_emissions"
-        ].sum()
-
-        df_constraint_share = (
-            df_scope_1_emission_stack / df_scope_1_emission_stack.sum()
-        )
-        df_constraint_share[df_constraint_share < 0.05] = 0.05
-
-        return (df_constraint_share / df_constraint_share.sum()).to_dict()
+        # """
+        # Calculate constraint share based on scope 1 emission
+        # """
+        # df_emission_stack = self.calculate_emission_stack(year)
+        #
+        # df_scope_1_emission_stack = df_emission_stack.groupby(["chemical"])[
+        #     "scope_1_stack_emissions"
+        # ].sum()
+        #
+        # df_constraint_share = (
+        #     df_scope_1_emission_stack / df_scope_1_emission_stack.sum()
+        # )
+        # df_constraint_share[df_constraint_share < 0.05] = 0.05
+        #
+        # return (df_constraint_share / df_constraint_share.sum()).to_dict()
+        pass
 
     def copy_availability(self, year):
         df = self.availability
 
-        for chemical in CHEMICALS:
-            df.loc[df.year == year + 1, f"{chemical}_used"] = list(
-                df.loc[df.year == year, f"{chemical}_used"]
+        for product in PRODUCTS[SECTOR]:
+            df.loc[df.year == year + 1, f"{product}_used"] = list(
+                df.loc[df.year == year, f"{product}_used"]
             )
 
         df.loc[df.year == year + 1, "used"] = list(df.loc[df.year == year, "used"])
@@ -371,20 +375,6 @@ class SimulationPathway:
             ]
         )
 
-    def _validate_only_primary_chemical(self, df_production):
-        multi_product_tech = set(self.df_multi_product_ratio.technology)
-        df_production_multi = df_production[
-            df_production.technology.isin(multi_product_tech)
-        ].rename(columns={"chemical": "primary_chemical"})
-        valid_options = df_production_multi.merge(
-            self.df_multi_product_ratio,
-            on=["technology", "primary_chemical", "region"],
-        ).drop_duplicates(["technology", "primary_chemical", "region"])
-
-        assert len(df_production_multi) == len(
-            valid_options
-        ), "Invalid options in the current production input"
-
     def _calculate_plants_from_production(self):
         """Calculate how many plants are there, based on current production"""
 
@@ -393,8 +383,8 @@ class SimulationPathway:
 
         df_plants["number_of_plants"] = (
             (
-                (df_plants["annual_production_capacity"] / df_plants["capacity_utilisation_factor"])
-                / df_plants["assumed_plant_capacity"]
+                (df_plants["annual_production_capacity"])
+                / ASSUMED_PLANT_CAPACITY * 365/1e6
             )
             .round()
             .astype(int)

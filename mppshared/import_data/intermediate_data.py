@@ -3,7 +3,7 @@ from pandas.errors import ParserError
 from pathlib import Path
 
 
-from mppshared.config import MODEL_SCOPE
+from mppshared.config import MODEL_SCOPE, ASSUMED_PLANT_CAPACITY
 # from util.util import make_multi_df
 
 
@@ -67,10 +67,20 @@ class IntermediateDataImporter:
             index_col=["product", "technology", "region"],
         )
 
+    def get_plant_sizes(self):
+        """Get plant sizes for each different chemical/process"""
+        df_spec = self.get_plant_specs()
+        return df_spec.reset_index()[
+            ["chemical", "technology", "assumed_plant_capacity", "capacity_factor"]
+        ].drop_duplicates(["chemical", "technology"])
+
     def get_plant_capacities(self):
         df_spec = self.get_plant_specs().reset_index()
+        df_spec.annual_production_capacity = ASSUMED_PLANT_CAPACITY
+        df_spec["yearly_volume"] = df_spec.annual_production_capacity * df_spec.capacity_factor
+        df_spec["total_volume"] = df_spec.technology_lifetime * df_spec.yearly_volume
         return df_spec.drop_duplicates(["product", "region", "technology"])[
-            ["product", "technology", "region", "annual_production_capacity"]
+            ["product", "technology", "region", "annual_production_capacity", "yearly_volume", "total_volume"]
         ]
 
     def get_demand(self, region):
@@ -126,14 +136,11 @@ class IntermediateDataImporter:
         index_col = 0 if variable == "outputs" else [0, 1]
         return pd.read_csv(file_path, header=[0, 1], index_col=index_col)
 
-    def get_ranking(self, rank_type, chemical, japan_only=False):
+    def get_ranking(self, rank_type, product):
         file_path = self.export_dir.joinpath(
-            "ranking", chemical, f"{rank_type}_rank.csv"
+            "ranking", product, f"{rank_type}_rank.csv"
         )
         df = pd.read_csv(file_path)
-
-        if japan_only:
-            return df.query("region == 'Japan'")
         return df
 
     # def get_technology_distribution(self, chemical, new=False):
