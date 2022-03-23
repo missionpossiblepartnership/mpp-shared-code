@@ -152,7 +152,7 @@ DECOMMISSION_RATES = {
 }
 
 # Scope of the model run - to be specified
-MODEL_SCOPE = "Global"
+MODEL_SCOPE = ["Global"]
 
 # Override plant parameters; unit t/year
 ASSUMED_PLANT_CAPACITY = 3000
@@ -173,7 +173,7 @@ SECTOR = "chemicals" #"aluminium, steel, ..."
 
 # Product
 PRODUCTS = {
-    "chemicals": "Ammonia",        
+    "chemicals": ["Ammonia"],
 }
 
 RUN_PARALLEL = False

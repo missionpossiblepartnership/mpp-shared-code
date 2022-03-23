@@ -4,18 +4,18 @@ from pathlib import Path
 
 
 from mppshared.config import MODEL_SCOPE, ASSUMED_PLANT_CAPACITY
-# from util.util import make_multi_df
+from mppshared.utility.dataframe_utility import make_multi_df
 
 
 class IntermediateDataImporter:
     """Imports data that is output by the model at some point in time"""
 
     def __init__(
-            self,
-            pathway,
-            sensitivity,
-            sector,
-            product,
+        self,
+        pathway,
+        sensitivity,
+        sector,
+        product,
     ):
         parent_path = Path(__file__).resolve().parents[2]
         self.input_path = parent_path.joinpath(
@@ -25,12 +25,16 @@ class IntermediateDataImporter:
         self.product = product
         self.pathway = pathway
         self.sensitivity = sensitivity
-        self.export_dir = parent_path.joinpath(f"data/{sector}/{product}/{pathway}/{sensitivity}")
+        self.export_dir = parent_path.joinpath(
+            f"data/{sector}/{pathway}/{sensitivity}"
+        )
         self.intermediate_path = self.export_dir.joinpath("intermediate")
         self.final_path = self.export_dir.joinpath("final")
         self.aggregate_export_dir = parent_path.joinpath("output/")
 
-    def export_data(self, df: pd.DataFrame, filename: str, export_dir: str, aggregate=False):
+    def export_data(
+        self, df: pd.DataFrame, filename: str, export_dir: str, aggregate=False
+    ):
         """
         Export output data into the output directory
 
@@ -66,8 +70,10 @@ class IntermediateDataImporter:
             self.intermediate_path.joinpath("technology_characteristics.csv"),
             index_col=["product", "technology", "region"],
         )
-        df_spec.annual_production_capacity = ASSUMED_PLANT_CAPACITY
-        df_spec["yearly_volume"] = df_spec.annual_production_capacity * df_spec.capacity_factor
+        df_spec.annual_production_capacity = ASSUMED_PLANT_CAPACITY * 365 / 1e6
+        df_spec["yearly_volume"] = (
+            df_spec.annual_production_capacity * df_spec.capacity_factor
+        )
         df_spec["total_volume"] = df_spec.technology_lifetime * df_spec.yearly_volume
         return df_spec
 
@@ -75,20 +81,32 @@ class IntermediateDataImporter:
         """Get plant sizes for each different product/process"""
         df_spec = self.get_plant_specs()
         return df_spec.reset_index()[
-            ["product", "technology", "annual_production_capacity", "capacity_factor"]
+            [
+                "product",
+                "technology",
+                "annual_production_capacity",
+                "capacity_factor",
+                "yearly_volume",
+                "total_volume",
+            ]
         ].drop_duplicates(["product", "technology"])
 
     def get_plant_capacities(self):
         df_spec = self.get_plant_specs().reset_index()
         return df_spec.drop_duplicates(["product", "region", "technology"])[
-            ["product", "technology", "region", "annual_production_capacity", "yearly_volume", "total_volume"]
+            [
+                "product",
+                "technology",
+                "region",
+                "annual_production_capacity",
+                "yearly_volume",
+                "total_volume",
+            ]
         ]
 
     def get_demand(self, region):
-        return (
-            pd.read_csv(self.intermediate_path.joinpath("demand.csv")).query(
-                f"region == {region}"
-            )
+        return pd.read_csv(self.intermediate_path.joinpath("demand.csv")).query(
+            f"region == {region}"
         )
 
     def get_tech_transitions(self):
@@ -104,36 +122,40 @@ class IntermediateDataImporter:
         header = [0, 1] if data_type in ["cost", "inputs_pivot"] else 0
 
         # Costs
-        index_cols = [0, 1, 2, 3, 4] if data_type == "cost" else [0, 1, 2, 3]
+        index_cols = (
+            ["product", "technology_destination", "year", "region"]
+            if data_type == "technology_transitions"
+            else ["product", "technology", "year", "region"]
+        )
 
         return pd.read_csv(file_path, header=header, index_col=index_cols)
 
     def get_all_process_data(self, product=None):
         """Get combined data outputted by the model on process level"""
         # df_inputs_pivot = self.get_process_data("inputs_pivot")
-        # df_emissions = self.get_process_data("emissions")
-        # df_cost = self.get_process_data("cost")
-        # df_spec = self.get_plant_specs()
-        # 
-        # # Add multi index layers to join
-        # # 2 levels for emissions/spec to get it on the right level
-        # df_emissions = make_multi_df(
-        #     make_multi_df(df=df_emissions, name=""), name="emissions"
-        # )
-        # df_spec = make_multi_df(make_multi_df(df=df_spec, name=""), name="spec")
-        # df_cost = make_multi_df(df=df_cost, name="cost")
+        df_emissions = self.get_process_data("emissions")
+        df_cost = self.get_process_data("technology_transitions")
+        df_spec = self.get_plant_specs()
+
+        # Add multi index layers to join
+        # 2 levels for emissions/spec to get it on the right level
+        df_emissions = make_multi_df(df=df_spec, name="emissions")
+        df_spec = make_multi_df(df=df_spec, name="spec")
+        df_cost = make_multi_df(df=df_cost, name="cost")
+        df_cost.index.names = ['product', 'technology', 'year', 'region']
         # df_inputs_pivot = make_multi_df(df=df_inputs_pivot, name="inputs")
-        # 
-        # df_all = df_spec.join(df_inputs_pivot).join(df_emissions).join(df_cost)
+
+        df_all = df_spec.join(df_emissions).join(df_cost)
         # df_all.columns.names = ["group", "category", "name"]
-        # 
-        # if product is not None:
-        #     df_all = df_all.query(f"product == '{product}'").droplevel("product")
-        # return df_all.query("year <= 2050")
-        pass
+
+        if product is not None:
+            df_all = df_all.query(f"product == '{product}'").droplevel("product")
+        return df_all.query("year <= 2050")
 
     def get_variable_per_year(self, product, variable):
-        file_path = self.export_dir.joinpath("final", product, f"{variable}_per_year.csv")
+        file_path = self.export_dir.joinpath(
+            "final", product, f"{variable}_per_year.csv"
+        )
         index_col = 0 if variable == "outputs" else [0, 1]
         return pd.read_csv(file_path, header=[0, 1], index_col=index_col)
 
@@ -159,7 +181,7 @@ class IntermediateDataImporter:
     #             [[], [], []], names=("region", "technology", "year")
     #         )
     #         return pd.DataFrame(columns=columns, index=index)
-    # 
+    #
     #     # Only keep rows which have plants
     #     return df[df[("number_of_plants", "total")] != 0]
 

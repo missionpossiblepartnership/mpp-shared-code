@@ -7,7 +7,7 @@ from mppshared.config import (
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
-# from mppshared.agent_logic.build_new import build_new
+# from mppshared.agent_logic.new_build import new_build
 # from mppshared.agent_logic.decommission import decommission
 # from mppshared.agent_logic.retrofit import retrofit
 from mppshared.pathway.simpathway import SimulationPathway
@@ -37,7 +37,7 @@ def simulate(pathway: SimulationPathway):
         # Copy over last year's stack to this year
         pathway = pathway.copy_stack(year=year)
         # Run model for all chemicals (Methanol last as it needs MTO/A/P demand)
-        for product in pathway.products:
+        for product in pathway.product:
             logger.info(product)
 
             # Decommission assets
@@ -48,7 +48,7 @@ def simulate(pathway: SimulationPathway):
                 pathway = retrofit(pathway=pathway, year=year, product=product)
 
             # Build new assers
-            pathway = build_new(pathway=pathway, year=year, product=product)
+            pathway = new_build(pathway=pathway, year=year, product=product)
 
         # Copy availability to next year
         pathway.copy_availability(year=year)
@@ -100,7 +100,7 @@ def simulate_pathway(sector, product, pathway, sensitivity):
             export_dir=f"final/{product}",
         )
 
-        pathway.plot_stacks(df_stack_total, groupby="technology", chemical=chemical)
-        pathway.plot_stacks(df_stack_total, groupby="region", chemical=chemical)
+        pathway.plot_stacks(df_stack_total, groupby="technology", product=product)
+        pathway.plot_stacks(df_stack_total, groupby="region", product=product)
 
     logger.info("Pathway simulation complete")

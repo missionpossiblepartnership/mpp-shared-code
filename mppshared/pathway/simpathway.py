@@ -1,6 +1,7 @@
 import logging
 import math
 from collections import defaultdict
+from mppshared.config import MODEL_SCOPE
 
 import pandas as pd
 import plotly.express as px
@@ -11,7 +12,7 @@ from plotly.subplots import make_subplots
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.plant.plant import PlantStack, create_plants
-from mppshared.calculate.calculate_availability import update_availability_from_plant
+from mppshared.calculate.calcluate_availablity import update_availability_from_plant
 from mppshared.utility.dataframe_utility import flatten_columns
 from mppshared.config import (
     PRODUCTS,
@@ -44,21 +45,24 @@ class SimulationPathway:
         self.stacks = self.make_initial_plant_stack()
 
         logger.debug("Getting demand")
-        self.demand = self.importer.get_demand()
+        self.demand = self.importer.get_demand(region=MODEL_SCOPE)
 
-        logger.debug("Getting rankings")
-        self.rankings = self._import_rankings()
+        # TODO: Ranking missing, if it is available we should import
+        # logger.debug("Getting rankings")
+        # self.rankings = self._import_rankings()
 
         logger.debug("Getting emissions")
         self.emissions = self.importer.get_process_data(data_type="emissions")
 
-        logger.debug("Getting availability")
-        self.availability = self._import_availability()
+        # TODO: Availability missing, if it is available we should import
+        # logger.debug("Getting availability")
+        # self.availability = self._import_availability()
 
         logger.debug("Getting process data")
         self.process_data = self.importer.get_all_process_data()
-        self.cost = self.importer.get_process_data(data_type="cost")
-        self.inputs_pivot = self.importer.get_process_data(data_type="inputs")
+        self.cost = self.importer.get_process_data(data_type="technology_transitions")
+        # TODO: Raw material data is missing and should be called inputs to import it
+        # self.inputs_pivot = self.importer.get_process_data(data_type="inputs")
         self.plant_specs = self.importer.get_plant_specs()
 
     def _import_availability(self):
@@ -303,7 +307,7 @@ class SimulationPathway:
             plant: update based on this plant
         """
         df = self.availability
-        df = update_availability_from_plant(df, plant=plant, remove=remove, year=year)
+        df = update_availability_from_plant(df, plant=plant, year=year)
         self.availability = df.round(1)
         return self
 
@@ -363,22 +367,23 @@ class SimulationPathway:
         """Calculate how many plants are there, based on current production"""
         df_plant_size = self.importer.get_plant_sizes()
         df_production = self.importer.get_current_production()
-
-        df_plants = df_production.merge(df_plant_size, on=["technology", "production"])
-
-        df_plants["number_of_plants"] = (
+        df_production["number_of_plants"] = (
             (
-                (df_plants["annual_production_capacity"])
-                / ASSUMED_PLANT_CAPACITY * 365/1e6
+                (df_production["annual_production_capacity"])
+                / (ASSUMED_PLANT_CAPACITY * 365/1e6)
             )
             .round()
             .astype(int)
         )
 
-        # TODO: Define the plants that are old based on the commission year
+        df_plant_size.drop(columns=["annual_production_capacity"], inplace=True)
+
+        df_plants = df_production.merge(df_plant_size, on=["technology", "product"])
+
+        # TODO: Define the plants that are old based on the commission year - there is no data here
         # Calculate number of old and new plants
         df_plants["number_of_plants_old"] = (
-            df_plants["number_of_plants"] * df_plants["old_share"]
+            df_plants["number_of_plants"] * 0.5
         ).astype(int)
 
         df_plants["number_of_plants_new"] = (
@@ -398,7 +403,7 @@ class SimulationPathway:
         df_plants = df_plants.merge(
             df_process_data,
             left_on=["region", "product", "technology", "year"],
-            right_on=["region__", "product__", "technology__", "year__"],
+            right_on=["region_", "product_", "technology_", "year_"],
         )
         df_plants = df_plants.drop_duplicates(
             subset=["region", "product", "technology"]
@@ -417,9 +422,9 @@ class SimulationPathway:
                     start_year=self.start_year - 40
                     if plant_status == "old"
                     else self.start_year - 20,
-                    plant_lifetime=row["technology"],
+                    plant_lifetime=row["spec_technology_lifetime"],
                     plant_status=plant_status,
-                    capacity_factor=row["spec__capacity_factor"],
+                    capacity_factor=row["spec_capacity_factor"],
                     df_plant_capacities=self.df_plant_capacities,
                 ),
                 axis=1,
