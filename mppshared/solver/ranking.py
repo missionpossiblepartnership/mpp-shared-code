@@ -103,7 +103,7 @@ def rank_technology(df_ranking, rank_type, pathway, sensitivity):
     return df_rank
 
 
-def create_ranking(df_ranking, sensitivity, pathway):
+def make_rankings(df_ranking, sensitivity, pathway):
     """Create the ranking for all the possible rank types and scenarios.
 
     Args:

@@ -3,7 +3,7 @@
 from mppshared.config import SOLVER_INPUT_DATA_PATH
 from mppshared.solver.implicit_forcing import apply_implicit_forcing
 from mppshared.solver.input_loading import load_and_validate_inputs
-from mppshared.solver.ranking import create_ranking
+from mppshared.solver.ranking import make_rankings
 
 
 # TODO: which arguments are needed?
@@ -30,7 +30,7 @@ def solve(sector: str):
     # placeholder for the pathway
     pathway = "bau"
     sensitivity = 0
-    ranking = create_ranking(df_ranking, sensitivity, pathway)
+    ranking = make_rankings(df_ranking, sensitivity, pathway)
     # # Find optimum technology switches year-by-year
     # Process outputs
 
