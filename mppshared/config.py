@@ -154,8 +154,8 @@ DECOMMISSION_RATES = {
 # Scope of the model run - to be specified
 MODEL_SCOPE = "Global"
 
-# Override plant parameters
-PLANT_SPEC_OVERRIDE = {"assumed_plant_capacity": 3000}
+# Override plant parameters; unit t/year
+ASSUMED_PLANT_CAPACITY = 3000
 
 PATHWAYS = [
     "bau",
