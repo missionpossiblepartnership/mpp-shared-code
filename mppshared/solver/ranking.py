@@ -1,6 +1,8 @@
 """ Rank technology switches."""
+import numpy as np
 import pandas as pd
 
+from mppshared.config import NUMBER_OF_BINS_RANKING
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.utils import get_logger
 
@@ -76,6 +78,20 @@ def get_rank_config(rank_type: str, pathway: str):
     return config[rank_type][pathway]
 
 
+def add_binned_rankings(
+    df_rank: pd.DataFrame,
+    rank_type: str,
+    pathway: str,
+    n_bins: int = NUMBER_OF_BINS_RANKING,
+) -> pd.DataFrame:
+    """Add binned values for the possible ranking columns"""
+    df_rank[f"{rank_type}_{pathway}_score_binned"] = bin_ranking(
+        df_rank[f"{rank_type}_{pathway}_score"], n_bins=n_bins
+    )
+
+    return df_rank
+
+
 def rank_technology(df_ranking, rank_type, pathway, sensitivity):
     """Rank the technologies based on the ranking config.
 
@@ -110,23 +126,12 @@ def rank_technology(df_ranking, rank_type, pathway, sensitivity):
         df[f"{rank_type}_{pathway}_score"] = (
             df["sum_emissions_delta_normalized"] * config["emissions"]
         ) + (df["tco_normalized"] * config["tco"])
-        # df[f"{rank_type}_{pathway}_score"] = (
-        #     (df["tco"] * config["tco"])
-        #     + (df["delta_co2_scope1"] * config["delta_co2_scope1"])
-        #     + (df["delta_co2_scope2"] * config["delta_co2_scope2"])
-        #     + (df["delta_co2_scope3_upstream"] + config["delta_co2_scope3_upstream"])
-        #     + (
-        #         df["delta_co2_scope3_downstream"]
-        #         + config["delta_co2_scope3_downstream"]
-        #     )
-        # )
         # Get the ranking for the rank type
         df[f"{rank_type}_{pathway}_ranking"] = df[f"{rank_type}_{pathway}_score"].rank(
             ascending=False
         )
         holder.append(df)
     df_rank = pd.concat(holder)
-
     return df_rank
 
 
