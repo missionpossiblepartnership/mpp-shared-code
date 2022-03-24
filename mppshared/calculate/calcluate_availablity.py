@@ -12,10 +12,12 @@ def update_availability_from_plant(
         df_availability: Availabilities data
         plant: The plant in consideration
         year: Year the plant is added or removed
-        remove: The plant is removed
 
     Returns:
         The updated availability data
     """
 
-    return
+    return None
+
+def test_func():
+    pass

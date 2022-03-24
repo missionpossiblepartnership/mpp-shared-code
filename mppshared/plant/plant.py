@@ -9,20 +9,17 @@ from mppshared.config import DECOMMISSION_RATES  # , METHANOL_SUPPLY_TECH
 class Plant:
     def __init__(
         self,
-        sector,
         product,
         technology,
         region,
         start_year,
         capacity_factor,
-        ccs_total,
         plant_lifetime,
         df_plant_capacities,
         type_of_tech="Initial",
         retrofit=False,
         plant_status="new",
     ):
-        self.sector = sector
         self.product = product
         self.technology = technology
         self.region = region
@@ -32,7 +29,6 @@ class Plant:
         self.capacity_factor = capacity_factor
         self.uuid = uuid4().hex
         self.retrofit = retrofit
-        self.ccs_total = ccs_total
         self.plant_status = plant_status
         self.plant_lifetime = plant_lifetime
         self.type_of_tech = type_of_tech
@@ -55,9 +51,9 @@ class Plant:
 
         return {
             product: df_capacities.loc[
-                df_capacities.product == product, "assumed_plant_capacity"
+                df_capacities["product"] == product, "annual_production_capacity"
             ].values[0]
-            for product in df_capacities.product
+            for product in df_capacities["product"]
         }
 
     def get_capacity(self, product=None):
