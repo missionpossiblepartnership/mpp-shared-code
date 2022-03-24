@@ -78,7 +78,20 @@ def get_rank_config(rank_type: str, pathway: str):
     return config[rank_type][pathway]
 
 
-def add_binned_rankings(
+def bin_ranking(rank_array: np.array, n_bins: int = NUMBER_OF_BINS_RANKING) -> np.array:
+    """
+    Bin the ranking, i.e. values that are close together end up in the same bin
+    Args:
+        rank_array: The array with values we want to rank
+        n_bins: the number of bins we want to
+    Returns:
+        array with binned values
+    """
+    _, bins = np.histogram(rank_array, bins=n_bins)
+    return np.digitize(rank_array, bins=bins)
+
+
+def _add_binned_rankings(
     df_rank: pd.DataFrame,
     rank_type: str,
     pathway: str,
@@ -108,10 +121,13 @@ def rank_technology(df_ranking, rank_type, pathway, sensitivity):
     # to decommission?
     holder = []
     df_ranking.fillna(0, inplace=True)
-    for year in range(2020, 2051):
-        df = df_ranking[
-            (df_ranking["switch_type"] == "Decommission") & (df_ranking["year"] == year)
-        ].copy()
+    for switch_type in [
+        "decomission",
+        "brownfield_newbuild",
+        "brwonfield_greenfield",
+        "greenfield",
+    ]:
+        df = df_ranking[(df_ranking["switch_type"] == switch_type)].copy()
         # Normalize the tco and sum of emissions delta
         df["tco_normalized"] = df["tco"] / df["tco"].max()
         df["sum_emissions_delta"] = (
@@ -126,6 +142,7 @@ def rank_technology(df_ranking, rank_type, pathway, sensitivity):
         df[f"{rank_type}_{pathway}_score"] = (
             df["sum_emissions_delta_normalized"] * config["emissions"]
         ) + (df["tco_normalized"] * config["tco"])
+        df_rank = df.groupby(["year"]).apply(_add_binned_rankings, rank_type, pathway)
         # Get the ranking for the rank type
         df[f"{rank_type}_{pathway}_ranking"] = df[f"{rank_type}_{pathway}_score"].rank(
             ascending=False
