@@ -1,28 +1,29 @@
 """ Apply implicit forcing mechanisms to the input tables: carbon cost, green premium and technology moratorium."""
 
-import pandas as pd
-import numpy as np
-from timeit import default_timer as timer
 from datetime import timedelta
+from timeit import default_timer as timer
 
-from mppshared.model.carbon_cost_trajectory import CarbonCostTrajectory
+import numpy as np
+import pandas as pd
+
 from mppshared.calculate.calculate_cost import discount_costs
+from mppshared.config import EMISSION_SCOPES, GHGS
+from mppshared.model.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.utility.dataframe_utility import (
-    add_column_header_suffix,
-    get_grouping_columns_for_npv_calculation,
-)
-from mppshared.utility.function_timer_utility import timer_func
-from mppshared.config import GHGS, EMISSION_SCOPES
+    add_column_header_suffix, get_grouping_columns_for_npv_calculation)
 from mppshared.utility.function_timer_utility import timer_func
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger("Apply implicit forcing")
 
 
+# def apply_implicit_forcing(
+#     df_technology_switches: pd.DataFrame,
+#     df_emissions: pd.DataFrame,
+#     df_technology_characteristics: pd.DataFrame,
+# ) -> pd.DataFrame:
 def apply_implicit_forcing(
-    df_technology_switches: pd.DataFrame,
-    df_emissions: pd.DataFrame,
-    df_technology_characteristics: pd.DataFrame,
+    pathway: str, sensitivity: str, product: str, sector: str
 ) -> pd.DataFrame:
     """Apply the implicit forcing mechanisms to the input tables.
 
@@ -37,6 +38,12 @@ def apply_implicit_forcing(
 
     # Add carbon cost to TCO
     # TODO: improve runtime
+    importer = IntermediateDataImporter(
+        pathway=pathway, sensitivity=sensitivity, sector=sector, product=product
+    )
+    df_technology_switches = importer.get_tech_transitions()
+    df_emissions = importer.get_emissions()
+    df_technology_characteristics = importer.get_plant_specs()
     start = timer()
     df_carbon_cost = apply_carbon_cost_to_tco(
         df_technology_switches, df_emissions, df_technology_characteristics
@@ -57,6 +64,7 @@ def apply_implicit_forcing(
 
     # Calculate emission deltas between origin and destination technology
     df_ranking = calculate_emission_reduction(df_carbon_cost, df_emissions)
+    importer.export_data(df=df_ranking, filename="technologies_to_rank.csv")
 
     return df_ranking
 
