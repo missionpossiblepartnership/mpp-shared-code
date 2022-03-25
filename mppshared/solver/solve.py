@@ -22,15 +22,11 @@ def solve(sector: str):
         df_technology_characteristics=input_dfs["technology_characteristics"],
     )
 
-    df_ranking.to_csv(SOLVER_INPUT_DATA_PATH + f"{sector}_ranking.csv")
     pass
     # Output of this should be a technology switching table with cost, emissions and characteristics
 
     # Create ranking
-    # placeholder for the pathway
-    pathway = "bau"
-    sensitivity = 0
-    ranking = make_rankings(df_ranking, sensitivity, pathway)
+    # ranking = make_rankings(df_ranking, sensitivity, pathway)
     # # Find optimum technology switches year-by-year
     # Process outputs
 
