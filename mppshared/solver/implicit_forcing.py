@@ -15,7 +15,7 @@ from mppshared.utility.dataframe_utility import (
 from mppshared.utility.function_timer_utility import timer_func
 from mppshared.utility.log_utility import get_logger
 
-logger = get_logger("Apply implicit forcing")
+logger = get_logger(__name__)
 
 
 # def apply_implicit_forcing(
@@ -36,6 +36,7 @@ def apply_implicit_forcing(
     Returns:
         pd.DataFrame: DataFrame ready for ranking the technology switches
     """
+    logger.info("Applying implicit forcing")
 
     # Add carbon cost to TCO
     # TODO: improve runtime
@@ -45,6 +46,7 @@ def apply_implicit_forcing(
     df_technology_switches = importer.get_tech_transitions()
     df_emissions = importer.get_emissions()
     df_technology_characteristics = importer.get_plant_specs()
+    df_technology_characteristics.reset_index(inplace=True)
     start = timer()
     df_carbon_cost = apply_carbon_cost_to_tco(
         df_technology_switches, df_emissions, df_technology_characteristics
@@ -65,7 +67,9 @@ def apply_implicit_forcing(
 
     # Calculate emission deltas between origin and destination technology
     df_ranking = calculate_emission_reduction(df_carbon_cost, df_emissions)
-    importer.export_data(df=df_ranking, filename="technologies_to_rank.csv")
+    importer.export_data(
+        df=df_ranking, filename="technologies_to_rank.csv", export_dir="intermediate"
+    )
 
     return df_ranking
 
