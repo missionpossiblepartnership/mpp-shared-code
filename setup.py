@@ -4,7 +4,7 @@ For licence information, see licence.txt
 """
 import os
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 # only specify install_requires if not in RTD environment
 if os.getenv("READTHEDOCS") == "True":

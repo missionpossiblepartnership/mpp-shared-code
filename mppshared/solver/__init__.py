@@ -1,8 +1,10 @@
-from . import constraints
-from . import grid_search
-from . import implicit_forcing
-from . import input_loading
-from . import output_processing
-from . import ranking
-from . import solve
-from . import switching
+from . import (
+    constraints,
+    grid_search,
+    implicit_forcing,
+    input_loading,
+    output_processing,
+    ranking,
+    solve,
+    switching,
+)

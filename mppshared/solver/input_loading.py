@@ -1,8 +1,8 @@
 """ Import and validate the input tables."""
 
-from mppshared.config import SOLVER_INPUT_DATA_PATH, SOLVER_INPUT_TABLES
-
 import pandas as pd
+
+from mppshared.config import SOLVER_INPUT_DATA_PATH, SOLVER_INPUT_TABLES
 
 
 def load_and_validate_inputs(sector: str) -> dict:

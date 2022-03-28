@@ -11,7 +11,9 @@ from mppshared.config import EMISSION_SCOPES, GHGS
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.model.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.utility.dataframe_utility import (
-    add_column_header_suffix, get_grouping_columns_for_npv_calculation)
+    add_column_header_suffix,
+    get_grouping_columns_for_npv_calculation,
+)
 from mppshared.utility.function_timer_utility import timer_func
 from mppshared.utility.log_utility import get_logger
 

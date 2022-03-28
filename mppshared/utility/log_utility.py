@@ -3,11 +3,9 @@
 import logging
 import os
 import sys
-
-from pathlib import Path
-
 from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
+from pathlib import Path
 
 from mppshared.config import LOG_PATH
 

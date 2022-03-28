@@ -125,13 +125,15 @@ def rank_technology(df_ranking, rank_type, pathway, sensitivity):
     df_ranking.fillna(0, inplace=True)
     # TODO: make sure that the filter is correct and returning the apropiate data
     if rank_type == "brownfield":
-        df = df_ranking[df_ranking["switch_type"].str.contains('brownfield')].copy()
+        df = df_ranking[df_ranking["switch_type"].str.contains("brownfield")].copy()
     else:
         df = df_ranking[(df_ranking["switch_type"] == rank_type)].copy()
     # Normalize the tco and sum of emissions delta
     # Reverse the normalization. Rank higher the cheaper and lower the better
-    df["tco_normalized"] =1-(df['tco'] -df['tco'].min())/ (df['tco'].max() - df['tco'].min())
-    df["sum_emissions_delta"] = 1+(
+    df["tco_normalized"] = 1 - (df["tco"] - df["tco"].min()) / (
+        df["tco"].max() - df["tco"].min()
+    )
+    df["sum_emissions_delta"] = 1 + (
         df["delta_co2_scope1"]
         + df["delta_co2_scope2"]
         + df["delta_co2_scope3_downstream"]
@@ -140,9 +142,11 @@ def rank_technology(df_ranking, rank_type, pathway, sensitivity):
     # df["sum_emissions_delta_normalized"] = (
     #     df["sum_emissions_delta"] / df["sum_emissions_delta"].max()
     # )
-    df['sum_emissions_delta_normalized'] = 1-(df['sum_emissions_delta'] -df['sum_emissions_delta'].min())/ (df['sum_emissions_delta'].max() - df['sum_emissions_delta'].min())
+    df["sum_emissions_delta_normalized"] = 1 - (
+        df["sum_emissions_delta"] - df["sum_emissions_delta"].min()
+    ) / (df["sum_emissions_delta"].max() - df["sum_emissions_delta"].min())
     df.fillna(0, inplace=True)
-    df[f"{rank_type}_{pathway}_score"] =(
+    df[f"{rank_type}_{pathway}_score"] = (
         df["sum_emissions_delta_normalized"] * config["emissions"]
     ) + (df["tco_normalized"] * config["tco"])
     df_rank = df.groupby(["year"]).apply(_add_binned_rankings, rank_type, pathway)
@@ -165,11 +169,11 @@ def make_rankings(pathway, sensitivity, sector, product):
     )
     df_ranking = importer.get_technologies_to_rank()
     data_holder = []
-    for rank_type in [
-        "decommission",
-        "greenfield",
-        "brownfield"
-    ]:
+    for rank_type in ["decommission", "greenfield", "brownfield"]:
         df_rank = rank_technology(df_ranking, rank_type, pathway, sensitivity)
-        importer.export_data(df=df_rank, filename=f'{rank_type}_rank.csv',export_dir=f'ranking/{product}')
+        importer.export_data(
+            df=df_rank,
+            filename=f"{rank_type}_rank.csv",
+            export_dir=f"ranking/{product}",
+        )
         # df_rank.to_csv(f"{rank_type}_{pathway}.csv", index=False)

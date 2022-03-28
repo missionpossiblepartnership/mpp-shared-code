@@ -1,9 +1,10 @@
 import pandas as pd
+
 from mppshared.plant.plant import Plant
 
 
 def update_availability_from_plant(
-        df_availability: pd.DataFrame, plant: Plant, year: int
+    df_availability: pd.DataFrame, plant: Plant, year: int
 ):
     """
     Update availabilities based on a plant that is added or removed
@@ -18,6 +19,7 @@ def update_availability_from_plant(
     """
 
     return None
+
 
 def test_func():
     pass

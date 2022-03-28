@@ -1,10 +1,10 @@
 """ Function for cost calculations. """
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
+from mppshared.config import END_YEAR, START_YEAR
 from mppshared.utility.log_utility import get_logger
-from mppshared.config import START_YEAR, END_YEAR
 
 logger = get_logger("Cost calculations")
 
