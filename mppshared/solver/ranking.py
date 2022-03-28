@@ -1,4 +1,6 @@
 """ Rank technology switches."""
+import sys
+
 import numpy as np
 import pandas as pd
 
@@ -31,7 +33,7 @@ def get_rank_config(rank_type: str, pathway: str):
     """
 
     config = {
-        "new_build": {
+        "greenfield": {
             "bau": {
                 "tco": 1.0,
                 "emissions": 0.0,
@@ -45,10 +47,10 @@ def get_rank_config(rank_type: str, pathway: str):
                 "emissions": 0.2,
             },
         },
-        "retrofit": {
+        "brownfield": {
             "bau": {
-                "tco": 0.5,
-                "emissions": 0.5,
+                "tco": 1.0,
+                "emissions": 0.0,
             },
             "fa": {
                 "tco": 0.0,
@@ -121,34 +123,34 @@ def rank_technology(df_ranking, rank_type, pathway, sensitivity):
     # to decommission?
     holder = []
     df_ranking.fillna(0, inplace=True)
-    for switch_type in [
-        "decomission",
-        "brownfield_newbuild",
-        "brwonfield_greenfield",
-        "greenfield",
-    ]:
-        df = df_ranking[(df_ranking["switch_type"] == switch_type)].copy()
-        # Normalize the tco and sum of emissions delta
-        df["tco_normalized"] = df["tco"] / df["tco"].max()
-        df["sum_emissions_delta"] = (
-            df["delta_co2_scope1"]
-            + df["delta_co2_scope2"]
-            + df["delta_co2_scope3_downstream"]
-            + df["delta_co2_scope3_upstream"]
-        )
-        df["sum_emissions_delta_normalized"] = (
-            df["sum_emissions_delta"] / df["sum_emissions_delta"].max()
-        )
-        df[f"{rank_type}_{pathway}_score"] = (
-            df["sum_emissions_delta_normalized"] * config["emissions"]
-        ) + (df["tco_normalized"] * config["tco"])
-        df_rank = df.groupby(["year"]).apply(_add_binned_rankings, rank_type, pathway)
-        # Get the ranking for the rank type
-        df[f"{rank_type}_{pathway}_ranking"] = df[f"{rank_type}_{pathway}_score"].rank(
-            ascending=False
-        )
-        holder.append(df)
-    df_rank = pd.concat(holder)
+    # TODO: make sure that the filter is correct and returning the apropiate data
+    if rank_type == "brownfield":
+        df = df_ranking[df_ranking["switch_type"].str.contains('brownfield')].copy()
+    else:
+        df = df_ranking[(df_ranking["switch_type"] == rank_type)].copy()
+    # Normalize the tco and sum of emissions delta
+    # Reverse the normalization. Rank higher the cheaper and lower the better
+    df["tco_normalized"] =1-(df['tco'] -df['tco'].min())/ (df['tco'].max() - df['tco'].min())
+    df["sum_emissions_delta"] = 1+(
+        df["delta_co2_scope1"]
+        + df["delta_co2_scope2"]
+        + df["delta_co2_scope3_downstream"]
+        + df["delta_co2_scope3_upstream"]
+    )
+    # df["sum_emissions_delta_normalized"] = (
+    #     df["sum_emissions_delta"] / df["sum_emissions_delta"].max()
+    # )
+    df['sum_emissions_delta_normalized'] = 1-(df['sum_emissions_delta'] -df['sum_emissions_delta'].min())/ (df['sum_emissions_delta'].max() - df['sum_emissions_delta'].min())
+    df.fillna(0, inplace=True)
+    df[f"{rank_type}_{pathway}_score"] =(
+        df["sum_emissions_delta_normalized"] * config["emissions"]
+    ) + (df["tco_normalized"] * config["tco"])
+    df_rank = df.groupby(["year"]).apply(_add_binned_rankings, rank_type, pathway)
+    # Get the ranking for the rank type
+    df_rank[f"{rank_type}_{pathway}_ranking"] = df_rank[
+        f"{rank_type}_{pathway}_score"
+    ].rank(ascending=False)
+    holder.append(df)
     return df_rank
 
 
@@ -162,6 +164,12 @@ def make_rankings(pathway, sensitivity, sector, product):
         pathway=pathway, sensitivity=sensitivity, sector=sector, product=product
     )
     df_ranking = importer.get_technologies_to_rank()
-    for rank_type in ["decommission"]:  # ["new_build", "retrofit", "decommission"]:
+    data_holder = []
+    for rank_type in [
+        "decommission",
+        "greenfield",
+        "brownfield"
+    ]:
         df_rank = rank_technology(df_ranking, rank_type, pathway, sensitivity)
-        df_rank.to_csv(f"{rank_type}_{pathway}.csv", index=False)
+        importer.export_data(df=df_rank, filename=f'{rank_type}_rank.csv',export_dir=f'ranking/{product}')
+        # df_rank.to_csv(f"{rank_type}_{pathway}.csv", index=False)
