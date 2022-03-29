@@ -20,11 +20,6 @@ from mppshared.utility.log_utility import get_logger
 logger = get_logger(__name__)
 
 
-# def apply_implicit_forcing(
-#     df_technology_switches: pd.DataFrame,
-#     df_emissions: pd.DataFrame,
-#     df_technology_characteristics: pd.DataFrame,
-# ) -> pd.DataFrame:
 def apply_implicit_forcing(
     pathway: str, sensitivity: str, product: str, sector: str
 ) -> pd.DataFrame:
