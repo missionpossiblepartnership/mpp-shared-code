@@ -48,8 +48,8 @@ class SimulationPathway:
         self.demand = self.importer.get_demand(region=MODEL_SCOPE)
 
         # TODO: Ranking missing, if it is available we should import
-        # logger.debug("Getting rankings")
-        # self.rankings = self._import_rankings()
+        logger.debug("Getting rankings")
+        self.rankings = self._import_rankings()
 
         logger.debug("Getting emissions")
         self.emissions = self.importer.get_process_data(data_type="emissions")
@@ -112,7 +112,7 @@ class SimulationPathway:
     def _import_rankings(self, japan_only=False):
         """Import ranking for all products and rank types from the CSVs"""
         rankings = defaultdict(dict)
-        for rank_type in ["new_build", "retrofit", "decommission"]:
+        for rank_type in ["newbuild", "retrofit", "decommission"]:
             for product in self.product:
                 df_rank = self.importer.get_ranking(
                     rank_type=rank_type,
