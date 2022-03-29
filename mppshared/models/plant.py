@@ -62,7 +62,7 @@ class Plant:
         """Get plant capacity"""
         return self.capacities.get(product or self.product, 0)
 
-    def get_yearly_volume(self, product):
+    def get_annual_production(self, product):
         return self.get_capacity(product) * self.capacity_factor
 
 
@@ -134,13 +134,13 @@ class PlantStack:
         plants = self.filter_plants(product=product, **kwargs)
         return sum(plant.get_capacity(product) for plant in plants)
 
-    def get_yearly_volume(self, product, methanol_type=None, **kwargs):
+    def get_annual_production(self, product, methanol_type=None, **kwargs):
         """Get the yearly volume, optionally filtered by region, technology, product"""
         if methanol_type is not None:
             kwargs["methanol_type"] = methanol_type
 
         plants = self.filter_plants(product=product, **kwargs)
-        return sum(plant.get_yearly_volume(product=product) for plant in plants)
+        return sum(plant.get_annual_production(product=product) for plant in plants)
 
     def get_tech(self, id_vars, product=None):
         """
