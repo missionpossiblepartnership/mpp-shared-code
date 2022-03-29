@@ -1,25 +1,25 @@
 import logging
 import math
 from collections import defaultdict
-from mppshared.config import MODEL_SCOPE
 
 import pandas as pd
 import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-
-from mppshared.import_data.intermediate_data import IntermediateDataImporter
-# from mppshared.rank.rank_technologies import import_tech_data, rank_tech
-from mppshared.plant.plant import PlantStack, create_plants
 from mppshared.calculate.calcluate_availablity import update_availability_from_plant
-from mppshared.utility.dataframe_utility import flatten_columns
 from mppshared.config import (
+    ASSUMED_PLANT_CAPACITY,
+    LOG_LEVEL,
+    MODEL_SCOPE,
     PRODUCTS,
     SECTOR,
-    LOG_LEVEL,
-    ASSUMED_PLANT_CAPACITY
 )
+from mppshared.import_data.intermediate_data import IntermediateDataImporter
+
+# from mppshared.rank.rank_technologies import import_tech_data, rank_tech
+from mppshared.plant.plant import PlantStack, create_plants
+from mppshared.utility.dataframe_utility import flatten_columns
 
 logger = logging.getLogger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -370,7 +370,7 @@ class SimulationPathway:
         df_production["number_of_plants"] = (
             (
                 (df_production["annual_production_capacity"])
-                / (ASSUMED_PLANT_CAPACITY * 365/1e6)
+                / (ASSUMED_PLANT_CAPACITY * 365 / 1e6)
             )
             .round()
             .astype(int)
@@ -506,9 +506,7 @@ class SimulationPathway:
         self, df, vars, product, year, methanol_type: str = None, emissions=True
     ):
         """Calculate the weighted average of variables over regions/technologies"""
-        df_plants = flatten_columns(
-            self.stacks[year].aggregate_stack(product=product)
-        )
+        df_plants = flatten_columns(self.stacks[year].aggregate_stack(product=product))
 
         df = pd.merge(
             df_plants.reset_index(),
@@ -570,9 +568,7 @@ class SimulationPathway:
 
     def get_total_volume(self, product: str, year: int, methanol_type=None):
         """Get total volume produced of a product in a year"""
-        df_plants = flatten_columns(
-            self.stacks[year].aggregate_stack(product=product)
-        )
+        df_plants = flatten_columns(self.stacks[year].aggregate_stack(product=product))
 
         # Return total capacity in Mton/annum
         return df_plants["capacity_total"].sum()

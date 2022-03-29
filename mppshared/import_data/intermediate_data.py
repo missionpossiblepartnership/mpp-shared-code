@@ -1,9 +1,10 @@
-import pandas as pd
-from pandas.errors import ParserError
 from pathlib import Path
 
+import pandas as pd
+from pandas.errors import ParserError
 
-from mppshared.config import MODEL_SCOPE, ASSUMED_PLANT_CAPACITY
+# from util.util import make_multi_df
+from mppshared.config import ASSUMED_PLANT_CAPACITY, MODEL_SCOPE
 from mppshared.utility.dataframe_utility import make_multi_df
 
 
@@ -25,9 +26,7 @@ class IntermediateDataImporter:
         self.product = product
         self.pathway = pathway
         self.sensitivity = sensitivity
-        self.export_dir = parent_path.joinpath(
-            f"data/{sector}/{pathway}/{sensitivity}"
-        )
+        self.export_dir = parent_path.joinpath(f"data/{sector}/{pathway}/{sensitivity}")
         self.intermediate_path = self.export_dir.joinpath("intermediate")
         self.final_path = self.export_dir.joinpath("final")
         self.aggregate_export_dir = parent_path.joinpath("output/")
@@ -68,7 +67,7 @@ class IntermediateDataImporter:
     def get_plant_specs(self):
         df_spec = pd.read_csv(
             self.intermediate_path.joinpath("technology_characteristics.csv"),
-            index_col=["product", "technology", "region"],
+            # index_col=["product", "technology", "region"],
         )
         df_spec.annual_production_capacity = ASSUMED_PLANT_CAPACITY * 365 / 1e6
         df_spec["yearly_volume"] = (
@@ -93,6 +92,11 @@ class IntermediateDataImporter:
 
     def get_plant_capacities(self):
         df_spec = self.get_plant_specs().reset_index()
+        df_spec.annual_production_capacity = ASSUMED_PLANT_CAPACITY
+        df_spec["yearly_volume"] = (
+            df_spec.annual_production_capacity * df_spec.capacity_factor
+        )
+        df_spec["total_volume"] = df_spec.technology_lifetime * df_spec.yearly_volume
         return df_spec.drop_duplicates(["product", "region", "technology"])[
             [
                 "product",
@@ -142,7 +146,7 @@ class IntermediateDataImporter:
         df_emissions = make_multi_df(df=df_spec, name="emissions")
         df_spec = make_multi_df(df=df_spec, name="spec")
         df_cost = make_multi_df(df=df_cost, name="cost")
-        df_cost.index.names = ['product', 'technology', 'year', 'region']
+        df_cost.index.names = ["product", "technology", "year", "region"]
         # df_inputs_pivot = make_multi_df(df=df_inputs_pivot, name="inputs")
 
         df_all = df_spec.join(df_emissions).join(df_cost)
@@ -151,6 +155,11 @@ class IntermediateDataImporter:
         if product is not None:
             df_all = df_all.query(f"product == '{product}'").droplevel("product")
         return df_all.query("year <= 2050")
+
+    def get_technologies_to_rank(self):
+        """Return the list of technologies to rank with the TCO and emission deltas."""
+        file_path = self.intermediate_path.joinpath("technologies_to_rank.csv")
+        return pd.read_csv(file_path)
 
     def get_variable_per_year(self, product, variable):
         file_path = self.export_dir.joinpath(

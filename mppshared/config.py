@@ -1,5 +1,6 @@
 """Configuration file for the library."""
 import logging
+
 import numpy as np
 
 LOG_LEVEL = "INFO"
@@ -169,7 +170,7 @@ SENSITIVITIES = [
 ]
 
 # Sectors
-SECTOR = "chemicals" #"aluminium, steel, ..."
+SECTOR = "chemicals"  # "aluminium, steel, ..."
 
 # Product
 PRODUCTS = {
@@ -179,12 +180,14 @@ PRODUCTS = {
 RUN_PARALLEL = False
 
 run_config = {
-    # "IMPORT_DATA",
-    # "CALCULATE_VARIABLES",
-    # "MAKE_RANKINGS",
+    "IMPORT_DATA",
+    "CALCULATE_VARIABLES",
+    "APPLY_IMPLICIT_FORCING",
+    "MAKE_RANKINGS",
     "SIMULATE_PATHWAY",
     # "CALCULATE_OUTPUTS",
     # "EXPORT_OUTPUTS",
     # "PLOT_AVAILABILITIES"
     # "MERGE_OUTPUTS"
 }
+NUMBER_OF_BINS_RANKING = 10
