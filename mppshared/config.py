@@ -147,6 +147,11 @@ CARBON_BUDGET_REF = {
     "trucking": 36,
 }
 
+# Capacity utilisation factor thresholds
+# TODO: make sector-specific with dictionary
+CUF_LOWER_THRESHOLD = 0.6
+CUF_UPPER_THRESHOLD = 0.95
+
 # TODO: Add more decomissioning rates
 DECOMMISSION_RATES = {
     "PDH": 0.1,
