@@ -151,9 +151,7 @@ def rank_technology(df_ranking, rank_type, pathway, sensitivity):
     ) + (df["tco_normalized"] * config["tco"])
     df_rank = df.groupby(["year"]).apply(_add_binned_rankings, rank_type, pathway)
     # Get the ranking for the rank type
-    df_rank[f"{rank_type}_{pathway}_ranking"] = df_rank[
-        f"{rank_type}_{pathway}_score"
-    ].rank(ascending=False)
+    df_rank[f"rank"] = df_rank[f"{rank_type}_{pathway}_score"].rank(ascending=False)
     holder.append(df)
     return df_rank
 
