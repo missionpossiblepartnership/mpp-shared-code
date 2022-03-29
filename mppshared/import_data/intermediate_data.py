@@ -67,7 +67,7 @@ class IntermediateDataImporter:
     def get_plant_specs(self):
         df_spec = pd.read_csv(
             self.intermediate_path.joinpath("technology_characteristics.csv"),
-            # index_col=["product", "technology", "region"],
+            index_col=["product", "technology", "region"],
         )
         df_spec.annual_production_capacity = ASSUMED_PLANT_CAPACITY * 365 / 1e6
         df_spec["yearly_volume"] = (
@@ -143,12 +143,13 @@ class IntermediateDataImporter:
 
         # Add multi index layers to join
         # 2 levels for emissions/spec to get it on the right level
-        df_emissions = make_multi_df(df=df_spec, name="emissions")
+        df_emissions = make_multi_df(df=df_emissions, name="emissions")
         df_spec = make_multi_df(df=df_spec, name="spec")
         df_cost = make_multi_df(df=df_cost, name="cost")
         df_cost.index.names = ["product", "technology", "year", "region"]
         # df_inputs_pivot = make_multi_df(df=df_inputs_pivot, name="inputs")
 
+        # TODO: this throws a bug because of mismatching indeces
         df_all = df_spec.join(df_emissions).join(df_cost)
         # df_all.columns.names = ["group", "category", "name"]
 

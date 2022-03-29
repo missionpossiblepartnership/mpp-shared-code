@@ -410,6 +410,7 @@ class SimulationPathway:
         )
 
         # Build them
+        # TODO: take out plant status old/new or deduce from plant age
         all_plants = []
         for plant_status in ["old", "new"]:
             plants = df_plants.apply(
