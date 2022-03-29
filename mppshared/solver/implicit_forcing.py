@@ -7,9 +7,10 @@ import numpy as np
 import pandas as pd
 
 from mppshared.calculate.calculate_cost import discount_costs
+from mppshared.solver.input_loading import filter_df_for_development
 from mppshared.config import EMISSION_SCOPES, GHGS
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.model.carbon_cost_trajectory import CarbonCostTrajectory
+from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.utility.dataframe_utility import (
     add_column_header_suffix,
     get_grouping_columns_for_npv_calculation,
@@ -20,11 +21,6 @@ from mppshared.utility.log_utility import get_logger
 logger = get_logger(__name__)
 
 
-# def apply_implicit_forcing(
-#     df_technology_switches: pd.DataFrame,
-#     df_emissions: pd.DataFrame,
-#     df_technology_characteristics: pd.DataFrame,
-# ) -> pd.DataFrame:
 def apply_implicit_forcing(
     pathway: str, sensitivity: str, product: str, sector: str
 ) -> pd.DataFrame:
@@ -40,15 +36,21 @@ def apply_implicit_forcing(
     """
     logger.info("Applying implicit forcing")
 
-    # Add carbon cost to TCO
-    # TODO: improve runtime
+    # Import input tables
     importer = IntermediateDataImporter(
         pathway=pathway, sensitivity=sensitivity, sector=sector, product=product
     )
-    df_technology_switches = importer.get_tech_transitions()
-    df_emissions = importer.get_emissions()
-    df_technology_characteristics = importer.get_plant_specs()
+
+    #! Development only: filter input tables for faster runtimes
+    df_technology_switches = filter_df_for_development(importer.get_tech_transitions())
+    df_emissions = filter_df_for_development(importer.get_emissions())
+    df_technology_characteristics = filter_df_for_development(
+        importer.get_plant_specs()
+    )
     df_technology_characteristics.reset_index(inplace=True)
+
+    # Add carbon cost to TCO based on scope 1 and 2 CO2 emissions
+    # TODO: improve runtime
     start = timer()
     df_carbon_cost = apply_carbon_cost_to_tco(
         df_technology_switches, df_emissions, df_technology_characteristics

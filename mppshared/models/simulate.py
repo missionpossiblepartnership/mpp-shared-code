@@ -1,12 +1,12 @@
 import logging
 
-from mppshared.config import END_YEAR, LOG_LEVEL, START_YEAR
+from mppshared.config import END_YEAR, LOG_LEVEL, START_YEAR, PRODUCTS, SECTOR
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
 # from mppshared.agent_logic.new_build import new_build
 # from mppshared.agent_logic.decommission import decommission
 # from mppshared.agent_logic.retrofit import retrofit
-from mppshared.pathway.simpathway import SimulationPathway
+from mppshared.models.simulation_pathway import SimulationPathway
 
 # from util.util import timing
 
@@ -81,7 +81,7 @@ def simulate_pathway(sector, product, pathway, sensitivity):
     pathway.save_availability()
     pathway.save_demand()
 
-    for product in PRODUCT[SECTOR]:
+    for product in PRODUCTS[SECTOR]:
         df_stack_total = pathway.aggregate_stacks(this_year=False, product=product)
         df_stack_new = pathway.aggregate_stacks(this_year=True, product=product)
 
