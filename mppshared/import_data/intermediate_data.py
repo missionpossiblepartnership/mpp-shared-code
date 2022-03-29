@@ -149,7 +149,6 @@ class IntermediateDataImporter:
         df_cost.index.names = ["product", "technology", "year", "region"]
         # df_inputs_pivot = make_multi_df(df=df_inputs_pivot, name="inputs")
 
-        # TODO: this throws a bug because of mismatching indeces
         df_all = df_spec.join(df_emissions).join(df_cost)
         # df_all.columns.names = ["group", "category", "name"]
 
