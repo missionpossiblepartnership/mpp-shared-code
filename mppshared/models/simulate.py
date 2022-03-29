@@ -4,7 +4,9 @@ from mppshared.config import END_YEAR, LOG_LEVEL, START_YEAR, PRODUCTS, SECTOR
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
 # from mppshared.agent_logic.new_build import new_build
-# from mppshared.agent_logic.decommission import decommission
+from mppshared.agent_logic.decommission import decommission
+from mppshared.models.plant import PlantStack
+
 # from mppshared.agent_logic.retrofit import retrofit
 from mppshared.models.simulation_pathway import SimulationPathway
 
@@ -14,7 +16,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def simulate(pathway: SimulationPathway):
+def simulate(pathway: SimulationPathway) -> SimulationPathway:
     """
     Run the pathway simulation over the years:
         - First, decommission a fixed % of plants
