@@ -7,7 +7,7 @@ import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.calculate.calcluate_availablity import update_availability_from_plant
+from mppshared.calculate.calculate_availablity import update_availability_from_plant
 from mppshared.config import (
     ASSUMED_PLANT_CAPACITY,
     LOG_LEVEL,
@@ -18,7 +18,7 @@ from mppshared.config import (
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
-from mppshared.plant.plant import PlantStack, create_plants
+from mppshared.models.plant import PlantStack, create_plants
 from mppshared.utility.dataframe_utility import flatten_columns
 
 logger = logging.getLogger(__name__)
@@ -468,13 +468,9 @@ class SimulationPathway:
 
         filename = f"output/{self.pathway_name}/{self.sensitivity}/final/{product}/{groupby}_over_time"
 
-        plot(
-            fig,
-            filename=filename + ".html",
-            auto_open=False,
-        )
+        plot(fig, filename=f"{filename}.html", auto_open=False)
 
-        fig.write_image(filename + ".png")
+        fig.write_image(f"{filename}.png")
 
     def plot_methanol_availability(self, df_availability):
 
@@ -494,13 +490,9 @@ class SimulationPathway:
 
         filename = f"output/{self.pathway_name}/{self.sensitivity}/final/Methanol/methanol_availability_over_time"
 
-        plot(
-            fig,
-            filename=filename + ".html",
-            auto_open=False,
-        )
+        plot(fig, filename=f"{filename}.html", auto_open=False)
 
-        fig.write_image(filename + ".png")
+        fig.write_image(f"{filename}.png")
 
     def _get_weighted_average(
         self, df, vars, product, year, methanol_type: str = None, emissions=True
