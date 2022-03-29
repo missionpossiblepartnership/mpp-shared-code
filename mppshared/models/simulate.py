@@ -1,6 +1,6 @@
 import logging
 
-from mppshared.config import END_YEAR, LOG_LEVEL, START_YEAR
+from mppshared.config import END_YEAR, LOG_LEVEL, START_YEAR, PRODUCTS, SECTOR
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
 # from mppshared.agent_logic.new_build import new_build
