@@ -16,7 +16,6 @@ from mppshared.models.carbon_budget import carbon_budget_test
 from mppshared.models.simulate import simulate_pathway
 from mppshared.solver.implicit_forcing import apply_implicit_forcing
 from mppshared.solver.ranking import make_rankings
-from mppshared.solver.solve import solve
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
