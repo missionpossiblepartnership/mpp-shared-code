@@ -1,5 +1,5 @@
+from ..models import constraints
 from . import (
-    constraints,
     grid_search,
     implicit_forcing,
     input_loading,
