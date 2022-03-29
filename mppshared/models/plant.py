@@ -3,7 +3,10 @@ from uuid import uuid4
 
 import pandas as pd
 
-from mppshared.config import DECOMMISSION_RATES  # , METHANOL_SUPPLY_TECH
+from mppshared.config import (
+    DECOMMISSION_RATES,
+    CUF_LOWER_THRESHOLD,
+)  # , METHANOL_SUPPLY_TECH
 
 # from utility.utils import first
 
@@ -228,7 +231,9 @@ class PlantStack:
                     [
                         {
                             "capacity": plant.get_capacity(product),
-                            "yearly_volume": plant.get_yearly_volume(product=product),
+                            "yearly_volume": plant.get_annual_production(
+                                product=product
+                            ),
                             "technology": plant.technology,
                             "region": plant.region,
                             "retrofit": plant.retrofit,
@@ -341,3 +346,21 @@ def make_new_plant(
         type_of_tech=type_of_tech,
         df_plant_capacities=df_plant_capacities,
     )
+
+
+def get_assets_eligible_for_decommission(self) -> list():
+    """Return a list of Plants from the PlantStack that are eligible for decommissioning
+
+    Returns:
+        list of Plants
+    """
+    # Filter for CUF < threshold
+    #! For development only
+    cuf_placeholder = 0.95
+    candidates = filter(
+        lambda plant: plant.capacity_factor < cuf_placeholder, self.plants
+    )
+
+    # TODO: filter based on asset age
+
+    return candidates
