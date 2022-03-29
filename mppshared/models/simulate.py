@@ -81,7 +81,7 @@ def simulate_pathway(sector, product, pathway, sensitivity):
     pathway.save_availability()
     pathway.save_demand()
 
-    for product in PRODUCT[SECTOR]:
+    for product in PRODUCTS[SECTOR]:
         df_stack_total = pathway.aggregate_stacks(this_year=False, product=product)
         df_stack_new = pathway.aggregate_stacks(this_year=True, product=product)
 
