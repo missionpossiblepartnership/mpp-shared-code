@@ -9,7 +9,7 @@ import pandas as pd
 from mppshared.calculate.calculate_cost import discount_costs
 from mppshared.config import EMISSION_SCOPES, GHGS
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.model.carbon_cost_trajectory import CarbonCostTrajectory
+from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.utility.dataframe_utility import (
     add_column_header_suffix,
     get_grouping_columns_for_npv_calculation,
