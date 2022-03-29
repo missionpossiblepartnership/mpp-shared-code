@@ -6,7 +6,7 @@ from mppshared.import_data.intermediate_data import IntermediateDataImporter
 # from mppshared.agent_logic.new_build import new_build
 # from mppshared.agent_logic.decommission import decommission
 # from mppshared.agent_logic.retrofit import retrofit
-from mppshared.pathway.simpathway import SimulationPathway
+from mppshared.models.simulation_pathway import SimulationPathway
 
 # from util.util import timing
 
