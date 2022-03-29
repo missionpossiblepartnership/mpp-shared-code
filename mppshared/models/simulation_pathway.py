@@ -187,18 +187,26 @@ class SimulationPathway:
             ["product", "year"]
         )
 
-    def get_demand(self, product, year, mtx=True, build_new=False):
+    def get_demand(
+        self, product: str, year: int, region: str, mtx=True, build_new=False
+    ):
         """
         Get the demand for a product in a year
         Args:
             build_new: overwrite demand after the new build step
             product: get for this product
+            region: get for this region
             year: and this year
         Returns:
 
         """
         df = self.demand
-        return df.loc[(df.product == product) & (df.year == year), "demand"].item()
+        return df.loc[
+            (df["product"] == product)
+            & (df["year"] == year)
+            & (df["region"] == region),
+            "value",
+        ].item()
 
     def get_inputs(self, year, product=None):
         """Get the inputs for a product in a year"""
