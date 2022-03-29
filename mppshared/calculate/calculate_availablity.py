@@ -1,6 +1,6 @@
 import pandas as pd
 
-from mppshared.plant.plant import Plant
+from mppshared.models.plant import Plant
 
 
 def update_availability_from_plant(
