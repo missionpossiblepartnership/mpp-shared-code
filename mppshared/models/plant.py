@@ -40,7 +40,10 @@ class Plant:
 
     def __eq__(self, other):
         return self.uuid == other.uuid
-        
+
+    def __ne__(self, other):
+        return self.uuid != other.uuid
+
     @property
     def byproducts(self):
         return [k for (k, v) in self.capacities.items() if v != 0]
