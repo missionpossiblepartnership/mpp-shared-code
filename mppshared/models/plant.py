@@ -38,6 +38,9 @@ class Plant:
         self.plant_lifetime = plant_lifetime
         self.type_of_tech = type_of_tech
 
+    def __eq__(self, other):
+        return self.uuid == other.uuid
+        
     @property
     def byproducts(self):
         return [k for (k, v) in self.capacities.items() if v != 0]
@@ -303,6 +306,23 @@ class PlantStack:
             plants=[plant for plant in self.plants if plant.technology == technology]
         )
 
+    def get_assets_eligible_for_decommission(self) -> list():
+        """Return a list of Plants from the PlantStack that are eligible for decommissioning
+
+        Returns:
+            list of Plants
+        """
+        # Filter for CUF < threshold
+        #! For development only
+        cuf_placeholder = 0.95
+        candidates = filter(
+            lambda plant: plant.capacity_factor < cuf_placeholder, self.plants
+        )
+
+        # TODO: filter based on asset age
+
+        return list(candidates)
+
 
 def make_new_plant(
     best_transition, df_process_data, year, retrofit, product, df_plant_capacities
@@ -346,21 +366,3 @@ def make_new_plant(
         type_of_tech=type_of_tech,
         df_plant_capacities=df_plant_capacities,
     )
-
-
-def get_assets_eligible_for_decommission(self) -> list():
-    """Return a list of Plants from the PlantStack that are eligible for decommissioning
-
-    Returns:
-        list of Plants
-    """
-    # Filter for CUF < threshold
-    #! For development only
-    cuf_placeholder = 0.95
-    candidates = filter(
-        lambda plant: plant.capacity_factor < cuf_placeholder, self.plants
-    )
-
-    # TODO: filter based on asset age
-
-    return candidates
