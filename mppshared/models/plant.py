@@ -316,10 +316,8 @@ class PlantStack:
             list of Plants
         """
         # Filter for CUF < threshold
-        #! For development only
-        cuf_placeholder = 0.95
         candidates = filter(
-            lambda plant: plant.capacity_factor < cuf_placeholder, self.plants
+            lambda plant: plant.capacity_factor < CUF_LOWER_THRESHOLD, self.plants
         )
 
         # TODO: filter based on asset age
