@@ -48,8 +48,8 @@ class SimulationPathway:
         self.demand = self.importer.get_demand(region=MODEL_SCOPE)
 
         # TODO: Ranking missing, if it is available we should import
-        # logger.debug("Getting rankings")
-        # self.rankings = self._import_rankings()
+        logger.debug("Getting rankings")
+        self.rankings = self._import_rankings()
 
         logger.debug("Getting emissions")
         self.emissions = self.importer.get_process_data(data_type="emissions")
@@ -112,7 +112,7 @@ class SimulationPathway:
     def _import_rankings(self, japan_only=False):
         """Import ranking for all products and rank types from the CSVs"""
         rankings = defaultdict(dict)
-        for rank_type in ["new_build", "retrofit", "decommission"]:
+        for rank_type in ["newbuild", "retrofit", "decommission"]:
             for product in self.product:
                 df_rank = self.importer.get_ranking(
                     rank_type=rank_type,
@@ -187,18 +187,26 @@ class SimulationPathway:
             ["product", "year"]
         )
 
-    def get_demand(self, product, year, mtx=True, build_new=False):
+    def get_demand(
+        self, product: str, year: int, region: str, mtx=True, build_new=False
+    ):
         """
         Get the demand for a product in a year
         Args:
             build_new: overwrite demand after the new build step
             product: get for this product
+            region: get for this region
             year: and this year
         Returns:
 
         """
         df = self.demand
-        return df.loc[(df.product == product) & (df.year == year), "demand"].item()
+        return df.loc[
+            (df["product"] == product)
+            & (df["year"] == year)
+            & (df["region"] == region),
+            "value",
+        ].item()
 
     def get_inputs(self, year, product=None):
         """Get the inputs for a product in a year"""

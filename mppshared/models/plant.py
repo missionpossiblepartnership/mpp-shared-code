@@ -3,9 +3,12 @@ from uuid import uuid4
 
 import pandas as pd
 
-from mppshared.config import DECOMMISSION_RATES  # , METHANOL_SUPPLY_TECH
+from mppshared.config import (
+    DECOMMISSION_RATES,
+    CUF_LOWER_THRESHOLD,
+)  # , METHANOL_SUPPLY_TECH
 
-# from utility.utils import first
+from mppshared.utility.utils import first
 
 
 class Plant:
@@ -62,7 +65,7 @@ class Plant:
         """Get plant capacity"""
         return self.capacities.get(product or self.product, 0)
 
-    def get_yearly_volume(self, product):
+    def get_annual_production(self, product):
         return self.get_capacity(product) * self.capacity_factor
 
 
@@ -134,13 +137,13 @@ class PlantStack:
         plants = self.filter_plants(product=product, **kwargs)
         return sum(plant.get_capacity(product) for plant in plants)
 
-    def get_yearly_volume(self, product, methanol_type=None, **kwargs):
+    def get_annual_production(self, product, methanol_type=None, **kwargs):
         """Get the yearly volume, optionally filtered by region, technology, product"""
         if methanol_type is not None:
             kwargs["methanol_type"] = methanol_type
 
         plants = self.filter_plants(product=product, **kwargs)
-        return sum(plant.get_yearly_volume(product=product) for plant in plants)
+        return sum(plant.get_annual_production(product=product) for plant in plants)
 
     def get_tech(self, id_vars, product=None):
         """
@@ -228,7 +231,9 @@ class PlantStack:
                     [
                         {
                             "capacity": plant.get_capacity(product),
-                            "yearly_volume": plant.get_yearly_volume(product=product),
+                            "yearly_volume": plant.get_annual_production(
+                                product=product
+                            ),
                             "technology": plant.technology,
                             "region": plant.region,
                             "retrofit": plant.retrofit,
@@ -341,3 +346,21 @@ def make_new_plant(
         type_of_tech=type_of_tech,
         df_plant_capacities=df_plant_capacities,
     )
+
+
+def get_assets_eligible_for_decommission(self) -> list():
+    """Return a list of Plants from the PlantStack that are eligible for decommissioning
+
+    Returns:
+        list of Plants
+    """
+    # Filter for CUF < threshold
+    #! For development only
+    cuf_placeholder = 0.95
+    candidates = filter(
+        lambda plant: plant.capacity_factor < cuf_placeholder, self.plants
+    )
+
+    # TODO: filter based on asset age
+
+    return candidates
