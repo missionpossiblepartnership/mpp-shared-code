@@ -196,3 +196,18 @@ run_config = {
     # "MERGE_OUTPUTS"
 }
 NUMBER_OF_BINS_RANKING = 10
+
+### CONSTRAINTS ###
+
+# TODO: placeholder for external input
+REGIONAL_PRODUCTION_SHARE = {
+    "Africa": 0.3,
+    "China": 0.3,
+    "Europe": 0.3,
+    "India": 0.3,
+    "Latin America": 0.3,
+    "Middle East": 0.3,
+    "North America": 0.3,
+    "Oceania": 0.3,
+    "Russia": 0.3,
+}
