@@ -14,17 +14,17 @@ logger = get_logger(__name__)
 def get_rank_config(rank_type: str, pathway: str):
     """
     Configuration to use for ranking
-    For each rank type (new_build, retrofit, decommission), and each scenario,
+    For each rank type (newbuild, retrofit, decommission), and each scenario,
     the dict items represent the weights assigned for the ranking.
     For example:
-    "new_build": {
+    "newbuild": {
         "me": {
             "type_of_tech_destination": "max",
             "tco": "min",
             "emissions_scope_1_2_delta": "min",
             "emissions_scope_3_upstream_delta": "min",
         }
-    indicates that for the new_build rank, in the most_economic scenario, we favor building:
+    indicates that for the newbuild rank, in the most_economic scenario, we favor building:
     1. Higher tech type (i.e. more advanced tech)
     2. Lower levelized cost of chemical
     3. Lower scope 1/2 emissions
@@ -33,7 +33,7 @@ def get_rank_config(rank_type: str, pathway: str):
     """
 
     config = {
-        "new_build": {
+        "newbuild": {
             "bau": {
                 "tco": 1.0,
                 "emissions": 0.0,
@@ -167,7 +167,7 @@ def make_rankings(pathway, sensitivity, sector, product):
     )
     df_ranking = importer.get_technologies_to_rank()
     data_holder = []
-    for rank_type in ["decommission", "new_build", "retrofit"]:
+    for rank_type in ["decommission", "newbuild", "retrofit"]:
         df_rank = rank_technology(df_ranking, rank_type, pathway, sensitivity)
         importer.export_data(
             df=df_rank,
