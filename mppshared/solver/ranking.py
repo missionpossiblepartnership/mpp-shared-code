@@ -33,7 +33,7 @@ def get_rank_config(rank_type: str, pathway: str):
     """
 
     config = {
-        "newbuild": {
+        "greenfield": {
             "bau": {
                 "tco": 1.0,
                 "emissions": 0.0,
@@ -47,7 +47,7 @@ def get_rank_config(rank_type: str, pathway: str):
                 "emissions": 0.2,
             },
         },
-        "retrofit": {
+        "brownfield": {
             "bau": {
                 "tco": 1.0,
                 "emissions": 0.0,
@@ -123,11 +123,12 @@ def rank_technology(df_ranking, rank_type, pathway, sensitivity):
     # to decommission?
     holder = []
     df_ranking.fillna(0, inplace=True)
-    # TODO: make sure that the filter is correct and returning the apropiate data
-    if rank_type == "decommission":
+    if rank_type == "brownfield":
         df = df_ranking[df_ranking["switch_type"].str.contains("brownfield")].copy()
-    else:
-        df = df_ranking[(df_ranking["switch_type"] == rank_type)].copy()
+    elif rank_type == "greenfield":
+        df = df_ranking[(df_ranking["switch_type"] == "new_build")].copy()
+    elif rank_type == "decommission":
+        df = df_ranking[(df_ranking["switch_type"] == "decommission")].copy()
     # Normalize the tco and sum of emissions delta
     # Reverse the normalization. Rank higher the cheaper and lower the better
     df["tco_normalized"] = 1 - (df["tco"] - df["tco"].min()) / (
@@ -167,7 +168,7 @@ def make_rankings(pathway, sensitivity, sector, product):
     )
     df_ranking = importer.get_technologies_to_rank()
     data_holder = []
-    for rank_type in ["decommission", "newbuild", "retrofit"]:
+    for rank_type in ["decommission", "greenfield", "brownfield"]:
         df_rank = rank_technology(df_ranking, rank_type, pathway, sensitivity)
         importer.export_data(
             df=df_rank,
