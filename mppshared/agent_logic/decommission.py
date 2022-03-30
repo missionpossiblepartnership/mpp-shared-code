@@ -53,7 +53,11 @@ def decommission(
         # Identify asset to be decommissioned
         try:
             asset_to_remove = select_asset_to_decommission(
-                stack=new_stack, df_rank=df_rank, product=product
+                pathway=pathway,
+                stack=new_stack,
+                df_rank=df_rank,
+                product=product,
+                year=year,
             )
 
         except ValueError:
@@ -77,7 +81,11 @@ def decommission(
 
 
 def select_asset_to_decommission(
-    stack: PlantStack, df_rank: pd.DataFrame, product: str
+    pathway: SimulationPathway,
+    stack: PlantStack,
+    df_rank: pd.DataFrame,
+    product: str,
+    year: int,
 ) -> Plant:
     """Select asset to decommission according to decommission ranking. Choose randomly if several assets have the same decommission ranking.
 
@@ -115,8 +123,6 @@ def select_asset_to_decommission(
         # Remove best transition from ranking table
         df_rank = remove_transition(df_rank, best_transition)
 
-    # TODO: If no candidates for best transition, remove transition from df_ranking and find best transition again
-
     # If several candidates for best transition, choose asset with lowest annual production
     # TODO: What happens if several assets have same annual production?
     asset_to_remove = min(
@@ -128,7 +134,8 @@ def select_asset_to_decommission(
     tentative_stack.remove(asset_to_remove)
 
     # Check constraints with tentative new stack
-    no_constraint_hurt = check_constraints(tentative_stack)
+    no_constraint_hurt = True
+    # no_constraint_hurt = check_constraints(pathway, tentative_stack, product, year)
 
     if no_constraint_hurt:
         return asset_to_remove
