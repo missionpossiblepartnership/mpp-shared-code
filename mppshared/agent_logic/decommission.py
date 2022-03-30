@@ -2,7 +2,7 @@
 
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.plant import PlantStack, Plant
-from mppshared.models.demand import get_demand_balance
+from mppshared.agent_logic.agent_logic_functions import get_demand_balance
 
 import pandas as pd
 import logging
@@ -29,7 +29,6 @@ def decommission(
     new_stack = pathway.get_stack(year=year + 1)
 
     # Get demand balance (demand - production)
-    # TODO: clean up regionality
     region = "Global"
     demand = pathway.get_demand(product, year, region)
     production = old_stack.get_annual_production(product)
