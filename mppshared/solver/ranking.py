@@ -14,17 +14,17 @@ logger = get_logger(__name__)
 def get_rank_config(rank_type: str, pathway: str):
     """
     Configuration to use for ranking
-    For each rank type (new_build, retrofit, decommission), and each scenario,
+    For each rank type (newbuild, retrofit, decommission), and each scenario,
     the dict items represent the weights assigned for the ranking.
     For example:
-    "new_build": {
+    "newbuild": {
         "me": {
             "type_of_tech_destination": "max",
             "tco": "min",
             "emissions_scope_1_2_delta": "min",
             "emissions_scope_3_upstream_delta": "min",
         }
-    indicates that for the new_build rank, in the most_economic scenario, we favor building:
+    indicates that for the newbuild rank, in the most_economic scenario, we favor building:
     1. Higher tech type (i.e. more advanced tech)
     2. Lower levelized cost of chemical
     3. Lower scope 1/2 emissions
@@ -33,7 +33,7 @@ def get_rank_config(rank_type: str, pathway: str):
     """
 
     config = {
-        "greenfield": {
+        "newbuild": {
             "bau": {
                 "tco": 1.0,
                 "emissions": 0.0,
@@ -47,7 +47,7 @@ def get_rank_config(rank_type: str, pathway: str):
                 "emissions": 0.2,
             },
         },
-        "brownfield": {
+        "retrofit": {
             "bau": {
                 "tco": 1.0,
                 "emissions": 0.0,
@@ -124,7 +124,7 @@ def rank_technology(df_ranking, rank_type, pathway, sensitivity):
     holder = []
     df_ranking.fillna(0, inplace=True)
     # TODO: make sure that the filter is correct and returning the apropiate data
-    if rank_type == "brownfield":
+    if rank_type == "decommission":
         df = df_ranking[df_ranking["switch_type"].str.contains("brownfield")].copy()
     else:
         df = df_ranking[(df_ranking["switch_type"] == rank_type)].copy()
@@ -167,11 +167,11 @@ def make_rankings(pathway, sensitivity, sector, product):
     )
     df_ranking = importer.get_technologies_to_rank()
     data_holder = []
-    for rank_type in ["decommission", "greenfield", "brownfield"]:
+    for rank_type in ["decommission", "newbuild", "retrofit"]:
         df_rank = rank_technology(df_ranking, rank_type, pathway, sensitivity)
         importer.export_data(
             df=df_rank,
             filename=f"{rank_type}_rank.csv",
-            export_dir=f"ranking/{product}",
+            export_dir=f"ranking/{product[0]}",  # TODO: remove hack to save the data in the correct directory
         )
         # df_rank.to_csv(f"{rank_type}_{pathway}.csv", index=False)

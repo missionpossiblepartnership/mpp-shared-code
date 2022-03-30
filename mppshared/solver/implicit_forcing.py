@@ -7,14 +7,12 @@ import numpy as np
 import pandas as pd
 
 from mppshared.calculate.calculate_cost import discount_costs
-from mppshared.solver.input_loading import filter_df_for_development
 from mppshared.config import EMISSION_SCOPES, GHGS
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
+from mppshared.solver.input_loading import filter_df_for_development
 from mppshared.utility.dataframe_utility import (
-    add_column_header_suffix,
-    get_grouping_columns_for_npv_calculation,
-)
+    add_column_header_suffix, get_grouping_columns_for_npv_calculation)
 from mppshared.utility.function_timer_utility import timer_func
 from mppshared.utility.log_utility import get_logger
 
@@ -44,9 +42,7 @@ def apply_implicit_forcing(
     #! Development only: filter input tables for faster runtimes
     df_technology_switches = filter_df_for_development(importer.get_tech_transitions())
     df_emissions = filter_df_for_development(importer.get_emissions())
-    df_technology_characteristics = filter_df_for_development(
-        importer.get_plant_specs()
-    )
+    df_technology_characteristics = importer.get_plant_specs()
     df_technology_characteristics.reset_index(inplace=True)
 
     # Add carbon cost to TCO based on scope 1 and 2 CO2 emissions
