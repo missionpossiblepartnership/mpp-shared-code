@@ -61,7 +61,7 @@ def decommission(
             break
 
         logger.info(
-            f"Removing plant with technology {asset_to_remove.technology}, annual production {asset_to_remove.get_annual_production(product)} and UUID {asset_to_remove.uuid}"
+            f"Removing plant with technology {asset_to_remove.technology} in region {asset_to_remove.region}, annual production {asset_to_remove.get_annual_production(product)} and UUID {asset_to_remove.uuid}"
         )
 
         new_stack.remove(asset_to_remove)
@@ -95,10 +95,9 @@ def select_asset_to_decommission(
 
     # If no more assets to decommission, raise ValueError
     if not candidates:
-        return ValueError
+        raise ValueError
 
-    # Find assets that have the origin technology of the best transition
-    # If there are no assets for the best transition, continue searching with the next-best transition
+    # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
     best_candidates = []
     while not best_candidates:
         # Choose the best transition, i.e. highest decommission rank
@@ -106,7 +105,9 @@ def select_asset_to_decommission(
 
         best_candidates = list(
             filter(
-                lambda plant: plant.technology == best_transition["technology_origin"],
+                lambda plant: (plant.technology == best_transition["technology_origin"])
+                & (plant.region == best_transition["region"])
+                & (plant.product == best_transition["product"]),
                 candidates,
             )
         )
