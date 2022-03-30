@@ -90,7 +90,7 @@ class PlantStack:
         self.new_ids = []
 
     def remove(self, remove_plant):
-        self.plants.remove(remove_plant)
+        self.plants = [plant for plant in self.plants if plant != remove_plant]
 
     def append(self, new_plant):
         self.plants.append(new_plant)
