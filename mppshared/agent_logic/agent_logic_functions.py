@@ -1,4 +1,4 @@
-""" Functions for demand balances. """
+""" Additional functions required for the agent logic, e.g. demand balances. """
 
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.plant import PlantStack
