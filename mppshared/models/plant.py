@@ -218,6 +218,19 @@ class PlantStack:
         df_agg["proportion"] = df_agg["capacity"] / df_agg["capacity"].sum()
         return df_agg
 
+    def get_regional_production(self, product):
+        return (
+            pd.DataFrame(
+                {
+                    "region": plant.region,
+                    "annual_production": plant.get_annual_production(product),
+                }
+                for plant in self.plants
+            )
+            .groupby("region", as_index=False)
+            .sum()
+        )
+
     def aggregate_stack(self, product=None, year=None, this_year=False):
 
         # Filter for product
