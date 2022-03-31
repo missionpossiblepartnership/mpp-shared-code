@@ -11,7 +11,7 @@ from mppshared.config import (
 from mppshared.utility.utils import first
 
 
-class Plant:
+class Asset:
     def __init__(
         self,
         product,
@@ -78,12 +78,12 @@ class Plant:
 def create_plants(n_plants: int, df_plant_capacities: pd.DataFrame, **kwargs) -> list:
     """Convenience function to create a list of plant at once"""
     return [
-        Plant(df_plant_capacities=df_plant_capacities, **kwargs)
+        Asset(df_plant_capacities=df_plant_capacities, **kwargs)
         for _ in range(n_plants)
     ]
 
 
-class PlantStack:
+class AssetStack:
     def __init__(self, plants: list):
         self.plants = plants
         # Keep track of all plants added this year
@@ -181,12 +181,12 @@ class PlantStack:
             return pd.DataFrame()
 
     def get_new_plant_stack(self):
-        return PlantStack(
+        return AssetStack(
             plants=[plant for plant in self.plants if plant.plant_status == "new"]
         )
 
     def get_old_plant_stack(self):
-        return PlantStack(
+        return AssetStack(
             plants=[plant for plant in self.plants if plant.plant_status == "old"]
         )
 
@@ -316,7 +316,7 @@ class PlantStack:
         return df
 
     def get_tech_plant_stack(self, technology: str):
-        return PlantStack(
+        return AssetStack(
             plants=[plant for plant in self.plants if plant.technology == technology]
         )
 
@@ -334,6 +334,21 @@ class PlantStack:
         # TODO: filter based on asset age
 
         return list(candidates)
+
+    def export_stack_to_df(self) -> pd.DataFrame:
+        return pd.DataFrame(
+            {
+                "product": plant.product,
+                "region": plant.region,
+                "technology": plant.technology,
+                "daily_production_capacity": plant.get_capacity(),
+                "capacity_factor": plant.capacity_factor,
+                "plant_lifetime": plant.plant_lifetime,
+                "retrofit_status": plant.retrofit,
+                "uuid": plant.uuid,
+            }
+            for plant in self.plants
+        )
 
 
 def make_new_plant(
@@ -363,7 +378,7 @@ def make_new_plant(
     types_of_tech = {1: "Initial", 2: "Transition", 3: "End-state"}
     type_of_tech = types_of_tech[asset_transition["type_of_tech_destination"]]
 
-    return Plant(
+    return Asset(
         sector=first(spec["sector"]),
         product=product,
         technology=first(spec["technology"]),
