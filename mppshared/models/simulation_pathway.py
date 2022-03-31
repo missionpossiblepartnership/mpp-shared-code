@@ -45,9 +45,11 @@ class SimulationPathway:
         self.products = products
         self.start_year = start_year
         self.end_year = end_year
+
         self.importer = IntermediateDataImporter(
             pathway=pathway, sensitivity=sensitivity, sector=sector, products=products
         )
+
         logger.debug("Getting asset capacities")
         self.df_asset_capacities = self.importer.get_asset_capacities()
 
@@ -244,7 +246,7 @@ class SimulationPathway:
         """Get all process data for a product in a year"""
         df = self.process_data
         df = df.reset_index(level=["product", "year"])
-        return df[(df.product == product) & (df.year == year)]
+        return df[(df[("product", "")] == product) & (df[("year", "")] == year)]
 
     def get_ranking(self, product, year, rank_type):
         """Get ranking df for a specific year/product"""
@@ -401,7 +403,7 @@ class SimulationPathway:
         df_production["number_of_assets"] = (
             (
                 (df_production["annual_production_capacity"])
-                / (ASSUMED_ANNUAL_PRODUCTION_CAPACITY * 365 / 1e6)
+                / ASSUMED_ANNUAL_PRODUCTION_CAPACITY
             )
             .round()
             .astype(int)
@@ -423,7 +425,7 @@ class SimulationPathway:
         return df_assets
 
     def make_initial_asset_stack(self):
-        # Calculate how many assets we have to build
+        # Calculate how many assets to create
         df_assets = self._calculate_assets_from_production()
 
         # Merge input data on the assets
