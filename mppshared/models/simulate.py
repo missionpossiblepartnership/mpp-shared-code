@@ -39,7 +39,7 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
         # Copy over last year's stack to this year
         pathway = pathway.copy_stack(year=year)
         # Run model for all chemicals (Methanol last as it needs MTO/A/P demand)
-        for product in pathway.product:
+        for product in pathway.products:
             logger.info(product)
 
             # Decommission assets
@@ -58,12 +58,15 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
     return pathway
 
 
-def simulate_pathway(sector, pathway, sensitivity):
+def simulate_pathway(sector: str, pathway: str, sensitivity: str):
     """
     Get data per technology, ranking data and then run the pathway simulation
     """
     importer = IntermediateDataImporter(
-        pathway=pathway, sensitivity=sensitivity, sector=sector, product=PRODUCTS[sector]
+        pathway=pathway,
+        sensitivity=sensitivity,
+        sector=sector,
+        products=PRODUCTS[sector],
     )
 
     # Make pathway
@@ -71,7 +74,7 @@ def simulate_pathway(sector, pathway, sensitivity):
         pathway=pathway,
         sensitivity=sensitivity,
         sector=sector,
-        product=PRODUCTS[sector],
+        products=PRODUCTS[sector],
         start_year=START_YEAR,
         end_year=END_YEAR,
     )

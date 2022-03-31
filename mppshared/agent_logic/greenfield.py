@@ -1,8 +1,11 @@
-""" Logic for technology transitions of type decommission (remove Asset from AssetStack)."""
+""" Logic for technology transitions of type greenfield (add new Asset to AssetStack."""
 
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.plant import PlantStack, Plant, make_new_plant
-from mppshared.agent_logic.agent_logic_functions import select_best_transition, optimize_cuf
+from mppshared.agent_logic.agent_logic_functions import (
+    select_best_transition,
+    optimize_cuf,
+)
 from mppshared.models.constraints import check_constraints
 from mppshared.utility.utils import get_logger
 from mppshared.config import LOG_LEVEL, MODEL_SCOPE, ASSUMED_PLANT_CAPACITY
@@ -18,10 +21,10 @@ logger = logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def new_build(
+def greenfield(
     pathway: SimulationPathway, product: str, year: int
 ) -> SimulationPathway:
-    """Apply decommission transition to eligible Assets in the AssetStack.
+    """Apply newbuild transition to eligible Assets in the AssetStack.
 
     Args:
         pathway: decarbonization pathway that describes the composition of the AssetStack in every year of the model horizon
@@ -43,18 +46,20 @@ def new_build(
 
     # TODO: Change rank_type to new_build
     # Get ranking table for decommissioning
-    df_rank = pathway.get_ranking(product=product, year=year,  rank_type="decommission")
+    df_rank = pathway.get_ranking(product=product, year=year, rank_type="greenfield")
 
     # TODO: Decommission until one plant short of balance between demand and production
     surplus = demand - production
     while surplus > 0:
         # Check whether it is even possible to increase CUF
-        cuf_plants = list(filter(lambda plant: plant.capacity_factor < 0.95, new_stack.plants))
+        cuf_plants = list(
+            filter(lambda plant: plant.capacity_factor < 0.95, new_stack.plants)
+        )
         if not cuf_plants:
             break
 
         # Optimize capacity factor and check whether surplus is covered
-        if (surplus/ASSUMED_PLANT_CAPACITY)/len(cuf_plants) > 0.95:
+        if (surplus / ASSUMED_PLANT_CAPACITY) / len(cuf_plants) > 0.95:
             cuf_array = [0.95] * len(cuf_plants)
         else:
             cuf_array = optimize_cuf(cuf_plants, surplus)
@@ -81,7 +86,7 @@ def new_build(
             year=year,
             retrofit=False,
             product=product,
-            df_plant_capacities=pathway.df_plant_capacities
+            df_plant_capacities=pathway.df_plant_capacities,
         )
 
         logger.info(

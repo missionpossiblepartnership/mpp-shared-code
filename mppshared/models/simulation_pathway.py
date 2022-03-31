@@ -15,6 +15,7 @@ from mppshared.config import (
     MODEL_SCOPE,
     PRODUCTS,
     SECTOR,
+    RANK_TYPES,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
@@ -29,15 +30,23 @@ logger.setLevel(LOG_LEVEL)
 class SimulationPathway:
     """Contains the current state of the simulated pathway, and methods to adjust that state"""
 
-    def __init__(self, start_year, end_year, pathway, sensitivity, sector, product):
+    def __init__(
+        self,
+        start_year: int,
+        end_year: int,
+        pathway: str,
+        sensitivity: str,
+        sector: str,
+        products: list,
+    ):
         self.pathway = pathway
         self.sensitivity = sensitivity
         self.sector = sector
-        self.product = product
+        self.products = products
         self.start_year = start_year
         self.end_year = end_year
         self.importer = IntermediateDataImporter(
-            pathway=pathway, sensitivity=sensitivity, sector=sector, product=product
+            pathway=pathway, sensitivity=sensitivity, sector=sector, products=products
         )
         logger.debug("Getting plant capacities")
         self.df_plant_capacities = self.importer.get_plant_capacities()
@@ -114,8 +123,8 @@ class SimulationPathway:
     def _import_rankings(self, japan_only=False):
         """Import ranking for all products and rank types from the CSVs"""
         rankings = defaultdict(dict)
-        for rank_type in ["newbuild", "retrofit", "decommission"]:
-            for product in self.product:
+        for rank_type in RANK_TYPES:
+            for product in self.products:
                 df_rank = self.importer.get_ranking(
                     rank_type=rank_type,
                     product=product,
@@ -190,7 +199,10 @@ class SimulationPathway:
         )
 
     def get_demand(
-        self, product: str, year: int, region: str,
+        self,
+        product: str,
+        year: int,
+        region: str,
     ):
         """
         Get the demand for a product in a year
@@ -233,8 +245,7 @@ class SimulationPathway:
 
     def get_ranking(self, product, year, rank_type):
         """Get ranking df for a specific year/product"""
-        allowed_types = ["new_build", "retrofit", "decommission"]
-        if rank_type not in allowed_types:
+        if rank_type not in RANK_TYPES:
             raise ValueError(
                 "Rank type %s not recognized, choose one of %s",
                 rank_type,

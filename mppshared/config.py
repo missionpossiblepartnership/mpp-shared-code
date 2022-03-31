@@ -1,11 +1,15 @@
 """Configuration file for the library."""
 import logging
-
 import numpy as np
 
+### LOGGER ####
 LOG_LEVEL = "INFO"
+LOG_FORMATTER = logging.Formatter(
+    "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
+)
 
-# Define Data Path
+
+### DATA IMPORT AND EXPORT
 CORE_DATA_PATH = "data"
 LOG_PATH = "logs/"
 IMPORT_DATA_PATH = f"{CORE_DATA_PATH}/import_data"
@@ -16,12 +20,8 @@ PKL_DATA_INTERMEDIATE = f"{PKL_FOLDER}/intermediate_data"
 PKL_DATA_FINAL = f"{PKL_FOLDER}/final_data"
 SOLVER_INPUT_DATA_PATH = f"{CORE_DATA_PATH}/solver_input_data"
 
-# Log formatter
-LOG_FORMATTER = logging.Formatter(
-    "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
-)
 
-# STANDARDISED SOLVER
+# Naming of solver input tables
 SOLVER_INPUT_TABLES = [
     "technology_switches",
     "emissions",
@@ -29,20 +29,6 @@ SOLVER_INPUT_TABLES = [
     "technology_characteristics",
     "demand",
 ]
-
-START_YEAR = 2020
-END_YEAR = 2050
-MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
-
-# Emissions
-GHGS = [
-    "co2",
-    # "ch4",
-    # "n2o"
-]
-
-EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
-
 
 FOLDERS_TO_CHECK_IN_ORDER = [
     # Top level folders
@@ -147,6 +133,21 @@ CARBON_BUDGET_REF = {
     "trucking": 36,
 }
 
+### MODEL DECISION PARAMETERS ###
+START_YEAR = 2020
+END_YEAR = 2050
+MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
+
+# Emissions
+GHGS = [
+    "co2",
+    # "ch4",
+    # "n2o"
+]
+
+# Emission scopes included in data analysis
+EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
+
 # Capacity utilisation factor thresholds
 # TODO: make sector-specific with dictionary
 CUF_LOWER_THRESHOLD = 0.6
@@ -174,13 +175,16 @@ SENSITIVITIES = [
     "def",
 ]
 
-# Sectors
+### SECTOR-SPECIFIC PARAMETERS ###
+# Sectors for which the model can be run
 SECTOR = "chemicals"  # "aluminium, steel, ..."
 
-# Product
+# Products produced by each sector
 PRODUCTS = {
     "chemicals": ["Ammonia"],
 }
+
+### RUN CONFIGURATION ###
 
 RUN_PARALLEL = False
 
@@ -195,7 +199,83 @@ run_config = {
     # "PLOT_AVAILABILITIES"
     # "MERGE_OUTPUTS"
 }
+### RANKING ###
 NUMBER_OF_BINS_RANKING = 10
+
+# GHGs and Emission scopes included in weighting when ranking technology transitions
+GHGS_RANKING = [
+    "co2",
+    # "ch4",
+    # "n2o"
+]
+EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
+RANK_TYPES = ["decommission", "greenfield", "brownfield"]
+
+
+"""
+Configuration to use for ranking
+For each rank type (newbuild, retrofit, decommission), and each scenario,
+the dict items represent the weights assigned for the ranking.
+For example:
+"newbuild": {
+    "me": {
+        "type_of_tech_destination": "max",
+        "tco": "min",
+        "emissions_scope_1_2_delta": "min",
+        "emissions_scope_3_upstream_delta": "min",
+    }
+indicates that for the newbuild rank, in the most_economic scenario, we favor building:
+1. Higher tech type (i.e. more advanced tech)
+2. Lower levelized cost of chemical
+3. Lower scope 1/2 emissions
+4. Lower scope 3 emissions
+in that order!
+"""
+
+RANKING_CONFIG = {
+    "greenfield": {
+        "bau": {
+            "tco": 1.0,
+            "emissions": 0.0,
+        },
+        "fa": {
+            "tco": 0.0,
+            "emissions": 1.0,
+        },
+        "lc": {
+            "tco": 0.8,
+            "emissions": 0.2,
+        },
+    },
+    "brownfield": {
+        "bau": {
+            "tco": 1.0,
+            "emissions": 0.0,
+        },
+        "fa": {
+            "tco": 0.0,
+            "emissions": 1.0,
+        },
+        "lc": {
+            "tco": 0.8,
+            "emissions": 0.2,
+        },
+    },
+    "decommission": {
+        "bau": {
+            "tco": 1,
+            "emissions": 0,
+        },
+        "fa": {
+            "tco": 0.0,
+            "emissions": 1.0,
+        },
+        "lc": {
+            "tco": 0.8,
+            "emissions": 0.2,
+        },
+    },
+}
 
 ### CONSTRAINTS ###
 
