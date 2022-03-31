@@ -175,6 +175,10 @@ class SimulationPathway:
             export_dir="final/All",
         )
 
+    def export_stack_to_csv(self, year):
+        df = self.get_stack(year).export_stack_to_df()
+        self.importer.export_data(df, f"stack_{year}.csv", "stack_tracker")
+
     def get_emissions(self, year, product=None):
         """Get  the emissions for a product in a year"""
         df = self.emissions.copy()
