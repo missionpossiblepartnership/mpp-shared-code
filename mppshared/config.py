@@ -3,7 +3,7 @@ import logging
 import numpy as np
 
 ### LOGGER ####
-LOG_LEVEL = "INFO"
+LOG_LEVEL = "DEBUG"
 LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
 )

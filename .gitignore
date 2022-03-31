@@ -137,3 +137,6 @@ data/chemicals/bau/def/intermediate/technology_transitions.csv
 data/chemicals/bau/def/ranking/Ammonia/brownfield_rank.csv
 data/chemicals/bau/def/ranking/Ammonia/decommission_rank.csv
 data/chemicals/bau/def/ranking/Ammonia/greenfield_rank.csv
+
+# Ignore all ranking files
+data/chemicals/bau/def/ranking

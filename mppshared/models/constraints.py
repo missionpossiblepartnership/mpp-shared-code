@@ -3,7 +3,7 @@
 from pandera import Bool
 import numpy as np
 
-from mppshared.models.plant import Asset, AssetStack
+from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.config import REGIONAL_PRODUCTION_SHARE
 
