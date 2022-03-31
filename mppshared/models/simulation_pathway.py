@@ -29,15 +29,23 @@ logger.setLevel(LOG_LEVEL)
 class SimulationPathway:
     """Contains the current state of the simulated pathway, and methods to adjust that state"""
 
-    def __init__(self, start_year, end_year, pathway, sensitivity, sector, product):
+    def __init__(
+        self,
+        start_year: int,
+        end_year: int,
+        pathway: str,
+        sensitivity: str,
+        sector: str,
+        products: list,
+    ):
         self.pathway = pathway
         self.sensitivity = sensitivity
         self.sector = sector
-        self.product = product
+        self.products = products
         self.start_year = start_year
         self.end_year = end_year
         self.importer = IntermediateDataImporter(
-            pathway=pathway, sensitivity=sensitivity, sector=sector, product=product
+            pathway=pathway, sensitivity=sensitivity, sector=sector, products=products
         )
         logger.debug("Getting plant capacities")
         self.df_plant_capacities = self.importer.get_plant_capacities()
@@ -115,7 +123,7 @@ class SimulationPathway:
         """Import ranking for all products and rank types from the CSVs"""
         rankings = defaultdict(dict)
         for rank_type in ["newbuild", "retrofit", "decommission"]:
-            for product in self.product:
+            for product in self.products:
                 df_rank = self.importer.get_ranking(
                     rank_type=rank_type,
                     product=product,
@@ -190,7 +198,10 @@ class SimulationPathway:
         )
 
     def get_demand(
-        self, product: str, year: int, region: str,
+        self,
+        product: str,
+        year: int,
+        region: str,
     ):
         """
         Get the demand for a product in a year

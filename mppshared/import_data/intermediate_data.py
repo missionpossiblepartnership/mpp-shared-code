@@ -13,17 +13,17 @@ class IntermediateDataImporter:
 
     def __init__(
         self,
-        pathway,
-        sensitivity,
-        sector,
-        product,
+        pathway: str,
+        sensitivity: str,
+        sector: str,
+        products: list,
     ):
         parent_path = Path(__file__).resolve().parents[2]
         self.input_path = parent_path.joinpath(
             "data/Master template - python copy.xlsx"
         )
         self.sector = sector
-        self.product = product
+        self.products = products
         self.pathway = pathway
         self.sensitivity = sensitivity
         self.export_dir = parent_path.joinpath(f"data/{sector}/{pathway}/{sensitivity}")

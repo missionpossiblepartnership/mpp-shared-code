@@ -4,7 +4,7 @@ import sys
 import numpy as np
 import pandas as pd
 
-from mppshared.config import NUMBER_OF_BINS_RANKING
+from mppshared.config import NUMBER_OF_BINS_RANKING, PRODUCTS
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.utils import get_logger
 
@@ -107,7 +107,13 @@ def _add_binned_rankings(
     return df_rank
 
 
-def rank_technology(df_ranking, rank_type, pathway, sensitivity):
+def rank_technology(
+    df_ranking: pd.DataFrame,
+    rank_type: str,
+    pathway: str,
+    sensitivity: str,
+    product: str,
+):
     """Rank the technologies based on the ranking config.
 
     Args:
@@ -115,7 +121,10 @@ def rank_technology(df_ranking, rank_type, pathway, sensitivity):
         rank_type:
         sensitivity:
     """
-    logger.info(f"Making ranking for {rank_type}")
+    # Filter ranking table for desired product
+    df_ranking = df_ranking.loc[df_ranking["product"] == product]
+
+    logger.info(f"Making ranking for {rank_type} and product {product}")
     # Get the config for the rank type
     config = get_rank_config(rank_type, pathway)
     # Get the weights for the rank type
@@ -157,22 +166,29 @@ def rank_technology(df_ranking, rank_type, pathway, sensitivity):
     return df_rank
 
 
-def make_rankings(pathway, sensitivity, sector, product):
+def make_rankings(pathway: str, sensitivity: str, sector: str):
     """Create the ranking for all the possible rank types and scenarios.
 
     Args:
         df_ranking:
     """
     importer = IntermediateDataImporter(
-        pathway=pathway, sensitivity=sensitivity, sector=sector, product=product
+        pathway=pathway,
+        sensitivity=sensitivity,
+        sector=sector,
+        products=PRODUCTS[sector],
     )
+
+    # Make the ranking separately for each product
     df_ranking = importer.get_technologies_to_rank()
-    data_holder = []
-    for rank_type in ["decommission", "greenfield", "brownfield"]:
-        df_rank = rank_technology(df_ranking, rank_type, pathway, sensitivity)
-        importer.export_data(
-            df=df_rank,
-            filename=f"{rank_type}_rank.csv",
-            export_dir=f"ranking/{product[0]}",  # TODO: remove hack to save the data in the correct directory
-        )
-        # df_rank.to_csv(f"{rank_type}_{pathway}.csv", index=False)
+    for product in PRODUCTS[sector]:
+        for rank_type in ["decommission", "greenfield", "brownfield"]:
+            df_rank = rank_technology(
+                df_ranking, rank_type, pathway, sensitivity, product
+            )
+            importer.export_data(
+                df=df_rank,
+                filename=f"{rank_type}_rank.csv",
+                export_dir=f"ranking/{product}",
+            )
+            # df_rank.to_csv(f"{rank_type}_{pathway}.csv", index=False)
