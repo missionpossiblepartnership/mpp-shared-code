@@ -145,7 +145,11 @@ GHGS = [
     # "n2o"
 ]
 
+# Emission scopes included in data analysis
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
+
+# Emission scopes included in weighting when ranking technology transitions
+EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
 
 # Capacity utilisation factor thresholds
 # TODO: make sector-specific with dictionary
@@ -200,6 +204,71 @@ run_config = {
 }
 ### RANKING ###
 NUMBER_OF_BINS_RANKING = 10
+
+"""
+Configuration to use for ranking
+For each rank type (newbuild, retrofit, decommission), and each scenario,
+the dict items represent the weights assigned for the ranking.
+For example:
+"newbuild": {
+    "me": {
+        "type_of_tech_destination": "max",
+        "tco": "min",
+        "emissions_scope_1_2_delta": "min",
+        "emissions_scope_3_upstream_delta": "min",
+    }
+indicates that for the newbuild rank, in the most_economic scenario, we favor building:
+1. Higher tech type (i.e. more advanced tech)
+2. Lower levelized cost of chemical
+3. Lower scope 1/2 emissions
+4. Lower scope 3 emissions
+in that order!
+"""
+
+RANKING_CONFIG = {
+    "greenfield": {
+        "bau": {
+            "tco": 1.0,
+            "emissions": 0.0,
+        },
+        "fa": {
+            "tco": 0.0,
+            "emissions": 1.0,
+        },
+        "lc": {
+            "tco": 0.8,
+            "emissions": 0.2,
+        },
+    },
+    "brownfield": {
+        "bau": {
+            "tco": 1.0,
+            "emissions": 0.0,
+        },
+        "fa": {
+            "tco": 0.0,
+            "emissions": 1.0,
+        },
+        "lc": {
+            "tco": 0.8,
+            "emissions": 0.2,
+        },
+    },
+    "decommission": {
+        "bau": {
+            "tco": 1,
+            "emissions": 0,
+        },
+        "fa": {
+            "tco": 0.0,
+            "emissions": 1.0,
+        },
+        "lc": {
+            "tco": 0.8,
+            "emissions": 0.2,
+        },
+    },
+}
 
 ### CONSTRAINTS ###
 
