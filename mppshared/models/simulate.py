@@ -5,6 +5,9 @@ from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
 # from mppshared.agent_logic.new_build import new_build
 from mppshared.agent_logic.decommission import decommission
+from mppshared.agent_logic.retrofit import retrofit
+from mppshared.agent_logic.new_build import new_build
+
 from mppshared.models.plant import PlantStack
 
 # from mppshared.agent_logic.retrofit import retrofit
@@ -43,8 +46,8 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             pathway = decommission(pathway=pathway, year=year, product=product)
 
             # Retrofit assets, except for business as usual scenario
-            if pathway.pathway_name != "bau":
-                pathway = retrofit(pathway=pathway, year=year, product=product)
+            # if pathway.pathway_name != "bau":
+            #     pathway = retrofit(pathway=pathway, year=year, product=product)
 
             # Build new assers
             pathway = new_build(pathway=pathway, year=year, product=product)
@@ -55,12 +58,12 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
     return pathway
 
 
-def simulate_pathway(sector, product, pathway, sensitivity):
+def simulate_pathway(sector, pathway, sensitivity):
     """
     Get data per technology, ranking data and then run the pathway simulation
     """
     importer = IntermediateDataImporter(
-        pathway=pathway, sensitivity=sensitivity, sector=sector, product=product
+        pathway=pathway, sensitivity=sensitivity, sector=sector, product=PRODUCTS[sector]
     )
 
     # Make pathway
@@ -68,7 +71,7 @@ def simulate_pathway(sector, product, pathway, sensitivity):
         pathway=pathway,
         sensitivity=sensitivity,
         sector=sector,
-        product=product,
+        product=PRODUCTS[sector],
         start_year=START_YEAR,
         end_year=END_YEAR,
     )

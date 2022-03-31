@@ -143,10 +143,8 @@ class PlantStack:
         plants = self.filter_plants(product=product, **kwargs)
         return sum(plant.get_capacity(product) for plant in plants)
 
-    def get_annual_production(self, product, methanol_type=None, **kwargs):
+    def get_annual_production(self, product, **kwargs):
         """Get the yearly volume, optionally filtered by region, technology, product"""
-        if methanol_type is not None:
-            kwargs["methanol_type"] = methanol_type
 
         plants = self.filter_plants(product=product, **kwargs)
         return sum(plant.get_annual_production(product=product) for plant in plants)
@@ -339,13 +337,13 @@ class PlantStack:
 
 
 def make_new_plant(
-    best_transition, df_process_data, year, retrofit, product, df_plant_capacities
+    asset_transition, df_process_data, year, retrofit, product, df_plant_capacities
 ):
     """
     Make a new plant, based on a transition entry from the ranking dataframe
 
     Args:
-        best_transition: The best transition (destination is the plant to build)
+        asset_transition: The best transition (destination is the plant to build)
         df_process_data: The inputs dataframe (needed for plant specs)
         year: Build the plant in this year
         retrofit: Plant is retrofitted from an old plant
@@ -355,17 +353,15 @@ def make_new_plant(
     """
     df_process_data = df_process_data.reset_index()
     spec = df_process_data[
-        (df_process_data.sector == best_transition["sector"])
-        & (  # add the sector to the specs to map
-            df_process_data.technology == best_transition["destination"]
-        )
-        & (df_process_data.year == best_transition["year"])
-        & (df_process_data.region == best_transition["region"])
+        (df_process_data.sector == asset_transition["sector"])
+        & (df_process_data.technology == asset_transition["destination"])
+        & (df_process_data.year == asset_transition["year"])
+        & (df_process_data.region == asset_transition["region"])
     ]
 
     # Map tech type back from ints
     types_of_tech = {1: "Initial", 2: "Transition", 3: "End-state"}
-    type_of_tech = types_of_tech[best_transition["type_of_tech_destination"]]
+    type_of_tech = types_of_tech[asset_transition["type_of_tech_destination"]]
 
     return Plant(
         sector=first(spec["sector"]),
@@ -374,7 +370,6 @@ def make_new_plant(
         region=first(spec["region"]),
         start_year=year,
         retrofit=retrofit,
-        ccs_total=first(spec["emissions", "", "ccs_total"]),
         plant_lifetime=first(spec["spec", "", "plant_lifetime"]),
         capacity_factor=first(spec["spec", "", "capacity_factor"]),
         type_of_tech=type_of_tech,

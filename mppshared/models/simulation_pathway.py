@@ -190,7 +190,7 @@ class SimulationPathway:
         )
 
     def get_demand(
-        self, product: str, year: int, region: str, mtx=True, build_new=False
+        self, product: str, year: int, region: str,
     ):
         """
         Get the demand for a product in a year
@@ -206,7 +206,7 @@ class SimulationPathway:
         return df.loc[
             (df["product"] == product)
             & (df["year"] == year)
-            & (df["region"] == region),
+            & (df["region"].isin(region)),
             "value",
         ].item()
 
