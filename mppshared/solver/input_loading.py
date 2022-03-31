@@ -51,6 +51,7 @@ def filter_df_for_development(df: pd.DataFrame) -> pd.DataFrame:
             df["technology_origin"].isin(
                 [
                     "Natural Gas SMR + ammonia synthesis",  # Initial
+                    "Coal Gasification + ammonia synthesis",  # Initial
                     "Electrolyser + SMR + ammonia synthesis",  # Transition
                     "New-build",  # For greenfield switch
                     "Electrolyser - grid PPA + ammonia synthesis",  # "End-state"

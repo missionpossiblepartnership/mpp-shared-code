@@ -108,10 +108,12 @@ class IntermediateDataImporter:
             ]
         ]
 
-    def get_demand(self, region):
-        return pd.read_csv(self.intermediate_path.joinpath("demand.csv")).query(
-            f"region == {region}"
-        )
+    def get_demand(self, region=None):
+        df = pd.read_csv(self.intermediate_path.joinpath("demand.csv"))
+
+        if not region:
+            return df
+        return df.loc[df["region"] == region]
 
     def get_tech_transitions(self):
         return pd.read_csv(

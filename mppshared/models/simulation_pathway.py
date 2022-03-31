@@ -1,6 +1,7 @@
 import logging
 import math
 from collections import defaultdict
+from sqlite3 import register_converter
 
 import pandas as pd
 import plotly.express as px
@@ -44,8 +45,9 @@ class SimulationPathway:
         logger.debug("Making plant stacks")
         self.stacks = self.make_initial_plant_stack()
 
+        # Import demand for all regions
         logger.debug("Getting demand")
-        self.demand = self.importer.get_demand(region=MODEL_SCOPE)
+        self.demand = self.importer.get_demand(region=None)
 
         # TODO: Ranking missing, if it is available we should import
         logger.debug("Getting rankings")
@@ -207,6 +209,13 @@ class SimulationPathway:
             & (df["region"] == region),
             "value",
         ].item()
+
+    def get_regional_demand(self, product: str, year: int):
+        df = self.demand
+        return pd.DataFrame(
+            {"region": region, "demand": self.get_demand(product, year, region)}
+            for region in df["region"].unique()
+        )
 
     def get_inputs(self, year, product=None):
         """Get the inputs for a product in a year"""
