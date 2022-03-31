@@ -1,4 +1,4 @@
-"""Plant and plant stack classes, code adapted from MCC"""
+"""Asset and plant stack classes, code adapted from MCC"""
 from uuid import uuid4
 
 import pandas as pd
@@ -321,10 +321,10 @@ class AssetStack:
         )
 
     def get_assets_eligible_for_decommission(self) -> list():
-        """Return a list of Plants from the PlantStack that are eligible for decommissioning
+        """Return a list of Assets from the AssetStack that are eligible for decommissioning
 
         Returns:
-            list of Plants
+            list of Assets
         """
         # Filter for CUF < threshold
         candidates = filter(
@@ -361,7 +361,7 @@ def make_new_plant(
         asset_transition: The best transition (destination is the plant to build)
         df_process_data: The inputs dataframe (needed for plant specs)
         year: Build the plant in this year
-        retrofit: Plant is retrofitted from an old plant
+        retrofit: Asset is retrofitted from an old plant
 
     Returns:
         The new plant

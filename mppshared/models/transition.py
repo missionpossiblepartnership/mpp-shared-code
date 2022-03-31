@@ -4,7 +4,7 @@ from typing import Literal, Optional
 
 import pandas as pd
 
-from mppshared.models.plant import Plant
+from mppshared.models.plant import Asset
 
 
 class TransitionRegistry:
@@ -17,8 +17,8 @@ class TransitionRegistry:
         transition_type: Literal[
             "decommission", "brownfield_renovation", "brownfield_newbuild", "newbuild"
         ],
-        origin: Optional[Plant] = None,
-        destination: Optional[Plant] = None,
+        origin: Optional[Asset] = None,
+        destination: Optional[Asset] = None,
     ):
         transition = {
             "year": year,

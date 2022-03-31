@@ -1,7 +1,7 @@
 """ Logic for technology transitions of type decommission (remove Asset from AssetStack)."""
 
 from mppshared.models.simulation_pathway import SimulationPathway
-from mppshared.models.plant import PlantStack, Plant
+from mppshared.models.asset import AssetStack, Asset
 from mppshared.models.constraints import check_constraints
 from mppshared.utility.utils import get_logger
 from mppshared.config import LOG_LEVEL, MODEL_SCOPE
@@ -35,7 +35,7 @@ def decommission(
 
     #! Development only: force some assets to be decommissioned
     for i in np.arange(0, 5):
-        new_stack.plants[i].capacity_factor = 0.5
+        new_stack.assets[i].capacity_factor = 0.5
 
     # Get demand balance (demand - production)
     demand = pathway.get_demand(product, year, MODEL_SCOPE)
@@ -44,7 +44,7 @@ def decommission(
     # Get ranking table for decommissioning
     df_rank = pathway.get_ranking(year=year, product=product, rank_type="decommission")
 
-    # TODO: Decommission until one plant short of balance between demand and production
+    # TODO: Decommission until one asset short of balance between demand and production
     surplus = production - demand
     while surplus > 0:
 
@@ -59,11 +59,11 @@ def decommission(
             )
 
         except ValueError:
-            logger.info("No more plants to decommission")
+            logger.info("No more assets to decommission")
             break
 
         logger.info(
-            f"Removing plant with technology {asset_to_remove.technology} in region {asset_to_remove.region}, annual production {asset_to_remove.get_annual_production(product)} and UUID {asset_to_remove.uuid}"
+            f"Removing asset with technology {asset_to_remove.technology} in region {asset_to_remove.region}, annual production {asset_to_remove.get_annual_production(product)} and UUID {asset_to_remove.uuid}"
         )
 
         new_stack.remove(asset_to_remove)
@@ -80,11 +80,11 @@ def decommission(
 
 def select_asset_to_decommission(
     pathway: SimulationPathway,
-    stack: PlantStack,
+    stack: AssetStack,
     df_rank: pd.DataFrame,
     product: str,
     year: int,
-) -> Plant:
+) -> Asset:
     """Select asset to decommission according to decommission ranking. Choose randomly if several assets have the same decommission ranking.
 
     Args:
@@ -93,7 +93,7 @@ def select_asset_to_decommission(
         df_tech:
 
     Returns:
-        Plant to be decommissioned
+        Asset to be decommissioned
 
     """
     # Get all assets eligible for decommissioning
@@ -111,9 +111,9 @@ def select_asset_to_decommission(
 
         best_candidates = list(
             filter(
-                lambda plant: (plant.technology == best_transition["technology_origin"])
-                & (plant.region == best_transition["region"])
-                & (plant.product == best_transition["product"]),
+                lambda asset: (asset.technology == best_transition["technology_origin"])
+                & (asset.region == best_transition["region"])
+                & (asset.product == best_transition["product"]),
                 candidates,
             )
         )

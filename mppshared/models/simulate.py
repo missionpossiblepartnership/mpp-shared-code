@@ -8,7 +8,7 @@ from mppshared.agent_logic.decommission import decommission
 from mppshared.agent_logic.retrofit import retrofit
 from mppshared.agent_logic.new_build import new_build
 
-from mppshared.models.plant import PlantStack
+from mppshared.models.asset import AssetStack
 
 # from mppshared.agent_logic.retrofit import retrofit
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -22,7 +22,7 @@ logger.setLevel(LOG_LEVEL)
 def simulate(pathway: SimulationPathway) -> SimulationPathway:
     """
     Run the pathway simulation over the years:
-        - First, decommission a fixed % of plants
+        - First, decommission a fixed % of assets
         - Then, retrofit a fixed %
         - Then, build new if increasing demand
     Args:
@@ -34,7 +34,7 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
 
     for year in range(START_YEAR, END_YEAR):
         logger.info("Optimizing for %s", year)
-        pathway.update_plant_status(year=year)
+        pathway.update_asset_status(year=year)
 
         # Copy over last year's stack to this year
         pathway = pathway.copy_stack(year=year)
@@ -79,7 +79,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         end_year=END_YEAR,
     )
 
-    # Optimize plant stack on a yearly basis
+    # Optimize asset stack on a yearly basis
     pathway = simulate(
         pathway=pathway,
     )
