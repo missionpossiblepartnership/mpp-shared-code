@@ -20,6 +20,7 @@ from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import AssetStack, create_assets
+from mppshared.models.transition import TransitionRegistry
 from mppshared.utility.dataframe_utility import flatten_columns
 
 logger = logging.getLogger(__name__)
