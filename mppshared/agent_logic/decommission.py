@@ -71,9 +71,9 @@ def decommission(
         surplus -= asset_to_remove.get_annual_production(product)
 
         # TODO: implement logging of the asset transition
-        # pathway.transitions.add(
-        #     transition_type="decommission", year=year, origin=asset_to_remove
-        # )
+        pathway.transitions.add(
+            transition_type="decommission", year=year, origin=asset_to_remove
+        )
 
     return pathway
 
