@@ -1,16 +1,15 @@
 import logging
 import math
 from collections import defaultdict
-from sqlite3 import register_converter
 
 import pandas as pd
 import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.calculate.calculate_availablity import update_availability_from_plant
+from mppshared.calculate.calculate_availablity import update_availability_from_asset
 from mppshared.config import (
-    ASSUMED_PLANT_CAPACITY,
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
     LOG_LEVEL,
     MODEL_SCOPE,
     PRODUCTS,
@@ -20,7 +19,8 @@ from mppshared.config import (
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
-from mppshared.models.plant import PlantStack, create_plants
+from mppshared.models.asset import AssetStack, create_assets
+from mppshared.models.transition import TransitionRegistry
 from mppshared.utility.dataframe_utility import flatten_columns
 
 logger = logging.getLogger(__name__)
@@ -48,11 +48,11 @@ class SimulationPathway:
         self.importer = IntermediateDataImporter(
             pathway=pathway, sensitivity=sensitivity, sector=sector, products=products
         )
-        logger.debug("Getting plant capacities")
-        self.df_plant_capacities = self.importer.get_plant_capacities()
+        logger.debug("Getting asset capacities")
+        self.df_asset_capacities = self.importer.get_asset_capacities()
 
-        logger.debug("Making plant stacks")
-        self.stacks = self.make_initial_plant_stack()
+        logger.debug("Making asset stacks")
+        self.stacks = self.make_initial_asset_stack()
 
         # Import demand for all regions
         logger.debug("Getting demand")
@@ -74,7 +74,10 @@ class SimulationPathway:
         self.cost = self.importer.get_process_data(data_type="technology_transitions")
         # TODO: Raw material data is missing and should be called inputs to import it
         # self.inputs_pivot = self.importer.get_process_data(data_type="inputs")
-        self.plant_specs = self.importer.get_plant_specs()
+        self.asset_specs = self.importer.get_asset_specs()
+
+        # Initialize TransitionRegistry to track technology transitions
+        self.transitions = TransitionRegistry()
 
     def _import_availability(self):
         """Import availabilities of biomass, waste, etc"""
@@ -108,10 +111,10 @@ class SimulationPathway:
         #             ]
         #         )
         #
-        # for plant in self.get_stack(self.start_year).plants:
-        #     logger.debug(plant)
-        #     df_availability = update_availability_from_plant(
-        #         df_availability=df_availability, plant=plant, year=self.start_year
+        # for asset in self.get_stack(self.start_year).assets:
+        #     logger.debug(asset)
+        #     df_availability = update_availability_from_asset(
+        #         df_availability=df_availability, asset=asset, year=self.start_year
         #     )
         #
         # df_methanol = make_empty_methanol_availability()
@@ -193,7 +196,7 @@ class SimulationPathway:
         )
 
     def get_specs(self, product, year):
-        df = self.plant_specs
+        df = self.asset_specs
         return df.query(f"product == '{product}' & year == {year}").droplevel(
             ["product", "year"]
         )
@@ -249,7 +252,7 @@ class SimulationPathway:
             raise ValueError(
                 "Rank type %s not recognized, choose one of %s",
                 rank_type,
-                allowed_types,
+                RANK_TYPES,
             )
 
         return self.rankings[product][rank_type][year]
@@ -286,7 +289,7 @@ class SimulationPathway:
         #
         # for emission_type in emission_column:
         #     df_emission_stack[f"{emission_type}_stack_emissions"] = (
-        #         df_emission_stack[emission_type] * df_emission_stack.number_of_plants
+        #         df_emission_stack[emission_type] * df_emission_stack.number_of_assets
         #     )
         #
         # return df_emission_stack
@@ -325,24 +328,24 @@ class SimulationPathway:
             df.loc[(df.year == year + 1) & (df.name.str.contains("Methanol")), "cap"]
         )
 
-    def update_availability(self, plant, year, remove=False):
+    def update_availability(self, asset, year, remove=False):
         """
         Update the amount used of resources
 
         Args:
             year: current year
             remove:
-            plant: update based on this plant
+            asset: update based on this asset
         """
         df = self.availability
-        df = update_availability_from_plant(df, plant=plant, year=year)
+        df = update_availability_from_asset(df, asset=asset, year=year)
         self.availability = df.round(1)
         return self
 
-    def update_plant_status(self, year):
-        for plant in self.stacks[year].plants:
-            if year - plant.start_year >= plant.plant_lifetime:
-                plant.plant_status = "old"
+    def update_asset_status(self, year):
+        for asset in self.stacks[year].assets:
+            if year - asset.start_year >= asset.asset_lifetime:
+                asset.asset_status = "old"
         return self
 
     def get_availability(self, year=None, name=None):
@@ -356,7 +359,7 @@ class SimulationPathway:
 
         return df
 
-    def get_stack(self, year: int) -> PlantStack:
+    def get_stack(self, year: int) -> AssetStack:
         return self.stacks[year]
 
     def update_stack(self, year, stack):
@@ -366,7 +369,7 @@ class SimulationPathway:
     def copy_stack(self, year):
         """Copy this year's stack to next year"""
         old_stack = self.get_stack(year=year)
-        new_stack = PlantStack(plants=old_stack.plants.copy())
+        new_stack = AssetStack(assets=old_stack.assets.copy())
         return self.add_stack(year=year + 1, stack=new_stack)
 
     def add_stack(self, year, stack):
@@ -391,78 +394,78 @@ class SimulationPathway:
             ]
         )
 
-    def _calculate_plants_from_production(self):
-        """Calculate how many plants are there, based on current production"""
-        df_plant_size = self.importer.get_plant_sizes()
+    def _calculate_assets_from_production(self):
+        """Calculate how many assets are there, based on current production"""
+        df_asset_size = self.importer.get_asset_sizes()
         df_production = self.importer.get_current_production()
-        df_production["number_of_plants"] = (
+        df_production["number_of_assets"] = (
             (
                 (df_production["annual_production_capacity"])
-                / (ASSUMED_PLANT_CAPACITY * 365 / 1e6)
+                / (ASSUMED_ANNUAL_PRODUCTION_CAPACITY * 365 / 1e6)
             )
             .round()
             .astype(int)
         )
 
-        df_plant_size.drop(columns=["annual_production_capacity"], inplace=True)
+        df_asset_size.drop(columns=["annual_production_capacity"], inplace=True)
 
-        df_plants = df_production.merge(df_plant_size, on=["technology", "product"])
+        df_assets = df_production.merge(df_asset_size, on=["technology", "product"])
 
-        # TODO: Define the plants that are old based on the commission year - there is no data here
-        # Calculate number of old and new plants
-        df_plants["number_of_plants_old"] = (
-            df_plants["number_of_plants"] * 0.5
+        # TODO: Define the assets that are old based on the commission year - there is no data here
+        # Calculate number of old and new assets
+        df_assets["number_of_assets_old"] = (
+            df_assets["number_of_assets"] * 0.5
         ).astype(int)
 
-        df_plants["number_of_plants_new"] = (
-            df_plants["number_of_plants"] - df_plants["number_of_plants_old"]
+        df_assets["number_of_assets_new"] = (
+            df_assets["number_of_assets"] - df_assets["number_of_assets_old"]
         )
-        return df_plants
+        return df_assets
 
-    def make_initial_plant_stack(self):
-        # Calculate how many plants we have to build
-        df_plants = self._calculate_plants_from_production()
+    def make_initial_asset_stack(self):
+        # Calculate how many assets we have to build
+        df_assets = self._calculate_assets_from_production()
 
-        # Merge input data on the plants
+        # Merge input data on the assets
         df_process_data = self.importer.get_all_process_data()
         df_process_data = df_process_data.reset_index()
         df_process_data.columns = ["_".join(col) for col in df_process_data.columns]
 
-        df_plants = df_plants.merge(
+        df_assets = df_assets.merge(
             df_process_data,
             left_on=["region", "product", "technology", "year"],
             right_on=["region_", "product_", "technology_", "year_"],
         )
-        df_plants = df_plants.drop_duplicates(
+        df_assets = df_assets.drop_duplicates(
             subset=["region", "product", "technology"]
         )
 
         # Build them
-        # TODO: take out plant status old/new or deduce from plant age
-        all_plants = []
-        for plant_status in ["old", "new"]:
-            plants = df_plants.apply(
-                lambda row: create_plants(
-                    n_plants=row[f"number_of_plants_{plant_status}"],
+        # TODO: take out asset status old/new or deduce from asset age
+        all_assets = []
+        for asset_status in ["old", "new"]:
+            assets = df_assets.apply(
+                lambda row: create_assets(
+                    n_assets=row[f"number_of_assets_{asset_status}"],
                     technology=row["technology"],
                     region=row["region"],
                     product=row["product"],
-                    # Assumption: old plants started 40 years ago, new ones just 20
+                    # Assumption: old assets started 40 years ago, new ones just 20
                     start_year=self.start_year - 40
-                    if plant_status == "old"
+                    if asset_status == "old"
                     else self.start_year - 20,
-                    plant_lifetime=row["spec_technology_lifetime"],
-                    plant_status=plant_status,
+                    asset_lifetime=row["spec_technology_lifetime"],
+                    asset_status=asset_status,
                     capacity_factor=row["spec_capacity_factor"],
-                    df_plant_capacities=self.df_plant_capacities,
+                    df_asset_capacities=self.df_asset_capacities,
                 ),
                 axis=1,
             ).tolist()
 
-            plants = [item for sublist in plants for item in sublist]
-            all_plants += plants
+            assets = [item for sublist in assets for item in sublist]
+            all_assets += assets
 
-        stack = PlantStack(plants=all_plants)
+        stack = AssetStack(assets=all_assets)
         return {self.start_year: stack}
 
     def plot_stacks(self, df_stack_agg, groupby, product):
@@ -527,10 +530,10 @@ class SimulationPathway:
         self, df, vars, product, year, methanol_type: str = None, emissions=True
     ):
         """Calculate the weighted average of variables over regions/technologies"""
-        df_plants = flatten_columns(self.stacks[year].aggregate_stack(product=product))
+        df_assets = flatten_columns(self.stacks[year].aggregate_stack(product=product))
 
         df = pd.merge(
-            df_plants.reset_index(),
+            df_assets.reset_index(),
             df.reset_index(),
             on=["technology", "region"],
         )
@@ -551,7 +554,7 @@ class SimulationPathway:
         self, product: str, year: int, methanol_type: str = None
     ) -> int:
         """
-        Calculate emissions of a product, based on the plants that produce it in a year
+        Calculate emissions of a product, based on the assets that produce it in a year
 
         Returns:
             Emissions of producing the product in this year (averaged over technologies and locations)
@@ -571,7 +574,7 @@ class SimulationPathway:
         self, product: str, year: int, methanol_type: str = None
     ) -> int:
         """
-        Calculate levelized cost of a product, based on the plants that produce it in a year
+        Calculate levelized cost of a product, based on the assets that produce it in a year
 
         Returns:
             Levelized cost of producing the product in this year (averaged over technologies and locations)
@@ -589,7 +592,7 @@ class SimulationPathway:
 
     def get_total_volume(self, product: str, year: int, methanol_type=None):
         """Get total volume produced of a product in a year"""
-        df_plants = flatten_columns(self.stacks[year].aggregate_stack(product=product))
+        df_assets = flatten_columns(self.stacks[year].aggregate_stack(product=product))
 
         # Return total capacity in Mton/annum
-        return df_plants["capacity_total"].sum()
+        return df_assets["capacity_total"].sum()

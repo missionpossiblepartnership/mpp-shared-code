@@ -1,4 +1,4 @@
-"""Plant and plant stack classes, code adapted from MCC"""
+"""Asset and asset stack classes, code adapted from MCC"""
 from uuid import uuid4
 
 import pandas as pd
@@ -11,7 +11,7 @@ from mppshared.config import (
 from mppshared.utility.utils import first
 
 
-class Plant:
+class Asset:
     def __init__(
         self,
         product,
@@ -19,23 +19,23 @@ class Plant:
         region,
         start_year,
         capacity_factor,
-        plant_lifetime,
-        df_plant_capacities,
+        asset_lifetime,
+        df_asset_capacities,
         type_of_tech="Initial",
         retrofit=False,
-        plant_status="new",
+        asset_status="new",
     ):
         self.product = product
         self.technology = technology
         self.region = region
         self.start_year = start_year
-        self.df_plant_capacities = df_plant_capacities
+        self.df_asset_capacities = df_asset_capacities
         self.capacities = self.import_capacities()
         self.capacity_factor = capacity_factor
         self.uuid = uuid4().hex
         self.retrofit = retrofit
-        self.plant_status = plant_status
-        self.plant_lifetime = plant_lifetime
+        self.asset_status = asset_status
+        self.asset_lifetime = asset_lifetime
         self.type_of_tech = type_of_tech
 
     def __eq__(self, other):
@@ -52,8 +52,8 @@ class Plant:
         return year - self.start_year
 
     def import_capacities(self) -> dict:
-        """Import plant capacities for the different products that this plant produces"""
-        df = self.df_plant_capacities
+        """Import asset capacities for the different products that this asset produces"""
+        df = self.df_asset_capacities
 
         # Find the capacities
         df_capacities = df[
@@ -68,86 +68,86 @@ class Plant:
         }
 
     def get_capacity(self, product=None):
-        """Get plant capacity"""
+        """Get asset capacity"""
         return self.capacities.get(product or self.product, 0)
 
     def get_annual_production(self, product):
         return self.get_capacity(product) * self.capacity_factor
 
 
-def create_plants(n_plants: int, df_plant_capacities: pd.DataFrame, **kwargs) -> list:
-    """Convenience function to create a list of plant at once"""
+def create_assets(n_assets: int, df_asset_capacities: pd.DataFrame, **kwargs) -> list:
+    """Convenience function to create a list of asset at once"""
     return [
-        Plant(df_plant_capacities=df_plant_capacities, **kwargs)
-        for _ in range(n_plants)
+        Asset(df_asset_capacities=df_asset_capacities, **kwargs)
+        for _ in range(n_assets)
     ]
 
 
-class PlantStack:
-    def __init__(self, plants: list):
-        self.plants = plants
-        # Keep track of all plants added this year
+class AssetStack:
+    def __init__(self, assets: list):
+        self.assets = assets
+        # Keep track of all assets added this year
         self.new_ids = []
 
-    def remove(self, remove_plant):
-        self.plants = [plant for plant in self.plants if plant != remove_plant]
+    def remove(self, remove_asset):
+        self.assets = [asset for asset in self.assets if asset != remove_asset]
 
-    def append(self, new_plant):
-        self.plants.append(new_plant)
-        self.new_ids.append(new_plant.uuid)
+    def append(self, new_asset):
+        self.assets.append(new_asset)
+        self.new_ids.append(new_asset.uuid)
 
     def empty(self):
-        """Return True if no plant in stack"""
-        return not self.plants
+        """Return True if no asset in stack"""
+        return not self.assets
 
-    def filter_plants(self, sector=None, region=None, technology=None, product=None):
-        """Filter plant based on one or more criteria"""
-        plants = self.plants
+    def filter_assets(self, sector=None, region=None, technology=None, product=None):
+        """Filter asset based on one or more criteria"""
+        assets = self.assets
         if sector is not None:
-            plants = filter(lambda plant: plant.sector == sector, plants)
+            assets = filter(lambda asset: asset.sector == sector, assets)
         if region is not None:
-            plants = filter(lambda plant: plant.region == region, plants)
+            assets = filter(lambda asset: asset.region == region, assets)
         if technology is not None:
-            plants = filter(lambda plant: plant.technology == technology, plants)
+            assets = filter(lambda asset: asset.technology == technology, assets)
         if product is not None:
-            plants = filter(
-                lambda plant: (plant.product == product)
-                or (product in plant.byproducts),
-                plants,
+            assets = filter(
+                lambda asset: (asset.product == product)
+                or (product in asset.byproducts),
+                assets,
             )
         # Commenting out the following lines as it is not cleare if we will need
         # something similar for ammonia and aluminium
         # if methanol_type is not None:
-        #     plant = filter(
-        #         lambda plant: plant.technology in METHANOL_SUPPLY_TECH[methanol_type],
-        #         plant,
+        #     asset = filter(
+        #         lambda asset: asset.technology in METHANOL_SUPPLY_TECH[methanol_type],
+        #         asset,
         #     )
 
-        return list(plants)
+        return list(assets)
 
-    def get_fossil_plants(self, product):
+    def get_fossil_assets(self, product):
         return [
-            plant
-            for plant in self.plants
+            asset
+            for asset in self.assets
             if (
-                (plant.technology in DECOMMISSION_RATES.keys())
-                and (plant.product == product)
+                (asset.technology in DECOMMISSION_RATES.keys())
+                and (asset.product == product)
             )
         ]
 
     def get_capacity(self, product, methanol_type=None, **kwargs):
-        """Get the plant capacity, optionally filtered by region, technology, product"""
+        """Get the asset capacity, optionally filtered by region, technology, product"""
         if methanol_type is not None:
             kwargs["methanol_type"] = methanol_type
 
-        plants = self.filter_plants(product=product, **kwargs)
-        return sum(plant.get_capacity(product) for plant in plants)
+        assets = self.filter_assets(product=product, **kwargs)
+        return sum(asset.get_capacity(product) for asset in assets)
 
     def get_annual_production(self, product, **kwargs):
         """Get the yearly volume, optionally filtered by region, technology, product"""
 
-        plants = self.filter_plants(product=product, **kwargs)
-        return sum(plant.get_annual_production(product=product) for plant in plants)
+        assets = self.filter_assets(product=product, **kwargs)
+        return sum(asset.get_annual_production(product=product) for asset in assets)
 
     def get_tech(self, id_vars, product=None):
         """
@@ -163,40 +163,40 @@ class PlantStack:
         df = pd.DataFrame(
             [
                 {
-                    "product": plant.product,
-                    "technology": plant.technology,
-                    "region": plant.region,
-                    "retrofit": plant.retrofit,
-                    "capacity": plant.get_capacity(product),
+                    "product": asset.product,
+                    "technology": asset.technology,
+                    "region": asset.region,
+                    "retrofit": asset.retrofit,
+                    "capacity": asset.get_capacity(product),
                 }
-                for plant in self.plants
+                for asset in self.assets
             ]
         )
         try:
             return df.groupby(id_vars).agg(
-                capacity=("capacity", "sum"), number_of_plants=("capacity", "count")
+                capacity=("capacity", "sum"), number_of_assets=("capacity", "count")
             )
         except KeyError:
-            # There are no plant
+            # There are no asset
             return pd.DataFrame()
 
-    def get_new_plant_stack(self):
-        return PlantStack(
-            plants=[plant for plant in self.plants if plant.plant_status == "new"]
+    def get_new_asset_stack(self):
+        return AssetStack(
+            assets=[asset for asset in self.assets if asset.asset_status == "new"]
         )
 
-    def get_old_plant_stack(self):
-        return PlantStack(
-            plants=[plant for plant in self.plants if plant.plant_status == "old"]
+    def get_old_asset_stack(self):
+        return AssetStack(
+            assets=[asset for asset in self.assets if asset.asset_status == "old"]
         )
 
     def get_unique_tech(self, product=None):
         if product is not None:
-            plants = self.filter_plants(product=product)
+            assets = self.filter_assets(product=product)
         else:
-            plants = self.plants
+            assets = self.assets
 
-        valid_combos = {(plant.technology, plant.region) for plant in plants}
+        valid_combos = {(asset.technology, asset.region) for asset in assets}
         return pd.DataFrame(valid_combos, columns=["technology", "region"])
 
     def get_regional_contribution(self):
@@ -204,10 +204,10 @@ class PlantStack:
             pd.DataFrame(
                 [
                     {
-                        "region": plant.region,
-                        "capacity": plant.get_capacity(),
+                        "region": asset.region,
+                        "capacity": asset.get_capacity(),
                     }
-                    for plant in self.plants
+                    for asset in self.assets
                 ]
             )
             .groupby("region", as_index=False)
@@ -220,10 +220,10 @@ class PlantStack:
         return (
             pd.DataFrame(
                 {
-                    "region": plant.region,
-                    "annual_production": plant.get_annual_production(product),
+                    "region": asset.region,
+                    "annual_production": asset.get_annual_production(product),
                 }
-                for plant in self.plants
+                for asset in self.assets
             )
             .groupby("region", as_index=False)
             .sum()
@@ -233,35 +233,35 @@ class PlantStack:
 
         # Filter for product
         if product is not None:
-            plants = self.filter_plants(product=product)
+            assets = self.filter_assets(product=product)
         else:
-            plants = self.plants
+            assets = self.assets
 
-        # Keep only plant that were built in a year
+        # Keep only asset that were built in a year
         if this_year:
-            plants = [plant for plant in plants if plant.uuid in self.new_ids]
+            assets = [asset for asset in assets if asset.uuid in self.new_ids]
 
-        # Calculate capacity and number of plant for new and retrofit
+        # Calculate capacity and number of asset for new and retrofit
         try:
             df_agg = (
                 pd.DataFrame(
                     [
                         {
-                            "capacity": plant.get_capacity(product),
-                            "yearly_volume": plant.get_annual_production(
+                            "capacity": asset.get_capacity(product),
+                            "yearly_volume": asset.get_annual_production(
                                 product=product
                             ),
-                            "technology": plant.technology,
-                            "region": plant.region,
-                            "retrofit": plant.retrofit,
+                            "technology": asset.technology,
+                            "region": asset.region,
+                            "retrofit": asset.retrofit,
                         }
-                        for plant in plants
+                        for asset in assets
                     ]
                 )
                 .groupby(["technology", "region", "retrofit"], as_index=False)
                 .agg(
                     capacity=("capacity", "sum"),
-                    number_of_plants=("capacity", "count"),
+                    number_of_assets=("capacity", "count"),
                     yearly_volume=("yearly_volume", "sum"),
                 )
             ).fillna(0)
@@ -271,7 +271,7 @@ class PlantStack:
             df_agg.loc[df_agg.retrofit, "build_type"] = "retrofit"
 
             df = df_agg.pivot_table(
-                values=["capacity", "number_of_plants", "yearly_volume"],
+                values=["capacity", "number_of_assets", "yearly_volume"],
                 index=["region", "technology"],
                 columns="build_type",
                 dropna=False,
@@ -282,8 +282,8 @@ class PlantStack:
             for col in [
                 ("capacity", "retrofit"),
                 ("capacity", "new_build"),
-                ("number_of_plants", "retrofit"),
-                ("number_of_plants", "new_build"),
+                ("number_of_assets", "retrofit"),
+                ("number_of_assets", "new_build"),
                 ("yearly_volume", "retrofit"),
                 ("yearly_volume", "new_build"),
             ]:
@@ -294,15 +294,15 @@ class PlantStack:
             df[("capacity", "total")] = (
                 df[("capacity", "new_build")] + df[("capacity", "retrofit")]
             )
-            df[("number_of_plants", "total")] = (
-                df[("number_of_plants", "new_build")]
-                + df[("number_of_plants", "retrofit")]
+            df[("number_of_assets", "total")] = (
+                df[("number_of_assets", "new_build")]
+                + df[("number_of_assets", "retrofit")]
             )
             df[("yearly_volume", "total")] = (
                 df[("yearly_volume", "new_build")] + df[("yearly_volume", "retrofit")]
             )
 
-        # No plant exist
+        # No asset exist
         except KeyError:
             return pd.DataFrame()
 
@@ -315,41 +315,56 @@ class PlantStack:
 
         return df
 
-    def get_tech_plant_stack(self, technology: str):
-        return PlantStack(
-            plants=[plant for plant in self.plants if plant.technology == technology]
+    def get_tech_asset_stack(self, technology: str):
+        return AssetStack(
+            assets=[asset for asset in self.assets if asset.technology == technology]
         )
 
     def get_assets_eligible_for_decommission(self) -> list():
-        """Return a list of Plants from the PlantStack that are eligible for decommissioning
+        """Return a list of Assets from the AssetStack that are eligible for decommissioning
 
         Returns:
-            list of Plants
+            list of Assets
         """
         # Filter for CUF < threshold
         candidates = filter(
-            lambda plant: plant.capacity_factor < CUF_LOWER_THRESHOLD, self.plants
+            lambda asset: asset.capacity_factor < CUF_LOWER_THRESHOLD, self.assets
         )
 
         # TODO: filter based on asset age
 
         return list(candidates)
 
+    def export_stack_to_df(self) -> pd.DataFrame:
+        return pd.DataFrame(
+            {
+                "product": asset.product,
+                "region": asset.region,
+                "technology": asset.technology,
+                "daily_production_capacity": asset.get_capacity(),
+                "capacity_factor": asset.capacity_factor,
+                "asset_lifetime": asset.asset_lifetime,
+                "retrofit_status": asset.retrofit,
+                "uuid": asset.uuid,
+            }
+            for asset in self.assets
+        )
 
-def make_new_plant(
-    asset_transition, df_process_data, year, retrofit, product, df_plant_capacities
+
+def make_new_asset(
+    asset_transition, df_process_data, year, retrofit, product, df_asset_capacities
 ):
     """
-    Make a new plant, based on a transition entry from the ranking dataframe
+    Make a new asset, based on a transition entry from the ranking dataframe
 
     Args:
-        asset_transition: The best transition (destination is the plant to build)
-        df_process_data: The inputs dataframe (needed for plant specs)
-        year: Build the plant in this year
-        retrofit: Plant is retrofitted from an old plant
+        asset_transition: The best transition (destination is the asset to build)
+        df_process_data: The inputs dataframe (needed for asset specs)
+        year: Build the asset in this year
+        retrofit: Asset is retrofitted from an old asset
 
     Returns:
-        The new plant
+        The new asset
     """
     df_process_data = df_process_data.reset_index()
     spec = df_process_data[
@@ -363,15 +378,15 @@ def make_new_plant(
     types_of_tech = {1: "Initial", 2: "Transition", 3: "End-state"}
     type_of_tech = types_of_tech[asset_transition["type_of_tech_destination"]]
 
-    return Plant(
+    return Asset(
         sector=first(spec["sector"]),
         product=product,
         technology=first(spec["technology"]),
         region=first(spec["region"]),
         start_year=year,
         retrofit=retrofit,
-        plant_lifetime=first(spec["spec", "", "plant_lifetime"]),
+        asset_lifetime=first(spec["spec", "", "asset_lifetime"]),
         capacity_factor=first(spec["spec", "", "capacity_factor"]),
         type_of_tech=type_of_tech,
-        df_plant_capacities=df_plant_capacities,
+        df_asset_capacities=df_asset_capacities,
     )

@@ -1,14 +1,14 @@
 """ Logic for technology transitions of type greenfield (add new Asset to AssetStack."""
 
 from mppshared.models.simulation_pathway import SimulationPathway
-from mppshared.models.plant import PlantStack, Plant, make_new_plant
+from mppshared.models.asset import AssetStack, Asset, make_new_asset
 from mppshared.agent_logic.agent_logic_functions import (
     select_best_transition,
     optimize_cuf,
 )
 from mppshared.models.constraints import check_constraints
 from mppshared.utility.utils import get_logger
-from mppshared.config import LOG_LEVEL, MODEL_SCOPE, ASSUMED_PLANT_CAPACITY
+from mppshared.config import LOG_LEVEL, MODEL_SCOPE, ASSUMED_ANNUAL_PRODUCTION_CAPACITY
 
 
 import pandas as pd
@@ -24,7 +24,7 @@ logger.setLevel(LOG_LEVEL)
 def greenfield(
     pathway: SimulationPathway, product: str, year: int
 ) -> SimulationPathway:
-    """Apply newbuild transition to eligible Assets in the AssetStack.
+    """Apply greenfield transition and add new Assets to the AssetStack.
 
     Args:
         pathway: decarbonization pathway that describes the composition of the AssetStack in every year of the model horizon
@@ -44,34 +44,33 @@ def greenfield(
     demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
     production = old_stack.get_annual_production(product)
 
-    # TODO: Change rank_type to new_build
-    # Get ranking table for decommissioning
+    # Get ranking table for greenfield transitions
     df_rank = pathway.get_ranking(product=product, year=year, rank_type="greenfield")
 
-    # TODO: Decommission until one plant short of balance between demand and production
+    # TODO: Decommission until one asset short of balance between demand and production
     surplus = demand - production
     while surplus > 0:
         # Check whether it is even possible to increase CUF
-        cuf_plants = list(
-            filter(lambda plant: plant.capacity_factor < 0.95, new_stack.plants)
+        cuf_assets = list(
+            filter(lambda asset: asset.capacity_factor < 0.95, new_stack.assets)
         )
-        if not cuf_plants:
+        if not cuf_assets:
             break
 
         # Optimize capacity factor and check whether surplus is covered
-        if (surplus / ASSUMED_PLANT_CAPACITY) / len(cuf_plants) > 0.95:
-            cuf_array = [0.95] * len(cuf_plants)
+        if (surplus / ASSUMED_ANNUAL_PRODUCTION_CAPACITY) / len(cuf_assets) > 0.95:
+            cuf_array = [0.95] * len(cuf_assets)
         else:
-            cuf_array = optimize_cuf(cuf_plants, surplus)
+            cuf_array = optimize_cuf(cuf_assets, surplus)
 
         for i, cuf in enumerate(cuf_array):
-            cuf_plants[i].capacity_factor = cuf
+            cuf_assets[i].capacity_factor = cuf
 
     # Get demand balance (demand - production)
     demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
     production = new_stack.get_annual_production(product)
 
-    # TODO: Decommission until one plant short of balance between demand and production
+    # TODO: Decommission until one asset short of balance between demand and production
     surplus = demand - production
     while surplus > 0:
 
@@ -80,20 +79,20 @@ def greenfield(
             df_rank=df_rank,
         )
 
-        new_plant = make_new_plant(
+        new_asset = make_new_asset(
             asset_transition=asset_transition,
             df_process_data=df_process_data,
             year=year,
             retrofit=False,
             product=product,
-            df_plant_capacities=pathway.df_plant_capacities,
+            df_asset_capacities=pathway.df_asset_capacities,
         )
 
         logger.info(
-            f"Building new plant with technology {new_plant.technology} in region {new_plant.region}, annual production {new_plant.get_annual_production(product)} and UUID {new_plant.uuid}"
+            f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production(product)} and UUID {new_asset.uuid}"
         )
 
-        new_stack.append(new_plant)
-        surplus -= new_plant.get_annual_production(product)
+        new_stack.append(new_asset)
+        surplus -= new_asset.get_annual_production(product)
 
     return pathway

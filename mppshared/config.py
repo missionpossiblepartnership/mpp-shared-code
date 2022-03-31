@@ -161,8 +161,8 @@ DECOMMISSION_RATES = {
 # Scope of the model run - to be specified
 MODEL_SCOPE = ["Global"]
 
-# Override plant parameters; unit t/year
-ASSUMED_PLANT_CAPACITY = 3000
+# Override asset parameters; annual production capacity in Mt/year
+ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
     "bau",
@@ -209,6 +209,12 @@ GHGS_RANKING = [
     # "n2o"
 ]
 EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
+TRANSITION_TYPES = [
+    "decommission",
+    "greenfield",
+    "brownfield_renovation",
+    "brownfield_newbuild",
+]
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 
 
