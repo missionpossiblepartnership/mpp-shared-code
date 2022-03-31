@@ -4,7 +4,7 @@ import pandas as pd
 from pandas.errors import ParserError
 
 # from util.util import make_multi_df
-from mppshared.config import ASSUMED_ASSET_CAPACITY, MODEL_SCOPE, PRODUCTS
+from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY, MODEL_SCOPE, PRODUCTS
 from mppshared.utility.dataframe_utility import make_multi_df
 
 
@@ -76,7 +76,9 @@ class IntermediateDataImporter:
             self.intermediate_path.joinpath("technology_characteristics.csv"),
             index_col=["product", "technology", "region"],
         )
-        df_spec.annual_production_capacity = ASSUMED_ASSET_CAPACITY * 365 / 1e6
+        df_spec.annual_production_capacity = (
+            ASSUMED_ANNUAL_PRODUCTION_CAPACITY * 365 / 1e6
+        )
         df_spec["yearly_volume"] = (
             df_spec.annual_production_capacity * df_spec.capacity_factor
         )
@@ -99,7 +101,7 @@ class IntermediateDataImporter:
 
     def get_asset_capacities(self):
         df_spec = self.get_asset_specs().reset_index()
-        df_spec.annual_production_capacity = ASSUMED_ASSET_CAPACITY
+        df_spec.annual_production_capacity = ASSUMED_ANNUAL_PRODUCTION_CAPACITY
         df_spec["yearly_volume"] = (
             df_spec.annual_production_capacity * df_spec.capacity_factor
         )
