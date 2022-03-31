@@ -1,7 +1,12 @@
 """ Additional functions required for the agent logic, e.g. demand balances. """
 
+import pandas as pd
+import numpy as np
+from scipy.optimize import linprog
+
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.plant import PlantStack
+from mppshared.config import ASSUMED_PLANT_CAPACITY
 
 
 def get_demand_balance(
@@ -27,3 +32,47 @@ def get_demand_balance(
     production = current_stack.get_yearly_volume(product)
     balance = demand - production
     return balance
+
+
+def select_best_transition(df_rank: pd.DataFrame) -> dict:
+    """Based on the ranking, select the best transition
+
+    Args:
+        df_rank: contains column "rank" with ranking for each technology transition (minimum rank = optimal technology transition)
+
+    Returns:
+        The highest ranking technology transition
+
+    """
+    # Best transition has minimum rank
+    return (
+        df_rank[df_rank["rank"] == df_rank["rank"].min()]
+        .sample(n=1)
+        .to_dict(orient="records")
+    )[0]
+
+
+def optimize_cuf(cuf_plants: list, surplus: float, upper_bound=0.95, lower_bound=0.5) -> list:
+    """
+
+    Args:
+        cuf_plants:
+        surplus:
+        upper_bound:
+        lower_bound:
+
+    Returns:
+        an array with new CUF to cover the demand
+
+    """
+    c = [-1] * len(cuf_plants)
+    A_ub = [1] * len(cuf_plants)
+    b_ub = surplus/ASSUMED_PLANT_CAPACITY
+    bounds = [(lower_bound, upper_bound)] * len(cuf_plants)
+
+    model_linear = linprog(c=c,
+                           A_ub=A_ub,
+                           b_ub=b_ub,
+                           bounds=bounds)
+
+    return [round(cuf, 2) for cuf in model_linear.x.to_list()]

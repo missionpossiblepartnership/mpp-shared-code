@@ -2,20 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="02329e65-324f-4e04-a306-ec660e0198a3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/mppshared/calculate/calcluate_availablity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/mpp-shared-code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/mpp-shared-code.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/chemicals/ammonia/bau/def/intermediate/demand.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/chemicals/ammonia/bau/def/intermediate/emissions.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/chemicals/ammonia/bau/def/intermediate/initial_state.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/chemicals/ammonia/bau/def/intermediate/technology_characteristics.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/chemicals/ammonia/bau/def/intermediate/technology_transitions.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mppshared/calculate/calculate_availability" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mppshared/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mppshared/agent_logic/agent_logic_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/agent_logic/agent_logic_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mppshared/agent_logic/decommission.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/agent_logic/decommission.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mppshared/agent_logic/new_build.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/agent_logic/new_build.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mppshared/import_data/intermediate_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/import_data/intermediate_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mppshared/model/simulate.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/model/simulate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mppshared/pathway/simpathway.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/pathway/simpathway.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mppshared/plant/plant.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/plant/plant.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mppshared/models/plant.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/models/plant.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mppshared/models/simulate.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/models/simulate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mppshared/models/simulation_pathway.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/models/simulation_pathway.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,16 +124,10 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/mppshared/model/simulate.py</url>
-          <line>43</line>
-          <option name="timeStamp" value="21" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">

@@ -4,7 +4,7 @@ import pandas as pd
 from pandas.errors import ParserError
 
 # from util.util import make_multi_df
-from mppshared.config import ASSUMED_PLANT_CAPACITY, MODEL_SCOPE
+from mppshared.config import ASSUMED_PLANT_CAPACITY, MODEL_SCOPE, PRODUCTS
 from mppshared.utility.dataframe_utility import make_multi_df
 
 

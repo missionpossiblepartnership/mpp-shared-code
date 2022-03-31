@@ -4,8 +4,7 @@ from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.plant import PlantStack, Plant
 from mppshared.models.constraints import check_constraints
 from mppshared.utility.utils import get_logger
-from mppshared.config import LOG_LEVEL
-
+from mppshared.config import LOG_LEVEL, MODEL_SCOPE
 
 import pandas as pd
 import numpy as np
@@ -39,8 +38,7 @@ def decommission(
         new_stack.plants[i].capacity_factor = 0.5
 
     # Get demand balance (demand - production)
-    region = "Global"
-    demand = pathway.get_demand(product, year, region)
+    demand = pathway.get_demand(product, year, MODEL_SCOPE)
     production = old_stack.get_annual_production(product)
 
     # Get ranking table for decommissioning
