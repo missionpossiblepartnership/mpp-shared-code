@@ -1,11 +1,15 @@
 """Configuration file for the library."""
 import logging
-
 import numpy as np
 
+### LOGGER ####
 LOG_LEVEL = "INFO"
+LOG_FORMATTER = logging.Formatter(
+    "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
+)
 
-# Define Data Path
+
+### DATA IMPORT AND EXPORT
 CORE_DATA_PATH = "data"
 LOG_PATH = "logs/"
 IMPORT_DATA_PATH = f"{CORE_DATA_PATH}/import_data"
@@ -16,12 +20,8 @@ PKL_DATA_INTERMEDIATE = f"{PKL_FOLDER}/intermediate_data"
 PKL_DATA_FINAL = f"{PKL_FOLDER}/final_data"
 SOLVER_INPUT_DATA_PATH = f"{CORE_DATA_PATH}/solver_input_data"
 
-# Log formatter
-LOG_FORMATTER = logging.Formatter(
-    "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
-)
 
-# STANDARDISED SOLVER
+# Naming of solver input tables
 SOLVER_INPUT_TABLES = [
     "technology_switches",
     "emissions",
@@ -29,20 +29,6 @@ SOLVER_INPUT_TABLES = [
     "technology_characteristics",
     "demand",
 ]
-
-START_YEAR = 2020
-END_YEAR = 2050
-MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
-
-# Emissions
-GHGS = [
-    "co2",
-    # "ch4",
-    # "n2o"
-]
-
-EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
-
 
 FOLDERS_TO_CHECK_IN_ORDER = [
     # Top level folders
@@ -147,6 +133,20 @@ CARBON_BUDGET_REF = {
     "trucking": 36,
 }
 
+### MODEL DECISION PARAMETERS ###
+START_YEAR = 2020
+END_YEAR = 2050
+MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
+
+# Emissions
+GHGS = [
+    "co2",
+    # "ch4",
+    # "n2o"
+]
+
+EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
+
 # Capacity utilisation factor thresholds
 # TODO: make sector-specific with dictionary
 CUF_LOWER_THRESHOLD = 0.6
@@ -174,13 +174,16 @@ SENSITIVITIES = [
     "def",
 ]
 
-# Sectors
+### SECTOR-SPECIFIC PARAMETERS ###
+# Sectors for which the model can be run
 SECTOR = "chemicals"  # "aluminium, steel, ..."
 
-# Product
+# Products produced by each sector
 PRODUCTS = {
     "chemicals": ["Ammonia"],
 }
+
+### RUN CONFIGURATION ###
 
 RUN_PARALLEL = False
 
@@ -195,6 +198,7 @@ run_config = {
     # "PLOT_AVAILABILITIES"
     # "MERGE_OUTPUTS"
 }
+### RANKING ###
 NUMBER_OF_BINS_RANKING = 10
 
 ### CONSTRAINTS ###
