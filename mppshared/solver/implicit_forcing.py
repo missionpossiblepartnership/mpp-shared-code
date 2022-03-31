@@ -71,7 +71,10 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
     # Calculate emission deltas between origin and destination technology
     df_ranking = calculate_emission_reduction(df_carbon_cost, df_emissions)
     importer.export_data(
-        df=df_ranking, filename="technologies_to_rank.csv", export_dir="intermediate"
+        df=df_ranking,
+        filename="technologies_to_rank.csv",
+        export_dir="intermediate",
+        index=False,
     )
 
     return df_ranking

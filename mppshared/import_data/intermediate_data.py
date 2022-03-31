@@ -32,7 +32,12 @@ class IntermediateDataImporter:
         self.aggregate_export_dir = parent_path.joinpath("output/")
 
     def export_data(
-        self, df: pd.DataFrame, filename: str, export_dir: str, aggregate=False
+        self,
+        df: pd.DataFrame,
+        filename: str,
+        export_dir: str,
+        index=True,
+        aggregate=False,
     ):
         """
         Export output data into the output directory
@@ -42,6 +47,7 @@ class IntermediateDataImporter:
             df: Data to export
             filename: Filename to export to
             export_dir: Additional directory to create
+            index: index is exported if True (default)
         """
         output_dir = self.aggregate_export_dir if aggregate else self.export_dir
         if export_dir is not None:
@@ -53,7 +59,8 @@ class IntermediateDataImporter:
         output_dir.mkdir(exist_ok=True, parents=True)
 
         export_path = output_dir.joinpath(filename)
-        df.to_csv(export_path)
+
+        df.to_csv(export_path, index=index)
 
     def get_availabilities(self):
         return pd.read_csv(self.intermediate_path.joinpath("availabilities.csv"))

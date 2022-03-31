@@ -147,4 +147,5 @@ def make_rankings(pathway: str, sensitivity: str, sector: str):
                 df=df_rank,
                 filename=f"{rank_type}_rank.csv",
                 export_dir=f"ranking/{product}",
+                index=False,
             )
