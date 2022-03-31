@@ -44,7 +44,7 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
 
     #! Development only: filter input tables for faster runtimes
     df_technology_switches = filter_df_for_development(importer.get_tech_transitions())
-    df_emissions = filter_df_for_development(importer.get_emissions())
+    df_emissions = importer.get_emissions()
     df_technology_characteristics = importer.get_plant_specs()
     df_technology_characteristics.reset_index(inplace=True)
 
