@@ -131,3 +131,4 @@ play.py
 data/implicit_forcing_intermediate.csv
 data/solver_input_datachemicals_ranking.csv
 decommission_bau.csv
+data/chemicals/bau/def/stack_tracker/stack_2020.csv
