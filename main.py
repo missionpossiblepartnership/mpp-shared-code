@@ -1,22 +1,12 @@
+from mppshared.utility.utils import get_logger
+from mppshared.config import LOG_LEVEL, PATHWAYS, SENSITIVITIES, SECTOR, RUN_PARALLEL, run_config
+from mppshared.models.simulate import simulate_pathway
+from mppshared.solver.ranking import make_rankings
+
+import numpy as np
 import itertools
 import multiprocessing as mp
 
-import numpy as np
-
-from mppshared.config import (
-    LOG_LEVEL,
-    PATHWAYS,
-    PRODUCTS,
-    RUN_PARALLEL,
-    SECTOR,
-    SENSITIVITIES,
-    run_config,
-)
-from mppshared.models.carbon_budget import carbon_budget_test
-from mppshared.models.simulate import simulate_pathway
-from mppshared.solver.implicit_forcing import apply_implicit_forcing
-from mppshared.solver.ranking import make_rankings
-from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -24,7 +14,6 @@ logger.setLevel(LOG_LEVEL)
 np.random.seed(100)
 
 funcs = {
-    # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     # "MAKE_RANKINGS": make_rankings,
     "SIMULATE_PATHWAY": simulate_pathway,
     # "CALCULATE_OUTPUTS": calculate_outputs,
@@ -40,7 +29,6 @@ def _run_model(pathway, sensitivity):
             func(
                 pathway=pathway,
                 sensitivity=sensitivity,
-                product=PRODUCTS[SECTOR],
                 sector=SECTOR,
             )
 
@@ -73,3 +61,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
