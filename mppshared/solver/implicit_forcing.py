@@ -7,27 +7,27 @@ import numpy as np
 import pandas as pd
 
 from mppshared.calculate.calculate_cost import discount_costs
-from mppshared.config import EMISSION_SCOPES, GHGS
+from mppshared.config import EMISSION_SCOPES, GHGS, PRODUCTS
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.solver.input_loading import filter_df_for_development
 from mppshared.utility.dataframe_utility import (
-    add_column_header_suffix, get_grouping_columns_for_npv_calculation)
+    add_column_header_suffix,
+    get_grouping_columns_for_npv_calculation,
+)
 from mppshared.utility.function_timer_utility import timer_func
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
 
 
-def apply_implicit_forcing(
-    pathway: str, sensitivity: str, product: str, sector: str
-) -> pd.DataFrame:
+def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.DataFrame:
     """Apply the implicit forcing mechanisms to the input tables.
 
     Args:
-        df_technology_switches: cost data for every technology switch (regional)
-        df_emissions: emissions data for every technology (regional)
-        df_technology_characteristics: characteristics for every technology
+        pathway:
+        sensitivity:
+        sector:
 
     Returns:
         pd.DataFrame: DataFrame ready for ranking the technology switches
@@ -36,7 +36,10 @@ def apply_implicit_forcing(
 
     # Import input tables
     importer = IntermediateDataImporter(
-        pathway=pathway, sensitivity=sensitivity, sector=sector, product=product
+        pathway=pathway,
+        sensitivity=sensitivity,
+        sector=sector,
+        products=PRODUCTS[sector],
     )
 
     #! Development only: filter input tables for faster runtimes
