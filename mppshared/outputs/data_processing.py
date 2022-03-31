@@ -3,7 +3,7 @@
 import pandas as pd
 
 
-def create_output_interface():
+def create_outputs_interface():
     pass
 
 
