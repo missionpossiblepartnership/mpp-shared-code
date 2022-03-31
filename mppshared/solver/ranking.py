@@ -5,10 +5,12 @@ import numpy as np
 import pandas as pd
 
 from mppshared.config import (
+    GHGS_RANKING,
     NUMBER_OF_BINS_RANKING,
     PRODUCTS,
     EMISSION_SCOPES_RANKING,
     RANKING_CONFIG,
+    RANK_TYPES,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.utils import get_logger
@@ -60,7 +62,7 @@ def rank_technology(
 
     Args:
         df_ranking: DataFrame with cost and emissions data used to rank each technology transition
-        rank_type: either of "decommission", "greenfield", "brownfield"
+        rank_type: must be in RANK_TYPES
         pathway:
         sensitivity:
         product:
@@ -84,7 +86,7 @@ def rank_technology(
     elif rank_type == "decommission":
         df = df_ranking[(df_ranking["switch_type"] == "decommission")].copy()
     elif rank_type == "greenfield":
-        df = df_ranking[(df_ranking["switch_type"] == "new_build")].copy()
+        df = df_ranking[(df_ranking["switch_type"] == "greenfield")].copy()
 
     # Normalize TCO
     df["tco_normalized"] = 1 - (df["tco"] - df["tco"].min()) / (
@@ -92,7 +94,12 @@ def rank_technology(
     )
 
     # Sum emission reductions for all scopes included in optimization. Add 1 to avoid division by 0 in normalization
-    df["sum_emissions_delta"] = 1 + (df[EMISSION_SCOPES_RANKING].sum(axis=1))
+    col_list = [
+        f"delta_{ghg}_{scope}"
+        for scope in EMISSION_SCOPES_RANKING
+        for ghg in GHGS_RANKING
+    ]
+    df["sum_emissions_delta"] = 1 + (df[col_list].sum(axis=1))
 
     # Normalize the sum of emission reductions
     df["sum_emissions_delta_normalized"] = 1 - (
@@ -128,7 +135,7 @@ def make_rankings(pathway: str, sensitivity: str, sector: str):
     # Make the ranking separately for each product and each type of technology transition
     df_ranking = importer.get_technologies_to_rank()
     for product in PRODUCTS[sector]:
-        for rank_type in ["decommission", "greenfield", "brownfield"]:
+        for rank_type in RANK_TYPES:
 
             # Create ranking table
             df_rank = rank_technology(

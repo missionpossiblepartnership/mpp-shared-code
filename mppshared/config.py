@@ -148,9 +148,6 @@ GHGS = [
 # Emission scopes included in data analysis
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
 
-# Emission scopes included in weighting when ranking technology transitions
-EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
-
 # Capacity utilisation factor thresholds
 # TODO: make sector-specific with dictionary
 CUF_LOWER_THRESHOLD = 0.6
@@ -204,6 +201,16 @@ run_config = {
 }
 ### RANKING ###
 NUMBER_OF_BINS_RANKING = 10
+
+# GHGs and Emission scopes included in weighting when ranking technology transitions
+GHGS_RANKING = [
+    "co2",
+    # "ch4",
+    # "n2o"
+]
+EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
+RANK_TYPES = ["decommission", "greenfield", "brownfield"]
+
 
 """
 Configuration to use for ranking

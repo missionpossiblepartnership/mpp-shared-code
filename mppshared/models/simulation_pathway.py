@@ -15,6 +15,7 @@ from mppshared.config import (
     MODEL_SCOPE,
     PRODUCTS,
     SECTOR,
+    RANK_TYPES,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
@@ -122,7 +123,7 @@ class SimulationPathway:
     def _import_rankings(self, japan_only=False):
         """Import ranking for all products and rank types from the CSVs"""
         rankings = defaultdict(dict)
-        for rank_type in ["newbuild", "retrofit", "decommission"]:
+        for rank_type in RANK_TYPES:
             for product in self.products:
                 df_rank = self.importer.get_ranking(
                     rank_type=rank_type,
@@ -244,8 +245,7 @@ class SimulationPathway:
 
     def get_ranking(self, product, year, rank_type):
         """Get ranking df for a specific year/product"""
-        allowed_types = ["new_build", "retrofit", "decommission"]
-        if rank_type not in allowed_types:
+        if rank_type not in RANK_TYPES:
             raise ValueError(
                 "Rank type %s not recognized, choose one of %s",
                 rank_type,
