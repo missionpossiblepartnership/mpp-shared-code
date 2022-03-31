@@ -6,7 +6,7 @@ from scipy.optimize import linprog
 
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.asset import AssetStack
-from mppshared.config import ASSUMED_ASSET_CAPACITY
+from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY
 
 
 def get_demand_balance(
@@ -69,7 +69,7 @@ def optimize_cuf(
     """
     c = [-1] * len(cuf_assets)
     A_ub = [1] * len(cuf_assets)
-    b_ub = surplus / ASSUMED_ASSET_CAPACITY
+    b_ub = surplus / ASSUMED_ANNUAL_PRODUCTION_CAPACITY
     bounds = [(lower_bound, upper_bound)] * len(cuf_assets)
 
     model_linear = linprog(c=c, A_ub=A_ub, b_ub=b_ub, bounds=bounds)

@@ -8,7 +8,7 @@ from mppshared.agent_logic.agent_logic_functions import (
 )
 from mppshared.models.constraints import check_constraints
 from mppshared.utility.utils import get_logger
-from mppshared.config import LOG_LEVEL, MODEL_SCOPE, ASSUMED_ASSET_CAPACITY
+from mppshared.config import LOG_LEVEL, MODEL_SCOPE, ASSUMED_ANNUAL_PRODUCTION_CAPACITY
 
 
 import pandas as pd
@@ -24,7 +24,7 @@ logger.setLevel(LOG_LEVEL)
 def greenfield(
     pathway: SimulationPathway, product: str, year: int
 ) -> SimulationPathway:
-    """Apply newbuild transition to eligible Assets in the AssetStack.
+    """Apply greenfield transition and add new Assets to the AssetStack.
 
     Args:
         pathway: decarbonization pathway that describes the composition of the AssetStack in every year of the model horizon
@@ -44,8 +44,7 @@ def greenfield(
     demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
     production = old_stack.get_annual_production(product)
 
-    # TODO: Change rank_type to new_build
-    # Get ranking table for decommissioning
+    # Get ranking table for greenfield transitions
     df_rank = pathway.get_ranking(product=product, year=year, rank_type="greenfield")
 
     # TODO: Decommission until one asset short of balance between demand and production
@@ -59,7 +58,7 @@ def greenfield(
             break
 
         # Optimize capacity factor and check whether surplus is covered
-        if (surplus / ASSUMED_ASSET_CAPACITY) / len(cuf_assets) > 0.95:
+        if (surplus / ASSUMED_ANNUAL_PRODUCTION_CAPACITY) / len(cuf_assets) > 0.95:
             cuf_array = [0.95] * len(cuf_assets)
         else:
             cuf_array = optimize_cuf(cuf_assets, surplus)

@@ -1,7 +1,6 @@
 import logging
 import math
 from collections import defaultdict
-from sqlite3 import register_converter
 
 import pandas as pd
 import plotly.express as px
@@ -10,7 +9,7 @@ from plotly.subplots import make_subplots
 
 from mppshared.calculate.calculate_availablity import update_availability_from_asset
 from mppshared.config import (
-    ASSUMED_ASSET_CAPACITY,
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
     LOG_LEVEL,
     MODEL_SCOPE,
     PRODUCTS,
@@ -75,6 +74,9 @@ class SimulationPathway:
         # TODO: Raw material data is missing and should be called inputs to import it
         # self.inputs_pivot = self.importer.get_process_data(data_type="inputs")
         self.asset_specs = self.importer.get_asset_specs()
+
+        # Initialize TransitionRegistry to track technology transitions
+        self.transitions = TransitionRegistry()
 
     def _import_availability(self):
         """Import availabilities of biomass, waste, etc"""
@@ -249,7 +251,7 @@ class SimulationPathway:
             raise ValueError(
                 "Rank type %s not recognized, choose one of %s",
                 rank_type,
-                allowed_types,
+                RANK_TYPES,
             )
 
         return self.rankings[product][rank_type][year]
@@ -398,7 +400,7 @@ class SimulationPathway:
         df_production["number_of_assets"] = (
             (
                 (df_production["annual_production_capacity"])
-                / (ASSUMED_ASSET_CAPACITY * 365 / 1e6)
+                / (ASSUMED_ANNUAL_PRODUCTION_CAPACITY * 365 / 1e6)
             )
             .round()
             .astype(int)

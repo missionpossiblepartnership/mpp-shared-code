@@ -5,8 +5,8 @@ from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
 # from mppshared.agent_logic.new_build import new_build
 from mppshared.agent_logic.decommission import decommission
-from mppshared.agent_logic.retrofit import retrofit
-from mppshared.agent_logic.new_build import new_build
+from mppshared.agent_logic.brownfield import retrofit
+from mppshared.agent_logic.greenfield import greenfield
 
 from mppshared.models.asset import AssetStack
 
@@ -49,11 +49,14 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             # if pathway.pathway_name != "bau":
             #     pathway = retrofit(pathway=pathway, year=year, product=product)
 
-            # Build new assers
-            pathway = new_build(pathway=pathway, year=year, product=product)
+            # Build new assets
+            pathway = greenfield(pathway=pathway, year=year, product=product)
+
+            # Write stack to csv
+            pathway.export_stack_to_csv(year)
 
         # Copy availability to next year
-        pathway.copy_availability(year=year)
+        # pathway.copy_availability(year=year)
 
     return pathway
 

@@ -4,7 +4,7 @@ from typing import Literal, Optional
 
 import pandas as pd
 
-from mppshared.models.plant import Asset
+from mppshared.models.asset import Asset
 
 
 class TransitionRegistry:
