@@ -1,4 +1,4 @@
-""" Logic for technology transitions of type decommission (remove Asset from AssetStack)."""
+""" Logic for technology transitions of type greenfield (add new Asset to AssetStack."""
 
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.plant import PlantStack, Plant, make_new_plant
@@ -21,8 +21,10 @@ logger = logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def new_build(pathway: SimulationPathway, product: str, year: int) -> SimulationPathway:
-    """Apply decommission transition to eligible Assets in the AssetStack.
+def greenfield(
+    pathway: SimulationPathway, product: str, year: int
+) -> SimulationPathway:
+    """Apply newbuild transition to eligible Assets in the AssetStack.
 
     Args:
         pathway: decarbonization pathway that describes the composition of the AssetStack in every year of the model horizon
