@@ -50,7 +50,7 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             #     pathway = retrofit(pathway=pathway, year=year, product=product)
 
             # Build new assets
-            pathway = greenfield(pathway=pathway, year=year, product=product)
+            # pathway = greenfield(pathway=pathway, year=year, product=product)
 
             # Write stack to csv
             pathway.export_stack_to_csv(year)
