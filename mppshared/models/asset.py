@@ -368,18 +368,18 @@ def make_new_asset(
     """
     df_process_data = df_process_data.reset_index()
     spec = df_process_data[
-        (df_process_data.sector == asset_transition["sector"])
-        & (df_process_data.technology == asset_transition["destination"])
+        (df_process_data.technology == asset_transition["technology_destination"])
         & (df_process_data.year == asset_transition["year"])
         & (df_process_data.region == asset_transition["region"])
     ]
 
     # Map tech type back from ints
+    # TODO: Integrate type of tech destination into the asset transition (this throws a bag)
     types_of_tech = {1: "Initial", 2: "Transition", 3: "End-state"}
     type_of_tech = types_of_tech[asset_transition["type_of_tech_destination"]]
 
     return Asset(
-        sector=first(spec["sector"]),
+        sector=first(spec["sector"]),  # TODO: this also throws a bug
         product=product,
         technology=first(spec["technology"]),
         region=first(spec["region"]),
