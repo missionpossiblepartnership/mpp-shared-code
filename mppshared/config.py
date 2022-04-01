@@ -3,7 +3,7 @@ import logging
 import numpy as np
 
 ### LOGGER ####
-LOG_LEVEL = "DEBUG"
+LOG_LEVEL = "INFO"
 LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
 )
@@ -159,7 +159,7 @@ DECOMMISSION_RATES = {
 }
 
 # Scope of the model run - to be specified
-MODEL_SCOPE = ["Global"]
+MODEL_SCOPE = "Global"
 
 # Override asset parameters; annual production capacity in Mt/year
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
@@ -302,4 +302,5 @@ REGIONAL_PRODUCTION_SHARE = {
     "North America": 0.3,
     "Oceania": 0.3,
     "Russia": 0.3,
+    "Rest of Asia": 0.3,
 }

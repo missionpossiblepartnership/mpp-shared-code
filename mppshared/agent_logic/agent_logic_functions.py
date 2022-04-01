@@ -37,6 +37,21 @@ def select_best_transition(df_rank: pd.DataFrame) -> dict:
     )[0]
 
 
+def remove_transition(df_rank: pd.DataFrame, transition: dict) -> pd.DataFrame:
+    """Filter transition from ranking table.
+
+    Args:
+        df_rank: table with ranking of technology switches
+        transition: row from the ranking table
+
+    Returns:
+        ranking table with the row corresponding to the transition removed
+    """
+    return df_rank.loc[
+        ~(df_rank[list(transition)] == pd.Series(transition)).all(axis=1)
+    ]
+
+
 def adjust_capacity_utilisation(
     pathway: SimulationPathway, product: str, year: int
 ) -> SimulationPathway:
@@ -55,6 +70,7 @@ def adjust_capacity_utilisation(
     stack = pathway.get_stack(year=year)
     production = stack.get_annual_production_volume(product)
 
+    # TODO: make sure that CUF adjustment does not overshoot demand and production balance
     # If demand exceeds production, increase capacity utilisation of each asset to make production deficit as small as possible, starting at the asset with lowest LCOX
     if demand > production:
         logger.info(

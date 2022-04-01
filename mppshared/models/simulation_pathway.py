@@ -240,9 +240,9 @@ class SimulationPathway:
         region: str,
     ):
         """
-        Get the demand for a product in a year
+        Get the demand for a product in a given year and region
+
         Args:
-            build_new: overwrite demand after the new build step
             product: get for this product
             region: get for this region
             year: and this year
@@ -253,7 +253,7 @@ class SimulationPathway:
         return df.loc[
             (df["product"] == product)
             & (df["year"] == year)
-            & (df["region"].isin(region)),
+            & (df["region"] == region),
             "value",
         ].item()
 
