@@ -14,9 +14,8 @@ import pandas as pd
 import numpy as np
 from operator import methodcaller
 from copy import deepcopy
-import logging
 
-logger = logger = get_logger(__name__)
+logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
@@ -62,7 +61,7 @@ def decommission(
             logger.info("No more assets to decommission")
             break
 
-        logger.info(
+        logger.debug(
             f"Removing asset with technology {asset_to_remove.technology} in region {asset_to_remove.region}, annual production {asset_to_remove.get_annual_production_volume()} and UUID {asset_to_remove.uuid}"
         )
 

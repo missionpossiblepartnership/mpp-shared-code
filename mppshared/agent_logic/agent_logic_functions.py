@@ -71,6 +71,7 @@ def adjust_capacity_utilisation(
     production = stack.get_annual_production_volume(product)
 
     # TODO: make sure that CUF adjustment does not overshoot demand and production balance
+    # TODO: integrate regional production constraint
     # If demand exceeds production, increase capacity utilisation of each asset to make production deficit as small as possible, starting at the asset with lowest LCOX
     if demand > production:
         logger.info(

@@ -3,12 +3,11 @@ import logging
 from mppshared.config import END_YEAR, LOG_LEVEL, START_YEAR, PRODUCTS, SECTOR
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
-# from mppshared.agent_logic.new_build import new_build
 from mppshared.agent_logic.decommission import decommission
-
-# from mppshared.agent_logic.brownfield import brownfield
+from mppshared.agent_logic.brownfield import brownfield
 from mppshared.agent_logic.greenfield import greenfield
 from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
+from mppshared.utility.log_utility import get_logger
 
 from mppshared.models.asset import AssetStack
 
@@ -17,7 +16,7 @@ from mppshared.models.simulation_pathway import SimulationPathway
 
 # from util.util import timing
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
@@ -52,9 +51,8 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             # Decommission assets
             pathway = decommission(pathway=pathway, year=year, product=product)
 
-            # Retrofit assets, except for business as usual scenario
-            # if pathway.pathway_name != "bau":
-            #     pathway = retrofit(pathway=pathway, year=year, product=product)
+            # Renovate and rebuild assets (brownfield transition)
+            pathway = brownfield(pathway=pathway, year=year, product=product)
 
             # Build new assets
             pathway = greenfield(pathway=pathway, year=year, product=product)

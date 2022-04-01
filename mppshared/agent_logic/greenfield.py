@@ -16,9 +16,8 @@ import pandas as pd
 import numpy as np
 from operator import methodcaller
 from copy import deepcopy
-import logging
 
-logger = logger = get_logger(__name__)
+logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
@@ -33,7 +32,7 @@ def greenfield(
         product: product for which technology transitions are enacted
 
     Returns:
-        Updated decarbonization pathway with the updated AssetStack in the subsequent year according to the decommission transitions enacted
+        Updated decarbonization pathway with the updated AssetStack in the subsequent year according to the greenfield transitions enacted
     """
     # Next year's stack is updated with each decommissioning
     new_stack = pathway.get_stack(year=year + 1)
@@ -65,11 +64,15 @@ def greenfield(
             logger.info("No more assets for greenfield transition within constraints")
             break
 
-        logger.info(
+        # Enact greenfield transition and add to TransitionRegistry
+        logger.debug(
             f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}"
         )
 
         new_stack.append(new_asset)
+        pathway.transitions.add(
+            transition_type="greenfield", year=year, destination=new_asset
+        )
 
     production = new_stack.get_annual_production_volume(product)  #! Development only
     return pathway
