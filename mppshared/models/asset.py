@@ -24,7 +24,7 @@ class Asset:
         annual_production_capacity: float,
         capacity_factor: float,
         asset_lifetime: int,
-        type_of_tech="Initial",
+        technology_classification="Initial",
         retrofit=False,
     ):
         # Unique ID to identify and compare assets
@@ -43,7 +43,7 @@ class Asset:
         # Asset status parameters
         self.retrofit = retrofit
         self.asset_lifetime = asset_lifetime  # unit: years
-        self.type_of_tech = type_of_tech
+        self.type_of_tech = technology_classification
 
     def __str__(self):
         return f"<Asset with UUID {self.uuid}, technology {self.technology} in region {self.region}>"
@@ -64,12 +64,9 @@ class Asset:
         return self.get_annual_production_capacity() * self.capacity_factor
 
 
-def create_assets(n_assets: int, df_asset_capacities: pd.DataFrame, **kwargs) -> list:
+def create_assets(n_assets: int, **kwargs) -> list:
     """Convenience function to create a list of asset at once"""
-    return [
-        Asset(df_asset_capacities=df_asset_capacities, **kwargs)
-        for _ in range(n_assets)
-    ]
+    return [Asset(**kwargs) for _ in range(n_assets)]
 
 
 class AssetStack:
@@ -286,6 +283,6 @@ def make_new_asset(
         retrofit=retrofit,
         asset_lifetime=first(spec["spec", "", "asset_lifetime"]),
         capacity_factor=first(spec["spec", "", "capacity_factor"]),
-        type_of_tech=type_of_tech,
+        technology_classification=type_of_tech,
         df_asset_capacities=df_asset_capacities,
     )

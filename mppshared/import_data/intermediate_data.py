@@ -71,6 +71,14 @@ class IntermediateDataImporter:
     def get_current_production(self):
         return pd.read_csv(self.intermediate_path.joinpath("initial_state.csv"))
 
+    def get_initial_asset_stack(self):
+        return pd.read_csv(self.intermediate_path.joinpath("initial_asset_stack.csv"))
+
+    def get_technology_characteristics(self):
+        return pd.read_csv(
+            self.intermediate_path.joinpath("technology_characteristics.csv")
+        )
+
     def get_asset_specs(self):
         df_spec = pd.read_csv(
             self.intermediate_path.joinpath("technology_characteristics.csv"),
