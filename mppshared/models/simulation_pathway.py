@@ -143,7 +143,7 @@ class SimulationPathway:
                 )
 
                 rankings[product][rank_type] = {}
-                for year in range(self.start_year, self.end_year):
+                for year in range(self.start_year, self.end_year + 1):
                     rankings[product][rank_type][year] = df_rank.query(
                         f"year == {year}"
                     )
@@ -151,11 +151,13 @@ class SimulationPathway:
 
     def save_rankings(self):
         for product in PRODUCTS[SECTOR]:
-            for ranking in ["decommission", "retrofit", "new_build"]:
+            for rank_type in RANK_TYPES:
                 df = pd.concat(
                     [
                         pd.concat([df_ranking])
-                        for year, df_ranking in self.rankings[product][ranking].items()
+                        for year, df_ranking in self.rankings[product][
+                            rank_type
+                        ].items()
                     ]
                 )
                 self.importer.export_data(
@@ -357,7 +359,7 @@ class SimulationPathway:
 
     def update_asset_status(self, year):
         for asset in self.stacks[year].assets:
-            if year - asset.start_year >= asset.asset_lifetime:
+            if year - asset.year_commissioned >= asset.asset_lifetime:
                 asset.asset_status = "old"
         return self
 
