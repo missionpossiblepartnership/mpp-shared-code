@@ -36,10 +36,10 @@ def create_timeseries_extension_components(
     logger.info("Creating the timeseries extension components")
 
     df_c = df.copy()
-    year_commissioned = df_c[year_colname].iloc[0]
-    if new_last_year <= year_commissioned:
+    start_year = df_c[year_colname].iloc[0]
+    if new_last_year <= start_year:
         raise ValueError(
-            f"Your last year value: {new_last_year} is equal to or less than the current start year {year_commissioned}."
+            f"Your last year value: {new_last_year} is equal to or less than the current start year {start_year}."
         )
 
     time_series_values = [year_colname, value_colname]
@@ -53,7 +53,7 @@ def create_timeseries_extension_components(
     # df_c.plot(x=year_colname, y=value_colname)
     # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases
     full_date_range = pd.date_range(
-        start=str(year_commissioned),
+        start=str(start_year),
         end=str(new_last_year),
         freq="YS",
         normalize=True,

@@ -47,6 +47,11 @@ class SimulationPathway:
         self.sensitivity = sensitivity
         self.sector = sector
         self.products = products
+<<<<<<< HEAD
+=======
+        self.start_year = start_year
+        self.end_year = end_year
+>>>>>>> parent of 6de174c (Refactor to year_commissioned)
 
         # Use importer to get all data required for simulating the pathway
         self.importer = IntermediateDataImporter(
@@ -118,10 +123,10 @@ class SimulationPathway:
         #             ]
         #         )
         #
-        # for asset in self.get_stack(self.year_commissioned).assets:
+        # for asset in self.get_stack(self.start_year).assets:
         #     logger.debug(asset)
         #     df_availability = update_availability_from_asset(
-        #         df_availability=df_availability, asset=asset, year=self.year_commissioned
+        #         df_availability=df_availability, asset=asset, year=self.start_year
         #     )
         #
         # df_methanol = make_empty_methanol_availability()
@@ -141,7 +146,7 @@ class SimulationPathway:
                 )
 
                 rankings[product][rank_type] = {}
-                for year in range(self.year_commissioned, self.end_year):
+                for year in range(self.start_year, self.end_year):
                     rankings[product][rank_type][year] = df_rank.query(
                         f"year == {year}"
                     )
@@ -355,7 +360,7 @@ class SimulationPathway:
 
     def update_asset_status(self, year):
         for asset in self.stacks[year].assets:
-            if year - asset.year_commissioned >= asset.asset_lifetime:
+            if year - asset.start_year >= asset.asset_lifetime:
                 asset.asset_status = "old"
         return self
 
@@ -432,6 +437,7 @@ class SimulationPathway:
             how="left",
         )
 
+<<<<<<< HEAD
         # Create list of assets for every product, region and technology (corresponds to one row in the DataFrame)
         # TODO: based on distribution of CUF and commissioning year
         assets = df_stack.apply(
@@ -457,6 +463,35 @@ class SimulationPathway:
     def make_initial_asset_stack_from_asset_data(self):
         """Make AssetStack from asset-specific data (as opposed to average regional data)."""
         pass
+=======
+        # Build them
+        # TODO: take out asset status old/new or deduce from asset age
+        all_assets = []
+        for asset_status in ["old", "new"]:
+            assets = df_assets.apply(
+                lambda row: create_assets(
+                    n_assets=row[f"number_of_assets_{asset_status}"],
+                    technology=row["technology"],
+                    region=row["region"],
+                    product=row["product"],
+                    # Assumption: old assets started 40 years ago, new ones just 20
+                    start_year=self.start_year - 40
+                    if asset_status == "old"
+                    else self.start_year - 20,
+                    asset_lifetime=row["spec_technology_lifetime"],
+                    asset_status=asset_status,
+                    capacity_factor=row["spec_capacity_factor"],
+                    df_asset_capacities=self.df_asset_capacities,
+                ),
+                axis=1,
+            ).tolist()
+
+            assets = [item for sublist in assets for item in sublist]
+            all_assets += assets
+
+        stack = AssetStack(assets=all_assets)
+        return {self.start_year: stack}
+>>>>>>> parent of 6de174c (Refactor to year_commissioned)
 
     def plot_stacks(self, df_stack_agg, groupby, product):
         """
