@@ -4,6 +4,10 @@ from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.asset import AssetStack, Asset
 from mppshared.models.constraints import check_constraints
 from mppshared.utility.utils import get_logger
+from mppshared.agent_logic.agent_logic_functions import (
+    select_best_transition,
+    remove_transition,
+)
 from mppshared.config import LOG_LEVEL, MODEL_SCOPE
 
 import pandas as pd
@@ -133,36 +137,3 @@ def select_asset_to_decommission(
 
     if no_constraint_hurt:
         return asset_to_remove
-
-
-def select_best_transition(df_rank: pd.DataFrame) -> dict:
-    """Based on the ranking, select the best transition
-
-    Args:
-        df_rank: contains column "rank" with ranking for each technology transition (minimum rank = optimal technology transition)
-
-    Returns:
-        The highest ranking technology transition
-
-    """
-    # Best transition has minimum rank
-    return (
-        df_rank[df_rank["rank"] == df_rank["rank"].min()]
-        .sample(n=1)
-        .to_dict(orient="records")
-    )[0]
-
-
-def remove_transition(df_rank: pd.DataFrame, transition: dict) -> pd.DataFrame:
-    """Filter transition from ranking table.
-
-    Args:
-        df_rank: table with ranking of technology switches
-        transition: row from the ranking table
-
-    Returns:
-        ranking table with the row corresponding to the transition removed
-    """
-    return df_rank.loc[
-        ~(df_rank[list(transition)] == pd.Series(transition)).all(axis=1)
-    ]
