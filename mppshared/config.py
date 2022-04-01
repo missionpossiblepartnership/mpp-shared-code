@@ -166,8 +166,8 @@ ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
     "bau",
-    "fa",
-    "lc",
+    # "fa",
+    # "lc",
 ]
 
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
@@ -182,6 +182,12 @@ SECTOR = "chemicals"  # "aluminium, steel, ..."
 # Products produced by each sector
 PRODUCTS = {
     "chemicals": ["Ammonia"],
+}
+
+# Specify whether sector uses region-specific or asset-specific data for initial asset stack
+INITIAL_ASSET_DATA_LEVEL = {
+    "chemicals": "regional",
+    # "aluminium": "individual_assets"
 }
 
 ### RUN CONFIGURATION ###

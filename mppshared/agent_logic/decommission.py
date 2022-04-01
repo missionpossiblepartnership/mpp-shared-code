@@ -39,7 +39,7 @@ def decommission(
 
     # Get demand balance (demand - production)
     demand = pathway.get_demand(product, year, MODEL_SCOPE)
-    production = old_stack.get_annual_production(product)
+    production = old_stack.get_annual_production_volume(product)
 
     # Get ranking table for decommissioning
     df_rank = pathway.get_ranking(year=year, product=product, rank_type="decommission")
@@ -63,12 +63,12 @@ def decommission(
             break
 
         logger.info(
-            f"Removing asset with technology {asset_to_remove.technology} in region {asset_to_remove.region}, annual production {asset_to_remove.get_annual_production(product)} and UUID {asset_to_remove.uuid}"
+            f"Removing asset with technology {asset_to_remove.technology} in region {asset_to_remove.region}, annual production {asset_to_remove.get_annual_production_volume(product)} and UUID {asset_to_remove.uuid}"
         )
 
         new_stack.remove(asset_to_remove)
 
-        surplus -= asset_to_remove.get_annual_production(product)
+        surplus -= asset_to_remove.get_annual_production_volume(product)
 
         # TODO: implement logging of the asset transition
         pathway.transitions.add(
