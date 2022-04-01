@@ -17,7 +17,7 @@ class Asset:
         product,
         technology,
         region,
-        start_year,
+        year_commissioned,
         capacity_factor,
         asset_lifetime,
         df_asset_capacities,
@@ -28,7 +28,7 @@ class Asset:
         self.product = product
         self.technology = technology
         self.region = region
-        self.start_year = start_year
+        self.year_commissioned = year_commissioned
         self.df_asset_capacities = df_asset_capacities
         self.capacities = self.import_capacities()
         self.capacity_factor = capacity_factor
@@ -49,7 +49,7 @@ class Asset:
         return [k for (k, v) in self.capacities.items() if v != 0]
 
     def get_age(self, year):
-        return year - self.start_year
+        return year - self.year_commissioned
 
     def import_capacities(self) -> dict:
         """Import asset capacities for the different products that this asset produces"""
@@ -383,7 +383,7 @@ def make_new_asset(
         product=product,
         technology=first(spec["technology"]),
         region=first(spec["region"]),
-        start_year=year,
+        year_commissioned=year,
         retrofit=retrofit,
         asset_lifetime=first(spec["spec", "", "asset_lifetime"]),
         capacity_factor=first(spec["spec", "", "capacity_factor"]),
