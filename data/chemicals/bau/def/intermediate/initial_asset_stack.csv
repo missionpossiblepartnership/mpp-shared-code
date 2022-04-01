@@ -1,0 +1,12 @@
+﻿product,region,technology,annual_production_capacity,annual_production_volume,average_cuf,average_age
+Ammonia,China,Coal Gasification + ammonia synthesis,52.5,41,0.780612245,12
+Ammonia,China,Natural Gas SMR + ammonia synthesis,17.5,13.7,0.780612245,13
+Ammonia,North America,Natural Gas SMR + ammonia synthesis,22.5,21.9,0.975395031,32
+Ammonia,Rest of Asia,Natural Gas SMR + ammonia synthesis,25.9,22.5,0.871305088,25
+Ammonia,Russia,Natural Gas SMR + ammonia synthesis,20.3,18.2,0.897255454,31
+Ammonia,Europe,Natural Gas SMR + ammonia synthesis,19.1,16.1,0.843258761,44
+Ammonia,India,Natural Gas SMR + ammonia synthesis,17.8,15.8,0.886837881,29
+Ammonia,Middle East,Natural Gas SMR + ammonia synthesis,20.1,18,0.894632207,14
+Ammonia,Africa,Natural Gas SMR + ammonia synthesis,11.7,9.4,0.804616694,13
+Ammonia,Latin America,Natural Gas SMR + ammonia synthesis,10.9,6.4,0.592549813,23
+Ammonia,Oceania,Natural Gas SMR + ammonia synthesis,2.2,2.1,0.919183673,20
