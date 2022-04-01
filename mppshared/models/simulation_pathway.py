@@ -32,7 +32,7 @@ class SimulationPathway:
 
     def __init__(
         self,
-        start_year: int,
+        year_commissioned: int,
         end_year: int,
         pathway: str,
         sensitivity: str,
@@ -43,7 +43,7 @@ class SimulationPathway:
         self.sensitivity = sensitivity
         self.sector = sector
         self.products = products
-        self.start_year = start_year
+        self.year_commissioned = year_commissioned
         self.end_year = end_year
 
         self.importer = IntermediateDataImporter(
@@ -113,10 +113,10 @@ class SimulationPathway:
         #             ]
         #         )
         #
-        # for asset in self.get_stack(self.start_year).assets:
+        # for asset in self.get_stack(self.year_commissioned).assets:
         #     logger.debug(asset)
         #     df_availability = update_availability_from_asset(
-        #         df_availability=df_availability, asset=asset, year=self.start_year
+        #         df_availability=df_availability, asset=asset, year=self.year_commissioned
         #     )
         #
         # df_methanol = make_empty_methanol_availability()
@@ -136,7 +136,7 @@ class SimulationPathway:
                 )
 
                 rankings[product][rank_type] = {}
-                for year in range(self.start_year, self.end_year):
+                for year in range(self.year_commissioned, self.end_year):
                     rankings[product][rank_type][year] = df_rank.query(
                         f"year == {year}"
                     )
@@ -350,7 +350,7 @@ class SimulationPathway:
 
     def update_asset_status(self, year):
         for asset in self.stacks[year].assets:
-            if year - asset.start_year >= asset.asset_lifetime:
+            if year - asset.year_commissioned >= asset.asset_lifetime:
                 asset.asset_status = "old"
         return self
 
@@ -457,9 +457,9 @@ class SimulationPathway:
                     region=row["region"],
                     product=row["product"],
                     # Assumption: old assets started 40 years ago, new ones just 20
-                    start_year=self.start_year - 40
+                    year_commissioned=self.year_commissioned - 40
                     if asset_status == "old"
-                    else self.start_year - 20,
+                    else self.year_commissioned - 20,
                     asset_lifetime=row["spec_technology_lifetime"],
                     asset_status=asset_status,
                     capacity_factor=row["spec_capacity_factor"],
@@ -472,7 +472,7 @@ class SimulationPathway:
             all_assets += assets
 
         stack = AssetStack(assets=all_assets)
-        return {self.start_year: stack}
+        return {self.year_commissioned: stack}
 
     def plot_stacks(self, df_stack_agg, groupby, product):
         """

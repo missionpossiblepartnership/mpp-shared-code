@@ -40,7 +40,7 @@ def calculate_npv_costs(df_cost: pd.DataFrame) -> pd.DataFrame:
             rate=row["wacc"],
             df=subset_cost_df(
                 df_cost=df_cost.drop(columns=["wacc", "technology_lifetime"]),
-                start_year=row.name,
+                year_commissioned=row.name,
                 lifetime=row["technology_lifetime"],
             ),
         ),
@@ -69,13 +69,13 @@ def net_present_value(
 
 
 def subset_cost_df(
-    df_cost: pd.DataFrame, start_year: int, lifetime: int
+    df_cost: pd.DataFrame, year_commissioned: int, lifetime: int
 ) -> pd.DataFrame:
     """Filter DataFrame with cost data for a year range and expand with constant value of the last year if necessary.
 
     Args:
         df_cost (pd.DataFrame): contains columns with cost data, indexed by year (int)
-        start_year (int): first year of year range filtering
+        year_commissioned (int): first year of year range filtering
         lifetime (int): required length of the cost series
 
     Returns:
@@ -83,17 +83,20 @@ def subset_cost_df(
     """
     # Filter year range
     df_cost = df_cost[
-        (df_cost.index >= start_year) & (df_cost.index <= start_year + lifetime)
+        (df_cost.index >= year_commissioned)
+        & (df_cost.index <= year_commissioned + lifetime)
     ]
 
     # Expand DataFrame beyond model years if necessary, assuming that cost data stay constant after MODEL_END_YEAR
-    if start_year + lifetime > END_YEAR:
+    if year_commissioned + lifetime > END_YEAR:
 
         # TODO: make this workaround nicer
         cost_value = df_cost.loc[df_cost.index == END_YEAR].copy()
-        extension_length = int((start_year + lifetime) - END_YEAR)
+        extension_length = int((year_commissioned + lifetime) - END_YEAR)
         cost_constant = pd.concat([cost_value] * extension_length)
-        cost_constant["year"] = np.arange(END_YEAR + 1, start_year + lifetime + 1)
+        cost_constant["year"] = np.arange(
+            END_YEAR + 1, year_commissioned + lifetime + 1
+        )
         cost_constant = cost_constant.set_index("year", drop=True)
         cost_constant.index = cost_constant.index.astype(int)
 

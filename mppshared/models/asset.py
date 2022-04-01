@@ -25,14 +25,20 @@ class Asset:
         retrofit=False,
         asset_status="new",
     ):
+        # Unique ID to identify and compare assets
+        self.uuid = uuid4().hex
+
+        # Characteristics
         self.product = product
         self.technology = technology
         self.region = region
         self.year_commissioned = year_commissioned
+
+        # Production capacity parameters
+        self.capacity_factor = capacity_factor
         self.df_asset_capacities = df_asset_capacities
         self.capacities = self.import_capacities()
-        self.capacity_factor = capacity_factor
-        self.uuid = uuid4().hex
+
         self.retrofit = retrofit
         self.asset_status = asset_status
         self.asset_lifetime = asset_lifetime
