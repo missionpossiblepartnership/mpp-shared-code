@@ -47,11 +47,8 @@ class SimulationPathway:
         self.sensitivity = sensitivity
         self.sector = sector
         self.products = products
-<<<<<<< HEAD
-=======
         self.start_year = start_year
         self.end_year = end_year
->>>>>>> parent of 6de174c (Refactor to year_commissioned)
 
         # Use importer to get all data required for simulating the pathway
         self.importer = IntermediateDataImporter(
