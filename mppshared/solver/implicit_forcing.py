@@ -142,9 +142,9 @@ def apply_carbon_cost_to_tco(
 
     # Contribution of a cost to TCO is net present cost divided by (lifetime * capacity utilisation factor)
     # TODO: integrate dynamic capacity utilisation functionality
-    capacity_factor_dummy = 0.95
+    cuf_dummy = 0.95
     df["carbon_cost_addition_tco"] = (
-        df["carbon_cost_addition"] / (df["technology_lifetime"] * capacity_factor_dummy)
+        df["carbon_cost_addition"] / (df["technology_lifetime"] * cuf_dummy)
     ).fillna(0)
 
     # Update TCO in technology switching DataFrame

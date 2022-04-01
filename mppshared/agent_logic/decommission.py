@@ -35,7 +35,7 @@ def decommission(
 
     #! Development only: force some assets to be decommissioned
     for i in np.arange(0, 10):
-        new_stack.assets[i].capacity_factor = 0.5
+        new_stack.assets[i].cuf = 0.5
 
     # Get demand balance (demand - production)
     demand = pathway.get_demand(product, year, MODEL_SCOPE)

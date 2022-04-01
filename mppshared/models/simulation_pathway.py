@@ -446,7 +446,7 @@ class SimulationPathway:
                 region=row["region"],
                 year_commissioned=row["year"] - row["average_age"],
                 annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                capacity_factor=row["average_cuf"],
+                cuf=row["average_cuf"],
                 asset_lifetime=row["technology_lifetime"],
                 technology_classification=row["technology_classification"],
             ),
