@@ -141,5 +141,5 @@ data/chemicals/bau/def/ranking/Ammonia/greenfield_rank.csv
 # Ignore all ranking files
 data/chemicals/bau/def/ranking
 
-# Ignore all stack tracking files
+# Ignore stack tracker
 data/chemicals/bau/def/stack_tracker
