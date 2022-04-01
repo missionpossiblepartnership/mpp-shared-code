@@ -15,6 +15,7 @@ from mppshared.config import (
     PRODUCTS,
     SECTOR,
     RANK_TYPES,
+    INITIAL_ASSET_DATA_LEVEL,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
@@ -28,7 +29,7 @@ logger.setLevel(LOG_LEVEL)
 
 
 class SimulationPathway:
-    """Contains the current state of the simulated pathway, and methods to adjust that state"""
+    """Define a pathway that simulates the evolution of the AssetStack in each year of the model time horizon"""
 
     def __init__(
         self,
@@ -39,6 +40,9 @@ class SimulationPathway:
         sector: str,
         products: list,
     ):
+        # Attributes describing the pathway
+        self.start_year = start_year
+        self.end_year = end_year
         self.pathway = pathway
         self.sensitivity = sensitivity
         self.sector = sector
@@ -46,24 +50,27 @@ class SimulationPathway:
         self.start_year = start_year
         self.end_year = end_year
 
+        # Use importer to get all data required for simulating the pathway
         self.importer = IntermediateDataImporter(
             pathway=pathway, sensitivity=sensitivity, sector=sector, products=products
         )
 
-        logger.debug("Getting asset capacities")
-        self.df_asset_capacities = self.importer.get_asset_capacities()
-
-        logger.debug("Making asset stacks")
-        self.stacks = self.make_initial_asset_stack()
+        # Make initial asset stack from input data
+        logger.debug("Making asset stack")
+        if INITIAL_ASSET_DATA_LEVEL[sector] == "regional":
+            self.stacks = self.make_initial_asset_stack_from_regional_data()
+        elif INITIAL_ASSET_DATA_LEVEL[sector] == "individual_assets":
+            self.stacks = self.make_initial_asset_stack_from_asset_data()
 
         # Import demand for all regions
         logger.debug("Getting demand")
         self.demand = self.importer.get_demand(region=None)
 
-        # TODO: Ranking missing, if it is available we should import
+        # Import ranking of technology transitions for all transition types
         logger.debug("Getting rankings")
         self.rankings = self._import_rankings()
 
+        # Import emissions data
         logger.debug("Getting emissions")
         self.emissions = self.importer.get_process_data(data_type="emissions")
 
@@ -390,7 +397,7 @@ class SimulationPathway:
     def get_capacity(self, year):
         """Get the capacity for a year"""
         stack = self.get_stack(year=year)
-        return stack.get_capacity()
+        return stack.get_annual_production_capacity()
 
     def aggregate_stacks(self, product, this_year=False):
         return pd.concat(
@@ -400,52 +407,59 @@ class SimulationPathway:
             ]
         )
 
-    def _calculate_assets_from_production(self):
-        """Calculate how many assets are there, based on current production"""
-        df_asset_size = self.importer.get_asset_sizes()
-        df_production = self.importer.get_current_production()
-        df_production["number_of_assets"] = (
-            (
-                (df_production["annual_production_capacity"])
-                / ASSUMED_ANNUAL_PRODUCTION_CAPACITY
-            )
-            .round()
-            .astype(int)
+    def make_initial_asset_stack_from_regional_data(self):
+        """Make AssetStack from input data organised by region on total production volume and capacity, average capacity utilisation factor and average age in the initial year."""
+        df_stack = self.importer.get_initial_asset_stack()
+
+        # Get the number assets required
+        # TODO: based on distribution of typical production capacities
+        # TODO: create smaller asset to meet production capacity precisely
+        df_stack["number_assets"] = (
+            df_stack["annual_production_capacity"] / ASSUMED_ANNUAL_PRODUCTION_CAPACITY
+        ).apply(lambda x: int(x))
+
+        # Merge with technology specifications to get technology lifetime
+        df_tech_characteristics = self.importer.get_technology_characteristics()
+        df_stack = df_stack.merge(
+            df_tech_characteristics[
+                [
+                    "product",
+                    "region",
+                    "technology",
+                    "technology_classification",
+                    "technology_lifetime",
+                ]
+            ],
+            on=["product", "region", "technology"],
+            how="left",
         )
 
-        df_asset_size.drop(columns=["annual_production_capacity"], inplace=True)
+        # Create list of assets for every product, region and technology (corresponds to one row in the DataFrame)
+        # TODO: based on distribution of CUF and commissioning year
+        assets = df_stack.apply(
+            lambda row: create_assets(
+                n_assets=row["number_assets"],
+                product=row["product"],
+                technology=row["technology"],
+                region=row["region"],
+                year_commissioned=row["year"] - row["average_age"],
+                annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                capacity_factor=row["average_cuf"],
+                asset_lifetime=row["technology_lifetime"],
+                technology_classification=row["technology_classification"],
+            ),
+            axis=1,
+        ).tolist()
+        assets = [item for sublist in assets for item in sublist]
 
-        df_assets = df_production.merge(df_asset_size, on=["technology", "product"])
+        # Create AssetStack for model start year
+        return {self.start_year: AssetStack(assets)}
 
-        # TODO: Define the assets that are old based on the commission year - there is no data here
-        # Calculate number of old and new assets
-        df_assets["number_of_assets_old"] = (
-            df_assets["number_of_assets"] * 0.5
-        ).astype(int)
-
-        df_assets["number_of_assets_new"] = (
-            df_assets["number_of_assets"] - df_assets["number_of_assets_old"]
-        )
-        return df_assets
-
-    def make_initial_asset_stack(self):
-        # Calculate how many assets to create
-        df_assets = self._calculate_assets_from_production()
-
-        # Merge input data on the assets
-        df_process_data = self.importer.get_all_process_data()
-        df_process_data = df_process_data.reset_index()
-        df_process_data.columns = ["_".join(col) for col in df_process_data.columns]
-
-        df_assets = df_assets.merge(
-            df_process_data,
-            left_on=["region", "product", "technology", "year"],
-            right_on=["region_", "product_", "technology_", "year_"],
-        )
-        df_assets = df_assets.drop_duplicates(
-            subset=["region", "product", "technology"]
-        )
-
+    # TODO: implement
+    def make_initial_asset_stack_from_asset_data(self):
+        """Make AssetStack from asset-specific data (as opposed to average regional data)."""
+        pass
+    
         # Build them
         # TODO: take out asset status old/new or deduce from asset age
         all_assets = []
@@ -473,6 +487,7 @@ class SimulationPathway:
 
         stack = AssetStack(assets=all_assets)
         return {self.start_year: stack}
+>>>>>>> parent of 6de174c (Refactor to year_commissioned)
 
     def plot_stacks(self, df_stack_agg, groupby, product):
         """
