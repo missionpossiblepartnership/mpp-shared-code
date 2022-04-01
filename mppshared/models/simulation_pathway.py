@@ -143,7 +143,7 @@ class SimulationPathway:
                 )
 
                 rankings[product][rank_type] = {}
-                for year in range(self.start_year, self.end_year):
+                for year in range(self.start_year, self.end_year + 1):
                     rankings[product][rank_type][year] = df_rank.query(
                         f"year == {year}"
                     )
@@ -151,11 +151,13 @@ class SimulationPathway:
 
     def save_rankings(self):
         for product in PRODUCTS[SECTOR]:
-            for ranking in ["decommission", "retrofit", "new_build"]:
+            for rank_type in RANK_TYPES:
                 df = pd.concat(
                     [
                         pd.concat([df_ranking])
-                        for year, df_ranking in self.rankings[product][ranking].items()
+                        for year, df_ranking in self.rankings[product][
+                            rank_type
+                        ].items()
                     ]
                 )
                 self.importer.export_data(
@@ -357,7 +359,7 @@ class SimulationPathway:
 
     def update_asset_status(self, year):
         for asset in self.stacks[year].assets:
-            if year - asset.start_year >= asset.asset_lifetime:
+            if year - asset.year_commissioned >= asset.asset_lifetime:
                 asset.asset_status = "old"
         return self
 
@@ -459,93 +461,6 @@ class SimulationPathway:
     def make_initial_asset_stack_from_asset_data(self):
         """Make AssetStack from asset-specific data (as opposed to average regional data)."""
         pass
-    
-        # Build them
-        # TODO: take out asset status old/new or deduce from asset age
-        all_assets = []
-        for asset_status in ["old", "new"]:
-            assets = df_assets.apply(
-                lambda row: create_assets(
-                    n_assets=row[f"number_of_assets_{asset_status}"],
-                    technology=row["technology"],
-                    region=row["region"],
-                    product=row["product"],
-                    # Assumption: old assets started 40 years ago, new ones just 20
-                    start_year=self.start_year - 40
-                    if asset_status == "old"
-                    else self.start_year - 20,
-                    asset_lifetime=row["spec_technology_lifetime"],
-                    asset_status=asset_status,
-                    capacity_factor=row["spec_capacity_factor"],
-                    df_asset_capacities=self.df_asset_capacities,
-                ),
-                axis=1,
-            ).tolist()
-
-            assets = [item for sublist in assets for item in sublist]
-            all_assets += assets
-
-        stack = AssetStack(assets=all_assets)
-        return {self.start_year: stack}
->>>>>>> parent of 6de174c (Refactor to year_commissioned)
-
-    def plot_stacks(self, df_stack_agg, groupby, product):
-        """
-        Plot the resulting stacks over the years
-
-        Args:
-            df_stack_agg: The dataframe with stacks, aggregated per year / tech / region
-            groupby: Groupby this variable, can be 'region' or 'technology'
-            timeframe: Show results for this timeframe: 'this_year' or 'cumulative'
-        """
-        df = df_stack_agg.groupby(["year", groupby]).sum()[[("yearly_volume", "total")]]
-        df.columns = df.columns.get_level_values(level=0)
-        df = df.reset_index()
-
-        fig = make_subplots()
-
-        wedge_fig = px.area(df, color=groupby, x="year", y="yearly_volume")
-
-        df_demand = self.demand.query(f"product=='{product}'").query(
-            f"year <= {df.year.max()}"
-        )
-        demand_fig = px.line(df_demand, x="year", y="demand")
-        demand_fig.update_traces(line=dict(color="Black", width=2, dash="dash"))
-
-        demand_fig.update_traces(showlegend=True, name="Demand")
-        fig.add_traces(wedge_fig.data + demand_fig.data)
-
-        fig.layout.xaxis.title = "Year"
-        fig.layout.yaxis.title = "Yearly volume (Mton / annum)"
-        fig.layout.title = f"{groupby} over time for {product} - {self.pathway_name} - {self.sensitivity}"
-
-        filename = f"output/{self.pathway_name}/{self.sensitivity}/final/{product}/{groupby}_over_time"
-
-        plot(fig, filename=f"{filename}.html", auto_open=False)
-
-        fig.write_image(f"{filename}.png")
-
-    def plot_methanol_availability(self, df_availability):
-
-        df_availability = df_availability[
-            (df_availability.name.isin(["Methanol - Black", "Methanol - Green"]))
-            & (df_availability.region == "World")
-        ]
-        df_availability = df_availability.reset_index()
-
-        fig = px.area(
-            df_availability,
-            x="year",
-            y="cap",
-            color="name",
-            title=f"Methanol availability over time - {self.pathway_name} - {self.sensitivity}",
-        )
-
-        filename = f"output/{self.pathway_name}/{self.sensitivity}/final/Methanol/methanol_availability_over_time"
-
-        plot(fig, filename=f"{filename}.html", auto_open=False)
-
-        fig.write_image(f"{filename}.png")
 
     def _get_weighted_average(
         self, df, vars, product, year, methanol_type: str = None, emissions=True
