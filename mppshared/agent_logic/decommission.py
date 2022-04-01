@@ -99,41 +99,46 @@ def select_asset_to_decommission(
     # Get all assets eligible for decommissioning
     candidates = stack.get_assets_eligible_for_decommission()
 
+    while candidates:
+        # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
+        best_candidates = []
+        while not best_candidates:
+            # Choose the best transition, i.e. highest decommission rank
+            best_transition = select_best_transition(df_rank)
+
+            best_candidates = list(
+                filter(
+                    lambda asset: (
+                        asset.technology == best_transition["technology_origin"]
+                    )
+                    & (asset.region == best_transition["region"])
+                    & (asset.product == best_transition["product"]),
+                    candidates,
+                )
+            )
+
+            # Remove best transition from ranking table
+            df_rank = remove_transition(df_rank, best_transition)
+
+        # If several candidates for best transition, choose asset with lowest annual production
+        # TODO: What happens if several assets have same annual production?
+        asset_to_remove = min(
+            best_candidates, key=methodcaller("get_annual_production_volume")
+        )
+
+        # Remove asset tentatively (needs deepcopy to provide changes to original stack)
+        tentative_stack = deepcopy(stack)
+        tentative_stack.remove(asset_to_remove)
+
+        # Check constraints with tentative new stack
+        no_constraint_hurt = check_constraints(pathway, tentative_stack, product, year)
+
+        if no_constraint_hurt:
+            return asset_to_remove
+
+        # If constraint is hurt, remove asset from list of candidates and try again
+        candidates.remove(asset_to_remove)
+
     # If no more assets to decommission, raise ValueError
     if not candidates:
         raise ValueError
-
-    # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
-    best_candidates = []
-    while not best_candidates:
-        # Choose the best transition, i.e. highest decommission rank
-        best_transition = select_best_transition(df_rank)
-
-        best_candidates = list(
-            filter(
-                lambda asset: (asset.technology == best_transition["technology_origin"])
-                & (asset.region == best_transition["region"])
-                & (asset.product == best_transition["product"]),
-                candidates,
-            )
-        )
-
-        # Remove best transition from ranking table
-        df_rank = remove_transition(df_rank, best_transition)
-
-    # If several candidates for best transition, choose asset with lowest annual production
-    # TODO: What happens if several assets have same annual production?
-    asset_to_remove = min(
-        best_candidates, key=methodcaller("get_annual_production_volume")
-    )
-
-    # Remove asset tentatively (needs deepcopy to provide changes to original stack)
-    tentative_stack = deepcopy(stack)
-    tentative_stack.remove(asset_to_remove)
-
-    # Check constraints with tentative new stack
-    no_constraint_hurt = True
-    # no_constraint_hurt = check_constraints(pathway, tentative_stack, product, year)
-
-    if no_constraint_hurt:
-        return asset_to_remove
