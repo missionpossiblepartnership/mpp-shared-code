@@ -434,7 +434,6 @@ class SimulationPathway:
             how="left",
         )
 
-<<<<<<< HEAD
         # Create list of assets for every product, region and technology (corresponds to one row in the DataFrame)
         # TODO: based on distribution of CUF and commissioning year
         assets = df_stack.apply(
@@ -460,7 +459,7 @@ class SimulationPathway:
     def make_initial_asset_stack_from_asset_data(self):
         """Make AssetStack from asset-specific data (as opposed to average regional data)."""
         pass
-=======
+    
         # Build them
         # TODO: take out asset status old/new or deduce from asset age
         all_assets = []
