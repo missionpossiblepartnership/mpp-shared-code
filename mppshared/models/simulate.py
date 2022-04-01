@@ -5,7 +5,8 @@ from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
 # from mppshared.agent_logic.new_build import new_build
 from mppshared.agent_logic.decommission import decommission
-from mppshared.agent_logic.brownfield import retrofit
+
+# from mppshared.agent_logic.brownfield import brownfield
 from mppshared.agent_logic.greenfield import greenfield
 from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
 
@@ -35,7 +36,6 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
 
     for year in range(START_YEAR, END_YEAR + 1):
         logger.info("Optimizing for %s", year)
-        pathway.update_asset_status(year=year)
 
         # Copy over last year's stack to this year
         pathway = pathway.copy_stack(year=year)
@@ -57,7 +57,7 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             #     pathway = retrofit(pathway=pathway, year=year, product=product)
 
             # Build new assets
-            # pathway = greenfield(pathway=pathway, year=year, product=product)
+            pathway = greenfield(pathway=pathway, year=year, product=product)
 
             # Write stack to csv
             pathway.export_stack_to_csv(year)
