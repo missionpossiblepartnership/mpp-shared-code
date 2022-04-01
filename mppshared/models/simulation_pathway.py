@@ -1,6 +1,7 @@
 import logging
 import math
 from collections import defaultdict
+from multiprocessing.sharedctypes import Value
 
 import pandas as pd
 import plotly.express as px
@@ -20,7 +21,7 @@ from mppshared.config import (
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
-from mppshared.models.asset import AssetStack, create_assets
+from mppshared.models.asset import Asset, AssetStack, create_assets
 from mppshared.models.transition import TransitionRegistry
 from mppshared.utility.dataframe_utility import flatten_columns
 
@@ -80,7 +81,7 @@ class SimulationPathway:
 
         logger.debug("Getting process data")
         self.process_data = self.importer.get_all_process_data()
-        self.cost = self.importer.get_process_data(data_type="technology_transitions")
+        self.df_cost = self.importer.get_technology_transitions_and_cost()
         # TODO: Raw material data is missing and should be called inputs to import it
         # self.inputs_pivot = self.importer.get_process_data(data_type="inputs")
         self.asset_specs = self.importer.get_asset_specs()
@@ -196,9 +197,19 @@ class SimulationPathway:
             ["product", "year"]
         )
 
+    def get_asset_lcox(self, asset: Asset, year: int) -> float:
+        """Get LCOX for a specific Asset if the Asset is in the AssetStack of the given year."""
+        if asset not in self.get_stack(year).assets:
+            raise ValueError(
+                f"Asset with UUID {asset.uuid} is not in this year's AssetStack."
+            )
+        return self.df_cost.query(
+            f"product=='{asset.product}' & technology_origin=='New-build' & year=={year} & region=='{asset.region}' & technology_destination=='{asset.technology}'"
+        )["lcox"].iloc[0]
+
     def get_cost(self, product, year):
         """Get  the cost for a product in a year"""
-        df = self.cost
+        df = self.df_cost
         return df.query(f"product == '{product}' & year == {year}").droplevel(
             ["product", "year"]
         )

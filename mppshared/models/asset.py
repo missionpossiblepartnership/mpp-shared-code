@@ -61,7 +61,21 @@ class Asset:
         return self.annual_production_capacity
 
     def get_annual_production_volume(self):
-        return self.get_annual_production_capacity() * self.capacity_utilisation_factor
+        return self.get_annual_production_capacity() * self.cuf
+
+    def get_lcox(self, df_cost: pd.DataFrame, year: int) -> float:
+        """Get LCOX based on table with cost data for technology transitions and specified year
+
+        Args:
+            df_cost: contains columns "product", "technology_origin", "region", "year", "technology_destination", "lcox"
+            year: year for which to get the asset lcox
+
+        Returns:
+            LCOX for the asset in the given year
+        """
+        return df_cost.query(
+            f"product=='{self.product}' & technology_origin=='New-build' & year=={year} & region=='{self.region}' & technology_destination=='{self.technology}'"
+        )["lcox"].iloc[0]
 
 
 def create_assets(n_assets: int, **kwargs) -> list:

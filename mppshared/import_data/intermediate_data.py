@@ -87,7 +87,9 @@ class IntermediateDataImporter:
         df_spec.annual_production_capacity = (
             ASSUMED_ANNUAL_PRODUCTION_CAPACITY * 365 / 1e6
         )
-        df_spec["yearly_volume"] = df_spec.annual_production_capacity * df_spec.cuf
+        df_spec["yearly_volume"] = (
+            df_spec.annual_production_capacity * df_spec.capacity_factor
+        )
         df_spec["total_volume"] = df_spec.technology_lifetime * df_spec.yearly_volume
         return df_spec
 
@@ -128,7 +130,7 @@ class IntermediateDataImporter:
             return df
         return df.loc[df["region"] == region]
 
-    def get_tech_transitions(self):
+    def get_technology_transitions_and_cost(self):
         return pd.read_csv(
             self.intermediate_path.joinpath("technology_transitions.csv")
         )
