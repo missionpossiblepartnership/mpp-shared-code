@@ -3,13 +3,13 @@
 from pandera import Bool
 import numpy as np
 
-from mppshared.models.plant import Plant, PlantStack
+from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.config import REGIONAL_PRODUCTION_SHARE
 
 
 def check_constraints(
-    pathway: SimulationPathway, stack: PlantStack, product: str, year: int
+    pathway: SimulationPathway, stack: AssetStack, product: str, year: int
 ) -> Bool:
     """Check all constraints for a given asset stack.
 
@@ -38,7 +38,7 @@ def check_constraints(
 
 
 def check_constraint_regional_production(
-    pathway: SimulationPathway, stack: PlantStack, product: str, year: int
+    pathway: SimulationPathway, stack: AssetStack, product: str, year: int
 ) -> Bool:
     """Check constraints that regional production is at least a specified share of regional demand
 

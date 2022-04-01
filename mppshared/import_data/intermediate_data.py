@@ -4,7 +4,7 @@ import pandas as pd
 from pandas.errors import ParserError
 
 # from util.util import make_multi_df
-from mppshared.config import ASSUMED_PLANT_CAPACITY, MODEL_SCOPE, PRODUCTS
+from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY, MODEL_SCOPE, PRODUCTS
 from mppshared.utility.dataframe_utility import make_multi_df
 
 
@@ -13,17 +13,17 @@ class IntermediateDataImporter:
 
     def __init__(
         self,
-        pathway,
-        sensitivity,
-        sector,
-        product,
+        pathway: str,
+        sensitivity: str,
+        sector: str,
+        products: list,
     ):
         parent_path = Path(__file__).resolve().parents[2]
         self.input_path = parent_path.joinpath(
             "data/Master template - python copy.xlsx"
         )
         self.sector = sector
-        self.product = product
+        self.products = products
         self.pathway = pathway
         self.sensitivity = sensitivity
         self.export_dir = parent_path.joinpath(f"data/{sector}/{pathway}/{sensitivity}")
@@ -32,7 +32,12 @@ class IntermediateDataImporter:
         self.aggregate_export_dir = parent_path.joinpath("output/")
 
     def export_data(
-        self, df: pd.DataFrame, filename: str, export_dir: str, aggregate=False
+        self,
+        df: pd.DataFrame,
+        filename: str,
+        export_dir: str,
+        index=True,
+        aggregate=False,
     ):
         """
         Export output data into the output directory
@@ -42,6 +47,7 @@ class IntermediateDataImporter:
             df: Data to export
             filename: Filename to export to
             export_dir: Additional directory to create
+            index: index is exported if True (default)
         """
         output_dir = self.aggregate_export_dir if aggregate else self.export_dir
         if export_dir is not None:
@@ -53,7 +59,8 @@ class IntermediateDataImporter:
         output_dir.mkdir(exist_ok=True, parents=True)
 
         export_path = output_dir.joinpath(filename)
-        df.to_csv(export_path)
+
+        df.to_csv(export_path, index=index)
 
     def get_availabilities(self):
         return pd.read_csv(self.intermediate_path.joinpath("availabilities.csv"))
@@ -64,21 +71,23 @@ class IntermediateDataImporter:
     def get_current_production(self):
         return pd.read_csv(self.intermediate_path.joinpath("initial_state.csv"))
 
-    def get_plant_specs(self):
+    def get_asset_specs(self):
         df_spec = pd.read_csv(
             self.intermediate_path.joinpath("technology_characteristics.csv"),
             index_col=["product", "technology", "region"],
         )
-        df_spec.annual_production_capacity = ASSUMED_PLANT_CAPACITY * 365 / 1e6
+        df_spec.annual_production_capacity = (
+            ASSUMED_ANNUAL_PRODUCTION_CAPACITY * 365 / 1e6
+        )
         df_spec["yearly_volume"] = (
             df_spec.annual_production_capacity * df_spec.capacity_factor
         )
         df_spec["total_volume"] = df_spec.technology_lifetime * df_spec.yearly_volume
         return df_spec
 
-    def get_plant_sizes(self):
-        """Get plant sizes for each different product/process"""
-        df_spec = self.get_plant_specs()
+    def get_asset_sizes(self):
+        """Get asset sizes for each different product/process"""
+        df_spec = self.get_asset_specs()
         return df_spec.reset_index()[
             [
                 "product",
@@ -90,9 +99,9 @@ class IntermediateDataImporter:
             ]
         ].drop_duplicates(["product", "technology"])
 
-    def get_plant_capacities(self):
-        df_spec = self.get_plant_specs().reset_index()
-        df_spec.annual_production_capacity = ASSUMED_PLANT_CAPACITY
+    def get_asset_capacities(self):
+        df_spec = self.get_asset_specs().reset_index()
+        df_spec.annual_production_capacity = ASSUMED_ANNUAL_PRODUCTION_CAPACITY
         df_spec["yearly_volume"] = (
             df_spec.annual_production_capacity * df_spec.capacity_factor
         )
@@ -141,7 +150,7 @@ class IntermediateDataImporter:
         # df_inputs_pivot = self.get_process_data("inputs_pivot")
         df_emissions = self.get_process_data("emissions")
         df_cost = self.get_process_data("technology_transitions")
-        df_spec = self.get_plant_specs()
+        df_spec = self.get_asset_specs()
 
         # Add multi index layers to join
         # 2 levels for emissions/spec to get it on the right level
@@ -184,8 +193,8 @@ class IntermediateDataImporter:
     #     try:
     #         df = pd.read_csv(file_path, index_col=[0, 1, 2], header=[0, 1]).fillna(0)
     #     except ParserError:
-    #         # No plants, return empty df with right columns and index
-    #         parameters = ["capacity", "number_of_plants", "yearly_volume"]
+    #         # No assets, return empty df with right columns and index
+    #         parameters = ["capacity", "number_of_assets", "yearly_volume"]
     #         build_types = ["new_build", "retrofit", "total"]
     #         columns = pd.MultiIndex.from_product([parameters, build_types])
     #         index = pd.MultiIndex.from_arrays(
@@ -193,8 +202,8 @@ class IntermediateDataImporter:
     #         )
     #         return pd.DataFrame(columns=columns, index=index)
     #
-    #     # Only keep rows which have plants
-    #     return df[df[("number_of_plants", "total")] != 0]
+    #     # Only keep rows which have assets
+    #     return df[df[("number_of_assets", "total")] != 0]
 
     # def get_availability_used(self):
     #     path = self.final_path.joinpath("All", "availability_output.csv")

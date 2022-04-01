@@ -5,13 +5,13 @@ import numpy as np
 from scipy.optimize import linprog
 
 from mppshared.models.simulation_pathway import SimulationPathway
-from mppshared.models.plant import PlantStack
-from mppshared.config import ASSUMED_PLANT_CAPACITY
+from mppshared.models.asset import AssetStack
+from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY
 
 
 def get_demand_balance(
     pathway: SimulationPathway,
-    current_stack: PlantStack,
+    current_stack: AssetStack,
     product: str,
     year: int,
     region: str,
@@ -52,11 +52,13 @@ def select_best_transition(df_rank: pd.DataFrame) -> dict:
     )[0]
 
 
-def optimize_cuf(cuf_plants: list, surplus: float, upper_bound=0.95, lower_bound=0.5) -> list:
+def optimize_cuf(
+    cuf_assets: list, surplus: float, upper_bound=0.95, lower_bound=0.5
+) -> list:
     """
 
     Args:
-        cuf_plants:
+        cuf_assets:
         surplus:
         upper_bound:
         lower_bound:
@@ -65,14 +67,11 @@ def optimize_cuf(cuf_plants: list, surplus: float, upper_bound=0.95, lower_bound
         an array with new CUF to cover the demand
 
     """
-    c = [-1] * len(cuf_plants)
-    A_ub = [1] * len(cuf_plants)
-    b_ub = surplus/ASSUMED_PLANT_CAPACITY
-    bounds = [(lower_bound, upper_bound)] * len(cuf_plants)
+    c = [-1] * len(cuf_assets)
+    A_ub = [1] * len(cuf_assets)
+    b_ub = surplus / ASSUMED_ANNUAL_PRODUCTION_CAPACITY
+    bounds = [(lower_bound, upper_bound)] * len(cuf_assets)
 
-    model_linear = linprog(c=c,
-                           A_ub=A_ub,
-                           b_ub=b_ub,
-                           bounds=bounds)
+    model_linear = linprog(c=c, A_ub=A_ub, b_ub=b_ub, bounds=bounds)
 
     return [round(cuf, 2) for cuf in model_linear.x.to_list()]

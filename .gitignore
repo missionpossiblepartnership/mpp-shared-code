@@ -131,3 +131,12 @@ play.py
 data/implicit_forcing_intermediate.csv
 data/solver_input_datachemicals_ranking.csv
 decommission_bau.csv
+data/chemicals/bau/def/stack_tracker/stack_2020.csv
+data/chemicals/bau/def/intermediate/technologies_to_rank.csv
+data/chemicals/bau/def/intermediate/technology_transitions.csv
+data/chemicals/bau/def/ranking/Ammonia/brownfield_rank.csv
+data/chemicals/bau/def/ranking/Ammonia/decommission_rank.csv
+data/chemicals/bau/def/ranking/Ammonia/greenfield_rank.csv
+
+# Ignore all ranking files
+data/chemicals/bau/def/ranking

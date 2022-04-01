@@ -8,7 +8,7 @@
       <change beforePath="$PROJECT_DIR$/mppshared/agent_logic/decommission.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/agent_logic/decommission.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mppshared/agent_logic/new_build.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/agent_logic/new_build.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mppshared/import_data/intermediate_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/import_data/intermediate_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mppshared/models/plant.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/models/plant.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mppshared/models/asset.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/models/asset.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mppshared/models/simulate.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/models/simulate.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mppshared/models/simulation_pathway.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/models/simulation_pathway.py" afterDir="false" />
     </list>
