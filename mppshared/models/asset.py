@@ -23,10 +23,8 @@ class Asset:
         annual_production_capacity: float,
         capacity_factor: float,
         asset_lifetime: int,
-        df_asset_capacities: pd.DataFrame,
         type_of_tech="Initial",
         retrofit=False,
-        asset_status="new",
     ):
         # Unique ID to identify and compare assets
         self.uuid = uuid4().hex
@@ -40,12 +38,9 @@ class Asset:
         # Production capacity parameters
         self.annual_production_capacity = annual_production_capacity
         self.capacity_factor = capacity_factor
-        self.df_asset_capacities = df_asset_capacities
-        self.capacities = self.import_capacities()
 
         # Asset status parameters
         self.retrofit = retrofit
-        self.asset_status = asset_status
         self.asset_lifetime = asset_lifetime
         self.type_of_tech = type_of_tech
 
@@ -58,28 +53,11 @@ class Asset:
     def get_age(self, year):
         return year - self.year_commissioned
 
-    def import_capacities(self) -> dict:
-        """Import asset capacities for the different products that this asset produces"""
-        df = self.df_asset_capacities
+    def get_annual_production_capacity(self):
+        return self.annual_production_capacity
 
-        # Find the capacities
-        df_capacities = df[
-            (df.technology == self.technology) & (df.region == self.region)
-        ]
-
-        return {
-            product: df_capacities.loc[
-                df_capacities["product"] == product, "annual_production_capacity"
-            ].values[0]
-            for product in df_capacities["product"]
-        }
-
-    def get_capacity(self, product=None):
-        """Get asset capacity"""
-        return self.capacities.get(product or self.product, 0)
-
-    def get_annual_production(self, product):
-        return self.get_capacity(product) * self.capacity_factor
+    def get_annual_production_volume(self):
+        return self.get_annual_production_capacity() * self.capacity_factor
 
 
 def create_assets(n_assets: int, df_asset_capacities: pd.DataFrame, **kwargs) -> list:
