@@ -6,21 +6,24 @@ import pandas as pd
 from mppshared.config import (
     DECOMMISSION_RATES,
     CUF_LOWER_THRESHOLD,
-)  # , METHANOL_SUPPLY_TECH
+)
 
 from mppshared.utility.utils import first
 
 
 class Asset:
+    """Define an asset that produces a specific product with a specific technology."""
+
     def __init__(
         self,
-        product,
-        technology,
-        region,
-        year_commissioned,
-        capacity_factor,
-        asset_lifetime,
-        df_asset_capacities,
+        product: str,
+        technology: str,
+        region: str,
+        year_commissioned: int,
+        annual_production_capacity: float,
+        capacity_factor: float,
+        asset_lifetime: int,
+        df_asset_capacities: pd.DataFrame,
         type_of_tech="Initial",
         retrofit=False,
         asset_status="new",
@@ -35,10 +38,12 @@ class Asset:
         self.year_commissioned = year_commissioned
 
         # Production capacity parameters
+        self.annual_production_capacity = annual_production_capacity
         self.capacity_factor = capacity_factor
         self.df_asset_capacities = df_asset_capacities
         self.capacities = self.import_capacities()
 
+        # Asset status parameters
         self.retrofit = retrofit
         self.asset_status = asset_status
         self.asset_lifetime = asset_lifetime
@@ -49,10 +54,6 @@ class Asset:
 
     def __ne__(self, other):
         return self.uuid != other.uuid
-
-    @property
-    def byproducts(self):
-        return [k for (k, v) in self.capacities.items() if v != 0]
 
     def get_age(self, year):
         return year - self.year_commissioned
