@@ -7,6 +7,7 @@ from mppshared.agent_logic.decommission import decommission
 from mppshared.agent_logic.brownfield import brownfield
 from mppshared.agent_logic.greenfield import greenfield
 from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
+from mppshared.models.carbon_budget import CarbonBudget, carbon_budget_test
 from mppshared.utility.log_utility import get_logger
 
 from mppshared.models.asset import AssetStack
@@ -77,6 +78,12 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         products=PRODUCTS[sector],
     )
 
+    # Create carbon budget
+    carbon_budget = CarbonBudget()
+    carbon_budget.create_emissions_pathway(
+        year_start=START_YEAR, year_end=END_YEAR, end_value=0, line_shape="straight"
+    )
+
     # Make pathway
     pathway = SimulationPathway(
         start_year=START_YEAR,
@@ -85,6 +92,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS[sector],
+        carbon_budget=carbon_budget,
     )
 
     # Optimize asset stack on a yearly basis

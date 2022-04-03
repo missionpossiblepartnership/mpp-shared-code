@@ -6,7 +6,7 @@ import pandas as pd
 from mppshared.config import CARBON_BUDGET_REF
 
 
-class CarbonBudgetClass:
+class CarbonBudget:
     def __init__(self):
         self.budgets = {}
         self.pathways = {}
@@ -63,7 +63,7 @@ class CarbonBudgetClass:
 
 
 def carbon_budget_test():
-    CarbonBudget = CarbonBudgetClass()
+    CarbonBudget = CarbonBudget()
     CarbonBudget.set_budget_dict(CARBON_BUDGET_REF)
     CarbonBudget.total_budget_all_sectors()
     pathway = CarbonBudget.set_emissions_pathway(2020, 2050, "steel", "straight")
