@@ -3,7 +3,7 @@ import logging
 import numpy as np
 
 ### LOGGER ####
-LOG_LEVEL = "INFO"
+LOG_LEVEL = "DEBUG"
 LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
 )
@@ -123,15 +123,6 @@ EU_COUNTRIES = [
     "SWE",
 ]
 
-CARBON_BUDGET_REF = {
-    "aluminium": 11,
-    "cement": 42,
-    "chemicals": 32,
-    "steel": 56,
-    "aviation": 17,
-    "shipping": 16,
-    "trucking": 36,
-}
 
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
@@ -306,4 +297,16 @@ REGIONAL_PRODUCTION_SHARE = {
     "Oceania": 0.3,
     "Russia": 0.3,
     "Rest of Asia": 0.3,
+}
+
+# Sectoral carbon budget (scope 1 and 2 CO2 emissions, in GtCO2)
+# TODO: import from .csv file
+SECTORAL_CARBON_BUDGETS = {
+    "aluminium": 11,
+    "cement": 42,
+    "chemicals": 32 * 1 / 3,  #! Debug: reduce to enforce constraint
+    "steel": 56,
+    "aviation": 17,
+    "shipping": 16,
+    "trucking": 36,
 }

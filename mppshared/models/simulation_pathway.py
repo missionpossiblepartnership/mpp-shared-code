@@ -9,6 +9,7 @@ from plotly.offline import plot
 from plotly.subplots import make_subplots
 
 from mppshared.calculate.calculate_availablity import update_availability_from_asset
+from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.utility.dataframe_utility import get_emission_columns
 from mppshared.config import (
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
@@ -43,6 +44,7 @@ class SimulationPathway:
         sensitivity: str,
         sector: str,
         products: list,
+        carbon_budget: CarbonBudget,
     ):
         # Attributes describing the pathway
         self.start_year = start_year
@@ -53,6 +55,9 @@ class SimulationPathway:
         self.products = products
         self.start_year = start_year
         self.end_year = end_year
+
+        # Carbon Budget (already initialized with emissions pathway)
+        self.carbon_budget = carbon_budget
 
         # Use importer to get all data required for simulating the pathway
         self.importer = IntermediateDataImporter(
@@ -297,7 +302,7 @@ class SimulationPathway:
         self.rankings[product][rank_type][year] = df_rank
 
     def calculate_emissions_stack(self, year: int, product=None) -> dict:
-        """Calculate emissions of the current stack by GHG and scope, optionally filtered for specific product"""
+        """Calculate emissions of the current stack in MtGHG by GHG and scope, optionally filtered for specific product"""
 
         # Get stack for given year
         stack = self.get_stack(year)
@@ -323,8 +328,11 @@ class SimulationPathway:
         dict_emissions = dict.fromkeys(emission_columns)
 
         for emission_item in emission_columns:
-            dict_emissions[emission_item] = (df_emissions_stack[emission_item] * df_emissions_stack["annual_production_volume"]).sum()
-        
+            dict_emissions[emission_item] = (
+                df_emissions_stack[emission_item]
+                * df_emissions_stack["annual_production_volume"]
+            ).sum()
+
         return dict_emissions
 
     def calculate_constraint_share(self, year):
