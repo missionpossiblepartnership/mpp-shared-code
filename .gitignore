@@ -145,3 +145,5 @@ data/chemicals/bau/def/ranking
 data/chemicals/bau/def/stack_tracker
 data/chemicals/bau/def/outputs/emissions_trajectory.csv
 data/chemicals/bau/def/outputs/technology_roadmap.csv
+data/chemicals/bau/def/final/technology_roadmap.html
+data/chemicals/bau/def/final/technology_roadmap.png
