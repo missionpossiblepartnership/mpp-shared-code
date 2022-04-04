@@ -71,6 +71,7 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
     # TODO: Eliminate switches according to technology moratorium
 
     # Apply technology availability constraint
+    # TODO: eliminate transitions from one end-state technology to another!
     # df = apply_technology_availability_constraint(df_technology_switches, df_technology_characteristics)
 
     # Calculate emission deltas between origin and destination technology

@@ -4,6 +4,7 @@ from collections import defaultdict
 from multiprocessing.sharedctypes import Value
 
 import pandas as pd
+import numpy as np
 import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
@@ -14,6 +15,7 @@ from mppshared.utility.dataframe_utility import get_emission_columns
 from mppshared.config import (
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
     EMISSION_SCOPES,
+    END_YEAR,
     GHGS,
     LOG_LEVEL,
     MODEL_SCOPE,
@@ -21,6 +23,7 @@ from mppshared.config import (
     SECTOR,
     RANK_TYPES,
     INITIAL_ASSET_DATA_LEVEL,
+    START_YEAR,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
@@ -202,6 +205,72 @@ class SimulationPathway:
     def export_stack_to_csv(self, year):
         df = self.get_stack(year).export_stack_to_df()
         self.importer.export_data(df, f"stack_{year}.csv", "stack_tracker")
+
+    def output_technology_roadmap(self):
+        df_roadmap = self.create_technology_roadmap()
+        self.importer.export_data(df_roadmap, "technology_roadmap.csv", "final")
+        self.plot_technology_roadmap(df_roadmap=df_roadmap)
+
+    def create_technology_roadmap(self) -> pd.DataFrame:
+        """Create technology roadmap that shows evolution of stack (supply mix) over model horizon."""
+
+        # TODO: filter by product
+        # Annual production volume in MtNH3 by technology
+        technologies = self.importer.get_technology_characteristics()[
+            "technology"
+        ].unique()
+        df_roadmap = pd.DataFrame(data={"technology": technologies})
+
+        for year in np.arange(START_YEAR, END_YEAR + 1):
+
+            # Group by technology and sum annual production volume
+            df_stack = self.importer.get_asset_stack(year=year)
+            df_sum = df_stack.groupby(["technology"], as_index=False).sum()
+            df_sum = df_sum[["technology", "annual_production_volume"]].rename(
+                {"annual_production_volume": year}, axis=1
+            )
+
+            # Merge with roadmap DataFrame
+            df_roadmap = df_roadmap.merge(df_sum, on=["technology"], how="left").fillna(
+                0
+            )
+
+        return df_roadmap
+
+    def plot_technology_roadmap(self, df_roadmap: pd.DataFrame):
+        """Plot the technology roadmap and save as .html"""
+
+        # Melt roadmap DataFrame for easy plotting
+        df_roadmap = df_roadmap.melt(
+            id_vars="technology", var_name="year", value_name="annual_volume"
+        )
+
+        fig = make_subplots()
+        wedge_fig = px.area(df_roadmap, color="technology", x="year", y="annual_volume")
+
+        fig.add_traces(wedge_fig.data)
+
+        fig.layout.xaxis.title = "Year"
+        fig.layout.yaxis.title = "Annual production volume (MtNH3/year)"
+        fig.layout.title = "Technology roadmap"
+
+        plot(
+            fig,
+            filename=str(self.importer.final_path.joinpath("technology_roadmap.html")),
+            auto_open=False,
+        )
+
+        fig.write_image(self.importer.final_path.joinpath("technology_roadmap.png"))
+
+    def output_emission_trajectory(self):
+        """Output emission trajectory as csv and figure"""
+        pass
+
+    def create_emission_trajectory(self) -> pd.DataFrame:
+        pass
+
+    def plot_emission_trajectory(self, df_emissions: pd.DataFrame) -> pd.DataFrame:
+        pass
 
     def get_emissions(self, year, product=None):
         """Get  the emissions for a product in a year"""

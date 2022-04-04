@@ -142,6 +142,9 @@ class IntermediateDataImporter:
             self.intermediate_path.joinpath("technology_transitions.csv")
         )
 
+    def get_asset_stack(self, year):
+        return pd.read_csv(self.stack_tracker_path.joinpath(f"stack_{year}.csv"))
+
     def get_process_data(self, data_type):
         """Get data outputted by the model on process level: cost/inputs/emissions"""
         file_path = self.intermediate_path.joinpath(f"{data_type}.csv")

@@ -139,4 +139,9 @@ data/*/bau/def/ranking/Ammonia/greenfield_rank.csv
 data/*/bau/def/ranking
 
 # Ignore stack tracker
-data/*/bau/def/stack_tracker
+data/chemicals/bau/def/stack_tracker
+
+# Ignore outputs
+data/chemicals/bau/def/final
+data/chemicals/bau/def/outputs/emissions_trajectory.csv
+data/chemicals/bau/def/outputs/technology_roadmap.csv
