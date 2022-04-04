@@ -32,7 +32,7 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
         The updated pathway
     """
 
-    for year in range(START_YEAR, END_YEAR):
+    for year in range(START_YEAR, END_YEAR + 1):
         logger.info("Optimizing for %s", year)
         pathway.update_asset_status(year=year)
 
@@ -74,12 +74,12 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
 
     # Make pathway
     pathway = SimulationPathway(
+        start_year=START_YEAR,
+        end_year=END_YEAR,
         pathway=pathway,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS[sector],
-        start_year=START_YEAR,
-        end_year=END_YEAR,
     )
 
     # Optimize asset stack on a yearly basis

@@ -187,6 +187,12 @@ PRODUCTS = {
     "aluminium": ["Alumina"],
 }
 
+# Specify whether sector uses region-specific or asset-specific data for initial asset stack
+INITIAL_ASSET_DATA_LEVEL = {
+    "chemicals": "regional",
+    # "aluminium": "individual_assets"
+}
+
 ### RUN CONFIGURATION ###
 
 RUN_PARALLEL = False

@@ -42,7 +42,7 @@ def greenfield(
     df_process_data = pathway.get_all_process_data(product=product, year=year)
 
     demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
-    production = old_stack.get_annual_production(product)
+    production = old_stack.get_annual_production_volume(product)
 
     # Get ranking table for greenfield transitions
     df_rank = pathway.get_ranking(product=product, year=year, rank_type="greenfield")
@@ -68,7 +68,7 @@ def greenfield(
 
     # Get demand balance (demand - production)
     demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
-    production = new_stack.get_annual_production(product)
+    production = new_stack.get_annual_production_volume(product)
 
     # TODO: Decommission until one asset short of balance between demand and production
     surplus = demand - production
@@ -89,10 +89,10 @@ def greenfield(
         )
 
         logger.info(
-            f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production(product)} and UUID {new_asset.uuid}"
+            f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production_volume(product)} and UUID {new_asset.uuid}"
         )
 
         new_stack.append(new_asset)
-        surplus -= new_asset.get_annual_production(product)
+        surplus -= new_asset.get_annual_production_volume(product)
 
     return pathway

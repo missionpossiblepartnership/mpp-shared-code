@@ -47,7 +47,7 @@ def check_constraint_regional_production(
         product (_type_): _description_
     """
     # Get regional production and demand
-    df_regional_production = stack.get_regional_production(product)
+    df_regional_production = stack.get_regional_production_volume(product)
     df_demand = pathway.get_regional_demand(product, year)
 
     # Check for every region in DataFrame
