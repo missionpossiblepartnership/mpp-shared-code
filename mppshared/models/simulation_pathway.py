@@ -9,8 +9,12 @@ from plotly.offline import plot
 from plotly.subplots import make_subplots
 
 from mppshared.calculate.calculate_availablity import update_availability_from_asset
+from mppshared.models.carbon_budget import CarbonBudget
+from mppshared.utility.dataframe_utility import get_emission_columns
 from mppshared.config import (
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    EMISSION_SCOPES,
+    GHGS,
     LOG_LEVEL,
     MODEL_SCOPE,
     PRODUCTS,
@@ -40,6 +44,7 @@ class SimulationPathway:
         sensitivity: str,
         sector: str,
         products: list,
+        carbon_budget: CarbonBudget,
     ):
         # Attributes describing the pathway
         self.start_year = start_year
@@ -50,6 +55,9 @@ class SimulationPathway:
         self.products = products
         self.start_year = start_year
         self.end_year = end_year
+
+        # Carbon Budget (already initialized with emissions pathway)
+        self.carbon_budget = carbon_budget
 
         # Use importer to get all data required for simulating the pathway
         self.importer = IntermediateDataImporter(
@@ -293,39 +301,39 @@ class SimulationPathway:
         """Update ranking for a product, year, type"""
         self.rankings[product][rank_type][year] = df_rank
 
-    def calculate_emission_stack(self, year):
-        # """
-        # Calculate emission level of the current stack
-        # """
-        # df_tech = self.get_stack(year).get_tech(
-        #     id_vars=["technology", "product", "region"]
-        # )
-        # df_tech = df_tech.reset_index()
-        # df_tech = df_tech[df_tech.product.isin(productS)]
-        #
-        # df_emissions = self.emissions
-        # df_emissions = df_emissions.reset_index()
-        # df_emissions = df_emissions[
-        #     (df_emissions.year == year) & (df_emissions.product.isin(productS))
-        # ]
-        #
-        # df_emission_stack = pd.merge(
-        #     df_emissions, df_tech, how="right", on=["technology", "product", "region"]
-        # )
-        #
-        # emission_column = [
-        #     column
-        #     for column in df_emissions.columns
-        #     if column.startswith("scope") or column == "total"
-        # ]
-        #
-        # for emission_type in emission_column:
-        #     df_emission_stack[f"{emission_type}_stack_emissions"] = (
-        #         df_emission_stack[emission_type] * df_emission_stack.number_of_assets
-        #     )
-        #
-        # return df_emission_stack
-        pass
+    def calculate_emissions_stack(self, year: int, product=None) -> dict:
+        """Calculate emissions of the current stack in MtGHG by GHG and scope, optionally filtered for specific product"""
+
+        # Get stack for given year
+        stack = self.get_stack(year)
+
+        # Get DataFrame with annual production volume by product, region and technology (optionally filtered for specific product)
+        df_stack = stack.aggregate_stack(
+            aggregation_vars=["technology", "product", "region"], product=product
+        )
+        df_stack = df_stack.reset_index()
+
+        # Get DataFrame with emissions for the given year by product, region and technology
+        df_emissions = self.emissions
+        df_emissions = df_emissions.reset_index()
+        df_emissions = df_emissions[(df_emissions.year == year)]
+
+        # Add emissions by GHG and scope to each technologyy
+        df_emissions_stack = df_stack.merge(
+            df_emissions, how="left", on=["technology", "product", "region"]
+        )
+
+        # Sum emissions by GHG and scope
+        emission_columns = get_emission_columns(ghgs=GHGS, scopes=EMISSION_SCOPES)
+        dict_emissions = dict.fromkeys(emission_columns)
+
+        for emission_item in emission_columns:
+            dict_emissions[emission_item] = (
+                df_emissions_stack[emission_item]
+                * df_emissions_stack["annual_production_volume"]
+            ).sum()
+
+        return dict_emissions
 
     def calculate_constraint_share(self, year):
         # """

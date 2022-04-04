@@ -1,12 +1,20 @@
 import logging
 
-from mppshared.config import END_YEAR, LOG_LEVEL, START_YEAR, PRODUCTS, SECTOR
+from mppshared.config import (
+    END_YEAR,
+    LOG_LEVEL,
+    SECTORAL_CARBON_BUDGETS,
+    START_YEAR,
+    PRODUCTS,
+    SECTOR,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
 from mppshared.agent_logic.decommission import decommission
 from mppshared.agent_logic.brownfield import brownfield
 from mppshared.agent_logic.greenfield import greenfield
 from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
+from mppshared.models.carbon_budget import CarbonBudget, carbon_budget_test
 from mppshared.utility.log_utility import get_logger
 
 from mppshared.models.asset import AssetStack
@@ -41,12 +49,20 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
 
         # Run pathway simulation for each product
         for product in pathway.products:
+
             logger.info(product)
 
             # Adjust capacity utilisation of each asset
             pathway = adjust_capacity_utilisation(
                 pathway=pathway, year=year, product=product
             )
+
+            #! Debug: set carbon budget start to initial emissions (needs to be implemented)
+            if year == START_YEAR:
+                emissions = pathway.calculate_emissions_stack(year, product)
+                limit = (emissions["co2_scope1"] + emissions["co2_scope2"]) / 1e3
+                df = pathway.carbon_budget.pathways[pathway.sector]
+                df.loc[START_YEAR, "annual_limit"] = limit
 
             # Decommission assets
             pathway = decommission(pathway=pathway, year=year, product=product)
@@ -77,6 +93,11 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         products=PRODUCTS[sector],
     )
 
+    # Create carbon budget
+    carbon_budget = CarbonBudget(
+        sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS, pathway_shape="linear"
+    )
+
     # Make pathway
     pathway = SimulationPathway(
         start_year=START_YEAR,
@@ -85,6 +106,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS[sector],
+        carbon_budget=carbon_budget,
     )
 
     # Optimize asset stack on a yearly basis

@@ -334,3 +334,8 @@ def make_multi_df(df: pd.DataFrame, name: str) -> pd.DataFrame:
         multi-indexed df
     """
     return pd.concat({name: df}, axis=1)
+
+
+def get_emission_columns(ghgs: list, scopes: list) -> list:
+    """Get list of emissions columns for specified GHGs and emission scopes"""
+    return [f"{ghg}_{scope}" for scope in scopes for ghg in ghgs]
