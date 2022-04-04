@@ -43,23 +43,25 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
     )
 
     #! Development only: filter input tables for faster runtimes
-    df_technology_switches = filter_df_for_development(
-        importer.get_technology_transitions_and_cost()
-    )
+    df_technology_switches = importer.get_technology_transitions_and_cost()
     df_emissions = importer.get_emissions()
     df_technology_characteristics = importer.get_asset_specs()
     df_technology_characteristics.reset_index(inplace=True)
 
-    # Add carbon cost to TCO based on scope 1 and 2 CO2 emissions
-    # TODO: improve runtime
-    start = timer()
-    df_carbon_cost = apply_carbon_cost_to_tco(
-        df_technology_switches, df_emissions, df_technology_characteristics
-    )
-    end = timer()
-    logger.info(
-        f"Time elapsed to apply carbon cost to {len(df_carbon_cost)} rows: {timedelta(seconds=end-start)}"
-    )
+    carbon_cost = 0
+    if carbon_cost == 0:
+        df_carbon_cost = df_technology_switches
+    else:
+        # Add carbon cost to TCO based on scope 1 and 2 CO2 emissions
+        # TODO: improve runtime
+        start = timer()
+        df_carbon_cost = apply_carbon_cost_to_tco(
+            df_technology_switches, df_emissions, df_technology_characteristics
+        )
+        end = timer()
+        logger.info(
+            f"Time elapsed to apply carbon cost to {len(df_carbon_cost)} rows: {timedelta(seconds=end-start)}"
+        )
 
     # TODO: add carbon cost to LCOX and other cost metrics
 
