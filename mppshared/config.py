@@ -1,5 +1,6 @@
 """Configuration file for the library."""
 import logging
+
 import numpy as np
 
 ### LOGGER ####
@@ -166,8 +167,8 @@ ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
     "bau",
-    "fa",
-    "lc",
+    # "fa",
+    # "lc",
 ]
 
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
@@ -177,11 +178,13 @@ SENSITIVITIES = [
 
 ### SECTOR-SPECIFIC PARAMETERS ###
 # Sectors for which the model can be run
-SECTOR = "chemicals"  # "aluminium, steel, ..."
+# SECTOR = "chemicals"
+SECTOR = "aluminium"  # "aluminium, steel, ..."
 
 # Products produced by each sector
 PRODUCTS = {
     "chemicals": ["Ammonia"],
+    "aluminium": ["Alumina"],
 }
 
 ### RUN CONFIGURATION ###
