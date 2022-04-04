@@ -128,6 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 play.py
+
+data/chemicals/bau/def/intermediate/technologies_to_rank.csv
 data/chemicals/bau/def/ranking/Ammonia/brownfield_rank.csv
 data/chemicals/bau/def/ranking/Ammonia/decommission_rank.csv
 data/chemicals/bau/def/ranking/Ammonia/greenfield_rank.csv
