@@ -124,3 +124,6 @@ def select_asset_for_greenfield(
 
         # If constraint hurt, remove best transition from ranking table and try again
         df_rank = remove_transition(df_rank, asset_transition)
+
+    # If ranking table empty, no greenfield construction possible
+    raise ValueError
