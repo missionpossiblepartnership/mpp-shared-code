@@ -1,42 +1,55 @@
 """Asset and asset stack classes, code adapted from MCC"""
 from uuid import uuid4
+from xmlrpc.client import Boolean
 
 import pandas as pd
 
 from mppshared.config import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CUF_UPPER_THRESHOLD,
     DECOMMISSION_RATES,
     CUF_LOWER_THRESHOLD,
-)  # , METHANOL_SUPPLY_TECH
+    INVESTMENT_CYCLE,
+)
 
 from mppshared.utility.utils import first
 
 
 class Asset:
+    """Define an asset that produces a specific product with a specific technology."""
+
     def __init__(
         self,
-        product,
-        technology,
-        region,
-        start_year,
-        capacity_factor,
-        asset_lifetime,
-        df_asset_capacities,
-        type_of_tech="Initial",
+        product: str,
+        technology: str,
+        region: str,
+        year_commissioned: int,
+        annual_production_capacity: float,
+        cuf: float,
+        asset_lifetime: int,
+        technology_classification: str,
         retrofit=False,
-        asset_status="new",
     ):
+        # Unique ID to identify and compare assets
+        self.uuid = uuid4().hex
+
+        # Characteristics
         self.product = product
         self.technology = technology
         self.region = region
-        self.start_year = start_year
-        self.df_asset_capacities = df_asset_capacities
-        self.capacities = self.import_capacities()
-        self.capacity_factor = capacity_factor
-        self.uuid = uuid4().hex
+        self.year_commissioned = year_commissioned
+
+        # Production capacity parameters
+        self.annual_production_capacity = annual_production_capacity  # unit: Mt/year
+        self.cuf = cuf  # capacity utilisation factor (decimal)
+
+        # Asset status parameters
         self.retrofit = retrofit
-        self.asset_status = asset_status
-        self.asset_lifetime = asset_lifetime
-        self.type_of_tech = type_of_tech
+        self.asset_lifetime = asset_lifetime  # unit: years
+        self.technology_classification = technology_classification
+
+    def __str__(self):
+        return f"<Asset with UUID {self.uuid}, technology {self.technology} in region {self.region}>"
 
     def __eq__(self, other):
         return self.uuid == other.uuid
@@ -44,153 +57,151 @@ class Asset:
     def __ne__(self, other):
         return self.uuid != other.uuid
 
-    @property
-    def byproducts(self):
-        return [k for (k, v) in self.capacities.items() if v != 0]
-
     def get_age(self, year):
-        return year - self.start_year
+        return year - self.year_commissioned
 
-    def import_capacities(self) -> dict:
-        """Import asset capacities for the different products that this asset produces"""
-        df = self.df_asset_capacities
+    def get_annual_production_capacity(self):
+        return self.annual_production_capacity
 
-        # Find the capacities
-        df_capacities = df[
-            (df.technology == self.technology) & (df.region == self.region)
-        ]
+    def get_annual_production_volume(self):
+        return self.get_annual_production_capacity() * self.cuf
 
-        return {
-            product: df_capacities.loc[
-                df_capacities["product"] == product, "annual_production_capacity"
-            ].values[0]
-            for product in df_capacities["product"]
-        }
+    def get_lcox(self, df_cost: pd.DataFrame, year: int) -> float:
+        """Get LCOX based on table with cost data for technology transitions and specified year
 
-    def get_capacity(self, product=None):
-        """Get asset capacity"""
-        return self.capacities.get(product or self.product, 0)
+        Args:
+            df_cost: contains columns "product", "technology_origin", "region", "year", "technology_destination", "lcox"
+            year: year for which to get the asset lcox
 
-    def get_annual_production(self, product):
-        return self.get_capacity(product) * self.capacity_factor
+        Returns:
+            LCOX for the asset in the given year
+        """
+        return df_cost.query(
+            f"product=='{self.product}' & technology_origin=='New-build' & year=={year} & region=='{self.region}' & technology_destination=='{self.technology}'"
+        )["lcox"].iloc[0]
 
 
-def create_assets(n_assets: int, df_asset_capacities: pd.DataFrame, **kwargs) -> list:
+def create_assets(n_assets: int, **kwargs) -> list:
     """Convenience function to create a list of asset at once"""
-    return [
-        Asset(df_asset_capacities=df_asset_capacities, **kwargs)
-        for _ in range(n_assets)
-    ]
+    return [Asset(**kwargs) for _ in range(n_assets)]
 
 
 class AssetStack:
+    """Define an AssetStack composed of several Assets"""
+
     def __init__(self, assets: list):
         self.assets = assets
         # Keep track of all assets added this year
         self.new_ids = []
 
-    def remove(self, remove_asset):
+    def remove(self, remove_asset: Asset):
+        """Remove asset from stack"""
         self.assets = [asset for asset in self.assets if asset != remove_asset]
 
-    def append(self, new_asset):
+    def append(self, new_asset: Asset):
+        "Add new asset to stack"
         self.assets.append(new_asset)
         self.new_ids.append(new_asset.uuid)
 
-    def empty(self):
+    def update_asset(self, asset_to_update: Asset, new_technology: str):
+        """Update an asset in AssetStack, unique ID remains the same"""
+        asset_to_update.technology = new_technology
+
+    def empty(self) -> Boolean:
         """Return True if no asset in stack"""
         return not self.assets
 
-    def filter_assets(self, sector=None, region=None, technology=None, product=None):
-        """Filter asset based on one or more criteria"""
+    def filter_assets(self, product=None, region=None, technology=None) -> list:
+        """Filter assets based on one or more criteria"""
         assets = self.assets
-        if sector is not None:
-            assets = filter(lambda asset: asset.sector == sector, assets)
         if region is not None:
             assets = filter(lambda asset: asset.region == region, assets)
         if technology is not None:
             assets = filter(lambda asset: asset.technology == technology, assets)
         if product is not None:
-            assets = filter(
-                lambda asset: (asset.product == product)
-                or (product in asset.byproducts),
-                assets,
-            )
-        # Commenting out the following lines as it is not cleare if we will need
-        # something similar for ammonia and aluminium
-        # if methanol_type is not None:
-        #     asset = filter(
-        #         lambda asset: asset.technology in METHANOL_SUPPLY_TECH[methanol_type],
-        #         asset,
-        #     )
+            assets = filter(lambda asset: (asset.product == product), assets)
 
         return list(assets)
 
-    def get_fossil_assets(self, product):
-        return [
-            asset
-            for asset in self.assets
-            if (
-                (asset.technology in DECOMMISSION_RATES.keys())
-                and (asset.product == product)
-            )
-        ]
+    def get_annual_production_capacity(
+        self, product, region=None, technology=None
+    ) -> float:
+        """Get annual production capacity of the AssetStack for a specific product, optionally filtered by region and technology"""
+        assets = self.filter_assets(
+            product=product, region=region, technology=technology
+        )
+        return sum(asset.get_annual_production_capacity() for asset in assets)
 
-    def get_capacity(self, product, methanol_type=None, **kwargs):
-        """Get the asset capacity, optionally filtered by region, technology, product"""
-        if methanol_type is not None:
-            kwargs["methanol_type"] = methanol_type
+    def get_annual_production_volume(
+        self, product, region=None, technology=None
+    ) -> float:
+        """Get the yearly production volume of the AssetStack for a specific product, optionally filtered by region and technology"""
 
-        assets = self.filter_assets(product=product, **kwargs)
-        return sum(asset.get_capacity(product) for asset in assets)
+        assets = self.filter_assets(
+            product=product, region=region, technology=technology
+        )
+        return sum(asset.get_annual_production_volume() for asset in assets)
 
-    def get_annual_production(self, product, **kwargs):
-        """Get the yearly volume, optionally filtered by region, technology, product"""
+    def get_products(self) -> list:
+        """Get list of unique products produced by the AssetStack"""
+        return list({asset.product for asset in self.assets})
 
-        assets = self.filter_assets(product=product, **kwargs)
-        return sum(asset.get_annual_production(product=product) for asset in assets)
-
-    def get_tech(self, id_vars, product=None):
+    def aggregate_stack(self, aggregation_vars, product=None) -> pd.DataFrame:
         """
-        Get technologies of this stack
+        Aggregate AssetStack according to product, technology or region, and show annual production capacity, annual production volume and number of assets. Optionally filtered by product
 
         Args:
-            id_vars: aggregate by these variables
+            aggregation_vars: aggregate by these variables
 
         Returns:
             Dataframe with technologies
         """
 
+        # Optional filter by product
+        assets = self.filter_assets(product) if product else self.assets
+
+        # Aggregate stack to DataFrame
         df = pd.DataFrame(
             [
                 {
                     "product": asset.product,
                     "technology": asset.technology,
                     "region": asset.region,
-                    "retrofit": asset.retrofit,
-                    "capacity": asset.get_capacity(product),
+                    "annual_production_capacity": asset.get_annual_production_capacity(),
+                    "annual_production_volume": asset.get_annual_production_volume(),
                 }
-                for asset in self.assets
+                for asset in assets
             ]
         )
         try:
-            return df.groupby(id_vars).agg(
-                capacity=("capacity", "sum"), number_of_assets=("capacity", "count")
+            return df.groupby(aggregation_vars).agg(
+                annual_production_capacity=("annual_production_capacity", "sum"),
+                annual_production_volume=("annual_production_volume", "sum"),
+                number_of_assets=("annual_production_capacity", "count"),
             )
         except KeyError:
-            # There are no asset
+            # There are no assets
             return pd.DataFrame()
 
-    def get_new_asset_stack(self):
-        return AssetStack(
-            assets=[asset for asset in self.assets if asset.asset_status == "new"]
+    def export_stack_to_df(self) -> pd.DataFrame:
+        """Format the entire AssetStack as a DataFrame (no aggregation)."""
+        return pd.DataFrame(
+            {
+                "uuid": asset.uuid,
+                "product": asset.product,
+                "region": asset.region,
+                "technology": asset.technology,
+                "annual_production_capacity": asset.get_annual_production_capacity(),
+                "annual_production_volume": asset.get_annual_production_volume(),
+                "cuf": asset.cuf,
+                "asset_lifetime": asset.asset_lifetime,
+                "retrofit_status": asset.retrofit,
+            }
+            for asset in self.assets
         )
 
-    def get_old_asset_stack(self):
-        return AssetStack(
-            assets=[asset for asset in self.assets if asset.asset_status == "old"]
-        )
-
-    def get_unique_tech(self, product=None):
+    def get_unique_tech_by_region(self, product=None) -> pd.DataFrame:
+        """Get the unique technologies in the AssetStack for each region, optionally filtered by product"""
         if product is not None:
             assets = self.filter_assets(product=product)
         else:
@@ -199,194 +210,104 @@ class AssetStack:
         valid_combos = {(asset.technology, asset.region) for asset in assets}
         return pd.DataFrame(valid_combos, columns=["technology", "region"])
 
-    def get_regional_contribution(self):
+    def get_regional_contribution_annual_production_volume(
+        self, product
+    ) -> pd.DataFrame:
+        """Get the share of each region in the annual production volume for a specific product."""
+        assets = self.filter_assets(product)
         df_agg = (
             pd.DataFrame(
                 [
                     {
                         "region": asset.region,
-                        "capacity": asset.get_capacity(),
+                        "volume": asset.get_annual_production_volume(),
                     }
-                    for asset in self.assets
+                    for asset in assets
                 ]
             )
             .groupby("region", as_index=False)
             .sum()
         )
-        df_agg["proportion"] = df_agg["capacity"] / df_agg["capacity"].sum()
+        df_agg["proportion"] = df_agg["volume"] / df_agg["volume"].sum()
         return df_agg
 
-    def get_regional_production(self, product):
+    def get_regional_production_volume(self, product):
+        """Get annual production volume in each region for a specific product."""
+        assets = self.filter_assets(product)
         return (
             pd.DataFrame(
                 {
                     "region": asset.region,
-                    "annual_production": asset.get_annual_production(product),
+                    "annual_production_volume": asset.get_annual_production_volume(),
                 }
-                for asset in self.assets
+                for asset in assets
             )
             .groupby("region", as_index=False)
             .sum()
         )
 
-    def aggregate_stack(self, product=None, year=None, this_year=False):
-
-        # Filter for product
-        if product is not None:
-            assets = self.filter_assets(product=product)
-        else:
-            assets = self.assets
-
-        # Keep only asset that were built in a year
-        if this_year:
-            assets = [asset for asset in assets if asset.uuid in self.new_ids]
-
-        # Calculate capacity and number of asset for new and retrofit
-        try:
-            df_agg = (
-                pd.DataFrame(
-                    [
-                        {
-                            "capacity": asset.get_capacity(product),
-                            "yearly_volume": asset.get_annual_production(
-                                product=product
-                            ),
-                            "technology": asset.technology,
-                            "region": asset.region,
-                            "retrofit": asset.retrofit,
-                        }
-                        for asset in assets
-                    ]
-                )
-                .groupby(["technology", "region", "retrofit"], as_index=False)
-                .agg(
-                    capacity=("capacity", "sum"),
-                    number_of_assets=("capacity", "count"),
-                    yearly_volume=("yearly_volume", "sum"),
-                )
-            ).fillna(0)
-
-            # Helper column to avoid having True and False as column names
-            df_agg["build_type"] = "new_build"
-            df_agg.loc[df_agg.retrofit, "build_type"] = "retrofit"
-
-            df = df_agg.pivot_table(
-                values=["capacity", "number_of_assets", "yearly_volume"],
-                index=["region", "technology"],
-                columns="build_type",
-                dropna=False,
-                fill_value=0,
-            )
-
-            # Make sure all columns are present
-            for col in [
-                ("capacity", "retrofit"),
-                ("capacity", "new_build"),
-                ("number_of_assets", "retrofit"),
-                ("number_of_assets", "new_build"),
-                ("yearly_volume", "retrofit"),
-                ("yearly_volume", "new_build"),
-            ]:
-                if col not in df.columns:
-                    df[col] = 0
-
-            # Add totals
-            df[("capacity", "total")] = (
-                df[("capacity", "new_build")] + df[("capacity", "retrofit")]
-            )
-            df[("number_of_assets", "total")] = (
-                df[("number_of_assets", "new_build")]
-                + df[("number_of_assets", "retrofit")]
-            )
-            df[("yearly_volume", "total")] = (
-                df[("yearly_volume", "new_build")] + df[("yearly_volume", "retrofit")]
-            )
-
-        # No asset exist
-        except KeyError:
-            return pd.DataFrame()
-
-        df.columns.names = ["quantity", "build_type"]
-
-        # Add year to index if passed (to help identify chunks)
-        if year is not None:
-            df["year"] = year
-            df = df.set_index("year", append=True)
-
-        return df
-
     def get_tech_asset_stack(self, technology: str):
+        """Get AssetStack with a specific technology."""
         return AssetStack(
             assets=[asset for asset in self.assets if asset.technology == technology]
         )
 
-    def get_assets_eligible_for_decommission(self) -> list():
-        """Return a list of Assets from the AssetStack that are eligible for decommissioning
-
-        Returns:
-            list of Assets
-        """
-        # Filter for CUF < threshold
-        candidates = filter(
-            lambda asset: asset.capacity_factor < CUF_LOWER_THRESHOLD, self.assets
-        )
+    def get_assets_eligible_for_decommission(self) -> list:
+        """Return a list of Assets from the AssetStack that are eligible for decommissioning"""
+        # Assets can be decommissioned if their CUF is lower than the threshold
+        candidates = filter(lambda asset: asset.cuf < CUF_LOWER_THRESHOLD, self.assets)
 
         # TODO: filter based on asset age
 
         return list(candidates)
 
-    def export_stack_to_df(self) -> pd.DataFrame:
-        return pd.DataFrame(
-            {
-                "product": asset.product,
-                "region": asset.region,
-                "technology": asset.technology,
-                "daily_production_capacity": asset.get_capacity(),
-                "capacity_factor": asset.capacity_factor,
-                "asset_lifetime": asset.asset_lifetime,
-                "retrofit_status": asset.retrofit,
-                "uuid": asset.uuid,
-            }
-            for asset in self.assets
+    def get_assets_eligible_for_brownfield(self, year) -> list:
+        """Return a list of Assets from the AssetStack that are eligible for a brownfield technology transition"""
+
+        # Assets can be renovated or rebuild if their CUF exceeds the threshold and they are older than the investment cycle
+        # TODO: is there a distinction between brownfield renovation and brownfield rebuild?
+        candidates = filter(
+            lambda asset: (asset.cuf > CUF_LOWER_THRESHOLD)
+            & (asset.get_age(year) >= INVESTMENT_CYCLE),
+            self.assets,
         )
+
+        return list(candidates)
 
 
 def make_new_asset(
-    asset_transition, df_process_data, year, retrofit, product, df_asset_capacities
+    asset_transition: dict, df_technology_characteristics: pd.DataFrame, year: int
 ):
-    """
-    Make a new asset, based on a transition entry from the ranking dataframe
+    """Make a new asset, based on asset transition from the ranking DataFrame. The asset is assumed to start operating at the highest possible capacity utilisation
 
     Args:
         asset_transition: The best transition (destination is the asset to build)
-        df_process_data: The inputs dataframe (needed for asset specs)
+        df_technology_characteristics: needed for asset lifetime and technology classification
         year: Build the asset in this year
         retrofit: Asset is retrofitted from an old asset
 
     Returns:
         The new asset
     """
-    df_process_data = df_process_data.reset_index()
-    spec = df_process_data[
-        (df_process_data.technology == asset_transition["technology_destination"])
-        & (df_process_data.year == asset_transition["year"])
-        & (df_process_data.region == asset_transition["region"])
+    technology_characteristics = df_technology_characteristics.loc[
+        (df_technology_characteristics["product"] == asset_transition["product"])
+        & (df_technology_characteristics["region"] == asset_transition["region"])
+        & (
+            df_technology_characteristics["technology"]
+            == asset_transition["technology_destination"]
+        )
     ]
 
-    # Map tech type back from ints
-    # TODO: Integrate type of tech destination into the asset transition (this throws a bag)
-    types_of_tech = {1: "Initial", 2: "Transition", 3: "End-state"}
-    type_of_tech = types_of_tech[asset_transition["type_of_tech_destination"]]
-
     return Asset(
-        sector=first(spec["sector"]),  # TODO: this also throws a bug
-        product=product,
-        technology=first(spec["technology"]),
-        region=first(spec["region"]),
-        start_year=year,
-        retrofit=retrofit,
-        asset_lifetime=first(spec["spec", "", "asset_lifetime"]),
-        capacity_factor=first(spec["spec", "", "capacity_factor"]),
-        type_of_tech=type_of_tech,
-        df_asset_capacities=df_asset_capacities,
+        product=asset_transition["product"],
+        technology=asset_transition["technology_destination"],
+        region=asset_transition["region"],
+        year_commissioned=year,
+        annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+        cuf=CUF_UPPER_THRESHOLD,
+        asset_lifetime=technology_characteristics["technology_lifetime"],
+        technology_classification=technology_characteristics[
+            "technology_classification"
+        ],
+        retrofit=False,
     )

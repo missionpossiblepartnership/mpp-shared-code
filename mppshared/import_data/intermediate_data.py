@@ -71,6 +71,14 @@ class IntermediateDataImporter:
     def get_current_production(self):
         return pd.read_csv(self.intermediate_path.joinpath("initial_state.csv"))
 
+    def get_initial_asset_stack(self):
+        return pd.read_csv(self.intermediate_path.joinpath("initial_asset_stack.csv"))
+
+    def get_technology_characteristics(self):
+        return pd.read_csv(
+            self.intermediate_path.joinpath("technology_characteristics.csv")
+        )
+
     def get_asset_specs(self):
         df_spec = pd.read_csv(
             self.intermediate_path.joinpath("technology_characteristics.csv"),
@@ -93,7 +101,7 @@ class IntermediateDataImporter:
                 "product",
                 "technology",
                 "annual_production_capacity",
-                "capacity_factor",
+                "cuf",
                 "yearly_volume",
                 "total_volume",
             ]
@@ -102,9 +110,7 @@ class IntermediateDataImporter:
     def get_asset_capacities(self):
         df_spec = self.get_asset_specs().reset_index()
         df_spec.annual_production_capacity = ASSUMED_ANNUAL_PRODUCTION_CAPACITY
-        df_spec["yearly_volume"] = (
-            df_spec.annual_production_capacity * df_spec.capacity_factor
-        )
+        df_spec["yearly_volume"] = df_spec.annual_production_capacity * df_spec.cuf
         df_spec["total_volume"] = df_spec.technology_lifetime * df_spec.yearly_volume
         return df_spec.drop_duplicates(["product", "region", "technology"])[
             [
@@ -124,7 +130,7 @@ class IntermediateDataImporter:
             return df
         return df.loc[df["region"] == region]
 
-    def get_tech_transitions(self):
+    def get_technology_transitions_and_cost(self):
         return pd.read_csv(
             self.intermediate_path.joinpath("technology_transitions.csv")
         )

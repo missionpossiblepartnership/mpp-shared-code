@@ -4,15 +4,18 @@ from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.asset import AssetStack, Asset
 from mppshared.models.constraints import check_constraints
 from mppshared.utility.utils import get_logger
+from mppshared.agent_logic.agent_logic_functions import (
+    select_best_transition,
+    remove_transition,
+)
 from mppshared.config import LOG_LEVEL, MODEL_SCOPE
 
 import pandas as pd
 import numpy as np
 from operator import methodcaller
 from copy import deepcopy
-import logging
 
-logger = logger = get_logger(__name__)
+logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
@@ -33,13 +36,9 @@ def decommission(
     old_stack = pathway.get_stack(year=year)
     new_stack = pathway.get_stack(year=year + 1)
 
-    #! Development only: force some assets to be decommissioned
-    for i in np.arange(0, 10):
-        new_stack.assets[i].capacity_factor = 0.5
-
     # Get demand balance (demand - production)
     demand = pathway.get_demand(product, year, MODEL_SCOPE)
-    production = old_stack.get_annual_production(product)
+    production = old_stack.get_annual_production_volume(product)
 
     # Get ranking table for decommissioning
     df_rank = pathway.get_ranking(year=year, product=product, rank_type="decommission")
@@ -62,13 +61,13 @@ def decommission(
             logger.info("No more assets to decommission")
             break
 
-        logger.info(
-            f"Removing asset with technology {asset_to_remove.technology} in region {asset_to_remove.region}, annual production {asset_to_remove.get_annual_production(product)} and UUID {asset_to_remove.uuid}"
+        logger.debug(
+            f"Removing asset with technology {asset_to_remove.technology} in region {asset_to_remove.region}, annual production {asset_to_remove.get_annual_production_volume()} and UUID {asset_to_remove.uuid}"
         )
 
         new_stack.remove(asset_to_remove)
 
-        surplus -= asset_to_remove.get_annual_production(product)
+        surplus -= asset_to_remove.get_annual_production_volume()
 
         # TODO: implement logging of the asset transition
         pathway.transitions.add(
@@ -99,74 +98,46 @@ def select_asset_to_decommission(
     # Get all assets eligible for decommissioning
     candidates = stack.get_assets_eligible_for_decommission()
 
+    while candidates:
+        # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
+        best_candidates = []
+        while not best_candidates:
+            # Choose the best transition, i.e. highest decommission rank
+            best_transition = select_best_transition(df_rank)
+
+            best_candidates = list(
+                filter(
+                    lambda asset: (
+                        asset.technology == best_transition["technology_origin"]
+                    )
+                    & (asset.region == best_transition["region"])
+                    & (asset.product == best_transition["product"]),
+                    candidates,
+                )
+            )
+
+            # Remove best transition from ranking table
+            df_rank = remove_transition(df_rank, best_transition)
+
+        # If several candidates for best transition, choose asset with lowest annual production
+        # TODO: What happens if several assets have same annual production?
+        asset_to_remove = min(
+            best_candidates, key=methodcaller("get_annual_production_volume")
+        )
+
+        # Remove asset tentatively (needs deepcopy to provide changes to original stack)
+        tentative_stack = deepcopy(stack)
+        tentative_stack.remove(asset_to_remove)
+
+        # Check constraints with tentative new stack
+        no_constraint_hurt = check_constraints(pathway, tentative_stack, product, year)
+
+        if no_constraint_hurt:
+            return asset_to_remove
+
+        # If constraint is hurt, remove asset from list of candidates and try again
+        candidates.remove(asset_to_remove)
+
     # If no more assets to decommission, raise ValueError
     if not candidates:
         raise ValueError
-
-    # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
-    best_candidates = []
-    while not best_candidates:
-        # Choose the best transition, i.e. highest decommission rank
-        best_transition = select_best_transition(df_rank)
-
-        best_candidates = list(
-            filter(
-                lambda asset: (asset.technology == best_transition["technology_origin"])
-                & (asset.region == best_transition["region"])
-                & (asset.product == best_transition["product"]),
-                candidates,
-            )
-        )
-
-        # Remove best transition from ranking table
-        df_rank = remove_transition(df_rank, best_transition)
-
-    # If several candidates for best transition, choose asset with lowest annual production
-    # TODO: What happens if several assets have same annual production?
-    asset_to_remove = min(
-        best_candidates, key=methodcaller("get_annual_production", product)
-    )
-
-    # Remove asset tentatively (needs deepcopy to provide changes to original stack)
-    tentative_stack = deepcopy(stack)
-    tentative_stack.remove(asset_to_remove)
-
-    # Check constraints with tentative new stack
-    no_constraint_hurt = True
-    # no_constraint_hurt = check_constraints(pathway, tentative_stack, product, year)
-
-    if no_constraint_hurt:
-        return asset_to_remove
-
-
-def select_best_transition(df_rank: pd.DataFrame) -> dict:
-    """Based on the ranking, select the best transition
-
-    Args:
-        df_rank: contains column "rank" with ranking for each technology transition (minimum rank = optimal technology transition)
-
-    Returns:
-        The highest ranking technology transition
-
-    """
-    # Best transition has minimum rank
-    return (
-        df_rank[df_rank["rank"] == df_rank["rank"].min()]
-        .sample(n=1)
-        .to_dict(orient="records")
-    )[0]
-
-
-def remove_transition(df_rank: pd.DataFrame, transition: dict) -> pd.DataFrame:
-    """Filter transition from ranking table.
-
-    Args:
-        df_rank: table with ranking of technology switches
-        transition: row from the ranking table
-
-    Returns:
-        ranking table with the row corresponding to the transition removed
-    """
-    return df_rank.loc[
-        ~(df_rank[list(transition)] == pd.Series(transition)).all(axis=1)
-    ]

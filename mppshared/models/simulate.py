@@ -1,12 +1,21 @@
 import logging
 
-from mppshared.config import END_YEAR, LOG_LEVEL, START_YEAR, PRODUCTS, SECTOR
+from mppshared.config import (
+    END_YEAR,
+    LOG_LEVEL,
+    SECTORAL_CARBON_BUDGETS,
+    START_YEAR,
+    PRODUCTS,
+    SECTOR,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
-# from mppshared.agent_logic.new_build import new_build
 from mppshared.agent_logic.decommission import decommission
-from mppshared.agent_logic.brownfield import retrofit
+from mppshared.agent_logic.brownfield import brownfield
 from mppshared.agent_logic.greenfield import greenfield
+from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
+from mppshared.models.carbon_budget import CarbonBudget, carbon_budget_test
+from mppshared.utility.log_utility import get_logger
 
 from mppshared.models.asset import AssetStack
 
@@ -15,7 +24,7 @@ from mppshared.models.simulation_pathway import SimulationPathway
 
 # from util.util import timing
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
@@ -32,25 +41,37 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
         The updated pathway
     """
 
-    for year in range(START_YEAR, END_YEAR):
+    for year in range(START_YEAR, END_YEAR + 1):
         logger.info("Optimizing for %s", year)
-        pathway.update_asset_status(year=year)
 
         # Copy over last year's stack to this year
         pathway = pathway.copy_stack(year=year)
-        # Run model for all chemicals (Methanol last as it needs MTO/A/P demand)
+
+        # Run pathway simulation for each product
         for product in pathway.products:
+
             logger.info(product)
+
+            # Adjust capacity utilisation of each asset
+            pathway = adjust_capacity_utilisation(
+                pathway=pathway, year=year, product=product
+            )
+
+            #! Debug: set carbon budget start to initial emissions (needs to be implemented)
+            if year == START_YEAR:
+                emissions = pathway.calculate_emissions_stack(year, product)
+                limit = (emissions["co2_scope1"] + emissions["co2_scope2"]) / 1e3
+                df = pathway.carbon_budget.pathways[pathway.sector]
+                df.loc[START_YEAR, "annual_limit"] = limit
 
             # Decommission assets
             pathway = decommission(pathway=pathway, year=year, product=product)
 
-            # Retrofit assets, except for business as usual scenario
-            # if pathway.pathway_name != "bau":
-            #     pathway = retrofit(pathway=pathway, year=year, product=product)
+            # Renovate and rebuild assets (brownfield transition)
+            pathway = brownfield(pathway=pathway, year=year, product=product)
 
             # Build new assets
-            # pathway = greenfield(pathway=pathway, year=year, product=product)
+            pathway = greenfield(pathway=pathway, year=year, product=product)
 
             # Write stack to csv
             pathway.export_stack_to_csv(year)
@@ -72,14 +93,20 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         products=PRODUCTS[sector],
     )
 
+    # Create carbon budget
+    carbon_budget = CarbonBudget(
+        sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS, pathway_shape="linear"
+    )
+
     # Make pathway
     pathway = SimulationPathway(
+        start_year=START_YEAR,
+        end_year=END_YEAR,
         pathway=pathway,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS[sector],
-        start_year=START_YEAR,
-        end_year=END_YEAR,
+        carbon_budget=carbon_budget,
     )
 
     # Optimize asset stack on a yearly basis

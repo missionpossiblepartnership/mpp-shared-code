@@ -124,15 +124,6 @@ EU_COUNTRIES = [
     "SWE",
 ]
 
-CARBON_BUDGET_REF = {
-    "aluminium": 11,
-    "cement": 42,
-    "chemicals": 32,
-    "steel": 56,
-    "aviation": 17,
-    "shipping": 16,
-    "trucking": 36,
-}
 
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
@@ -160,7 +151,7 @@ DECOMMISSION_RATES = {
 }
 
 # Scope of the model run - to be specified
-MODEL_SCOPE = ["Global"]
+MODEL_SCOPE = "Global"
 
 # Override asset parameters; annual production capacity in Mt/year
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
@@ -185,6 +176,12 @@ SECTOR = "aluminium"  # "aluminium, steel, ..."
 PRODUCTS = {
     "chemicals": ["Ammonia"],
     "aluminium": ["Alumina"],
+}
+
+# Specify whether sector uses region-specific or asset-specific data for initial asset stack
+INITIAL_ASSET_DATA_LEVEL = {
+    "chemicals": "regional",
+    # "aluminium": "individual_assets"
 }
 
 ### RUN CONFIGURATION ###
@@ -288,6 +285,9 @@ RANKING_CONFIG = {
 
 ### CONSTRAINTS ###
 
+# TODO: replace investment cycle placeholder with technology- and sector-specific considerations
+INVESTMENT_CYCLE = 20  # years
+
 # TODO: placeholder for external input
 REGIONAL_PRODUCTION_SHARE = {
     "Africa": 0.3,
@@ -299,4 +299,17 @@ REGIONAL_PRODUCTION_SHARE = {
     "North America": 0.3,
     "Oceania": 0.3,
     "Russia": 0.3,
+    "Rest of Asia": 0.3,
+}
+
+# Sectoral carbon budget (scope 1 and 2 CO2 emissions, in GtCO2)
+# TODO: import from .csv file
+SECTORAL_CARBON_BUDGETS = {
+    "aluminium": 11,
+    "cement": 42,
+    "chemicals": 32 * 1 / 3,  #! Debug: reduce to enforce constraint
+    "steel": 56,
+    "aviation": 17,
+    "shipping": 16,
+    "trucking": 36,
 }
