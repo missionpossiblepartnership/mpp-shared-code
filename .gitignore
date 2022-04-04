@@ -129,10 +129,11 @@ dmypy.json
 .pyre/
 play.py
 
-data/chemicals/bau/def/intermediate/technologies_to_rank.csv
-data/chemicals/bau/def/ranking/Ammonia/brownfield_rank.csv
-data/chemicals/bau/def/ranking/Ammonia/decommission_rank.csv
-data/chemicals/bau/def/ranking/Ammonia/greenfield_rank.csv
+# Data files
+data/*/bau/def/intermediate/technologies_to_rank.csv
+data/*/bau/def/ranking/Ammonia/brownfield_rank.csv
+data/*/bau/def/ranking/Ammonia/decommission_rank.csv
+data/*/bau/def/ranking/Ammonia/greenfield_rank.csv
 
 # Ignore all ranking files
 data/chemicals/bau/def/ranking
