@@ -294,6 +294,9 @@ RANKING_CONFIG = {
 
 ### CONSTRAINTS ###
 
+# TODO: replace investment cycle placeholder with technology- and sector-specific considerations
+INVESTMENT_CYCLE = 20  # years
+
 # TODO: placeholder for external input
 REGIONAL_PRODUCTION_SHARE = {
     "Africa": 0.3,

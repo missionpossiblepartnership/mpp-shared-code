@@ -9,6 +9,7 @@ from mppshared.config import (
     CUF_UPPER_THRESHOLD,
     DECOMMISSION_RATES,
     CUF_LOWER_THRESHOLD,
+    INVESTMENT_CYCLE,
 )
 
 from mppshared.utility.utils import first
@@ -101,6 +102,10 @@ class AssetStack:
         "Add new asset to stack"
         self.assets.append(new_asset)
         self.new_ids.append(new_asset.uuid)
+
+    def update_asset(self, asset_to_update: Asset, new_technology: str):
+        """Update an asset in AssetStack, unique ID remains the same"""
+        asset_to_update.technology = new_technology
 
     def empty(self) -> Boolean:
         """Return True if no asset in stack"""
@@ -247,16 +252,25 @@ class AssetStack:
             assets=[asset for asset in self.assets if asset.technology == technology]
         )
 
-    def get_assets_eligible_for_decommission(self) -> list():
-        """Return a list of Assets from the AssetStack that are eligible for decommissioning
-
-        Returns:
-            list of Assets
-        """
-        # Filter for CUF < threshold
+    def get_assets_eligible_for_decommission(self) -> list:
+        """Return a list of Assets from the AssetStack that are eligible for decommissioning"""
+        # Assets can be decommissioned if their CUF is lower than the threshold
         candidates = filter(lambda asset: asset.cuf < CUF_LOWER_THRESHOLD, self.assets)
 
         # TODO: filter based on asset age
+
+        return list(candidates)
+
+    def get_assets_eligible_for_brownfield(self, year) -> list:
+        """Return a list of Assets from the AssetStack that are eligible for a brownfield technology transition"""
+
+        # Assets can be renovated or rebuild if their CUF exceeds the threshold and they are older than the investment cycle
+        # TODO: is there a distinction between brownfield renovation and brownfield rebuild?
+        candidates = filter(
+            lambda asset: (asset.cuf > CUF_LOWER_THRESHOLD)
+            & (asset.get_age(year) >= INVESTMENT_CYCLE),
+            self.assets,
+        )
 
         return list(candidates)
 
