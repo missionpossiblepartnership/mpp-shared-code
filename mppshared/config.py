@@ -1,5 +1,6 @@
 """Configuration file for the library."""
 import logging
+
 import numpy as np
 
 ### LOGGER ####
@@ -168,11 +169,13 @@ SENSITIVITIES = [
 
 ### SECTOR-SPECIFIC PARAMETERS ###
 # Sectors for which the model can be run
-SECTOR = "chemicals"  # "aluminium, steel, ..."
+SECTOR = "chemicals"
+# SECTOR = "aluminium"  # "aluminium, steel, ..."
 
 # Products produced by each sector
 PRODUCTS = {
     "chemicals": ["Ammonia"],
+    "aluminium": ["Alumina"],
 }
 
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
