@@ -28,6 +28,7 @@ class IntermediateDataImporter:
         self.sensitivity = sensitivity
         self.export_dir = parent_path.joinpath(f"data/{sector}/{pathway}/{sensitivity}")
         self.intermediate_path = self.export_dir.joinpath("intermediate")
+        self.stack_tracker_path = self.export_dir.joinpath("stack_tracker")
         self.final_path = self.export_dir.joinpath("final")
         self.aggregate_export_dir = parent_path.joinpath("output/")
 
@@ -134,6 +135,9 @@ class IntermediateDataImporter:
         return pd.read_csv(
             self.intermediate_path.joinpath("technology_transitions.csv")
         )
+
+    def get_asset_stack(self, year):
+        return pd.read_csv(self.stack_tracker_path.joinpath(f"stack_{year}.csv"))
 
     def get_process_data(self, data_type):
         """Get data outputted by the model on process level: cost/inputs/emissions"""
