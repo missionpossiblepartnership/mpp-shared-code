@@ -50,11 +50,12 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
 
     carbon_cost = 0
     if carbon_cost == 0:
-        df_carbon_cost = df_technology_switches
+        df_carbon_cost = df_technology_switches.copy()
     else:
         # Add carbon cost to TCO based on scope 1 and 2 CO2 emissions
         # TODO: improve runtime
         start = timer()
+        df_technology_switches = filter_df_for_development(df_technology_switches)
         df_carbon_cost = apply_carbon_cost_to_tco(
             df_technology_switches, df_emissions, df_technology_characteristics
         )
