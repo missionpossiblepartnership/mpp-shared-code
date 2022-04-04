@@ -43,7 +43,9 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
     )
 
     #! Development only: filter input tables for faster runtimes
-    df_technology_switches = filter_df_for_development(importer.get_tech_transitions())
+    df_technology_switches = filter_df_for_development(
+        importer.get_technology_transitions_and_cost()
+    )
     df_emissions = importer.get_emissions()
     df_technology_characteristics = importer.get_asset_specs()
     df_technology_characteristics.reset_index(inplace=True)
@@ -142,9 +144,9 @@ def apply_carbon_cost_to_tco(
 
     # Contribution of a cost to TCO is net present cost divided by (lifetime * capacity utilisation factor)
     # TODO: integrate dynamic capacity utilisation functionality
-    capacity_factor_dummy = 0.95
+    cuf_dummy = 0.95
     df["carbon_cost_addition_tco"] = (
-        df["carbon_cost_addition"] / (df["technology_lifetime"] * capacity_factor_dummy)
+        df["carbon_cost_addition"] / (df["technology_lifetime"] * cuf_dummy)
     ).fillna(0)
 
     # Update TCO in technology switching DataFrame

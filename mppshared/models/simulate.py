@@ -7,6 +7,7 @@ from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.agent_logic.decommission import decommission
 from mppshared.agent_logic.brownfield import retrofit
 from mppshared.agent_logic.greenfield import greenfield
+from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
 
 from mppshared.models.asset import AssetStack
 
@@ -38,9 +39,15 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
 
         # Copy over last year's stack to this year
         pathway = pathway.copy_stack(year=year)
-        # Run model for all chemicals (Methanol last as it needs MTO/A/P demand)
+
+        # Run pathway simulation for each product
         for product in pathway.products:
             logger.info(product)
+
+            # Adjust capacity utilisation of each asset
+            pathway = adjust_capacity_utilisation(
+                pathway=pathway, year=year, product=product
+            )
 
             # Decommission assets
             pathway = decommission(pathway=pathway, year=year, product=product)

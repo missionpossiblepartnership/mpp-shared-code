@@ -22,7 +22,7 @@ class Asset:
         region: str,
         year_commissioned: int,
         annual_production_capacity: float,
-        capacity_factor: float,
+        cuf: float,
         asset_lifetime: int,
         technology_classification="Initial",
         retrofit=False,
@@ -38,7 +38,7 @@ class Asset:
 
         # Production capacity parameters
         self.annual_production_capacity = annual_production_capacity  # unit: Mt/year
-        self.capacity_factor = capacity_factor  # unit: decimal
+        self.cuf = cuf  # capacity utilisation factor (decimal)
 
         # Asset status parameters
         self.retrofit = retrofit
@@ -61,7 +61,21 @@ class Asset:
         return self.annual_production_capacity
 
     def get_annual_production_volume(self):
-        return self.get_annual_production_capacity() * self.capacity_factor
+        return self.get_annual_production_capacity() * self.cuf
+
+    def get_lcox(self, df_cost: pd.DataFrame, year: int) -> float:
+        """Get LCOX based on table with cost data for technology transitions and specified year
+
+        Args:
+            df_cost: contains columns "product", "technology_origin", "region", "year", "technology_destination", "lcox"
+            year: year for which to get the asset lcox
+
+        Returns:
+            LCOX for the asset in the given year
+        """
+        return df_cost.query(
+            f"product=='{self.product}' & technology_origin=='New-build' & year=={year} & region=='{self.region}' & technology_destination=='{self.technology}'"
+        )["lcox"].iloc[0]
 
 
 def create_assets(n_assets: int, **kwargs) -> list:
@@ -172,7 +186,7 @@ class AssetStack:
                 "technology": asset.technology,
                 "annual_production_capacity": asset.get_annual_production_capacity(),
                 "annual_production_volume": asset.get_annual_production_volume(),
-                "capacity_factor": asset.capacity_factor,
+                "cuf": asset.cuf,
                 "asset_lifetime": asset.asset_lifetime,
                 "retrofit_status": asset.retrofit,
             }
@@ -238,9 +252,7 @@ class AssetStack:
             list of Assets
         """
         # Filter for CUF < threshold
-        candidates = filter(
-            lambda asset: asset.capacity_factor < CUF_LOWER_THRESHOLD, self.assets
-        )
+        candidates = filter(lambda asset: asset.cuf < CUF_LOWER_THRESHOLD, self.assets)
 
         # TODO: filter based on asset age
 
@@ -282,7 +294,7 @@ def make_new_asset(
         year_commissioned=year,
         retrofit=retrofit,
         asset_lifetime=first(spec["spec", "", "asset_lifetime"]),
-        capacity_factor=first(spec["spec", "", "capacity_factor"]),
+        cuf=first(spec["spec", "", "cuf"]),
         technology_classification=type_of_tech,
         df_asset_capacities=df_asset_capacities,
     )

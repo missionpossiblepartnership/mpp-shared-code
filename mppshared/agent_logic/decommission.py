@@ -33,10 +33,6 @@ def decommission(
     old_stack = pathway.get_stack(year=year)
     new_stack = pathway.get_stack(year=year + 1)
 
-    #! Development only: force some assets to be decommissioned
-    for i in np.arange(0, 10):
-        new_stack.assets[i].capacity_factor = 0.5
-
     # Get demand balance (demand - production)
     demand = pathway.get_demand(product, year, MODEL_SCOPE)
     production = old_stack.get_annual_production_volume(product)
@@ -63,12 +59,12 @@ def decommission(
             break
 
         logger.info(
-            f"Removing asset with technology {asset_to_remove.technology} in region {asset_to_remove.region}, annual production {asset_to_remove.get_annual_production_volume(product)} and UUID {asset_to_remove.uuid}"
+            f"Removing asset with technology {asset_to_remove.technology} in region {asset_to_remove.region}, annual production {asset_to_remove.get_annual_production_volume()} and UUID {asset_to_remove.uuid}"
         )
 
         new_stack.remove(asset_to_remove)
 
-        surplus -= asset_to_remove.get_annual_production_volume(product)
+        surplus -= asset_to_remove.get_annual_production_volume()
 
         # TODO: implement logging of the asset transition
         pathway.transitions.add(
@@ -124,7 +120,7 @@ def select_asset_to_decommission(
     # If several candidates for best transition, choose asset with lowest annual production
     # TODO: What happens if several assets have same annual production?
     asset_to_remove = min(
-        best_candidates, key=methodcaller("get_annual_production", product)
+        best_candidates, key=methodcaller("get_annual_production_volume")
     )
 
     # Remove asset tentatively (needs deepcopy to provide changes to original stack)
