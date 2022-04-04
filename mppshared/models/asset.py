@@ -5,6 +5,8 @@ from xmlrpc.client import Boolean
 import pandas as pd
 
 from mppshared.config import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CUF_UPPER_THRESHOLD,
     DECOMMISSION_RATES,
     CUF_LOWER_THRESHOLD,
 )
@@ -24,7 +26,7 @@ class Asset:
         annual_production_capacity: float,
         cuf: float,
         asset_lifetime: int,
-        technology_classification="Initial",
+        technology_classification: str,
         retrofit=False,
     ):
         # Unique ID to identify and compare assets
@@ -43,7 +45,7 @@ class Asset:
         # Asset status parameters
         self.retrofit = retrofit
         self.asset_lifetime = asset_lifetime  # unit: years
-        self.type_of_tech = technology_classification
+        self.technology_classification = technology_classification
 
     def __str__(self):
         return f"<Asset with UUID {self.uuid}, technology {self.technology} in region {self.region}>"
@@ -260,41 +262,38 @@ class AssetStack:
 
 
 def make_new_asset(
-    asset_transition, df_process_data, year, retrofit, product, df_asset_capacities
+    asset_transition: dict, df_technology_characteristics: pd.DataFrame, year: int
 ):
-    """
-    Make a new asset, based on a transition entry from the ranking dataframe
+    """Make a new asset, based on asset transition from the ranking DataFrame. The asset is assumed to start operating at the highest possible capacity utilisation
 
     Args:
         asset_transition: The best transition (destination is the asset to build)
-        df_process_data: The inputs dataframe (needed for asset specs)
+        df_technology_characteristics: needed for asset lifetime and technology classification
         year: Build the asset in this year
         retrofit: Asset is retrofitted from an old asset
 
     Returns:
         The new asset
     """
-    df_process_data = df_process_data.reset_index()
-    spec = df_process_data[
-        (df_process_data.technology == asset_transition["technology_destination"])
-        & (df_process_data.year == asset_transition["year"])
-        & (df_process_data.region == asset_transition["region"])
+    technology_characteristics = df_technology_characteristics.loc[
+        (df_technology_characteristics["product"] == asset_transition["product"])
+        & (df_technology_characteristics["region"] == asset_transition["region"])
+        & (
+            df_technology_characteristics["technology"]
+            == asset_transition["technology_destination"]
+        )
     ]
 
-    # Map tech type back from ints
-    # TODO: Integrate type of tech destination into the asset transition (this throws a bag)
-    types_of_tech = {1: "Initial", 2: "Transition", 3: "End-state"}
-    type_of_tech = types_of_tech[asset_transition["type_of_tech_destination"]]
-
     return Asset(
-        sector=first(spec["sector"]),  # TODO: this also throws a bug
-        product=product,
-        technology=first(spec["technology"]),
-        region=first(spec["region"]),
+        product=asset_transition["product"],
+        technology=asset_transition["technology_destination"],
+        region=asset_transition["region"],
         year_commissioned=year,
-        retrofit=retrofit,
-        asset_lifetime=first(spec["spec", "", "asset_lifetime"]),
-        cuf=first(spec["spec", "", "cuf"]),
-        technology_classification=type_of_tech,
-        df_asset_capacities=df_asset_capacities,
+        annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+        cuf=CUF_UPPER_THRESHOLD,
+        asset_lifetime=technology_characteristics["technology_lifetime"],
+        technology_classification=technology_characteristics[
+            "technology_classification"
+        ],
+        retrofit=False,
     )

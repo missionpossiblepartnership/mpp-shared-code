@@ -75,6 +75,12 @@ class SimulationPathway:
         logger.debug("Getting emissions")
         self.emissions = self.importer.get_process_data(data_type="emissions")
 
+        # Import technology characteristics
+        logger.debug("Getting technology characteristics")
+        self.df_technology_characteristics = (
+            self.importer.get_technology_characteristics()
+        )
+
         # TODO: Availability missing, if it is available we should import
         # logger.debug("Getting availability")
         # self.availability = self._import_availability()
@@ -234,9 +240,9 @@ class SimulationPathway:
         region: str,
     ):
         """
-        Get the demand for a product in a year
+        Get the demand for a product in a given year and region
+
         Args:
-            build_new: overwrite demand after the new build step
             product: get for this product
             region: get for this region
             year: and this year
@@ -247,7 +253,7 @@ class SimulationPathway:
         return df.loc[
             (df["product"] == product)
             & (df["year"] == year)
-            & (df["region"].isin(region)),
+            & (df["region"] == region),
             "value",
         ].item()
 
@@ -366,12 +372,6 @@ class SimulationPathway:
         df = self.availability
         df = update_availability_from_asset(df, asset=asset, year=year)
         self.availability = df.round(1)
-        return self
-
-    def update_asset_status(self, year):
-        for asset in self.stacks[year].assets:
-            if year - asset.year_commissioned >= asset.asset_lifetime:
-                asset.asset_status = "old"
         return self
 
     def get_availability(self, year=None, name=None):

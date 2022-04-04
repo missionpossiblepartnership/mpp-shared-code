@@ -56,12 +56,12 @@ def check_constraint_regional_production(
 
     # Compare regional production with required demand share up to specified number of significant figures
     sf = 2
-    df["check"] = np.round(df["annual_production"], sf) >= np.round(
+    df["check"] = np.round(df["annual_production_volume"], sf) >= np.round(
         df["demand"] * df["share_regional_production"], sf
     )
 
     # The constraint is hurt if any region does not meet its required regional production share
-    if False in df["check"]:
-        return False
+    if df["check"].all():
+        return True
 
-    return True
+    return False
