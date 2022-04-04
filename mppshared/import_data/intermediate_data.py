@@ -80,6 +80,12 @@ class IntermediateDataImporter:
             self.intermediate_path.joinpath("technology_characteristics.csv")
         )
 
+    def get_asset_stack(self, year):
+        return pd.read_csv(
+            self.stack_tracker_path.joinpath(f"stack_{year}.csv")
+        )
+
+
     def get_asset_specs(self):
         df_spec = pd.read_csv(
             self.intermediate_path.joinpath("technology_characteristics.csv"),
