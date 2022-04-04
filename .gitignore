@@ -136,7 +136,7 @@ data/*/bau/def/ranking/Ammonia/decommission_rank.csv
 data/*/bau/def/ranking/Ammonia/greenfield_rank.csv
 
 # Ignore all ranking files
-data/chemicals/bau/def/ranking
+data/*/bau/def/ranking
 
 # Ignore stack tracker
-data/chemicals/bau/def/stack_tracker
+data/*/bau/def/stack_tracker
