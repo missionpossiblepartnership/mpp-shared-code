@@ -1,559 +1,621 @@
-﻿product,scenario,region,year,value
-Alumina,BAU,China,2020,67463000
-Alumina,BAU,Europe,2020,6767428
-Alumina,BAU,North America,2020,2090747
-Alumina,BAU,Latin America,2020,11217819
-Alumina,BAU,Middle East,2020,3969296
-Alumina,BAU,Rest of Asia,2020,11749049.22
-Alumina,BAU,Africa,2020,0
-Alumina,BAU,Oceania,2020,20737000
-Alumina,BAU,Russia,2020,2688844.785
-Alumina,BAU,China,2021,70161520
-Alumina,BAU,Europe,2021,6767428
-Alumina,BAU,North America,2021,2090747
-Alumina,BAU,Latin America,2021,11217819
-Alumina,BAU,Middle East,2021,4564690.4
-Alumina,BAU,Rest of Asia,2021,11742491.44
-Alumina,BAU,Africa,2021,0
-Alumina,BAU,Oceania,2021,20694857.04
-Alumina,BAU,Russia,2021,2683380.354
-Alumina,BAU,China,2022,68758289.6
-Alumina,BAU,Europe,2022,6767428
-Alumina,BAU,North America,2022,2090747
-Alumina,BAU,Latin America,2022,11217819
-Alumina,BAU,Middle East,2022,4564690.4
-Alumina,BAU,Rest of Asia,2022,11368270.99
-Alumina,BAU,Africa,2022,0
-Alumina,BAU,Oceania,2022,18289962.77
-Alumina,BAU,Russia,2022,2371551.864
-Alumina,BAU,China,2023,68758289.6
-Alumina,BAU,Europe,2023,6767428
-Alumina,BAU,North America,2023,2090747
-Alumina,BAU,Latin America,2023,11217819
-Alumina,BAU,Middle East,2023,4564690.4
-Alumina,BAU,Rest of Asia,2023,11272383.98
-Alumina,BAU,Africa,2023,0
-Alumina,BAU,Oceania,2023,17673753.5
-Alumina,BAU,Russia,2023,2291651.634
-Alumina,BAU,China,2024,69445872.5
-Alumina,BAU,Europe,2024,6767428
-Alumina,BAU,North America,2024,2090747
-Alumina,BAU,Latin America,2024,11217819
-Alumina,BAU,Middle East,2024,4564690.4
-Alumina,BAU,Rest of Asia,2024,11310913.64
-Alumina,BAU,Africa,2024,0
-Alumina,BAU,Oceania,2024,17921360.91
-Alumina,BAU,Russia,2024,2323757.429
-Alumina,BAU,China,2025,67362496.32
-Alumina,BAU,Europe,2025,6767428
-Alumina,BAU,North America,2025,2090747
-Alumina,BAU,Latin America,2025,11217819
-Alumina,BAU,Middle East,2025,4564690.4
-Alumina,BAU,Rest of Asia,2025,11337551.71
-Alumina,BAU,Africa,2025,0
-Alumina,BAU,Oceania,2025,18092548.07
-Alumina,BAU,Russia,2025,2345954.261
-Alumina,BAU,China,2026,69383371.21
-Alumina,BAU,Europe,2026,6767428
-Alumina,BAU,North America,2026,2090747
-Alumina,BAU,Latin America,2026,11217819
-Alumina,BAU,Middle East,2026,4564690.4
-Alumina,BAU,Rest of Asia,2026,11227961.32
-Alumina,BAU,Africa,2026,0
-Alumina,BAU,Oceania,2026,17388275.23
-Alumina,BAU,Russia,2026,2254635.346
-Alumina,BAU,China,2027,67301870.07
-Alumina,BAU,Europe,2027,6767428
-Alumina,BAU,North America,2027,2090747
-Alumina,BAU,Latin America,2027,11217819
-Alumina,BAU,Middle East,2027,4564690.4
-Alumina,BAU,Rest of Asia,2027,11392587.51
-Alumina,BAU,Africa,2027,0
-Alumina,BAU,Oceania,2027,18446230.7
-Alumina,BAU,Russia,2027,2391814.208
-Alumina,BAU,China,2028,68477846.75
-Alumina,BAU,Europe,2028,6767428
-Alumina,BAU,North America,2028,2090747
-Alumina,BAU,Latin America,2028,11217819
-Alumina,BAU,Middle East,2028,4564690.4
-Alumina,BAU,Rest of Asia,2028,11478014.27
-Alumina,BAU,Africa,2028,0
-Alumina,BAU,Oceania,2028,18995218.16
-Alumina,BAU,Russia,2028,2462998.181
-Alumina,BAU,China,2029,69847456.78
-Alumina,BAU,Europe,2029,6767428
-Alumina,BAU,North America,2029,2090747
-Alumina,BAU,Latin America,2029,11217819
-Alumina,BAU,Middle East,2029,4564690.4
-Alumina,BAU,Rest of Asia,2029,11567558.12
-Alumina,BAU,Africa,2029,0
-Alumina,BAU,Oceania,2029,19570663.71
-Alumina,BAU,Russia,2029,2537612.819
-Alumina,BAU,China,2030,67494792.34
-Alumina,BAU,Europe,2030,6767428
-Alumina,BAU,North America,2030,2090747
-Alumina,BAU,Latin America,2030,11217819
-Alumina,BAU,Middle East,2030,4564690.4
-Alumina,BAU,Rest of Asia,2030,11622849.97
-Alumina,BAU,Africa,2030,0
-Alumina,BAU,Oceania,2030,19925991.87
-Alumina,BAU,Russia,2030,2583686.132
-Alumina,BAU,China,2031,72636753.08
-Alumina,BAU,Europe,2031,6767428
-Alumina,BAU,North America,2031,2090747
-Alumina,BAU,Latin America,2031,11217819
-Alumina,BAU,Middle East,2031,4564690.4
-Alumina,BAU,Rest of Asia,2031,11719795.74
-Alumina,BAU,Africa,2031,0
-Alumina,BAU,Oceania,2031,20549005.15
-Alumina,BAU,Russia,2031,2664468.598
-Alumina,BAU,China,2032,77996812.27
-Alumina,BAU,Europe,2032,6767428
-Alumina,BAU,North America,2032,2090747
-Alumina,BAU,Latin America,2032,11217819
-Alumina,BAU,Middle East,2032,4564690.4
-Alumina,BAU,Rest of Asia,2032,11820276.48
-Alumina,BAU,Africa,2032,0
-Alumina,BAU,Oceania,2032,21194735.62
-Alumina,BAU,Russia,2032,2748196.669
-Alumina,BAU,China,2033,79107356.4
-Alumina,BAU,Europe,2033,6767428
-Alumina,BAU,North America,2033,2090747
-Alumina,BAU,Latin America,2033,11217819
-Alumina,BAU,Middle East,2033,4564690.4
-Alumina,BAU,Rest of Asia,2033,11831176.73
-Alumina,BAU,Africa,2033,0
-Alumina,BAU,Oceania,2033,21264785.15
-Alumina,BAU,Russia,2033,2757279.58
-Alumina,BAU,China,2034,81098920.18
-Alumina,BAU,Europe,2034,6767428
-Alumina,BAU,North America,2034,2090747
-Alumina,BAU,Latin America,2034,11217819
-Alumina,BAU,Middle East,2034,4564690.4
-Alumina,BAU,Rest of Asia,2034,11850724.41
-Alumina,BAU,Africa,2034,0
-Alumina,BAU,Oceania,2034,21390406.55
-Alumina,BAU,Russia,2034,2773568.168
-Alumina,BAU,China,2035,81098920.18
-Alumina,BAU,Europe,2035,6767428
-Alumina,BAU,North America,2035,2090747
-Alumina,BAU,Latin America,2035,11217819
-Alumina,BAU,Middle East,2035,4564690.4
-Alumina,BAU,Rest of Asia,2035,12150333.72
-Alumina,BAU,Africa,2035,0
-Alumina,BAU,Oceania,2035,23315818.95
-Alumina,BAU,Russia,2035,3023225.066
-Alumina,BAU,China,2036,81098920.18
-Alumina,BAU,Europe,2036,6767428
-Alumina,BAU,North America,2036,2090747
-Alumina,BAU,Latin America,2036,11217819
-Alumina,BAU,Middle East,2036,4564690.4
-Alumina,BAU,Rest of Asia,2036,12508962.5
-Alumina,BAU,Africa,2036,0
-Alumina,BAU,Oceania,2036,25620514.76
-Alumina,BAU,Russia,2036,3322061.412
-Alumina,BAU,China,2037,81098920.18
-Alumina,BAU,Europe,2037,6767428
-Alumina,BAU,North America,2037,2090747
-Alumina,BAU,Latin America,2037,11217819
-Alumina,BAU,Middle East,2037,4564690.4
-Alumina,BAU,Rest of Asia,2037,12779538.75
-Alumina,BAU,Africa,2037,0
-Alumina,BAU,Oceania,2037,27359348.8
-Alumina,BAU,Russia,2037,3547525.791
-Alumina,BAU,China,2038,81098920.18
-Alumina,BAU,Europe,2038,6767428
-Alumina,BAU,North America,2038,2090747
-Alumina,BAU,Latin America,2038,11217819
-Alumina,BAU,Middle East,2038,4564690.4
-Alumina,BAU,Rest of Asia,2038,13072064.39
-Alumina,BAU,Africa,2038,0
-Alumina,BAU,Oceania,2038,29239238.68
-Alumina,BAU,Russia,2038,3791280.051
-Alumina,BAU,China,2039,81098920.18
-Alumina,BAU,Europe,2039,6767428
-Alumina,BAU,North America,2039,2090747
-Alumina,BAU,Latin America,2039,11217819
-Alumina,BAU,Middle East,2039,4564690.4
-Alumina,BAU,Rest of Asia,2039,13390341.47
-Alumina,BAU,Africa,2039,0
-Alumina,BAU,Oceania,2039,31284617.85
-Alumina,BAU,Russia,2039,4056492.335
-Alumina,BAU,China,2040,81098920.18
-Alumina,BAU,Europe,2040,6767428
-Alumina,BAU,North America,2040,2090747
-Alumina,BAU,Latin America,2040,11217819
-Alumina,BAU,Middle East,2040,4564690.4
-Alumina,BAU,Rest of Asia,2040,13734434.09
-Alumina,BAU,Africa,2040,0
-Alumina,BAU,Oceania,2040,33495898.32
-Alumina,BAU,Russia,2040,4343216.064
-Alumina,BAU,China,2041,81098920.18
-Alumina,BAU,Europe,2041,6767428
-Alumina,BAU,North America,2041,2090747
-Alumina,BAU,Latin America,2041,11217819
-Alumina,BAU,Middle East,2041,4564690.4
-Alumina,BAU,Rest of Asia,2041,14105742.67
-Alumina,BAU,Africa,2041,0
-Alumina,BAU,Oceania,2041,35882079.66
-Alumina,BAU,Russia,2041,4652618.159
-Alumina,BAU,China,2042,81098920.18
-Alumina,BAU,Europe,2042,6767428
-Alumina,BAU,North America,2042,2090747
-Alumina,BAU,Latin America,2042,11217819
-Alumina,BAU,Middle East,2042,4564690.4
-Alumina,BAU,Rest of Asia,2042,14248240.13
-Alumina,BAU,Africa,2042,0
-Alumina,BAU,Oceania,2042,36797826.88
-Alumina,BAU,Russia,2042,4771357.712
-Alumina,BAU,China,2043,81098920.18
-Alumina,BAU,Europe,2043,6767428
-Alumina,BAU,North America,2043,2090747
-Alumina,BAU,Latin America,2043,11217819
-Alumina,BAU,Middle East,2043,4564690.4
-Alumina,BAU,Rest of Asia,2043,14285478.05
-Alumina,BAU,Africa,2043,0
-Alumina,BAU,Oceania,2043,37037133.01
-Alumina,BAU,Russia,2043,4802387.13
-Alumina,BAU,China,2044,81098920.18
-Alumina,BAU,Europe,2044,6767428
-Alumina,BAU,North America,2044,2090747
-Alumina,BAU,Latin America,2044,11217819
-Alumina,BAU,Middle East,2044,4564690.4
-Alumina,BAU,Rest of Asia,2044,14353928.8
-Alumina,BAU,Africa,2044,0
-Alumina,BAU,Oceania,2044,37477025.64
-Alumina,BAU,Russia,2044,4859425.42
-Alumina,BAU,China,2045,81098920.18
-Alumina,BAU,Europe,2045,6767428
-Alumina,BAU,North America,2045,2090747
-Alumina,BAU,Latin America,2045,11217819
-Alumina,BAU,Middle East,2045,4564690.4
-Alumina,BAU,Rest of Asia,2045,14427515.69
-Alumina,BAU,Africa,2045,0
-Alumina,BAU,Oceania,2045,37949925.2
-Alumina,BAU,Russia,2045,4920743.523
-Alumina,BAU,China,2046,81098920.18
-Alumina,BAU,Europe,2046,6767428
-Alumina,BAU,North America,2046,2090747
-Alumina,BAU,Latin America,2046,11217819
-Alumina,BAU,Middle East,2046,4564690.4
-Alumina,BAU,Rest of Asia,2046,14507893.47
-Alumina,BAU,Africa,2046,0
-Alumina,BAU,Oceania,2046,38466465.79
-Alumina,BAU,Russia,2046,4987720.303
-Alumina,BAU,China,2047,81098920.18
-Alumina,BAU,Europe,2047,6767428
-Alumina,BAU,North America,2047,2090747
-Alumina,BAU,Latin America,2047,11217819
-Alumina,BAU,Middle East,2047,4564690.4
-Alumina,BAU,Rest of Asia,2047,14596354.78
-Alumina,BAU,Africa,2047,0
-Alumina,BAU,Oceania,2047,39034954.49
-Alumina,BAU,Russia,2047,5061432.888
-Alumina,BAU,China,2048,81098920.18
-Alumina,BAU,Europe,2048,6767428
-Alumina,BAU,North America,2048,2090747
-Alumina,BAU,Latin America,2048,11217819
-Alumina,BAU,Middle East,2048,4564690.4
-Alumina,BAU,Rest of Asia,2048,14694004.97
-Alumina,BAU,Africa,2048,0
-Alumina,BAU,Oceania,2048,39662494.74
-Alumina,BAU,Russia,2048,5142802.34
-Alumina,BAU,China,2049,81098920.18
-Alumina,BAU,Europe,2049,6767428
-Alumina,BAU,North America,2049,2090747
-Alumina,BAU,Latin America,2049,11217819
-Alumina,BAU,Middle East,2049,4564690.4
-Alumina,BAU,Rest of Asia,2049,14803052.7
-Alumina,BAU,Africa,2049,0
-Alumina,BAU,Oceania,2049,40363280.19
-Alumina,BAU,Russia,2049,5233669.066
-Alumina,BAU,China,2050,81098920.18
-Alumina,BAU,Europe,2050,6767428
-Alumina,BAU,North America,2050,2090747
-Alumina,BAU,Latin America,2050,11217819
-Alumina,BAU,Middle East,2050,4564690.4
-Alumina,BAU,Rest of Asia,2050,14926322.61
-Alumina,BAU,Africa,2050,0
-Alumina,BAU,Oceania,2050,41155463.26
-Alumina,BAU,Russia,2050,5336386.785
-Alumina,1.5deg,China,2020,67463000
-Alumina,1.5deg,Europe,2020,6767428
-Alumina,1.5deg,North America,2020,2090747
-Alumina,1.5deg,Latin America,2020,11217819
-Alumina,1.5deg,Middle East,2020,3969296
-Alumina,1.5deg,Rest of Asia,2020,11749049.22
-Alumina,1.5deg,Africa,2020,0
-Alumina,1.5deg,Oceania,2020,20737000
-Alumina,1.5deg,Russia,2020,2688844.785
-Alumina,1.5deg,China,2021,70161520
-Alumina,1.5deg,Europe,2021,6767428
-Alumina,1.5deg,North America,2021,2090747
-Alumina,1.5deg,Latin America,2021,11217819
-Alumina,1.5deg,Middle East,2021,4564690.4
-Alumina,1.5deg,Rest of Asia,2021,11816390.16
-Alumina,1.5deg,Africa,2021,0
-Alumina,1.5deg,Oceania,2021,21169760.58
-Alumina,1.5deg,Russia,2021,2744958.303
-Alumina,1.5deg,China,2022,67147668.63
-Alumina,1.5deg,Europe,2022,6767428
-Alumina,1.5deg,North America,2022,2090747
-Alumina,1.5deg,Latin America,2022,11217819
-Alumina,1.5deg,Middle East,2022,4564690.4
-Alumina,1.5deg,Rest of Asia,2022,11629776.68
-Alumina,1.5deg,Africa,2022,0
-Alumina,1.5deg,Oceania,2022,19970505.73
-Alumina,1.5deg,Russia,2022,2589457.982
-Alumina,1.5deg,China,2023,66376560.75
-Alumina,1.5deg,Europe,2023,6767428
-Alumina,1.5deg,North America,2023,2090747
-Alumina,1.5deg,Latin America,2023,11217819
-Alumina,1.5deg,Middle East,2023,4564690.4
-Alumina,1.5deg,Rest of Asia,2023,11620595.76
-Alumina,1.5deg,Africa,2023,0
-Alumina,1.5deg,Oceania,2023,19911505.36
-Alumina,1.5deg,Russia,2023,2581807.751
-Alumina,1.5deg,China,2024,67247306.5
-Alumina,1.5deg,Europe,2024,6767428
-Alumina,1.5deg,North America,2024,2090747
-Alumina,1.5deg,Latin America,2024,11217819
-Alumina,1.5deg,Middle East,2024,4564690.4
-Alumina,1.5deg,Rest of Asia,2024,11630962.98
-Alumina,1.5deg,Africa,2024,0
-Alumina,1.5deg,Oceania,2024,19978129.4
-Alumina,1.5deg,Russia,2024,2590446.498
-Alumina,1.5deg,China,2025,66097760.13
-Alumina,1.5deg,Europe,2025,6767428
-Alumina,1.5deg,North America,2025,2090747
-Alumina,1.5deg,Latin America,2025,11217819
-Alumina,1.5deg,Middle East,2025,4564690.4
-Alumina,1.5deg,Rest of Asia,2025,11617276.32
-Alumina,1.5deg,Africa,2025,0
-Alumina,1.5deg,Oceania,2025,19890173.27
-Alumina,1.5deg,Russia,2025,2579041.745
-Alumina,1.5deg,China,2026,64934065.94
-Alumina,1.5deg,Europe,2026,6767428
-Alumina,1.5deg,North America,2026,2090747
-Alumina,1.5deg,Latin America,2026,11217819
-Alumina,1.5deg,Middle East,2026,4564690.4
-Alumina,1.5deg,Rest of Asia,2026,11603421.21
-Alumina,1.5deg,Africa,2026,0
-Alumina,1.5deg,Oceania,2026,19801134.64
-Alumina,1.5deg,Russia,2026,2567496.629
-Alumina,1.5deg,China,2027,62730396.57
-Alumina,1.5deg,Europe,2027,6767428
-Alumina,1.5deg,North America,2027,2090747
-Alumina,1.5deg,Latin America,2027,11217819
-Alumina,1.5deg,Middle East,2027,4564690.4
-Alumina,1.5deg,Rest of Asia,2027,11577184
-Alumina,1.5deg,Africa,2027,0
-Alumina,1.5deg,Oceania,2027,19632523.58
-Alumina,1.5deg,Russia,2027,2545633.825
-Alumina,1.5deg,China,2028,63203144.47
-Alumina,1.5deg,Europe,2028,6767428
-Alumina,1.5deg,North America,2028,2090747
-Alumina,1.5deg,Latin America,2028,11217819
-Alumina,1.5deg,Middle East,2028,4564690.4
-Alumina,1.5deg,Rest of Asia,2028,11582812.61
-Alumina,1.5deg,Africa,2028,0
-Alumina,1.5deg,Oceania,2028,19668695.31
-Alumina,1.5deg,Russia,2028,2550324
-Alumina,1.5deg,China,2029,63846354.01
-Alumina,1.5deg,Europe,2029,6767428
-Alumina,1.5deg,North America,2029,2090747
-Alumina,1.5deg,Latin America,2029,11217819
-Alumina,1.5deg,Middle East,2029,4564690.4
-Alumina,1.5deg,Rest of Asia,2029,11590470.75
-Alumina,1.5deg,Africa,2029,0
-Alumina,1.5deg,Oceania,2029,19717909.69
-Alumina,1.5deg,Russia,2029,2556705.34
-Alumina,1.5deg,China,2030,68051222.02
-Alumina,1.5deg,Europe,2030,6767428
-Alumina,1.5deg,North America,2030,2090747
-Alumina,1.5deg,Latin America,2030,11217819
-Alumina,1.5deg,Middle East,2030,4564690.4
-Alumina,1.5deg,Rest of Asia,2030,11640534.52
-Alumina,1.5deg,Africa,2030,0
-Alumina,1.5deg,Oceania,2030,20039640.01
-Alumina,1.5deg,Russia,2030,2598422.217
-Alumina,1.5deg,China,2031,71347706.69
-Alumina,1.5deg,Europe,2031,6767428
-Alumina,1.5deg,North America,2031,2090747
-Alumina,1.5deg,Latin America,2031,11217819
-Alumina,1.5deg,Middle East,2031,4564690.4
-Alumina,1.5deg,Rest of Asia,2031,11679782.94
-Alumina,1.5deg,Africa,2031,0
-Alumina,1.5deg,Oceania,2031,20291866.48
-Alumina,1.5deg,Russia,2031,2631126.94
-Alumina,1.5deg,China,2032,74820508.1
-Alumina,1.5deg,Europe,2032,6767428
-Alumina,1.5deg,North America,2032,2090747
-Alumina,1.5deg,Latin America,2032,11217819
-Alumina,1.5deg,Middle East,2032,4564690.4
-Alumina,1.5deg,Rest of Asia,2032,11721130.62
-Alumina,1.5deg,Africa,2032,0
-Alumina,1.5deg,Oceania,2032,20557583.62
-Alumina,1.5deg,Russia,2032,2665580.918
-Alumina,1.5deg,China,2033,73853024.79
-Alumina,1.5deg,Europe,2033,6767428
-Alumina,1.5deg,North America,2033,2090747
-Alumina,1.5deg,Latin America,2033,11217819
-Alumina,1.5deg,Middle East,2033,4564690.4
-Alumina,1.5deg,Rest of Asia,2033,11709611.62
-Alumina,1.5deg,Africa,2033,0
-Alumina,1.5deg,Oceania,2033,20483557.82
-Alumina,1.5deg,Russia,2033,2655982.428
-Alumina,1.5deg,China,2034,73801523.28
-Alumina,1.5deg,Europe,2034,6767428
-Alumina,1.5deg,North America,2034,2090747
-Alumina,1.5deg,Latin America,2034,11217819
-Alumina,1.5deg,Middle East,2034,4564690.4
-Alumina,1.5deg,Rest of Asia,2034,11708998.44
-Alumina,1.5deg,Africa,2034,0
-Alumina,1.5deg,Oceania,2034,20479617.25
-Alumina,1.5deg,Russia,2034,2655471.477
-Alumina,1.5deg,China,2035,74058543.53
-Alumina,1.5deg,Europe,2035,6767428
-Alumina,1.5deg,North America,2035,2090747
-Alumina,1.5deg,Latin America,2035,11217819
-Alumina,1.5deg,Middle East,2035,4564690.4
-Alumina,1.5deg,Rest of Asia,2035,11712058.56
-Alumina,1.5deg,Africa,2035,0
-Alumina,1.5deg,Oceania,2035,20499282.84
-Alumina,1.5deg,Russia,2035,2658021.398
-Alumina,1.5deg,China,2036,74818278.02
-Alumina,1.5deg,Europe,2036,6767428
-Alumina,1.5deg,North America,2036,2090747
-Alumina,1.5deg,Latin America,2036,11217819
-Alumina,1.5deg,Middle East,2036,4564690.4
-Alumina,1.5deg,Rest of Asia,2036,11721104.06
-Alumina,1.5deg,Africa,2036,0
-Alumina,1.5deg,Oceania,2036,20557412.99
-Alumina,1.5deg,Russia,2036,2665558.793
-Alumina,1.5deg,China,2037,75134928.91
-Alumina,1.5deg,Europe,2037,6767428
-Alumina,1.5deg,North America,2037,2090747
-Alumina,1.5deg,Latin America,2037,11217819
-Alumina,1.5deg,Middle East,2037,4564690.4
-Alumina,1.5deg,Rest of Asia,2037,11724874.16
-Alumina,1.5deg,Africa,2037,0
-Alumina,1.5deg,Oceania,2037,20581641.14
-Alumina,1.5deg,Russia,2037,2668700.315
-Alumina,1.5deg,China,2038,75683117.14
-Alumina,1.5deg,Europe,2038,6767428
-Alumina,1.5deg,North America,2038,2090747
-Alumina,1.5deg,Latin America,2038,11217819
-Alumina,1.5deg,Middle East,2038,4564690.4
-Alumina,1.5deg,Rest of Asia,2038,11731400.96
-Alumina,1.5deg,Africa,2038,0
-Alumina,1.5deg,Oceania,2038,20623585.09
-Alumina,1.5deg,Russia,2038,2674138.941
-Alumina,1.5deg,China,2039,76459185.88
-Alumina,1.5deg,Europe,2039,6767428
-Alumina,1.5deg,North America,2039,2090747
-Alumina,1.5deg,Latin America,2039,11217819
-Alumina,1.5deg,Middle East,2039,4564690.4
-Alumina,1.5deg,Rest of Asia,2039,11740640.95
-Alumina,1.5deg,Africa,2039,0
-Alumina,1.5deg,Oceania,2039,20682965.04
-Alumina,1.5deg,Russia,2039,2681838.389
-Alumina,1.5deg,China,2040,77631144.89
-Alumina,1.5deg,Europe,2040,6767428
-Alumina,1.5deg,North America,2040,2090747
-Alumina,1.5deg,Latin America,2040,11217819
-Alumina,1.5deg,Middle East,2040,4564690.4
-Alumina,1.5deg,Rest of Asia,2040,11754594.46
-Alumina,1.5deg,Africa,2040,0
-Alumina,1.5deg,Oceania,2040,20772636.04
-Alumina,1.5deg,Russia,2040,2693465.5
-Alumina,1.5deg,China,2041,79227744.37
-Alumina,1.5deg,Europe,2041,6767428
-Alumina,1.5deg,North America,2041,2090747
-Alumina,1.5deg,Latin America,2041,11217819
-Alumina,1.5deg,Middle East,2041,4564690.4
-Alumina,1.5deg,Rest of Asia,2041,11773603.81
-Alumina,1.5deg,Africa,2041,0
-Alumina,1.5deg,Oceania,2041,20894797.89
-Alumina,1.5deg,Russia,2041,2709305.509
-Alumina,1.5deg,China,2042,78758917.41
-Alumina,1.5deg,Europe,2042,6767428
-Alumina,1.5deg,North America,2042,2090747
-Alumina,1.5deg,Latin America,2042,11217819
-Alumina,1.5deg,Middle East,2042,4564690.4
-Alumina,1.5deg,Rest of Asia,2042,11768021.89
-Alumina,1.5deg,Africa,2042,0
-Alumina,1.5deg,Oceania,2042,20858926.17
-Alumina,1.5deg,Russia,2042,2704654.234
-Alumina,1.5deg,China,2043,77515354.74
-Alumina,1.5deg,Europe,2043,6767428
-Alumina,1.5deg,North America,2043,2090747
-Alumina,1.5deg,Latin America,2043,11217819
-Alumina,1.5deg,Middle East,2043,4564690.4
-Alumina,1.5deg,Rest of Asia,2043,11753215.85
-Alumina,1.5deg,Africa,2043,0
-Alumina,1.5deg,Oceania,2043,20763776.5
-Alumina,1.5deg,Russia,2043,2692316.736
-Alumina,1.5deg,China,2044,76603198.68
-Alumina,1.5deg,Europe,2044,6767428
-Alumina,1.5deg,North America,2044,2090747
-Alumina,1.5deg,Latin America,2044,11217819
-Alumina,1.5deg,Middle East,2044,4564690.4
-Alumina,1.5deg,Rest of Asia,2044,11742355.59
-Alumina,1.5deg,Africa,2044,0
-Alumina,1.5deg,Oceania,2044,20693984
-Alumina,1.5deg,Russia,2044,2683267.153
-Alumina,1.5deg,China,2045,75717582.89
-Alumina,1.5deg,Europe,2045,6767428
-Alumina,1.5deg,North America,2045,2090747
-Alumina,1.5deg,Latin America,2045,11217819
-Alumina,1.5deg,Middle East,2045,4564690.4
-Alumina,1.5deg,Rest of Asia,2045,11731811.32
-Alumina,1.5deg,Africa,2045,0
-Alumina,1.5deg,Oceania,2045,20626222.19
-Alumina,1.5deg,Russia,2045,2674480.878
-Alumina,1.5deg,China,2046,74871318.51
-Alumina,1.5deg,Europe,2046,6767428
-Alumina,1.5deg,North America,2046,2090747
-Alumina,1.5deg,Latin America,2046,11217819
-Alumina,1.5deg,Middle East,2046,4564690.4
-Alumina,1.5deg,Rest of Asia,2046,11721735.57
-Alumina,1.5deg,Africa,2046,0
-Alumina,1.5deg,Oceania,2046,20561471.31
-Alumina,1.5deg,Russia,2046,2666085.013
-Alumina,1.5deg,China,2047,74071849
-Alumina,1.5deg,Europe,2047,6767428
-Alumina,1.5deg,North America,2047,2090747
-Alumina,1.5deg,Latin America,2047,11217819
-Alumina,1.5deg,Middle East,2047,4564690.4
-Alumina,1.5deg,Rest of Asia,2047,11712216.97
-Alumina,1.5deg,Africa,2047,0
-Alumina,1.5deg,Oceania,2047,20500300.89
-Alumina,1.5deg,Russia,2047,2658153.403
-Alumina,1.5deg,China,2048,73321876.55
-Alumina,1.5deg,Europe,2048,6767428
-Alumina,1.5deg,North America,2048,2090747
-Alumina,1.5deg,Latin America,2048,11217819
-Alumina,1.5deg,Middle East,2048,4564690.4
-Alumina,1.5deg,Rest of Asia,2048,11703287.69
-Alumina,1.5deg,Africa,2048,0
-Alumina,1.5deg,Oceania,2048,20442917.67
-Alumina,1.5deg,Russia,2048,2650712.859
-Alumina,1.5deg,China,2049,72630758.63
-Alumina,1.5deg,Europe,2049,6767428
-Alumina,1.5deg,North America,2049,2090747
-Alumina,1.5deg,Latin America,2049,11217819
-Alumina,1.5deg,Middle East,2049,4564690.4
-Alumina,1.5deg,Rest of Asia,2049,11695059.14
-Alumina,1.5deg,Africa,2049,0
-Alumina,1.5deg,Oceania,2049,20390037.63
-Alumina,1.5deg,Russia,2049,2643856.215
-Alumina,1.5deg,China,2050,72011781.5
-Alumina,1.5deg,Europe,2050,6767428
-Alumina,1.5deg,North America,2050,2090747
-Alumina,1.5deg,Latin America,2050,11217819
-Alumina,1.5deg,Middle East,2050,4564690.4
-Alumina,1.5deg,Rest of Asia,2050,11687689.51
-Alumina,1.5deg,Africa,2050,0
-Alumina,1.5deg,Oceania,2050,20342677.35
-Alumina,1.5deg,Russia,2050,2637715.287
+,product,scenario,region,year,value
+0,Alumina,BAU,China,2020,67463000.0
+1,Alumina,BAU,Europe,2020,6767428.0
+2,Alumina,BAU,North America,2020,2090747.0
+3,Alumina,BAU,Latin America,2020,11217819.0
+4,Alumina,BAU,Middle East,2020,3969296.0
+5,Alumina,BAU,Rest of Asia,2020,11749049.22
+6,Alumina,BAU,Africa,2020,0.0
+7,Alumina,BAU,Oceania,2020,20737000.0
+8,Alumina,BAU,Russia,2020,2688844.785
+9,Alumina,BAU,China,2021,70161520.0
+10,Alumina,BAU,Europe,2021,6767428.0
+11,Alumina,BAU,North America,2021,2090747.0
+12,Alumina,BAU,Latin America,2021,11217819.0
+13,Alumina,BAU,Middle East,2021,4564690.4
+14,Alumina,BAU,Rest of Asia,2021,11742491.44
+15,Alumina,BAU,Africa,2021,0.0
+16,Alumina,BAU,Oceania,2021,20694857.04
+17,Alumina,BAU,Russia,2021,2683380.354
+18,Alumina,BAU,China,2022,68758289.6
+19,Alumina,BAU,Europe,2022,6767428.0
+20,Alumina,BAU,North America,2022,2090747.0
+21,Alumina,BAU,Latin America,2022,11217819.0
+22,Alumina,BAU,Middle East,2022,4564690.4
+23,Alumina,BAU,Rest of Asia,2022,11368270.99
+24,Alumina,BAU,Africa,2022,0.0
+25,Alumina,BAU,Oceania,2022,18289962.77
+26,Alumina,BAU,Russia,2022,2371551.864
+27,Alumina,BAU,China,2023,68758289.6
+28,Alumina,BAU,Europe,2023,6767428.0
+29,Alumina,BAU,North America,2023,2090747.0
+30,Alumina,BAU,Latin America,2023,11217819.0
+31,Alumina,BAU,Middle East,2023,4564690.4
+32,Alumina,BAU,Rest of Asia,2023,11272383.98
+33,Alumina,BAU,Africa,2023,0.0
+34,Alumina,BAU,Oceania,2023,17673753.5
+35,Alumina,BAU,Russia,2023,2291651.634
+36,Alumina,BAU,China,2024,69445872.5
+37,Alumina,BAU,Europe,2024,6767428.0
+38,Alumina,BAU,North America,2024,2090747.0
+39,Alumina,BAU,Latin America,2024,11217819.0
+40,Alumina,BAU,Middle East,2024,4564690.4
+41,Alumina,BAU,Rest of Asia,2024,11310913.64
+42,Alumina,BAU,Africa,2024,0.0
+43,Alumina,BAU,Oceania,2024,17921360.91
+44,Alumina,BAU,Russia,2024,2323757.429
+45,Alumina,BAU,China,2025,67362496.32
+46,Alumina,BAU,Europe,2025,6767428.0
+47,Alumina,BAU,North America,2025,2090747.0
+48,Alumina,BAU,Latin America,2025,11217819.0
+49,Alumina,BAU,Middle East,2025,4564690.4
+50,Alumina,BAU,Rest of Asia,2025,11337551.71
+51,Alumina,BAU,Africa,2025,0.0
+52,Alumina,BAU,Oceania,2025,18092548.07
+53,Alumina,BAU,Russia,2025,2345954.261
+54,Alumina,BAU,China,2026,69383371.21
+55,Alumina,BAU,Europe,2026,6767428.0
+56,Alumina,BAU,North America,2026,2090747.0
+57,Alumina,BAU,Latin America,2026,11217819.0
+58,Alumina,BAU,Middle East,2026,4564690.4
+59,Alumina,BAU,Rest of Asia,2026,11227961.32
+60,Alumina,BAU,Africa,2026,0.0
+61,Alumina,BAU,Oceania,2026,17388275.23
+62,Alumina,BAU,Russia,2026,2254635.346
+63,Alumina,BAU,China,2027,67301870.07
+64,Alumina,BAU,Europe,2027,6767428.0
+65,Alumina,BAU,North America,2027,2090747.0
+66,Alumina,BAU,Latin America,2027,11217819.0
+67,Alumina,BAU,Middle East,2027,4564690.4
+68,Alumina,BAU,Rest of Asia,2027,11392587.51
+69,Alumina,BAU,Africa,2027,0.0
+70,Alumina,BAU,Oceania,2027,18446230.7
+71,Alumina,BAU,Russia,2027,2391814.208
+72,Alumina,BAU,China,2028,68477846.75
+73,Alumina,BAU,Europe,2028,6767428.0
+74,Alumina,BAU,North America,2028,2090747.0
+75,Alumina,BAU,Latin America,2028,11217819.0
+76,Alumina,BAU,Middle East,2028,4564690.4
+77,Alumina,BAU,Rest of Asia,2028,11478014.27
+78,Alumina,BAU,Africa,2028,0.0
+79,Alumina,BAU,Oceania,2028,18995218.16
+80,Alumina,BAU,Russia,2028,2462998.181
+81,Alumina,BAU,China,2029,69847456.78
+82,Alumina,BAU,Europe,2029,6767428.0
+83,Alumina,BAU,North America,2029,2090747.0
+84,Alumina,BAU,Latin America,2029,11217819.0
+85,Alumina,BAU,Middle East,2029,4564690.4
+86,Alumina,BAU,Rest of Asia,2029,11567558.12
+87,Alumina,BAU,Africa,2029,0.0
+88,Alumina,BAU,Oceania,2029,19570663.71
+89,Alumina,BAU,Russia,2029,2537612.819
+90,Alumina,BAU,China,2030,67494792.34
+91,Alumina,BAU,Europe,2030,6767428.0
+92,Alumina,BAU,North America,2030,2090747.0
+93,Alumina,BAU,Latin America,2030,11217819.0
+94,Alumina,BAU,Middle East,2030,4564690.4
+95,Alumina,BAU,Rest of Asia,2030,11622849.97
+96,Alumina,BAU,Africa,2030,0.0
+97,Alumina,BAU,Oceania,2030,19925991.87
+98,Alumina,BAU,Russia,2030,2583686.132
+99,Alumina,BAU,China,2031,72636753.08
+100,Alumina,BAU,Europe,2031,6767428.0
+101,Alumina,BAU,North America,2031,2090747.0
+102,Alumina,BAU,Latin America,2031,11217819.0
+103,Alumina,BAU,Middle East,2031,4564690.4
+104,Alumina,BAU,Rest of Asia,2031,11719795.74
+105,Alumina,BAU,Africa,2031,0.0
+106,Alumina,BAU,Oceania,2031,20549005.15
+107,Alumina,BAU,Russia,2031,2664468.598
+108,Alumina,BAU,China,2032,77996812.27
+109,Alumina,BAU,Europe,2032,6767428.0
+110,Alumina,BAU,North America,2032,2090747.0
+111,Alumina,BAU,Latin America,2032,11217819.0
+112,Alumina,BAU,Middle East,2032,4564690.4
+113,Alumina,BAU,Rest of Asia,2032,11820276.48
+114,Alumina,BAU,Africa,2032,0.0
+115,Alumina,BAU,Oceania,2032,21194735.62
+116,Alumina,BAU,Russia,2032,2748196.669
+117,Alumina,BAU,China,2033,79107356.4
+118,Alumina,BAU,Europe,2033,6767428.0
+119,Alumina,BAU,North America,2033,2090747.0
+120,Alumina,BAU,Latin America,2033,11217819.0
+121,Alumina,BAU,Middle East,2033,4564690.4
+122,Alumina,BAU,Rest of Asia,2033,11831176.73
+123,Alumina,BAU,Africa,2033,0.0
+124,Alumina,BAU,Oceania,2033,21264785.15
+125,Alumina,BAU,Russia,2033,2757279.58
+126,Alumina,BAU,China,2034,81098920.18
+127,Alumina,BAU,Europe,2034,6767428.0
+128,Alumina,BAU,North America,2034,2090747.0
+129,Alumina,BAU,Latin America,2034,11217819.0
+130,Alumina,BAU,Middle East,2034,4564690.4
+131,Alumina,BAU,Rest of Asia,2034,11850724.41
+132,Alumina,BAU,Africa,2034,0.0
+133,Alumina,BAU,Oceania,2034,21390406.55
+134,Alumina,BAU,Russia,2034,2773568.168
+135,Alumina,BAU,China,2035,81098920.18
+136,Alumina,BAU,Europe,2035,6767428.0
+137,Alumina,BAU,North America,2035,2090747.0
+138,Alumina,BAU,Latin America,2035,11217819.0
+139,Alumina,BAU,Middle East,2035,4564690.4
+140,Alumina,BAU,Rest of Asia,2035,12150333.72
+141,Alumina,BAU,Africa,2035,0.0
+142,Alumina,BAU,Oceania,2035,23315818.95
+143,Alumina,BAU,Russia,2035,3023225.066
+144,Alumina,BAU,China,2036,81098920.18
+145,Alumina,BAU,Europe,2036,6767428.0
+146,Alumina,BAU,North America,2036,2090747.0
+147,Alumina,BAU,Latin America,2036,11217819.0
+148,Alumina,BAU,Middle East,2036,4564690.4
+149,Alumina,BAU,Rest of Asia,2036,12508962.5
+150,Alumina,BAU,Africa,2036,0.0
+151,Alumina,BAU,Oceania,2036,25620514.76
+152,Alumina,BAU,Russia,2036,3322061.412
+153,Alumina,BAU,China,2037,81098920.18
+154,Alumina,BAU,Europe,2037,6767428.0
+155,Alumina,BAU,North America,2037,2090747.0
+156,Alumina,BAU,Latin America,2037,11217819.0
+157,Alumina,BAU,Middle East,2037,4564690.4
+158,Alumina,BAU,Rest of Asia,2037,12779538.75
+159,Alumina,BAU,Africa,2037,0.0
+160,Alumina,BAU,Oceania,2037,27359348.8
+161,Alumina,BAU,Russia,2037,3547525.791
+162,Alumina,BAU,China,2038,81098920.18
+163,Alumina,BAU,Europe,2038,6767428.0
+164,Alumina,BAU,North America,2038,2090747.0
+165,Alumina,BAU,Latin America,2038,11217819.0
+166,Alumina,BAU,Middle East,2038,4564690.4
+167,Alumina,BAU,Rest of Asia,2038,13072064.39
+168,Alumina,BAU,Africa,2038,0.0
+169,Alumina,BAU,Oceania,2038,29239238.68
+170,Alumina,BAU,Russia,2038,3791280.051
+171,Alumina,BAU,China,2039,81098920.18
+172,Alumina,BAU,Europe,2039,6767428.0
+173,Alumina,BAU,North America,2039,2090747.0
+174,Alumina,BAU,Latin America,2039,11217819.0
+175,Alumina,BAU,Middle East,2039,4564690.4
+176,Alumina,BAU,Rest of Asia,2039,13390341.47
+177,Alumina,BAU,Africa,2039,0.0
+178,Alumina,BAU,Oceania,2039,31284617.85
+179,Alumina,BAU,Russia,2039,4056492.335
+180,Alumina,BAU,China,2040,81098920.18
+181,Alumina,BAU,Europe,2040,6767428.0
+182,Alumina,BAU,North America,2040,2090747.0
+183,Alumina,BAU,Latin America,2040,11217819.0
+184,Alumina,BAU,Middle East,2040,4564690.4
+185,Alumina,BAU,Rest of Asia,2040,13734434.09
+186,Alumina,BAU,Africa,2040,0.0
+187,Alumina,BAU,Oceania,2040,33495898.32
+188,Alumina,BAU,Russia,2040,4343216.064
+189,Alumina,BAU,China,2041,81098920.18
+190,Alumina,BAU,Europe,2041,6767428.0
+191,Alumina,BAU,North America,2041,2090747.0
+192,Alumina,BAU,Latin America,2041,11217819.0
+193,Alumina,BAU,Middle East,2041,4564690.4
+194,Alumina,BAU,Rest of Asia,2041,14105742.67
+195,Alumina,BAU,Africa,2041,0.0
+196,Alumina,BAU,Oceania,2041,35882079.66
+197,Alumina,BAU,Russia,2041,4652618.159
+198,Alumina,BAU,China,2042,81098920.18
+199,Alumina,BAU,Europe,2042,6767428.0
+200,Alumina,BAU,North America,2042,2090747.0
+201,Alumina,BAU,Latin America,2042,11217819.0
+202,Alumina,BAU,Middle East,2042,4564690.4
+203,Alumina,BAU,Rest of Asia,2042,14248240.13
+204,Alumina,BAU,Africa,2042,0.0
+205,Alumina,BAU,Oceania,2042,36797826.88
+206,Alumina,BAU,Russia,2042,4771357.712
+207,Alumina,BAU,China,2043,81098920.18
+208,Alumina,BAU,Europe,2043,6767428.0
+209,Alumina,BAU,North America,2043,2090747.0
+210,Alumina,BAU,Latin America,2043,11217819.0
+211,Alumina,BAU,Middle East,2043,4564690.4
+212,Alumina,BAU,Rest of Asia,2043,14285478.05
+213,Alumina,BAU,Africa,2043,0.0
+214,Alumina,BAU,Oceania,2043,37037133.01
+215,Alumina,BAU,Russia,2043,4802387.13
+216,Alumina,BAU,China,2044,81098920.18
+217,Alumina,BAU,Europe,2044,6767428.0
+218,Alumina,BAU,North America,2044,2090747.0
+219,Alumina,BAU,Latin America,2044,11217819.0
+220,Alumina,BAU,Middle East,2044,4564690.4
+221,Alumina,BAU,Rest of Asia,2044,14353928.8
+222,Alumina,BAU,Africa,2044,0.0
+223,Alumina,BAU,Oceania,2044,37477025.64
+224,Alumina,BAU,Russia,2044,4859425.42
+225,Alumina,BAU,China,2045,81098920.18
+226,Alumina,BAU,Europe,2045,6767428.0
+227,Alumina,BAU,North America,2045,2090747.0
+228,Alumina,BAU,Latin America,2045,11217819.0
+229,Alumina,BAU,Middle East,2045,4564690.4
+230,Alumina,BAU,Rest of Asia,2045,14427515.69
+231,Alumina,BAU,Africa,2045,0.0
+232,Alumina,BAU,Oceania,2045,37949925.2
+233,Alumina,BAU,Russia,2045,4920743.523
+234,Alumina,BAU,China,2046,81098920.18
+235,Alumina,BAU,Europe,2046,6767428.0
+236,Alumina,BAU,North America,2046,2090747.0
+237,Alumina,BAU,Latin America,2046,11217819.0
+238,Alumina,BAU,Middle East,2046,4564690.4
+239,Alumina,BAU,Rest of Asia,2046,14507893.47
+240,Alumina,BAU,Africa,2046,0.0
+241,Alumina,BAU,Oceania,2046,38466465.79
+242,Alumina,BAU,Russia,2046,4987720.303
+243,Alumina,BAU,China,2047,81098920.18
+244,Alumina,BAU,Europe,2047,6767428.0
+245,Alumina,BAU,North America,2047,2090747.0
+246,Alumina,BAU,Latin America,2047,11217819.0
+247,Alumina,BAU,Middle East,2047,4564690.4
+248,Alumina,BAU,Rest of Asia,2047,14596354.78
+249,Alumina,BAU,Africa,2047,0.0
+250,Alumina,BAU,Oceania,2047,39034954.49
+251,Alumina,BAU,Russia,2047,5061432.888
+252,Alumina,BAU,China,2048,81098920.18
+253,Alumina,BAU,Europe,2048,6767428.0
+254,Alumina,BAU,North America,2048,2090747.0
+255,Alumina,BAU,Latin America,2048,11217819.0
+256,Alumina,BAU,Middle East,2048,4564690.4
+257,Alumina,BAU,Rest of Asia,2048,14694004.97
+258,Alumina,BAU,Africa,2048,0.0
+259,Alumina,BAU,Oceania,2048,39662494.74
+260,Alumina,BAU,Russia,2048,5142802.34
+261,Alumina,BAU,China,2049,81098920.18
+262,Alumina,BAU,Europe,2049,6767428.0
+263,Alumina,BAU,North America,2049,2090747.0
+264,Alumina,BAU,Latin America,2049,11217819.0
+265,Alumina,BAU,Middle East,2049,4564690.4
+266,Alumina,BAU,Rest of Asia,2049,14803052.7
+267,Alumina,BAU,Africa,2049,0.0
+268,Alumina,BAU,Oceania,2049,40363280.19
+269,Alumina,BAU,Russia,2049,5233669.066
+270,Alumina,BAU,China,2050,81098920.18
+271,Alumina,BAU,Europe,2050,6767428.0
+272,Alumina,BAU,North America,2050,2090747.0
+273,Alumina,BAU,Latin America,2050,11217819.0
+274,Alumina,BAU,Middle East,2050,4564690.4
+275,Alumina,BAU,Rest of Asia,2050,14926322.61
+276,Alumina,BAU,Africa,2050,0.0
+277,Alumina,BAU,Oceania,2050,41155463.26
+278,Alumina,BAU,Russia,2050,5336386.785
+279,Alumina,1.5deg,China,2020,67463000.0
+280,Alumina,1.5deg,Europe,2020,6767428.0
+281,Alumina,1.5deg,North America,2020,2090747.0
+282,Alumina,1.5deg,Latin America,2020,11217819.0
+283,Alumina,1.5deg,Middle East,2020,3969296.0
+284,Alumina,1.5deg,Rest of Asia,2020,11749049.22
+285,Alumina,1.5deg,Africa,2020,0.0
+286,Alumina,1.5deg,Oceania,2020,20737000.0
+287,Alumina,1.5deg,Russia,2020,2688844.785
+288,Alumina,1.5deg,China,2021,70161520.0
+289,Alumina,1.5deg,Europe,2021,6767428.0
+290,Alumina,1.5deg,North America,2021,2090747.0
+291,Alumina,1.5deg,Latin America,2021,11217819.0
+292,Alumina,1.5deg,Middle East,2021,4564690.4
+293,Alumina,1.5deg,Rest of Asia,2021,11816390.16
+294,Alumina,1.5deg,Africa,2021,0.0
+295,Alumina,1.5deg,Oceania,2021,21169760.58
+296,Alumina,1.5deg,Russia,2021,2744958.303
+297,Alumina,1.5deg,China,2022,67147668.63
+298,Alumina,1.5deg,Europe,2022,6767428.0
+299,Alumina,1.5deg,North America,2022,2090747.0
+300,Alumina,1.5deg,Latin America,2022,11217819.0
+301,Alumina,1.5deg,Middle East,2022,4564690.4
+302,Alumina,1.5deg,Rest of Asia,2022,11629776.68
+303,Alumina,1.5deg,Africa,2022,0.0
+304,Alumina,1.5deg,Oceania,2022,19970505.73
+305,Alumina,1.5deg,Russia,2022,2589457.982
+306,Alumina,1.5deg,China,2023,66376560.75
+307,Alumina,1.5deg,Europe,2023,6767428.0
+308,Alumina,1.5deg,North America,2023,2090747.0
+309,Alumina,1.5deg,Latin America,2023,11217819.0
+310,Alumina,1.5deg,Middle East,2023,4564690.4
+311,Alumina,1.5deg,Rest of Asia,2023,11620595.76
+312,Alumina,1.5deg,Africa,2023,0.0
+313,Alumina,1.5deg,Oceania,2023,19911505.36
+314,Alumina,1.5deg,Russia,2023,2581807.751
+315,Alumina,1.5deg,China,2024,67247306.5
+316,Alumina,1.5deg,Europe,2024,6767428.0
+317,Alumina,1.5deg,North America,2024,2090747.0
+318,Alumina,1.5deg,Latin America,2024,11217819.0
+319,Alumina,1.5deg,Middle East,2024,4564690.4
+320,Alumina,1.5deg,Rest of Asia,2024,11630962.98
+321,Alumina,1.5deg,Africa,2024,0.0
+322,Alumina,1.5deg,Oceania,2024,19978129.4
+323,Alumina,1.5deg,Russia,2024,2590446.498
+324,Alumina,1.5deg,China,2025,66097760.13
+325,Alumina,1.5deg,Europe,2025,6767428.0
+326,Alumina,1.5deg,North America,2025,2090747.0
+327,Alumina,1.5deg,Latin America,2025,11217819.0
+328,Alumina,1.5deg,Middle East,2025,4564690.4
+329,Alumina,1.5deg,Rest of Asia,2025,11617276.32
+330,Alumina,1.5deg,Africa,2025,0.0
+331,Alumina,1.5deg,Oceania,2025,19890173.27
+332,Alumina,1.5deg,Russia,2025,2579041.745
+333,Alumina,1.5deg,China,2026,64934065.94
+334,Alumina,1.5deg,Europe,2026,6767428.0
+335,Alumina,1.5deg,North America,2026,2090747.0
+336,Alumina,1.5deg,Latin America,2026,11217819.0
+337,Alumina,1.5deg,Middle East,2026,4564690.4
+338,Alumina,1.5deg,Rest of Asia,2026,11603421.21
+339,Alumina,1.5deg,Africa,2026,0.0
+340,Alumina,1.5deg,Oceania,2026,19801134.64
+341,Alumina,1.5deg,Russia,2026,2567496.629
+342,Alumina,1.5deg,China,2027,62730396.57
+343,Alumina,1.5deg,Europe,2027,6767428.0
+344,Alumina,1.5deg,North America,2027,2090747.0
+345,Alumina,1.5deg,Latin America,2027,11217819.0
+346,Alumina,1.5deg,Middle East,2027,4564690.4
+347,Alumina,1.5deg,Rest of Asia,2027,11577184.0
+348,Alumina,1.5deg,Africa,2027,0.0
+349,Alumina,1.5deg,Oceania,2027,19632523.58
+350,Alumina,1.5deg,Russia,2027,2545633.825
+351,Alumina,1.5deg,China,2028,63203144.47
+352,Alumina,1.5deg,Europe,2028,6767428.0
+353,Alumina,1.5deg,North America,2028,2090747.0
+354,Alumina,1.5deg,Latin America,2028,11217819.0
+355,Alumina,1.5deg,Middle East,2028,4564690.4
+356,Alumina,1.5deg,Rest of Asia,2028,11582812.61
+357,Alumina,1.5deg,Africa,2028,0.0
+358,Alumina,1.5deg,Oceania,2028,19668695.31
+359,Alumina,1.5deg,Russia,2028,2550324.0
+360,Alumina,1.5deg,China,2029,63846354.01
+361,Alumina,1.5deg,Europe,2029,6767428.0
+362,Alumina,1.5deg,North America,2029,2090747.0
+363,Alumina,1.5deg,Latin America,2029,11217819.0
+364,Alumina,1.5deg,Middle East,2029,4564690.4
+365,Alumina,1.5deg,Rest of Asia,2029,11590470.75
+366,Alumina,1.5deg,Africa,2029,0.0
+367,Alumina,1.5deg,Oceania,2029,19717909.69
+368,Alumina,1.5deg,Russia,2029,2556705.34
+369,Alumina,1.5deg,China,2030,68051222.02
+370,Alumina,1.5deg,Europe,2030,6767428.0
+371,Alumina,1.5deg,North America,2030,2090747.0
+372,Alumina,1.5deg,Latin America,2030,11217819.0
+373,Alumina,1.5deg,Middle East,2030,4564690.4
+374,Alumina,1.5deg,Rest of Asia,2030,11640534.52
+375,Alumina,1.5deg,Africa,2030,0.0
+376,Alumina,1.5deg,Oceania,2030,20039640.01
+377,Alumina,1.5deg,Russia,2030,2598422.217
+378,Alumina,1.5deg,China,2031,71347706.69
+379,Alumina,1.5deg,Europe,2031,6767428.0
+380,Alumina,1.5deg,North America,2031,2090747.0
+381,Alumina,1.5deg,Latin America,2031,11217819.0
+382,Alumina,1.5deg,Middle East,2031,4564690.4
+383,Alumina,1.5deg,Rest of Asia,2031,11679782.94
+384,Alumina,1.5deg,Africa,2031,0.0
+385,Alumina,1.5deg,Oceania,2031,20291866.48
+386,Alumina,1.5deg,Russia,2031,2631126.94
+387,Alumina,1.5deg,China,2032,74820508.1
+388,Alumina,1.5deg,Europe,2032,6767428.0
+389,Alumina,1.5deg,North America,2032,2090747.0
+390,Alumina,1.5deg,Latin America,2032,11217819.0
+391,Alumina,1.5deg,Middle East,2032,4564690.4
+392,Alumina,1.5deg,Rest of Asia,2032,11721130.62
+393,Alumina,1.5deg,Africa,2032,0.0
+394,Alumina,1.5deg,Oceania,2032,20557583.62
+395,Alumina,1.5deg,Russia,2032,2665580.918
+396,Alumina,1.5deg,China,2033,73853024.79
+397,Alumina,1.5deg,Europe,2033,6767428.0
+398,Alumina,1.5deg,North America,2033,2090747.0
+399,Alumina,1.5deg,Latin America,2033,11217819.0
+400,Alumina,1.5deg,Middle East,2033,4564690.4
+401,Alumina,1.5deg,Rest of Asia,2033,11709611.62
+402,Alumina,1.5deg,Africa,2033,0.0
+403,Alumina,1.5deg,Oceania,2033,20483557.82
+404,Alumina,1.5deg,Russia,2033,2655982.428
+405,Alumina,1.5deg,China,2034,73801523.28
+406,Alumina,1.5deg,Europe,2034,6767428.0
+407,Alumina,1.5deg,North America,2034,2090747.0
+408,Alumina,1.5deg,Latin America,2034,11217819.0
+409,Alumina,1.5deg,Middle East,2034,4564690.4
+410,Alumina,1.5deg,Rest of Asia,2034,11708998.44
+411,Alumina,1.5deg,Africa,2034,0.0
+412,Alumina,1.5deg,Oceania,2034,20479617.25
+413,Alumina,1.5deg,Russia,2034,2655471.477
+414,Alumina,1.5deg,China,2035,74058543.53
+415,Alumina,1.5deg,Europe,2035,6767428.0
+416,Alumina,1.5deg,North America,2035,2090747.0
+417,Alumina,1.5deg,Latin America,2035,11217819.0
+418,Alumina,1.5deg,Middle East,2035,4564690.4
+419,Alumina,1.5deg,Rest of Asia,2035,11712058.56
+420,Alumina,1.5deg,Africa,2035,0.0
+421,Alumina,1.5deg,Oceania,2035,20499282.84
+422,Alumina,1.5deg,Russia,2035,2658021.398
+423,Alumina,1.5deg,China,2036,74818278.02
+424,Alumina,1.5deg,Europe,2036,6767428.0
+425,Alumina,1.5deg,North America,2036,2090747.0
+426,Alumina,1.5deg,Latin America,2036,11217819.0
+427,Alumina,1.5deg,Middle East,2036,4564690.4
+428,Alumina,1.5deg,Rest of Asia,2036,11721104.06
+429,Alumina,1.5deg,Africa,2036,0.0
+430,Alumina,1.5deg,Oceania,2036,20557412.99
+431,Alumina,1.5deg,Russia,2036,2665558.793
+432,Alumina,1.5deg,China,2037,75134928.91
+433,Alumina,1.5deg,Europe,2037,6767428.0
+434,Alumina,1.5deg,North America,2037,2090747.0
+435,Alumina,1.5deg,Latin America,2037,11217819.0
+436,Alumina,1.5deg,Middle East,2037,4564690.4
+437,Alumina,1.5deg,Rest of Asia,2037,11724874.16
+438,Alumina,1.5deg,Africa,2037,0.0
+439,Alumina,1.5deg,Oceania,2037,20581641.14
+440,Alumina,1.5deg,Russia,2037,2668700.315
+441,Alumina,1.5deg,China,2038,75683117.14
+442,Alumina,1.5deg,Europe,2038,6767428.0
+443,Alumina,1.5deg,North America,2038,2090747.0
+444,Alumina,1.5deg,Latin America,2038,11217819.0
+445,Alumina,1.5deg,Middle East,2038,4564690.4
+446,Alumina,1.5deg,Rest of Asia,2038,11731400.96
+447,Alumina,1.5deg,Africa,2038,0.0
+448,Alumina,1.5deg,Oceania,2038,20623585.09
+449,Alumina,1.5deg,Russia,2038,2674138.941
+450,Alumina,1.5deg,China,2039,76459185.88
+451,Alumina,1.5deg,Europe,2039,6767428.0
+452,Alumina,1.5deg,North America,2039,2090747.0
+453,Alumina,1.5deg,Latin America,2039,11217819.0
+454,Alumina,1.5deg,Middle East,2039,4564690.4
+455,Alumina,1.5deg,Rest of Asia,2039,11740640.95
+456,Alumina,1.5deg,Africa,2039,0.0
+457,Alumina,1.5deg,Oceania,2039,20682965.04
+458,Alumina,1.5deg,Russia,2039,2681838.389
+459,Alumina,1.5deg,China,2040,77631144.89
+460,Alumina,1.5deg,Europe,2040,6767428.0
+461,Alumina,1.5deg,North America,2040,2090747.0
+462,Alumina,1.5deg,Latin America,2040,11217819.0
+463,Alumina,1.5deg,Middle East,2040,4564690.4
+464,Alumina,1.5deg,Rest of Asia,2040,11754594.46
+465,Alumina,1.5deg,Africa,2040,0.0
+466,Alumina,1.5deg,Oceania,2040,20772636.04
+467,Alumina,1.5deg,Russia,2040,2693465.5
+468,Alumina,1.5deg,China,2041,79227744.37
+469,Alumina,1.5deg,Europe,2041,6767428.0
+470,Alumina,1.5deg,North America,2041,2090747.0
+471,Alumina,1.5deg,Latin America,2041,11217819.0
+472,Alumina,1.5deg,Middle East,2041,4564690.4
+473,Alumina,1.5deg,Rest of Asia,2041,11773603.81
+474,Alumina,1.5deg,Africa,2041,0.0
+475,Alumina,1.5deg,Oceania,2041,20894797.89
+476,Alumina,1.5deg,Russia,2041,2709305.509
+477,Alumina,1.5deg,China,2042,78758917.41
+478,Alumina,1.5deg,Europe,2042,6767428.0
+479,Alumina,1.5deg,North America,2042,2090747.0
+480,Alumina,1.5deg,Latin America,2042,11217819.0
+481,Alumina,1.5deg,Middle East,2042,4564690.4
+482,Alumina,1.5deg,Rest of Asia,2042,11768021.89
+483,Alumina,1.5deg,Africa,2042,0.0
+484,Alumina,1.5deg,Oceania,2042,20858926.17
+485,Alumina,1.5deg,Russia,2042,2704654.234
+486,Alumina,1.5deg,China,2043,77515354.74
+487,Alumina,1.5deg,Europe,2043,6767428.0
+488,Alumina,1.5deg,North America,2043,2090747.0
+489,Alumina,1.5deg,Latin America,2043,11217819.0
+490,Alumina,1.5deg,Middle East,2043,4564690.4
+491,Alumina,1.5deg,Rest of Asia,2043,11753215.85
+492,Alumina,1.5deg,Africa,2043,0.0
+493,Alumina,1.5deg,Oceania,2043,20763776.5
+494,Alumina,1.5deg,Russia,2043,2692316.736
+495,Alumina,1.5deg,China,2044,76603198.68
+496,Alumina,1.5deg,Europe,2044,6767428.0
+497,Alumina,1.5deg,North America,2044,2090747.0
+498,Alumina,1.5deg,Latin America,2044,11217819.0
+499,Alumina,1.5deg,Middle East,2044,4564690.4
+500,Alumina,1.5deg,Rest of Asia,2044,11742355.59
+501,Alumina,1.5deg,Africa,2044,0.0
+502,Alumina,1.5deg,Oceania,2044,20693984.0
+503,Alumina,1.5deg,Russia,2044,2683267.153
+504,Alumina,1.5deg,China,2045,75717582.89
+505,Alumina,1.5deg,Europe,2045,6767428.0
+506,Alumina,1.5deg,North America,2045,2090747.0
+507,Alumina,1.5deg,Latin America,2045,11217819.0
+508,Alumina,1.5deg,Middle East,2045,4564690.4
+509,Alumina,1.5deg,Rest of Asia,2045,11731811.32
+510,Alumina,1.5deg,Africa,2045,0.0
+511,Alumina,1.5deg,Oceania,2045,20626222.19
+512,Alumina,1.5deg,Russia,2045,2674480.878
+513,Alumina,1.5deg,China,2046,74871318.51
+514,Alumina,1.5deg,Europe,2046,6767428.0
+515,Alumina,1.5deg,North America,2046,2090747.0
+516,Alumina,1.5deg,Latin America,2046,11217819.0
+517,Alumina,1.5deg,Middle East,2046,4564690.4
+518,Alumina,1.5deg,Rest of Asia,2046,11721735.57
+519,Alumina,1.5deg,Africa,2046,0.0
+520,Alumina,1.5deg,Oceania,2046,20561471.31
+521,Alumina,1.5deg,Russia,2046,2666085.013
+522,Alumina,1.5deg,China,2047,74071849.0
+523,Alumina,1.5deg,Europe,2047,6767428.0
+524,Alumina,1.5deg,North America,2047,2090747.0
+525,Alumina,1.5deg,Latin America,2047,11217819.0
+526,Alumina,1.5deg,Middle East,2047,4564690.4
+527,Alumina,1.5deg,Rest of Asia,2047,11712216.97
+528,Alumina,1.5deg,Africa,2047,0.0
+529,Alumina,1.5deg,Oceania,2047,20500300.89
+530,Alumina,1.5deg,Russia,2047,2658153.403
+531,Alumina,1.5deg,China,2048,73321876.55
+532,Alumina,1.5deg,Europe,2048,6767428.0
+533,Alumina,1.5deg,North America,2048,2090747.0
+534,Alumina,1.5deg,Latin America,2048,11217819.0
+535,Alumina,1.5deg,Middle East,2048,4564690.4
+536,Alumina,1.5deg,Rest of Asia,2048,11703287.69
+537,Alumina,1.5deg,Africa,2048,0.0
+538,Alumina,1.5deg,Oceania,2048,20442917.67
+539,Alumina,1.5deg,Russia,2048,2650712.859
+540,Alumina,1.5deg,China,2049,72630758.63
+541,Alumina,1.5deg,Europe,2049,6767428.0
+542,Alumina,1.5deg,North America,2049,2090747.0
+543,Alumina,1.5deg,Latin America,2049,11217819.0
+544,Alumina,1.5deg,Middle East,2049,4564690.4
+545,Alumina,1.5deg,Rest of Asia,2049,11695059.14
+546,Alumina,1.5deg,Africa,2049,0.0
+547,Alumina,1.5deg,Oceania,2049,20390037.63
+548,Alumina,1.5deg,Russia,2049,2643856.215
+549,Alumina,1.5deg,China,2050,72011781.5
+550,Alumina,1.5deg,Europe,2050,6767428.0
+551,Alumina,1.5deg,North America,2050,2090747.0
+552,Alumina,1.5deg,Latin America,2050,11217819.0
+553,Alumina,1.5deg,Middle East,2050,4564690.4
+554,Alumina,1.5deg,Rest of Asia,2050,11687689.51
+555,Alumina,1.5deg,Africa,2050,0.0
+556,Alumina,1.5deg,Oceania,2050,20342677.35
+557,Alumina,1.5deg,Russia,2050,2637715.287
+0,Alumina,1.5deg,Global,2020,126683184.005
+1,Alumina,BAU,Global,2020,126683184.005
+2,Alumina,1.5deg,Global,2021,130533313.443
+3,Alumina,BAU,Global,2021,129922933.234
+4,Alumina,1.5deg,Global,2022,125978093.42199999
+5,Alumina,BAU,Global,2022,125428759.624
+6,Alumina,1.5deg,Global,2023,125131154.021
+7,Alumina,BAU,Global,2023,124636763.114
+8,Alumina,1.5deg,Global,2024,126087529.778
+9,Alumina,BAU,Global,2024,125642588.87900001
+10,Alumina,1.5deg,Global,2025,124824935.86500001
+11,Alumina,BAU,Global,2025,123779234.76099999
+12,Alumina,1.5deg,Global,2026,123546802.81899999
+13,Alumina,BAU,Global,2026,124894927.506
+14,Alumina,1.5deg,Global,2027,121126422.375
+15,Alumina,BAU,Global,2027,124173186.888
+16,Alumina,1.5deg,Global,2028,121645660.78999999
+17,Alumina,BAU,Global,2028,126054761.76099999
+18,Alumina,1.5deg,Global,2029,122352124.19
+19,Alumina,BAU,Global,2029,128163975.829
+20,Alumina,1.5deg,Global,2030,126970503.167
+21,Alumina,BAU,Global,2030,126268004.71200001
+22,Alumina,1.5deg,Global,2031,130591167.45
+23,Alumina,BAU,Global,2031,132210706.968
+24,Alumina,1.5deg,Global,2032,134405487.658
+25,Alumina,BAU,Global,2032,138400705.439
+26,Alumina,1.5deg,Global,2033,133342861.05800001
+27,Alumina,BAU,Global,2033,139601282.26000002
+28,Alumina,1.5deg,Global,2034,133286294.847
+29,Alumina,BAU,Global,2034,141754303.708
+30,Alumina,1.5deg,Global,2035,133568590.728
+31,Alumina,BAU,Global,2035,144228982.316
+32,Alumina,1.5deg,Global,2036,134403038.26299998
+33,Alumina,BAU,Global,2036,147191143.252
+34,Alumina,1.5deg,Global,2037,134750828.925
+35,Alumina,BAU,Global,2037,149426017.921
+36,Alumina,1.5deg,Global,2038,135352926.53100002
+37,Alumina,BAU,Global,2038,151842187.701
+38,Alumina,1.5deg,Global,2039,136205314.659
+39,Alumina,BAU,Global,2039,154471056.235
+40,Alumina,1.5deg,Global,2040,137492525.29
+41,Alumina,BAU,Global,2040,157313153.05400002
+42,Alumina,1.5deg,Global,2041,139246135.979
+43,Alumina,BAU,Global,2041,160380045.069
+44,Alumina,1.5deg,Global,2042,138731204.104
+45,Alumina,BAU,Global,2042,161557029.30200002
+46,Alumina,1.5deg,Global,2043,137365348.22599998
+47,Alumina,BAU,Global,2043,161864602.77
+48,Alumina,1.5deg,Global,2044,136363489.823
+49,Alumina,BAU,Global,2044,162429984.44
+50,Alumina,1.5deg,Global,2045,135390781.678
+51,Alumina,BAU,Global,2045,163037788.993
+52,Alumina,1.5deg,Global,2046,134461294.803
+53,Alumina,BAU,Global,2046,163701684.143
+54,Alumina,1.5deg,Global,2047,133583204.663
+55,Alumina,BAU,Global,2047,164432346.738
+56,Alumina,1.5deg,Global,2048,132759479.169
+57,Alumina,BAU,Global,2048,165238906.63
+58,Alumina,1.5deg,Global,2049,132000396.015
+59,Alumina,BAU,Global,2049,166139606.536
+60,Alumina,1.5deg,Global,2050,131320548.047
+61,Alumina,BAU,Global,2050,167157777.235
