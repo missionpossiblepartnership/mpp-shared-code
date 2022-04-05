@@ -3,34 +3,25 @@ import math
 from collections import defaultdict
 from multiprocessing.sharedctypes import Value
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.calculate.calculate_availablity import update_availability_from_asset
-from mppshared.models.carbon_budget import CarbonBudget
-from mppshared.utility.dataframe_utility import get_emission_columns
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    EMISSION_SCOPES,
-    END_YEAR,
-    GHGS,
-    LOG_LEVEL,
-    MODEL_SCOPE,
-    PRODUCTS,
-    SECTOR,
-    RANK_TYPES,
-    INITIAL_ASSET_DATA_LEVEL,
-    START_YEAR,
-)
+from mppshared.calculate.calculate_availablity import \
+    update_availability_from_asset
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                              EMISSION_SCOPES, END_YEAR, GHGS,
+                              INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL, MODEL_SCOPE,
+                              PRODUCTS, RANK_TYPES, SECTOR, START_YEAR)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import Asset, AssetStack, create_assets
+from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.transition import TransitionRegistry
-from mppshared.utility.dataframe_utility import flatten_columns
+from mppshared.utility.dataframe_utility import (flatten_columns,
+                                                 get_emission_columns)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -548,7 +539,44 @@ class SimulationPathway:
     # TODO: implement
     def make_initial_asset_stack_from_asset_data(self):
         """Make AssetStack from asset-specific data (as opposed to average regional data)."""
-        pass
+        df_stack = self.importer.get_initial_asset_stack()
+        df_stack["number_assets"] = 1
+
+        df_tech_characteristics = self.importer.get_technology_characteristics()
+        df_stack = df_stack.merge(
+            df_tech_characteristics[
+                [
+                    "product",
+                    "region",
+                    "technology",
+                    "technology_classification",
+                    "technology_lifetime",
+                ]
+            ],
+            on=["product", "region", "technology"],
+            how="left",
+        )
+
+        # Create list of assets for every product, region and technology (corresponds to one row in the DataFrame)
+        # TODO: based on distribution of CUF and commissioning year
+        assets = df_stack.apply(
+            lambda row: create_assets(
+                n_assets=row["number_assets"],
+                product=row["product"],
+                technology=row["technology"],
+                region=row["region"],
+                year_commissioned=row["year"] - row["average_age"],
+                annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                cuf=row["average_cuf"],
+                asset_lifetime=row["technology_lifetime"],
+                technology_classification=row["technology_classification"],
+            ),
+            axis=1,
+        ).tolist()
+        assets = [item for sublist in assets for item in sublist]
+
+        # Create AssetStack for model start year
+        return {self.start_year: AssetStack(assets)}
 
     def _get_weighted_average(
         self, df, vars, product, year, methanol_type: str = None, emissions=True
