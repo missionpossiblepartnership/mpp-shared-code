@@ -306,7 +306,6 @@ class SimulationPathway:
         product: str,
         year: int,
         region: str,
-        scenario: str,
     ):
         """
         Get the demand for a product in a given year and region
@@ -324,7 +323,6 @@ class SimulationPathway:
             (df["product"] == product)
             & (df["year"] == year)
             & (df["region"] == region),
-            & (df["scenario"] == scenario),
             "value",
         ].item()
 
