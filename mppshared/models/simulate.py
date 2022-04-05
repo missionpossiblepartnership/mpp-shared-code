@@ -114,6 +114,9 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         pathway=pathway,
     )
 
+    #! Development only: export technology roadmap
+    pathway.output_technology_roadmap()
+
     # Save rankings after they have been adjusted due to MTO
     pathway.save_rankings()
     pathway.save_availability()
