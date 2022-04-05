@@ -1,37 +1,49 @@
 ﻿shorthand,region,country,coordinates,product,technology,annual_production_capacity,year,capacity_factor
-Alum,Oceania,Australia,"-32.192803, 115.778179",Alumina,Natural gas-Boiler Natural gas-Calciner,2190000,1963,0
-Alum,Oceania,Australia,"-32.643451, 115.949544",Alumina,Natural gas-Boiler Natural gas-Calciner,4234000,1972,0
-Alum,Oceania,Australia,"-32.914487, 115.915322",Alumina,Natural gas-Boiler Natural gas-Calciner,2555000,1984,0
-Alum,Oceania,Australia,"-23.865808, 151.290751",Alumina,Coal-Boiler Natural gas-Calciner,3950000,1967,0.936962025
-Alum,Middle East,Azerbaijan,"40.693204, 46.411926",Alumina,Coal-Boiler Oil-Calciner,450000,1933,0
-Alum,Europe,Bosnia and Herzegovina,"44.419125, 19.112116",Alumina,Oil-Boiler Oil-Calciner,600000,1978,0
-Alum,South America,Brazil,"-21.843218, -46.589446",Alumina,Natural gas-Boiler Natural gas-Calciner,390000,1970,0
-Alum,South America,Brazil,"-2.710826, -44.346324",Alumina,Oil-Boiler Oil-Calciner,3830000,1984,1.004699739
-Alum,South America,Brazil,"-23.528225, -47.269735",Alumina,Biomass-Boiler Oil-Calciner,800000,1955,0
-Alum,South America,Brazil,"-1.600239, -48.730275",Alumina,No Data,0,0,0
-Alum,North America,Canada,"48.429356, -71.157885",Alumina,No Data,1560000,1936,0.913
-Alum,Europe,Germany,"53.652962, 9.496364",Alumina,Natural gas-Boiler,1000000,1973,0.9
-Alum,Europe,Greece,"38.361542, 22.694489",Alumina,Natural gas-Boiler Natural gas-Calciner,860000,1966,1.012790698
-Alum,Africa,Guinea,"10.386786, -13.578347",Alumina,Oil-Boiler Oil-Calciner,650000,1999,0.68
-Alum,Rest of Asia,India,"17.594676, 82.748291",Alumina,Coal-Boiler,1500000,2013,0
-Alum,Rest of Asia,India,"22.397845, 82.740433",Alumina,No Data,200000,1974,0
-Alum,Rest of Asia,India,"23.379808, 85.873095",Alumina,Coal-Boiler Oil-Calciner,450000,1948,0.637588889
-Alum,Rest of Asia,India,"19.184771, 83.028059",Alumina,Coal-Boiler Oil-Calciner,1500000,2012,1.035733333
-Alum,Rest of Asia,India,"11.809796, 77.827301",Alumina,No Data,85000,1965,0
-Alum,Rest of Asia,India,"18.772826, 82.917431",Alumina,Coal-Boiler Oil-Calciner,2275000,1986,0.926153846
-Alum,Rest of Asia,India,"19.708692, 83.398615",Alumina,Coal-Boiler Oil-Calciner,2000000,2007,0.750335
-Alum,Rest of Asia,Indonesia,"-2.363759, 110.160065",Alumina,No Data,1000000,2016,1
-Alum,Middle East,Iran,"36.993399, 56.437304",Alumina,Fuel oil-Boiler Natural gas-Calciner,280000,2003,0.834685714
-Alum,Europe,Ireland,"52.629099, -9.057957",Alumina,Natural gas-Boiler Natural gas-Calciner,1990000,1983,0.95
-Alum,Europe,Italy,"39.206656, 8.396895",Alumina,Oil-Boiler Oil-Calciner,1050000,1973,0
-Alum,North America,Jamaica,"18.170779, -77.065048",Alumina,Oil-Boiler Oil-Calciner,625000,1959,0.43
-Alum,Middle East,Kazakhstan,"52.257828, 77.047154",Alumina,Coal-Boiler Natural gas-Calciner,1500000,1964,1
-Alum,Russia,Russia,"59.763534, 60.193574",Alumina,Coal-Boiler Natural gas-Calciner,1030000,1943,0.96
-Alum,Middle East,Saudi Arabia,"27.047209, 49.558893",Alumina,Natural gas-Boiler Natural gas-Calciner,1800000,2016,0.990022778
-Alum,Europe,Turkey,"37.445175, 31.847175",Alumina,Natural gas-Boiler Natural gas-Calciner,200000,1973,0.81407
-Alum,Europe,Ukraine,"47.865645, 35.130917",Alumina,Natural gas-Boiler,245000,1934,0
-Alum,Middle East,United Arab Emirates,"24.786545, 54.730482",Alumina,Natural gas-Boiler Natural gas-Calciner,2000000,2019,1
-Alum,North America,United States,"30.059307, -90.666919",Alumina,Natural gas-Boiler Natural gas-Calciner,1180000,1959,0.974576271
-Alum,South America,Venezuela,"8.292261, -62.815954",Alumina,Oil-Boiler Oil-Calciner,2000000,1977,0
-Alum,Rest of Asia,Vietnam,"11.659493, 107.797649",Alumina,No Data,650000,2012,0
-Alum,Rest of Asia,Vietnam,"11.968334, 107.585122",Alumina,No Data,650000,2017,0.923076923
+Alum,Oceania,Australia,"-32.192803, 115.778179",Alumina,Gas-Boiler + Gas-Calciner,2190000,1963,1
+Alum,Oceania,Australia,"-32.643451, 115.949544",Alumina,Gas-Boiler + Gas-Calciner,4234000,1972,1
+Alum,Oceania,Australia,"-32.914487, 115.915322",Alumina,Gas-Boiler + Gas-Calciner,2555000,1984,1
+Alum,Oceania,Australia,"-23.828357, 151.154210",Alumina,Coal-Boiler + Gas-Calciner,3200000,2004,0.9921875
+Alum,Oceania,Australia,"-23.865808, 151.290751",Alumina,Coal-Boiler + Gas-Calciner,3950000,1967,0.936962025
+Alum,Oceania,Australia,"-33.238330, 116.068500",Alumina,Coal-Boiler + Gas-Calciner,4600000,1984,0.844782609
+Alum,Middle East,Azerbaijan,"40.693204, 46.411926",Alumina,Coal-Boiler + Oil-Calciner,450000,1933,0
+Alum,Europe,Bosnia and Herzegovina,"44.419125, 19.112116",Alumina,Oil-Boiler + Oil-Calciner,600000,1978,0
+Alum,South America,Brazil,"-21.843218, -46.589446",Alumina,Gas-Boiler + Gas-Calciner,390000,1970,1
+Alum,South America,Brazil,"-2.710826, -44.346324",Alumina,Oil-Boiler + Oil-Calciner,3830000,1984,1.004699739
+Alum,South America,Brazil,"-23.528225, -47.269735",Alumina,Biomass-Boiler + Oil-Calciner,800000,1955,1
+Alum,South America,Brazil,"-1.545880, -48.730613",Alumina,Coal-Boiler + Gas-Calciner,6300000,1995,0.873015873
+Alum,North America,Canada,"48.429356, -71.157885",Alumina,Gas-Boiler + Gas-Calciner,1560000,1936,0.874358974
+Alum,Europe,Germany,"53.652962, 9.496364",Alumina,Gas-Boiler + Gas-Calciner,1000000,1973,0.9
+Alum,Europe,Greece,"38.361542, 22.694489",Alumina,Gas-Boiler + Gas-Calciner,860000,1966,0.960465116
+Alum,Africa,Guinea,"10.386786, -13.578347",Alumina,Oil-Boiler + Oil-Calciner,650000,1999,0.68
+Alum,Rest of Asia,India,"17.594676, 82.748291",Alumina,Coal-Boiler + Oil-Calciner,1500000,2013,0
+Alum,Rest of Asia,India,"22.397845, 82.740433",Alumina,Coal-Boiler + Oil-Calciner,200000,1974,0
+Alum,Rest of Asia,India,"23.379808, 85.873095",Alumina,Coal-Boiler + Oil-Calciner,450000,1948,0.637588889
+Alum,Rest of Asia,India,"24.223988, 83.030190",Alumina,Coal-Boiler + Oil-Calciner,700000,1962,0.979835714
+Alum,Rest of Asia,India,"19.184771, 83.028059",Alumina,Coal-Boiler + Oil-Calciner,1500000,2012,1.035733333
+Alum,Rest of Asia,India,"11.809796, 77.827301",Alumina,Coal-Boiler + Oil-Calciner,85000,1965,0
+Alum,Rest of Asia,India,"18.772826, 82.917431",Alumina,Coal-Boiler + Oil-Calciner,2275000,1986,0.926153846
+Alum,Rest of Asia,India,"19.708692, 83.398615",Alumina,Coal-Boiler + Oil-Calciner,2000000,2007,0.750335
+Alum,Rest of Asia,India,"-2.363759, 110.160065",Alumina,Coal-Boiler + Gas-Calciner,1000000,2016,1
+Alum,Rest of Asia,Indonesia,"36.993399, 56.437304",Alumina,Oil-Boiler + Gas-Calciner,280000,2003,0.834685714
+Alum,Middle East,Iran,"52.629099, -9.057957",Alumina,Gas-Boiler + Gas-Calciner,1990000,1983,0.95
+Alum,Europe,Ireland,"39.206656, 8.396895",Alumina,Oil-Boiler + Oil-Calciner,1050000,1973,0
+Alum,Europe,Italy,"17.968080, -77.608927",Alumina,Oil-Boiler,1650000,1968,0
+Alum,North America,Jamaica,"17.900667, -77.240530",Alumina,Gas-Boiler + Gas-Calciner,1416700,1972,0
+Alum,North America,Jamaica,"18.170779, -77.065048",Alumina,Oil-Boiler + Oil-Calciner,625000,1959,0.43
+Alum,North America,Jamaica,"18.081689, -77.474800",Alumina,Oil-Boiler + Oil-Calciner,585000,1952,0.43
+Alum,North America,Jamaica,"52.257828, 77.047154",Alumina,Coal-Boiler + Gas-Calciner,1500000,1964,1
+Alum,Middle East,Kazakhstan,"45.180857, 28.768040",Alumina,Gas-Boiler + Gas-Calciner,600000,1975,0.710655
+Alum,Europe,Romania,"56.269501, 90.495240",Alumina,Coal-Boiler + Oil-Calciner,1069000,1970,0.84
+,Russia,Russia,"59.763534, 60.193574",Alumina,Coal-Boiler + Gas-Calciner,1030000,1943,0.96
+,Russia,Russia,"56.415240, 61.917764",Alumina,Gas-Boiler + Gas-Calciner,910000,1939,1.02
+,Russia,Russia,"27.047209, 49.558893",Alumina,Gas-Boiler + Gas-Calciner,1800000,2016,0.990022778
+,Middle East,Saudi Arabia,"43.698990, -7.459916",Alumina,Gas-Boiler + Gas-Calciner,1500000,1980,0.341
+,Europe,Spain,"37.445175, 31.847175",Alumina,Gas-Boiler + Gas-Calciner,200000,1973,0.81407
+,Europe,Turkey,"46.777242, 31.951480",Alumina,Gas-Boiler + Gas-Calciner,1759000,1980,0.98
+,Europe,Ukraine,"47.865645, 35.130917",Alumina,Gas-Boiler,245000,1934,0
+,Europe,Ukraine,"24.786545, 54.730482",Alumina,Gas-Boiler + Gas-Calciner,2000000,2019,1
+,Middle East,United Arab Emirates,"30.059307, -90.666919",Alumina,Gas-Boiler + Gas-Calciner,1180000,1959,0.516949153
+,North America,United States,"30.134730, -90.915896",Alumina,Gas-Boiler + Gas-Calciner,540000,1956,0
+,North America,United States,"8.292261, -62.815954",Alumina,Oil-Boiler + Oil-Calciner,2000000,1977,0
+,South America,Venezuela,"11.659493, 107.797649",Alumina,Coal-Boiler + Gas-Calciner,650000,2012,0.86
+,Rest of Asia,Vietnam,"11.968334, 107.585122",Alumina,Coal-Boiler + Gas-Calciner,650000,2017,0.923076923
