@@ -4,14 +4,9 @@ from xmlrpc.client import Boolean
 
 import pandas as pd
 
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    CUF_UPPER_THRESHOLD,
-    DECOMMISSION_RATES,
-    CUF_LOWER_THRESHOLD,
-    INVESTMENT_CYCLE,
-)
-
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                              CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
+                              DECOMMISSION_RATES, INVESTMENT_CYCLE)
 from mppshared.utility.utils import first
 
 
