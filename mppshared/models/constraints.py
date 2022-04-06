@@ -2,6 +2,7 @@
 
 from pandera import Bool
 import numpy as np
+from copy import deepcopy
 
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -24,8 +25,13 @@ def check_constraints(
     """
     # TODO: improve runtime by not applying all constraints to every agent logic
 
-    # TODO: Check regional production constraint
-    constraints_not_hurt = check_constraint_regional_production(
+    # Check regional production constraint
+    regional_constraint = check_constraint_regional_production(
+        pathway=pathway, stack=stack, product=product, year=year
+    )
+
+    # Check constraint for annual emissions limit from carbon budget
+    emissions_constraint = check_annual_carbon_budget_constraint(
         pathway=pathway, stack=stack, product=product, year=year
     )
 
@@ -34,7 +40,7 @@ def check_constraints(
     # TODO: Check resource availability constraint
 
     #! Placeholder
-    return constraints_not_hurt
+    return regional_constraint & emissions_constraint
 
 
 def check_constraint_regional_production(
@@ -47,7 +53,7 @@ def check_constraint_regional_production(
         product (_type_): _description_
     """
     # Get regional production and demand
-    df_regional_production = stack.get_regional_production(product)
+    df_regional_production = stack.get_regional_production_volume(product)
     df_demand = pathway.get_regional_demand(product, year)
 
     # Check for every region in DataFrame
@@ -56,12 +62,38 @@ def check_constraint_regional_production(
 
     # Compare regional production with required demand share up to specified number of significant figures
     sf = 2
-    df["check"] = np.round(df["annual_production"], sf) >= np.round(
+    df["check"] = np.round(df["annual_production_volume"], sf) >= np.round(
         df["demand"] * df["share_regional_production"], sf
     )
 
     # The constraint is hurt if any region does not meet its required regional production share
-    if False in df["check"]:
-        return False
+    if df["check"].all():
+        return True
 
-    return True
+    return False
+
+
+def check_annual_carbon_budget_constraint(
+    pathway: SimulationPathway, stack: AssetStack, product: str, year: int
+) -> Bool:
+    """Check if the stack exceeds the Carbon Budget defined in the pathway for the given product and year"""
+    # Create deep copy of pathway with updated tentative stack
+    temp_pathway = deepcopy(pathway)
+    temp_pathway.update_stack(year=year, stack=stack)
+
+    # TODO: improve hacky workaround
+    dict_stack_emissions = temp_pathway.calculate_emissions_stack(
+        year=year, product=product
+    )
+    co2_scope1_2 = (
+        dict_stack_emissions["co2_scope1"] + dict_stack_emissions["co2_scope2"]
+    ) / 1e3  # Gt CO2
+
+    # TODO: integrate sector
+    limit = temp_pathway.carbon_budget.get_annual_emissions_limit(
+        year, temp_pathway.sector
+    )
+    if np.round(co2_scope1_2, 2) < np.round(limit, 2):
+        return True
+
+    return False

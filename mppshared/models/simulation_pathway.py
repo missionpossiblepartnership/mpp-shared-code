@@ -1,34 +1,34 @@
 import logging
 import math
 from collections import defaultdict
+from multiprocessing.sharedctypes import Value
 
+import numpy as np
 import pandas as pd
 import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.calculate.calculate_availablity import update_availability_from_asset
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    LOG_LEVEL,
-    MODEL_SCOPE,
-    PRODUCTS,
-    SECTOR,
-    RANK_TYPES,
-)
+from mppshared.calculate.calculate_availablity import \
+    update_availability_from_asset
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                              EMISSION_SCOPES, END_YEAR, GHGS,
+                              INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL, MODEL_SCOPE,
+                              PRODUCTS, RANK_TYPES, SECTOR, START_YEAR)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
-from mppshared.models.asset import AssetStack, create_assets
+from mppshared.models.asset import Asset, AssetStack, create_assets
+from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.transition import TransitionRegistry
-from mppshared.utility.dataframe_utility import flatten_columns
+from mppshared.utility.dataframe_utility import (flatten_columns,
+                                                 get_emission_columns)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
 class SimulationPathway:
-    """Contains the current state of the simulated pathway, and methods to adjust that state"""
+    """Define a pathway that simulates the evolution of the AssetStack in each year of the model time horizon"""
 
     def __init__(
         self,
@@ -38,7 +38,11 @@ class SimulationPathway:
         sensitivity: str,
         sector: str,
         products: list,
+        carbon_budget: CarbonBudget,
     ):
+        # Attributes describing the pathway
+        self.start_year = start_year
+        self.end_year = end_year
         self.pathway = pathway
         self.sensitivity = sensitivity
         self.sector = sector
@@ -46,26 +50,38 @@ class SimulationPathway:
         self.start_year = start_year
         self.end_year = end_year
 
+        # Carbon Budget (already initialized with emissions pathway)
+        self.carbon_budget = carbon_budget
+
+        # Use importer to get all data required for simulating the pathway
         self.importer = IntermediateDataImporter(
             pathway=pathway, sensitivity=sensitivity, sector=sector, products=products
         )
 
-        logger.debug("Getting asset capacities")
-        self.df_asset_capacities = self.importer.get_asset_capacities()
-
-        logger.debug("Making asset stacks")
-        self.stacks = self.make_initial_asset_stack()
+        # Make initial asset stack from input data
+        logger.debug("Making asset stack")
+        if INITIAL_ASSET_DATA_LEVEL[sector] == "regional":
+            self.stacks = self.make_initial_asset_stack_from_regional_data()
+        elif INITIAL_ASSET_DATA_LEVEL[sector] == "individual_assets":
+            self.stacks = self.make_initial_asset_stack_from_asset_data()
 
         # Import demand for all regions
         logger.debug("Getting demand")
         self.demand = self.importer.get_demand(region=None)
 
-        # TODO: Ranking missing, if it is available we should import
+        # Import ranking of technology transitions for all transition types
         logger.debug("Getting rankings")
         self.rankings = self._import_rankings()
 
+        # Import emissions data
         logger.debug("Getting emissions")
         self.emissions = self.importer.get_process_data(data_type="emissions")
+
+        # Import technology characteristics
+        logger.debug("Getting technology characteristics")
+        self.df_technology_characteristics = (
+            self.importer.get_technology_characteristics()
+        )
 
         # TODO: Availability missing, if it is available we should import
         # logger.debug("Getting availability")
@@ -73,7 +89,7 @@ class SimulationPathway:
 
         logger.debug("Getting process data")
         self.process_data = self.importer.get_all_process_data()
-        self.cost = self.importer.get_process_data(data_type="technology_transitions")
+        self.df_cost = self.importer.get_technology_transitions_and_cost()
         # TODO: Raw material data is missing and should be called inputs to import it
         # self.inputs_pivot = self.importer.get_process_data(data_type="inputs")
         self.asset_specs = self.importer.get_asset_specs()
@@ -136,7 +152,7 @@ class SimulationPathway:
                 )
 
                 rankings[product][rank_type] = {}
-                for year in range(self.start_year, self.end_year):
+                for year in range(self.start_year, self.end_year + 1):
                     rankings[product][rank_type][year] = df_rank.query(
                         f"year == {year}"
                     )
@@ -144,11 +160,13 @@ class SimulationPathway:
 
     def save_rankings(self):
         for product in PRODUCTS[SECTOR]:
-            for ranking in ["decommission", "retrofit", "new_build"]:
+            for rank_type in RANK_TYPES:
                 df = pd.concat(
                     [
                         pd.concat([df_ranking])
-                        for year, df_ranking in self.rankings[product][ranking].items()
+                        for year, df_ranking in self.rankings[product][
+                            rank_type
+                        ].items()
                     ]
                 )
                 self.importer.export_data(
@@ -179,6 +197,72 @@ class SimulationPathway:
         df = self.get_stack(year).export_stack_to_df()
         self.importer.export_data(df, f"stack_{year}.csv", "stack_tracker")
 
+    def output_technology_roadmap(self):
+        df_roadmap = self.create_technology_roadmap()
+        self.importer.export_data(df_roadmap, "technology_roadmap.csv", "final")
+        self.plot_technology_roadmap(df_roadmap=df_roadmap)
+
+    def create_technology_roadmap(self) -> pd.DataFrame:
+        """Create technology roadmap that shows evolution of stack (supply mix) over model horizon."""
+
+        # TODO: filter by product
+        # Annual production volume in MtNH3 by technology
+        technologies = self.importer.get_technology_characteristics()[
+            "technology"
+        ].unique()
+        df_roadmap = pd.DataFrame(data={"technology": technologies})
+
+        for year in np.arange(START_YEAR, END_YEAR + 1):
+
+            # Group by technology and sum annual production volume
+            df_stack = self.importer.get_asset_stack(year=year)
+            df_sum = df_stack.groupby(["technology"], as_index=False).sum()
+            df_sum = df_sum[["technology", "annual_production_volume"]].rename(
+                {"annual_production_volume": year}, axis=1
+            )
+
+            # Merge with roadmap DataFrame
+            df_roadmap = df_roadmap.merge(df_sum, on=["technology"], how="left").fillna(
+                0
+            )
+
+        return df_roadmap
+
+    def plot_technology_roadmap(self, df_roadmap: pd.DataFrame):
+        """Plot the technology roadmap and save as .html"""
+
+        # Melt roadmap DataFrame for easy plotting
+        df_roadmap = df_roadmap.melt(
+            id_vars="technology", var_name="year", value_name="annual_volume"
+        )
+
+        fig = make_subplots()
+        wedge_fig = px.area(df_roadmap, color="technology", x="year", y="annual_volume")
+
+        fig.add_traces(wedge_fig.data)
+
+        fig.layout.xaxis.title = "Year"
+        fig.layout.yaxis.title = "Annual production volume (MtNH3/year)"
+        fig.layout.title = "Technology roadmap"
+
+        plot(
+            fig,
+            filename=str(self.importer.final_path.joinpath("technology_roadmap.html")),
+            auto_open=False,
+        )
+
+        fig.write_image(self.importer.final_path.joinpath("technology_roadmap.png"))
+
+    def output_emission_trajectory(self):
+        """Output emission trajectory as csv and figure"""
+        pass
+
+    def create_emission_trajectory(self) -> pd.DataFrame:
+        pass
+
+    def plot_emission_trajectory(self, df_emissions: pd.DataFrame) -> pd.DataFrame:
+        pass
+
     def get_emissions(self, year, product=None):
         """Get  the emissions for a product in a year"""
         df = self.emissions.copy()
@@ -187,9 +271,19 @@ class SimulationPathway:
             ["product", "year"]
         )
 
+    def get_asset_lcox(self, asset: Asset, year: int) -> float:
+        """Get LCOX for a specific Asset if the Asset is in the AssetStack of the given year."""
+        if asset not in self.get_stack(year).assets:
+            raise ValueError(
+                f"Asset with UUID {asset.uuid} is not in this year's AssetStack."
+            )
+        return self.df_cost.query(
+            f"product=='{asset.product}' & technology_origin=='New-build' & year=={year} & region=='{asset.region}' & technology_destination=='{asset.technology}'"
+        )["lcox"].iloc[0]
+
     def get_cost(self, product, year):
         """Get  the cost for a product in a year"""
-        df = self.cost
+        df = self.df_cost
         return df.query(f"product == '{product}' & year == {year}").droplevel(
             ["product", "year"]
         )
@@ -214,9 +308,9 @@ class SimulationPathway:
         region: str,
     ):
         """
-        Get the demand for a product in a year
+        Get the demand for a product in a given year and region
+
         Args:
-            build_new: overwrite demand after the new build step
             product: get for this product
             region: get for this region
             year: and this year
@@ -227,7 +321,7 @@ class SimulationPathway:
         return df.loc[
             (df["product"] == product)
             & (df["year"] == year)
-            & (df["region"].isin(region)),
+            & (df["region"] == region),
             "value",
         ].item()
 
@@ -267,39 +361,39 @@ class SimulationPathway:
         """Update ranking for a product, year, type"""
         self.rankings[product][rank_type][year] = df_rank
 
-    def calculate_emission_stack(self, year):
-        # """
-        # Calculate emission level of the current stack
-        # """
-        # df_tech = self.get_stack(year).get_tech(
-        #     id_vars=["technology", "product", "region"]
-        # )
-        # df_tech = df_tech.reset_index()
-        # df_tech = df_tech[df_tech.product.isin(productS)]
-        #
-        # df_emissions = self.emissions
-        # df_emissions = df_emissions.reset_index()
-        # df_emissions = df_emissions[
-        #     (df_emissions.year == year) & (df_emissions.product.isin(productS))
-        # ]
-        #
-        # df_emission_stack = pd.merge(
-        #     df_emissions, df_tech, how="right", on=["technology", "product", "region"]
-        # )
-        #
-        # emission_column = [
-        #     column
-        #     for column in df_emissions.columns
-        #     if column.startswith("scope") or column == "total"
-        # ]
-        #
-        # for emission_type in emission_column:
-        #     df_emission_stack[f"{emission_type}_stack_emissions"] = (
-        #         df_emission_stack[emission_type] * df_emission_stack.number_of_assets
-        #     )
-        #
-        # return df_emission_stack
-        pass
+    def calculate_emissions_stack(self, year: int, product=None) -> dict:
+        """Calculate emissions of the current stack in MtGHG by GHG and scope, optionally filtered for specific product"""
+
+        # Get stack for given year
+        stack = self.get_stack(year)
+
+        # Get DataFrame with annual production volume by product, region and technology (optionally filtered for specific product)
+        df_stack = stack.aggregate_stack(
+            aggregation_vars=["technology", "product", "region"], product=product
+        )
+        df_stack = df_stack.reset_index()
+
+        # Get DataFrame with emissions for the given year by product, region and technology
+        df_emissions = self.emissions
+        df_emissions = df_emissions.reset_index()
+        df_emissions = df_emissions[(df_emissions.year == year)]
+
+        # Add emissions by GHG and scope to each technologyy
+        df_emissions_stack = df_stack.merge(
+            df_emissions, how="left", on=["technology", "product", "region"]
+        )
+
+        # Sum emissions by GHG and scope
+        emission_columns = get_emission_columns(ghgs=GHGS, scopes=EMISSION_SCOPES)
+        dict_emissions = dict.fromkeys(emission_columns)
+
+        for emission_item in emission_columns:
+            dict_emissions[emission_item] = (
+                df_emissions_stack[emission_item]
+                * df_emissions_stack["annual_production_volume"]
+            ).sum()
+
+        return dict_emissions
 
     def calculate_constraint_share(self, year):
         # """
@@ -348,12 +442,6 @@ class SimulationPathway:
         self.availability = df.round(1)
         return self
 
-    def update_asset_status(self, year):
-        for asset in self.stacks[year].assets:
-            if year - asset.start_year >= asset.asset_lifetime:
-                asset.asset_status = "old"
-        return self
-
     def get_availability(self, year=None, name=None):
         df = self.availability.drop(columns=["unit"])
 
@@ -390,7 +478,7 @@ class SimulationPathway:
     def get_capacity(self, year):
         """Get the capacity for a year"""
         stack = self.get_stack(year=year)
-        return stack.get_capacity()
+        return stack.get_annual_production_capacity()
 
     def aggregate_stacks(self, product, this_year=False):
         return pd.concat(
@@ -400,137 +488,93 @@ class SimulationPathway:
             ]
         )
 
-    def _calculate_assets_from_production(self):
-        """Calculate how many assets are there, based on current production"""
-        df_asset_size = self.importer.get_asset_sizes()
-        df_production = self.importer.get_current_production()
-        df_production["number_of_assets"] = (
-            (
-                (df_production["annual_production_capacity"])
-                / ASSUMED_ANNUAL_PRODUCTION_CAPACITY
-            )
-            .round()
-            .astype(int)
+    def make_initial_asset_stack_from_regional_data(self):
+        """Make AssetStack from input data organised by region on total production volume and capacity, average capacity utilisation factor and average age in the initial year."""
+        df_stack = self.importer.get_initial_asset_stack()
+
+        # Get the number assets required
+        # TODO: based on distribution of typical production capacities
+        # TODO: create smaller asset to meet production capacity precisely
+        df_stack["number_assets"] = (
+            df_stack["annual_production_capacity"] / ASSUMED_ANNUAL_PRODUCTION_CAPACITY
+        ).apply(lambda x: int(x))
+
+        # Merge with technology specifications to get technology lifetime
+        df_tech_characteristics = self.importer.get_technology_characteristics()
+        df_stack = df_stack.merge(
+            df_tech_characteristics[
+                [
+                    "product",
+                    "region",
+                    "technology",
+                    "technology_classification",
+                    "technology_lifetime",
+                ]
+            ],
+            on=["product", "region", "technology"],
+            how="left",
         )
 
-        df_asset_size.drop(columns=["annual_production_capacity"], inplace=True)
+        # Create list of assets for every product, region and technology (corresponds to one row in the DataFrame)
+        # TODO: based on distribution of CUF and commissioning year
+        assets = df_stack.apply(
+            lambda row: create_assets(
+                n_assets=row["number_assets"],
+                product=row["product"],
+                technology=row["technology"],
+                region=row["region"],
+                year_commissioned=row["year"] - row["average_age"],
+                annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                cuf=row["average_cuf"],
+                asset_lifetime=row["technology_lifetime"],
+                technology_classification=row["technology_classification"],
+            ),
+            axis=1,
+        ).tolist()
+        assets = [item for sublist in assets for item in sublist]
 
-        df_assets = df_production.merge(df_asset_size, on=["technology", "product"])
+        # Create AssetStack for model start year
+        return {self.start_year: AssetStack(assets)}
 
-        # TODO: Define the assets that are old based on the commission year - there is no data here
-        # Calculate number of old and new assets
-        df_assets["number_of_assets_old"] = (
-            df_assets["number_of_assets"] * 0.5
-        ).astype(int)
+    # TODO: implement
+    def make_initial_asset_stack_from_asset_data(self):
+        """Make AssetStack from asset-specific data (as opposed to average regional data)."""
+        df_stack = self.importer.get_initial_asset_stack()
+        df_stack["number_assets"] = 1
 
-        df_assets["number_of_assets_new"] = (
-            df_assets["number_of_assets"] - df_assets["number_of_assets_old"]
-        )
-        return df_assets
-
-    def make_initial_asset_stack(self):
-        # Calculate how many assets to create
-        df_assets = self._calculate_assets_from_production()
-
-        # Merge input data on the assets
-        df_process_data = self.importer.get_all_process_data()
-        df_process_data = df_process_data.reset_index()
-        df_process_data.columns = ["_".join(col) for col in df_process_data.columns]
-
-        df_assets = df_assets.merge(
-            df_process_data,
-            left_on=["region", "product", "technology", "year"],
-            right_on=["region_", "product_", "technology_", "year_"],
-        )
-        df_assets = df_assets.drop_duplicates(
-            subset=["region", "product", "technology"]
-        )
-
-        # Build them
-        # TODO: take out asset status old/new or deduce from asset age
-        all_assets = []
-        for asset_status in ["old", "new"]:
-            assets = df_assets.apply(
-                lambda row: create_assets(
-                    n_assets=row[f"number_of_assets_{asset_status}"],
-                    technology=row["technology"],
-                    region=row["region"],
-                    product=row["product"],
-                    # Assumption: old assets started 40 years ago, new ones just 20
-                    start_year=self.start_year - 40
-                    if asset_status == "old"
-                    else self.start_year - 20,
-                    asset_lifetime=row["spec_technology_lifetime"],
-                    asset_status=asset_status,
-                    capacity_factor=row["spec_capacity_factor"],
-                    df_asset_capacities=self.df_asset_capacities,
-                ),
-                axis=1,
-            ).tolist()
-
-            assets = [item for sublist in assets for item in sublist]
-            all_assets += assets
-
-        stack = AssetStack(assets=all_assets)
-        return {self.start_year: stack}
-
-    def plot_stacks(self, df_stack_agg, groupby, product):
-        """
-        Plot the resulting stacks over the years
-
-        Args:
-            df_stack_agg: The dataframe with stacks, aggregated per year / tech / region
-            groupby: Groupby this variable, can be 'region' or 'technology'
-            timeframe: Show results for this timeframe: 'this_year' or 'cumulative'
-        """
-        df = df_stack_agg.groupby(["year", groupby]).sum()[[("yearly_volume", "total")]]
-        df.columns = df.columns.get_level_values(level=0)
-        df = df.reset_index()
-
-        fig = make_subplots()
-
-        wedge_fig = px.area(df, color=groupby, x="year", y="yearly_volume")
-
-        df_demand = self.demand.query(f"product=='{product}'").query(
-            f"year <= {df.year.max()}"
-        )
-        demand_fig = px.line(df_demand, x="year", y="demand")
-        demand_fig.update_traces(line=dict(color="Black", width=2, dash="dash"))
-
-        demand_fig.update_traces(showlegend=True, name="Demand")
-        fig.add_traces(wedge_fig.data + demand_fig.data)
-
-        fig.layout.xaxis.title = "Year"
-        fig.layout.yaxis.title = "Yearly volume (Mton / annum)"
-        fig.layout.title = f"{groupby} over time for {product} - {self.pathway_name} - {self.sensitivity}"
-
-        filename = f"output/{self.pathway_name}/{self.sensitivity}/final/{product}/{groupby}_over_time"
-
-        plot(fig, filename=f"{filename}.html", auto_open=False)
-
-        fig.write_image(f"{filename}.png")
-
-    def plot_methanol_availability(self, df_availability):
-
-        df_availability = df_availability[
-            (df_availability.name.isin(["Methanol - Black", "Methanol - Green"]))
-            & (df_availability.region == "World")
-        ]
-        df_availability = df_availability.reset_index()
-
-        fig = px.area(
-            df_availability,
-            x="year",
-            y="cap",
-            color="name",
-            title=f"Methanol availability over time - {self.pathway_name} - {self.sensitivity}",
+        df_tech_characteristics = self.importer.get_technology_characteristics()
+        df_stack = df_stack.merge(
+            df_tech_characteristics[
+                [
+                    "product",
+                    "region",
+                    "technology",
+                    "technology_classification",
+                    "technology_lifetime",
+                ]
+            ],
+            on=["product", "region", "technology"],
+            how="left",
         )
 
-        filename = f"output/{self.pathway_name}/{self.sensitivity}/final/Methanol/methanol_availability_over_time"
+        assets = df_stack.apply(
+            lambda row: create_assets(
+                n_assets=row["number_assets"],
+                product=row["product"],
+                technology=row["technology"],
+                region=row["region"],
+                year_commissioned=row["year"],
+                annual_production_capacity=row["annual_production_capacity"] / 1e6,
+                cuf=row["capacity_factor"],
+                asset_lifetime=row["technology_lifetime"],
+                technology_classification=row["technology_classification"],
+            ),
+            axis=1,
+        ).tolist()
+        assets = [item for sublist in assets for item in sublist]
 
-        plot(fig, filename=f"{filename}.html", auto_open=False)
-
-        fig.write_image(f"{filename}.png")
+        # Create AssetStack for model start year
+        return {self.start_year: AssetStack(assets)}
 
     def _get_weighted_average(
         self, df, vars, product, year, methanol_type: str = None, emissions=True

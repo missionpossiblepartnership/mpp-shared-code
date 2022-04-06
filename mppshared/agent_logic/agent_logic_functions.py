@@ -1,37 +1,19 @@
 """ Additional functions required for the agent logic, e.g. demand balances. """
 
-import pandas as pd
+from operator import methodcaller
+
 import numpy as np
-from scipy.optimize import linprog
+import pandas as pd
 
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                              CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
+                              LOG_LEVEL, MODEL_SCOPE)
+from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
-from mppshared.models.asset import AssetStack
-from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY
+from mppshared.utility.utils import get_logger
 
-
-def get_demand_balance(
-    pathway: SimulationPathway,
-    current_stack: AssetStack,
-    product: str,
-    year: int,
-    region: str,
-) -> float:
-    """Calculate balance between production of the AssetStack and demand in the given region in a given year
-
-    Args:
-        pathway: contains demand data
-        current_stack: contains production assets
-        product: product for demand balance
-        year: year for demand balance
-        region: region for demand balance
-
-    Returns:
-        float: demand - production
-    """
-    demand = pathway.get_demand(product, year, region)
-    production = current_stack.get_yearly_volume(product)
-    balance = demand - production
-    return balance
+logger = logger = get_logger(__name__)
+logger.setLevel(LOG_LEVEL)
 
 
 def select_best_transition(df_rank: pd.DataFrame) -> dict:
@@ -52,26 +34,131 @@ def select_best_transition(df_rank: pd.DataFrame) -> dict:
     )[0]
 
 
-def optimize_cuf(
-    cuf_assets: list, surplus: float, upper_bound=0.95, lower_bound=0.5
-) -> list:
-    """
+def remove_transition(df_rank: pd.DataFrame, transition: dict) -> pd.DataFrame:
+    """Filter transition from ranking table.
 
     Args:
-        cuf_assets:
-        surplus:
-        upper_bound:
-        lower_bound:
+        df_rank: table with ranking of technology switches
+        transition: row from the ranking table
 
     Returns:
-        an array with new CUF to cover the demand
-
+        ranking table with the row corresponding to the transition removed
     """
-    c = [-1] * len(cuf_assets)
-    A_ub = [1] * len(cuf_assets)
-    b_ub = surplus / ASSUMED_ANNUAL_PRODUCTION_CAPACITY
-    bounds = [(lower_bound, upper_bound)] * len(cuf_assets)
+    return df_rank.loc[
+        ~(df_rank[list(transition)] == pd.Series(transition)).all(axis=1)
+    ]
 
-    model_linear = linprog(c=c, A_ub=A_ub, b_ub=b_ub, bounds=bounds)
 
-    return [round(cuf, 2) for cuf in model_linear.x.to_list()]
+def adjust_capacity_utilisation(
+    pathway: SimulationPathway, product: str, year: int
+) -> SimulationPathway:
+    """Adjust capacity utilisation of each asset within predefined thresholds to balance demand and production as much as possible in the given year.
+
+    Args:
+        pathway: pathway with AssetStack and demand data for the specified year
+        product:
+        year:
+
+    Returns:
+        pathway with updated capacity factor for each Asset in the AssetStack of the given year
+    """
+    # Get demand and production in that year
+    demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
+    stack = pathway.get_stack(year=year)
+    production = stack.get_annual_production_volume(product)
+
+    # TODO: make sure that CUF adjustment does not overshoot demand and production balance
+    # TODO: integrate regional production constraint
+    # If demand exceeds production, increase capacity utilisation of each asset to make production deficit as small as possible, starting at the asset with lowest LCOX
+    if demand > production:
+        logger.info(
+            "Increasing capacity utilisation of assets to minimise production deficit"
+        )
+        pathway = increase_cuf_of_assets(
+            pathway=pathway, demand=demand, product=product, year=year
+        )
+
+    # If production exceeds demand, decrease capacity utilisation of each asset to make production surplus as small as possible, starting at asset with highest LCOX
+    elif production > demand:
+        logger.info(
+            "Decreasing capacity utilisation of assets to minimise production surplus"
+        )
+        pathway = decrease_cuf_of_assets(
+            pathway=pathway, demand=demand, product=product, year=year
+        )
+
+    production = stack.get_annual_production_volume(product)
+    return pathway
+
+
+def increase_cuf_of_assets(
+    pathway: SimulationPathway, demand: float, product: str, year: int
+) -> SimulationPathway:
+    """Increase CUF of assets to minimise the production deficit."""
+
+    # Get AssetStack for the given year
+    stack = pathway.get_stack(year)
+
+    # Identify all assets that produce below CUF threshold and sort list so asset with lowest LCOX is first
+    assets_below_cuf_threshold = list(
+        filter(lambda asset: asset.cuf < CUF_UPPER_THRESHOLD, stack.assets)
+    )
+    assets_below_cuf_threshold = sort_assets_lcox(
+        assets_below_cuf_threshold, pathway, year
+    )
+
+    # Increase CUF of assets to upper threshold in order of ascending LCOX until production meets demand or no assets left for CUF increase
+    while demand > stack.get_annual_production_volume(product):
+
+        if not assets_below_cuf_threshold:
+            break
+
+        # Increase CUF of asset with lowest LCOX to upper threshold and remove from list
+        asset = assets_below_cuf_threshold[0]
+        logger.debug(f"Increase CUF of {str(asset)}")
+        asset.cuf = CUF_UPPER_THRESHOLD
+        assets_below_cuf_threshold.pop(0)
+
+    return pathway
+
+
+def decrease_cuf_of_assets(
+    pathway: SimulationPathway, demand: float, product: str, year: int
+) -> SimulationPathway:
+    """Decrease CUF of assets to minimise the production surplus."""
+
+    # Get AssetStack for the given year
+    stack = pathway.get_stack(year)
+
+    # Identify all assets that produce above CUF threshold and sort list so asset with highest LCOX is first
+    assets_above_cuf_threshold = list(
+        filter(lambda asset: asset.cuf < CUF_UPPER_THRESHOLD, stack.assets)
+    )
+    assets_above_cuf_threshold = sort_assets_lcox(
+        assets_above_cuf_threshold, pathway, year, descending=True
+    )
+
+    # Decrease CUF of assets to lower threshold in order of descending LCOX until production meets demand or no assets left for CUF decrease
+    while stack.get_annual_production_volume(product) > demand:
+
+        if not assets_above_cuf_threshold:
+            break
+
+        # Increase CUF of asset with lowest LCOX to upper threshold and remove from list
+        asset = assets_above_cuf_threshold[0]
+        logger.debug(f"Decrease CUF of {str(asset)}")
+        asset.cuf = CUF_UPPER_THRESHOLD
+        assets_above_cuf_threshold.pop(0)
+
+    return pathway
+
+
+def sort_assets_lcox(
+    assets: list, pathway: SimulationPathway, year: int, descending=False
+):
+    """Sort list of assets according to LCOX in the specified year in ascending order"""
+    return sorted(
+        assets,
+        key=methodcaller("get_lcox", df_cost=pathway.df_cost, year=year),
+        reverse=descending,
+    )
