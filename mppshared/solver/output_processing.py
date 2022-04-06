@@ -16,32 +16,29 @@ def create_table_sequence_technology():
 
 def create_table_all_data_year(year, importer):
     df_stack = importer.get_asset_stack(year)
+    # Calculate the number of assets for each region, product and technology
     df_stack["asset"] = 1
-    # Group by product, region and technology and count the number of assets, get  coulm with the count
-    df_stack_plants = (
+    df_stack_total_assets = (
         df_stack.groupby(["product", "region", "technology"]).count().reset_index()
     )
-    # Rename the column to count
-    df_stack_plants.rename(columns={"asset": "value"}, inplace=True)
-    df_stack_plants["parameter"] = "Number of plants"
-    df_stack_plants["unit"] = "plant"
+    df_stack_total_assets.rename(columns={"asset": "value"}, inplace=True)
+    df_stack_total_assets["parameter"] = "Number of plants"
+    df_stack_total_assets["unit"] = "plant"
+    # Calculate the production volume per region, product and technology
+    df_stack_production_capacity = (
+        df_stack.groupby(["product", "region", "technology"]).sum().reset_index()
+    )
+    df_stack_production_capacity.rename(
+        columns={"annual_production_volume": "value"}, inplace=True
+    )
+    df_stack_production_capacity["parameter"] = "Annual production volume"
+    df_stack_production_capacity["unit"] = "Mt"
+    # Join the dataframes into a long table
+    df_stack_plants = pd.concat([df_stack_total_assets, df_stack_production_capacity])
     return df_stack_plants
 
 
 def calculate_outputs(pathway, sensitivity, sector):
-    print("Hello world")
-    # table has to be structured as follows:
-    # Columns:
-    # - sector
-    # - product
-    # - technology
-    # - parameter
-    # - unit
-    # - value
-    # - 2020
-    # - nth year
-    #  To fill it can be done with a long table with a year column and then create a pivot table with the years as index
-
     importer = IntermediateDataImporter(
         pathway=pathway,
         sensitivity=sensitivity,
