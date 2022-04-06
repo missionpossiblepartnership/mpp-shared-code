@@ -557,8 +557,6 @@ class SimulationPathway:
             how="left",
         )
 
-        # Create list of assets for every product, region and technology (corresponds to one row in the DataFrame)
-        # TODO: based on distribution of CUF and commissioning year
         assets = df_stack.apply(
             lambda row: create_assets(
                 n_assets=row["number_assets"],
@@ -566,7 +564,7 @@ class SimulationPathway:
                 technology=row["technology"],
                 region=row["region"],
                 year_commissioned=row["year"],
-                annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                annual_production_capacity=row["annual_production_capacity"] / 1e6,
                 cuf=row["capacity_factor"],
                 asset_lifetime=row["technology_lifetime"],
                 technology_classification=row["technology_classification"],
