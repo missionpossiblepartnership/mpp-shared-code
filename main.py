@@ -3,14 +3,8 @@ import multiprocessing as mp
 
 import numpy as np
 
-from mppshared.config import (
-    LOG_LEVEL,
-    PATHWAYS,
-    RUN_PARALLEL,
-    SECTOR,
-    SENSITIVITIES,
-    run_config,
-)
+from mppshared.config import (LOG_LEVEL, PATHWAYS, RUN_PARALLEL, SECTOR,
+                              SENSITIVITIES, run_config)
 from mppshared.models.simulate import simulate_pathway
 from mppshared.solver.implicit_forcing import apply_implicit_forcing
 from mppshared.solver.ranking import make_rankings

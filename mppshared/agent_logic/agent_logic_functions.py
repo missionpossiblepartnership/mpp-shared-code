@@ -1,18 +1,15 @@
 """ Additional functions required for the agent logic, e.g. demand balances. """
 
-import pandas as pd
-import numpy as np
 from operator import methodcaller
 
-from mppshared.models.simulation_pathway import SimulationPathway
+import numpy as np
+import pandas as pd
+
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                              CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
+                              LOG_LEVEL, MODEL_SCOPE)
 from mppshared.models.asset import Asset, AssetStack
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    CUF_LOWER_THRESHOLD,
-    CUF_UPPER_THRESHOLD,
-    MODEL_SCOPE,
-    LOG_LEVEL,
-)
+from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 
 logger = logger = get_logger(__name__)

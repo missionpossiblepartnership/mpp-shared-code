@@ -169,8 +169,8 @@ SENSITIVITIES = [
 
 ### SECTOR-SPECIFIC PARAMETERS ###
 # Sectors for which the model can be run
-SECTOR = "chemicals"
-# SECTOR = "aluminium"  # "aluminium, steel, ..."
+# SECTOR = "chemicals"
+SECTOR = "aluminium"
 
 # Products produced by each sector
 PRODUCTS = {
@@ -179,10 +179,7 @@ PRODUCTS = {
 }
 
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
-INITIAL_ASSET_DATA_LEVEL = {
-    "chemicals": "regional",
-    # "aluminium": "individual_assets"
-}
+INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_assets"}
 
 ### RUN CONFIGURATION ###
 
