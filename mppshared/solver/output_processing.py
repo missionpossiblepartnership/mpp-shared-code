@@ -70,11 +70,27 @@ def create_table_all_data_year(year, importer):
     )
     df_stack_capture_emissions["unit"] = "t"
     df_stack_capture_emissions["parameter_group"] = "Emissions"
+    # Calculate the LCOX per region, product, technology
+    df_transitions = importer.get_technology_transitions_and_cost()
+    df_transitions = df_transitions[df_transitions["year"] == year]
+    df_assets_lcox = df_stack.merge(
+        df_transitions,
+        left_on=["product", "region", "technology"],
+        right_on=["product", "region", "technology_destination"],
+    )
+    df_stack_lcox = (
+        df_assets_lcox.groupby(["product", "region", "technology"]).sum().reset_index()
+    )
+    df_stack_lcox.rename(columns={"lcox": "value"}, inplace=True)
+    df_stack_lcox["parameter"] = "lcox"
+    df_stack_lcox["unit"] = "USD/t"
+    df_stack_lcox["parameter_group"] = "finance"
 
     return pd.concat(
         [
             df_stack_total_assets,
             df_stack_production_capacity,
+            df_stack_lcox,
             df_stack_emissions_emitted,
             df_stack_capture_emissions,
         ]
