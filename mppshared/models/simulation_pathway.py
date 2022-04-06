@@ -318,7 +318,6 @@ class SimulationPathway:
 
         """
         df = self.demand
-        print(product, year, region)
         return df.loc[
             (df["product"] == product)
             & (df["year"] == year)
