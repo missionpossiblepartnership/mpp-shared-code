@@ -17,9 +17,9 @@ logger.setLevel(LOG_LEVEL)
 np.random.seed(100)
 
 funcs = {
-    # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    # "MAKE_RANKINGS": make_rankings,
-    # "SIMULATE_PATHWAY": simulate_pathway,
+    "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
+    "MAKE_RANKINGS": make_rankings,
+    "SIMULATE_PATHWAY": simulate_pathway,
     "CALCULATE_OUTPUTS": calculate_outputs,
 }
 
