@@ -169,8 +169,8 @@ SENSITIVITIES = [
 
 ### SECTOR-SPECIFIC PARAMETERS ###
 # Sectors for which the model can be run
-SECTOR = "chemicals"
-# SECTOR = "aluminium"
+# SECTOR = "chemicals"
+SECTOR = "aluminium"
 
 # Products produced by each sector
 PRODUCTS = {
