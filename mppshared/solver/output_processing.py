@@ -96,8 +96,31 @@ def _calculate_lcox(df_stack, df_transitions):
     df_stack_lcox["parameter_group"] = "finance"
     return df_stack_lcox
 
+def _calculate_total_capex(df_stack):
+    df_total_capex = pd.DataFrame()
+    return df_total_capex
 
-def create_table_all_data_year(year, importer):
+def _calculate_total_opex(df_stack):
+    df_total_opex = pd.DataFrame()
+    return df_total_opex
+
+def _calculate_variable_opex():
+    df_variable_opex = pd.DataFrame()
+    return df_variable_opex
+
+def _calculate_fixed_opex():
+    df_fixed_opex = pd.DataFrame()
+    return df_fixed_opex
+
+def _calculate_energy_fedstock_inputs():
+    df_energy_fedstock_inputs = pd.DataFrame()
+    return df_energy_fedstock_inputs
+
+def _calculate_h2_storage()
+    df_h2_storage = pd.DataFrame()
+    return df_h2_storage
+
+def create_table_all_data_year(year, importer, sector):
     df_stack = importer.get_asset_stack(year)
     df_stack_total_assets = _calculate_number_of_assets(df_stack)
     df_stack_production_capacity = _calculate_production_volume(df_stack)
@@ -110,17 +133,31 @@ def create_table_all_data_year(year, importer):
     df_transitions = importer.get_technology_transitions_and_cost()
     df_transitions = df_transitions[df_transitions["year"] == year]
     df_stack_lcox = _calculate_lcox(df_stack, df_transitions)
-
-    return pd.concat(
+    df_total_capex = _calculate_total_capex(df_stack)
+    df_total_opex = _calculate_total_opex(df_stack)
+    df_variable_opex = _calculate_variable_opex()
+    df_fixed_opex = _calculate_fixed_opex()
+    df_energy_fedstock_inputs = _calculate_energy_fedstock_inputs()
+    df_all_data_year = pd.concat(
         [
             df_stack_total_assets,
             df_stack_production_capacity,
-            df_stack_lcox,
             df_stack_emissions_emitted,
             df_stack_capture_emissions,
+            df_stack_lcox,
+            df_total_capex,
+            df_total_opex,
+            df_variable_opex,
+            df_fixed_opex,
+            df_energy_fedstock_inputs,
         ]
     )
-
+    if sector == "chemicals":
+        df_h2_storage = _calculate_h2_storage()
+        df_all_data_year = pd.concat(
+            [df_all_data_year, df_h2_storage]
+        )
+    return df_all_data_year
 
 def calculate_outputs(pathway, sensitivity, sector):
     importer = IntermediateDataImporter(
@@ -132,7 +169,7 @@ def calculate_outputs(pathway, sensitivity, sector):
     data = []
     for year in range(START_YEAR, END_YEAR + 1):
         logger.info(f"Processing year {year}")
-        yearly = create_table_all_data_year(year, importer)
+        yearly = create_table_all_data_year(year, importer, sector)
         yearly["year"] = year
         data.append(yearly)
     df = pd.concat(data)
