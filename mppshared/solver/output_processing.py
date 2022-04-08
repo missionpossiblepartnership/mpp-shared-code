@@ -96,29 +96,42 @@ def _calculate_lcox(df_stack, df_transitions):
     df_stack_lcox["parameter_group"] = "finance"
     return df_stack_lcox
 
+
 def _calculate_total_capex(df_stack):
+    logger.info("-- Calculating total capex")
     df_total_capex = pd.DataFrame()
     return df_total_capex
 
+
 def _calculate_total_opex(df_stack):
+    logger.info("-- Calculating total opex")
     df_total_opex = pd.DataFrame()
     return df_total_opex
 
+
 def _calculate_variable_opex():
+    logger.info("-- Calculating variable opex")
     df_variable_opex = pd.DataFrame()
     return df_variable_opex
 
+
 def _calculate_fixed_opex():
+    logger.info("-- Calculating fixed opex")
     df_fixed_opex = pd.DataFrame()
     return df_fixed_opex
 
+
 def _calculate_energy_fedstock_inputs():
+    logger.info("-- Calculating energy fedstock inputs")
     df_energy_fedstock_inputs = pd.DataFrame()
     return df_energy_fedstock_inputs
 
-def _calculate_h2_storage()
+
+def _calculate_h2_storage():
+    logger.info("-- Calculating H2 storage")
     df_h2_storage = pd.DataFrame()
     return df_h2_storage
+
 
 def create_table_all_data_year(year, importer, sector):
     df_stack = importer.get_asset_stack(year)
@@ -129,7 +142,6 @@ def create_table_all_data_year(year, importer, sector):
     df_stack_emissions_emitted, df_stack_capture_emissions = _calculate_emissions(
         df_stack, df_emissions
     )
-    # Calculate the LCOX per region, product, technology
     df_transitions = importer.get_technology_transitions_and_cost()
     df_transitions = df_transitions[df_transitions["year"] == year]
     df_stack_lcox = _calculate_lcox(df_stack, df_transitions)
@@ -154,10 +166,9 @@ def create_table_all_data_year(year, importer, sector):
     )
     if sector == "chemicals":
         df_h2_storage = _calculate_h2_storage()
-        df_all_data_year = pd.concat(
-            [df_all_data_year, df_h2_storage]
-        )
+        df_all_data_year = pd.concat([df_all_data_year, df_h2_storage])
     return df_all_data_year
+
 
 def calculate_outputs(pathway, sensitivity, sector):
     importer = IntermediateDataImporter(
@@ -190,9 +201,21 @@ def calculate_outputs(pathway, sensitivity, sector):
     )
     df_pivot.reset_index(inplace=True)
     df_pivot.fillna(0, inplace=True)
-    importer.export_data(df_pivot, "export_all_data.csv", "outputs")
+    importer.export_data(
+        df_pivot, f"simulation_outputs_sensitivity_{sensitivity}.csv", "final"
+    )
+    columns = [
+        "sector",
+        "product",
+        "region",
+        "technology",
+        "year",
+        "parameter_group",
+        "parameter",
+        "unit",
+        "value",
+    ]
+    importer.export_data(
+        df[columns], f"interface_outputs_sensitivity_{sensitivity}.csv", "final"
+    )
     logger.info("All data for all years processed.")
-
-
-def create_outputs_dashboard():
-    pass
