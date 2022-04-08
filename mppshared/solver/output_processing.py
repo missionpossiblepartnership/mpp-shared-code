@@ -14,8 +14,8 @@ def create_table_sequence_technology():
     pass
 
 
-def create_table_all_data_year(year, importer):
-    df_stack = importer.get_asset_stack(year)
+def _calculate_number_of_assets(df_stack):
+    logger.info("-- Calculating number of assets")
     # Calculate the number of assets for each region, product and technology
     df_stack["asset"] = 1
     df_stack_total_assets = (
@@ -25,6 +25,11 @@ def create_table_all_data_year(year, importer):
     df_stack_total_assets["parameter"] = "Number of plants"
     df_stack_total_assets["unit"] = "plant"
     df_stack_total_assets["parameter_group"] = "Production"
+    return df_stack_total_assets
+
+
+def _calculate_production_volume(df_stack):
+    logger.info("-- Calculating production volume")
     # Calculate the production volume per region, product and technology
     df_stack_production_capacity = (
         df_stack.groupby(["product", "region", "technology"]).sum().reset_index()
@@ -35,10 +40,12 @@ def create_table_all_data_year(year, importer):
     df_stack_production_capacity["parameter"] = "Annual production volume"
     df_stack_production_capacity["unit"] = "Mt"
     df_stack_production_capacity["parameter_group"] = "Production"
+    return df_stack_production_capacity
 
+
+def _calculate_emissions(df_stack, df_emissions):
+    logger.info("-- Calculating emissions")
     # Calculate the carbon emissions per region, product and technology
-    df_emissions = importer.get_emissions()
-    df_emissions = df_emissions[df_emissions["year"] == year]
     df_assets_emissions = df_stack.merge(
         df_emissions, on=["product", "region", "technology"]
     )
@@ -70,9 +77,11 @@ def create_table_all_data_year(year, importer):
     )
     df_stack_capture_emissions["unit"] = "t"
     df_stack_capture_emissions["parameter_group"] = "Emissions"
-    # Calculate the LCOX per region, product, technology
-    df_transitions = importer.get_technology_transitions_and_cost()
-    df_transitions = df_transitions[df_transitions["year"] == year]
+    return df_stack_emissions_emitted, df_stack_capture_emissions
+
+
+def _calculate_lcox(df_stack, df_transitions):
+    logger.info("-- Calculating LCOX")
     df_assets_lcox = df_stack.merge(
         df_transitions,
         left_on=["product", "region", "technology"],
@@ -85,6 +94,22 @@ def create_table_all_data_year(year, importer):
     df_stack_lcox["parameter"] = "lcox"
     df_stack_lcox["unit"] = "USD/t"
     df_stack_lcox["parameter_group"] = "finance"
+    return df_stack_lcox
+
+
+def create_table_all_data_year(year, importer):
+    df_stack = importer.get_asset_stack(year)
+    df_stack_total_assets = _calculate_number_of_assets(df_stack)
+    df_stack_production_capacity = _calculate_production_volume(df_stack)
+    df_emissions = importer.get_emissions()
+    df_emissions = df_emissions[df_emissions["year"] == year]
+    df_stack_emissions_emitted, df_stack_capture_emissions = _calculate_emissions(
+        df_stack, df_emissions
+    )
+    # Calculate the LCOX per region, product, technology
+    df_transitions = importer.get_technology_transitions_and_cost()
+    df_transitions = df_transitions[df_transitions["year"] == year]
+    df_stack_lcox = _calculate_lcox(df_stack, df_transitions)
 
     return pd.concat(
         [
@@ -129,6 +154,7 @@ def calculate_outputs(pathway, sensitivity, sector):
     df_pivot.reset_index(inplace=True)
     df_pivot.fillna(0, inplace=True)
     importer.export_data(df_pivot, "export_all_data.csv", "outputs")
+    logger.info("All data for all years processed.")
 
 
 def create_outputs_dashboard():
