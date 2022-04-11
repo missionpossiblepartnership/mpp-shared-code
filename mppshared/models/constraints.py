@@ -94,7 +94,7 @@ def check_annual_carbon_budget_constraint(
     limit = temp_pathway.carbon_budget.get_annual_emissions_limit(
         year, temp_pathway.sector
     )
-    if np.round(co2_scope1_2, 2) < np.round(limit, 2):
+    if np.round(co2_scope1_2, 2) <= np.round(limit, 2):
         return True
 
     return False
