@@ -1,12 +1,13 @@
 """ Enforce constraints in the yearly optimization of technology switches."""
 
-from pandera import Bool
-import numpy as np
 from copy import deepcopy
 
+import numpy as np
+from pandera import Bool
+
+from mppshared.config import REGIONAL_PRODUCTION_SHARE
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
-from mppshared.config import REGIONAL_PRODUCTION_SHARE
 
 
 def check_constraints(
