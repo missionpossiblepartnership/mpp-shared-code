@@ -1,19 +1,18 @@
 """ Logic for technology transitions of type decommission (remove Asset from AssetStack)."""
 
-from mppshared.models.simulation_pathway import SimulationPathway
-from mppshared.models.asset import AssetStack, Asset
-from mppshared.models.constraints import check_constraints
-from mppshared.utility.utils import get_logger
-from mppshared.agent_logic.agent_logic_functions import (
-    select_best_transition,
-    remove_transition,
-)
-from mppshared.config import LOG_LEVEL, MODEL_SCOPE
-
-import pandas as pd
-import numpy as np
-from operator import methodcaller
 from copy import deepcopy
+from operator import methodcaller
+
+import numpy as np
+import pandas as pd
+
+from mppshared.agent_logic.agent_logic_functions import (
+    remove_transition, select_best_transition)
+from mppshared.config import LOG_LEVEL, MODEL_SCOPE
+from mppshared.models.asset import Asset, AssetStack
+from mppshared.models.constraints import check_constraints
+from mppshared.models.simulation_pathway import SimulationPathway
+from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -45,6 +44,9 @@ def decommission(
 
     # TODO: Decommission until one asset short of balance between demand and production
     surplus = production - demand
+    logger.debug(
+        f"Year: {year} Production: {production}, Demand: {demand}, Surplus: {surplus}"
+    )
     while surplus > 0:
 
         # Identify asset to be decommissioned
