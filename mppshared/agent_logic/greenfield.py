@@ -1,21 +1,20 @@
 """ Logic for technology transitions of type greenfield (add new Asset to AssetStack."""
 
-from multiprocessing.sharedctypes import Value
-from mppshared.models.simulation_pathway import SimulationPathway
-from mppshared.models.asset import AssetStack, Asset, make_new_asset
-from mppshared.agent_logic.agent_logic_functions import (
-    select_best_transition,
-    remove_transition,
-)
-from mppshared.models.constraints import check_constraints
-from mppshared.utility.utils import get_logger
-from mppshared.config import LOG_LEVEL, MODEL_SCOPE, ASSUMED_ANNUAL_PRODUCTION_CAPACITY
-
-
-import pandas as pd
-import numpy as np
-from operator import methodcaller
 from copy import deepcopy
+from multiprocessing.sharedctypes import Value
+from operator import methodcaller
+
+import numpy as np
+import pandas as pd
+
+from mppshared.agent_logic.agent_logic_functions import (
+    remove_transition, select_best_transition)
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL,
+                              MODEL_SCOPE)
+from mppshared.models.asset import Asset, AssetStack, make_new_asset
+from mppshared.models.constraints import check_constraints
+from mppshared.models.simulation_pathway import SimulationPathway
+from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
