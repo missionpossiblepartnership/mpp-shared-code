@@ -178,11 +178,16 @@ def calculate_outputs(pathway, sensitivity, sector):
         products=PRODUCTS[sector],
     )
     data = []
+    data_stacks = []
     for year in range(START_YEAR, END_YEAR + 1):
         logger.info(f"Processing year {year}")
         yearly = create_table_all_data_year(year, importer, sector)
         yearly["year"] = year
         data.append(yearly)
+        df_stack = importer.get_asset_stack(year)
+        df_stack["year"] = year
+        data_stacks.append(df_stack)
+    df_stacks = pd.concat(data_stacks)
     df = pd.concat(data)
     df["sector"] = sector
     # Pivot the dataframe to have the years as columns
@@ -217,5 +222,8 @@ def calculate_outputs(pathway, sensitivity, sector):
     ]
     importer.export_data(
         df[columns], f"interface_outputs_sensitivity_{sensitivity}.csv", "final"
+    )
+    importer.export_data(
+        df_stacks, f"plant_stack_transition_sensitivity_{sensitivity}.csv", "final"
     )
     logger.info("All data for all years processed.")
