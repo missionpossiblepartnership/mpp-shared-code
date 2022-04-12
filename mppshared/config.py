@@ -191,7 +191,7 @@ run_config = {
     "APPLY_IMPLICIT_FORCING",
     "MAKE_RANKINGS",
     "SIMULATE_PATHWAY",
-    # "CALCULATE_OUTPUTS",
+    "CALCULATE_OUTPUTS",
     # "EXPORT_OUTPUTS",
     # "PLOT_AVAILABILITIES"
     # "MERGE_OUTPUTS"
@@ -214,6 +214,10 @@ TRANSITION_TYPES = [
 ]
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 
+# Carbon cost parameters
+
+INITIAL_CARBON_COST = 50
+FINAL_CARBON_COST = 250
 
 """
 Configuration to use for ranking
@@ -286,19 +290,37 @@ RANKING_CONFIG = {
 INVESTMENT_CYCLE = 20  # years
 
 # TODO: placeholder for external input
-REGIONAL_PRODUCTION_SHARE = {
-    "Africa": 0.3,
-    "China": 0.3,
-    "Europe": 0.3,
-    "India": 0.3,
-    "Latin America": 0.3,
-    "Middle East": 0.3,
-    "North America": 0.3,
-    "Oceania": 0.3,
-    "Russia": 0.3,
-    "Rest of Asia": 0.3,
-}
+# REGIONAL_PRODUCTION_SHARE Ammonia
+# REGIONAL_PRODUCTION_SHARE = {
+#     "Africa": 0.3,
+#     "China": 0.3,
+#     "Europe": 0.3,
+#     "India": 0.3,
+#     "Latin America": 0.3,
+#     "Middle East": 0.3,
+#     "North America": 0.3,
+#     "Oceania": 0.3,
+#     "Russia": 0.3,
+#     "Rest of Asia": 0.3,
+# }
 
+# REGIONAL_PRODUCTION_SHARE Aluminium
+REGIONAL_PRODUCTION_SHARE = {
+    "China - North": 0.3,
+    "China - North West": 0.3,
+    "China - North East": 0.3,
+    "China - Central": 0.3,
+    "China - South": 0.3,
+    "China - East": 0.3,
+    "Rest of Asia": 0.3,
+    "North America": 0.3,
+    "Russia": 0.3,
+    "Europe": 0.3,
+    "Middle East": 0.3,
+    "Africa": 0.3,
+    "South America": 0.3,
+    "Oceania": 0.3,
+}
 # Sectoral carbon budget (scope 1 and 2 CO2 emissions, in GtCO2)
 # TODO: import from .csv file
 SECTORAL_CARBON_BUDGETS = {

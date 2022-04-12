@@ -79,9 +79,9 @@ def rank_technology(
     if rank_type == "brownfield":
         df = df_ranking[df_ranking["switch_type"].str.contains("brownfield")].copy()
     elif rank_type == "decommission":
-        df = df_ranking[(df_ranking["switch_type"] == "decommission")].copy()
+        df = df_ranking[(df_ranking["switch_type"].str.contains("decommission"))].copy()
     elif rank_type == "greenfield":
-        df = df_ranking[(df_ranking["switch_type"] == "greenfield")].copy()
+        df = df_ranking[(df_ranking["switch_type"].str.contains("greenfield"))].copy()
 
     # Normalize TCO
     df["tco_normalized"] = 1 - (df["tco"] - df["tco"].min()) / (

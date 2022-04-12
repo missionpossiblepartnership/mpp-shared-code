@@ -1,12 +1,13 @@
 """ Enforce constraints in the yearly optimization of technology switches."""
 
-from pandera import Bool
-import numpy as np
 from copy import deepcopy
 
+import numpy as np
+from pandera import Bool
+
+from mppshared.config import REGIONAL_PRODUCTION_SHARE
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
-from mppshared.config import REGIONAL_PRODUCTION_SHARE
 
 
 def check_constraints(
@@ -93,7 +94,7 @@ def check_annual_carbon_budget_constraint(
     limit = temp_pathway.carbon_budget.get_annual_emissions_limit(
         year, temp_pathway.sector
     )
-    if np.round(co2_scope1_2, 2) < np.round(limit, 2):
+    if np.round(co2_scope1_2, 2) <= np.round(limit, 2):
         return True
 
     return False

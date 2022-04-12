@@ -110,27 +110,28 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
     pathway.output_technology_roadmap()
 
     # Save rankings after they have been adjusted due to MTO
-    pathway.save_rankings()
-    pathway.save_availability()
-    pathway.save_demand()
+    # Commening out the code as the processing of outputs is done independently
+    # pathway.save_rankings()
+    # pathway.save_availability()
+    # pathway.save_demand()
 
-    for product in PRODUCTS[SECTOR]:
-        df_stack_total = pathway.aggregate_stacks(this_year=False, product=product)
-        df_stack_new = pathway.aggregate_stacks(this_year=True, product=product)
+    # for product in PRODUCTS[SECTOR]:
+    #     df_stack_total = pathway.aggregate_stacks(this_year=False, product=product)
+    #     df_stack_new = pathway.aggregate_stacks(this_year=True, product=product)
 
-        importer.export_data(
-            df=df_stack_total,
-            filename="technologies_over_time_region.csv",
-            export_dir=f"final/{product}",
-        )
+    #     importer.export_data(
+    #         df=df_stack_total,
+    #         filename="technologies_over_time_region.csv",
+    #         export_dir=f"final/{product}",
+    #     )
 
-        importer.export_data(
-            df=df_stack_new,
-            filename="technologies_over_time_region_new.csv",
-            export_dir=f"final/{product}",
-        )
+    #     importer.export_data(
+    #         df=df_stack_new,
+    #         filename="technologies_over_time_region_new.csv",
+    #         export_dir=f"final/{product}",
+    #     )
 
-        pathway.plot_stacks(df_stack_total, groupby="technology", product=product)
-        pathway.plot_stacks(df_stack_total, groupby="region", product=product)
+    #     pathway.plot_stacks(df_stack_total, groupby="technology", product=product)
+    #     pathway.plot_stacks(df_stack_total, groupby="region", product=product)
 
     logger.info("Pathway simulation complete")

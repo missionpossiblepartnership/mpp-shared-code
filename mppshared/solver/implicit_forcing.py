@@ -7,14 +7,13 @@ import numpy as np
 import pandas as pd
 
 from mppshared.calculate.calculate_cost import discount_costs
-from mppshared.config import EMISSION_SCOPES, GHGS, PRODUCTS
+from mppshared.config import (EMISSION_SCOPES, FINAL_CARBON_COST, GHGS,
+                              INITIAL_CARBON_COST, PRODUCTS)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.solver.input_loading import filter_df_for_development
 from mppshared.utility.dataframe_utility import (
-    add_column_header_suffix,
-    get_grouping_columns_for_npv_calculation,
-)
+    add_column_header_suffix, get_grouping_columns_for_npv_calculation)
 from mppshared.utility.function_timer_utility import timer_func
 from mppshared.utility.log_utility import get_logger
 
@@ -123,7 +122,9 @@ def apply_carbon_cost_to_tco(
 
     # Additional cost from carbon cost is carbon cost multiplied with sum of scope 1 and scope 2 CO2 emissions
     cc = CarbonCostTrajectory(
-        trajectory="constant", initial_carbon_cost=50, final_carbon_cost=50
+        trajectory="constant",
+        initial_carbon_cost=INITIAL_CARBON_COST,
+        final_carbon_cost=FINAL_CARBON_COST,
     )
     df_cc = df.merge(cc.df_carbon_cost, on=["year"])
     df_cc["carbon_cost_addition"] = (df_cc["co2_scope1"] + df_cc["co2_scope2"]) * df_cc[
