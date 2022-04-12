@@ -214,6 +214,10 @@ TRANSITION_TYPES = [
 ]
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 
+# Carbon cost parameters
+
+INITIAL_CARBON_COST = 50
+FINAL_CARBON_COST = 250
 
 """
 Configuration to use for ranking
