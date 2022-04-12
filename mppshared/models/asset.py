@@ -6,8 +6,11 @@ import pandas as pd
 
 from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                               CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
-                              DECOMMISSION_RATES, INVESTMENT_CYCLE)
-from mppshared.utility.utils import first
+                              DECOMMISSION_RATES, INVESTMENT_CYCLE, LOG_LEVEL)
+from mppshared.utility.utils import first, get_logger
+
+logger = get_logger(__name__)
+logger.setLevel(LOG_LEVEL)
 
 
 class Asset:
@@ -71,6 +74,9 @@ class Asset:
         Returns:
             LCOX for the asset in the given year
         """
+        logger.debug(
+            f"product=='{self.product}' & technology_origin=='New-build' & year=={year} & region=='{self.region}' & technology_destination=='{self.technology}'"
+        )
         return df_cost.query(
             f"product=='{self.product}' & technology_origin=='New-build' & year=={year} & region=='{self.region}' & technology_destination=='{self.technology}'"
         )["lcox"].iloc[0]
