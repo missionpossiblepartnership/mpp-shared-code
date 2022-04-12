@@ -147,7 +147,7 @@ def decrease_cuf_of_assets(
         # Increase CUF of asset with lowest LCOX to upper threshold and remove from list
         asset = assets_above_cuf_threshold[0]
         logger.debug(f"Decrease CUF of {str(asset)}")
-        asset.cuf = CUF_UPPER_THRESHOLD
+        asset.cuf = CUF_LOWER_THRESHOLD
         assets_above_cuf_threshold.pop(0)
 
     return pathway
