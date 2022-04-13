@@ -59,7 +59,9 @@ def check_constraint_regional_production(
 
     # Check for every region in DataFrame
     df = df_regional_production.merge(df_demand, on=["region"], how="left")
-    df["share_regional_production"] = df["region"].map(REGIONAL_PRODUCTION_SHARE)
+    df["share_regional_production"] = df["region"].map(
+        REGIONAL_PRODUCTION_SHARE[product]
+    )
 
     # Compare regional production with required demand share up to specified number of significant figures
     sf = 2
