@@ -7,13 +7,20 @@ import numpy as np
 import pandas as pd
 
 from mppshared.calculate.calculate_cost import discount_costs
-from mppshared.config import (EMISSION_SCOPES, FINAL_CARBON_COST, GHGS,
-                              INITIAL_CARBON_COST, PRODUCTS)
+from mppshared.config import (
+    EMISSION_SCOPES,
+    FINAL_CARBON_COST,
+    GHGS,
+    INITIAL_CARBON_COST,
+    PRODUCTS,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.solver.input_loading import filter_df_for_development
 from mppshared.utility.dataframe_utility import (
-    add_column_header_suffix, get_grouping_columns_for_npv_calculation)
+    add_column_header_suffix,
+    get_grouping_columns_for_npv_calculation,
+)
 from mppshared.utility.function_timer_utility import timer_func
 from mppshared.utility.log_utility import get_logger
 
@@ -41,11 +48,15 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
         products=PRODUCTS[sector],
     )
 
-    #! Development only: filter input tables for faster runtimes
     df_technology_switches = importer.get_technology_transitions_and_cost()
     df_emissions = importer.get_emissions()
-    df_technology_characteristics = importer.get_asset_specs()
-    df_technology_characteristics.reset_index(inplace=True)
+    df_technology_characteristics = importer.get_technology_characteristics()
+
+    # Apply technology availability constraint
+    # TODO: eliminate transitions from one end-state technology to another!
+    df = apply_technology_availability_constraint(
+        df_technology_switches, df_technology_characteristics
+    )
 
     carbon_cost = 0
     if carbon_cost == 0:
@@ -68,10 +79,6 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
     # TODO: Subtract green premium from eligible technologies
 
     # TODO: Eliminate switches according to technology moratorium
-
-    # Apply technology availability constraint
-    # TODO: eliminate transitions from one end-state technology to another!
-    # df = apply_technology_availability_constraint(df_technology_switches, df_technology_characteristics)
 
     # Calculate emission deltas between origin and destination technology
     df_ranking = calculate_emission_reduction(df_carbon_cost, df_emissions)
@@ -174,7 +181,61 @@ def apply_technology_availability_constraint(
     Returns:
         pd.DataFrame: _description_
     """
-    pass
+
+    # Add classification of origin and destination technologies to technology transitions table
+    df_tech_char_destination = df_technology_characteristics[
+        ["product", "year", "region", "technology_destination", "classification"]
+    ].rename({"classification": "classification_destination"}, axis=1)
+
+    df_tech_char_origin = df_technology_characteristics[
+        ["product", "year", "region", "technology_destination", "classification"]
+    ].rename(
+        {
+            "technology_destination": "technology_origin",
+            "classification": "classification_origin",
+        },
+        axis=1,
+    )
+    df = df_technology_switches.merge(
+        df_tech_char_destination,
+        on=["product", "year", "region", "technology_destination"],
+        how="left",
+    )
+    df = df.merge(
+        df_tech_char_origin,
+        on=["product", "year", "region", "technology_origin"],
+        how="left",
+    )
+
+    # Constraint 1: no switches from transition or end-state to initial technologies
+    df = df.loc[
+        ~(
+            (
+                (df["classification_origin"] == "transition")
+                & (df["classification_destination"] == "initial")
+            )
+            | (
+                (df["classification_origin"] == "end-state")
+                & (df["classification_destination"] == "initial")
+            )
+            | (
+                (df["classification_origin"] == "end-state")
+                & (df["classification_destination"] == "transition")
+            )
+        )
+    ]
+
+    # Constraint 2: transitions to a technology are only possible when it has reached maturity
+    df = df.merge(
+        df_technology_characteristics[
+            ["product", "year", "region", "technology_destination", "expected_maturity"]
+        ],
+        on=["product", "year", "region", "technology_destination"],
+        how="left",
+    )
+    df = df.loc[df["year"] >= df["expected_maturity"]]
+
+    return df
 
 
 def calculate_emission_reduction(

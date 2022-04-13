@@ -4,8 +4,7 @@ import pandas as pd
 from pandas.errors import ParserError
 
 # from util.util import make_multi_df
-from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, MODEL_SCOPE,
-                              PRODUCTS)
+from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY, MODEL_SCOPE, PRODUCTS
 from mppshared.utility.dataframe_utility import make_multi_df
 
 
@@ -81,6 +80,7 @@ class IntermediateDataImporter:
             self.intermediate_path.joinpath("technology_characteristics.csv")
         )
 
+    # TODO: remove this legacy function
     def get_asset_specs(self):
         df_spec = pd.read_csv(
             self.intermediate_path.joinpath("technology_characteristics.csv"),
