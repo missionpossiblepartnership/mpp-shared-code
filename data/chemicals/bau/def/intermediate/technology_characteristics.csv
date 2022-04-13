@@ -1,4 +1,4 @@
-product,year,region,technology_destination,expected_maturity,wacc,lifetime,trl_current,classification
+product,year,region,technology,expected_maturity,wacc,technology_lifetime,trl_current,technology_classification
 Ammonia,2020,China,Natural Gas SMR + ammonia synthesis,2020,0.06,30,9,initial
 Ammonia,2020,Rest of Asia,Natural Gas SMR + ammonia synthesis,2020,0.06,30,9,initial
 Ammonia,2020,North America,Natural Gas SMR + ammonia synthesis,2020,0.06,30,9,initial
