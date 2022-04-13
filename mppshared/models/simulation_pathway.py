@@ -1,5 +1,6 @@
 import logging
 import math
+import sys
 from collections import defaultdict
 from multiprocessing.sharedctypes import Value
 
@@ -22,8 +23,9 @@ from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.transition import TransitionRegistry
 from mppshared.utility.dataframe_utility import (flatten_columns,
                                                  get_emission_columns)
+from mppshared.utility.utils import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
@@ -88,13 +90,16 @@ class SimulationPathway:
         # self.availability = self._import_availability()
 
         logger.debug("Getting process data")
-        self.process_data = self.importer.get_all_process_data()
+        # self.process_data = self.importer.get_all_process_data()
+        logger.debug("Getting all transitions and cost")
         self.df_cost = self.importer.get_technology_transitions_and_cost()
         # TODO: Raw material data is missing and should be called inputs to import it
         # self.inputs_pivot = self.importer.get_process_data(data_type="inputs")
+        logger.debug("Getting the asset specs")
         self.asset_specs = self.importer.get_asset_specs()
 
         # Initialize TransitionRegistry to track technology transitions
+        logger.debug("Getting the transition registry to track technology transitions")
         self.transitions = TransitionRegistry()
 
     def _import_availability(self):
@@ -208,7 +213,7 @@ class SimulationPathway:
         # TODO: filter by product
         # Annual production volume in MtNH3 by technology
         technologies = self.importer.get_technology_characteristics()[
-            "technology"
+            "technology_destination"
         ].unique()
         df_roadmap = pd.DataFrame(data={"technology": technologies})
 
@@ -536,42 +541,47 @@ class SimulationPathway:
         # Create AssetStack for model start year
         return {self.start_year: AssetStack(assets)}
 
-    # TODO: implement
     def make_initial_asset_stack_from_asset_data(self):
         """Make AssetStack from asset-specific data (as opposed to average regional data)."""
+        logger.info("Creating initial asset stack from asset data")
         df_stack = self.importer.get_initial_asset_stack()
         df_stack["number_assets"] = 1
-
         df_tech_characteristics = self.importer.get_technology_characteristics()
+        df_tech_characteristics.rename(
+            columns={"technology_destination": "technology"}, inplace=True
+        )
+        df_stack.rename(columns={"year": "year_commissioned"}, inplace=True)
+        df_stack["year"] = self.start_year
         df_stack = df_stack.merge(
             df_tech_characteristics[
                 [
+                    "year",
                     "product",
                     "region",
                     "technology",
-                    "technology_classification",
+                    "classification",
                     "technology_lifetime",
                 ]
             ],
-            on=["product", "region", "technology"],
+            on=["product", "year", "region", "technology"],
             how="left",
         )
-
         assets = df_stack.apply(
             lambda row: create_assets(
                 n_assets=row["number_assets"],
                 product=row["product"],
                 technology=row["technology"],
                 region=row["region"],
-                year_commissioned=row["year"],
+                year_commissioned=row["year_commissioned"],
                 annual_production_capacity=row["annual_production_capacity"],
                 cuf=row["capacity_factor"],
                 asset_lifetime=row["technology_lifetime"],
-                technology_classification=row["technology_classification"],
+                technology_classification=row["classification"],
             ),
             axis=1,
         ).tolist()
         assets = [item for sublist in assets for item in sublist]
+        logger.info(f"Created {len(assets)} initial assets")
 
         # Create AssetStack for model start year
         return {self.start_year: AssetStack(assets)}
