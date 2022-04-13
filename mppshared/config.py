@@ -9,6 +9,10 @@ LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
 )
 
+### SECTOR CHOICE ###
+SECTOR = "chemicals"
+# SECTOR = "aluminium"
+
 
 ### DATA IMPORT AND EXPORT
 CORE_DATA_PATH = "data"
@@ -168,9 +172,6 @@ SENSITIVITIES = [
 ]
 
 ### SECTOR-SPECIFIC PARAMETERS ###
-# Sectors for which the model can be run
-# SECTOR = "chemicals"
-SECTOR = "aluminium"
 
 # Products produced by each sector
 PRODUCTS = {
