@@ -135,7 +135,10 @@ END_YEAR = 2050
 MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 # (Artificial) investment cycles after which plants can be rebuilt and decommissioned
-INVESTMENT_CYCLES
+INVESTMENT_CYCLES = {
+    "chemicals": 20,  # years
+    "aluminium": 20,
+}
 
 # Emissions
 GHGS = [
@@ -242,7 +245,8 @@ indicates that for the newbuild rank, in the most_economic scenario, we favor bu
 4. Lower scope 3 emissions
 in that order!
 """
-
+lc_weight_cost = 1
+lc_weight_emissions = 0
 RANKING_CONFIG = {
     "greenfield": {
         "bau": {
@@ -254,8 +258,8 @@ RANKING_CONFIG = {
             "emissions": 1.0,
         },
         "lc": {
-            "tco": 0.8,
-            "emissions": 0.2,
+            "tco": lc_weight_cost,
+            "emissions": lc_weight_emissions,
         },
     },
     "brownfield": {
@@ -268,8 +272,8 @@ RANKING_CONFIG = {
             "emissions": 1.0,
         },
         "lc": {
-            "tco": 0.8,
-            "emissions": 0.2,
+            "tco": lc_weight_cost,
+            "emissions": lc_weight_emissions,
         },
     },
     "decommission": {
@@ -282,8 +286,8 @@ RANKING_CONFIG = {
             "emissions": 1.0,
         },
         "lc": {
-            "tco": 0.8,
-            "emissions": 0.2,
+            "tco": lc_weight_cost,
+            "emissions": lc_weight_emissions,
         },
     },
 }
@@ -329,7 +333,7 @@ REGIONAL_PRODUCTION_SHARES = {
 SECTORAL_CARBON_BUDGETS = {
     "aluminium": 11,
     "cement": 42,
-    "chemicals": 32 * 1 / 3,  #! Debug: reduce to enforce constraint
+    "chemicals": 32,
     "steel": 56,
     "aviation": 17,
     "shipping": 16,
