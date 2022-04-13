@@ -37,7 +37,9 @@ def brownfield(
     df_rank = pathway.get_ranking(year=year, product=product, rank_type="brownfield")
 
     # Get assets eligible for brownfield transitions
-    candidates = new_stack.get_assets_eligible_for_brownfield(year)
+    candidates = new_stack.get_assets_eligible_for_brownfield(
+        year=year, sector=pathway.sector
+    )
 
     # Track number of assets that undergo transition
     # TODO: implement constraints for number of brownfield transitions per year

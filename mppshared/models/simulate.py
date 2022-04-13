@@ -1,15 +1,21 @@
 import logging
 
-from mppshared.agent_logic.agent_logic_functions import \
-    adjust_capacity_utilisation
+from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
 from mppshared.agent_logic.brownfield import brownfield
 from mppshared.agent_logic.decommission import decommission
 from mppshared.agent_logic.greenfield import greenfield
-from mppshared.config import (END_YEAR, LOG_LEVEL, PRODUCTS, SECTOR,
-                              SECTORAL_CARBON_BUDGETS, START_YEAR)
+from mppshared.config import (
+    END_YEAR,
+    LOG_LEVEL,
+    PRODUCTS,
+    SECTOR,
+    SECTORAL_CARBON_BUDGETS,
+    START_YEAR,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.asset import AssetStack
 from mppshared.models.carbon_budget import CarbonBudget, carbon_budget_test
+
 # from mppshared.agent_logic.retrofit import retrofit
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
@@ -57,7 +63,7 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
                 df.loc[START_YEAR, "annual_limit"] = limit
 
             # Decommission assets
-            pathway = decommission(pathway=pathway, year=year, product=product)
+            # pathway = decommission(pathway=pathway, year=year, product=product)
 
             # Renovate and rebuild assets (brownfield transition)
             pathway = brownfield(pathway=pathway, year=year, product=product)

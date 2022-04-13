@@ -30,11 +30,13 @@ def check_constraints(
     regional_constraint = check_constraint_regional_production(
         pathway=pathway, stack=stack, product=product, year=year
     )
+    # regional_constraint = True  #! Testing only
 
     # Check constraint for annual emissions limit from carbon budget
     emissions_constraint = check_annual_carbon_budget_constraint(
         pathway=pathway, stack=stack, product=product, year=year
     )
+    # emissions_constraint = True  #! Testing only
 
     # TODO: Check technology ramp-up constraint
 
