@@ -56,6 +56,7 @@ def run_model_parallel(runs):
 
 
 def main():
+    logger.info(f"Running model for {SECTOR}")
     runs = list(itertools.product(PATHWAYS, SENSITIVITIES))
     if RUN_PARALLEL:
         run_model_parallel(runs)
