@@ -297,7 +297,7 @@ RANKING_CONFIG = {
 # TODO: placeholder for external input
 # REGIONAL_PRODUCTION_SHARE Ammonia
 REGIONAL_PRODUCTION_SHARES = {
-    "Ammonia": {
+    "chemicals": {
         "Africa": 0.3,
         "China": 0.3,
         "Europe": 0.3,
@@ -332,10 +332,26 @@ REGIONAL_PRODUCTION_SHARES = {
 # TODO: import from .csv file
 SECTORAL_CARBON_BUDGETS = {
     "aluminium": 11,
-    "cement": 42,
+    # "cement": 42,
     "chemicals": 32,
-    "steel": 56,
-    "aviation": 17,
-    "shipping": 16,
-    "trucking": 36,
+    # "steel": 56,
+    # "aviation": 17,
+    # "shipping": 16,
+    # "trucking": 36,
+}
+
+residual_share = 0.05
+emissions_chemicals_2020 = 0.51  # Gt CO2 (scope 1 and 2)
+
+SECTORAL_PATHWAYS = {
+    "chemicals": {
+        "emissions_start": emissions_chemicals_2020,
+        "emissions_end": residual_share * emissions_chemicals_2020,
+        "action_start": 2025,
+    },
+    "aluminium": {
+        "emissions_start": emissions_chemicals_2020,
+        "emissions_end": residual_share * emissions_chemicals_2020,
+        "action_start": 2025,
+    },
 }
