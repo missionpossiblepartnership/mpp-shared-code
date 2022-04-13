@@ -74,9 +74,6 @@ class Asset:
         Returns:
             LCOX for the asset in the given year
         """
-        logger.debug(
-            f"product=='{self.product}' & technology_origin=='New-Build' & year=={year} & region=='{self.region}' & technology_destination=='{self.technology}'"
-        )
         return df_cost.query(
             f"product=='{self.product}' & technology_origin=='New-Build' & year=={year} & region=='{self.region}' & technology_destination=='{self.technology}'"
         )["lcox"].iloc[0]
@@ -294,7 +291,7 @@ def make_new_asset(
         (df_technology_characteristics["product"] == asset_transition["product"])
         & (df_technology_characteristics["region"] == asset_transition["region"])
         & (
-            df_technology_characteristics["technology"]
+            df_technology_characteristics["technology_destination"]
             == asset_transition["technology_destination"]
         )
     ]
@@ -307,8 +304,6 @@ def make_new_asset(
         annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
         cuf=CUF_UPPER_THRESHOLD,
         asset_lifetime=technology_characteristics["technology_lifetime"],
-        technology_classification=technology_characteristics[
-            "technology_classification"
-        ],
+        technology_classification=technology_characteristics["classification"],
         retrofit=False,
     )
