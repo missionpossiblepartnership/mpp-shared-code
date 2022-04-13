@@ -44,29 +44,33 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
 
             logger.info(product)
 
-            # Adjust capacity utilisation of each asset
-            pathway = adjust_capacity_utilisation(
-                pathway=pathway, year=year, product=product
-            )
-
-            #! Debug: set carbon budget start to initial emissions (needs to be implemented)
             if year == START_YEAR:
+                # Adjust capacity utilisation of each asset
+                pathway = adjust_capacity_utilisation(
+                    pathway=pathway, year=year, product=product
+                )
+
+                #! Debug: set carbon budget start to initial emissions (needs to be implemented)
                 emissions = pathway.calculate_emissions_stack(year, product)
                 limit = (emissions["co2_scope1"] + emissions["co2_scope2"]) / 1e3
                 df = pathway.carbon_budget.pathways[pathway.sector]
                 df.loc[START_YEAR, "annual_limit"] = limit
 
-            # Decommission assets
-            pathway = decommission(pathway=pathway, year=year, product=product)
+            else:
+                pathway = adjust_capacity_utilisation(
+                    pathway=pathway, year=year, product=product
+                )
+                # Decommission assets
+                pathway = decommission(pathway=pathway, year=year, product=product)
 
-            # Renovate and rebuild assets (brownfield transition)
-            pathway = brownfield(pathway=pathway, year=year, product=product)
+                # Renovate and rebuild assets (brownfield transition)
+                pathway = brownfield(pathway=pathway, year=year, product=product)
 
-            # Build new assets
-            pathway = greenfield(pathway=pathway, year=year, product=product)
+                # Build new assets
+                pathway = greenfield(pathway=pathway, year=year, product=product)
 
-            # Write stack to csv
-            pathway.export_stack_to_csv(year)
+                # Write stack to csv
+                pathway.export_stack_to_csv(year)
 
         # Copy availability to next year
         # pathway.copy_availability(year=year)
