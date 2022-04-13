@@ -1,11 +1,17 @@
+import sys
 from pathlib import Path
 
 import pandas as pd
 from pandas.errors import ParserError
 
 # from util.util import make_multi_df
-from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY, MODEL_SCOPE, PRODUCTS
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL,
+                              MODEL_SCOPE, PRODUCTS)
 from mppshared.utility.dataframe_utility import make_multi_df
+from mppshared.utility.utils import get_logger
+
+logger = get_logger(__name__)
+logger.setLevel(LOG_LEVEL)
 
 
 class IntermediateDataImporter:
@@ -84,7 +90,7 @@ class IntermediateDataImporter:
     def get_asset_specs(self):
         df_spec = pd.read_csv(
             self.intermediate_path.joinpath("technology_characteristics.csv"),
-            index_col=["product", "technology", "region"],
+            index_col=["product", "technology_destination", "region"],
         )
         df_spec.annual_production_capacity = (
             ASSUMED_ANNUAL_PRODUCTION_CAPACITY * 365 / 1e6
@@ -155,28 +161,6 @@ class IntermediateDataImporter:
         )
 
         return pd.read_csv(file_path, header=header, index_col=index_cols)
-
-    def get_all_process_data(self, product=None):
-        """Get combined data outputted by the model on process level"""
-        # df_inputs_pivot = self.get_process_data("inputs_pivot")
-        df_emissions = self.get_process_data("emissions")
-        df_cost = self.get_process_data("technology_transitions")
-        df_spec = self.get_asset_specs()
-
-        # Add multi index layers to join
-        # 2 levels for emissions/spec to get it on the right level
-        df_emissions = make_multi_df(df=df_emissions, name="emissions")
-        df_spec = make_multi_df(df=df_spec, name="spec")
-        df_cost = make_multi_df(df=df_cost, name="cost")
-        df_cost.index.names = ["product", "technology", "year", "region"]
-        # df_inputs_pivot = make_multi_df(df=df_inputs_pivot, name="inputs")
-
-        df_all = df_spec.join(df_emissions).join(df_cost)
-        # df_all.columns.names = ["group", "category", "name"]
-
-        if product is not None:
-            df_all = df_all.query(f"product == '{product}'").droplevel("product")
-        return df_all.query("year <= 2050")
 
     def get_technologies_to_rank(self):
         """Return the list of technologies to rank with the TCO and emission deltas."""
