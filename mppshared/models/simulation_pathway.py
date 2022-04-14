@@ -98,7 +98,7 @@ class SimulationPathway:
         # TODO: Raw material data is missing and should be called inputs to import it
         # self.inputs_pivot = self.importer.get_process_data(data_type="inputs")
         logger.debug("Getting the asset specs")
-        self.asset_specs = self.importer.get_asset_specs()
+        # self.asset_specs = self.importer.get_asset_specs()
 
         # Initialize TransitionRegistry to track technology transitions
         logger.debug("Getting the transition registry to track technology transitions")
@@ -562,7 +562,7 @@ class SimulationPathway:
                     "product",
                     "region",
                     "technology",
-                    "classification",
+                    "technology_classification",
                     "technology_lifetime",
                 ]
             ],
@@ -579,7 +579,7 @@ class SimulationPathway:
                 annual_production_capacity=row["annual_production_capacity"],
                 cuf=row["capacity_factor"],
                 asset_lifetime=row["technology_lifetime"],
-                technology_classification=row["classification"],
+                technology_classification=row["technology_classification"],
             ),
             axis=1,
         ).tolist()

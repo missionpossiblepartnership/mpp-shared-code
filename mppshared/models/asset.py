@@ -5,14 +5,9 @@ from xmlrpc.client import Boolean
 
 import pandas as pd
 
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    CUF_LOWER_THRESHOLD,
-    CUF_UPPER_THRESHOLD,
-    DECOMMISSION_RATES,
-    INVESTMENT_CYCLES,
-    LOG_LEVEL,
-)
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                              CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
+                              DECOMMISSION_RATES, INVESTMENT_CYCLES, LOG_LEVEL)
 from mppshared.utility.utils import first, get_logger
 
 logger = get_logger(__name__)
@@ -307,7 +302,7 @@ def make_new_asset(
         (df_technology_characteristics["product"] == asset_transition["product"])
         & (df_technology_characteristics["region"] == asset_transition["region"])
         & (
-            df_technology_characteristics["technology_destination"]
+            df_technology_characteristics["technology"]
             == asset_transition["technology_destination"]
         )
     ]
@@ -320,6 +315,8 @@ def make_new_asset(
         annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
         cuf=CUF_UPPER_THRESHOLD,
         asset_lifetime=technology_characteristics["technology_lifetime"],
-        technology_classification=technology_characteristics["classification"],
+        technology_classification=technology_characteristics[
+            "technology_classification"
+        ],
         retrofit=False,
     )
