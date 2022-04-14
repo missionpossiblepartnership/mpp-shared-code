@@ -7,7 +7,9 @@ import numpy as np
 import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_transition, select_best_transition)
+    remove_transition,
+    select_best_transition,
+)
 from mppshared.config import LOG_LEVEL, MODEL_SCOPE
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.constraints import check_constraints
@@ -98,13 +100,15 @@ def select_asset_to_decommission(
 
     """
     # Get all assets eligible for decommissioning
-    candidates = stack.get_assets_eligible_for_decommission()
+    candidates = stack.get_assets_eligible_for_decommission(
+        year=year, sector=pathway.sector
+    )
 
     while candidates:
         # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
         best_candidates = []
         while not best_candidates:
-            # Choose the best transition, i.e. highest decommission rank
+            # Choose the best transition, i.e. highest decommission rank (filter )
             best_transition = select_best_transition(df_rank)
 
             best_candidates = list(

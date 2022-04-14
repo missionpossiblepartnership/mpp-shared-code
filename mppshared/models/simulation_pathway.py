@@ -85,6 +85,8 @@ class SimulationPathway:
             self.importer.get_technology_characteristics()
         )
 
+        self.df_cost = self.importer.get_technology_transitions_and_cost()
+
         # TODO: Availability missing, if it is available we should import
         # logger.debug("Getting availability")
         # self.availability = self._import_availability()
@@ -512,11 +514,12 @@ class SimulationPathway:
                     "product",
                     "region",
                     "technology",
+                    "year",
                     "technology_classification",
                     "technology_lifetime",
                 ]
             ],
-            on=["product", "region", "technology"],
+            on=["product", "region", "year", "technology"],
             how="left",
         )
 

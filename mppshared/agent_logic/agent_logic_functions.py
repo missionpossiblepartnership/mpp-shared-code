@@ -5,9 +5,13 @@ from operator import methodcaller
 import numpy as np
 import pandas as pd
 
-from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                              CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
-                              LOG_LEVEL, MODEL_SCOPE)
+from mppshared.config import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CUF_LOWER_THRESHOLD,
+    CUF_UPPER_THRESHOLD,
+    LOG_LEVEL,
+    MODEL_SCOPE,
+)
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
@@ -115,7 +119,7 @@ def increase_cuf_of_assets(
 
         # Increase CUF of asset with lowest LCOX to upper threshold and remove from list
         asset = assets_below_cuf_threshold[0]
-        logger.debug(f"Increase CUF of {str(asset)}")
+        # logger.debug(f"Increase CUF of {str(asset)}")
         asset.cuf = CUF_UPPER_THRESHOLD
         assets_below_cuf_threshold.pop(0)
 
@@ -146,7 +150,7 @@ def decrease_cuf_of_assets(
 
         # Increase CUF of asset with lowest LCOX to upper threshold and remove from list
         asset = assets_above_cuf_threshold[0]
-        logger.debug(f"Decrease CUF of {str(asset)}")
+        # logger.debug(f"Decrease CUF of {str(asset)}")
         asset.cuf = CUF_LOWER_THRESHOLD
         assets_above_cuf_threshold.pop(0)
 

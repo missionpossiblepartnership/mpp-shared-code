@@ -8,9 +8,10 @@ import numpy as np
 import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_transition, select_best_transition)
-from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL,
-                              MODEL_SCOPE)
+    remove_transition,
+    select_best_transition,
+)
+from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL, MODEL_SCOPE
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
