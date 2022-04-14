@@ -1,13 +1,17 @@
 """ Enforce constraints in the yearly optimization of technology switches."""
-
 from copy import deepcopy
 
 import numpy as np
+import pandas as pd
 from pandera import Bool
 
-from mppshared.config import REGIONAL_PRODUCTION_SHARES
+from mppshared.config import LOG_LEVEL, REGIONAL_PRODUCTION_SHARES
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
+from mppshared.utility.utils import get_logger
+
+logger = get_logger(__name__)
+logger.setLevel(LOG_LEVEL)
 
 
 def check_constraints(
@@ -26,9 +30,9 @@ def check_constraints(
     """
     # TODO: improve runtime by not applying all constraints to every agent logic
     if pathway.pathway == "bau":
+        logger.debug("No constraints for bau pathway")
         return True
     else:
-
         # Check regional production constraint
         regional_constraint = check_constraint_regional_production(
             pathway=pathway, stack=stack, product=product, year=year
@@ -39,13 +43,22 @@ def check_constraints(
         emissions_constraint = check_annual_carbon_budget_constraint(
             pathway=pathway, stack=stack, product=product, year=year
         )
-        # emissions_constraint = True  #! Testing only
+        emissions_constraint = True  #! Testing only
 
         # TODO: Check technology ramp-up constraint
 
         # TODO: Check resource availability constraint
 
         #! Placeholder
+        df = pd.DataFrame(
+            data={
+                "regional_constraint": regional_constraint,
+                "emissions_constraint": emissions_constraint,
+            },
+            index=[0],
+        )
+        # TODO: Remove, only for debugging
+        df.to_csv(f"debug/{year}_check_constraints.csv")
         return regional_constraint & emissions_constraint
 
 
@@ -73,6 +86,8 @@ def check_constraint_regional_production(
     df["check"] = np.round(df["annual_production_volume"], sf) >= np.round(
         df["demand"] * df["share_regional_production"], sf
     )
+    # TODO: Remove, only for debugging
+    df.to_csv(f"debug/{year}_check_constraint_regional_production.csv")
 
     # The constraint is hurt if any region does not meet its required regional production share
     if df["check"].all():
