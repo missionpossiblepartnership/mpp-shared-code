@@ -33,6 +33,7 @@ def greenfield(
     Returns:
         Updated decarbonization pathway with the updated AssetStack in the subsequent year according to the greenfield transitions enacted
     """
+    logger.info(f"Starting greenfield transition logic for year {year}")
     # Next year's stack is updated with each decommissioning
     new_stack = pathway.get_stack(year=year + 1)
 
@@ -45,6 +46,7 @@ def greenfield(
 
     # Build new assets while demand exceeds production
     # TODO: Decommission until one asset short of balance between demand and production
+    assets_greenfield = 0
     while demand > new_stack.get_annual_production_volume(product):
 
         # Identify asset for greenfield transition
@@ -69,6 +71,9 @@ def greenfield(
         pathway.transitions.add(
             transition_type="greenfield", year=year, destination=new_asset
         )
+    logger.debug(
+        f"Greenfield transition logic finished for year {year}, {assets_greenfield} assets built"
+    )
 
     production = new_stack.get_annual_production_volume(product)  #! Development only
     return pathway
