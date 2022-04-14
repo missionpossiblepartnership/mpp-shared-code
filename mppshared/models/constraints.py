@@ -25,25 +25,28 @@ def check_constraints(
         Returns True if no constraint hurt
     """
     # TODO: improve runtime by not applying all constraints to every agent logic
+    if pathway.pathway == "bau":
+        return True
+    else:
 
-    # Check regional production constraint
-    regional_constraint = check_constraint_regional_production(
-        pathway=pathway, stack=stack, product=product, year=year
-    )
-    # regional_constraint = True  #! Testing only
+        # Check regional production constraint
+        regional_constraint = check_constraint_regional_production(
+            pathway=pathway, stack=stack, product=product, year=year
+        )
+        # regional_constraint = True  #! Testing only
 
-    # Check constraint for annual emissions limit from carbon budget
-    emissions_constraint = check_annual_carbon_budget_constraint(
-        pathway=pathway, stack=stack, product=product, year=year
-    )
-    # emissions_constraint = True  #! Testing only
+        # Check constraint for annual emissions limit from carbon budget
+        emissions_constraint = check_annual_carbon_budget_constraint(
+            pathway=pathway, stack=stack, product=product, year=year
+        )
+        # emissions_constraint = True  #! Testing only
 
-    # TODO: Check technology ramp-up constraint
+        # TODO: Check technology ramp-up constraint
 
-    # TODO: Check resource availability constraint
+        # TODO: Check resource availability constraint
 
-    #! Placeholder
-    return regional_constraint & emissions_constraint
+        #! Placeholder
+        return regional_constraint & emissions_constraint
 
 
 def check_constraint_regional_production(
