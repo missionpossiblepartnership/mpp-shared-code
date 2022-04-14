@@ -10,8 +10,8 @@ LOG_FORMATTER = logging.Formatter(
 )
 
 ### SECTOR CHOICE ###
-# SECTOR = "chemicals"
-SECTOR = "aluminium"
+SECTOR = "chemicals"
+# SECTOR = "aluminium"
 
 
 ### DATA IMPORT AND EXPORT
@@ -137,7 +137,7 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 # (Artificial) investment cycles after which plants can be rebuilt and decommissioned
 INVESTMENT_CYCLES = {
     "chemicals": 20,  # years
-    "aluminium": 20,
+    "aluminium": 1,
 }
 
 # Emissions
