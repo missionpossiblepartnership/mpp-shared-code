@@ -55,8 +55,10 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
                 limit = (emissions["co2_scope1"] + emissions["co2_scope2"]) / 1e3
                 df = pathway.carbon_budget.pathways[pathway.sector]
                 df.loc[START_YEAR, "annual_limit"] = limit
+                # Write stack to csv
+                pathway.export_stack_to_csv(year)
 
-            else:
+            elif year != START_YEAR:
                 pathway = adjust_capacity_utilisation(
                     pathway=pathway, year=year, product=product
                 )
