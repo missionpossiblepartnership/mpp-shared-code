@@ -205,7 +205,9 @@ class SimulationPathway:
         self.importer.export_data(df, f"stack_{year}.csv", "stack_tracker")
 
     def output_technology_roadmap(self):
+        logger.debug("Creatting technology roadmap")
         df_roadmap = self.create_technology_roadmap()
+        logger.debug("Exporting technology roadmap")
         self.importer.export_data(df_roadmap, "technology_roadmap.csv", "final")
         self.plot_technology_roadmap(df_roadmap=df_roadmap)
 
@@ -215,9 +217,10 @@ class SimulationPathway:
         # TODO: filter by product
         # Annual production volume in MtNH3 by technology
         technologies = self.importer.get_technology_characteristics()[
-            "technology_destination"
+            "technology"
         ].unique()
         df_roadmap = pd.DataFrame(data={"technology": technologies})
+        logger.debug("Calculating annual production volume")
 
         for year in np.arange(START_YEAR, END_YEAR + 1):
 
@@ -239,10 +242,11 @@ class SimulationPathway:
         """Plot the technology roadmap and save as .html"""
 
         # Melt roadmap DataFrame for easy plotting
+        logger.debug("Melting roadmap DataFrame")
         df_roadmap = df_roadmap.melt(
             id_vars="technology", var_name="year", value_name="annual_volume"
         )
-
+        logger.debug("Plotting technology roadmap")
         fig = make_subplots()
         wedge_fig = px.area(df_roadmap, color="technology", x="year", y="annual_volume")
 
@@ -251,13 +255,14 @@ class SimulationPathway:
         fig.layout.xaxis.title = "Year"
         fig.layout.yaxis.title = "Annual production volume (MtNH3/year)"
         fig.layout.title = "Technology roadmap"
+        logger.debug("Exporting technology roadmap HTML")
 
         plot(
             fig,
             filename=str(self.importer.final_path.joinpath("technology_roadmap.html")),
             auto_open=False,
         )
-
+        logger.debug("Exporting technology roadmap PNG")
         fig.write_image(self.importer.final_path.joinpath("technology_roadmap.png"))
 
     def output_emission_trajectory(self):
