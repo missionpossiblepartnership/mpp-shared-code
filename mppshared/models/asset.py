@@ -1,12 +1,18 @@
 """Asset and asset stack classes, code adapted from MCC"""
+from calendar import c
 from uuid import uuid4
 from xmlrpc.client import Boolean
 
 import pandas as pd
 
-from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                              CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
-                              DECOMMISSION_RATES, INVESTMENT_CYCLE, LOG_LEVEL)
+from mppshared.config import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CUF_LOWER_THRESHOLD,
+    CUF_UPPER_THRESHOLD,
+    DECOMMISSION_RATES,
+    INVESTMENT_CYCLES,
+    LOG_LEVEL,
+)
 from mppshared.utility.utils import first, get_logger
 
 logger = get_logger(__name__)
@@ -74,12 +80,11 @@ class Asset:
         Returns:
             LCOX for the asset in the given year
         """
-        logger.debug(
-            f"product=='{self.product}' & technology_origin=='New-Build' & year=={year} & region=='{self.region}' & technology_destination=='{self.technology}'"
-        )
-        return df_cost.query(
-            f"product=='{self.product}' & technology_origin=='New-Build' & year=={year} & region=='{self.region}' & technology_destination=='{self.technology}'"
-        )["lcox"].iloc[0]
+        result = df_cost.query(
+            f"product=='{self.product}' & technology_origin=='New-build' & year=={year} & region=='{self.region}' & technology_destination=='{self.technology}'"
+        )["lcox"]
+
+        return result.iloc[0]
 
 
 def create_assets(n_assets: int, **kwargs) -> list:
@@ -253,27 +258,35 @@ class AssetStack:
             assets=[asset for asset in self.assets if asset.technology == technology]
         )
 
-    def get_assets_eligible_for_decommission(self) -> list:
+    def get_assets_eligible_for_decommission(self, year: int, sector: str) -> list:
         """Return a list of Assets from the AssetStack that are eligible for decommissioning"""
+
         # Assets can be decommissioned if their CUF is lower than the threshold
         candidates = filter(lambda asset: asset.cuf < CUF_LOWER_THRESHOLD, self.assets)
 
-        # TODO: filter based on asset age
-
-        return list(candidates)
-
-    def get_assets_eligible_for_brownfield(self, year) -> list:
-        """Return a list of Assets from the AssetStack that are eligible for a brownfield technology transition"""
-
-        # Assets can be renovated or rebuild if their CUF exceeds the threshold and they are older than the investment cycle
-        # TODO: is there a distinction between brownfield renovation and brownfield rebuild?
+        # Assets can be decommissioned if their age is at least as high as the sector's investment cycle
         candidates = filter(
-            lambda asset: (asset.cuf > CUF_LOWER_THRESHOLD)
-            & (asset.get_age(year) >= INVESTMENT_CYCLE),
-            self.assets,
+            lambda asset: asset.get_age(year) >= INVESTMENT_CYCLES[sector], candidates
         )
 
         return list(candidates)
+
+    def get_assets_eligible_for_brownfield(self, year: int, sector: str) -> list:
+        """Return a list of Assets from the AssetStack that are eligible for a brownfield technology transition"""
+
+        # Assets can be renovated at any time unless they've been renovated already
+        candidates_renovation = filter(
+            lambda asset: asset.retrofit == False, self.assets
+        )
+
+        # Assets can be rebuild if their CUF exceeds the threshold and they are older than the investment cycle
+        candidates_rebuild = filter(
+            lambda asset: (asset.cuf > CUF_LOWER_THRESHOLD)
+            & (asset.get_age(year) >= INVESTMENT_CYCLES[sector]),
+            self.assets,
+        )
+
+        return list(candidates_renovation) + list(candidates_rebuild)
 
 
 def make_new_asset(

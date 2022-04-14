@@ -134,6 +134,12 @@ START_YEAR = 2020
 END_YEAR = 2050
 MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
+# (Artificial) investment cycles after which plants can be rebuilt and decommissioned
+INVESTMENT_CYCLES = {
+    "chemicals": 20,  # years
+    "aluminium": 20,
+}
+
 # Emissions
 GHGS = [
     "co2",
@@ -239,7 +245,8 @@ indicates that for the newbuild rank, in the most_economic scenario, we favor bu
 4. Lower scope 3 emissions
 in that order!
 """
-
+lc_weight_cost = 1
+lc_weight_emissions = 0
 RANKING_CONFIG = {
     "greenfield": {
         "bau": {
@@ -251,8 +258,8 @@ RANKING_CONFIG = {
             "emissions": 1.0,
         },
         "lc": {
-            "tco": 0.8,
-            "emissions": 0.2,
+            "tco": lc_weight_cost,
+            "emissions": lc_weight_emissions,
         },
     },
     "brownfield": {
@@ -265,8 +272,8 @@ RANKING_CONFIG = {
             "emissions": 1.0,
         },
         "lc": {
-            "tco": 0.8,
-            "emissions": 0.2,
+            "tco": lc_weight_cost,
+            "emissions": lc_weight_emissions,
         },
     },
     "decommission": {
@@ -279,57 +286,72 @@ RANKING_CONFIG = {
             "emissions": 1.0,
         },
         "lc": {
-            "tco": 0.8,
-            "emissions": 0.2,
+            "tco": lc_weight_cost,
+            "emissions": lc_weight_emissions,
         },
     },
 }
 
 ### CONSTRAINTS ###
 
-# TODO: replace investment cycle placeholder with technology- and sector-specific considerations
-INVESTMENT_CYCLE = 20  # years
-
 # TODO: placeholder for external input
 # REGIONAL_PRODUCTION_SHARE Ammonia
-# REGIONAL_PRODUCTION_SHARE = {
-#     "Africa": 0.3,
-#     "China": 0.3,
-#     "Europe": 0.3,
-#     "India": 0.3,
-#     "Latin America": 0.3,
-#     "Middle East": 0.3,
-#     "North America": 0.3,
-#     "Oceania": 0.3,
-#     "Russia": 0.3,
-#     "Rest of Asia": 0.3,
-# }
-
-# REGIONAL_PRODUCTION_SHARE Aluminium
-REGIONAL_PRODUCTION_SHARE = {
-    "China - North": 0.3,
-    "China - North West": 0.3,
-    "China - North East": 0.3,
-    "China - Central": 0.3,
-    "China - South": 0.3,
-    "China - East": 0.3,
-    "Rest of Asia": 0.3,
-    "North America": 0.3,
-    "Russia": 0.3,
-    "Europe": 0.3,
-    "Middle East": 0.3,
-    "Africa": 0.3,
-    "South America": 0.3,
-    "Oceania": 0.3,
+REGIONAL_PRODUCTION_SHARES = {
+    "chemicals": {
+        "Africa": 0.3,
+        "China": 0.3,
+        "Europe": 0.3,
+        "India": 0.3,
+        "Latin America": 0.3,
+        "Middle East": 0.3,
+        "North America": 0.3,
+        "Oceania": 0.3,
+        "Russia": 0.3,
+        "Rest of Asia": 0.3,
+    },
+    "aluminium": {
+        "China - North": 0.3,
+        "China - North West": 0.3,
+        "China - North East": 0.3,
+        "China - Central": 0.3,
+        "China - South": 0.3,
+        "China - East": 0.3,
+        "Rest of Asia": 0.3,
+        "North America": 0.3,
+        "Russia": 0.3,
+        "Europe": 0.3,
+        "Middle East": 0.3,
+        "Africa": 0.3,
+        "South America": 0.3,
+        "Oceania": 0.3,
+    },
 }
+
+
 # Sectoral carbon budget (scope 1 and 2 CO2 emissions, in GtCO2)
 # TODO: import from .csv file
 SECTORAL_CARBON_BUDGETS = {
     "aluminium": 11,
-    "cement": 42,
-    "chemicals": 32 * 1 / 3,  #! Debug: reduce to enforce constraint
-    "steel": 56,
-    "aviation": 17,
-    "shipping": 16,
-    "trucking": 36,
+    # "cement": 42,
+    "chemicals": 32,
+    # "steel": 56,
+    # "aviation": 17,
+    # "shipping": 16,
+    # "trucking": 36,
+}
+
+residual_share = 0.05
+emissions_chemicals_2020 = 0.51  # Gt CO2 (scope 1 and 2)
+
+SECTORAL_PATHWAYS = {
+    "chemicals": {
+        "emissions_start": emissions_chemicals_2020,
+        "emissions_end": residual_share * emissions_chemicals_2020,
+        "action_start": 2025,
+    },
+    "aluminium": {
+        "emissions_start": emissions_chemicals_2020,
+        "emissions_end": residual_share * emissions_chemicals_2020,
+        "action_start": 2025,
+    },
 }

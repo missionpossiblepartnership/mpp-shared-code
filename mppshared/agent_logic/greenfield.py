@@ -8,9 +8,10 @@ import numpy as np
 import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_transition, select_best_transition)
-from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL,
-                              MODEL_SCOPE)
+    remove_transition,
+    select_best_transition,
+)
+from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL, MODEL_SCOPE
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -35,9 +36,6 @@ def greenfield(
     """
     # Next year's stack is updated with each decommissioning
     new_stack = pathway.get_stack(year=year + 1)
-
-    # Get process data
-    df_process_data = pathway.get_all_process_data(product=product, year=year)
 
     # Get ranking table for greenfield transitions
     df_rank = pathway.get_ranking(product=product, year=year, rank_type="greenfield")

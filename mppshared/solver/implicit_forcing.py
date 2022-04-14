@@ -184,15 +184,21 @@ def apply_technology_availability_constraint(
 
     # Add classification of origin and destination technologies to technology transitions table
     df_tech_char_destination = df_technology_characteristics[
-        ["product", "year", "region", "technology_destination", "classification"]
-    ].rename({"classification": "classification_destination"}, axis=1)
-
-    df_tech_char_origin = df_technology_characteristics[
-        ["product", "year", "region", "technology_destination", "classification"]
+        ["product", "year", "region", "technology", "technology_classification"]
     ].rename(
         {
-            "technology_destination": "technology_origin",
-            "classification": "classification_origin",
+            "technology": "technology_destination",
+            "technology_classification": "classification_destination",
+        },
+        axis=1,
+    )
+
+    df_tech_char_origin = df_technology_characteristics[
+        ["product", "year", "region", "technology", "technology_classification"]
+    ].rename(
+        {
+            "technology": "technology_origin",
+            "technology_classification": "classification_origin",
         },
         axis=1,
     )
@@ -228,14 +234,20 @@ def apply_technology_availability_constraint(
     # Constraint 2: transitions to a technology are only possible when it has reached maturity
     df = df.merge(
         df_technology_characteristics[
-            ["product", "year", "region", "technology_destination", "expected_maturity"]
-        ],
+            ["product", "year", "region", "technology", "expected_maturity"]
+        ].rename({"technology": "technology_destination"}, axis=1),
         on=["product", "year", "region", "technology_destination"],
         how="left",
     )
     df = df.loc[df["year"] >= df["expected_maturity"]]
 
-    return df
+    return df.drop(
+        columns=[
+            "classification_origin",
+            "classification_destination",
+            "expected_maturity",
+        ]
+    )
 
 
 def calculate_emission_reduction(

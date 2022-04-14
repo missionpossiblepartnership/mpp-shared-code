@@ -5,7 +5,7 @@ from copy import deepcopy
 import numpy as np
 from pandera import Bool
 
-from mppshared.config import REGIONAL_PRODUCTION_SHARE
+from mppshared.config import REGIONAL_PRODUCTION_SHARES
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
 
@@ -30,11 +30,13 @@ def check_constraints(
     regional_constraint = check_constraint_regional_production(
         pathway=pathway, stack=stack, product=product, year=year
     )
+    # regional_constraint = True  #! Testing only
 
     # Check constraint for annual emissions limit from carbon budget
     emissions_constraint = check_annual_carbon_budget_constraint(
         pathway=pathway, stack=stack, product=product, year=year
     )
+    # emissions_constraint = True  #! Testing only
 
     # TODO: Check technology ramp-up constraint
 
@@ -59,7 +61,9 @@ def check_constraint_regional_production(
 
     # Check for every region in DataFrame
     df = df_regional_production.merge(df_demand, on=["region"], how="left")
-    df["share_regional_production"] = df["region"].map(REGIONAL_PRODUCTION_SHARE)
+    df["share_regional_production"] = df["region"].map(
+        REGIONAL_PRODUCTION_SHARES[pathway.sector]
+    )
 
     # Compare regional production with required demand share up to specified number of significant figures
     sf = 2

@@ -9,19 +9,27 @@ import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.calculate.calculate_availablity import \
-    update_availability_from_asset
-from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                              EMISSION_SCOPES, END_YEAR, GHGS,
-                              INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL, MODEL_SCOPE,
-                              PRODUCTS, RANK_TYPES, SECTOR, START_YEAR)
+from mppshared.calculate.calculate_availablity import update_availability_from_asset
+from mppshared.config import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    EMISSION_SCOPES,
+    END_YEAR,
+    GHGS,
+    INITIAL_ASSET_DATA_LEVEL,
+    LOG_LEVEL,
+    MODEL_SCOPE,
+    PRODUCTS,
+    RANK_TYPES,
+    SECTOR,
+    START_YEAR,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
+
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import Asset, AssetStack, create_assets
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.transition import TransitionRegistry
-from mppshared.utility.dataframe_utility import (flatten_columns,
-                                                 get_emission_columns)
+from mppshared.utility.dataframe_utility import flatten_columns, get_emission_columns
 
 logger = logging.getLogger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -83,16 +91,19 @@ class SimulationPathway:
             self.importer.get_technology_characteristics()
         )
 
+        self.df_cost = self.importer.get_technology_transitions_and_cost()
+
         # TODO: Availability missing, if it is available we should import
         # logger.debug("Getting availability")
         # self.availability = self._import_availability()
 
-        logger.debug("Getting process data")
-        self.process_data = self.importer.get_all_process_data()
-        self.df_cost = self.importer.get_technology_transitions_and_cost()
+        # TODO: remove this legacy function
+        # logger.debug("Getting process data")
+        # self.process_data = self.importer.get_all_process_data()
+
         # TODO: Raw material data is missing and should be called inputs to import it
         # self.inputs_pivot = self.importer.get_process_data(data_type="inputs")
-        self.asset_specs = self.importer.get_asset_specs()
+        # self.asset_specs = self.importer.get_asset_specs()
 
         # Initialize TransitionRegistry to track technology transitions
         self.transitions = TransitionRegistry()
@@ -507,11 +518,12 @@ class SimulationPathway:
                     "product",
                     "region",
                     "technology",
+                    "year",
                     "technology_classification",
                     "technology_lifetime",
                 ]
             ],
-            on=["product", "region", "technology"],
+            on=["product", "region", "year", "technology"],
             how="left",
         )
 

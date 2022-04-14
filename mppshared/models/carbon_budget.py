@@ -3,7 +3,17 @@ from copy import deepcopy
 import numpy as np
 import pandas as pd
 
-from mppshared.config import SECTORAL_CARBON_BUDGETS, START_YEAR, END_YEAR
+from mppshared.config import (
+    SECTORAL_CARBON_BUDGETS,
+    SECTORAL_PATHWAYS,
+    START_YEAR,
+    END_YEAR,
+)
+from mppshared.import_data.intermediate_data import IntermediateDataImporter
+
+import plotly.express as px
+from plotly.offline import plot
+from plotly.subplots import make_subplots
 
 
 class CarbonBudget:
@@ -32,19 +42,25 @@ class CarbonBudget:
         """Create emissions pathway for specified sector according to given shape"""
         index = pd.RangeIndex(START_YEAR, END_YEAR + 1, step=1, name="year")
         cumulative_max = self.budgets[sector]
-        if pathway_shape == "linear":
-            values = np.linspace(cumulative_max, 0, num=len(index))
-        elif pathway_shape == "log":
-            values = np.logspace(cumulative_max, 0, num=len(index))
 
-        # TODO: exponential is non-sensical, debug
-        elif pathway_shape == "exp":
-            values = np.geomspace(cumulative_max, 1e-10, num=len(index))
-        df = pd.DataFrame(data={"year": index, "cumulative_limit": values}).set_index(
+        # Annual emissions are reduced linearly
+        # TODO: implement in a better way
+        trajectory = SECTORAL_PATHWAYS[sector]
+        if pathway_shape == "linear":
+            initial_level = np.full(
+                trajectory["action_start"] - START_YEAR,
+                trajectory["emissions_start"],
+            )
+            linear_reduction = np.linspace(
+                trajectory["emissions_start"],
+                trajectory["emissions_end"],
+                num=END_YEAR - trajectory["action_start"] + 1,
+            )
+            values = np.concatenate((initial_level, linear_reduction))
+
+        df = pd.DataFrame(data={"year": index, "annual_limit": values}).set_index(
             "year"
         )
-        df_a = df.diff(-1).fillna(0)
-        df["annual_limit"] = df_a["cumulative_limit"]
         return df
 
     def set_emission_pathways(self):
@@ -61,8 +77,26 @@ class CarbonBudget:
         df = self.pathways[sector]
         return df.loc[year, "annual_limit"]
 
-    def plot_emissions_pathway(self, sector: str):
-        self.pathways[sector].plot()
+    # TODO: implement
+    def output_emissions_pathway(self, sector: str, importer: IntermediateDataImporter):
+        df = self.pathways[sector]
+        fig = make_subplots()
+        line_fig = px.line(df, color="index", x="year", y="emissions")
+
+        fig.add_traces(line_fig.data)
+
+        fig.layout.xaxis.title = "Year"
+        fig.layout.yaxis.title = "CO2 emissions (GtCO2/year)"
+        fig.layout.title = "Emission trajectory aligned with carbon budget"
+
+        plot(
+            fig,
+            filename=str(importer.final_path.joinpath("carbon_budget.html")),
+            auto_open=True,
+        )
+
+        fig.write_image(importer.final_path.joinpath("carbon_budget.png"))
+        importer.export_data(df, "carbon_budget.csv", "final")
 
     def pathway_getter(self, sector: str, year: int, value_type: str):
         mapper = {"annual": "annual_limit", "cumulative": "cumulative_limit"}
