@@ -130,14 +130,14 @@ dmypy.json
 play.py
 
 # Data files
-data/*/bau/def/intermediate/technologies_to_rank.csv
+data/*/*/def/intermediate/technologies_to_rank.csv
 
 # Ignore all ranking files
-data/*/bau/def/ranking
+data/*/*/def/ranking
 
 # Ignore stack tracker
-data/*/bau/def/stack_tracker
+data/*/*/def/stack_tracker
 
 # Ignore outputs
-data/*/bau/def/final
-data/*/bau/def/outputs
+data/*/*/def/final
+data/*/*/def/outputs
