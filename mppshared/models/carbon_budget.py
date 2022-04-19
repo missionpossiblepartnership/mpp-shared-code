@@ -14,6 +14,8 @@ from mppshared.import_data.intermediate_data import IntermediateDataImporter
 import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
+import plotly.io as pio
+pio.kaleido.scope.mathjax = None
 
 
 class CarbonBudget:
@@ -41,7 +43,6 @@ class CarbonBudget:
     def create_emissions_pathway(self, pathway_shape: str, sector: str) -> pd.DataFrame:
         """Create emissions pathway for specified sector according to given shape"""
         index = pd.RangeIndex(START_YEAR, END_YEAR + 1, step=1, name="year")
-        cumulative_max = self.budgets[sector]
 
         # Annual emissions are reduced linearly
         # TODO: implement in a better way
@@ -57,7 +58,7 @@ class CarbonBudget:
                 num=END_YEAR - trajectory["action_start"] + 1,
             )
             values = np.concatenate((initial_level, linear_reduction))
-
+        # TODO: implement other pathway shapes
         df = pd.DataFrame(data={"year": index, "annual_limit": values}).set_index(
             "year"
         )
@@ -81,21 +82,23 @@ class CarbonBudget:
     def output_emissions_pathway(self, sector: str, importer: IntermediateDataImporter):
         df = self.pathways[sector]
         fig = make_subplots()
-        line_fig = px.line(df, color="index", x="year", y="emissions")
+        line_fig = px.line(df, x=df.index, y="annual_limit")
 
         fig.add_traces(line_fig.data)
 
         fig.layout.xaxis.title = "Year"
         fig.layout.yaxis.title = "CO2 emissions (GtCO2/year)"
-        fig.layout.title = "Emission trajectory aligned with carbon budget"
+        cumulative_emissions = np.round(df["annual_limit"].sum(), 1)
+        fig.layout.title = f"Emission trajectory aligned with carbon budget (Cumulative emissions: {cumulative_emissions} GtCO2)"
 
         plot(
             fig,
             filename=str(importer.final_path.joinpath("carbon_budget.html")),
-            auto_open=True,
+            auto_open=False,
         )
 
-        fig.write_image(importer.final_path.joinpath("carbon_budget.png"))
+        # TODO: debug why writing image with kaleido enters into seemingly infinite loop
+        # fig.write_image(importer.final_path.joinpath("carbon_budget.png"), engine="kaleido")
         importer.export_data(df, "carbon_budget.csv", "final")
 
     def pathway_getter(self, sector: str, year: int, value_type: str):
