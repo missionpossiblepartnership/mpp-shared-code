@@ -97,37 +97,42 @@ def _calculate_lcox(df_stack, df_transitions):
     return df_stack_lcox
 
 
-def _calculate_total_capex(df_stack):
+def _calculate_total_capex(df_stack, df_inputs_outputs):
     logger.info("-- Calculating total capex")
-    df_total_capex = pd.DataFrame()
-    return df_total_capex
+    df_capex = df_inputs_outputs.loc[(df_inputs_outputs["parameter"] == "capex")].copy()
+    df_stack = df.stack.merge(df_capex, on=["product", "region", "technology"])
+    df_stack_capex = (
+        df_stack.groupby(["product", "region", "technology"]).sum().reset_index()
+    )
+    df_stack_capex["parameter_group"] = "finance"
+    return df_stack_capex
 
 
-def _calculate_total_opex(df_stack):
+def _calculate_total_opex(df_stack, df_inputs_outputs):
     logger.info("-- Calculating total opex")
     df_total_opex = pd.DataFrame()
     return df_total_opex
 
 
-def _calculate_variable_opex():
+def _calculate_variable_opex(df_stack, df_inputs_outputs):
     logger.info("-- Calculating variable opex")
     df_variable_opex = pd.DataFrame()
     return df_variable_opex
 
 
-def _calculate_fixed_opex():
+def _calculate_fixed_opex(df_stack, df_inputs_outputs):
     logger.info("-- Calculating fixed opex")
     df_fixed_opex = pd.DataFrame()
     return df_fixed_opex
 
 
-def _calculate_energy_fedstock_inputs():
+def _calculate_energy_fedstock_inputs(df_stack, df_inputs_outputs):
     logger.info("-- Calculating energy fedstock inputs")
     df_energy_fedstock_inputs = pd.DataFrame()
     return df_energy_fedstock_inputs
 
 
-def _calculate_h2_storage():
+def _calculate_h2_storage(df_stack, df_inputs_outputs):
     logger.info("-- Calculating H2 storage")
     df_h2_storage = pd.DataFrame()
     return df_h2_storage
@@ -145,11 +150,14 @@ def create_table_all_data_year(year, importer, sector):
     df_transitions = importer.get_technology_transitions_and_cost()
     df_transitions = df_transitions[df_transitions["year"] == year]
     df_stack_lcox = _calculate_lcox(df_stack, df_transitions)
-    df_total_capex = _calculate_total_capex(df_stack)
-    df_total_opex = _calculate_total_opex(df_stack)
-    df_variable_opex = _calculate_variable_opex()
-    df_fixed_opex = _calculate_fixed_opex()
-    df_energy_fedstock_inputs = _calculate_energy_fedstock_inputs()
+    df_inputs_outputs = importer.get_inputs_outputs()
+    df_total_capex = _calculate_total_capex(df_stack, df_inputs_outputs)
+    df_total_opex = _calculate_total_opex(df_stack, df_inputs_outputs)
+    df_variable_opex = _calculate_variable_opex(df_stack, df_inputs_outputs)
+    df_fixed_opex = _calculate_fixed_opex(df_stack, df_inputs_outputs)
+    df_energy_fedstock_inputs = _calculate_energy_fedstock_inputs(
+        df_stack, df_inputs_outputs
+    )
     df_all_data_year = pd.concat(
         [
             df_stack_total_assets,
