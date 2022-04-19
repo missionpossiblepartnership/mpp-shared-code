@@ -56,13 +56,8 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
                 pathway=pathway, year=year, product=product
             )
 
-            #! Debug: set carbon budget start to initial emissions (needs to be implemented)
-            # Let's remove this and make sure the annual emissions limit is initalized correctly at the start
-            # if year == START_YEAR:
-            #     emissions = pathway.calculate_emissions_stack(year, product)
-            #     limit = (emissions["co2_scope1"] + emissions["co2_scope2"]) / 1e3
-            #     df = pathway.carbon_budget.pathways[pathway.sector]
-            #     df.loc[START_YEAR, "annual_limit"] = limit
+            # Write stack to csv
+            pathway.export_stack_to_csv(year)
 
             # Decommission assets
             start = timer()
@@ -81,9 +76,6 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             pathway = greenfield(pathway=pathway, year=year, product=product)
             end = timer()
             logger.debug(f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds")
-
-            # Write stack to csv
-            pathway.export_stack_to_csv(year)
 
         # Copy availability to next year
         # pathway.copy_availability(year=year)

@@ -8,6 +8,7 @@ import pandas as pd
 import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
+from copy import deepcopy
 
 from mppshared.calculate.calculate_availablity import update_availability_from_asset
 from mppshared.config import (
@@ -474,7 +475,7 @@ class SimulationPathway:
     def copy_stack(self, year):
         """Copy this year's stack to next year"""
         old_stack = self.get_stack(year=year)
-        new_stack = AssetStack(assets=old_stack.assets.copy())
+        new_stack = AssetStack(assets=old_stack.assets.deepcopy())
         return self.add_stack(year=year + 1, stack=new_stack)
 
     def add_stack(self, year, stack):
