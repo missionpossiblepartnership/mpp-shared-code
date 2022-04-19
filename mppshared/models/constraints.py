@@ -3,6 +3,7 @@
 from copy import deepcopy
 
 import numpy as np
+import pandas as pd
 from pandera import Bool
 
 from mppshared.config import REGIONAL_PRODUCTION_SHARES
@@ -11,7 +12,7 @@ from mppshared.models.simulation_pathway import SimulationPathway
 
 
 def check_constraints(
-    pathway: SimulationPathway, stack: AssetStack, product: str, year: int
+    pathway: SimulationPathway, stack: AssetStack, product: str, year: int, transition_type: str
 ) -> Bool:
     """Check all constraints for a given asset stack.
 
@@ -20,30 +21,30 @@ def check_constraints(
         stack: stack of assets for which constraints are to be checked
         product
         year: required for resource availabilities
+        transition_type: either of "decommission", "brownfield", "greenfield"
 
     Returns:
         Returns True if no constraint hurt
     """
-    # TODO: improve runtime by not applying all constraints to every agent logic
+    # TODO: Map constraint application to the three transition types
 
     # Check regional production constraint
-    regional_constraint = check_constraint_regional_production(
-        pathway=pathway, stack=stack, product=product, year=year
-    )
-    # regional_constraint = True  #! Testing only
+    # TODO: is this still needed for any of the transition types?
+    # regional_constraint = check_constraint_regional_production(
+    #     pathway=pathway, stack=stack, product=product, year=year
+    # )
+
 
     # Check constraint for annual emissions limit from carbon budget
     emissions_constraint = check_annual_carbon_budget_constraint(
         pathway=pathway, stack=stack, product=product, year=year
     )
-    # emissions_constraint = True  #! Testing only
 
     # TODO: Check technology ramp-up constraint
 
     # TODO: Check resource availability constraint
 
-    #! Placeholder
-    return regional_constraint & emissions_constraint
+    return emissions_constraint
 
 
 def check_constraint_regional_production(
@@ -55,6 +56,15 @@ def check_constraint_regional_production(
         stack (_type_): _description_
         product (_type_): _description_
     """
+    df = get_regional_production_constraint_table(pathway, stack, product, year)
+    # The constraint is hurt if any region does not meet its required regional production share
+    if df["check"].all():
+        return True
+
+    return False
+
+def get_regional_production_constraint_table(pathway: SimulationPathway, stack: AssetStack, product: str, year: int) -> pd.DataFrame:
+    """Get table that compares regional production with regional demand for a given year"""
     # Get regional production and demand
     df_regional_production = stack.get_regional_production_volume(product)
     df_demand = pathway.get_regional_demand(product, year)
@@ -65,17 +75,16 @@ def check_constraint_regional_production(
         REGIONAL_PRODUCTION_SHARES[pathway.sector]
     )
 
+    # Add required regional production column
+    df["annual_production_volume_minimum"] = df["demand"] * df["share_regional_production"]
+
     # Compare regional production with required demand share up to specified number of significant figures
     sf = 2
     df["check"] = np.round(df["annual_production_volume"], sf) >= np.round(
-        df["demand"] * df["share_regional_production"], sf
+        df["annual_production_volume_minimum"], sf
     )
 
-    # The constraint is hurt if any region does not meet its required regional production share
-    if df["check"].all():
-        return True
-
-    return False
+    return df
 
 
 def check_annual_carbon_budget_constraint(

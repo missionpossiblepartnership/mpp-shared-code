@@ -167,9 +167,9 @@ MODEL_SCOPE = "Global"
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
-    "bau",
+    # "bau",
     # "fa",
-    # "lc",
+    "lc",
 ]
 
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
