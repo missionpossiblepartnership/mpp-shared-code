@@ -1,4 +1,5 @@
-import logging
+from datetime import timedelta
+from timeit import default_timer as timer
 
 from mppshared.agent_logic.agent_logic_functions import \
     adjust_capacity_utilisation
@@ -44,35 +45,37 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
 
             logger.info(product)
 
-            if year == START_YEAR:
-                # Adjust capacity utilisation of each asset
-                pathway = adjust_capacity_utilisation(
-                    pathway=pathway, year=year, product=product
-                )
+            # Adjust capacity utilisation of each asset
+            pathway = adjust_capacity_utilisation(
+                pathway=pathway, year=year, product=product
+            )
 
-                #! Debug: set carbon budget start to initial emissions (needs to be implemented)
-                emissions = pathway.calculate_emissions_stack(year, product)
-                limit = (emissions["co2_scope1"] + emissions["co2_scope2"]) / 1e3
-                df = pathway.carbon_budget.pathways[pathway.sector]
-                df.loc[START_YEAR, "annual_limit"] = limit
-                # Write stack to csv
-                pathway.export_stack_to_csv(year)
+            # Write stack to csv
+            pathway.export_stack_to_csv(year)
 
-            elif year != START_YEAR:
-                pathway = adjust_capacity_utilisation(
-                    pathway=pathway, year=year, product=product
-                )
-                # Decommission assets
-                pathway = decommission(pathway=pathway, year=year, product=product)
+            # Decommission assets
+            start = timer()
+            pathway = decommission(pathway=pathway, year=year, product=product)
+            end = timer()
+            logger.debug(
+                f"Time elapsed for decommission in year {year}: {timedelta(seconds=end-start)} seconds"
+            )
 
-                # Renovate and rebuild assets (brownfield transition)
-                pathway = brownfield(pathway=pathway, year=year, product=product)
+            # Renovate and rebuild assets (brownfield transition)
+            start = timer()
+            pathway = brownfield(pathway=pathway, year=year, product=product)
+            end = timer()
+            logger.debug(
+                f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
+            )
 
-                # Build new assets
-                pathway = greenfield(pathway=pathway, year=year, product=product)
-
-                # Write stack to csv
-                pathway.export_stack_to_csv(year)
+            # Build new assets
+            start = timer()
+            pathway = greenfield(pathway=pathway, year=year, product=product)
+            end = timer()
+            logger.debug(
+                f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
+            )
 
         # Copy availability to next year
         # pathway.copy_availability(year=year)
@@ -95,6 +98,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
     carbon_budget = CarbonBudget(
         sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS, pathway_shape="linear"
     )
+    carbon_budget.output_emissions_pathway(sector=sector, importer=importer)
 
     # Make pathway
     pathway = SimulationPathway(

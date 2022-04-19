@@ -90,7 +90,8 @@ def brownfield(
         tentative_stack.update_asset(asset_to_update, new_technology=new_technology)
 
         # Check constraints with tentative new stack
-        no_constraint_hurt = check_constraints(pathway, tentative_stack, product, year)
+        no_constraint_hurt = check_constraints(
+            pathway=pathway, stack=tentative_stack, product=product, year=year, transition_type="brownfield")
 
         if no_constraint_hurt:
             logger.debug(

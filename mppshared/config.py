@@ -167,9 +167,9 @@ MODEL_SCOPE = "Global"
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
-    "bau",
+    # "bau",
     # "fa",
-    # "lc",
+    "lc",
 ]
 
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
@@ -298,16 +298,16 @@ RANKING_CONFIG = {
 # REGIONAL_PRODUCTION_SHARE Ammonia
 REGIONAL_PRODUCTION_SHARES = {
     "chemicals": {
-        "Africa": 0.3,
-        "China": 0.3,
-        "Europe": 0.3,
-        "India": 0.3,
-        "Latin America": 0.3,
-        "Middle East": 0.3,
-        "North America": 0.3,
-        "Oceania": 0.3,
-        "Russia": 0.3,
-        "Rest of Asia": 0.3,
+        "Africa": 0.4,
+        "China": 0.4,
+        "Europe": 0.4,
+        "India": 0.4,
+        "Latin America": 0.4,
+        "Middle East": 0.4,
+        "North America": 0.4,
+        "Oceania": 0.4,
+        "Russia": 0.4,
+        "Rest of Asia": 0.4,
     },
     "aluminium": {
         "China - North": 0.3,
@@ -341,7 +341,7 @@ SECTORAL_CARBON_BUDGETS = {
 }
 
 residual_share = 0.05
-emissions_chemicals_2020 = 0.51  # Gt CO2 (scope 1 and 2)
+emissions_chemicals_2020 = 1  # Gt CO2 (scope 1 and 2)
 
 SECTORAL_PATHWAYS = {
     "chemicals": {
@@ -354,4 +354,10 @@ SECTORAL_PATHWAYS = {
         "emissions_end": residual_share * emissions_chemicals_2020,
         "action_start": 2025,
     },
+}
+
+# Year from which newbuild capacity must have transition or end-state technology
+TECHNOLOGY_MORATORIUM = {   
+    "chemicals": 2020,
+    "aluminium": 2050 # constraint currently not active
 }
