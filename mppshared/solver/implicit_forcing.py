@@ -286,8 +286,9 @@ def calculate_emission_reduction(
     Returns:
         pd.DataFrame: contains "delta_{}" for every scope and GHG considered
     """
-    # Get columns containing emissions
+    # Get columns containing emissions and filter emissions table accordingly
     cols = [f"{ghg}_{scope}" for ghg in GHGS for scope in EMISSION_SCOPES]
+    df_emissions = df_emissions[["product", "technology", "year", "region"] + cols]
 
     # Rename column headers for origin and destination technology emissions and drop captured emissions columns
     df_emissions_origin = add_column_header_suffix(
@@ -302,12 +303,12 @@ def calculate_emission_reduction(
         "destination",
     )
 
-    # Merge to insert origin and destination technology emissions into technology switching table
+    # Merge to insert origin and destination technology emissions into technology switching table (fill with zero to account for new-build and decommission)
     df = df_technology_switches.merge(
         df_emissions_origin.rename(columns={"technology": "technology_origin"}),
         on=["product", "region", "year", "technology_origin"],
         how="left",
-    )
+    ).fillna(0)
 
     df = df.merge(
         df_emissions_destination.rename(
@@ -315,7 +316,7 @@ def calculate_emission_reduction(
         ),
         on=["product", "technology_destination", "region", "year"],
         how="left",
-    )
+    ).fillna(0)
 
     # Calculate emissions reduction for each technology switch by GHG and scope
     for ghg in GHGS:
