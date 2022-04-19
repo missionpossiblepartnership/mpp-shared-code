@@ -1,4 +1,5 @@
-import logging
+from timeit import default_timer as timer
+from datetime import timedelta
 
 from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
 from mppshared.agent_logic.brownfield import brownfield
@@ -64,13 +65,22 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             #     df.loc[START_YEAR, "annual_limit"] = limit
 
             # Decommission assets
+            start = timer()
             pathway = decommission(pathway=pathway, year=year, product=product)
+            end = timer()
+            logger.debug(f"Time elapsed for decommission in year {year}: {timedelta(seconds=end-start)} seconds")
 
             # Renovate and rebuild assets (brownfield transition)
+            start = timer()
             pathway = brownfield(pathway=pathway, year=year, product=product)
+            end = timer()
+            logger.debug(f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds")
 
             # Build new assets
+            start = timer()
             pathway = greenfield(pathway=pathway, year=year, product=product)
+            end = timer()
+            logger.debug(f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds")
 
             # Write stack to csv
             pathway.export_stack_to_csv(year)
