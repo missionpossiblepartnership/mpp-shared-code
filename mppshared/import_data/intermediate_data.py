@@ -180,6 +180,11 @@ class IntermediateDataImporter:
         )
         return pd.read_csv(file_path)
 
+    def get_inputs_outputs(self):
+        return pd.read_csv(
+            self.intermediate_path.joinpath("inputs_outputs.csv"),
+        )
+
     # def get_technology_distribution(self, product, new=False):
     #     suffix = "_new" if new else ""
     #     file_path = self.export_dir.joinpath(
