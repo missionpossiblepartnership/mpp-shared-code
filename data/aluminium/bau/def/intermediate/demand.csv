@@ -1,311 +1,497 @@
-product,scenario,region,year,value
-Alumina,BAU,China,2020,67.463
-Alumina,BAU,Europe,2020,6.767428
-Alumina,BAU,North America,2020,2.090747
-Alumina,BAU,South America,2020,11.217819
-Alumina,BAU,Middle East,2020,3.969296
-Alumina,BAU,Rest of Asia,2020,11.74904922
-Alumina,BAU,Africa,2020,0
-Alumina,BAU,Oceania,2020,20.737
-Alumina,BAU,Russia,2020,2.688844785
-Alumina,BAU,China,2021,70.16152
-Alumina,BAU,Europe,2021,6.767428
-Alumina,BAU,North America,2021,2.090747
-Alumina,BAU,South America,2021,11.217819
-Alumina,BAU,Middle East,2021,4.5646904
-Alumina,BAU,Rest of Asia,2021,11.74249144
-Alumina,BAU,Africa,2021,0
-Alumina,BAU,Oceania,2021,20.69485704
-Alumina,BAU,Russia,2021,2.683380354
-Alumina,BAU,China,2022,68.7582896
-Alumina,BAU,Europe,2022,6.767428
-Alumina,BAU,North America,2022,2.090747
-Alumina,BAU,South America,2022,11.217819
-Alumina,BAU,Middle East,2022,4.5646904
-Alumina,BAU,Rest of Asia,2022,11.36827099
-Alumina,BAU,Africa,2022,0
-Alumina,BAU,Oceania,2022,18.28996277
-Alumina,BAU,Russia,2022,2.371551864
-Alumina,BAU,China,2023,68.7582896
-Alumina,BAU,Europe,2023,6.767428
-Alumina,BAU,North America,2023,2.090747
-Alumina,BAU,South America,2023,11.217819
-Alumina,BAU,Middle East,2023,4.5646904
-Alumina,BAU,Rest of Asia,2023,11.27238398
-Alumina,BAU,Africa,2023,0
-Alumina,BAU,Oceania,2023,17.6737535
-Alumina,BAU,Russia,2023,2.291651634
-Alumina,BAU,China,2024,69.4458725
-Alumina,BAU,Europe,2024,6.767428
-Alumina,BAU,North America,2024,2.090747
-Alumina,BAU,South America,2024,11.217819
-Alumina,BAU,Middle East,2024,4.5646904
-Alumina,BAU,Rest of Asia,2024,11.31091364
-Alumina,BAU,Africa,2024,0
-Alumina,BAU,Oceania,2024,17.92136091
-Alumina,BAU,Russia,2024,2.323757429
-Alumina,BAU,China,2025,67.36249632
-Alumina,BAU,Europe,2025,6.767428
-Alumina,BAU,North America,2025,2.090747
-Alumina,BAU,South America,2025,11.217819
-Alumina,BAU,Middle East,2025,4.5646904
-Alumina,BAU,Rest of Asia,2025,11.33755171
-Alumina,BAU,Africa,2025,0
-Alumina,BAU,Oceania,2025,18.09254807
-Alumina,BAU,Russia,2025,2.345954261
-Alumina,BAU,China,2026,69.38337121
-Alumina,BAU,Europe,2026,6.767428
-Alumina,BAU,North America,2026,2.090747
-Alumina,BAU,South America,2026,11.217819
-Alumina,BAU,Middle East,2026,4.5646904
-Alumina,BAU,Rest of Asia,2026,11.22796132
-Alumina,BAU,Africa,2026,0
-Alumina,BAU,Oceania,2026,17.38827523
-Alumina,BAU,Russia,2026,2.254635346
-Alumina,BAU,China,2027,67.30187007
-Alumina,BAU,Europe,2027,6.767428
-Alumina,BAU,North America,2027,2.090747
-Alumina,BAU,South America,2027,11.217819
-Alumina,BAU,Middle East,2027,4.5646904
-Alumina,BAU,Rest of Asia,2027,11.39258751
-Alumina,BAU,Africa,2027,0
-Alumina,BAU,Oceania,2027,18.4462307
-Alumina,BAU,Russia,2027,2.391814208
-Alumina,BAU,China,2028,68.47784675
-Alumina,BAU,Europe,2028,6.767428
-Alumina,BAU,North America,2028,2.090747
-Alumina,BAU,South America,2028,11.217819
-Alumina,BAU,Middle East,2028,4.5646904
-Alumina,BAU,Rest of Asia,2028,11.47801427
-Alumina,BAU,Africa,2028,0
-Alumina,BAU,Oceania,2028,18.99521816
-Alumina,BAU,Russia,2028,2.462998181
-Alumina,BAU,China,2029,69.84745678
-Alumina,BAU,Europe,2029,6.767428
-Alumina,BAU,North America,2029,2.090747
-Alumina,BAU,South America,2029,11.217819
-Alumina,BAU,Middle East,2029,4.5646904
-Alumina,BAU,Rest of Asia,2029,11.56755812
-Alumina,BAU,Africa,2029,0
-Alumina,BAU,Oceania,2029,19.57066371
-Alumina,BAU,Russia,2029,2.537612819
-Alumina,BAU,China,2030,67.49479234
-Alumina,BAU,Europe,2030,6.767428
-Alumina,BAU,North America,2030,2.090747
-Alumina,BAU,South America,2030,11.217819
-Alumina,BAU,Middle East,2030,4.5646904
-Alumina,BAU,Rest of Asia,2030,11.62284997
-Alumina,BAU,Africa,2030,0
-Alumina,BAU,Oceania,2030,19.92599187
-Alumina,BAU,Russia,2030,2.583686132
-Alumina,BAU,China,2031,72.63675308
-Alumina,BAU,Europe,2031,6.767428
-Alumina,BAU,North America,2031,2.090747
-Alumina,BAU,South America,2031,11.217819
-Alumina,BAU,Middle East,2031,4.5646904
-Alumina,BAU,Rest of Asia,2031,11.71979574
-Alumina,BAU,Africa,2031,0
-Alumina,BAU,Oceania,2031,20.54900515
-Alumina,BAU,Russia,2031,2.664468598
-Alumina,BAU,China,2032,77.99681227
-Alumina,BAU,Europe,2032,6.767428
-Alumina,BAU,North America,2032,2.090747
-Alumina,BAU,South America,2032,11.217819
-Alumina,BAU,Middle East,2032,4.5646904
-Alumina,BAU,Rest of Asia,2032,11.82027648
-Alumina,BAU,Africa,2032,0
-Alumina,BAU,Oceania,2032,21.19473562
-Alumina,BAU,Russia,2032,2.748196669
-Alumina,BAU,China,2033,79.1073564
-Alumina,BAU,Europe,2033,6.767428
-Alumina,BAU,North America,2033,2.090747
-Alumina,BAU,South America,2033,11.217819
-Alumina,BAU,Middle East,2033,4.5646904
-Alumina,BAU,Rest of Asia,2033,11.83117673
-Alumina,BAU,Africa,2033,0
-Alumina,BAU,Oceania,2033,21.26478515
-Alumina,BAU,Russia,2033,2.75727958
-Alumina,BAU,China,2034,81.09892018
-Alumina,BAU,Europe,2034,6.767428
-Alumina,BAU,North America,2034,2.090747
-Alumina,BAU,South America,2034,11.217819
-Alumina,BAU,Middle East,2034,4.5646904
-Alumina,BAU,Rest of Asia,2034,11.85072441
-Alumina,BAU,Africa,2034,0
-Alumina,BAU,Oceania,2034,21.39040655
-Alumina,BAU,Russia,2034,2.773568168
-Alumina,BAU,China,2035,81.09892018
-Alumina,BAU,Europe,2035,6.767428
-Alumina,BAU,North America,2035,2.090747
-Alumina,BAU,South America,2035,11.217819
-Alumina,BAU,Middle East,2035,4.5646904
-Alumina,BAU,Rest of Asia,2035,12.15033372
-Alumina,BAU,Africa,2035,0
-Alumina,BAU,Oceania,2035,23.31581895
-Alumina,BAU,Russia,2035,3.023225066
-Alumina,BAU,China,2036,81.09892018
-Alumina,BAU,Europe,2036,6.767428
-Alumina,BAU,North America,2036,2.090747
-Alumina,BAU,South America,2036,11.217819
-Alumina,BAU,Middle East,2036,4.5646904
-Alumina,BAU,Rest of Asia,2036,12.5089625
-Alumina,BAU,Africa,2036,0
-Alumina,BAU,Oceania,2036,25.62051476
-Alumina,BAU,Russia,2036,3.322061412
-Alumina,BAU,China,2037,81.09892018
-Alumina,BAU,Europe,2037,6.767428
-Alumina,BAU,North America,2037,2.090747
-Alumina,BAU,South America,2037,11.217819
-Alumina,BAU,Middle East,2037,4.5646904
-Alumina,BAU,Rest of Asia,2037,12.77953875
-Alumina,BAU,Africa,2037,0
-Alumina,BAU,Oceania,2037,27.3593488
-Alumina,BAU,Russia,2037,3.547525791
-Alumina,BAU,China,2038,81.09892018
-Alumina,BAU,Europe,2038,6.767428
-Alumina,BAU,North America,2038,2.090747
-Alumina,BAU,South America,2038,11.217819
-Alumina,BAU,Middle East,2038,4.5646904
-Alumina,BAU,Rest of Asia,2038,13.07206439
-Alumina,BAU,Africa,2038,0
-Alumina,BAU,Oceania,2038,29.23923868
-Alumina,BAU,Russia,2038,3.791280051
-Alumina,BAU,China,2039,81.09892018
-Alumina,BAU,Europe,2039,6.767428
-Alumina,BAU,North America,2039,2.090747
-Alumina,BAU,South America,2039,11.217819
-Alumina,BAU,Middle East,2039,4.5646904
-Alumina,BAU,Rest of Asia,2039,13.39034147
-Alumina,BAU,Africa,2039,0
-Alumina,BAU,Oceania,2039,31.28461785
-Alumina,BAU,Russia,2039,4.056492335
-Alumina,BAU,China,2040,81.09892018
-Alumina,BAU,Europe,2040,6.767428
-Alumina,BAU,North America,2040,2.090747
-Alumina,BAU,South America,2040,11.217819
-Alumina,BAU,Middle East,2040,4.5646904
-Alumina,BAU,Rest of Asia,2040,13.73443409
-Alumina,BAU,Africa,2040,0
-Alumina,BAU,Oceania,2040,33.49589832
-Alumina,BAU,Russia,2040,4.343216064
-Alumina,BAU,China,2041,81.09892018
-Alumina,BAU,Europe,2041,6.767428
-Alumina,BAU,North America,2041,2.090747
-Alumina,BAU,South America,2041,11.217819
-Alumina,BAU,Middle East,2041,4.5646904
-Alumina,BAU,Rest of Asia,2041,14.10574267
-Alumina,BAU,Africa,2041,0
-Alumina,BAU,Oceania,2041,35.88207966
-Alumina,BAU,Russia,2041,4.652618159
-Alumina,BAU,China,2042,81.09892018
-Alumina,BAU,Europe,2042,6.767428
-Alumina,BAU,North America,2042,2.090747
-Alumina,BAU,South America,2042,11.217819
-Alumina,BAU,Middle East,2042,4.5646904
-Alumina,BAU,Rest of Asia,2042,14.24824013
-Alumina,BAU,Africa,2042,0
-Alumina,BAU,Oceania,2042,36.79782688
-Alumina,BAU,Russia,2042,4.771357712
-Alumina,BAU,China,2043,81.09892018
-Alumina,BAU,Europe,2043,6.767428
-Alumina,BAU,North America,2043,2.090747
-Alumina,BAU,South America,2043,11.217819
-Alumina,BAU,Middle East,2043,4.5646904
-Alumina,BAU,Rest of Asia,2043,14.28547805
-Alumina,BAU,Africa,2043,0
-Alumina,BAU,Oceania,2043,37.03713301
-Alumina,BAU,Russia,2043,4.80238713
-Alumina,BAU,China,2044,81.09892018
-Alumina,BAU,Europe,2044,6.767428
-Alumina,BAU,North America,2044,2.090747
-Alumina,BAU,South America,2044,11.217819
-Alumina,BAU,Middle East,2044,4.5646904
-Alumina,BAU,Rest of Asia,2044,14.3539288
-Alumina,BAU,Africa,2044,0
-Alumina,BAU,Oceania,2044,37.47702564
-Alumina,BAU,Russia,2044,4.85942542
-Alumina,BAU,China,2045,81.09892018
-Alumina,BAU,Europe,2045,6.767428
-Alumina,BAU,North America,2045,2.090747
-Alumina,BAU,South America,2045,11.217819
-Alumina,BAU,Middle East,2045,4.5646904
-Alumina,BAU,Rest of Asia,2045,14.42751569
-Alumina,BAU,Africa,2045,0
-Alumina,BAU,Oceania,2045,37.9499252
-Alumina,BAU,Russia,2045,4.920743523
-Alumina,BAU,China,2046,81.09892018
-Alumina,BAU,Europe,2046,6.767428
-Alumina,BAU,North America,2046,2.090747
-Alumina,BAU,South America,2046,11.217819
-Alumina,BAU,Middle East,2046,4.5646904
-Alumina,BAU,Rest of Asia,2046,14.50789347
-Alumina,BAU,Africa,2046,0
-Alumina,BAU,Oceania,2046,38.46646579
-Alumina,BAU,Russia,2046,4.987720303
-Alumina,BAU,China,2047,81.09892018
-Alumina,BAU,Europe,2047,6.767428
-Alumina,BAU,North America,2047,2.090747
-Alumina,BAU,South America,2047,11.217819
-Alumina,BAU,Middle East,2047,4.5646904
-Alumina,BAU,Rest of Asia,2047,14.59635478
-Alumina,BAU,Africa,2047,0
-Alumina,BAU,Oceania,2047,39.03495449
-Alumina,BAU,Russia,2047,5.061432888
-Alumina,BAU,China,2048,81.09892018
-Alumina,BAU,Europe,2048,6.767428
-Alumina,BAU,North America,2048,2.090747
-Alumina,BAU,South America,2048,11.217819
-Alumina,BAU,Middle East,2048,4.5646904
-Alumina,BAU,Rest of Asia,2048,14.69400497
-Alumina,BAU,Africa,2048,0
-Alumina,BAU,Oceania,2048,39.66249474
-Alumina,BAU,Russia,2048,5.14280234
-Alumina,BAU,China,2049,81.09892018
-Alumina,BAU,Europe,2049,6.767428
-Alumina,BAU,North America,2049,2.090747
-Alumina,BAU,South America,2049,11.217819
-Alumina,BAU,Middle East,2049,4.5646904
-Alumina,BAU,Rest of Asia,2049,14.8030527
-Alumina,BAU,Africa,2049,0
-Alumina,BAU,Oceania,2049,40.36328019
-Alumina,BAU,Russia,2049,5.233669066
-Alumina,BAU,China,2050,81.09892018
-Alumina,BAU,Europe,2050,6.767428
-Alumina,BAU,North America,2050,2.090747
-Alumina,BAU,South America,2050,11.217819
-Alumina,BAU,Middle East,2050,4.5646904
-Alumina,BAU,Rest of Asia,2050,14.92632261
-Alumina,BAU,Africa,2050,0
-Alumina,BAU,Oceania,2050,41.15546326
-Alumina,BAU,Russia,2050,5.336386785
-Alumina,BAU,Global,2020,126.683184
-Alumina,BAU,Global,2021,129.9229332
-Alumina,BAU,Global,2022,125.4287596
-Alumina,BAU,Global,2023,124.6367631
-Alumina,BAU,Global,2024,125.6425889
-Alumina,BAU,Global,2025,123.7792348
-Alumina,BAU,Global,2026,124.8949275
-Alumina,BAU,Global,2027,124.1731869
-Alumina,BAU,Global,2028,126.0547618
-Alumina,BAU,Global,2029,128.1639758
-Alumina,BAU,Global,2030,126.2680047
-Alumina,BAU,Global,2031,132.210707
-Alumina,BAU,Global,2032,138.4007054
-Alumina,BAU,Global,2033,139.6012823
-Alumina,BAU,Global,2034,141.7543037
-Alumina,BAU,Global,2035,144.2289823
-Alumina,BAU,Global,2036,147.1911433
-Alumina,BAU,Global,2037,149.4260179
-Alumina,BAU,Global,2038,151.8421877
-Alumina,BAU,Global,2039,154.4710562
-Alumina,BAU,Global,2040,157.3131531
-Alumina,BAU,Global,2041,160.3800451
-Alumina,BAU,Global,2042,161.5570293
-Alumina,BAU,Global,2043,161.8646028
-Alumina,BAU,Global,2044,162.4299844
-Alumina,BAU,Global,2045,163.037789
-Alumina,BAU,Global,2046,163.7016841
-Alumina,BAU,Global,2047,164.4323467
-Alumina,BAU,Global,2048,165.2389066
-Alumina,BAU,Global,2049,166.1396065
-Alumina,BAU,Global,2050,167.1577772
+,product,scenario,region,year,value
+0,Aluminium,BAU,China,2020,67.463
+1,Aluminium,BAU,Europe,2020,6.767428
+2,Aluminium,BAU,North America,2020,2.090747
+3,Aluminium,BAU,South America,2020,11.217819
+4,Aluminium,BAU,Middle East,2020,3.969296
+5,Aluminium,BAU,Rest of Asia,2020,11.74904922
+6,Aluminium,BAU,Africa,2020,0
+7,Aluminium,BAU,Oceania,2020,20.737
+8,Aluminium,BAU,Russia,2020,2.688844785
+9,Aluminium,BAU,China,2021,70.16152
+10,Aluminium,BAU,Europe,2021,6.767428
+11,Aluminium,BAU,North America,2021,2.090747
+12,Aluminium,BAU,South America,2021,11.217819
+13,Aluminium,BAU,Middle East,2021,4.5646904
+14,Aluminium,BAU,Rest of Asia,2021,11.74249144
+15,Aluminium,BAU,Africa,2021,0
+16,Aluminium,BAU,Oceania,2021,20.69485704
+17,Aluminium,BAU,Russia,2021,2.683380354
+18,Aluminium,BAU,China,2022,68.7582896
+19,Aluminium,BAU,Europe,2022,6.767428
+20,Aluminium,BAU,North America,2022,2.090747
+21,Aluminium,BAU,South America,2022,11.217819
+22,Aluminium,BAU,Middle East,2022,4.5646904
+23,Aluminium,BAU,Rest of Asia,2022,11.36827099
+24,Aluminium,BAU,Africa,2022,0
+25,Aluminium,BAU,Oceania,2022,18.28996277
+26,Aluminium,BAU,Russia,2022,2.371551864
+27,Aluminium,BAU,China,2023,68.7582896
+28,Aluminium,BAU,Europe,2023,6.767428
+29,Aluminium,BAU,North America,2023,2.090747
+30,Aluminium,BAU,South America,2023,11.217819
+31,Aluminium,BAU,Middle East,2023,4.5646904
+32,Aluminium,BAU,Rest of Asia,2023,11.27238398
+33,Aluminium,BAU,Africa,2023,0
+34,Aluminium,BAU,Oceania,2023,17.6737535
+35,Aluminium,BAU,Russia,2023,2.291651634
+36,Aluminium,BAU,China,2024,69.4458725
+37,Aluminium,BAU,Europe,2024,6.767428
+38,Aluminium,BAU,North America,2024,2.090747
+39,Aluminium,BAU,South America,2024,11.217819
+40,Aluminium,BAU,Middle East,2024,4.5646904
+41,Aluminium,BAU,Rest of Asia,2024,11.31091364
+42,Aluminium,BAU,Africa,2024,0
+43,Aluminium,BAU,Oceania,2024,17.92136091
+44,Aluminium,BAU,Russia,2024,2.323757429
+45,Aluminium,BAU,China,2025,67.36249632
+46,Aluminium,BAU,Europe,2025,6.767428
+47,Aluminium,BAU,North America,2025,2.090747
+48,Aluminium,BAU,South America,2025,11.217819
+49,Aluminium,BAU,Middle East,2025,4.5646904
+50,Aluminium,BAU,Rest of Asia,2025,11.33755171
+51,Aluminium,BAU,Africa,2025,0
+52,Aluminium,BAU,Oceania,2025,18.09254807
+53,Aluminium,BAU,Russia,2025,2.345954261
+54,Aluminium,BAU,China,2026,69.38337121
+55,Aluminium,BAU,Europe,2026,6.767428
+56,Aluminium,BAU,North America,2026,2.090747
+57,Aluminium,BAU,South America,2026,11.217819
+58,Aluminium,BAU,Middle East,2026,4.5646904
+59,Aluminium,BAU,Rest of Asia,2026,11.22796132
+60,Aluminium,BAU,Africa,2026,0
+61,Aluminium,BAU,Oceania,2026,17.38827523
+62,Aluminium,BAU,Russia,2026,2.254635346
+63,Aluminium,BAU,China,2027,67.30187007
+64,Aluminium,BAU,Europe,2027,6.767428
+65,Aluminium,BAU,North America,2027,2.090747
+66,Aluminium,BAU,South America,2027,11.217819
+67,Aluminium,BAU,Middle East,2027,4.5646904
+68,Aluminium,BAU,Rest of Asia,2027,11.39258751
+69,Aluminium,BAU,Africa,2027,0
+70,Aluminium,BAU,Oceania,2027,18.4462307
+71,Aluminium,BAU,Russia,2027,2.391814208
+72,Aluminium,BAU,China,2028,68.47784675
+73,Aluminium,BAU,Europe,2028,6.767428
+74,Aluminium,BAU,North America,2028,2.090747
+75,Aluminium,BAU,South America,2028,11.217819
+76,Aluminium,BAU,Middle East,2028,4.5646904
+77,Aluminium,BAU,Rest of Asia,2028,11.47801427
+78,Aluminium,BAU,Africa,2028,0
+79,Aluminium,BAU,Oceania,2028,18.99521816
+80,Aluminium,BAU,Russia,2028,2.462998181
+81,Aluminium,BAU,China,2029,69.84745678
+82,Aluminium,BAU,Europe,2029,6.767428
+83,Aluminium,BAU,North America,2029,2.090747
+84,Aluminium,BAU,South America,2029,11.217819
+85,Aluminium,BAU,Middle East,2029,4.5646904
+86,Aluminium,BAU,Rest of Asia,2029,11.56755812
+87,Aluminium,BAU,Africa,2029,0
+88,Aluminium,BAU,Oceania,2029,19.57066371
+89,Aluminium,BAU,Russia,2029,2.537612819
+90,Aluminium,BAU,China,2030,67.49479234
+91,Aluminium,BAU,Europe,2030,6.767428
+92,Aluminium,BAU,North America,2030,2.090747
+93,Aluminium,BAU,South America,2030,11.217819
+94,Aluminium,BAU,Middle East,2030,4.5646904
+95,Aluminium,BAU,Rest of Asia,2030,11.62284997
+96,Aluminium,BAU,Africa,2030,0
+97,Aluminium,BAU,Oceania,2030,19.92599187
+98,Aluminium,BAU,Russia,2030,2.583686132
+99,Aluminium,BAU,China,2031,72.63675308
+100,Aluminium,BAU,Europe,2031,6.767428
+101,Aluminium,BAU,North America,2031,2.090747
+102,Aluminium,BAU,South America,2031,11.217819
+103,Aluminium,BAU,Middle East,2031,4.5646904
+104,Aluminium,BAU,Rest of Asia,2031,11.71979574
+105,Aluminium,BAU,Africa,2031,0
+106,Aluminium,BAU,Oceania,2031,20.54900515
+107,Aluminium,BAU,Russia,2031,2.664468598
+108,Aluminium,BAU,China,2032,77.99681227
+109,Aluminium,BAU,Europe,2032,6.767428
+110,Aluminium,BAU,North America,2032,2.090747
+111,Aluminium,BAU,South America,2032,11.217819
+112,Aluminium,BAU,Middle East,2032,4.5646904
+113,Aluminium,BAU,Rest of Asia,2032,11.82027648
+114,Aluminium,BAU,Africa,2032,0
+115,Aluminium,BAU,Oceania,2032,21.19473562
+116,Aluminium,BAU,Russia,2032,2.748196669
+117,Aluminium,BAU,China,2033,79.1073564
+118,Aluminium,BAU,Europe,2033,6.767428
+119,Aluminium,BAU,North America,2033,2.090747
+120,Aluminium,BAU,South America,2033,11.217819
+121,Aluminium,BAU,Middle East,2033,4.5646904
+122,Aluminium,BAU,Rest of Asia,2033,11.83117673
+123,Aluminium,BAU,Africa,2033,0
+124,Aluminium,BAU,Oceania,2033,21.26478515
+125,Aluminium,BAU,Russia,2033,2.75727958
+126,Aluminium,BAU,China,2034,81.09892018
+127,Aluminium,BAU,Europe,2034,6.767428
+128,Aluminium,BAU,North America,2034,2.090747
+129,Aluminium,BAU,South America,2034,11.217819
+130,Aluminium,BAU,Middle East,2034,4.5646904
+131,Aluminium,BAU,Rest of Asia,2034,11.85072441
+132,Aluminium,BAU,Africa,2034,0
+133,Aluminium,BAU,Oceania,2034,21.39040655
+134,Aluminium,BAU,Russia,2034,2.773568168
+135,Aluminium,BAU,China,2035,81.09892018
+136,Aluminium,BAU,Europe,2035,6.767428
+137,Aluminium,BAU,North America,2035,2.090747
+138,Aluminium,BAU,South America,2035,11.217819
+139,Aluminium,BAU,Middle East,2035,4.5646904
+140,Aluminium,BAU,Rest of Asia,2035,12.15033372
+141,Aluminium,BAU,Africa,2035,0
+142,Aluminium,BAU,Oceania,2035,23.31581895
+143,Aluminium,BAU,Russia,2035,3.023225066
+144,Aluminium,BAU,China,2036,81.09892018
+145,Aluminium,BAU,Europe,2036,6.767428
+146,Aluminium,BAU,North America,2036,2.090747
+147,Aluminium,BAU,South America,2036,11.217819
+148,Aluminium,BAU,Middle East,2036,4.5646904
+149,Aluminium,BAU,Rest of Asia,2036,12.5089625
+150,Aluminium,BAU,Africa,2036,0
+151,Aluminium,BAU,Oceania,2036,25.62051476
+152,Aluminium,BAU,Russia,2036,3.322061412
+153,Aluminium,BAU,China,2037,81.09892018
+154,Aluminium,BAU,Europe,2037,6.767428
+155,Aluminium,BAU,North America,2037,2.090747
+156,Aluminium,BAU,South America,2037,11.217819
+157,Aluminium,BAU,Middle East,2037,4.5646904
+158,Aluminium,BAU,Rest of Asia,2037,12.77953875
+159,Aluminium,BAU,Africa,2037,0
+160,Aluminium,BAU,Oceania,2037,27.3593488
+161,Aluminium,BAU,Russia,2037,3.547525791
+162,Aluminium,BAU,China,2038,81.09892018
+163,Aluminium,BAU,Europe,2038,6.767428
+164,Aluminium,BAU,North America,2038,2.090747
+165,Aluminium,BAU,South America,2038,11.217819
+166,Aluminium,BAU,Middle East,2038,4.5646904
+167,Aluminium,BAU,Rest of Asia,2038,13.07206439
+168,Aluminium,BAU,Africa,2038,0
+169,Aluminium,BAU,Oceania,2038,29.23923868
+170,Aluminium,BAU,Russia,2038,3.791280051
+171,Aluminium,BAU,China,2039,81.09892018
+172,Aluminium,BAU,Europe,2039,6.767428
+173,Aluminium,BAU,North America,2039,2.090747
+174,Aluminium,BAU,South America,2039,11.217819
+175,Aluminium,BAU,Middle East,2039,4.5646904
+176,Aluminium,BAU,Rest of Asia,2039,13.39034147
+177,Aluminium,BAU,Africa,2039,0
+178,Aluminium,BAU,Oceania,2039,31.28461785
+179,Aluminium,BAU,Russia,2039,4.056492335
+180,Aluminium,BAU,China,2040,81.09892018
+181,Aluminium,BAU,Europe,2040,6.767428
+182,Aluminium,BAU,North America,2040,2.090747
+183,Aluminium,BAU,South America,2040,11.217819
+184,Aluminium,BAU,Middle East,2040,4.5646904
+185,Aluminium,BAU,Rest of Asia,2040,13.73443409
+186,Aluminium,BAU,Africa,2040,0
+187,Aluminium,BAU,Oceania,2040,33.49589832
+188,Aluminium,BAU,Russia,2040,4.343216064
+189,Aluminium,BAU,China,2041,81.09892018
+190,Aluminium,BAU,Europe,2041,6.767428
+191,Aluminium,BAU,North America,2041,2.090747
+192,Aluminium,BAU,South America,2041,11.217819
+193,Aluminium,BAU,Middle East,2041,4.5646904
+194,Aluminium,BAU,Rest of Asia,2041,14.10574267
+195,Aluminium,BAU,Africa,2041,0
+196,Aluminium,BAU,Oceania,2041,35.88207966
+197,Aluminium,BAU,Russia,2041,4.652618159
+198,Aluminium,BAU,China,2042,81.09892018
+199,Aluminium,BAU,Europe,2042,6.767428
+200,Aluminium,BAU,North America,2042,2.090747
+201,Aluminium,BAU,South America,2042,11.217819
+202,Aluminium,BAU,Middle East,2042,4.5646904
+203,Aluminium,BAU,Rest of Asia,2042,14.24824013
+204,Aluminium,BAU,Africa,2042,0
+205,Aluminium,BAU,Oceania,2042,36.79782688
+206,Aluminium,BAU,Russia,2042,4.771357712
+207,Aluminium,BAU,China,2043,81.09892018
+208,Aluminium,BAU,Europe,2043,6.767428
+209,Aluminium,BAU,North America,2043,2.090747
+210,Aluminium,BAU,South America,2043,11.217819
+211,Aluminium,BAU,Middle East,2043,4.5646904
+212,Aluminium,BAU,Rest of Asia,2043,14.28547805
+213,Aluminium,BAU,Africa,2043,0
+214,Aluminium,BAU,Oceania,2043,37.03713301
+215,Aluminium,BAU,Russia,2043,4.80238713
+216,Aluminium,BAU,China,2044,81.09892018
+217,Aluminium,BAU,Europe,2044,6.767428
+218,Aluminium,BAU,North America,2044,2.090747
+219,Aluminium,BAU,South America,2044,11.217819
+220,Aluminium,BAU,Middle East,2044,4.5646904
+221,Aluminium,BAU,Rest of Asia,2044,14.3539288
+222,Aluminium,BAU,Africa,2044,0
+223,Aluminium,BAU,Oceania,2044,37.47702564
+224,Aluminium,BAU,Russia,2044,4.85942542
+225,Aluminium,BAU,China,2045,81.09892018
+226,Aluminium,BAU,Europe,2045,6.767428
+227,Aluminium,BAU,North America,2045,2.090747
+228,Aluminium,BAU,South America,2045,11.217819
+229,Aluminium,BAU,Middle East,2045,4.5646904
+230,Aluminium,BAU,Rest of Asia,2045,14.42751569
+231,Aluminium,BAU,Africa,2045,0
+232,Aluminium,BAU,Oceania,2045,37.9499252
+233,Aluminium,BAU,Russia,2045,4.920743523
+234,Aluminium,BAU,China,2046,81.09892018
+235,Aluminium,BAU,Europe,2046,6.767428
+236,Aluminium,BAU,North America,2046,2.090747
+237,Aluminium,BAU,South America,2046,11.217819
+238,Aluminium,BAU,Middle East,2046,4.5646904
+239,Aluminium,BAU,Rest of Asia,2046,14.50789347
+240,Aluminium,BAU,Africa,2046,0
+241,Aluminium,BAU,Oceania,2046,38.46646579
+242,Aluminium,BAU,Russia,2046,4.987720303
+243,Aluminium,BAU,China,2047,81.09892018
+244,Aluminium,BAU,Europe,2047,6.767428
+245,Aluminium,BAU,North America,2047,2.090747
+246,Aluminium,BAU,South America,2047,11.217819
+247,Aluminium,BAU,Middle East,2047,4.5646904
+248,Aluminium,BAU,Rest of Asia,2047,14.59635478
+249,Aluminium,BAU,Africa,2047,0
+250,Aluminium,BAU,Oceania,2047,39.03495449
+251,Aluminium,BAU,Russia,2047,5.061432888
+252,Aluminium,BAU,China,2048,81.09892018
+253,Aluminium,BAU,Europe,2048,6.767428
+254,Aluminium,BAU,North America,2048,2.090747
+255,Aluminium,BAU,South America,2048,11.217819
+256,Aluminium,BAU,Middle East,2048,4.5646904
+257,Aluminium,BAU,Rest of Asia,2048,14.69400497
+258,Aluminium,BAU,Africa,2048,0
+259,Aluminium,BAU,Oceania,2048,39.66249474
+260,Aluminium,BAU,Russia,2048,5.14280234
+261,Aluminium,BAU,China,2049,81.09892018
+262,Aluminium,BAU,Europe,2049,6.767428
+263,Aluminium,BAU,North America,2049,2.090747
+264,Aluminium,BAU,South America,2049,11.217819
+265,Aluminium,BAU,Middle East,2049,4.5646904
+266,Aluminium,BAU,Rest of Asia,2049,14.8030527
+267,Aluminium,BAU,Africa,2049,0
+268,Aluminium,BAU,Oceania,2049,40.36328019
+269,Aluminium,BAU,Russia,2049,5.233669066
+270,Aluminium,BAU,China,2050,81.09892018
+271,Aluminium,BAU,Europe,2050,6.767428
+272,Aluminium,BAU,North America,2050,2.090747
+273,Aluminium,BAU,South America,2050,11.217819
+274,Aluminium,BAU,Middle East,2050,4.5646904
+275,Aluminium,BAU,Rest of Asia,2050,14.92632261
+276,Aluminium,BAU,Africa,2050,0
+277,Aluminium,BAU,Oceania,2050,41.15546326
+278,Aluminium,BAU,Russia,2050,5.336386785
+279,Aluminium,BAU,Global,2020,126.683184
+280,Aluminium,BAU,Global,2021,129.9229332
+281,Aluminium,BAU,Global,2022,125.4287596
+282,Aluminium,BAU,Global,2023,124.6367631
+283,Aluminium,BAU,Global,2024,125.6425889
+284,Aluminium,BAU,Global,2025,123.7792348
+285,Aluminium,BAU,Global,2026,124.8949275
+286,Aluminium,BAU,Global,2027,124.1731869
+287,Aluminium,BAU,Global,2028,126.0547618
+288,Aluminium,BAU,Global,2029,128.1639758
+289,Aluminium,BAU,Global,2030,126.2680047
+290,Aluminium,BAU,Global,2031,132.210707
+291,Aluminium,BAU,Global,2032,138.4007054
+292,Aluminium,BAU,Global,2033,139.6012823
+293,Aluminium,BAU,Global,2034,141.7543037
+294,Aluminium,BAU,Global,2035,144.2289823
+295,Aluminium,BAU,Global,2036,147.1911433
+296,Aluminium,BAU,Global,2037,149.4260179
+297,Aluminium,BAU,Global,2038,151.8421877
+298,Aluminium,BAU,Global,2039,154.4710562
+299,Aluminium,BAU,Global,2040,157.3131531
+300,Aluminium,BAU,Global,2041,160.3800451
+301,Aluminium,BAU,Global,2042,161.5570293
+302,Aluminium,BAU,Global,2043,161.8646028
+303,Aluminium,BAU,Global,2044,162.4299844
+304,Aluminium,BAU,Global,2045,163.037789
+305,Aluminium,BAU,Global,2046,163.7016841
+306,Aluminium,BAU,Global,2047,164.4323467
+307,Aluminium,BAU,Global,2048,165.2389066
+308,Aluminium,BAU,Global,2049,166.1396065
+309,Aluminium,BAU,Global,2050,167.1577772
+0,Aluminium,BAU,China - North,2020,11.24383333
+9,Aluminium,BAU,China - North,2021,11.69358667
+18,Aluminium,BAU,China - North,2022,11.45971493
+27,Aluminium,BAU,China - North,2023,11.45971493
+36,Aluminium,BAU,China - North,2024,11.57431208
+45,Aluminium,BAU,China - North,2025,11.22708272
+54,Aluminium,BAU,China - North,2026,11.5638952
+63,Aluminium,BAU,China - North,2027,11.21697835
+72,Aluminium,BAU,China - North,2028,11.41297446
+81,Aluminium,BAU,China - North,2029,11.6412428
+90,Aluminium,BAU,China - North,2030,11.24913206
+99,Aluminium,BAU,China - North,2031,12.10612551
+108,Aluminium,BAU,China - North,2032,12.99946871
+117,Aluminium,BAU,China - North,2033,13.1845594
+126,Aluminium,BAU,China - North,2034,13.5164867
+135,Aluminium,BAU,China - North,2035,13.5164867
+144,Aluminium,BAU,China - North,2036,13.5164867
+153,Aluminium,BAU,China - North,2037,13.5164867
+162,Aluminium,BAU,China - North,2038,13.5164867
+171,Aluminium,BAU,China - North,2039,13.5164867
+180,Aluminium,BAU,China - North,2040,13.5164867
+189,Aluminium,BAU,China - North,2041,13.5164867
+198,Aluminium,BAU,China - North,2042,13.5164867
+207,Aluminium,BAU,China - North,2043,13.5164867
+216,Aluminium,BAU,China - North,2044,13.5164867
+225,Aluminium,BAU,China - North,2045,13.5164867
+234,Aluminium,BAU,China - North,2046,13.5164867
+243,Aluminium,BAU,China - North,2047,13.5164867
+252,Aluminium,BAU,China - North,2048,13.5164867
+261,Aluminium,BAU,China - North,2049,13.5164867
+270,Aluminium,BAU,China - North,2050,13.5164867
+0,Aluminium,BAU,China - North West,2020,11.24383333
+9,Aluminium,BAU,China - North West,2021,11.69358667
+18,Aluminium,BAU,China - North West,2022,11.45971493
+27,Aluminium,BAU,China - North West,2023,11.45971493
+36,Aluminium,BAU,China - North West,2024,11.57431208
+45,Aluminium,BAU,China - North West,2025,11.22708272
+54,Aluminium,BAU,China - North West,2026,11.5638952
+63,Aluminium,BAU,China - North West,2027,11.21697835
+72,Aluminium,BAU,China - North West,2028,11.41297446
+81,Aluminium,BAU,China - North West,2029,11.6412428
+90,Aluminium,BAU,China - North West,2030,11.24913206
+99,Aluminium,BAU,China - North West,2031,12.10612551
+108,Aluminium,BAU,China - North West,2032,12.99946871
+117,Aluminium,BAU,China - North West,2033,13.1845594
+126,Aluminium,BAU,China - North West,2034,13.5164867
+135,Aluminium,BAU,China - North West,2035,13.5164867
+144,Aluminium,BAU,China - North West,2036,13.5164867
+153,Aluminium,BAU,China - North West,2037,13.5164867
+162,Aluminium,BAU,China - North West,2038,13.5164867
+171,Aluminium,BAU,China - North West,2039,13.5164867
+180,Aluminium,BAU,China - North West,2040,13.5164867
+189,Aluminium,BAU,China - North West,2041,13.5164867
+198,Aluminium,BAU,China - North West,2042,13.5164867
+207,Aluminium,BAU,China - North West,2043,13.5164867
+216,Aluminium,BAU,China - North West,2044,13.5164867
+225,Aluminium,BAU,China - North West,2045,13.5164867
+234,Aluminium,BAU,China - North West,2046,13.5164867
+243,Aluminium,BAU,China - North West,2047,13.5164867
+252,Aluminium,BAU,China - North West,2048,13.5164867
+261,Aluminium,BAU,China - North West,2049,13.5164867
+270,Aluminium,BAU,China - North West,2050,13.5164867
+0,Aluminium,BAU,China - North East,2020,11.24383333
+9,Aluminium,BAU,China - North East,2021,11.69358667
+18,Aluminium,BAU,China - North East,2022,11.45971493
+27,Aluminium,BAU,China - North East,2023,11.45971493
+36,Aluminium,BAU,China - North East,2024,11.57431208
+45,Aluminium,BAU,China - North East,2025,11.22708272
+54,Aluminium,BAU,China - North East,2026,11.5638952
+63,Aluminium,BAU,China - North East,2027,11.21697835
+72,Aluminium,BAU,China - North East,2028,11.41297446
+81,Aluminium,BAU,China - North East,2029,11.6412428
+90,Aluminium,BAU,China - North East,2030,11.24913206
+99,Aluminium,BAU,China - North East,2031,12.10612551
+108,Aluminium,BAU,China - North East,2032,12.99946871
+117,Aluminium,BAU,China - North East,2033,13.1845594
+126,Aluminium,BAU,China - North East,2034,13.5164867
+135,Aluminium,BAU,China - North East,2035,13.5164867
+144,Aluminium,BAU,China - North East,2036,13.5164867
+153,Aluminium,BAU,China - North East,2037,13.5164867
+162,Aluminium,BAU,China - North East,2038,13.5164867
+171,Aluminium,BAU,China - North East,2039,13.5164867
+180,Aluminium,BAU,China - North East,2040,13.5164867
+189,Aluminium,BAU,China - North East,2041,13.5164867
+198,Aluminium,BAU,China - North East,2042,13.5164867
+207,Aluminium,BAU,China - North East,2043,13.5164867
+216,Aluminium,BAU,China - North East,2044,13.5164867
+225,Aluminium,BAU,China - North East,2045,13.5164867
+234,Aluminium,BAU,China - North East,2046,13.5164867
+243,Aluminium,BAU,China - North East,2047,13.5164867
+252,Aluminium,BAU,China - North East,2048,13.5164867
+261,Aluminium,BAU,China - North East,2049,13.5164867
+270,Aluminium,BAU,China - North East,2050,13.5164867
+0,Aluminium,BAU,China - Central,2020,11.24383333
+9,Aluminium,BAU,China - Central,2021,11.69358667
+18,Aluminium,BAU,China - Central,2022,11.45971493
+27,Aluminium,BAU,China - Central,2023,11.45971493
+36,Aluminium,BAU,China - Central,2024,11.57431208
+45,Aluminium,BAU,China - Central,2025,11.22708272
+54,Aluminium,BAU,China - Central,2026,11.5638952
+63,Aluminium,BAU,China - Central,2027,11.21697835
+72,Aluminium,BAU,China - Central,2028,11.41297446
+81,Aluminium,BAU,China - Central,2029,11.6412428
+90,Aluminium,BAU,China - Central,2030,11.24913206
+99,Aluminium,BAU,China - Central,2031,12.10612551
+108,Aluminium,BAU,China - Central,2032,12.99946871
+117,Aluminium,BAU,China - Central,2033,13.1845594
+126,Aluminium,BAU,China - Central,2034,13.5164867
+135,Aluminium,BAU,China - Central,2035,13.5164867
+144,Aluminium,BAU,China - Central,2036,13.5164867
+153,Aluminium,BAU,China - Central,2037,13.5164867
+162,Aluminium,BAU,China - Central,2038,13.5164867
+171,Aluminium,BAU,China - Central,2039,13.5164867
+180,Aluminium,BAU,China - Central,2040,13.5164867
+189,Aluminium,BAU,China - Central,2041,13.5164867
+198,Aluminium,BAU,China - Central,2042,13.5164867
+207,Aluminium,BAU,China - Central,2043,13.5164867
+216,Aluminium,BAU,China - Central,2044,13.5164867
+225,Aluminium,BAU,China - Central,2045,13.5164867
+234,Aluminium,BAU,China - Central,2046,13.5164867
+243,Aluminium,BAU,China - Central,2047,13.5164867
+252,Aluminium,BAU,China - Central,2048,13.5164867
+261,Aluminium,BAU,China - Central,2049,13.5164867
+270,Aluminium,BAU,China - Central,2050,13.5164867
+0,Aluminium,BAU,China - South,2020,11.24383333
+9,Aluminium,BAU,China - South,2021,11.69358667
+18,Aluminium,BAU,China - South,2022,11.45971493
+27,Aluminium,BAU,China - South,2023,11.45971493
+36,Aluminium,BAU,China - South,2024,11.57431208
+45,Aluminium,BAU,China - South,2025,11.22708272
+54,Aluminium,BAU,China - South,2026,11.5638952
+63,Aluminium,BAU,China - South,2027,11.21697835
+72,Aluminium,BAU,China - South,2028,11.41297446
+81,Aluminium,BAU,China - South,2029,11.6412428
+90,Aluminium,BAU,China - South,2030,11.24913206
+99,Aluminium,BAU,China - South,2031,12.10612551
+108,Aluminium,BAU,China - South,2032,12.99946871
+117,Aluminium,BAU,China - South,2033,13.1845594
+126,Aluminium,BAU,China - South,2034,13.5164867
+135,Aluminium,BAU,China - South,2035,13.5164867
+144,Aluminium,BAU,China - South,2036,13.5164867
+153,Aluminium,BAU,China - South,2037,13.5164867
+162,Aluminium,BAU,China - South,2038,13.5164867
+171,Aluminium,BAU,China - South,2039,13.5164867
+180,Aluminium,BAU,China - South,2040,13.5164867
+189,Aluminium,BAU,China - South,2041,13.5164867
+198,Aluminium,BAU,China - South,2042,13.5164867
+207,Aluminium,BAU,China - South,2043,13.5164867
+216,Aluminium,BAU,China - South,2044,13.5164867
+225,Aluminium,BAU,China - South,2045,13.5164867
+234,Aluminium,BAU,China - South,2046,13.5164867
+243,Aluminium,BAU,China - South,2047,13.5164867
+252,Aluminium,BAU,China - South,2048,13.5164867
+261,Aluminium,BAU,China - South,2049,13.5164867
+270,Aluminium,BAU,China - South,2050,13.5164867
+0,Aluminium,BAU,China - East,2020,11.24383333
+9,Aluminium,BAU,China - East,2021,11.69358667
+18,Aluminium,BAU,China - East,2022,11.45971493
+27,Aluminium,BAU,China - East,2023,11.45971493
+36,Aluminium,BAU,China - East,2024,11.57431208
+45,Aluminium,BAU,China - East,2025,11.22708272
+54,Aluminium,BAU,China - East,2026,11.5638952
+63,Aluminium,BAU,China - East,2027,11.21697835
+72,Aluminium,BAU,China - East,2028,11.41297446
+81,Aluminium,BAU,China - East,2029,11.6412428
+90,Aluminium,BAU,China - East,2030,11.24913206
+99,Aluminium,BAU,China - East,2031,12.10612551
+108,Aluminium,BAU,China - East,2032,12.99946871
+117,Aluminium,BAU,China - East,2033,13.1845594
+126,Aluminium,BAU,China - East,2034,13.5164867
+135,Aluminium,BAU,China - East,2035,13.5164867
+144,Aluminium,BAU,China - East,2036,13.5164867
+153,Aluminium,BAU,China - East,2037,13.5164867
+162,Aluminium,BAU,China - East,2038,13.5164867
+171,Aluminium,BAU,China - East,2039,13.5164867
+180,Aluminium,BAU,China - East,2040,13.5164867
+189,Aluminium,BAU,China - East,2041,13.5164867
+198,Aluminium,BAU,China - East,2042,13.5164867
+207,Aluminium,BAU,China - East,2043,13.5164867
+216,Aluminium,BAU,China - East,2044,13.5164867
+225,Aluminium,BAU,China - East,2045,13.5164867
+234,Aluminium,BAU,China - East,2046,13.5164867
+243,Aluminium,BAU,China - East,2047,13.5164867
+252,Aluminium,BAU,China - East,2048,13.5164867
+261,Aluminium,BAU,China - East,2049,13.5164867
+270,Aluminium,BAU,China - East,2050,13.5164867
