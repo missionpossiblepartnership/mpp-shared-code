@@ -56,14 +56,15 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             )
 
             #! Debug: set carbon budget start to initial emissions (needs to be implemented)
-            if year == START_YEAR:
-                emissions = pathway.calculate_emissions_stack(year, product)
-                limit = (emissions["co2_scope1"] + emissions["co2_scope2"]) / 1e3
-                df = pathway.carbon_budget.pathways[pathway.sector]
-                df.loc[START_YEAR, "annual_limit"] = limit
+            # Let's remove this and make sure the annual emissions limit is initalized correctly at the start
+            # if year == START_YEAR:
+            #     emissions = pathway.calculate_emissions_stack(year, product)
+            #     limit = (emissions["co2_scope1"] + emissions["co2_scope2"]) / 1e3
+            #     df = pathway.carbon_budget.pathways[pathway.sector]
+            #     df.loc[START_YEAR, "annual_limit"] = limit
 
             # Decommission assets
-            # pathway = decommission(pathway=pathway, year=year, product=product)
+            pathway = decommission(pathway=pathway, year=year, product=product)
 
             # Renovate and rebuild assets (brownfield transition)
             pathway = brownfield(pathway=pathway, year=year, product=product)
@@ -95,6 +96,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
     carbon_budget = CarbonBudget(
         sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS, pathway_shape="linear"
     )
+    carbon_budget.output_emissions_pathway(sector=sector, importer=importer)
 
     # Make pathway
     pathway = SimulationPathway(
