@@ -100,7 +100,7 @@ def _calculate_lcox(df_stack, df_transitions):
 def _calculate_total_capex(df_stack, df_inputs_outputs):
     logger.info("-- Calculating total capex")
     df_capex = df_inputs_outputs.loc[(df_inputs_outputs["parameter"] == "capex")].copy()
-    df_stack = df.stack.merge(df_capex, on=["product", "region", "technology"])
+    df_stack = df_stack.merge(df_capex, on=["product", "region", "technology"])
     df_stack_capex = (
         df_stack.groupby(["product", "region", "technology"]).sum().reset_index()
     )
@@ -110,8 +110,14 @@ def _calculate_total_capex(df_stack, df_inputs_outputs):
 
 def _calculate_total_opex(df_stack, df_inputs_outputs):
     logger.info("-- Calculating total opex")
-    df_total_opex = pd.DataFrame()
-    return df_total_opex
+    logger.info("-- Calculating total capex")
+    df_opex = df_inputs_outputs.loc[(df_inputs_outputs["parameter"] == "opex")].copy()
+    df_stack = df_stack.merge(df_opex, on=["product", "region", "technology"])
+    df_stack_opex = (
+        df_stack.groupby(["product", "region", "technology"]).sum().reset_index()
+    )
+    df_stack_opex["parameter_group"] = "finance"
+    return df_stack_opex
 
 
 def _calculate_variable_opex(df_stack, df_inputs_outputs):
