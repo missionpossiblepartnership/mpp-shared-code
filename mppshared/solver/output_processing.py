@@ -144,6 +144,25 @@ def _calculate_h2_storage(df_stack, df_inputs_outputs):
     return df_h2_storage
 
 
+def _calculate_output_from_input(df_stack, df_inputs_outputs, variable, year):
+    logger.info(f"-- Calculating {variable}")
+    df_variable = df_inputs_outputs.loc[
+        (df_inputs_outputs["parameter"] == variable)
+        & (df_inputs_outputs["year"] == year)
+    ].copy()
+    logger.info(f"Length of df_variable: {df_variable.head()}")
+    df_stack = df_stack.merge(df_variable, on=["product", "region", "technology"])
+    logger.debug(
+        f"columns of df_stack: {df_stack.columns}, columns of df_variable: {df_variable.columns}"
+    )
+    df_stack_variable = (
+        df_stack.groupby(["product", "region", "technology"]).sum().reset_index()
+    )
+    df_stack_variable["parameter_group"] = "finance"
+    logger.debug(f"Head of df_stack_variable: {df_stack_variable.head()}")
+    return df_stack_variable
+
+
 def create_table_all_data_year(year, importer, sector):
     df_stack = importer.get_asset_stack(year)
     df_stack_total_assets = _calculate_number_of_assets(df_stack)
@@ -157,13 +176,21 @@ def create_table_all_data_year(year, importer, sector):
     df_transitions = df_transitions[df_transitions["year"] == year]
     df_stack_lcox = _calculate_lcox(df_stack, df_transitions)
     df_inputs_outputs = importer.get_inputs_outputs()
-    df_total_capex = _calculate_total_capex(df_stack, df_inputs_outputs)
-    df_total_opex = _calculate_total_opex(df_stack, df_inputs_outputs)
-    df_variable_opex = _calculate_variable_opex(df_stack, df_inputs_outputs)
-    df_fixed_opex = _calculate_fixed_opex(df_stack, df_inputs_outputs)
-    df_energy_fedstock_inputs = _calculate_energy_fedstock_inputs(
-        df_stack, df_inputs_outputs
-    )
+    data_variables = []
+    for variable in df_inputs_outputs["parameter"].unique():
+        df_stack_variable = _calculate_output_from_input(
+            df_stack, df_inputs_outputs, variable, year
+        )
+        data_variables.append(df_stack_variable)
+    df_variables = pd.concat(data_variables)
+    df_variables.to_csv("test.csv")
+    # df_total_capex = _calculate_total_capex(df_stack, df_inputs_outputs)
+    # df_total_opex = _calculate_total_opex(df_stack, df_inputs_outputs)
+    # df_variable_opex = _calculate_variable_opex(df_stack, df_inputs_outputs)
+    # df_fixed_opex = _calculate_fixed_opex(df_stack, df_inputs_outputs)
+    # df_energy_fedstock_inputs = _calculate_energy_fedstock_inputs(
+    #     df_stack, df_inputs_outputs
+    # )
     df_all_data_year = pd.concat(
         [
             df_stack_total_assets,
@@ -171,16 +198,17 @@ def create_table_all_data_year(year, importer, sector):
             df_stack_emissions_emitted,
             df_stack_capture_emissions,
             df_stack_lcox,
-            df_total_capex,
-            df_total_opex,
-            df_variable_opex,
-            df_fixed_opex,
-            df_energy_fedstock_inputs,
+            df_variables,
+            # df_total_capex,
+            # df_total_opex,
+            # df_variable_opex,
+            # df_fixed_opex,
+            # df_energy_fedstock_inputs,
         ]
     )
-    if sector == "chemicals":
-        df_h2_storage = _calculate_h2_storage()
-        df_all_data_year = pd.concat([df_all_data_year, df_h2_storage])
+    # if sector == "chemicals":
+    #     df_h2_storage = _calculate_h2_storage()
+    #     df_all_data_year = pd.concat([df_all_data_year, df_h2_storage])
     return df_all_data_year
 
 

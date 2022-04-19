@@ -167,9 +167,9 @@ MODEL_SCOPE = "Global"
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
-    # "bau",
+    "bau",
     # "fa",
-    "lc",
+    # "lc",
 ]
 
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
@@ -182,7 +182,7 @@ SENSITIVITIES = [
 # Products produced by each sector
 PRODUCTS = {
     "chemicals": ["Ammonia"],
-    "aluminium": ["Alumina"],
+    "aluminium": ["Aluminium"],
 }
 
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
@@ -357,7 +357,7 @@ SECTORAL_PATHWAYS = {
 }
 
 # Year from which newbuild capacity must have transition or end-state technology
-TECHNOLOGY_MORATORIUM = {   
+TECHNOLOGY_MORATORIUM = {
     "chemicals": 2020,
-    "aluminium": 2050 # constraint currently not active
+    "aluminium": 2050,  # constraint currently not active
 }
