@@ -165,14 +165,16 @@ def select_asset_for_greenfield(
         # Tentatively update the stack and check constraints
         tentative_stack = deepcopy(stack)
         tentative_stack.append(new_asset)
-
-        no_constraint_hurt = check_constraints(
-            pathway=pathway,
-            stack=tentative_stack,
-            product=product,
-            year=year,
-            transition_type="greenfield",
-        )
+        if pathway.pathway != "BAU":
+            no_constraint_hurt = check_constraints(
+                pathway=pathway,
+                stack=tentative_stack,
+                product=product,
+                year=year,
+                transition_type="greenfield",
+            )
+        else:
+            no_constraint_hurt = True
 
         # Asset can be created if no constraint hurt
         if no_constraint_hurt:

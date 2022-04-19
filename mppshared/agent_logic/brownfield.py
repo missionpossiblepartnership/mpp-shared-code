@@ -70,10 +70,6 @@ def brownfield(
                     candidates,
                 )
             )
-            logger.debug(
-                f"Found {len(best_candidates)} assets eligible, candidates: {candidates[0].technology, candidates[0].region}, out from the best transition {best_transition}"
-            )
-
             new_technology = best_transition["technology_destination"]
             # Remove best transition from ranking table
             df_rank = remove_transition(df_rank, best_transition)
@@ -88,10 +84,17 @@ def brownfield(
         tentative_stack = deepcopy(new_stack)
         origin_technology = asset_to_update.technology
         tentative_stack.update_asset(asset_to_update, new_technology=new_technology)
-
-        # Check constraints with tentative new stack
-        no_constraint_hurt = check_constraints(
-            pathway=pathway, stack=tentative_stack, product=product, year=year, transition_type="brownfield")
+        if pathway.pathway != "BAU":
+            # Check constraints with tentative new stack
+            no_constraint_hurt = check_constraints(
+                pathway=pathway,
+                stack=tentative_stack,
+                product=product,
+                year=year,
+                transition_type="brownfield",
+            )
+        else:
+            no_constraint_hurt = True
 
         if no_constraint_hurt:
             logger.debug(
