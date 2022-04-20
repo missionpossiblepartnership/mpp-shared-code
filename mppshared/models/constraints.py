@@ -94,9 +94,6 @@ def get_regional_production_constraint_table(
     df["check"] = np.round(df["annual_production_volume"], sf) >= np.round(
         df["annual_production_volume_minimum"], sf
     )
-    # TODO: Remove, only for debugging
-    df.to_csv(f"debug/{year}_check_constraint_regional_production.csv")
-
     return df
 
 
