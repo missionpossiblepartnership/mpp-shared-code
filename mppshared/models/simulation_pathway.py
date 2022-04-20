@@ -475,7 +475,7 @@ class SimulationPathway:
     def copy_stack(self, year):
         """Copy this year's stack to next year"""
         old_stack = self.get_stack(year=year)
-        new_stack = AssetStack(assets=old_stack.assets.deepcopy())
+        new_stack = AssetStack(assets=old_stack.assets.copy())
         return self.add_stack(year=year + 1, stack=new_stack)
 
     def add_stack(self, year, stack):
