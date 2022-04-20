@@ -13,6 +13,32 @@ LOG_FORMATTER = logging.Formatter(
 # SECTOR = "chemicals"
 SECTOR = "aluminium"
 
+### MODEL DECISION PARAMETERS ###
+START_YEAR = 2020
+END_YEAR = 2050
+MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
+
+# (Artificial) investment cycles after which plants can be rebuilt and decommissioned
+INVESTMENT_CYCLES = {
+    "chemicals": 20,  # years
+    "aluminium": 1,
+}
+
+### RUN CONFIGURATION ###
+
+RUN_PARALLEL = True
+
+run_config = {
+    "IMPORT_DATA",
+    "CALCULATE_VARIABLES",
+    "APPLY_IMPLICIT_FORCING",
+    "MAKE_RANKINGS",
+    "SIMULATE_PATHWAY",
+    "CALCULATE_OUTPUTS",
+    # "EXPORT_OUTPUTS",
+    # "PLOT_AVAILABILITIES"
+    # "MERGE_OUTPUTS"
+}
 
 ### DATA IMPORT AND EXPORT
 CORE_DATA_PATH = "data"
@@ -24,7 +50,6 @@ PKL_DATA_IMPORTS = f"{PKL_FOLDER}/imported_data"
 PKL_DATA_INTERMEDIATE = f"{PKL_FOLDER}/intermediate_data"
 PKL_DATA_FINAL = f"{PKL_FOLDER}/final_data"
 SOLVER_INPUT_DATA_PATH = f"{CORE_DATA_PATH}/solver_input_data"
-
 
 # Naming of solver input tables
 SOLVER_INPUT_TABLES = [
@@ -128,18 +153,6 @@ EU_COUNTRIES = [
     "SWE",
 ]
 
-
-### MODEL DECISION PARAMETERS ###
-START_YEAR = 2020
-END_YEAR = 2050
-MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
-
-# (Artificial) investment cycles after which plants can be rebuilt and decommissioned
-INVESTMENT_CYCLES = {
-    "chemicals": 20,  # years
-    "aluminium": 1,
-}
-
 # Emissions
 GHGS = [
     "co2",
@@ -188,21 +201,6 @@ PRODUCTS = {
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
 INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_assets"}
 
-### RUN CONFIGURATION ###
-
-RUN_PARALLEL = True
-
-run_config = {
-    "IMPORT_DATA",
-    "CALCULATE_VARIABLES",
-    "APPLY_IMPLICIT_FORCING",
-    "MAKE_RANKINGS",
-    "SIMULATE_PATHWAY",
-    "CALCULATE_OUTPUTS",
-    # "EXPORT_OUTPUTS",
-    # "PLOT_AVAILABILITIES"
-    # "MERGE_OUTPUTS"
-}
 ### RANKING ###
 NUMBER_OF_BINS_RANKING = 10
 
@@ -212,6 +210,7 @@ GHGS_RANKING = [
     # "ch4",
     # "n2o"
 ]
+
 EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
 TRANSITION_TYPES = [
     "decommission",
@@ -219,6 +218,7 @@ TRANSITION_TYPES = [
     "brownfield_renovation",
     "brownfield_newbuild",
 ]
+
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 
 # Carbon cost parameters
@@ -332,12 +332,12 @@ REGIONAL_PRODUCTION_SHARES = {
 # TODO: import from .csv file
 SECTORAL_CARBON_BUDGETS = {
     "aluminium": 11,
-    # "cement": 42,
+    "cement": 42,
     "chemicals": 32,
-    # "steel": 56,
-    # "aviation": 17,
-    # "shipping": 16,
-    # "trucking": 36,
+    "steel": 56,
+    "aviation": 17,
+    "shipping": 16,
+    "trucking": 36,
 }
 
 residual_share = 0.05
@@ -359,5 +359,5 @@ SECTORAL_PATHWAYS = {
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = {
     "chemicals": 2020,
-    "aluminium": 2050,  # constraint currently not active
+    "aluminium": 2020,  # constraint currently not active
 }
