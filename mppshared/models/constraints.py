@@ -1,18 +1,25 @@
 """ Enforce constraints in the yearly optimization of technology switches."""
-
 from copy import deepcopy
 
 import numpy as np
 import pandas as pd
 from pandera import Bool
 
-from mppshared.config import REGIONAL_PRODUCTION_SHARES
+from mppshared.config import LOG_LEVEL, REGIONAL_PRODUCTION_SHARES
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
+from mppshared.utility.utils import get_logger
+
+logger = get_logger(__name__)
+logger.setLevel(LOG_LEVEL)
 
 
 def check_constraints(
-    pathway: SimulationPathway, stack: AssetStack, product: str, year: int, transition_type: str
+    pathway: SimulationPathway,
+    stack: AssetStack,
+    product: str,
+    year: int,
+    transition_type: str,
 ) -> Bool:
     """Check all constraints for a given asset stack.
 
@@ -33,7 +40,6 @@ def check_constraints(
     # regional_constraint = check_constraint_regional_production(
     #     pathway=pathway, stack=stack, product=product, year=year
     # )
-
 
     # Check constraint for annual emissions limit from carbon budget
     emissions_constraint = check_annual_carbon_budget_constraint(
@@ -63,7 +69,10 @@ def check_constraint_regional_production(
 
     return False
 
-def get_regional_production_constraint_table(pathway: SimulationPathway, stack: AssetStack, product: str, year: int) -> pd.DataFrame:
+
+def get_regional_production_constraint_table(
+    pathway: SimulationPathway, stack: AssetStack, product: str, year: int
+) -> pd.DataFrame:
     """Get table that compares regional production with regional demand for a given year"""
     # Get regional production and demand
     df_regional_production = stack.get_regional_production_volume(product)
@@ -76,14 +85,15 @@ def get_regional_production_constraint_table(pathway: SimulationPathway, stack: 
     )
 
     # Add required regional production column
-    df["annual_production_volume_minimum"] = df["demand"] * df["share_regional_production"]
+    df["annual_production_volume_minimum"] = (
+        df["demand"] * df["share_regional_production"]
+    )
 
     # Compare regional production with required demand share up to specified number of significant figures
     sf = 2
     df["check"] = np.round(df["annual_production_volume"], sf) >= np.round(
         df["annual_production_volume_minimum"], sf
     )
-
     return df
 
 

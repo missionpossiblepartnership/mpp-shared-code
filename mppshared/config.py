@@ -10,8 +10,8 @@ LOG_FORMATTER = logging.Formatter(
 )
 
 ### SECTOR CHOICE ###
-SECTOR = "chemicals"
-# SECTOR = "aluminium"
+# SECTOR = "chemicals"
+SECTOR = "aluminium"
 
 
 ### DATA IMPORT AND EXPORT
@@ -137,7 +137,7 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 # (Artificial) investment cycles after which plants can be rebuilt and decommissioned
 INVESTMENT_CYCLES = {
     "chemicals": 20,  # years
-    "aluminium": 20,
+    "aluminium": 1,
 }
 
 # Emissions
@@ -167,8 +167,8 @@ MODEL_SCOPE = "Global"
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
-    # "bau",
-    # "fa",
+    "bau",
+    "fa",
     "lc",
 ]
 
@@ -182,7 +182,7 @@ SENSITIVITIES = [
 # Products produced by each sector
 PRODUCTS = {
     "chemicals": ["Ammonia"],
-    "aluminium": ["Alumina"],
+    "aluminium": ["Aluminium"],
 }
 
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
@@ -190,7 +190,7 @@ INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_as
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 
 run_config = {
     "IMPORT_DATA",
@@ -357,7 +357,7 @@ SECTORAL_PATHWAYS = {
 }
 
 # Year from which newbuild capacity must have transition or end-state technology
-TECHNOLOGY_MORATORIUM = {   
+TECHNOLOGY_MORATORIUM = {
     "chemicals": 2020,
-    "aluminium": 2050 # constraint currently not active
+    "aluminium": 2050,  # constraint currently not active
 }

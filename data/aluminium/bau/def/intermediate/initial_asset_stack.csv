@@ -1,57 +1,111 @@
 ﻿shorthand,region,country,coordinates,product,technology,annual_production_capacity,year,capacity_factor
-Alum,Oceania,Australia,"-32.192803, 115.778179",Alumina,Gas-Boiler + Gas-Calciner,2.19,1963,1
-Alum,Oceania,Australia,"-32.643451, 115.949544",Alumina,Gas-Boiler + Gas-Calciner,4.234,1972,1
-Alum,Oceania,Australia,"-32.914487, 115.915322",Alumina,Gas-Boiler + Gas-Calciner,2.555,1984,1
-Alum,Oceania,Australia,"-23.828357, 151.154210",Alumina,Coal-Boiler + Gas-Calciner,3.2,2004,0.9921875
-Alum,Oceania,Australia,"-23.865808, 151.290751",Alumina,Coal-Boiler + Gas-Calciner,3.95,1967,0.936962025
-Alum,Oceania,Australia,"-33.238330, 116.068500",Alumina,Coal-Boiler + Gas-Calciner,4.6,1984,0.844782609
-Alum,Middle East,Azerbaijan,"40.693204, 46.411926",Alumina,Coal-Boiler + Oil-Calciner,0.45,1933,0
-Alum,Europe,Bosnia and Herzegovina,"44.419125, 19.112116",Alumina,Oil-Boiler + Oil-Calciner,0.6,1978,0
-Alum,South America,Brazil,"-21.843218, -46.589446",Alumina,Gas-Boiler + Gas-Calciner,0.39,1970,1
-Alum,South America,Brazil,"-2.710826, -44.346324",Alumina,Oil-Boiler + Oil-Calciner,3.83,1984,1.004699739
-Alum,South America,Brazil,"-23.528225, -47.269735",Alumina,Biomass-Boiler + Oil-Calciner,0.8,1955,1
-Alum,South America,Brazil,"-1.545880, -48.730613",Alumina,Coal-Boiler + Gas-Calciner,6.3,1995,0.873015873
-Alum,North America,Canada,"48.429356, -71.157885",Alumina,Gas-Boiler + Gas-Calciner,1.56,1936,0.874358974
-Alum,Europe,Germany,"53.652962, 9.496364",Alumina,Gas-Boiler + Gas-Calciner,1,1973,0.9
-Alum,Europe,Greece,"38.361542, 22.694489",Alumina,Gas-Boiler + Gas-Calciner,0.86,1966,0.960465116
-Alum,Africa,Guinea,"10.386786, -13.578347",Alumina,Oil-Boiler + Oil-Calciner,0.65,1999,0.68
-Alum,Rest of Asia,India,"17.594676, 82.748291",Alumina,Coal-Boiler + Oil-Calciner,1.5,2013,0
-Alum,Rest of Asia,India,"22.397845, 82.740433",Alumina,Coal-Boiler + Oil-Calciner,0.2,1974,0
-Alum,Rest of Asia,India,"23.379808, 85.873095",Alumina,Coal-Boiler + Oil-Calciner,0.45,1948,0.637588889
-Alum,Rest of Asia,India,"24.223988, 83.030190",Alumina,Coal-Boiler + Oil-Calciner,0.7,1962,0.979835714
-Alum,Rest of Asia,India,"19.184771, 83.028059",Alumina,Coal-Boiler + Oil-Calciner,1.5,2012,1.035733333
-Alum,Rest of Asia,India,"11.809796, 77.827301",Alumina,Coal-Boiler + Oil-Calciner,0.085,1965,0
-Alum,Rest of Asia,India,"18.772826, 82.917431",Alumina,Coal-Boiler + Oil-Calciner,2.275,1986,0.926153846
-Alum,Rest of Asia,India,"19.708692, 83.398615",Alumina,Coal-Boiler + Oil-Calciner,2,2007,0.750335
-Alum,Rest of Asia,India,"-2.363759, 110.160065",Alumina,Coal-Boiler + Gas-Calciner,1,2016,1
-Alum,Rest of Asia,Indonesia,"36.993399, 56.437304",Alumina,Oil-Boiler + Gas-Calciner,0.28,2003,0.834685714
-Alum,Middle East,Iran,"52.629099, -9.057957",Alumina,Gas-Boiler + Gas-Calciner,1.99,1983,0.95
-Alum,Europe,Ireland,"39.206656, 8.396895",Alumina,Oil-Boiler + Oil-Calciner,1.05,1973,0
-Alum,Europe,Italy,"17.968080, -77.608927",Alumina,Oil-Boiler + Oil-Calciner,1.65,1968,0
-Alum,North America,Jamaica,"17.900667, -77.240530",Alumina,Gas-Boiler + Gas-Calciner,1.4167,1972,0
-Alum,North America,Jamaica,"18.170779, -77.065048",Alumina,Oil-Boiler + Oil-Calciner,0.625,1959,0.43
-Alum,North America,Jamaica,"18.081689, -77.474800",Alumina,Oil-Boiler + Oil-Calciner,0.585,1952,0.43
-Alum,North America,Jamaica,"52.257828, 77.047154",Alumina,Coal-Boiler + Gas-Calciner,1.5,1964,1
-Alum,Middle East,Kazakhstan,"45.180857, 28.768040",Alumina,Gas-Boiler + Gas-Calciner,0.6,1975,0.710655
-Alum,Europe,Romania,"56.269501, 90.495240",Alumina,Coal-Boiler + Oil-Calciner,1.069,1970,0.84
-Alum,Russia,Russia,"59.763534, 60.193574",Alumina,Coal-Boiler + Gas-Calciner,1.03,1943,0.96
-Alum,Russia,Russia,"56.415240, 61.917764",Alumina,Gas-Boiler + Gas-Calciner,0.91,1939,1.02
-Alum,Russia,Russia,"27.047209, 49.558893",Alumina,Gas-Boiler + Gas-Calciner,1.8,2016,0.990022778
-Alum,Middle East,Saudi Arabia,"43.698990, -7.459916",Alumina,Gas-Boiler + Gas-Calciner,1.5,1980,0.341
-Alum,Europe,Spain,"37.445175, 31.847175",Alumina,Gas-Boiler + Gas-Calciner,0.2,1973,0.81407
-Alum,Europe,Turkey,"46.777242, 31.951480",Alumina,Gas-Boiler + Gas-Calciner,1.759,1980,0.98
-Alum,Europe,Ukraine,"47.865645, 35.130917",Alumina,Gas-Boiler + Gas-Calciner,0.245,1934,0
-Alum,Europe,Ukraine,"24.786545, 54.730482",Alumina,Gas-Boiler + Gas-Calciner,2,2019,1
-Alum,Middle East,United Arab Emirates,"30.059307, -90.666919",Alumina,Gas-Boiler + Gas-Calciner,1.18,1959,0.516949153
-Alum,North America,United States,"30.134730, -90.915896",Alumina,Gas-Boiler + Gas-Calciner,0.54,1956,0
-Alum,North America,United States,"8.292261, -62.815954",Alumina,Oil-Boiler + Oil-Calciner,2,1977,0
-Alum,South America,Venezuela,"11.659493, 107.797649",Alumina,Coal-Boiler + Gas-Calciner,0.65,2012,0.86
-Alum,Rest of Asia,Vietnam,"11.968334, 107.585122",Alumina,Coal-Boiler + Gas-Calciner,0.65,2017,0.923076923
-Alum,China - North,China - North,"36.098571, 118.000800",Alumina,Coal-Boiler + Gas-Calciner,29.60132848,1990,0.878207885
-Alum,China - North,China - North,"37.325392, 112.316642",Alumina,Coal-Boiler + Gas-Calciner,25.88790018,1990,0.836590164
-Alum,China - Central,China - Central,"33.972072, 113.767438",Alumina,Coal-Boiler + Gas-Calciner,14.42932141,1990,0.799338235
-Alum,China - South,China - South,"23.389531, 108.384783",Alumina,Coal-Boiler + Gas-Calciner,8.593934075,1990,0.951851852
-Alum,China - South,China - South,"26.902103, 107.256242",Alumina,Coal-Boiler + Gas-Calciner,4.562211917,1990,1.017906977
-Alum,China - Central,China - Central,"29.830082, 107.760184",Alumina,Coal-Boiler + Gas-Calciner,1.113938461,1990,0.770538462
-Alum,China - South,China - South,"27.538904, 111.852754",Alumina,Coal-Boiler + Gas-Calciner,0.755935989,1990,0.770538462
-Alum,China - South,China - South,"34.166623, 103.679140",Alumina,Coal-Boiler + Gas-Calciner,2.26794566,1990,0.77
+Alum,South America,Argentina,"-42.737502, -65.046776",Aluminium,Carbon Anode + Natural gas,0.46,1971,0.82
+Alum,Oceania,Australia,"-23.928241, 151.339019",Aluminium,Carbon Anode + Grid,0.585,1982,0.87
+Alum,Oceania,Australia,"-38.386151, 141.631294",Aluminium,Carbon Anode + Grid,0.358,1986,0
+Alum,Oceania,Australia,"-41.124719, 146.869574",Aluminium,Carbon Anode + PPA+Grid,0.195,1955,0.97
+Alum,Oceania,Australia,"-32.821857, 151.720009",Aluminium,Carbon Anode + Grid,0.597,1983,0.99
+Alum,Middle East,Azerbaijan,"40.690544, 46.423296",Aluminium,Carbon Anode + Grid,0.055,2013,0.94
+Alum,Middle East,Bahrain,"26.088486, 50.604081",Aluminium,Carbon Anode + Natural gas,1.561,1971,0.99
+Alum,Europe,Bosnia and Herzegovina,"43.280119, 17.824988",Aluminium,Carbon Anode + Grid,0.35,1975,0
+Alum,South America,Brazil,"-2.707227, -44.331490",Aluminium,Carbon Anode + PPA+Grid,0.447,2023,0
+Alum,South America,Brazil,"-1.557386, -48.734998",Aluminium,Carbon Anode + PPA+Grid,0.46,1985,0.93
+Alum,South America,Brazil,"-23.532415, -47.267933",Aluminium,Carbon Anode + Hydro,0.475,1955,0.65
+Alum,Africa,Cameroon,"3.819955, 10.124405",Aluminium,Carbon Anode + Grid,0.1,1954,0.49
+Alum,North America,Canada,"46.694846, -71.948122",Aluminium,Carbon Anode + PPA+Grid,0.287,1992,0
+Alum,North America,Canada,"49.254464, -68.149013",Aluminium,Carbon Anode + PPA+Grid,0.312,1957,0
+Alum,North America,Canada,"50.158517, -66.440542",Aluminium,Carbon Anode + PPA+Grid,0.622,1992,1.01
+Alum,North America,Canada,"48.585317, -71.689234",Aluminium,Carbon Anode + Hydro,0.473,2000,1
+Alum,North America,Canada,"48.430413, -71.165668",Aluminium,Carbon Anode + Hydro,0.174,1926,0.97
+Alum,North America,Canada,"48.430413, -71.165668",Aluminium,Carbon Anode + Hydro,0.174,1926,0.97
+Alum,North America,Canada,"48.305907, -70.925449",Aluminium,Carbon Anode + Hydro,0.233,1980,1
+Alum,North America,Canada,"54.014473, -128.701677",Aluminium,Carbon Anode + Hydro,0.432,1954,0.76
+Alum,North America,Canada,"48.300538, -71.129035",Aluminium,Carbon Anode + Hydro,0.257,1989,0.97
+Alum,North America,Canada,"46.380570, -72.383278",Aluminium,Carbon Anode + PPA+Grid,0.462,1986,0.87
+Alum,Africa,Egypt,"25.989175, 32.332151",Aluminium,Carbon Anode + PPA+Grid,0.32,1975,0
+Alum,Europe,France,"50.999789, 2.169872",Aluminium,Carbon Anode + Grid,0.285,1991,0.82
+Alum,Europe,France,"45.270340, 6.375211",Aluminium,Carbon Anode + Grid,0.15,1907,0.97
+Alum,Europe,Germany,"51.148990, 6.781876",Aluminium,Carbon Anode + Grid,0.235,1962,0
+Alum,Europe,Germany,"51.493634, 6.963672",Aluminium,Carbon Anode + Grid,0.165,1971,1
+Alum,Europe,Germany,"53.511575, 9.894409",Aluminium,Carbon Anode + Grid,0.135,1970,1
+Alum,Europe,Germany,"51.621911, 6.614610",Aluminium,Carbon Anode + Grid,0.095,1971,1
+Alum,Africa,Ghana,"5.667995, 0.022149",Aluminium,Carbon Anode + PPA+Grid,0.2,1967,0
+Alum,Europe,Greece,"38.362709, 22.689281",Aluminium,Carbon Anode + Natural gas,0.19,1960,0.97
+Alum,Europe,Iceland,"65.034268, -14.101182",Aluminium,Carbon Anode + PPA+Grid,0.351,2007,0
+Alum,Europe,Iceland,"64.363992, -21.774589",Aluminium,Carbon Anode + PPA+Grid,0.317,1998,0.99
+Alum,Europe,Iceland,"64.045738, -22.026341",Aluminium,Carbon Anode + PPA+Grid,0.212,1969,0.96
+Alum,Rest of Asia,India,"21.738921, 84.050425",Aluminium,Carbon Anode + Coal,0.36,2013,1
+Alum,Rest of Asia,India,"21.532692, 83.906588",Aluminium,Carbon Anode + Coal,0.216,2013,0.71
+Alum,Rest of Asia,India,"24.231308, 82.437016",Aluminium,Carbon Anode + Coal,0.359,2015,0.99
+Alum,Rest of Asia,India,"24.217857, 83.029665",Aluminium,Carbon Anode + Coal,0.41,1962,1
+Alum,Rest of Asia,India,"20.827461, 85.159789",Aluminium,Carbon Anode + Coal,0.46,1987,0.91
+Alum,Rest of Asia,India,"21.806927, 84.041112",Aluminium,Carbon Anode + Coal,1.75,2008,0.77
+Alum,Rest of Asia,India,"22.398597, 82.731866",Aluminium,Carbon Anode + Coal,0.57,1965,1.01
+Alum,Rest of Asia,Indonesia,"3.347914, 99.455510",Aluminium,Carbon Anode + Hydro,0.26,1976,0.9
+Alum,Middle East,Iran,"27.164185, 56.082941",Aluminium,Carbon Anode + Natural gas,0.11,1997,0.64
+Alum,Middle East,Iran,"27.164185, 56.082941",Aluminium,Carbon Anode + Natural gas,0.11,1997,0.64
+Alum,Middle East,Iran,"34.076164, 49.762179",Aluminium,Carbon Anode + Grid,0.23,1967,0.77
+Alum,Middle East,Iran,"27.387977, 53.259092",Aluminium,Carbon Anode + Grid,0.3,2020,0.6
+Alum,Europe,Italy,"39.201427, 8.405401",Aluminium,Carbon Anode + Grid,0.15,2023,0
+Alum,Middle East,Kazakhstan,"52.253766, 77.049439",Aluminium,Carbon Anode + Grid,0.25,2007,1.06
+Alum,Rest of Asia,Malaysia,"2.968857, 112.375989",Aluminium,Carbon Anode + PPA+Grid,0.12,2009,1
+Alum,Rest of Asia,Malaysia,"3.551257, 113.323461",Aluminium,Carbon Anode + PPA+Grid,0.96,2012,1
+Alum,Europe,Montenegro,"42.395216, 19.227570",Aluminium,Carbon Anode + Grid,0.12,1969,0
+Alum,Africa,Mozambique,"-25.914387, 32.407732",Aluminium,Carbon Anode + PPA+Grid,0.58,1998,0.46
+Alum,Europe,Netherlands,"53.310164, 6.978198",Aluminium,Carbon Anode + Grid,0.11,1966,0
+Alum,Oceania,New Zealand,"-46.588563, 168.386072",Aluminium,Carbon Anode + PPA+Grid,0.373,1971,0.89
+Alum,Africa,Nigeria,"4.570606, 7.578276",Aluminium,Carbon Anode + Natural gas,0.193,2023,0
+Alum,Europe,Norway,"58.072504, 6.785369",Aluminium,Carbon Anode + PPA+Grid,0.094,1962,0
+Alum,Europe,Norway,"65.846361, 13.190513",Aluminium,Carbon Anode + PPA+Grid,0.2,1962,0
+Alum,Europe,Norway,"61.311276, 7.823018",Aluminium,Carbon Anode + Hydro,0.202,1948,1
+Alum,Europe,Norway,"61.218427, 6.067978",Aluminium,Carbon Anode + Hydro,0.066,1917,1
+Alum,Europe,Norway,"59.867941, 5.769198",Aluminium,Carbon Anode + Hydro,0.195,1965,0.87
+Alum,Europe,Norway,"59.314503, 5.310508",Aluminium,Carbon Anode + Hydro,0.271,1967,0.98
+Alum,Europe,Norway,"62.679442, 8.554155",Aluminium,Carbon Anode + Hydro,0.425,1954,1
+Alum,Middle East,Oman,"24.417262, 56.550682",Aluminium,Carbon Anode + Natural gas,0.395,2004,1
+Alum,Middle East,Qatar,"24.967998, 51.573632",Aluminium,Carbon Anode + Natural gas,0.636,2009,1
+Alum,Europe,Romania,"44.447044, 24.390634",Aluminium,Carbon Anode + Grid,0.265,1965,1.02
+Alum,Russia,Russia,"58.069283, 97.316230",Aluminium,Carbon Anode + Hydro,0.298,2019,0
+Alum,Russia,Russia,"56.128670, 101.451061",Aluminium,Carbon Anode + Hydro,1.009,1966,1
+Alum,Russia,Russia,"52.190191, 104.080259",Aluminium,Carbon Anode + Hydro,0.422,1962,1
+Alum,Russia,Russia,"67.194427, 32.426914",Aluminium,Carbon Anode + Grid,0.076,1951,0.92
+Alum,Russia,Russia,"53.190766, 91.449160",Aluminium,Carbon Anode + Hydro,0.297,2006,1.04
+Alum,Russia,Russia,"56.094478, 93.014721",Aluminium,Carbon Anode + Hydro,1.019,1964,1
+Alum,Russia,Russia,"53.780781, 87.240683",Aluminium,Carbon Anode + Grid,0.215,1943,1
+Alum,Russia,Russia,"53.199710, 91.451921",Aluminium,Carbon Anode + Hydro,0.542,1985,0.98
+Alum,Russia,Russia,"55.988376, 98.127028",Aluminium,Carbon Anode + Hydro,0.429,2021,0.42
+Alum,Russia,Russia,"56.371517, 61.970504",Aluminium,Carbon Anode + Grid,0.075,1939,0
+Alum,Russia,Russia,"48.832155, 44.591588",Aluminium,Carbon Anode + PPA+Grid,0.069,1959,1.01
+Alum,Middle East,Saudi Arabia,"27.516375, 49.168508",Aluminium,Carbon Anode + Grid,0.78,2012,1.02
+Alum,Europe,Slovakia,"48.564256, 18.848043",Aluminium,Carbon Anode + Grid,0.175,1993,0.94
+Alum,Europe,Slovenia,"46.393259, 15.790214",Aluminium,Carbon Anode + Grid,0.10037,1954,0.5
+Alum,Africa,South Africa,"-28.766263, 32.028996",Aluminium,Carbon Anode + Grid,0.72,2001,1
+Alum,Europe,Spain,"43.699862, -7.477310",Aluminium,Carbon Anode + PPA+Grid,0.228,2024,0
+Alum,Europe,Sweden,"62.373236, 17.369216",Aluminium,Carbon Anode + Grid,0.128,1942,0.91
+Alum,Middle East,Tajikistan,"38.546431, 68.225628",Aluminium,Carbon Anode + PPA+Grid,0.517,1975,0.2
+Alum,Europe,Turkey,"37.445172, 31.846318",Aluminium,Carbon Anode + Hydro,0.082,1974,0.89
+Alum,Middle East,United Arab Emirates,"24.790299, 54.726098",Aluminium,Carbon Anode + Natural gas,1.5,2009,0
+Alum,Middle East,United Arab Emirates,"25.031487, 55.095233",Aluminium,Carbon Anode + Natural gas,1,1979,0
+Alum,Europe,United Kingdom,"56.827960, -5.072148",Aluminium,Carbon Anode + Hydro,0.0475,1929,0.84
+Alum,North America,United States,"48.845511, -122.705254",Aluminium,Carbon Anode + Grid,0.279,1966,0
+Alum,North America,United States,"44.960676, -74.891914",Aluminium,Carbon Anode + PPA+Grid,0.13,1902,0
+Alum,North America,United States,"37.919136, -87.329551",Aluminium,Carbon Anode + Coal,0.269,1960,0
+Alum,North America,United States,"37.944389, -86.787717",Aluminium,Carbon Anode + Grid,0.25,1969,0.68
+Alum,North America,United States,"33.050838, -80.053257",Aluminium,Carbon Anode + Grid,0.229,1970,0.47
+Alum,North America,United States,"37.657386, -87.499630",Aluminium,Carbon Anode + Grid,0.22,1973,0.93
+Alum,North America,United States,"36.508713, -89.563988",Aluminium,Carbon Anode + Grid,0.263,1971,0
+Alum,South America,Venezuela,"8.269188, -62.811914",Aluminium,Carbon Anode + PPA+Grid,0.21,1967,0
+Alum,South America,Venezuela,"8.278633, -62.829004",Aluminium,Carbon Anode + PPA+Grid,0.43,1978,0
+Alum,Rest of Asia,Vietnam,"11.968851, 107.595029",Aluminium,Carbon Anode + Grid,0.65,2016,0.89
+Alum,China - North,China,"36.098571, 118.000800",Aluminium,Carbon Anode + Coal,14.86054956,2024,0.8
+Alum,China - North,China,"43.091250, 114.509649",Aluminium,Carbon Anode + Grid,6.368806956,1942,0.84
+Alum,China - North West,China,"38.423174, 101.388790",Aluminium,Carbon Anode + Grid,3.496599897,1975,0.93
+Alum,China - Central,China,"33.972072, 113.767438",Aluminium,Carbon Anode + Coal,4.495628439,1974,0.68
+Alum,China - North West,China,"35.596121, 96.670501",Aluminium,Carbon Anode + Grid,3.121964194,2009,0.94
+Alum,China - North West,China,"42.275613, 86.167467",Aluminium,Carbon Anode + Coal,8.866378311,1979,0.31
+Alum,China - South,China,"24.687847, 101.850990",Aluminium,Carbon Anode + Grid,2.122935652,1929,0.95
+Alum,China - South,China,"23.389531, 108.384783",Aluminium,Carbon Anode + Coal,2.815755409,1966,0.65
+Alum,China - North West,China,"37.241381, 106.060899",Aluminium,Carbon Anode + Coal,2.463298798,1902,0.65
+Alum,China - South,China,"26.902103, 107.256242",Aluminium,Carbon Anode + Grid,2.113069594,1960,0.65
+Alum,China - North,China,"37.325392, 112.316642",Aluminium,Carbon Anode + Grid,1.797070075,1969,0.65
+Alum,China - Central,China,"30.501153, 103.004116",Aluminium,Carbon Anode + Grid,1.113660712,1970,0.65
+Alum,China - East,China,"34.402224, 101.968268",Aluminium,Carbon Anode + Grid,1.061095078,1973,0.65

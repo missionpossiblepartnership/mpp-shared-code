@@ -1,15 +1,13 @@
 """ Logic for technology transitions of type brownfield rebuild and brownfield renovation."""
 
-from operator import methodcaller
 from copy import deepcopy
+from operator import methodcaller
 
-from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.agent_logic.agent_logic_functions import (
-    select_best_transition,
-    remove_transition,
-)
-from mppshared.models.constraints import check_constraints
+    remove_transition, select_best_transition)
 from mppshared.config import LOG_LEVEL
+from mppshared.models.constraints import check_constraints
+from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -29,6 +27,7 @@ def brownfield(
     Returns:
         Updated decarbonization pathway with the updated AssetStack in the subsequent year according to the brownfield transitions enacted
     """
+    logger.debug(f"Starting brownfield transition logic for year {year}")
 
     # Next year's asset stack is changed by the brownfield transitions
     new_stack = pathway.get_stack(year=year + 1)
@@ -44,6 +43,9 @@ def brownfield(
     # Track number of assets that undergo transition
     # TODO: implement constraints for number of brownfield transitions per year
     n_assets_transitioned = 0
+    logger.debug(
+        f"Number of assets eligible for brownfield transition: {len(candidates)} in year {year}"
+    )
 
     # Enact brownfield transitions while there are still candidates
     while (candidates != []) & (n_assets_transitioned < 10):
@@ -68,7 +70,6 @@ def brownfield(
                     candidates,
                 )
             )
-
             new_technology = best_transition["technology_destination"]
             # Remove best transition from ranking table
             df_rank = remove_transition(df_rank, best_transition)
@@ -83,10 +84,17 @@ def brownfield(
         tentative_stack = deepcopy(new_stack)
         origin_technology = asset_to_update.technology
         tentative_stack.update_asset(asset_to_update, new_technology=new_technology)
-
-        # Check constraints with tentative new stack
-        no_constraint_hurt = check_constraints(
-            pathway=pathway, stack=tentative_stack, product=product, year=year, transition_type="brownfield")
+        if pathway.pathway != "BAU":
+            # Check constraints with tentative new stack
+            no_constraint_hurt = check_constraints(
+                pathway=pathway,
+                stack=tentative_stack,
+                product=product,
+                year=year,
+                transition_type="brownfield",
+            )
+        else:
+            no_constraint_hurt = True
 
         if no_constraint_hurt:
             logger.debug(
@@ -100,5 +108,8 @@ def brownfield(
 
         # If constraint is hurt, remove asset from list of candidates and try again
         candidates.remove(asset_to_update)
+    logger.debug(
+        f"{n_assets_transitioned} assets transitioned in year {year} for product {product} in sector {pathway.sector}"
+    )
 
     return pathway

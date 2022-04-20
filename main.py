@@ -3,14 +3,8 @@ import multiprocessing as mp
 
 import numpy as np
 
-from mppshared.config import (
-    LOG_LEVEL,
-    PATHWAYS,
-    RUN_PARALLEL,
-    SECTOR,
-    SENSITIVITIES,
-    run_config,
-)
+from mppshared.config import (LOG_LEVEL, PATHWAYS, RUN_PARALLEL, SECTOR,
+                              SENSITIVITIES, run_config)
 from mppshared.models.simulate import simulate_pathway
 from mppshared.solver.implicit_forcing import apply_implicit_forcing
 from mppshared.solver.output_processing import calculate_outputs
@@ -23,8 +17,8 @@ logger.setLevel(LOG_LEVEL)
 np.random.seed(100)
 
 funcs = {
-    # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    # "MAKE_RANKINGS": make_rankings,
+    "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
+    "MAKE_RANKINGS": make_rankings,
     "SIMULATE_PATHWAY": simulate_pathway,
     "CALCULATE_OUTPUTS": calculate_outputs,
 }
@@ -62,6 +56,7 @@ def run_model_parallel(runs):
 
 
 def main():
+    logger.info(f"Running model for {SECTOR}")
     runs = list(itertools.product(PATHWAYS, SENSITIVITIES))
     if RUN_PARALLEL:
         run_model_parallel(runs)
