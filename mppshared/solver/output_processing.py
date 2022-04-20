@@ -97,73 +97,22 @@ def _calculate_lcox(df_stack, df_transitions):
     return df_stack_lcox
 
 
-def _calculate_total_capex(df_stack, df_inputs_outputs):
-    logger.info("-- Calculating total capex")
-    df_capex = df_inputs_outputs.loc[(df_inputs_outputs["parameter"] == "capex")].copy()
-    df_stack = df_stack.merge(df_capex, on=["product", "region", "technology"])
-    df_stack_capex = (
-        df_stack.groupby(["product", "region", "technology"]).sum().reset_index()
-    )
-    df_stack_capex["parameter_group"] = "finance"
-    return df_stack_capex
-
-
-def _calculate_total_opex(df_stack, df_inputs_outputs):
-    logger.info("-- Calculating total opex")
-    logger.info("-- Calculating total capex")
-    df_opex = df_inputs_outputs.loc[(df_inputs_outputs["parameter"] == "opex")].copy()
-    df_stack = df_stack.merge(df_opex, on=["product", "region", "technology"])
-    df_stack_opex = (
-        df_stack.groupby(["product", "region", "technology"]).sum().reset_index()
-    )
-    df_stack_opex["parameter_group"] = "finance"
-    return df_stack_opex
-
-
-def _calculate_variable_opex(df_stack, df_inputs_outputs):
-    logger.info("-- Calculating variable opex")
-    df_variable_opex = pd.DataFrame()
-    return df_variable_opex
-
-
-def _calculate_fixed_opex(df_stack, df_inputs_outputs):
-    logger.info("-- Calculating fixed opex")
-    df_fixed_opex = pd.DataFrame()
-    return df_fixed_opex
-
-
-def _calculate_energy_fedstock_inputs(df_stack, df_inputs_outputs):
-    logger.info("-- Calculating energy fedstock inputs")
-    df_energy_fedstock_inputs = pd.DataFrame()
-    return df_energy_fedstock_inputs
-
-
-def _calculate_h2_storage(df_stack, df_inputs_outputs):
-    logger.info("-- Calculating H2 storage")
-    df_h2_storage = pd.DataFrame()
-    return df_h2_storage
-
-
 def _calculate_output_from_input(df_stack, df_inputs_outputs, variable, year):
     logger.info(f"-- Calculating {variable}")
     df_variable = df_inputs_outputs.loc[
         (df_inputs_outputs["parameter"] == variable)
         & (df_inputs_outputs["year"] == year)
     ].copy()
-    logger.info(f"Length of df_variable: {df_variable.head()}")
     df_stack = df_stack.merge(df_variable, on=["product", "region", "technology"])
-    logger.debug(
-        f"columns of df_stack: {df_stack.columns}, columns of df_variable: {df_variable.columns}"
-    )
     df_stack_variable = (
         df_stack.groupby(["product", "region", "technology"]).sum().reset_index()
     )
     df_stack_variable["parameter_group"] = "finance"
-    logger.debug(f"Head of df_stack_variable: {df_stack_variable.head()}")
+    df_stack_variable["unit"] = df_variable["unit"].iloc[0]
     return df_stack_variable
 
 
-def create_table_all_data_year(year, importer, sector):
+def create_table_all_data_year(year, importer):
     df_stack = importer.get_asset_stack(year)
     df_stack_total_assets = _calculate_number_of_assets(df_stack)
     df_stack_production_capacity = _calculate_production_volume(df_stack)
@@ -181,16 +130,20 @@ def create_table_all_data_year(year, importer, sector):
         df_stack_variable = _calculate_output_from_input(
             df_stack, df_inputs_outputs, variable, year
         )
+        df_stack_variable["parameter"] = variable
         data_variables.append(df_stack_variable)
     df_variables = pd.concat(data_variables)
-    df_variables.to_csv("test.csv")
-    # df_total_capex = _calculate_total_capex(df_stack, df_inputs_outputs)
-    # df_total_opex = _calculate_total_opex(df_stack, df_inputs_outputs)
-    # df_variable_opex = _calculate_variable_opex(df_stack, df_inputs_outputs)
-    # df_fixed_opex = _calculate_fixed_opex(df_stack, df_inputs_outputs)
-    # df_energy_fedstock_inputs = _calculate_energy_fedstock_inputs(
-    #     df_stack, df_inputs_outputs
-    # )
+    df_variables = df_variables[
+        [
+            "product",
+            "region",
+            "technology",
+            "parameter_group",
+            "parameter",
+            "unit",
+            "value",
+        ]
+    ]
     df_all_data_year = pd.concat(
         [
             df_stack_total_assets,
@@ -199,16 +152,8 @@ def create_table_all_data_year(year, importer, sector):
             df_stack_capture_emissions,
             df_stack_lcox,
             df_variables,
-            # df_total_capex,
-            # df_total_opex,
-            # df_variable_opex,
-            # df_fixed_opex,
-            # df_energy_fedstock_inputs,
         ]
     )
-    # if sector == "chemicals":
-    #     df_h2_storage = _calculate_h2_storage()
-    #     df_all_data_year = pd.concat([df_all_data_year, df_h2_storage])
     return df_all_data_year
 
 
@@ -223,7 +168,7 @@ def calculate_outputs(pathway, sensitivity, sector):
     data_stacks = []
     for year in range(START_YEAR, END_YEAR + 1):
         logger.info(f"Processing year {year}")
-        yearly = create_table_all_data_year(year, importer, sector)
+        yearly = create_table_all_data_year(year, importer)
         yearly["year"] = year
         data.append(yearly)
         df_stack = importer.get_asset_stack(year)

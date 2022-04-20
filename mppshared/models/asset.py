@@ -81,7 +81,6 @@ class Asset:
         result = df_cost.query(
             f"product=='{self.product}' & technology_origin=='New-build' & year=={year} & region=='{self.region}' & technology_destination=='{self.technology}'"
         )["lcox"]
-
         return result.iloc[0]
 
 
