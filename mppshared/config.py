@@ -168,8 +168,8 @@ ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
     "bau",
-    # "fa",
-    # "lc",
+    "fa",
+    "lc",
 ]
 
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
@@ -190,7 +190,7 @@ INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_as
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 
 run_config = {
     "IMPORT_DATA",
