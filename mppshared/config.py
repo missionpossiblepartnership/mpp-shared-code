@@ -13,6 +13,21 @@ LOG_FORMATTER = logging.Formatter(
 # SECTOR = "chemicals"
 SECTOR = "aluminium"
 
+### RUN CONFIGURATION ###
+
+RUN_PARALLEL = True
+
+run_config = {
+    "IMPORT_DATA",
+    "CALCULATE_VARIABLES",
+    "APPLY_IMPLICIT_FORCING",
+    "MAKE_RANKINGS",
+    "SIMULATE_PATHWAY",
+    "CALCULATE_OUTPUTS",
+    # "EXPORT_OUTPUTS",
+    # "PLOT_AVAILABILITIES"
+    # "MERGE_OUTPUTS"
+}
 
 ### DATA IMPORT AND EXPORT
 CORE_DATA_PATH = "data"
@@ -188,21 +203,6 @@ PRODUCTS = {
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
 INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_assets"}
 
-### RUN CONFIGURATION ###
-
-RUN_PARALLEL = True
-
-run_config = {
-    "IMPORT_DATA",
-    "CALCULATE_VARIABLES",
-    "APPLY_IMPLICIT_FORCING",
-    "MAKE_RANKINGS",
-    "SIMULATE_PATHWAY",
-    "CALCULATE_OUTPUTS",
-    # "EXPORT_OUTPUTS",
-    # "PLOT_AVAILABILITIES"
-    # "MERGE_OUTPUTS"
-}
 ### RANKING ###
 NUMBER_OF_BINS_RANKING = 10
 
@@ -359,5 +359,5 @@ SECTORAL_PATHWAYS = {
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = {
     "chemicals": 2020,
-    "aluminium": 2050,  # constraint currently not active
+    "aluminium": 2020,  # constraint currently not active
 }
