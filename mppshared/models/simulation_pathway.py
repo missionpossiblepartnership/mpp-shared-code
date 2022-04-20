@@ -1,5 +1,4 @@
 import logging
-import math
 from collections import defaultdict
 from multiprocessing.sharedctypes import Value
 
@@ -8,7 +7,6 @@ import pandas as pd
 import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
-from copy import deepcopy
 
 from mppshared.calculate.calculate_availablity import update_availability_from_asset
 from mppshared.config import (
