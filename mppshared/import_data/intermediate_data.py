@@ -2,16 +2,8 @@ import sys
 from pathlib import Path
 
 import pandas as pd
-from pandas.errors import ParserError
 
-# from util.util import make_multi_df
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    LOG_LEVEL,
-    MODEL_SCOPE,
-    PRODUCTS,
-)
-from mppshared.utility.dataframe_utility import make_multi_df
+from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -188,27 +180,3 @@ class IntermediateDataImporter:
         return pd.read_csv(
             self.intermediate_path.joinpath("inputs_outputs.csv"),
         )
-
-    # def get_technology_distribution(self, product, new=False):
-    #     suffix = "_new" if new else ""
-    #     file_path = self.export_dir.joinpath(
-    #         "final", product, f"technologies_over_time_region{suffix}.csv"
-    #     )
-    #     try:
-    #         df = pd.read_csv(file_path, index_col=[0, 1, 2], header=[0, 1]).fillna(0)
-    #     except ParserError:
-    #         # No assets, return empty df with right columns and index
-    #         parameters = ["capacity", "number_of_assets", "yearly_volume"]
-    #         build_types = ["new_build", "retrofit", "total"]
-    #         columns = pd.MultiIndex.from_product([parameters, build_types])
-    #         index = pd.MultiIndex.from_arrays(
-    #             [[], [], []], names=("region", "technology", "year")
-    #         )
-    #         return pd.DataFrame(columns=columns, index=index)
-    #
-    #     # Only keep rows which have assets
-    #     return df[df[("number_of_assets", "total")] != 0]
-
-    # def get_availability_used(self):
-    #     path = self.final_path.joinpath("All", "availability_output.csv")
-    #     return pd.read_csv(path)

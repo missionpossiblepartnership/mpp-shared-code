@@ -113,50 +113,6 @@ class SimulationPathway:
         logger.debug("Getting the transition registry to track technology transitions")
         self.transitions = TransitionRegistry()
 
-    def _import_availability(self):
-        """Import availabilities of biomass, waste, etc"""
-        # df_availability = self.importer.get_availabilities()
-        # df_availability = df_availability.rename(columns={"value": "cap"})
-        # df_availability["used"] = 0
-        #
-        # # create product based availability columns
-        # for product in productS:
-        #     df_availability[f"{product}_cap"] = 0
-        #     df_availability[f"{product}_used"] = 0
-        #     for material_constraints in ["CO2 storage",
-        #                                  "Biomass",
-        #                                  "Waste water",
-        #                                  "Municipal solid waste RdF",
-        #                                  "Pyrolysis oil",
-        #                                  "Bio-oils"]:
-        #
-        #         # If there is no current (on purpose) stack, constraint share should be 0
-        #         try:
-        #             constraint_share = self.constraint_share[product]
-        #         except KeyError:
-        #             constraint_share = 0
-        #
-        #         df_availability.loc[
-        #             (df_availability.name == material_constraints), f"{product}_cap"
-        #         ] = (
-        #             constraint_share
-        #             * df_availability.loc[
-        #                 (df_availability.name == material_constraints), "cap"
-        #             ]
-        #         )
-        #
-        # for asset in self.get_stack(self.start_year).assets:
-        #     logger.debug(asset)
-        #     df_availability = update_availability_from_asset(
-        #         df_availability=df_availability, asset=asset, year=self.start_year
-        #     )
-        #
-        # df_methanol = make_empty_methanol_availability()
-        #
-        # df_availability = pd.concat([df_availability, df_methanol])
-        # return df_availability.query(f"year <= {self.end_year}")
-        pass
-
     def _import_rankings(self, japan_only=False):
         """Import ranking for all products and rank types from the CSVs"""
         rankings = defaultdict(dict)
@@ -415,24 +371,6 @@ class SimulationPathway:
             ).sum()
 
         return dict_emissions
-
-    def calculate_constraint_share(self, year):
-        # """
-        # Calculate constraint share based on scope 1 emission
-        # """
-        # df_emission_stack = self.calculate_emission_stack(year)
-        #
-        # df_scope_1_emission_stack = df_emission_stack.groupby(["product"])[
-        #     "scope_1_stack_emissions"
-        # ].sum()
-        #
-        # df_constraint_share = (
-        #     df_scope_1_emission_stack / df_scope_1_emission_stack.sum()
-        # )
-        # df_constraint_share[df_constraint_share < 0.05] = 0.05
-        #
-        # return (df_constraint_share / df_constraint_share.sum()).to_dict()
-        pass
 
     def copy_availability(self, year):
         df = self.availability
