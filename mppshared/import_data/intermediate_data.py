@@ -5,8 +5,12 @@ import pandas as pd
 from pandas.errors import ParserError
 
 # from util.util import make_multi_df
-from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL,
-                              MODEL_SCOPE, PRODUCTS)
+from mppshared.config import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    LOG_LEVEL,
+    MODEL_SCOPE,
+    PRODUCTS,
+)
 from mppshared.utility.dataframe_utility import make_multi_df
 from mppshared.utility.utils import get_logger
 

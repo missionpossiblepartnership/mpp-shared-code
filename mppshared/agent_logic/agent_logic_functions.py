@@ -4,8 +4,12 @@ from operator import methodcaller
 
 import pandas as pd
 
-from mppshared.config import (CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
-                              LOG_LEVEL, MODEL_SCOPE)
+from mppshared.config import (
+    CUF_LOWER_THRESHOLD,
+    CUF_UPPER_THRESHOLD,
+    LOG_LEVEL,
+    MODEL_SCOPE,
+)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 

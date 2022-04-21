@@ -61,9 +61,10 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
 
     # Apply technology moratorium (year after which newbuild capacity must be transition or end-state technologies)
     df_technology_switches = apply_technology_moratorium(
-        df_technology_switches=df_technology_switches, 
+        df_technology_switches=df_technology_switches,
         df_technology_characteristics=df_technology_characteristics,
-        moratorium_year=TECHNOLOGY_MORATORIUM[sector])
+        moratorium_year=TECHNOLOGY_MORATORIUM[sector],
+    )
 
     carbon_cost = 0
     if carbon_cost == 0:
@@ -254,25 +255,34 @@ def apply_technology_availability_constraint(
         ]
     )
 
-def apply_technology_moratorium(df_technology_switches: pd.DataFrame, df_technology_characteristics: pd.DataFrame, moratorium_year: int) -> pd.DataFrame:
+
+def apply_technology_moratorium(
+    df_technology_switches: pd.DataFrame,
+    df_technology_characteristics: pd.DataFrame,
+    moratorium_year: int,
+) -> pd.DataFrame:
     """Eliminate all newbuild transitions to a conventional technology after a specific year"""
 
     # Add technology classification to each destination technology
     df_tech_char_destination = df_technology_characteristics[
         ["product", "year", "region", "technology", "technology_classification"]
     ].rename(
-        {
-            "technology": "technology_destination"
-        },
+        {"technology": "technology_destination"},
         axis=1,
     )
-    df_technology_switches = df_technology_switches.merge(df_tech_char_destination, on=["product", "year", "region", "technology_destination"])
+    df_technology_switches = df_technology_switches.merge(
+        df_tech_char_destination,
+        on=["product", "year", "region", "technology_destination"],
+    )
 
     # Drop technology transitions of type new-build where the technology_destination is classified as initial
-    banned_transitions = (df_technology_switches["year"] >= moratorium_year) & (df_technology_switches["technology_classification"]=="initial")
+    banned_transitions = (df_technology_switches["year"] >= moratorium_year) & (
+        df_technology_switches["technology_classification"] == "initial"
+    )
     df_technology_switches = df_technology_switches.loc[~banned_transitions]
 
     return df_technology_switches
+
 
 def calculate_emission_reduction(
     df_technology_switches: pd.DataFrame, df_emissions: pd.DataFrame
