@@ -134,7 +134,8 @@ class AssetStack:
     def get_annual_production_capacity(
         self, product, region=None, technology=None
     ) -> float:
-        """Get annual production capacity of the AssetStack for a specific product, optionally filtered by region and technology"""
+        """Get annual production capacity of the AssetStack for a specific product,
+        optionally filtered by region and technology"""
         assets = self.filter_assets(
             product=product, region=region, technology=technology
         )
@@ -143,7 +144,8 @@ class AssetStack:
     def get_annual_production_volume(
         self, product, region=None, technology=None
     ) -> float:
-        """Get the yearly production volume of the AssetStack for a specific product, optionally filtered by region and technology"""
+        """Get the yearly production volume of the AssetStack for a specific product,
+        optionally filtered by region and technology"""
 
         assets = self.filter_assets(
             product=product, region=region, technology=technology
@@ -156,7 +158,8 @@ class AssetStack:
 
     def aggregate_stack(self, aggregation_vars, product=None) -> pd.DataFrame:
         """
-        Aggregate AssetStack according to product, technology or region, and show annual production capacity, annual production volume and number of assets. Optionally filtered by product
+        Aggregate AssetStack according to product, technology or region, and show annual
+        production capacity, annual production volume and number of assets. Optionally filtered by product
 
         Args:
             aggregation_vars: aggregate by these variables
@@ -209,7 +212,8 @@ class AssetStack:
         )
 
     def get_unique_tech_by_region(self, product=None) -> pd.DataFrame:
-        """Get the unique technologies in the AssetStack for each region, optionally filtered by product"""
+        """Get the unique technologies in the AssetStack for each region, optionally filtered by
+        product"""
         if product is not None:
             assets = self.filter_assets(product=product)
         else:
@@ -294,7 +298,8 @@ class AssetStack:
 def make_new_asset(
     asset_transition: dict, df_technology_characteristics: pd.DataFrame, year: int
 ):
-    """Make a new asset, based on asset transition from the ranking DataFrame. The asset is assumed to start operating at the highest possible capacity utilisation
+    """Make a new asset, based on asset transition from the ranking DataFrame. The asset is
+    assumed to start operating at the highest possible capacity utilisation
 
     Args:
         asset_transition: The best transition (destination is the asset to build)
