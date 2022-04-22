@@ -4,14 +4,9 @@ import sys
 import numpy as np
 import pandas as pd
 
-from mppshared.config import (
-    EMISSION_SCOPES_RANKING,
-    GHGS_RANKING,
-    NUMBER_OF_BINS_RANKING,
-    PRODUCTS,
-    RANK_TYPES,
-    RANKING_CONFIG,
-)
+from mppshared.config import (EMISSION_SCOPES_RANKING, GHGS_RANKING,
+                              NUMBER_OF_BINS_RANKING, PRODUCTS, RANK_TYPES,
+                              RANKING_CONFIG)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.utils import get_logger
 
@@ -114,8 +109,10 @@ def rank_technology(
     df_rank = df.groupby(["year"]).apply(_add_binned_rankings, rank_type, pathway)
 
     # Calculate final rank for the transition type
-    df_rank["rank"] = df_rank[f"{rank_type}_{pathway}_score"].rank(ascending=False)
-
+    if pathway != "bau":
+        df_rank["rank"] = df_rank[f"{rank_type}_{pathway}_score"].rank(ascending=True)
+    else:
+        df_rank["rank"] = df_rank[f"{rank_type}_{pathway}_score"].rank(ascending=False)
     return df_rank
 
 

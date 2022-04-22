@@ -15,7 +15,7 @@ SECTOR = "aluminium"
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = True
+RUN_PARALLEL = False
 
 run_config = {
     "IMPORT_DATA",
@@ -197,7 +197,7 @@ SENSITIVITIES = [
 # Products produced by each sector
 PRODUCTS = {
     "chemicals": ["Ammonia"],
-    "aluminium": ["Alumina"],
+    "aluminium": ["Aluminium"],
 }
 
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
@@ -352,7 +352,7 @@ SECTORAL_PATHWAYS = {
     "aluminium": {
         "emissions_start": emissions_chemicals_2020,
         "emissions_end": residual_share * emissions_chemicals_2020,
-        "action_start": 2025,
+        "action_start": 2023,
     },
 }
 
