@@ -1,8 +1,14 @@
 """ Process outputs to standardised output table."""
 import pandas as pd
 
-from mppshared.config import (END_YEAR, LOG_LEVEL, PRODUCTS, SECTOR,
-                              SECTORAL_CARBON_BUDGETS, START_YEAR)
+from mppshared.config import (
+    END_YEAR,
+    LOG_LEVEL,
+    PRODUCTS,
+    SECTOR,
+    SECTORAL_CARBON_BUDGETS,
+    START_YEAR,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.log_utility import get_logger
 
