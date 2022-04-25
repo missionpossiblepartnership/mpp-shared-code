@@ -22,8 +22,8 @@ run_config = {
     "CALCULATE_VARIABLES",
     "APPLY_IMPLICIT_FORCING",
     "MAKE_RANKINGS",
-    "SIMULATE_PATHWAY",
-    "CALCULATE_OUTPUTS",
+    # "SIMULATE_PATHWAY",
+    # "CALCULATE_OUTPUTS",
     # "EXPORT_OUTPUTS",
     # "PLOT_AVAILABILITIES"
     # "MERGE_OUTPUTS"
@@ -197,7 +197,7 @@ SENSITIVITIES = [
 # Products produced by each sector
 PRODUCTS = {
     "chemicals": ["Ammonia"],
-    "aluminium": ["Aluminium"],
+    "aluminium": ["Alumina"],
 }
 
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
@@ -245,8 +245,8 @@ indicates that for the newbuild rank, in the most_economic scenario, we favor bu
 4. Lower scope 3 emissions
 in that order!
 """
-lc_weight_cost = 1
-lc_weight_emissions = 0
+lc_weight_cost = 0.8
+lc_weight_emissions = 0.2
 RANKING_CONFIG = {
     "greenfield": {
         "bau": {
@@ -359,5 +359,5 @@ SECTORAL_PATHWAYS = {
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = {
     "chemicals": 2020,
-    "aluminium": 2020,  # constraint currently not active
+    "aluminium": 2040,  # constraint currently not active
 }

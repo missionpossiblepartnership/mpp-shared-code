@@ -7,21 +7,14 @@ import numpy as np
 import pandas as pd
 
 from mppshared.calculate.calculate_cost import discount_costs
-from mppshared.config import (
-    EMISSION_SCOPES,
-    FINAL_CARBON_COST,
-    GHGS,
-    INITIAL_CARBON_COST,
-    PRODUCTS,
-    TECHNOLOGY_MORATORIUM,
-)
+from mppshared.config import (EMISSION_SCOPES, FINAL_CARBON_COST, GHGS,
+                              INITIAL_CARBON_COST, PRODUCTS,
+                              TECHNOLOGY_MORATORIUM)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.solver.input_loading import filter_df_for_development
 from mppshared.utility.dataframe_utility import (
-    add_column_header_suffix,
-    get_grouping_columns_for_npv_calculation,
-)
+    add_column_header_suffix, get_grouping_columns_for_npv_calculation)
 from mppshared.utility.function_timer_utility import timer_func
 from mppshared.utility.log_utility import get_logger
 
@@ -60,11 +53,12 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
     )
 
     # Apply technology moratorium (year after which newbuild capacity must be transition or end-state technologies)
-    df_technology_switches = apply_technology_moratorium(
-        df_technology_switches=df_technology_switches,
-        df_technology_characteristics=df_technology_characteristics,
-        moratorium_year=TECHNOLOGY_MORATORIUM[sector],
-    )
+    if pathway != "bau":
+        df_technology_switches = apply_technology_moratorium(
+            df_technology_switches=df_technology_switches,
+            df_technology_characteristics=df_technology_characteristics,
+            moratorium_year=TECHNOLOGY_MORATORIUM[sector],
+        )
 
     carbon_cost = 0
     if carbon_cost == 0:
