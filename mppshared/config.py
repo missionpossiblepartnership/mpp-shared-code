@@ -15,15 +15,15 @@ SECTOR = "aluminium"
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 
 run_config = {
     "IMPORT_DATA",
     "CALCULATE_VARIABLES",
     "APPLY_IMPLICIT_FORCING",
     "MAKE_RANKINGS",
-    # "SIMULATE_PATHWAY",
-    # "CALCULATE_OUTPUTS",
+    "SIMULATE_PATHWAY",
+    "CALCULATE_OUTPUTS",
     # "EXPORT_OUTPUTS",
     # "PLOT_AVAILABILITIES"
     # "MERGE_OUTPUTS"
@@ -152,7 +152,7 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 # (Artificial) investment cycles after which plants can be rebuilt and decommissioned
 INVESTMENT_CYCLES = {
     "chemicals": 20,  # years
-    "aluminium": 1,
+    "aluminium": 10,
 }
 
 # Emissions
@@ -359,5 +359,7 @@ SECTORAL_PATHWAYS = {
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = {
     "chemicals": 2020,
-    "aluminium": 2040,  # constraint currently not active
+    "aluminium": 2030,  # constraint currently not active
 }
+# Control for how many years is allowed to use transition technologies once the moratorium is enable
+TRANSITIONAL_PERIOD_YEARS = {"chemicals": 30, "aluminium": 10}

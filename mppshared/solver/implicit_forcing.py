@@ -9,7 +9,7 @@ import pandas as pd
 from mppshared.calculate.calculate_cost import discount_costs
 from mppshared.config import (EMISSION_SCOPES, FINAL_CARBON_COST, GHGS,
                               INITIAL_CARBON_COST, PRODUCTS,
-                              TECHNOLOGY_MORATORIUM)
+                              TECHNOLOGY_MORATORIUM, TRANSITIONAL_PERIOD_YEARS)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.solver.input_loading import filter_df_for_development
@@ -58,6 +58,7 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
             df_technology_switches=df_technology_switches,
             df_technology_characteristics=df_technology_characteristics,
             moratorium_year=TECHNOLOGY_MORATORIUM[sector],
+            transitional_period_years=TRANSITIONAL_PERIOD_YEARS[sector],
         )
 
     carbon_cost = 0
@@ -254,6 +255,7 @@ def apply_technology_moratorium(
     df_technology_switches: pd.DataFrame,
     df_technology_characteristics: pd.DataFrame,
     moratorium_year: int,
+    transitional_period_years: int,
 ) -> pd.DataFrame:
     """Eliminate all newbuild transitions to a conventional technology after a specific year"""
 
@@ -273,6 +275,11 @@ def apply_technology_moratorium(
     banned_transitions = (df_technology_switches["year"] >= moratorium_year) & (
         df_technology_switches["technology_classification"] == "initial"
     )
+    df_technology_switches = df_technology_switches.loc[~banned_transitions]
+    # Drop technology transitions for 'transition' technologies after moratorium year + x years
+    banned_transitions = (
+        df_technology_switches["year"] >= moratorium_year + transitional_period_years
+    ) & (df_technology_switches["technology_classification"] == "transition")
     df_technology_switches = df_technology_switches.loc[~banned_transitions]
 
     return df_technology_switches

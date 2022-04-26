@@ -266,6 +266,7 @@ class AssetStack:
         candidates = filter(lambda asset: asset.cuf < CUF_LOWER_THRESHOLD, self.assets)
 
         # Assets can be decommissioned if their age is at least as high as the sector's investment cycle
+        # TODO: Decomission date.
         candidates = filter(
             lambda asset: asset.get_age(year) >= INVESTMENT_CYCLES[sector], candidates
         )
@@ -276,6 +277,7 @@ class AssetStack:
         """Return a list of Assets from the AssetStack that are eligible for a brownfield technology transition"""
 
         # Assets can be renovated at any time unless they've been renovated already
+        # TODO: Fix it, what happens if we want to switch from transition to end-statew technology
         candidates_renovation = filter(
             lambda asset: asset.retrofit == False, self.assets
         )
