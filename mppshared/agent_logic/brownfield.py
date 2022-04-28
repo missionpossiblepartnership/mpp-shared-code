@@ -48,7 +48,7 @@ def brownfield(
     )
 
     # Enact brownfield transitions while there are still candidates
-    while (candidates != []) & (n_assets_transitioned < 10):
+    while candidates != []:
         # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
         best_candidates = []
         while not best_candidates:
