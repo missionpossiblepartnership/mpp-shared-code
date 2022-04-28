@@ -103,9 +103,11 @@ def brownfield(
             logger.debug(
                 f"Updating asset from technology {origin_technology} to technology {new_technology} in region {asset_to_update.region}, annual production {asset_to_update.get_annual_production_volume()} and UUID {asset_to_update.uuid}"
             )
-            # If brownfield renovation, set retrofit attribute of asset to True
+            # Set retrofit or rebuild attribute to True according to type of brownfield transition
             if best_transition["switch_type"]=="brownfield_renovation":
                 asset_to_update.retrofit = True
+            elif best_transition["switch_type"]=="brownfield_rebuild":
+                asset_to_update.rebuild = True
 
             new_stack.update_asset(
                 asset_to_update,

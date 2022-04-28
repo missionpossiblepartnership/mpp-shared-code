@@ -28,6 +28,7 @@ class Asset:
         asset_lifetime: int,
         technology_classification: str,
         retrofit=False,
+        rebuild=False
     ):
         # Unique ID to identify and compare assets
         self.uuid = uuid4().hex
@@ -44,6 +45,7 @@ class Asset:
 
         # Asset status parameters
         self.retrofit = retrofit
+        self.rebuild = rebuild
         self.asset_lifetime = asset_lifetime  # unit: years
         self.technology_classification = technology_classification
 
