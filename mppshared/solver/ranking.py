@@ -4,14 +4,9 @@ import sys
 import numpy as np
 import pandas as pd
 
-from mppshared.config import (
-    EMISSION_SCOPES_RANKING,
-    GHGS_RANKING,
-    NUMBER_OF_BINS_RANKING,
-    PRODUCTS,
-    RANK_TYPES,
-    RANKING_CONFIG,
-)
+from mppshared.config import (EMISSION_SCOPES_RANKING, GHGS_RANKING,
+                              NUMBER_OF_BINS_RANKING, PRODUCTS, RANK_TYPES,
+                              RANKING_CONFIG)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.utils import get_logger
 
@@ -84,7 +79,7 @@ def rank_technology(
     if rank_type == "brownfield":
         df = df_ranking[df_ranking["switch_type"].str.contains("brownfield")].copy()
     elif rank_type == "decommission":
-        df = df_ranking[(df_ranking["switch_type"].str.contains("decommission"))].copy()
+        df = df_ranking[df_ranking["switch_type"] == "decommission"].copy()
     elif rank_type == "greenfield":
         df = df_ranking[(df_ranking["switch_type"].str.contains("greenfield"))].copy()
 

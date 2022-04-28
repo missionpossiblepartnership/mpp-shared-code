@@ -197,7 +197,7 @@ SENSITIVITIES = [
 # Products produced by each sector
 PRODUCTS = {
     "chemicals": ["Ammonia"],
-    "aluminium": ["Alumina"],
+    "aluminium": ["Aluminium"],
 }
 
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
