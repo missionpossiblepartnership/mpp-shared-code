@@ -79,7 +79,7 @@ def rank_technology(
     if rank_type == "brownfield":
         df = df_ranking[df_ranking["switch_type"].str.contains("brownfield")].copy()
     elif rank_type == "decommission":
-        df = df_ranking[(df_ranking["switch_type"].str.contains("decommission"))].copy()
+        df = df_ranking[df_ranking["switch_type"] == "decommission"].copy()
     elif rank_type == "greenfield":
         df = df_ranking[(df_ranking["switch_type"].str.contains("greenfield"))].copy()
 
@@ -98,7 +98,7 @@ def rank_technology(
 
     # Normalize the sum of emission reductions
     df["sum_emissions_delta_normalized"] = 1 - (
-        df["sum_emissions_delta"] - df["sum_emissions_delta"].min()
+        df["sum_emissions_delta"].max() - df["sum_emissions_delta"]
     ) / (df["sum_emissions_delta"].max() - df["sum_emissions_delta"].min())
     df.fillna(0, inplace=True)
 
@@ -110,7 +110,6 @@ def rank_technology(
 
     # Calculate final rank for the transition type
     df_rank["rank"] = df_rank[f"{rank_type}_{pathway}_score"].rank(ascending=False)
-
     return df_rank
 
 

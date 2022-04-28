@@ -1,11 +1,11 @@
 ﻿shorthand,region,country,coordinates,product,technology,annual_production_capacity,year,capacity_factor
-Alum,South America,Argentina,"-42.737502, -65.046776",Aluminium,Carbon Anode + Natural gas,0.46,1971,0.82
+Alum,South America,Argentina,"-42.737502, -65.046776",Aluminium,Carbon Anode + Natural Gas,0.46,1971,0.82
 Alum,Oceania,Australia,"-23.928241, 151.339019",Aluminium,Carbon Anode + Grid,0.585,1982,0.87
 Alum,Oceania,Australia,"-38.386151, 141.631294",Aluminium,Carbon Anode + Grid,0.358,1986,0
 Alum,Oceania,Australia,"-41.124719, 146.869574",Aluminium,Carbon Anode + PPA+Grid,0.195,1955,0.97
 Alum,Oceania,Australia,"-32.821857, 151.720009",Aluminium,Carbon Anode + Grid,0.597,1983,0.99
 Alum,Middle East,Azerbaijan,"40.690544, 46.423296",Aluminium,Carbon Anode + Grid,0.055,2013,0.94
-Alum,Middle East,Bahrain,"26.088486, 50.604081",Aluminium,Carbon Anode + Natural gas,1.561,1971,0.99
+Alum,Middle East,Bahrain,"26.088486, 50.604081",Aluminium,Carbon Anode + Natural Gas,1.561,1971,0.99
 Alum,Europe,Bosnia and Herzegovina,"43.280119, 17.824988",Aluminium,Carbon Anode + Grid,0.35,1975,0
 Alum,South America,Brazil,"-2.707227, -44.331490",Aluminium,Carbon Anode + PPA+Grid,0.447,2023,0
 Alum,South America,Brazil,"-1.557386, -48.734998",Aluminium,Carbon Anode + PPA+Grid,0.46,1985,0.93
@@ -29,7 +29,7 @@ Alum,Europe,Germany,"51.493634, 6.963672",Aluminium,Carbon Anode + Grid,0.165,19
 Alum,Europe,Germany,"53.511575, 9.894409",Aluminium,Carbon Anode + Grid,0.135,1970,1
 Alum,Europe,Germany,"51.621911, 6.614610",Aluminium,Carbon Anode + Grid,0.095,1971,1
 Alum,Africa,Ghana,"5.667995, 0.022149",Aluminium,Carbon Anode + PPA+Grid,0.2,1967,0
-Alum,Europe,Greece,"38.362709, 22.689281",Aluminium,Carbon Anode + Natural gas,0.19,1960,0.97
+Alum,Europe,Greece,"38.362709, 22.689281",Aluminium,Carbon Anode + Natural Gas,0.19,1960,0.97
 Alum,Europe,Iceland,"65.034268, -14.101182",Aluminium,Carbon Anode + PPA+Grid,0.351,2007,0
 Alum,Europe,Iceland,"64.363992, -21.774589",Aluminium,Carbon Anode + PPA+Grid,0.317,1998,0.99
 Alum,Europe,Iceland,"64.045738, -22.026341",Aluminium,Carbon Anode + PPA+Grid,0.212,1969,0.96
@@ -41,8 +41,8 @@ Alum,Rest of Asia,India,"20.827461, 85.159789",Aluminium,Carbon Anode + Coal,0.4
 Alum,Rest of Asia,India,"21.806927, 84.041112",Aluminium,Carbon Anode + Coal,1.75,2008,0.77
 Alum,Rest of Asia,India,"22.398597, 82.731866",Aluminium,Carbon Anode + Coal,0.57,1965,1.01
 Alum,Rest of Asia,Indonesia,"3.347914, 99.455510",Aluminium,Carbon Anode + Hydro,0.26,1976,0.9
-Alum,Middle East,Iran,"27.164185, 56.082941",Aluminium,Carbon Anode + Natural gas,0.11,1997,0.64
-Alum,Middle East,Iran,"27.164185, 56.082941",Aluminium,Carbon Anode + Natural gas,0.11,1997,0.64
+Alum,Middle East,Iran,"27.164185, 56.082941",Aluminium,Carbon Anode + Natural Gas,0.11,1997,0.64
+Alum,Middle East,Iran,"27.164185, 56.082941",Aluminium,Carbon Anode + Natural Gas,0.11,1997,0.64
 Alum,Middle East,Iran,"34.076164, 49.762179",Aluminium,Carbon Anode + Grid,0.23,1967,0.77
 Alum,Middle East,Iran,"27.387977, 53.259092",Aluminium,Carbon Anode + Grid,0.3,2020,0.6
 Alum,Europe,Italy,"39.201427, 8.405401",Aluminium,Carbon Anode + Grid,0.15,2023,0
@@ -53,7 +53,7 @@ Alum,Europe,Montenegro,"42.395216, 19.227570",Aluminium,Carbon Anode + Grid,0.12
 Alum,Africa,Mozambique,"-25.914387, 32.407732",Aluminium,Carbon Anode + PPA+Grid,0.58,1998,0.46
 Alum,Europe,Netherlands,"53.310164, 6.978198",Aluminium,Carbon Anode + Grid,0.11,1966,0
 Alum,Oceania,New Zealand,"-46.588563, 168.386072",Aluminium,Carbon Anode + PPA+Grid,0.373,1971,0.89
-Alum,Africa,Nigeria,"4.570606, 7.578276",Aluminium,Carbon Anode + Natural gas,0.193,2023,0
+Alum,Africa,Nigeria,"4.570606, 7.578276",Aluminium,Carbon Anode + Natural Gas,0.193,2023,0
 Alum,Europe,Norway,"58.072504, 6.785369",Aluminium,Carbon Anode + PPA+Grid,0.094,1962,0
 Alum,Europe,Norway,"65.846361, 13.190513",Aluminium,Carbon Anode + PPA+Grid,0.2,1962,0
 Alum,Europe,Norway,"61.311276, 7.823018",Aluminium,Carbon Anode + Hydro,0.202,1948,1
@@ -61,8 +61,8 @@ Alum,Europe,Norway,"61.218427, 6.067978",Aluminium,Carbon Anode + Hydro,0.066,19
 Alum,Europe,Norway,"59.867941, 5.769198",Aluminium,Carbon Anode + Hydro,0.195,1965,0.87
 Alum,Europe,Norway,"59.314503, 5.310508",Aluminium,Carbon Anode + Hydro,0.271,1967,0.98
 Alum,Europe,Norway,"62.679442, 8.554155",Aluminium,Carbon Anode + Hydro,0.425,1954,1
-Alum,Middle East,Oman,"24.417262, 56.550682",Aluminium,Carbon Anode + Natural gas,0.395,2004,1
-Alum,Middle East,Qatar,"24.967998, 51.573632",Aluminium,Carbon Anode + Natural gas,0.636,2009,1
+Alum,Middle East,Oman,"24.417262, 56.550682",Aluminium,Carbon Anode + Natural Gas,0.395,2004,1
+Alum,Middle East,Qatar,"24.967998, 51.573632",Aluminium,Carbon Anode + Natural Gas,0.636,2009,1
 Alum,Europe,Romania,"44.447044, 24.390634",Aluminium,Carbon Anode + Grid,0.265,1965,1.02
 Alum,Russia,Russia,"58.069283, 97.316230",Aluminium,Carbon Anode + Hydro,0.298,2019,0
 Alum,Russia,Russia,"56.128670, 101.451061",Aluminium,Carbon Anode + Hydro,1.009,1966,1
@@ -83,8 +83,8 @@ Alum,Europe,Spain,"43.699862, -7.477310",Aluminium,Carbon Anode + PPA+Grid,0.228
 Alum,Europe,Sweden,"62.373236, 17.369216",Aluminium,Carbon Anode + Grid,0.128,1942,0.91
 Alum,Middle East,Tajikistan,"38.546431, 68.225628",Aluminium,Carbon Anode + PPA+Grid,0.517,1975,0.2
 Alum,Europe,Turkey,"37.445172, 31.846318",Aluminium,Carbon Anode + Hydro,0.082,1974,0.89
-Alum,Middle East,United Arab Emirates,"24.790299, 54.726098",Aluminium,Carbon Anode + Natural gas,1.5,2009,0
-Alum,Middle East,United Arab Emirates,"25.031487, 55.095233",Aluminium,Carbon Anode + Natural gas,1,1979,0
+Alum,Middle East,United Arab Emirates,"24.790299, 54.726098",Aluminium,Carbon Anode + Natural Gas,1.5,2009,0
+Alum,Middle East,United Arab Emirates,"25.031487, 55.095233",Aluminium,Carbon Anode + Natural Gas,1,1979,0
 Alum,Europe,United Kingdom,"56.827960, -5.072148",Aluminium,Carbon Anode + Hydro,0.0475,1929,0.84
 Alum,North America,United States,"48.845511, -122.705254",Aluminium,Carbon Anode + Grid,0.279,1966,0
 Alum,North America,United States,"44.960676, -74.891914",Aluminium,Carbon Anode + PPA+Grid,0.13,1902,0

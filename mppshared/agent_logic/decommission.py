@@ -7,7 +7,9 @@ import numpy as np
 import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_transition, select_best_transition)
+    remove_transition,
+    select_best_transition,
+)
 from mppshared.config import LOG_LEVEL, MODEL_SCOPE
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.constraints import check_constraints
@@ -136,11 +138,12 @@ def select_asset_to_decommission(
 
         # Check constraints with tentative new stack
         no_constraint_hurt = check_constraints(
-            pathway=pathway, 
-            stack=tentative_stack, 
-            product=product, 
-            year=year, 
-            transition_type="decommission")
+            pathway=pathway,
+            stack=tentative_stack,
+            product=product,
+            year=year,
+            transition_type="decommission",
+        )
 
         if no_constraint_hurt:
             return asset_to_remove
