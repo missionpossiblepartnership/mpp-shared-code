@@ -10,8 +10,8 @@ LOG_FORMATTER = logging.Formatter(
 )
 
 ### SECTOR CHOICE ###
-# SECTOR = "chemicals"
-SECTOR = "aluminium"
+SECTOR = "chemicals"
+# SECTOR = "aluminium"
 
 
 ### DATA IMPORT AND EXPORT
@@ -167,8 +167,8 @@ MODEL_SCOPE = "Global"
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
-    "bau",
-    "fa",
+    # "bau",
+    # "fa",
     "lc",
 ]
 
@@ -193,11 +193,11 @@ INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_as
 RUN_PARALLEL = True
 
 run_config = {
-    "IMPORT_DATA",
-    "CALCULATE_VARIABLES",
-    "APPLY_IMPLICIT_FORCING",
-    "MAKE_RANKINGS",
-    "SIMULATE_PATHWAY",
+    # "IMPORT_DATA",
+    # "CALCULATE_VARIABLES",
+    # "APPLY_IMPLICIT_FORCING",
+    # "MAKE_RANKINGS",
+    # "SIMULATE_PATHWAY",
     "CALCULATE_OUTPUTS",
     # "EXPORT_OUTPUTS",
     # "PLOT_AVAILABILITIES"

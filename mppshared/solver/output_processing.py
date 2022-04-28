@@ -14,10 +14,16 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def create_table_sequence_technology():
-    # Johannes
-    pass
+def create_table_asset_transition_sequences(importer: IntermediateDataImporter) -> pd.DataFrame:
+    
+    df = importer.get_asset_stack(START_YEAR)
+    for year in np.arange(START_YEAR+1, END_YEAR + 1):
 
+        # Group by technology and sum annual production volume
+        df_stack = importer.get_asset_stack(year=year)
+        pass
+
+    return df
 
 def _calculate_number_of_assets(df_stack):
     logger.info("-- Calculating number of assets")
@@ -220,6 +226,11 @@ def calculate_outputs(pathway, sensitivity, sector):
     )
     logger.info("All data for all years processed.")
 
+    # Create summary table of asset transitions
+    logger.info("Creating table with asset transition sequences.")
+    df_transitions = create_table_asset_transition_sequences(importer)
+    importer.export_data(df_transitions, "asset_transition_sequences_sensitivity_{sensitivity}.csv", "final")
+
 def create_debugging_outputs(pathway: str, sensitivity: str, sector: str):
     """Create technology roadmap and emissions trajectory for quick debugging and refinement."""
 
@@ -336,9 +347,6 @@ def create_emissions_trajectory(importer: IntermediateDataImporter) -> pd.DataFr
 
     # Get emissions for each technology
     df_emissions = importer.get_emissions()
-    technologies = importer.get_technology_characteristics()[
-        "technology"
-    ].unique()
     df_trajectory = pd.DataFrame()
     
     greenhousegases = ["co2", "ch4", "n2o"]
