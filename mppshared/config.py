@@ -15,7 +15,7 @@ SECTOR = "aluminium"
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = True
+RUN_PARALLEL = False
 
 run_config = {
     "IMPORT_DATA",

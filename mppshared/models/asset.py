@@ -5,14 +5,9 @@ from xmlrpc.client import Boolean
 
 import pandas as pd
 
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    CUF_LOWER_THRESHOLD,
-    CUF_UPPER_THRESHOLD,
-    DECOMMISSION_RATES,
-    INVESTMENT_CYCLES,
-    LOG_LEVEL,
-)
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                              CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
+                              DECOMMISSION_RATES, INVESTMENT_CYCLES, LOG_LEVEL)
 from mppshared.utility.utils import first, get_logger
 
 logger = get_logger(__name__)

@@ -9,15 +9,12 @@ import numpy as np
 import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_transition,
-    select_best_transition,
-)
-from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL, MODEL_SCOPE
+    remove_transition, select_best_transition)
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL,
+                              MODEL_SCOPE)
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
-    check_constraints,
-    get_regional_production_constraint_table,
-)
+    check_constraints, get_regional_production_constraint_table)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 
@@ -109,10 +106,10 @@ def greenfield(
         logger.debug(
             f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}"
         )
-        new_stack.append(new_asset)
-        pathway.transitions.add(
-            transition_type="greenfield", year=year, destination=new_asset
-        )
+        # new_stack.append(new_asset)
+        # pathway.transitions.add(
+        #     transition_type="greenfield", year=year, destination=new_asset
+        # )
     production = new_stack.get_annual_production_volume(product)  #! Development only
     return pathway
 
