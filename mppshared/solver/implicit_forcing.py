@@ -256,6 +256,8 @@ def apply_technology_availability_constraint(
 
 def apply_regional_technology_ban(df_technology_switches: pd.DataFrame, sector_bans: dict) -> pd.DataFrame:
     """Remove certain technologies from the technology switching table that are banned in certain regions (defined in config.py)"""
+    if not sector_bans:
+        return df_technology_switches
     for region in sector_bans.keys():
         banned_transitions = (df_technology_switches["region"]==region) & (df_technology_switches["technology_destination"].isin(sector_bans[region]))
         df_technology_switches = df_technology_switches.loc[~banned_transitions]
