@@ -2,19 +2,19 @@ from copy import deepcopy
 
 import numpy as np
 import pandas as pd
+import plotly.express as px
+import plotly.io as pio
+from plotly.offline import plot
+from plotly.subplots import make_subplots
 
 from mppshared.config import (
+    END_YEAR,
     SECTORAL_CARBON_BUDGETS,
     SECTORAL_PATHWAYS,
     START_YEAR,
-    END_YEAR,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
-import plotly.express as px
-from plotly.offline import plot
-from plotly.subplots import make_subplots
-import plotly.io as pio
 pio.kaleido.scope.mathjax = None
 
 

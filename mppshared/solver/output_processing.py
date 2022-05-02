@@ -6,7 +6,14 @@ import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.config import (END_YEAR, LOG_LEVEL, PRODUCTS, EMISSION_SCOPES, START_YEAR)
+from mppshared.config import (
+    END_YEAR,
+    LOG_LEVEL,
+    PRODUCTS,
+    SECTOR,
+    SECTORAL_CARBON_BUDGETS,
+    START_YEAR,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.log_utility import get_logger
 
@@ -89,6 +96,22 @@ def _calculate_emissions(df_stack, df_emissions):
     df_assets_emissions = df_stack.merge(
         df_emissions, on=["product", "region", "technology"]
     )
+    df_assets_emissions["co2_scope1"] = (
+        df_assets_emissions["co2_scope1"]
+        * df_assets_emissions["annual_production_volume"]
+    )
+    df_assets_emissions["co2_scope2"] = (
+        df_assets_emissions["co2_scope2"]
+        * df_assets_emissions["annual_production_volume"]
+    )
+    df_assets_emissions["co2_scope3_upstream"] = (
+        df_assets_emissions["co2_scope3_upstream"]
+        * df_assets_emissions["annual_production_volume"]
+    )
+    df_assets_emissions["co2_scope3_downstream"] = (
+        df_assets_emissions["co2_scope3_downstream"]
+        * df_assets_emissions["annual_production_volume"]
+    )
     df_stack_emissions = (
         df_assets_emissions.groupby(["product", "region", "technology"])
         .sum()
@@ -144,6 +167,7 @@ def _calculate_output_from_input(df_stack, df_inputs_outputs, variable, year):
         & (df_inputs_outputs["year"] == year)
     ].copy()
     df_stack = df_stack.merge(df_variable, on=["product", "region", "technology"])
+    df_stack["value"] = df_stack["value"] * df_stack["annual_production_volume"]
     df_stack_variable = (
         df_stack.groupby(["product", "region", "technology"]).sum().reset_index()
     )

@@ -7,21 +7,14 @@ import numpy as np
 import pandas as pd
 
 from mppshared.calculate.calculate_cost import discount_costs
-from mppshared.config import (
-    EMISSION_SCOPES,
-    FINAL_CARBON_COST,
-    GHGS,
-    INITIAL_CARBON_COST,
-    PRODUCTS,
-    TECHNOLOGY_MORATORIUM,
-)
+from mppshared.config import (EMISSION_SCOPES, FINAL_CARBON_COST, GHGS,
+                              INITIAL_CARBON_COST, PRODUCTS,
+                              TECHNOLOGY_MORATORIUM, TRANSITIONAL_PERIOD_YEARS)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.solver.input_loading import filter_df_for_development
 from mppshared.utility.dataframe_utility import (
-    add_column_header_suffix,
-    get_grouping_columns_for_npv_calculation,
-)
+    add_column_header_suffix, get_grouping_columns_for_npv_calculation)
 from mppshared.utility.function_timer_utility import timer_func
 from mppshared.utility.log_utility import get_logger
 
@@ -59,11 +52,15 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
         df_technology_switches, df_technology_characteristics
     )
 
-    # Apply technology moratorium (year after which newbuild capacity must be transition or end-state technologies)
-    df_technology_switches = apply_technology_moratorium(
-        df_technology_switches=df_technology_switches, 
-        df_technology_characteristics=df_technology_characteristics,
-        moratorium_year=TECHNOLOGY_MORATORIUM[sector])
+    # Apply technology moratorium (year after which newbuild capacity must be transition or
+    # end-state technologies)
+    if pathway != "bau":
+        df_technology_switches = apply_technology_moratorium(
+            df_technology_switches=df_technology_switches,
+            df_technology_characteristics=df_technology_characteristics,
+            moratorium_year=TECHNOLOGY_MORATORIUM[sector],
+            transitional_period_years=TRANSITIONAL_PERIOD_YEARS[sector],
+        )
 
     carbon_cost = 0
     if carbon_cost == 0:
@@ -122,7 +119,7 @@ def apply_carbon_cost_to_tco(
         df_emissions.rename(columns={"technology": "technology_destination"}),
         on=["product", "region", "year", "technology_destination"],
         how="left",
-    )
+    ).fillna(0)
 
     df = df.merge(
         df_technology_characteristics.rename(
@@ -130,7 +127,7 @@ def apply_carbon_cost_to_tco(
         ),
         on=["product", "region", "technology_destination"],
         how="left",
-    )
+    ).fillna(0)
 
     # Additional cost from carbon cost is carbon cost multiplied with sum of scope 1 and scope 2 CO2 emissions
     cc = CarbonCostTrajectory(
@@ -211,12 +208,12 @@ def apply_technology_availability_constraint(
         df_tech_char_destination,
         on=["product", "year", "region", "technology_destination"],
         how="left",
-    )
+    ).fillna(0)
     df = df.merge(
         df_tech_char_origin,
         on=["product", "year", "region", "technology_origin"],
         how="left",
-    )
+    ).fillna(0)
 
     # Constraint 1: no switches from transition or end-state to initial technologies
     df = df.loc[
@@ -254,25 +251,55 @@ def apply_technology_availability_constraint(
         ]
     )
 
-def apply_technology_moratorium(df_technology_switches: pd.DataFrame, df_technology_characteristics: pd.DataFrame, moratorium_year: int) -> pd.DataFrame:
-    """Eliminate all newbuild transitions to a conventional technology after a specific year"""
+
+def apply_technology_moratorium(
+    df_technology_switches: pd.DataFrame,
+    df_technology_characteristics: pd.DataFrame,
+    moratorium_year: int,
+    transitional_period_years: int,
+) -> pd.DataFrame:
+    """Eliminate all newbuild transitions to a conventional technology after a specific year
+
+    Args:
+        df_technology_switches (pd.DataFrame): df_technology_switches
+        df_technology_characteristics (pd.DataFrame): df_technology_characteristics
+        moratorium_year (int): Year from which the technology moratorium kicks in
+        transitional_period_years (int): Period during transition to transition technologies is allowed
+
+    Returns:
+        pd.DataFrame:
+    """
 
     # Add technology classification to each destination technology
     df_tech_char_destination = df_technology_characteristics[
         ["product", "year", "region", "technology", "technology_classification"]
     ].rename(
-        {
-            "technology": "technology_destination"
-        },
+        {"technology": "technology_destination"},
         axis=1,
     )
-    df_technology_switches = df_technology_switches.merge(df_tech_char_destination, on=["product", "year", "region", "technology_destination"])
+    df_technology_switches = df_technology_switches.merge(
+        df_tech_char_destination,
+        on=["product", "year", "region", "technology_destination"],
+        how="left",
+    ).fillna(0)
 
     # Drop technology transitions of type new-build where the technology_destination is classified as initial
-    banned_transitions = (df_technology_switches["year"] >= moratorium_year) & (df_technology_switches["technology_classification"]=="initial")
+    banned_transitions = (
+        (df_technology_switches["year"] >= moratorium_year)
+        & (df_technology_switches["technology_classification"] == "initial")
+        & (df_technology_switches["switch_type"] != "decommission")
+    )
+    df_technology_switches = df_technology_switches.loc[~banned_transitions]
+    # Drop technology transitions for 'transition' technologies after moratorium year + x years
+    banned_transitions = (
+        (df_technology_switches["year"] >= moratorium_year + transitional_period_years)
+        & (df_technology_switches["technology_classification"] == "transition")
+        & (df_technology_switches["switch_type"] != "decommission")
+    )
     df_technology_switches = df_technology_switches.loc[~banned_transitions]
 
     return df_technology_switches
+
 
 def calculate_emission_reduction(
     df_technology_switches: pd.DataFrame, df_emissions: pd.DataFrame
@@ -326,12 +353,12 @@ def calculate_emission_reduction(
             ].fillna(0)
 
     # Drop emissions of destination and origin technology
-    drop_cols = [
-        f"{ghg}_{scope}_{switch_locator}"
-        for switch_locator in ["origin", "destination"]
-        for ghg in GHGS
-        for scope in EMISSION_SCOPES
-    ]
-    df = df.drop(columns=drop_cols)
+    # drop_cols = [
+    #     f"{ghg}_{scope}_{switch_locator}"
+    #     for switch_locator in ["origin", "destination"]
+    #     for ghg in GHGS
+    #     for scope in EMISSION_SCOPES
+    # ]
+    # df = df.drop(columns=drop_cols)
 
     return df
