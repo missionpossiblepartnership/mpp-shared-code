@@ -201,6 +201,7 @@ class AssetStack:
                 "cuf": asset.cuf,
                 "asset_lifetime": asset.asset_lifetime,
                 "retrofit_status": asset.retrofit,
+                "rebuild_status": asset.rebuild
             }
             for asset in self.assets
         )
