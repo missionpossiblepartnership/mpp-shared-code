@@ -10,8 +10,8 @@ LOG_FORMATTER = logging.Formatter(
 )
 
 ### SECTOR CHOICE ###
-SECTOR = "chemicals"
-# SECTOR = "aluminium"
+# SECTOR = "chemicals"
+SECTOR = "aluminium"
 
 ### RUN CONFIGURATION ###
 
@@ -182,8 +182,8 @@ MODEL_SCOPE = "Global"
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
-    # "bau",
-    # "fa",
+    "bau",
+    "fa",
     "lc",
 ]
 

@@ -4,9 +4,7 @@ from copy import deepcopy
 from operator import methodcaller
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_transition,
-    select_best_transition,
-)
+    remove_transition, select_best_transition)
 from mppshared.config import LOG_LEVEL
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -53,7 +51,6 @@ def brownfield(
     while (candidates != []) & (n_assets_transitioned <= 10):
         # TODO: how do we avoid that all assets are retrofit at once in the beginning?
         # TODO: implement foresight with brownfield rebuild
-        
         # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
         best_candidates = []
         while not best_candidates:
@@ -89,26 +86,23 @@ def brownfield(
         tentative_stack = deepcopy(new_stack)
         origin_technology = asset_to_update.technology
         tentative_stack.update_asset(asset_to_update, new_technology=new_technology)
-        if pathway.pathway != "BAU":
-            # Check constraints with tentative new stack
-            no_constraint_hurt = check_constraints(
-                pathway=pathway,
-                stack=tentative_stack,
-                product=product,
-                year=year,
-                transition_type="brownfield",
-            )
-        else:
-            no_constraint_hurt = True
+        # Check constraints with tentative new stack
+        no_constraint_hurt = check_constraints(
+            pathway=pathway,
+            stack=tentative_stack,
+            product=product,
+            year=year,
+            transition_type="brownfield",
+        )
 
         if no_constraint_hurt:
             logger.debug(
                 f"Updating asset from technology {origin_technology} to technology {new_technology} in region {asset_to_update.region}, annual production {asset_to_update.get_annual_production_volume()} and UUID {asset_to_update.uuid}"
             )
             # Set retrofit or rebuild attribute to True according to type of brownfield transition
-            if best_transition["switch_type"]=="brownfield_renovation":
+            if best_transition["switch_type"] == "brownfield_renovation":
                 asset_to_update.retrofit = True
-            elif best_transition["switch_type"]=="brownfield_rebuild":
+            elif best_transition["switch_type"] == "brownfield_rebuild":
                 asset_to_update.rebuild = True
 
             new_stack.update_asset(

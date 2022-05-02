@@ -7,9 +7,7 @@ import numpy as np
 import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_transition,
-    select_best_transition,
-)
+    remove_transition, select_best_transition)
 from mppshared.config import LOG_LEVEL, MODEL_SCOPE
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.constraints import check_constraints

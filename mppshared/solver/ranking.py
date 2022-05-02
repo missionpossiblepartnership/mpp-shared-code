@@ -15,6 +15,7 @@ logger = get_logger(__name__)
 
 def get_rank_config(rank_type: str, pathway: str):
     """Filter ranking configuration in config.py"""
+    logger.debug("Getting configuration for ranking")
 
     return RANKING_CONFIG[rank_type][pathway]
 
@@ -28,6 +29,7 @@ def bin_ranking(rank_array: np.array, n_bins: int = NUMBER_OF_BINS_RANKING) -> n
     Returns:
         array with binned values
     """
+    logger.debug("making bin ranks")
     _, bins = np.histogram(rank_array, bins=n_bins)
     return np.digitize(rank_array, bins=bins)
 
@@ -39,6 +41,7 @@ def _add_binned_rankings(
     n_bins: int = NUMBER_OF_BINS_RANKING,
 ) -> pd.DataFrame:
     """Add binned values for the possible ranking columns"""
+    logger.debug("Adding binned values")
     df_rank[f"{rank_type}_{pathway}_score_binned"] = bin_ranking(
         df_rank[f"{rank_type}_{pathway}_score"], n_bins=n_bins
     )
@@ -76,6 +79,7 @@ def rank_technology(
 
     # Filter ranking table for the type of technology transition
     df_ranking.fillna(0, inplace=True)
+    logger.debug("Applying filter for ranking type")
     if rank_type == "brownfield":
         df = df_ranking[df_ranking["switch_type"].str.contains("brownfield")].copy()
     elif rank_type == "decommission":
@@ -84,6 +88,7 @@ def rank_technology(
         df = df_ranking[(df_ranking["switch_type"].str.contains("greenfield"))].copy()
 
     # Normalize TCO
+    logger.debug("Normalizing TCO")
     df["tco_normalized"] = 1 - (df["tco"] - df["tco"].min()) / (
         df["tco"].max() - df["tco"].min()
     )
@@ -94,21 +99,27 @@ def rank_technology(
         for scope in EMISSION_SCOPES_RANKING
         for ghg in GHGS_RANKING
     ]
+    logger.debug("Summing emissions delta")
     df["sum_emissions_delta"] = 1 + (df[col_list].sum(axis=1))
 
     # Normalize the sum of emission reductions
+    logger.debug("Normalization of emissions reductions")
     df["sum_emissions_delta_normalized"] = 1 - (
         df["sum_emissions_delta"].max() - df["sum_emissions_delta"]
     ) / (df["sum_emissions_delta"].max() - df["sum_emissions_delta"].min())
     df.fillna(0, inplace=True)
 
     # Calculate scores
+    logger.debug("Calculating scores")
     df[f"{rank_type}_{pathway}_score"] = (
         df["sum_emissions_delta_normalized"] * config["emissions"]
     ) + (df["tco_normalized"] * config["tco"])
-    df_rank = df.groupby(["year"]).apply(_add_binned_rankings, rank_type, pathway)
+    logger.debug("Adding binned rankings")
+    # df_rank = df.groupby(["year"]).apply(_add_binned_rankings, rank_type, pathway)
+    df_rank = df
 
     # Calculate final rank for the transition type
+    logger.debug("Calculating final rank")
     df_rank["rank"] = df_rank[f"{rank_type}_{pathway}_score"].rank(ascending=False)
     return df_rank
 
