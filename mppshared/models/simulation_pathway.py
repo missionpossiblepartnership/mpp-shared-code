@@ -167,7 +167,7 @@ class SimulationPathway:
 
     def export_stack_to_csv(self, year):
         df = self.get_stack(year).export_stack_to_df()
-        self.importer.export_data(df, f"stack_{year}.csv", "stack_tracker")
+        self.importer.export_data(df, f"stack_{year}.csv", "stack_tracker", index=False)
 
     def output_technology_roadmap(self):
         logger.debug("Creatting technology roadmap")
