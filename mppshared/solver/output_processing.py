@@ -16,12 +16,41 @@ logger.setLevel(LOG_LEVEL)
 
 def create_table_asset_transition_sequences(importer: IntermediateDataImporter) -> pd.DataFrame:
     
-    df = importer.get_asset_stack(START_YEAR)
+    # Get initial stack and melt to long for that year
+    multiindex = ["uuid", "product", "region", "parameter"]
+    df = importer.get_asset_stack(START_YEAR) 
+    df = df[["uuid", "product", "region", "technology", "annual_production_capacity", "annual_production_volume", "retrofit_status"]]  
+    df = df.set_index(["product", "region", "uuid"])
+    df = df.melt(var_name="parameter", value_name=START_YEAR, ignore_index=False)
+    df = df.sort_index()
+    df = df.reset_index(drop=False).set_index(multiindex)
+    
     for year in np.arange(START_YEAR+1, END_YEAR + 1):
 
-        # Group by technology and sum annual production volume
+        # Get asset stack for that year
         df_stack = importer.get_asset_stack(year=year)
-        pass
+        df_stack = df_stack[["uuid", "product", "region", "technology", "annual_production_capacity", "annual_production_volume", "retrofit_status", "rebuild_status"]]  
+        
+        # Reformat stack DataFrame
+        df_stack = df_stack.set_index(["product", "region", "uuid"])
+        df_stack = df_stack.melt(var_name="parameter", value_name=year, ignore_index=False)
+        df_stack = df_stack.reset_index().set_index("uuid")
+        df_stack = df_stack.sort_index()
+
+        # Differentiate between existing and new assets
+        previous_uuids = df.index.unique()
+        current_uuids = df_stack.index.unique()
+
+        existing_uuids = [uuid for uuid in current_uuids if uuid in previous_uuids]
+        new_uuids = [uuid for uuid in current_uuids if uuid not in previous_uuids]
+        vanished_uuids = [uuid for uuid in previous_uuids if uuid not in current_uuids] # Decommissioned assets (not relevant)
+
+        newbuild_stack = df_stack[df_stack.index.isin(new_uuids)].reset_index().set_index(multiindex).sort_index()
+        existing_stack = df_stack[df_stack.index.isin(existing_uuids)].reset_index().set_index(multiindex).sort_index()
+
+        # Join existing stack and add newbuild stack
+        df[year] = existing_stack[year]
+        df = pd.concat([df, newbuild_stack])
 
     return df
 
@@ -175,6 +204,13 @@ def calculate_outputs(pathway, sensitivity, sector):
         sector=sector,
         products=PRODUCTS[sector],
     )
+
+    # Create summary table of asset transitions
+    logger.info("Creating table with asset transition sequences.")
+    df_transitions = create_table_asset_transition_sequences(importer)
+    importer.export_data(df_transitions, f"asset_transition_sequences_sensitivity_{sensitivity}.csv", "final")
+
+    # Create output table
     data = []
     data_stacks = []
     for year in range(START_YEAR, END_YEAR + 1):
@@ -225,11 +261,6 @@ def calculate_outputs(pathway, sensitivity, sector):
         df_stacks, f"plant_stack_transition_sensitivity_{sensitivity}.csv", "final"
     )
     logger.info("All data for all years processed.")
-
-    # Create summary table of asset transitions
-    logger.info("Creating table with asset transition sequences.")
-    df_transitions = create_table_asset_transition_sequences(importer)
-    importer.export_data(df_transitions, "asset_transition_sequences_sensitivity_{sensitivity}.csv", "final")
 
 def create_debugging_outputs(pathway: str, sensitivity: str, sector: str):
     """Create technology roadmap and emissions trajectory for quick debugging and refinement."""
