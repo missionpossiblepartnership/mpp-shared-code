@@ -12,6 +12,7 @@ from mppshared.config import (
     PRODUCTS,
     SECTOR,
     SECTORAL_CARBON_BUDGETS,
+    EMISSION_SCOPES,
     START_YEAR,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
