@@ -41,16 +41,17 @@ def check_constraints(
     #     pathway=pathway, stack=stack, product=product, year=year
     # )
 
-    # Check constraint for annual emissions limit from carbon budget
-    emissions_constraint = check_annual_carbon_budget_constraint(
-        pathway=pathway, stack=stack, product=product, year=year
-    )
-
-    # TODO: Check technology ramp-up constraint
-
-    # TODO: Check resource availability constraint
-
-    return emissions_constraint
+    # If pathway not bau, then check for constraints, else return true
+    if pathway.pathway != "bau":
+        # Check constraint for annual emissions limit from carbon budget
+        emissions_constraint = check_annual_carbon_budget_constraint(
+            pathway=pathway, stack=stack, product=product, year=year
+        )
+        # TODO: Check technology ramp-up constraint
+        # TODO: Check resource availability constraint
+        return emissions_constraint
+    else:
+        return True
 
 
 def check_constraint_regional_production(

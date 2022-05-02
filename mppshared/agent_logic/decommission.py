@@ -135,16 +135,13 @@ def select_asset_to_decommission(
         tentative_stack.remove(asset_to_remove)
 
         # Check constraints with tentative new stack
-        if pathway.pathway != "bau":
-            no_constraint_hurt = check_constraints(
-                pathway=pathway,
-                stack=tentative_stack,
-                product=product,
-                year=year,
-                transition_type="decommission",
-            )
-        else:
-            no_constraint_hurt = True
+        no_constraint_hurt = check_constraints(
+            pathway=pathway,
+            stack=tentative_stack,
+            product=product,
+            year=year,
+            transition_type="decommission",
+        )
 
         if no_constraint_hurt:
             return asset_to_remove
