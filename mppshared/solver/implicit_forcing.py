@@ -8,7 +8,7 @@ import pandas as pd
 
 from mppshared.calculate.calculate_cost import discount_costs
 from mppshared.config import (EMISSION_SCOPES, FINAL_CARBON_COST, GHGS,
-                              INITIAL_CARBON_COST, PRODUCTS,
+                              INITIAL_CARBON_COST, PRODUCTS, REGIONAL_TECHNOLOGY_BAN,
                               TECHNOLOGY_MORATORIUM, TRANSITIONAL_PERIOD_YEARS)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
@@ -51,6 +51,9 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
     df_technology_switches = apply_technology_availability_constraint(
         df_technology_switches, df_technology_characteristics
     )
+
+    # Apply regional technology bans
+    df_technology_switches = apply_regional_technology_ban(df_technology_switches, REGIONAL_TECHNOLOGY_BAN[sector])
 
     # Apply technology moratorium (year after which newbuild capacity must be transition or
     # end-state technologies)
@@ -250,6 +253,13 @@ def apply_technology_availability_constraint(
             "expected_maturity",
         ]
     )
+
+def apply_regional_technology_ban(df_technology_switches: pd.DataFrame, sector_bans: dict) -> pd.DataFrame:
+    """Remove certain technologies from the technology switching table that are banned in certain regions (defined in config.py)"""
+    for region in sector_bans.keys():
+        banned_transitions = (df_technology_switches["region"]==region) & (df_technology_switches["technology_destination"].isin(sector_bans[region]))
+        df_technology_switches = df_technology_switches.loc[~banned_transitions]
+    return df_technology_switches
 
 
 def apply_technology_moratorium(
