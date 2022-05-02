@@ -302,6 +302,7 @@ def apply_technology_moratorium(
         & (df_technology_switches["switch_type"] != "decommission")
     )
     df_technology_switches = df_technology_switches.loc[~banned_transitions]
+    
     # Drop technology transitions for 'transition' technologies after moratorium year + x years
     banned_transitions = (
         (df_technology_switches["year"] >= moratorium_year + transitional_period_years)

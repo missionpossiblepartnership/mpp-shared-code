@@ -10,8 +10,8 @@ LOG_FORMATTER = logging.Formatter(
 )
 
 ### SECTOR CHOICE ###
-# SECTOR = "chemicals"
-SECTOR = "aluminium"
+SECTOR = "chemicals"
+# SECTOR = "aluminium"
 
 ### RUN CONFIGURATION ###
 
@@ -182,8 +182,8 @@ MODEL_SCOPE = "Global"
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
-    "bau",
-    "fa",
+    # "bau",
+    # "fa",
     "lc",
 ]
 
@@ -220,6 +220,16 @@ TRANSITION_TYPES = [
     "brownfield_newbuild",
 ]
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
+
+MAP_LOW_COST_POWER_REGIONS = {
+    "chemicals": {
+        "Middle East": "Saudi Arabia",
+        "Africa": "Namibia",
+        "Oceania": "Australia",
+        "Latin America": "Brazil"
+    },
+    "aluminium": None
+}
 
 # Carbon cost parameters
 
@@ -372,5 +382,7 @@ REGIONAL_TECHNOLOGY_BAN = {
             "Natural Gas SMR + ammonia synthesis", "Natural Gas ATR + CCS + ammonia synthesis", "Oversized ATR + CCS", "Natural Gas SMR + CCS (process emissions only) + ammonia synthesis",
              "Natural Gas SMR + CCS + ammonia synthesis", "Electrolyser + SMR + ammonia synthesis", "GHR + CCS + ammonia synthesis", "ESMR Gas + CCS + ammonia synthesis", 
         ]
-    }
+    },
+    "aluminium":
+        None
 }
