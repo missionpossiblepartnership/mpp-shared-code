@@ -99,17 +99,14 @@ def greenfield(
         except ValueError:
             logger.info("No more assets for greenfield transition within constraints")
             break
-        enact_greenfield_transition(
-            pathway=pathway, stack=new_stack, new_asset=new_asset, year=year
-        )
-        # Enact greenfield transition and add to TransitionRegistry
+
+        # Enact greenfield transition
         logger.debug(
             f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}"
         )
-        # new_stack.append(new_asset)
-        # pathway.transitions.add(
-        #     transition_type="greenfield", year=year, destination=new_asset
-        # )
+        enact_greenfield_transition(
+            pathway=pathway, stack=new_stack, new_asset=new_asset, year=year
+        )
     production = new_stack.get_annual_production_volume(product)  #! Development only
     return pathway
 

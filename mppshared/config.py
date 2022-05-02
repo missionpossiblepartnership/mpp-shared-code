@@ -10,8 +10,8 @@ LOG_FORMATTER = logging.Formatter(
 )
 
 ### SECTOR CHOICE ###
-# SECTOR = "chemicals"
-SECTOR = "aluminium"
+SECTOR = "chemicals"
+# SECTOR = "aluminium"
 
 ### RUN CONFIGURATION ###
 
@@ -182,8 +182,8 @@ MODEL_SCOPE = "Global"
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
-    "bau",
-    "fa",
+    # "bau",
+    # "fa",
     "lc",
 ]
 
@@ -341,13 +341,13 @@ SECTORAL_CARBON_BUDGETS = {
 }
 
 residual_share = 0.05
-emissions_chemicals_2020 = 1  # Gt CO2 (scope 1 and 2)
+emissions_chemicals_2020 = 0.62  # Gt CO2 (scope 1 and 2)
 
 SECTORAL_PATHWAYS = {
     "chemicals": {
         "emissions_start": emissions_chemicals_2020,
         "emissions_end": residual_share * emissions_chemicals_2020,
-        "action_start": 2025,
+        "action_start": 2023,
     },
     "aluminium": {
         "emissions_start": emissions_chemicals_2020,
