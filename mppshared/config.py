@@ -15,7 +15,7 @@ SECTOR = "chemicals"
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = True
+RUN_PARALLEL = False
 
 run_config = {
     "IMPORT_DATA",
@@ -363,3 +363,14 @@ TECHNOLOGY_MORATORIUM = {
 }
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
 TRANSITIONAL_PERIOD_YEARS = {"chemicals": 30, "aluminium": 10}
+
+# Regional ban of technologies (sector-specific)
+REGIONAL_TECHNOLOGY_BAN = {
+    "chemicals":
+    {
+        "China": [
+            "Natural Gas SMR + ammonia synthesis", "Natural Gas ATR + CCS + ammonia synthesis", "Oversized ATR + CCS", "Natural Gas SMR + CCS (process emissions only) + ammonia synthesis",
+             "Natural Gas SMR + CCS + ammonia synthesis", "Electrolyser + SMR + ammonia synthesis", "GHR + CCS + ammonia synthesis", "ESMR Gas + CCS + ammonia synthesis", 
+        ]
+    }
+}
