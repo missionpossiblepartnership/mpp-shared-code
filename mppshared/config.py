@@ -192,7 +192,6 @@ PATHWAYS = [
 SENSITIVITIES = [
     "def",
 ]
-
 ### SECTOR-SPECIFIC PARAMETERS ###
 
 # Products produced by each sector
@@ -206,6 +205,13 @@ INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_as
 
 ### RANKING ###
 NUMBER_OF_BINS_RANKING = 10
+
+
+MAX_ANNUAL_BROWNFIELD_TRANSITIONS = {
+    "chemicals": 1000,
+    "aluminium": 10
+}
+
 
 # GHGs and Emission scopes included in weighting when ranking technology transitions
 GHGS_RANKING = [

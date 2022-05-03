@@ -13,7 +13,8 @@ from mppshared.config import (
 )
 from mppshared.models.simulate import simulate_pathway
 from mppshared.solver.implicit_forcing import apply_implicit_forcing
-from mppshared.solver.output_processing import calculate_outputs, create_debugging_outputs
+from mppshared.solver.output_processing import calculate_outputs
+from mppshared.solver.debugging_outputs import create_debugging_outputs
 from mppshared.solver.ranking import make_rankings
 from mppshared.utility.utils import get_logger
 
