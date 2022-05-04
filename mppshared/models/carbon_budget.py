@@ -7,12 +7,9 @@ import plotly.io as pio
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.config import (
-    END_YEAR,
-    SECTORAL_CARBON_BUDGETS,
-    SECTORAL_PATHWAYS,
-    START_YEAR,
-)
+from mppshared.config import (CARBON_BUDGET_SECTOR_CSV, END_YEAR,
+                              SECTORAL_CARBON_BUDGETS, SECTORAL_PATHWAYS,
+                              START_YEAR)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
 pio.kaleido.scope.mathjax = None
@@ -75,8 +72,12 @@ class CarbonBudget:
 
     def get_annual_emissions_limit(self, year: int, sector: str) -> float:
         """Get scope 1 and 2 CO2 emissions limit for a specific year for the given sector"""
-        df = self.pathways[sector]
-        return df.loc[year, "annual_limit"]
+        if CARBON_BUDGET_SECTOR_CSV == True:
+            # TODO: implement the carbon budget being read from a given CSV by the sector
+            pass
+        else:
+            df = self.pathways[sector]
+            return df.loc[year, "annual_limit"]
 
     # TODO: implement
     def output_emissions_pathway(self, sector: str, importer: IntermediateDataImporter):
@@ -102,6 +103,13 @@ class CarbonBudget:
         importer.export_data(df, "carbon_budget.csv", "final")
 
     def pathway_getter(self, sector: str, year: int, value_type: str):
+        """pathway_getter.
+
+        Args:
+            sector (str): sector
+            year (int): year
+            value_type (str): value_type
+        """
         mapper = {"annual": "annual_limit", "cumulative": "cumulative_limit"}
         return self.pathways[sector].loc[year][mapper[value_type]]
 
