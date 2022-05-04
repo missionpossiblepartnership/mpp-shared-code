@@ -99,6 +99,11 @@ class AssetStack:
         # Keep track of all assets added this year
         self.new_ids = []
 
+    def __eq__(self, other):
+        self_uuids = {asset.uuid for asset in self.assets}
+        other_uuids = {asset.uuid for asset in other.assets}
+        return self_uuids == other_uuids
+
     def remove(self, remove_asset: Asset):
         """Remove asset from stack"""
         self.assets = [asset for asset in self.assets if asset != remove_asset]
@@ -109,8 +114,11 @@ class AssetStack:
         self.new_ids.append(new_asset.uuid)
 
     def update_asset(self, asset_to_update: Asset, new_technology: str):
-        """Update an asset in AssetStack, unique ID remains the same"""
+        """Update an asset in AssetStack. This is done using the UUID to ensure correct updating."""
+        uuid_update = asset_to_update.uuid
         asset_to_update.technology = new_technology
+        self.assets = [asset for asset in self.assets if asset.uuid is not uuid_update]
+        self.assets.append(asset_to_update) 
 
     def empty(self) -> Boolean:
         """Return True if no asset in stack"""
