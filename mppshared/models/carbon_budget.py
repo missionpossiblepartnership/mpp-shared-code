@@ -3,7 +3,6 @@ from copy import deepcopy
 import numpy as np
 import pandas as pd
 import plotly.express as px
-import plotly.io as pio
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
@@ -14,8 +13,6 @@ from mppshared.config import (
     START_YEAR,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-
-pio.kaleido.scope.mathjax = None
 
 
 class CarbonBudget:
@@ -97,20 +94,9 @@ class CarbonBudget:
             auto_open=False,
         )
 
-        # TODO: debug why writing image with kaleido enters into seemingly infinite loop
-        # fig.write_image(importer.final_path.joinpath("carbon_budget.png"), engine="kaleido")
         importer.export_data(df, "carbon_budget.csv", "final")
 
     def pathway_getter(self, sector: str, year: int, value_type: str):
         mapper = {"annual": "annual_limit", "cumulative": "cumulative_limit"}
         return self.pathways[sector].loc[year][mapper[value_type]]
 
-
-def carbon_budget_test():
-    CarbonBudget = CarbonBudget()
-    CarbonBudget.set_budget_dict(CARBON_BUDGET_REF)
-    CarbonBudget.total_budget_all_sectors()
-    pathway = CarbonBudget.set_emissions_pathway(2020, 2050, "steel", "straight")
-    print(pathway)
-    CarbonBudget.plot_emissions_pathway("steel")
-    print(CarbonBudget.pathway_getter("steel", 2030, "annual"))
