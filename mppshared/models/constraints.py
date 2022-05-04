@@ -21,8 +21,8 @@ def check_constraints(
     product: str,
     year: int,
     transition_type: str,
-) -> Bool:
-    """Check all constraints for a given asset stack.
+) -> dict:
+    """Check all constraints for a given asset stack and return dictionary of Booleans with constraint types as keys.
 
     Args:
         pathway: contains data on demand and resource availability
@@ -54,7 +54,10 @@ def check_constraints(
         )
 
         # TODO: Check resource availability constraint
-        return emissions_constraint & rampup_constraint
+        return {
+            "emissions_constraint": emissions_constraint,
+            "rampup_constraint": rampup_constraint
+        }
     else:
         return True
 

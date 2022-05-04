@@ -5,7 +5,7 @@ from operator import methodcaller
 import numpy as np
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_transition, select_best_transition)
+    remove_transition, select_best_transition, remove_all_transitions_with_destination_technology)
 from mppshared.config import LOG_LEVEL, MAX_ANNUAL_BROWNFIELD_TRANSITIONS
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -88,9 +88,8 @@ def brownfield(
         origin_technology = asset_to_update.technology
         tentative_stack.update_asset(asset_to_update, new_technology=new_technology)
 
-
         # Check constraints with tentative new stack
-        no_constraint_hurt = check_constraints(
+        dict_constraints = check_constraints(
             pathway=pathway,
             stack=tentative_stack,
             product=product,
@@ -98,7 +97,8 @@ def brownfield(
             transition_type="brownfield",
         )
 
-        if no_constraint_hurt:
+        # If no constraint is hurt, execute the brownfield transition
+        if all(value == True for value in dict_constraints.values()):
             logger.debug(
                 f"Updating asset from technology {origin_technology} to technology {new_technology} in region {asset_to_update.region}, annual production {asset_to_update.get_annual_production_volume()} and UUID {asset_to_update.uuid}"
             )
@@ -108,16 +108,20 @@ def brownfield(
             if best_transition["switch_type"] == "brownfield_newbuild":
                 asset_to_update.rebuild = True
 
-            # TODO: does this work?
-            # asset_to_update.technology = new_technology
             new_stack.update_asset(
                 asset_to_update,
                 new_technology=new_technology,
             )
             n_assets_transitioned += 1
 
-        # If constraint is hurt, remove asset from list of candidates and try again
-        candidates.remove(asset_to_update)
+        # If the emissions constraint is hurt, remove asset from list of candidates and try again
+        if dict_constraints["emissions_constraint"]==False:
+            candidates.remove(asset_to_update)
+
+        # If only the technology ramp-up constraint is hurt, remove that technology from the ranking table and try again
+        elif dict_constraints["rampup_constraint"]==False:
+            df_rank = remove_all_transitions_with_destination_technology(df_rank, best_transition["technology_destination"])
+            
     logger.debug(
         f"{n_assets_transitioned} assets transitioned in year {year} for product {product} in sector {pathway.sector}"
     )

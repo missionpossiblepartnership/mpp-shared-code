@@ -50,6 +50,10 @@ def remove_transition(df_rank: pd.DataFrame, transition: dict) -> pd.DataFrame:
         ~(df_rank[list(transition)] == pd.Series(transition)).all(axis=1)
     ]
 
+def remove_all_transitions_with_destination_technology(df_rank: pd.DataFrame, technology_destination: str) -> pd.DataFrame:
+    """Remove all transitions with a specific destination technology from the ranking table. This is done when the transition for this technology hits the technology ramp-up constraint."""
+    df_rank = df_rank.loc[~(df_rank["technology_destination"]==technology_destination)]
+    return df_rank
 
 def adjust_capacity_utilisation(
     pathway: SimulationPathway, product: str, year: int

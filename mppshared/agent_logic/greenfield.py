@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_transition, select_best_transition)
+    remove_all_transitions_with_destination_technology, remove_transition, select_best_transition)
 from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL, MAP_LOW_COST_POWER_REGIONS,
                               MODEL_SCOPE)
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
@@ -163,7 +163,7 @@ def select_asset_for_greenfield(
         # Tentatively update the stack and check constraints
         tentative_stack = deepcopy(stack)
         tentative_stack.append(new_asset)
-        no_constraint_hurt = check_constraints(
+        dict_constraints = check_constraints(
             pathway=pathway,
             stack=tentative_stack,
             product=product,
@@ -172,11 +172,16 @@ def select_asset_for_greenfield(
         )
 
         # Asset can be created if no constraint hurt
-        if no_constraint_hurt:
+        if all(value == True for value in dict_constraints.values()):
             return new_asset
 
-        # If constraint hurt, remove best transition from ranking table and try again
-        df_rank = remove_transition(df_rank, asset_transition)
+        # If annual emissions constraint hurt, remove best transition from ranking table and try again
+        if dict_constraints["emissions_constraint"]==False:
+            df_rank = remove_transition(df_rank, asset_transition)
+
+        # If only technology ramp-up constraint hurt, remove all transitions with that destination technology from the ranking table
+        elif dict_constraints["rampup_constraint"]==False:
+            df_rank = remove_all_transitions_with_destination_technology(df_rank, asset_transition["technology_destination"])
 
     # If ranking table empty, no greenfield construction possible
     raise ValueError
