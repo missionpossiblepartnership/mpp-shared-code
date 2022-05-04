@@ -1,5 +1,5 @@
 """ Logic for technology transitions of type brownfield rebuild and brownfield renovation."""
-
+import sys
 from copy import deepcopy
 from operator import methodcaller
 
@@ -48,7 +48,9 @@ def brownfield(
     )
 
     # Enact brownfield transitions while there are still candidates
-    while (candidates != []) & (n_assets_transitioned <= MAX_ANNUAL_BROWNFIELD_TRANSITIONS[pathway.sector]):
+    while (candidates != []) & (
+        n_assets_transitioned <= MAX_ANNUAL_BROWNFIELD_TRANSITIONS[pathway.sector]
+    ):
         # TODO: how do we avoid that all assets are retrofit at once in the beginning?
         # TODO: implement foresight with brownfield rebuild
         # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
@@ -62,7 +64,7 @@ def brownfield(
             # Choose the best transition, i.e. highest decommission rank
             best_transition = select_best_transition(df_rank)
 
-            if best_transition["technology_destination"].contains("PPA"):
+            if "PPA" in best_transition["technology_destination"]:
                 best_candidates = list(
                     filter(
                         lambda asset: (
@@ -81,8 +83,7 @@ def brownfield(
                             asset.technology == best_transition["technology_origin"]
                         )
                         & (asset.region == best_transition["region"])
-                        & (asset.product == best_transition["product"])
-                        & (asset.ppa_allowed == False),
+                        & (asset.product == best_transition["product"]),
                         candidates,
                     )
                 )
