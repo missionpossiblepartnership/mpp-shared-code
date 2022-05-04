@@ -30,6 +30,7 @@ class Asset:
         retrofit=False,
         rebuild=False,
         greenfield=False,
+        ppa_allowed=True,
     ):
         # Unique ID to identify and compare assets
         self.uuid = uuid4().hex
@@ -50,6 +51,7 @@ class Asset:
         self.greenfield = greenfield
         self.asset_lifetime = asset_lifetime  # unit: years
         self.technology_classification = technology_classification
+        self.ppa_allowed = ppa_allowed
 
     def __str__(self):
         return f"<Asset with UUID {self.uuid}, technology {self.technology} in region {self.region}>"

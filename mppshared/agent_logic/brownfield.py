@@ -62,16 +62,30 @@ def brownfield(
             # Choose the best transition, i.e. highest decommission rank
             best_transition = select_best_transition(df_rank)
 
-            best_candidates = list(
-                filter(
-                    lambda asset: (
-                        asset.technology == best_transition["technology_origin"]
+            if best_transition["technology_destination"].contains("PPA"):
+                best_candidates = list(
+                    filter(
+                        lambda asset: (
+                            asset.technology == best_transition["technology_origin"]
+                        )
+                        & (asset.region == best_transition["region"])
+                        & (asset.product == best_transition["product"])
+                        & (asset.ppa_allowed == True),
+                        candidates,
                     )
-                    & (asset.region == best_transition["region"])
-                    & (asset.product == best_transition["product"]),
-                    candidates,
                 )
-            )
+            else:
+                best_candidates = list(
+                    filter(
+                        lambda asset: (
+                            asset.technology == best_transition["technology_origin"]
+                        )
+                        & (asset.region == best_transition["region"])
+                        & (asset.product == best_transition["product"])
+                        & (asset.ppa_allowed == False),
+                        candidates,
+                    )
+                )
             new_technology = best_transition["technology_destination"]
             # Remove best transition from ranking table
             df_rank = remove_transition(df_rank, best_transition)
