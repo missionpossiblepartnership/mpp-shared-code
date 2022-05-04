@@ -10,8 +10,8 @@ LOG_FORMATTER = logging.Formatter(
 )
 
 ### SECTOR CHOICE ###
-SECTOR = "chemicals"
-# SECTOR = "aluminium"
+# SECTOR = "chemicals"
+SECTOR = "aluminium"
 
 ### RUN CONFIGURATION ###
 
