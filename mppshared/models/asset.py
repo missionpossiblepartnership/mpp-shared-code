@@ -320,6 +320,7 @@ def make_new_asset(
             df_technology_characteristics["technology"]
             == asset_transition["technology_destination"]
         )
+        & (df_technology_characteristics["year"] == year)
     ]
 
     return Asset(
@@ -329,7 +330,7 @@ def make_new_asset(
         year_commissioned=year,
         annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
         cuf=CUF_UPPER_THRESHOLD,
-        asset_lifetime=technology_characteristics["technology_lifetime"],
+        asset_lifetime=technology_characteristics["technology_lifetime"].values[0],
         technology_classification=technology_characteristics[
             "technology_classification"
         ],
