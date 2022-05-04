@@ -11,6 +11,7 @@ from mppshared.config import (
     START_YEAR,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
+from mppshared.solver.debugging_outputs import create_table_asset_transition_sequences
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -183,6 +184,12 @@ def calculate_outputs(pathway, sensitivity, sector):
         sector=sector,
         products=PRODUCTS[sector],
     )
+
+    
+    # Create summary table of asset transitions
+    logger.info("Creating table with asset transition sequences.")
+    df_transitions = create_table_asset_transition_sequences(importer)
+    importer.export_data(df_transitions, f"asset_transition_sequences_sensitivity_{sensitivity}.csv", "final")
 
     # Create output table
     data = []
