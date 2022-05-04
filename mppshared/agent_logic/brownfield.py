@@ -2,6 +2,7 @@
 
 from copy import deepcopy
 from operator import methodcaller
+import numpy as np
 
 from mppshared.agent_logic.agent_logic_functions import (
     remove_transition, select_best_transition)
@@ -86,6 +87,8 @@ def brownfield(
         tentative_stack = deepcopy(new_stack)
         origin_technology = asset_to_update.technology
         tentative_stack.update_asset(asset_to_update, new_technology=new_technology)
+
+
         # Check constraints with tentative new stack
         no_constraint_hurt = check_constraints(
             pathway=pathway,
@@ -105,6 +108,8 @@ def brownfield(
             if best_transition["switch_type"] == "brownfield_newbuild":
                 asset_to_update.rebuild = True
 
+            # TODO: does this work?
+            # asset_to_update.technology = new_technology
             new_stack.update_asset(
                 asset_to_update,
                 new_technology=new_technology,

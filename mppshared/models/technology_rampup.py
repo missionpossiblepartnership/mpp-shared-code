@@ -30,20 +30,25 @@ class TechnologyRampup:
     def create_rampup_df(self, start_year: int, end_year: int, maximum_asset_additions: int, maximum_capacity_growth_rate: float):
         """Create DataFrame indexed by year with maximum number of asset additions."""
 
-        df_rampup = pd.DataFrame(index=np.arange(START_YEAR, END_YEAR+1), columns=["maximum_asset_number", "discrete_asset_additions", "growth_rate_asset_additions"])
+        # Rampup DataFrame needs to start one year before model to account for technologies that become mature in model start year
+        df_rampup = pd.DataFrame(index=np.arange(START_YEAR-1, END_YEAR+1), 
+        columns=["maximum_asset_additions", "maximum_asset_number", "discrete_asset_additions", "growth_rate_asset_additions"]
+        )
 
         # Zero assets before start year
-        df_rampup.loc[START_YEAR:start_year-1, "maximum_asset_number"] = 0
-        df_rampup.loc[start_year, "discrete_asset_additions"] = maximum_asset_additions
+        df_rampup.loc[START_YEAR-1:start_year-1, "maximum_asset_additions"] = 0
+        df_rampup.loc[START_YEAR-1:start_year-1, "maximum_asset_number"] = 0
+        df_rampup.loc[start_year:start_year+end_year+1, "discrete_asset_additions"] = maximum_asset_additions
         df_rampup.loc[start_year, "growth_rate_asset_additions"] = 0
 
         # Maximum asset number needs to fulfill both constraints on maximum discrete asset additions and maximum capacity growth rate 
-        for year in np.arange(start_year+1, end_year+2):
-            df_rampup.loc[year-1, "maximum_asset_number"] = max(
-                df_rampup.loc[year-1, "discrete_asset_additions"], df_rampup.loc[year-1, "growth_rate_asset_additions"]
+        for year in np.arange(start_year, end_year+1):
+            df_rampup.loc[year, "maximum_asset_additions"] = max(
+                df_rampup.loc[year, "discrete_asset_additions"], df_rampup.loc[year, "growth_rate_asset_additions"]
             )
-            df_rampup.loc[year, "discrete_asset_additions"] = df_rampup.loc[year-1, "discrete_asset_additions"] + maximum_asset_additions
-            df_rampup.loc[year, "growth_rate_asset_additions"] = df_rampup.loc[year-1, "maximum_asset_number"] * (1+maximum_capacity_growth_rate)
+            df_rampup.loc[year, "maximum_asset_number"] = df_rampup.loc[year-1, "maximum_asset_number"] + df_rampup.loc[year, "maximum_asset_additions"]
+            df_rampup.loc[year+1, "growth_rate_asset_additions"] = df_rampup.loc[year, "maximum_asset_number"] * maximum_capacity_growth_rate
         
-        df_rampup["maximum_asset_number"] = df_rampup["maximum_asset_number"].apply(lambda x: np.floor(x))
-        return df_rampup["maximum_asset_number"]
+        df_rampup["maximum_asset_additions"] = df_rampup["maximum_asset_additions"].apply(lambda x: np.floor(x))
+        
+        return df_rampup.loc[START_YEAR:END_YEAR+1,["maximum_asset_additions"]]

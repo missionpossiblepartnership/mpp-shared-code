@@ -119,6 +119,9 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         technology_rampup=dict_technology_rampup
     )
 
+    #! Debug only
+    pathway.stacks[START_YEAR].assets = pathway.stacks[START_YEAR].assets[0:2]
+
     # Optimize asset stack on a yearly basis
     pathway = simulate(
         pathway=pathway,
