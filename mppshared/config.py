@@ -314,12 +314,14 @@ RANKING_CONFIG = {
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
     "chemicals": {
-        "maximum_plant_additions": 4,
-        "maximum_capacity_growth_rate": 0.3
+        "maximum_asset_additions": 4,
+        "maximum_capacity_growth_rate": 0.3,
+        "years_rampup_phase": 10
     },
     "aluminium": {
-        "maximum_plant_additions": 4,
-        "maximum_capacity_growth_rate": 0.3
+        "maximum_asset_additions": 4,
+        "maximum_capacity_growth_rate": 0.3,
+        "years_rampup_phase": 10
     }
 }
 
