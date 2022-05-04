@@ -10,8 +10,8 @@ LOG_FORMATTER = logging.Formatter(
 )
 
 ### SECTOR CHOICE ###
-SECTOR = "chemicals"
-# SECTOR = "aluminium"
+# SECTOR = "chemicals"
+SECTOR = "aluminium"
 
 ### RUN CONFIGURATION ###
 
@@ -182,9 +182,9 @@ MODEL_SCOPE = "Global"
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
-    # "bau",
+    "bau",
     # "fa",
-    "lc",
+    # "lc",
 ]
 
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
@@ -226,9 +226,9 @@ MAP_LOW_COST_POWER_REGIONS = {
         "Middle East": "Saudi Arabia",
         "Africa": "Namibia",
         "Oceania": "Australia",
-        "Latin America": "Brazil"
+        "Latin America": "Brazil",
     },
-    "aluminium": None
+    "aluminium": None,
 }
 
 # Carbon cost parameters
@@ -376,13 +376,17 @@ TRANSITIONAL_PERIOD_YEARS = {"chemicals": 30, "aluminium": 10}
 
 # Regional ban of technologies (sector-specific)
 REGIONAL_TECHNOLOGY_BAN = {
-    "chemicals":
-    {
+    "chemicals": {
         "China": [
-            "Natural Gas SMR + ammonia synthesis", "Natural Gas ATR + CCS + ammonia synthesis", "Oversized ATR + CCS", "Natural Gas SMR + CCS (process emissions only) + ammonia synthesis",
-             "Natural Gas SMR + CCS + ammonia synthesis", "Electrolyser + SMR + ammonia synthesis", "GHR + CCS + ammonia synthesis", "ESMR Gas + CCS + ammonia synthesis", 
+            "Natural Gas SMR + ammonia synthesis",
+            "Natural Gas ATR + CCS + ammonia synthesis",
+            "Oversized ATR + CCS",
+            "Natural Gas SMR + CCS (process emissions only) + ammonia synthesis",
+            "Natural Gas SMR + CCS + ammonia synthesis",
+            "Electrolyser + SMR + ammonia synthesis",
+            "GHR + CCS + ammonia synthesis",
+            "ESMR Gas + CCS + ammonia synthesis",
         ]
     },
-    "aluminium":
-        None
+    "aluminium": None,
 }

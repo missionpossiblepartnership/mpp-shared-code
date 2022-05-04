@@ -28,7 +28,8 @@ class Asset:
         asset_lifetime: int,
         technology_classification: str,
         retrofit=False,
-        rebuild=False
+        rebuild=False,
+        greenfield=False,
     ):
         # Unique ID to identify and compare assets
         self.uuid = uuid4().hex
@@ -46,6 +47,7 @@ class Asset:
         # Asset status parameters
         self.retrofit = retrofit
         self.rebuild = rebuild
+        self.greenfield = greenfield
         self.asset_lifetime = asset_lifetime  # unit: years
         self.technology_classification = technology_classification
 
@@ -204,7 +206,8 @@ class AssetStack:
                 "cuf": asset.cuf,
                 "asset_lifetime": asset.asset_lifetime,
                 "retrofit_status": asset.retrofit,
-                "rebuild_status": asset.rebuild
+                "rebuild_status": asset.rebuild,
+                "greenfield_status": asset.greenfield,
             }
             for asset in self.assets
         )
@@ -317,6 +320,7 @@ def make_new_asset(
             df_technology_characteristics["technology"]
             == asset_transition["technology_destination"]
         )
+        & (df_technology_characteristics["year"] == year)
     ]
 
     return Asset(
@@ -326,7 +330,7 @@ def make_new_asset(
         year_commissioned=year,
         annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
         cuf=CUF_UPPER_THRESHOLD,
-        asset_lifetime=technology_characteristics["technology_lifetime"],
+        asset_lifetime=technology_characteristics["technology_lifetime"].values[0],
         technology_classification=technology_characteristics[
             "technology_classification"
         ],
