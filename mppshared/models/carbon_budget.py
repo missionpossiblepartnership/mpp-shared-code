@@ -5,7 +5,7 @@ import plotly.io as pio
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.config import (CARBON_BUDGET_SECTOR_CSV, END_YEAR,
+from mppshared.config import (CARBON_BUDGET_SECTOR_CSV, END_YEAR, PRODUCTS,
                               SECTORAL_CARBON_BUDGETS, SECTORAL_PATHWAYS,
                               START_YEAR)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
@@ -14,10 +14,20 @@ pio.kaleido.scope.mathjax = None
 
 
 class CarbonBudget:
-    def __init__(self, sectoral_carbon_budgets: dict, pathway_shape: str):
+    def __init__(
+        self,
+        sectoral_carbon_budgets: dict,
+        pathway_shape: str,
+        sensitivity: str,
+        sector: str,
+        pathway: str,
+    ):
         self.budgets = sectoral_carbon_budgets
         self.pathway_shape = pathway_shape
         self.pathways = self.set_emission_pathways()
+        self.sensitivity = sensitivity
+        self.sector = sector
+        self.pathway = pathway
 
     def __repr__(self):
         return "Carbon Budget Class"
@@ -73,6 +83,13 @@ class CarbonBudget:
         if CARBON_BUDGET_SECTOR_CSV == True:
             # TODO: implement the carbon budget being read from a given CSV by the sector
             pass
+            importer = IntermediateDataImporter(
+                pathway=self.pathway,
+                sensitivity=self.sensitivity,
+                sector=self.sector,
+                products=PRODUCTS[self.sector],
+            )
+            df = importer.get_carbon_budget()
         else:
             df = self.pathways[sector]
             return df.loc[year, "annual_limit"]
