@@ -1,4 +1,4 @@
-import sys
+import os
 from pathlib import Path
 
 import pandas as pd
@@ -28,11 +28,18 @@ class IntermediateDataImporter:
         self.products = products
         self.pathway = pathway
         self.sensitivity = sensitivity
+
+        # Initialize file paths
         self.export_dir = parent_path.joinpath(f"data/{sector}/{pathway}/{sensitivity}")
         self.intermediate_path = self.export_dir.joinpath("intermediate")
         self.stack_tracker_path = self.export_dir.joinpath("stack_tracker")
         self.final_path = self.export_dir.joinpath("final")
         self.aggregate_export_dir = parent_path.joinpath("output/")
+
+        # Create file paths if not yet existent
+        for path in [self.export_dir, self.intermediate_path, self.stack_tracker_path, self.final_path]:
+            if not os.path.exists(path):
+                os.makedirs(path)
 
     def export_data(
         self,
