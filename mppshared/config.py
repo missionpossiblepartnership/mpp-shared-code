@@ -340,7 +340,15 @@ REGIONAL_PRODUCTION_SHARES = {
 
 # Sectoral carbon budget (scope 1 and 2 CO2 emissions, in GtCO2)
 # Carbon budget sector CSV flag, if True reads in the specific carbon budget for the sector in a CSV
-CARBON_BUDGET_SECTOR_CSV = False
+CARBON_BUDGET_SECTOR_CSV = {
+    "aluminium": True,
+    # "cement": False,
+    "chemicals": False,
+    # "steel": False,
+    # "aviation": False,
+    # "shipping": False,
+    # "trucking": False,
+}
 SECTORAL_CARBON_BUDGETS = {
     "aluminium": 11,
     # "cement": 42,

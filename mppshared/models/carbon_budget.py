@@ -18,16 +18,12 @@ class CarbonBudget:
         self,
         sectoral_carbon_budgets: dict,
         pathway_shape: str,
-        sensitivity: str,
-        sector: str,
-        pathway: str,
+        importer: IntermediateDataImporter,
     ):
         self.budgets = sectoral_carbon_budgets
         self.pathway_shape = pathway_shape
         self.pathways = self.set_emission_pathways()
-        self.sensitivity = sensitivity
-        self.sector = sector
-        self.pathway = pathway
+        self.importer = importer
 
     def __repr__(self):
         return "Carbon Budget Class"
@@ -80,23 +76,20 @@ class CarbonBudget:
 
     def get_annual_emissions_limit(self, year: int, sector: str) -> float:
         """Get scope 1 and 2 CO2 emissions limit for a specific year for the given sector"""
-        if CARBON_BUDGET_SECTOR_CSV == True:
-            # TODO: implement the carbon budget being read from a given CSV by the sector
-            pass
-            importer = IntermediateDataImporter(
-                pathway=self.pathway,
-                sensitivity=self.sensitivity,
-                sector=self.sector,
-                products=PRODUCTS[self.sector],
-            )
-            df = importer.get_carbon_budget()
+        if CARBON_BUDGET_SECTOR_CSV[sector] == True:
+            df = self.importer.get_carbon_budget()
+            df.set_index("year", inplace=True)
         else:
             df = self.pathways[sector]
-            return df.loc[year, "annual_limit"]
+        return df.loc[year, "annual_limit"]
 
     # TODO: implement
     def output_emissions_pathway(self, sector: str, importer: IntermediateDataImporter):
-        df = self.pathways[sector]
+        if CARBON_BUDGET_SECTOR_CSV[sector] == True:
+            df = self.importer.get_carbon_budget()
+            df.set_index("year", inplace=True)
+        else:
+            df = self.pathways[sector]
         fig = make_subplots()
         line_fig = px.line(df, x=df.index, y="annual_limit")
 
