@@ -7,8 +7,9 @@ import pandas as pd
 
 from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                               CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
-                              DECOMMISSION_RATES, INVESTMENT_CYCLES, LOG_LEVEL)
+                             GHGS, EMISSION_SCOPES, INVESTMENT_CYCLES, LOG_LEVEL)
 from mppshared.utility.utils import first, get_logger
+from mppshared.utility.dataframe_utility import get_emission_columns
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -117,7 +118,7 @@ class AssetStack:
         """Update an asset in AssetStack. This is done using the UUID to ensure correct updating."""
         uuid_update = asset_to_update.uuid
         asset_to_update.technology = new_technology
-        asset_to_update.new_classification = new_classification
+        asset_to_update.technology_classification = new_classification
         self.assets = [asset for asset in self.assets if asset.uuid is not uuid_update]
         self.assets.append(asset_to_update) 
 
@@ -177,8 +178,7 @@ class AssetStack:
         """
 
         # Optional filter by technology classification and product
-        assets = self.filter_assets(technology_classification=technology_classification) if technology_classification else self.assets
-        assets = self.filter_assets(product=product) if product else assets
+        assets = self.filter_assets(technology_classification=technology_classification, product=product)
 
         # Aggregate stack to DataFrame
         df = pd.DataFrame(
@@ -202,6 +202,43 @@ class AssetStack:
         except KeyError:
             # There are no assets
             return pd.DataFrame()
+
+    def calculate_emissions_stack(self, year: int, df_emissions: pd.DataFrame, technology_classification=None, product=None) -> dict:
+        """Calculate emissions of the current stack in MtGHG by GHG and scope, optionally filtered for technology classification and/or a specific product"""
+
+        # Sum emissions by GHG and scope
+        emission_columns = get_emission_columns(ghgs=GHGS, scopes=EMISSION_SCOPES)
+        dict_emissions = dict.fromkeys(emission_columns)
+
+        # Get DataFrame with annual production volume by product, region and technology (optionally filtered for technology classification and specific product)
+        df_stack = self.aggregate_stack(
+            aggregation_vars=["technology", "product", "region"], technology_classification=technology_classification, product=product
+        )
+
+        # If the stack DataFrame is empty, return 0 for all emissions
+        if df_stack.empty:
+            for scope in dict_emissions.keys():
+                dict_emissions[scope] = 0 
+            return dict_emissions
+
+        df_stack = df_stack.reset_index()
+
+        # Filter emissions DataFrame for the given year
+        df_emissions = df_emissions.reset_index()
+        df_emissions = df_emissions[(df_emissions.year == year)]
+
+        # Add emissions by GHG and scope to each technologyy
+        df_emissions_stack = df_stack.merge(
+            df_emissions, how="left", on=["technology", "product", "region"]
+        )
+
+        for emission_item in emission_columns:
+            dict_emissions[emission_item] = (
+                df_emissions_stack[emission_item]
+                * df_emissions_stack["annual_production_volume"]
+            ).sum()
+
+        return dict_emissions
 
     def export_stack_to_df(self) -> pd.DataFrame:
         """Format the entire AssetStack as a DataFrame (no aggregation)."""
