@@ -6,7 +6,7 @@ import pandas as pd
 from pandera import Bool
 from pyparsing import col
 
-from mppshared.config import LOG_LEVEL, REGIONAL_PRODUCTION_SHARES
+from mppshared.config import END_YEAR, LOG_LEVEL, REGIONAL_PRODUCTION_SHARES, YEAR_2050_EMISSIONS_CONSTRAINT
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
@@ -46,7 +46,7 @@ def check_constraints(
     if pathway.pathway != "bau":
         # Check constraint for annual emissions limit from carbon budget
         emissions_constraint = check_annual_carbon_budget_constraint(
-            pathway=pathway, stack=stack, product=product, year=year
+            pathway=pathway, stack=stack, product=product, year=year, transition_type=transition_type
         )
         # Check technology ramp-up constraint
         rampup_constraint = check_technology_rampup_constraint(
@@ -139,25 +139,35 @@ def get_regional_production_constraint_table(
 
 
 def check_annual_carbon_budget_constraint(
-    pathway: SimulationPathway, stack: AssetStack, product: str, year: int
+    pathway: SimulationPathway, stack: AssetStack, product: str, year: int, transition_type: str
 ) -> Bool:
     """Check if the stack exceeds the Carbon Budget defined in the pathway for the given product and year"""
-    # Create deep copy of pathway with updated tentative stack
-    temp_pathway = deepcopy(pathway)
-    temp_pathway.update_stack(year=year, stack=stack)
 
-    # TODO: improve hacky workaround
-    dict_stack_emissions = temp_pathway.calculate_emissions_stack(
-        year=year, product=product
-    )
+    # After a sector-specific year, all end-state newbuild capacity has to fulfill the 2050 emissions limit with a stack composed of only end-state technologies
+    if (transition_type == "greenfield") & (year >= YEAR_2050_EMISSIONS_CONSTRAINT[pathway.sector]):
+        limit = pathway.carbon_budget.get_annual_emissions_limit(
+            END_YEAR, pathway.sector
+        )
+
+        dict_stack_emissions = stack.calculate_emissions_stack(
+            year=year, df_emissions=pathway.emissions, technology_classification="end-state"
+        )
+        
+    # In other cases, the limit is equivalent to that year's emission limit
+    else:
+        limit = pathway.carbon_budget.get_annual_emissions_limit(
+            year, pathway.sector
+        )
+
+        dict_stack_emissions = stack.calculate_emissions_stack(
+            year=year, df_emissions=pathway.emissions, technology_classification=None 
+        )
+    
+    # Compare scope 1 and 2 CO2 emissions to the allowed limit in that year
     co2_scope1_2 = (
         dict_stack_emissions["co2_scope1"] + dict_stack_emissions["co2_scope2"]
     ) / 1e3  # Gt CO2
 
-    # TODO: integrate sector
-    limit = temp_pathway.carbon_budget.get_annual_emissions_limit(
-        year, temp_pathway.sector
-    )
     if np.round(co2_scope1_2, 2) <= np.round(limit, 2):
         return True
 

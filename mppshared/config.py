@@ -325,6 +325,12 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
     }
 }
 
+# Year from which newbuild capacity has to fulfill the 2050 emissions constraint
+YEAR_2050_EMISSIONS_CONSTRAINT = {
+    "chemicals": 2021,
+    "aluminium": 2045
+}
+
 # Share of demand in each region that needs to be fulfilled by production in that region
 REGIONAL_PRODUCTION_SHARES = {
     "chemicals": {
