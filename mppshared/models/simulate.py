@@ -110,6 +110,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
     carbon_budget = CarbonBudget(
         sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS,
         pathway_shape="linear",
+        sector=sector,
         importer=importer,
     )
     carbon_budget.output_emissions_pathway(sector=sector, importer=importer)

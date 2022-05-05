@@ -3,6 +3,7 @@
 from copy import deepcopy
 from operator import methodcaller
 import numpy as np
+import random
 
 from mppshared.agent_logic.agent_logic_functions import (
     remove_transition, select_best_transition, remove_all_transitions_with_destination_technology)
@@ -50,8 +51,7 @@ def brownfield(
 
     # Enact brownfield transitions while there are still candidates
     while (candidates != []) & (n_assets_transitioned <= MAX_ANNUAL_BROWNFIELD_TRANSITIONS[pathway.sector]):
-        # TODO: how do we avoid that all assets are retrofit at once in the beginning?
-        # TODO: implement foresight with brownfield rebuild
+        
         # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
         best_candidates = []
         while not best_candidates:
@@ -77,11 +77,8 @@ def brownfield(
             # Remove best transition from ranking table
             df_rank = remove_transition(df_rank, best_transition)
 
-        # If several candidates for best transition, choose asset with lowest annual production
-        # TODO: What happens if several assets have same annual production?
-        asset_to_update = min(
-            best_candidates, key=methodcaller("get_annual_production_volume")
-        )
+        # If several candidates for best transition, choose asset for transition randomly
+        asset_to_update = random.choice(best_candidates)
 
         # Update asset tentatively (needs deepcopy to provide changes to original stack)
         tentative_stack = deepcopy(new_stack)
@@ -108,20 +105,21 @@ def brownfield(
             if best_transition["switch_type"] == "brownfield_newbuild":
                 asset_to_update.rebuild = True
 
+            # Update asset stack
             new_stack.update_asset(
                 asset_to_update,
                 new_technology=new_technology,
                 new_classification=best_transition["technology_classification"]
             )
+
+            # Remove asset from candidates
+            candidates.remove(asset_to_update)
             n_assets_transitioned += 1
 
-        # If the emissions constraint is hurt, remove asset from list of candidates and try again
-        if dict_constraints["emissions_constraint"]==False:
-            candidates.remove(asset_to_update)
-
-        # If only the technology ramp-up constraint is hurt, remove that technology from the ranking table and try again
-        elif dict_constraints["rampup_constraint"]==False:
+        # If the emissions constraint and/or the technology ramp-up constraint is hurt, remove remove that destination technology from the ranking table and try again
+        elif (dict_constraints["emissions_constraint"]==False) | dict_constraints["rampup_constraint"]==False:
             df_rank = remove_all_transitions_with_destination_technology(df_rank, best_transition["technology_destination"])
+        
             
     logger.debug(
         f"{n_assets_transitioned} assets transitioned in year {year} for product {product} in sector {pathway.sector}"
