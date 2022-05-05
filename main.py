@@ -22,7 +22,7 @@ funcs = {
     "MAKE_RANKINGS": make_rankings,
     "SIMULATE_PATHWAY": simulate_pathway,
     "CALCULATE_OUTPUTS": calculate_outputs,
-    # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs
+    "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs
 }
 
 def _run_model(pathway, sensitivity):

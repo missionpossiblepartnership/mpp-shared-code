@@ -28,7 +28,7 @@ def select_best_transition(df_rank: pd.DataFrame) -> dict:
         The highest ranking technology transition
 
     """
-    # Best transition has minimum rank
+    # Best transition has minimum rank (if same rank, chosen randomly with sample)
     return (
         df_rank[df_rank["rank"] == df_rank["rank"].min()]
         .sample(n=1)
