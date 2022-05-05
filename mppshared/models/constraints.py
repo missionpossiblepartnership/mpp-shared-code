@@ -59,7 +59,10 @@ def check_constraints(
             "rampup_constraint": rampup_constraint
         }
     else:
-        return True
+        return {
+            "emissions_constraint": True,
+            "rampup_constraint": True
+        }
 
 def check_technology_rampup_constraint(
     pathway: SimulationPathway, stack: AssetStack, year: int
