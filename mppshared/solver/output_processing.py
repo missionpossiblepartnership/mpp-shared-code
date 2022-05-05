@@ -1,8 +1,8 @@
 """ Process outputs to standardised output table."""
-import pandas as pd
-from pandas import CategoricalDtype
 import numpy as np
+import pandas as pd
 import plotly.express as px
+from pandas import CategoricalDtype
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
@@ -21,26 +21,51 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def create_table_asset_transition_sequences(importer: IntermediateDataImporter) -> pd.DataFrame:
-    
+def create_table_asset_transition_sequences(
+    importer: IntermediateDataImporter,
+) -> pd.DataFrame:
+
     # Get initial stack and melt to long for that year
     multiindex = ["uuid", "product", "region", "parameter"]
-    df = importer.get_asset_stack(START_YEAR) 
-    df = df[["uuid", "product", "region", "technology", "annual_production_capacity", "annual_production_volume", "retrofit_status"]]  
+    df = importer.get_asset_stack(START_YEAR)
+    df = df[
+        [
+            "uuid",
+            "product",
+            "region",
+            "technology",
+            "annual_production_capacity",
+            "annual_production_volume",
+            "retrofit_status",
+        ]
+    ]
     df = df.set_index(["product", "region", "uuid"])
     df = df.melt(var_name="parameter", value_name=START_YEAR, ignore_index=False)
     df = df.sort_index()
     df = df.reset_index(drop=False).set_index(multiindex)
-    
-    for year in np.arange(START_YEAR+1, END_YEAR + 1):
+
+    for year in np.arange(START_YEAR + 1, END_YEAR + 1):
 
         # Get asset stack for that year
         df_stack = importer.get_asset_stack(year=year)
-        df_stack = df_stack[["uuid", "product", "region", "technology", "annual_production_capacity", "annual_production_volume", "retrofit_status", "rebuild_status"]]  
-        
+        df_stack = df_stack[
+            [
+                "uuid",
+                "product",
+                "region",
+                "technology",
+                "annual_production_capacity",
+                "annual_production_volume",
+                "retrofit_status",
+                "rebuild_status",
+            ]
+        ]
+
         # Reformat stack DataFrame
         df_stack = df_stack.set_index(["product", "region", "uuid"])
-        df_stack = df_stack.melt(var_name="parameter", value_name=year, ignore_index=False)
+        df_stack = df_stack.melt(
+            var_name="parameter", value_name=year, ignore_index=False
+        )
         df_stack = df_stack.reset_index().set_index("uuid")
         df_stack = df_stack.sort_index()
 
@@ -50,16 +75,29 @@ def create_table_asset_transition_sequences(importer: IntermediateDataImporter) 
 
         existing_uuids = [uuid for uuid in current_uuids if uuid in previous_uuids]
         new_uuids = [uuid for uuid in current_uuids if uuid not in previous_uuids]
-        vanished_uuids = [uuid for uuid in previous_uuids if uuid not in current_uuids] # Decommissioned assets (not relevant)
+        vanished_uuids = [
+            uuid for uuid in previous_uuids if uuid not in current_uuids
+        ]  # Decommissioned assets (not relevant)
 
-        newbuild_stack = df_stack[df_stack.index.isin(new_uuids)].reset_index().set_index(multiindex).sort_index()
-        existing_stack = df_stack[df_stack.index.isin(existing_uuids)].reset_index().set_index(multiindex).sort_index()
+        newbuild_stack = (
+            df_stack[df_stack.index.isin(new_uuids)]
+            .reset_index()
+            .set_index(multiindex)
+            .sort_index()
+        )
+        existing_stack = (
+            df_stack[df_stack.index.isin(existing_uuids)]
+            .reset_index()
+            .set_index(multiindex)
+            .sort_index()
+        )
 
         # Join existing stack and add newbuild stack
         df[year] = existing_stack[year]
         df = pd.concat([df, newbuild_stack])
 
     return df
+
 
 def _calculate_number_of_assets(df_stack):
     logger.info("-- Calculating number of assets")
@@ -232,7 +270,11 @@ def calculate_outputs(pathway, sensitivity, sector):
     # Create summary table of asset transitions
     logger.info("Creating table with asset transition sequences.")
     df_transitions = create_table_asset_transition_sequences(importer)
-    importer.export_data(df_transitions, f"asset_transition_sequences_sensitivity_{sensitivity}.csv", "final")
+    importer.export_data(
+        df_transitions,
+        f"asset_transition_sequences_sensitivity_{sensitivity}.csv",
+        "final",
+    )
 
     # Create output table
     data = []
@@ -286,6 +328,7 @@ def calculate_outputs(pathway, sensitivity, sector):
     )
     logger.info("All data for all years processed.")
 
+
 def create_debugging_outputs(pathway: str, sensitivity: str, sector: str):
     """Create technology roadmap and emissions trajectory for quick debugging and refinement."""
 
@@ -299,25 +342,28 @@ def create_debugging_outputs(pathway: str, sensitivity: str, sector: str):
     output_emissions_trajectory(importer)
     output_technology_roadmap(importer)
 
+
 def output_technology_roadmap(importer: IntermediateDataImporter):
     df_roadmap = create_technology_roadmap(importer)
     importer.export_data(df_roadmap, "technology_roadmap.csv", "final")
     plot_technology_roadmap(importer=importer, df_roadmap=df_roadmap)
 
+
 def output_emissions_trajectory(importer: IntermediateDataImporter):
     df_trajectory = create_emissions_trajectory(importer)
-    df_wide = pd.pivot_table(df_trajectory, values="value", index="variable", columns="year")
+    df_wide = pd.pivot_table(
+        df_trajectory, values="value", index="variable", columns="year"
+    )
     importer.export_data(df_wide, "emissions_trajectory.csv", "final")
     plot_emissions_trajectory(importer=importer, df_trajectory=df_trajectory)
+
 
 def create_technology_roadmap(importer: IntermediateDataImporter) -> pd.DataFrame:
     """Create technology roadmap that shows evolution of stack (supply mix) over model horizon."""
 
     # TODO: filter by product
     # Annual production volume in MtNH3 by technology
-    technologies = importer.get_technology_characteristics()[
-        "technology"
-    ].unique()
+    technologies = importer.get_technology_characteristics()["technology"].unique()
     df_roadmap = pd.DataFrame(data={"technology": technologies})
 
     for year in np.arange(START_YEAR, END_YEAR + 1):
@@ -330,12 +376,12 @@ def create_technology_roadmap(importer: IntermediateDataImporter) -> pd.DataFram
         )
 
         # Merge with roadmap DataFrame
-        df_roadmap = df_roadmap.merge(df_sum, on=["technology"], how="left").fillna(
-            0
-        )
+        df_roadmap = df_roadmap.merge(df_sum, on=["technology"], how="left").fillna(0)
 
     # Sort technologies as required
-    df_roadmap = df_roadmap.loc[~(df_roadmap["technology"]=="Waste Water to ammonium nitrate")]
+    df_roadmap = df_roadmap.loc[
+        ~(df_roadmap["technology"] == "Waste Water to ammonium nitrate")
+    ]
     technologies = [
         "Natural Gas SMR + ammonia synthesis",
         "Coal Gasification + ammonia synthesis",
@@ -357,9 +403,7 @@ def create_technology_roadmap(importer: IntermediateDataImporter) -> pd.DataFram
         "Biomass Gasification + ammonia synthesis",
         "Waste to ammonia",
     ]
-    tech_order = CategoricalDtype(
-        technologies, ordered=True
-    )
+    tech_order = CategoricalDtype(technologies, ordered=True)
     df_roadmap["technology"] = df_roadmap["technology"].astype(tech_order)
 
     df_roadmap = df_roadmap.sort_values(["technology"])
@@ -371,10 +415,13 @@ def create_technology_roadmap(importer: IntermediateDataImporter) -> pd.DataFram
     }
     df_roadmap["technology"] = df_roadmap["technology"].astype(str)
     df_roadmap["technology"] = df_roadmap["technology"].replace(shortened_tech_names)
-    
+
     return df_roadmap
 
-def plot_technology_roadmap(importer: IntermediateDataImporter, df_roadmap: pd.DataFrame):
+
+def plot_technology_roadmap(
+    importer: IntermediateDataImporter, df_roadmap: pd.DataFrame
+):
     """Plot the technology roadmap and save as .html"""
 
     # Melt roadmap DataFrame for easy plotting
@@ -397,30 +444,39 @@ def plot_technology_roadmap(importer: IntermediateDataImporter, df_roadmap: pd.D
         auto_open=False,
     )
 
+
 def create_emissions_trajectory(importer: IntermediateDataImporter) -> pd.DataFrame:
     """Create emissions trajectory for scope 1, 2, 3 along with demand."""
 
     # Get emissions for each technology
     df_emissions = importer.get_emissions()
     df_trajectory = pd.DataFrame()
-    
+
     greenhousegases = ["co2", "ch4", "n2o"]
-    emission_cols = [f"{ghg}_{scope}" for ghg in greenhousegases for scope in EMISSION_SCOPES] + ["co2_scope1_captured"]
+    emission_cols = [
+        f"{ghg}_{scope}" for ghg in greenhousegases for scope in EMISSION_SCOPES
+    ] + ["co2_scope1_captured"]
 
     for year in np.arange(START_YEAR, END_YEAR + 1):
 
         # Filter emissions for the year
-        df_em = df_emissions.loc[df_emissions["year"]==year]
+        df_em = df_emissions.loc[df_emissions["year"] == year]
 
         # Calculate annual production volume by technology, merge with emissions and sum for each scope
         df_stack = importer.get_asset_stack(year=year)
-        df_sum = df_stack.groupby(["product", "region", "technology"], as_index=True).sum()
+        df_sum = df_stack.groupby(
+            ["product", "region", "technology"], as_index=True
+        ).sum()
         df_sum = df_sum[["annual_production_volume"]].reset_index()
-        df_stack_emissions = df_sum.merge(df_em, on=["product", "technology", "region"], how="left")
+        df_stack_emissions = df_sum.merge(
+            df_em, on=["product", "technology", "region"], how="left"
+        )
 
         # Multiply production volume with emission factor for each region and technology
         for col in emission_cols:
-            df_stack_emissions[f"emissions_{col}"] = df_stack_emissions["annual_production_volume"] * df_stack_emissions[col]
+            df_stack_emissions[f"emissions_{col}"] = (
+                df_stack_emissions["annual_production_volume"] * df_stack_emissions[col]
+            )
 
         # Melt to long format and concatenate
         cols_to_keep = [f"emissions_{col}" for col in emission_cols]
@@ -431,7 +487,10 @@ def create_emissions_trajectory(importer: IntermediateDataImporter) -> pd.DataFr
 
     return df_trajectory
 
-def plot_emissions_trajectory(importer: IntermediateDataImporter, df_trajectory: pd.DataFrame):
+
+def plot_emissions_trajectory(
+    importer: IntermediateDataImporter, df_trajectory: pd.DataFrame
+):
     """Plot emissions trajectory."""
 
     fig = make_subplots()
@@ -448,6 +507,7 @@ def plot_emissions_trajectory(importer: IntermediateDataImporter, df_trajectory:
         filename=str(importer.final_path.joinpath("emission_trajectory.html")),
         auto_open=False,
     )
+
 
 def sort_technologies_by_classification(df: pd.DataFrame) -> pd.DataFrame:
     """Sort technologies by conventional, transition, end-state.
@@ -477,6 +537,7 @@ def sort_technologies_by_classification(df: pd.DataFrame) -> pd.DataFrame:
     df = df.sort_values(["tech_class", "technology"])
 
     return df
+
 
 def get_tech_classification() -> dict:
     return {

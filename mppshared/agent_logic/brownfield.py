@@ -4,7 +4,9 @@ from copy import deepcopy
 from operator import methodcaller
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_transition, select_best_transition)
+    remove_transition,
+    select_best_transition,
+)
 from mppshared.config import LOG_LEVEL
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway

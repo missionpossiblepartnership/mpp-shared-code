@@ -7,14 +7,22 @@ import numpy as np
 import pandas as pd
 
 from mppshared.calculate.calculate_cost import discount_costs
-from mppshared.config import (EMISSION_SCOPES, FINAL_CARBON_COST, GHGS,
-                              INITIAL_CARBON_COST, PRODUCTS,
-                              TECHNOLOGY_MORATORIUM, TRANSITIONAL_PERIOD_YEARS)
+from mppshared.config import (
+    EMISSION_SCOPES,
+    FINAL_CARBON_COST,
+    GHGS,
+    INITIAL_CARBON_COST,
+    PRODUCTS,
+    TECHNOLOGY_MORATORIUM,
+    TRANSITIONAL_PERIOD_YEARS,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.solver.input_loading import filter_df_for_development
 from mppshared.utility.dataframe_utility import (
-    add_column_header_suffix, get_grouping_columns_for_npv_calculation)
+    add_column_header_suffix,
+    get_grouping_columns_for_npv_calculation,
+)
 from mppshared.utility.function_timer_utility import timer_func
 from mppshared.utility.log_utility import get_logger
 

@@ -5,9 +5,14 @@ from xmlrpc.client import Boolean
 
 import pandas as pd
 
-from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                              CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
-                              DECOMMISSION_RATES, INVESTMENT_CYCLES, LOG_LEVEL)
+from mppshared.config import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CUF_LOWER_THRESHOLD,
+    CUF_UPPER_THRESHOLD,
+    DECOMMISSION_RATES,
+    INVESTMENT_CYCLES,
+    LOG_LEVEL,
+)
 from mppshared.utility.utils import first, get_logger
 
 logger = get_logger(__name__)
@@ -28,7 +33,7 @@ class Asset:
         asset_lifetime: int,
         technology_classification: str,
         retrofit=False,
-        rebuild=False
+        rebuild=False,
     ):
         # Unique ID to identify and compare assets
         self.uuid = uuid4().hex
@@ -204,7 +209,7 @@ class AssetStack:
                 "cuf": asset.cuf,
                 "asset_lifetime": asset.asset_lifetime,
                 "retrofit_status": asset.retrofit,
-                "rebuild_status": asset.rebuild
+                "rebuild_status": asset.rebuild,
             }
             for asset in self.assets
         )

@@ -37,7 +37,12 @@ class IntermediateDataImporter:
         self.aggregate_export_dir = parent_path.joinpath("output/")
 
         # Create file paths if not yet existent
-        for path in [self.export_dir, self.intermediate_path, self.stack_tracker_path, self.final_path]:
+        for path in [
+            self.export_dir,
+            self.intermediate_path,
+            self.stack_tracker_path,
+            self.final_path,
+        ]:
             if not os.path.exists(path):
                 os.makedirs(path)
 

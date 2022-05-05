@@ -98,4 +98,3 @@ class CarbonBudget:
     def pathway_getter(self, sector: str, year: int, value_type: str):
         mapper = {"annual": "annual_limit", "cumulative": "cumulative_limit"}
         return self.pathways[sector].loc[year][mapper[value_type]]
-

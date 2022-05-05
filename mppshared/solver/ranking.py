@@ -4,9 +4,14 @@ import sys
 import numpy as np
 import pandas as pd
 
-from mppshared.config import (EMISSION_SCOPES_RANKING, GHGS_RANKING,
-                              NUMBER_OF_BINS_RANKING, PRODUCTS, RANK_TYPES,
-                              RANKING_CONFIG)
+from mppshared.config import (
+    EMISSION_SCOPES_RANKING,
+    GHGS_RANKING,
+    NUMBER_OF_BINS_RANKING,
+    PRODUCTS,
+    RANK_TYPES,
+    RANKING_CONFIG,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.utils import get_logger
 

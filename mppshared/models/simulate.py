@@ -1,13 +1,17 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from mppshared.agent_logic.agent_logic_functions import \
-    adjust_capacity_utilisation
+from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
 from mppshared.agent_logic.brownfield import brownfield
 from mppshared.agent_logic.decommission import decommission
 from mppshared.agent_logic.greenfield import greenfield
-from mppshared.config import (END_YEAR, LOG_LEVEL, PRODUCTS,
-                              SECTORAL_CARBON_BUDGETS, START_YEAR)
+from mppshared.config import (
+    END_YEAR,
+    LOG_LEVEL,
+    PRODUCTS,
+    SECTORAL_CARBON_BUDGETS,
+    START_YEAR,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.simulation_pathway import SimulationPathway
