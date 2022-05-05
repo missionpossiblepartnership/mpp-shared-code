@@ -24,6 +24,7 @@ run_config = {
     "MAKE_RANKINGS",
     "SIMULATE_PATHWAY",
     "CALCULATE_OUTPUTS",
+    "CREATE_DEBUGGING_OUTPUTS",
     # "EXPORT_OUTPUTS",
     # "PLOT_AVAILABILITIES"
     # "MERGE_OUTPUTS"
@@ -182,16 +183,15 @@ MODEL_SCOPE = "Global"
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
-    # "bau",
+    "bau",
     # "fa",
-    "lc",
+    # "lc",
 ]
 
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
 SENSITIVITIES = [
     "def",
 ]
-
 ### SECTOR-SPECIFIC PARAMETERS ###
 
 # Products produced by each sector
@@ -205,6 +205,13 @@ INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_as
 
 ### RANKING ###
 NUMBER_OF_BINS_RANKING = 10
+
+
+MAX_ANNUAL_BROWNFIELD_TRANSITIONS = {
+    "chemicals": 1000,
+    "aluminium": 10
+}
+
 
 # GHGs and Emission scopes included in weighting when ranking technology transitions
 GHGS_RANKING = [
