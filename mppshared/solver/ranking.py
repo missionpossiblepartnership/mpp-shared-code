@@ -115,8 +115,8 @@ def rank_technology(
         df["sum_emissions_delta_normalized"] * config["emissions"]
     ) + (df["tco_normalized"] * config["tco"])
     logger.debug("Adding binned rankings")
-    # df_rank = df.groupby(["year"]).apply(_add_binned_rankings, rank_type, pathway)
-    df_rank = df
+    df_rank = df.groupby(["year"]).apply(_add_binned_rankings, rank_type, pathway)
+    # df_rank = df
 
     # Calculate final rank for the transition type
     logger.debug("Calculating final rank")

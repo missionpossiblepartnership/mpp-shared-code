@@ -55,13 +55,13 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             pathway.export_stack_to_csv(year)
 
             # Decommission assets
-            if pathway.pathway != "bau":
-                start = timer()
-                pathway = decommission(pathway=pathway, year=year, product=product)
-                end = timer()
-                logger.debug(
-                    f"Time elapsed for decommission in year {year}: {timedelta(seconds=end-start)} seconds"
-                )
+            # if pathway.pathway != "bau":
+            start = timer()
+            pathway = decommission(pathway=pathway, year=year, product=product)
+            end = timer()
+            logger.debug(
+                f"Time elapsed for decommission in year {year}: {timedelta(seconds=end-start)} seconds"
+            )
 
             # Renovate and rebuild assets (brownfield transition)
             start = timer()
@@ -98,7 +98,9 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
 
     # Create carbon budget
     carbon_budget = CarbonBudget(
-        sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS, pathway_shape="linear"
+        sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS,
+        pathway_shape="linear",
+        importer=importer,
     )
     carbon_budget.output_emissions_pathway(sector=sector, importer=importer)
 

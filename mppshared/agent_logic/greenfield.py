@@ -60,7 +60,9 @@ def greenfield(
             row["annual_production_volume_minimum"] - row["annual_production_volume"]
         )
         number_new_assets = np.ceil(deficit / ASSUMED_ANNUAL_PRODUCTION_CAPACITY)
-        region_rank_filter = get_region_rank_filter(region=row["region"], sector=pathway.sector)
+        region_rank_filter = get_region_rank_filter(
+            region=row["region"], sector=pathway.sector
+        )
         df_rank_region = df_rank.loc[df_rank["region"].isin(region_rank_filter)]
 
         # Build the required number of assets to meet the minimum production volume
@@ -159,6 +161,7 @@ def select_asset_for_greenfield(
             df_technology_characteristics=pathway.df_technology_characteristics,
             year=year,
         )
+        new_asset.greenfield = True
 
         # Tentatively update the stack and check constraints
         tentative_stack = deepcopy(stack)
@@ -186,9 +189,10 @@ def select_asset_for_greenfield(
     # If ranking table empty, no greenfield construction possible
     raise ValueError
 
+
 def get_region_rank_filter(region: str, sector: str) -> list:
     """Return list of (sub)regions if the sector has low-cost power regions mapped to the overall regions"""
     if MAP_LOW_COST_POWER_REGIONS[sector]:
-       if region in MAP_LOW_COST_POWER_REGIONS[sector].keys(): 
-           return [region, MAP_LOW_COST_POWER_REGIONS[sector][region]]
+        if region in MAP_LOW_COST_POWER_REGIONS[sector].keys():
+            return [region, MAP_LOW_COST_POWER_REGIONS[sector][region]]
     return [region]
