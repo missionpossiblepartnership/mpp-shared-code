@@ -77,6 +77,9 @@ class IntermediateDataImporter:
     def get_initial_asset_stack(self):
         return pd.read_csv(self.intermediate_path.joinpath("initial_asset_stack.csv"))
 
+    def get_carbon_budget(self):
+        return pd.read_csv(self.intermediate_path.joinpath("carbon_budget.csv"))
+
     def get_technology_characteristics(self):
         return pd.read_csv(
             self.intermediate_path.joinpath("technology_characteristics.csv")
