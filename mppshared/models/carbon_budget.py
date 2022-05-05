@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -7,21 +5,24 @@ import plotly.io as pio
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.config import (
-    END_YEAR,
-    SECTORAL_CARBON_BUDGETS,
-    SECTORAL_PATHWAYS,
-    START_YEAR,
-)
+from mppshared.config import (CARBON_BUDGET_SECTOR_CSV, END_YEAR, PRODUCTS,
+                              SECTORAL_CARBON_BUDGETS, SECTORAL_PATHWAYS,
+                              START_YEAR)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
 pio.kaleido.scope.mathjax = None
 
 
 class CarbonBudget:
-    def __init__(self, sectoral_carbon_budgets: dict, pathway_shape: str):
+    def __init__(
+        self,
+        sectoral_carbon_budgets: dict,
+        pathway_shape: str,
+        importer: IntermediateDataImporter,
+    ):
         self.budgets = sectoral_carbon_budgets
         self.pathway_shape = pathway_shape
+        self.importer = importer
         self.pathways = self.set_emission_pathways()
 
     def __repr__(self):
@@ -42,26 +43,30 @@ class CarbonBudget:
 
     def create_emissions_pathway(self, pathway_shape: str, sector: str) -> pd.DataFrame:
         """Create emissions pathway for specified sector according to given shape"""
-        index = pd.RangeIndex(START_YEAR, END_YEAR + 1, step=1, name="year")
+        if CARBON_BUDGET_SECTOR_CSV[sector] == True:
+            df = self.importer.get_carbon_budget()
+            df.set_index("year", inplace=True)
+        else:
+            index = pd.RangeIndex(START_YEAR, END_YEAR + 1, step=1, name="year")
 
-        # Annual emissions are reduced linearly
-        # TODO: implement in a better way
-        trajectory = SECTORAL_PATHWAYS[sector]
-        if pathway_shape == "linear":
-            initial_level = np.full(
-                trajectory["action_start"] - START_YEAR,
-                trajectory["emissions_start"],
+            # Annual emissions are reduced linearly
+            # TODO: implement in a better way
+            trajectory = SECTORAL_PATHWAYS[sector]
+            if pathway_shape == "linear":
+                initial_level = np.full(
+                    trajectory["action_start"] - START_YEAR,
+                    trajectory["emissions_start"],
+                )
+                linear_reduction = np.linspace(
+                    trajectory["emissions_start"],
+                    trajectory["emissions_end"],
+                    num=END_YEAR - trajectory["action_start"] + 1,
+                )
+                values = np.concatenate((initial_level, linear_reduction))
+            # TODO: implement other pathway shapes
+            df = pd.DataFrame(data={"year": index, "annual_limit": values}).set_index(
+                "year"
             )
-            linear_reduction = np.linspace(
-                trajectory["emissions_start"],
-                trajectory["emissions_end"],
-                num=END_YEAR - trajectory["action_start"] + 1,
-            )
-            values = np.concatenate((initial_level, linear_reduction))
-        # TODO: implement other pathway shapes
-        df = pd.DataFrame(data={"year": index, "annual_limit": values}).set_index(
-            "year"
-        )
         return df
 
     def set_emission_pathways(self):
@@ -80,7 +85,11 @@ class CarbonBudget:
 
     # TODO: implement
     def output_emissions_pathway(self, sector: str, importer: IntermediateDataImporter):
-        df = self.pathways[sector]
+        if CARBON_BUDGET_SECTOR_CSV[sector] == True:
+            df = self.importer.get_carbon_budget()
+            df.set_index("year", inplace=True)
+        else:
+            df = self.pathways[sector]
         fig = make_subplots()
         line_fig = px.line(df, x=df.index, y="annual_limit")
 
@@ -102,6 +111,13 @@ class CarbonBudget:
         importer.export_data(df, "carbon_budget.csv", "final")
 
     def pathway_getter(self, sector: str, year: int, value_type: str):
+        """pathway_getter.
+
+        Args:
+            sector (str): sector
+            year (int): year
+            value_type (str): value_type
+        """
         mapper = {"annual": "annual_limit", "cumulative": "cumulative_limit"}
         return self.pathways[sector].loc[year][mapper[value_type]]
 
