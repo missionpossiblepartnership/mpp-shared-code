@@ -359,6 +359,7 @@ def make_new_asset(
     Returns:
         The new asset
     """
+    # Filter row of technology characteristics DataFrame that corresponds to the asset transition
     technology_characteristics = df_technology_characteristics.loc[
         (df_technology_characteristics["product"] == asset_transition["product"])
         & (df_technology_characteristics["region"] == asset_transition["region"])
@@ -366,8 +367,10 @@ def make_new_asset(
             df_technology_characteristics["technology"]
             == asset_transition["technology_destination"]
         )
+        & (df_technology_characteristics["year"]==asset_transition["year"])
     ]
 
+    # Create the new asset with the corresponding technology characteristics and assumptions
     return Asset(
         product=asset_transition["product"],
         technology=asset_transition["technology_destination"],
@@ -375,9 +378,10 @@ def make_new_asset(
         year_commissioned=year,
         annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
         cuf=CUF_UPPER_THRESHOLD,
-        asset_lifetime=technology_characteristics["technology_lifetime"],
+        asset_lifetime=technology_characteristics["technology_lifetime"].values[0],
         technology_classification=technology_characteristics[
             "technology_classification"
-        ],
+        ].values[0],
         retrofit=False,
+        rebuild=False
     )
