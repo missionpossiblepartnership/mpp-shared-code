@@ -43,7 +43,7 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
 
         # Run pathway simulation for each product
         for product in pathway.products:
-
+        
             logger.info(product)
 
             # Adjust capacity utilisation of each asset
@@ -78,6 +78,16 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             logger.debug(
                 f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
             )
+
+            #! Development only
+            # assets = pathway.stacks[year].filter_assets()
+            # assets1 = pathway.stacks[year].filter_assets(product="Urea", technology_classification="initial")
+            # assets2 = pathway.stacks[year].filter_assets(product=product, technology_classification="transition")
+            # assets3 = pathway.stacks[year].filter_assets(product=product, technology_classification="end-state")
+
+            # df_agg = pathway.stacks[year].aggregate_stack(aggregation_vars=["technology", "product", "region"], product=product, technology_classification="end-state")
+
+            pass
 
         # Copy availability to next year
         # pathway.copy_availability(year=year)
@@ -118,6 +128,9 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         carbon_budget=carbon_budget,
         technology_rampup=dict_technology_rampup
     )
+
+    #! Development only
+    # pathway.stacks[2020].assets = pathway.stacks[2020].assets[0:3]
 
     # Optimize asset stack on a yearly basis
     pathway = simulate(

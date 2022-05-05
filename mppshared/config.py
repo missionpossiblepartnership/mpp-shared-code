@@ -262,8 +262,8 @@ indicates that for the newbuild rank, in the most_economic scenario, we favor bu
 4. Lower scope 3 emissions
 in that order!
 """
-lc_weight_cost = 0.8
-lc_weight_emissions = 0.2
+lc_weight_cost = 1
+lc_weight_emissions = 0
 RANKING_CONFIG = {
     "greenfield": {
         "bau": {
@@ -323,6 +323,12 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
         "maximum_capacity_growth_rate": 0.3,
         "years_rampup_phase": 10
     }
+}
+
+# Year from which newbuild capacity has to fulfill the 2050 emissions constraint
+YEAR_2050_EMISSIONS_CONSTRAINT = {
+    "chemicals": 2045,
+    "aluminium": 2045
 }
 
 # Share of demand in each region that needs to be fulfilled by production in that region
