@@ -65,9 +65,6 @@ class IntermediateDataImporter:
 
         df.to_csv(export_path, index=index)
 
-    def get_availabilities(self):
-        return pd.read_csv(self.intermediate_path.joinpath("availabilities.csv"))
-
     def get_emissions(self):
         return pd.read_csv(self.intermediate_path.joinpath("emissions.csv"))
 
@@ -183,3 +180,5 @@ class IntermediateDataImporter:
         return pd.read_csv(
             self.intermediate_path.joinpath("inputs_outputs.csv"),
         )
+
+    

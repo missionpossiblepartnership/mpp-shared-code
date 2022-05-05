@@ -311,8 +311,21 @@ RANKING_CONFIG = {
 
 ### CONSTRAINTS ###
 
-# TODO: placeholder for external input
-# REGIONAL_PRODUCTION_SHARE Ammonia
+# Technology ramp-up parameters
+TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
+    "chemicals": {
+        "maximum_asset_additions": 10,
+        "maximum_capacity_growth_rate": 0.3,
+        "years_rampup_phase": 10
+    },
+    "aluminium": {
+        "maximum_asset_additions": 4,
+        "maximum_capacity_growth_rate": 0.3,
+        "years_rampup_phase": 10
+    }
+}
+
+# Share of demand in each region that needs to be fulfilled by production in that region
 REGIONAL_PRODUCTION_SHARES = {
     "chemicals": {
         "Africa": 0.4,

@@ -31,6 +31,7 @@ from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.asset import Asset, AssetStack, create_assets
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.transition import TransitionRegistry
+from mppshared.models.technology_rampup import TechnologyRampup
 from mppshared.utility.dataframe_utility import flatten_columns, get_emission_columns
 from mppshared.utility.utils import get_logger
 
@@ -50,6 +51,7 @@ class SimulationPathway:
         sector: str,
         products: list,
         carbon_budget: CarbonBudget,
+        technology_rampup: dict
     ):
         # Attributes describing the pathway
         self.start_year = start_year
@@ -63,6 +65,9 @@ class SimulationPathway:
 
         # Carbon Budget (already initialized with emissions pathway)
         self.carbon_budget = carbon_budget
+
+        # Technology ramp-up is a dictionary with the technologies as keys
+        self.technology_rampup = technology_rampup
 
         # Use importer to get all data required for simulating the pathway
         self.importer = IntermediateDataImporter(
