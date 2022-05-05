@@ -22,8 +22,8 @@ class CarbonBudget:
     ):
         self.budgets = sectoral_carbon_budgets
         self.pathway_shape = pathway_shape
-        self.pathways = self.set_emission_pathways()
         self.importer = importer
+        self.pathways = self.set_emission_pathways()
 
     def __repr__(self):
         return "Carbon Budget Class"
@@ -43,26 +43,30 @@ class CarbonBudget:
 
     def create_emissions_pathway(self, pathway_shape: str, sector: str) -> pd.DataFrame:
         """Create emissions pathway for specified sector according to given shape"""
-        index = pd.RangeIndex(START_YEAR, END_YEAR + 1, step=1, name="year")
+        if CARBON_BUDGET_SECTOR_CSV[sector] == True:
+            df = self.importer.get_carbon_budget()
+            df.set_index("year", inplace=True)
+        else:
+            index = pd.RangeIndex(START_YEAR, END_YEAR + 1, step=1, name="year")
 
-        # Annual emissions are reduced linearly
-        # TODO: implement in a better way
-        trajectory = SECTORAL_PATHWAYS[sector]
-        if pathway_shape == "linear":
-            initial_level = np.full(
-                trajectory["action_start"] - START_YEAR,
-                trajectory["emissions_start"],
+            # Annual emissions are reduced linearly
+            # TODO: implement in a better way
+            trajectory = SECTORAL_PATHWAYS[sector]
+            if pathway_shape == "linear":
+                initial_level = np.full(
+                    trajectory["action_start"] - START_YEAR,
+                    trajectory["emissions_start"],
+                )
+                linear_reduction = np.linspace(
+                    trajectory["emissions_start"],
+                    trajectory["emissions_end"],
+                    num=END_YEAR - trajectory["action_start"] + 1,
+                )
+                values = np.concatenate((initial_level, linear_reduction))
+            # TODO: implement other pathway shapes
+            df = pd.DataFrame(data={"year": index, "annual_limit": values}).set_index(
+                "year"
             )
-            linear_reduction = np.linspace(
-                trajectory["emissions_start"],
-                trajectory["emissions_end"],
-                num=END_YEAR - trajectory["action_start"] + 1,
-            )
-            values = np.concatenate((initial_level, linear_reduction))
-        # TODO: implement other pathway shapes
-        df = pd.DataFrame(data={"year": index, "annual_limit": values}).set_index(
-            "year"
-        )
         return df
 
     def set_emission_pathways(self):
@@ -76,11 +80,7 @@ class CarbonBudget:
 
     def get_annual_emissions_limit(self, year: int, sector: str) -> float:
         """Get scope 1 and 2 CO2 emissions limit for a specific year for the given sector"""
-        if CARBON_BUDGET_SECTOR_CSV[sector] == True:
-            df = self.importer.get_carbon_budget()
-            df.set_index("year", inplace=True)
-        else:
-            df = self.pathways[sector]
+        df = self.pathways[sector]
         return df.loc[year, "annual_limit"]
 
     # TODO: implement
