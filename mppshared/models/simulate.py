@@ -34,8 +34,6 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
     Returns:
         The updated pathway
     """
-    #! Debugging only
-    tech_rampup = TechnologyRampup("Test", start_year=2023, end_year=2033, maximum_asset_additions=4, maximum_capacity_growth_rate=0.3)
 
     for year in range(START_YEAR, END_YEAR + 1):
         logger.info("Optimizing for %s", year)
@@ -57,13 +55,13 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             pathway.export_stack_to_csv(year)
 
             # Decommission assets
-            if pathway.pathway != "bau":
-                start = timer()
-                pathway = decommission(pathway=pathway, year=year, product=product)
-                end = timer()
-                logger.debug(
-                    f"Time elapsed for decommission in year {year}: {timedelta(seconds=end-start)} seconds"
-                )
+            # if pathway.pathway != "bau":
+            start = timer()
+            pathway = decommission(pathway=pathway, year=year, product=product)
+            end = timer()
+            logger.debug(
+                f"Time elapsed for decommission in year {year}: {timedelta(seconds=end-start)} seconds"
+            )
 
             # Renovate and rebuild assets (brownfield transition)
             start = timer()
@@ -110,7 +108,9 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
 
     # Create carbon budget
     carbon_budget = CarbonBudget(
-        sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS, pathway_shape="linear"
+        sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS,
+        pathway_shape="linear",
+        importer=importer,
     )
     carbon_budget.output_emissions_pathway(sector=sector, importer=importer)
 
