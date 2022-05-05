@@ -34,8 +34,6 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
     Returns:
         The updated pathway
     """
-    #! Debugging only
-    tech_rampup = TechnologyRampup("Test", start_year=2023, end_year=2033, maximum_asset_additions=4, maximum_capacity_growth_rate=0.3)
 
     for year in range(START_YEAR, END_YEAR + 1):
         logger.info("Optimizing for %s", year)
