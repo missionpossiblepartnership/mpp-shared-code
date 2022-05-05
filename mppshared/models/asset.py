@@ -113,10 +113,11 @@ class AssetStack:
         self.assets.append(new_asset)
         self.new_ids.append(new_asset.uuid)
 
-    def update_asset(self, asset_to_update: Asset, new_technology: str):
+    def update_asset(self, asset_to_update: Asset, new_technology: str, new_classification: str):
         """Update an asset in AssetStack. This is done using the UUID to ensure correct updating."""
         uuid_update = asset_to_update.uuid
         asset_to_update.technology = new_technology
+        asset_to_update.new_classification = new_classification
         self.assets = [asset for asset in self.assets if asset.uuid is not uuid_update]
         self.assets.append(asset_to_update) 
 
@@ -124,7 +125,7 @@ class AssetStack:
         """Return True if no asset in stack"""
         return not self.assets
 
-    def filter_assets(self, product=None, region=None, technology=None) -> list:
+    def filter_assets(self, product=None, region=None, technology=None, technology_classification=None) -> list:
         """Filter assets based on one or more criteria"""
         assets = self.assets
         if region is not None:
@@ -133,6 +134,8 @@ class AssetStack:
             assets = filter(lambda asset: asset.technology == technology, assets)
         if product is not None:
             assets = filter(lambda asset: (asset.product == product), assets)
+        if technology_classification is not None:
+            assets = filter(lambda asset: (asset.technology_classification==technology_classification), assets)
 
         return list(assets)
 
@@ -161,10 +164,10 @@ class AssetStack:
         """Get list of unique products produced by the AssetStack"""
         return list({asset.product for asset in self.assets})
 
-    def aggregate_stack(self, aggregation_vars, product=None) -> pd.DataFrame:
+    def aggregate_stack(self, aggregation_vars, technology_classification=None, product=None) -> pd.DataFrame:
         """
         Aggregate AssetStack according to product, technology or region, and show annual
-        production capacity, annual production volume and number of assets. Optionally filtered by product
+        production capacity, annual production volume and number of assets. Optionally filtered by technology classification and/or product
 
         Args:
             aggregation_vars: aggregate by these variables
@@ -173,8 +176,9 @@ class AssetStack:
             Dataframe with technologies
         """
 
-        # Optional filter by product
-        assets = self.filter_assets(product) if product else self.assets
+        # Optional filter by technology classification and product
+        assets = self.filter_assets(technology_classification=technology_classification) if technology_classification else self.assets
+        assets = self.filter_assets(product=product) if product else assets
 
         # Aggregate stack to DataFrame
         df = pd.DataFrame(

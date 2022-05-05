@@ -86,7 +86,7 @@ def brownfield(
         # Update asset tentatively (needs deepcopy to provide changes to original stack)
         tentative_stack = deepcopy(new_stack)
         origin_technology = asset_to_update.technology
-        tentative_stack.update_asset(asset_to_update, new_technology=new_technology)
+        tentative_stack.update_asset(asset_to_update, new_technology=new_technology, new_classification=best_transition["technology_classification"])
 
         # Check constraints with tentative new stack
         dict_constraints = check_constraints(
@@ -111,6 +111,7 @@ def brownfield(
             new_stack.update_asset(
                 asset_to_update,
                 new_technology=new_technology,
+                new_classification=best_transition["technology_classification"]
             )
             n_assets_transitioned += 1
 
