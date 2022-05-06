@@ -67,7 +67,7 @@ def brownfield(
 
             # Choose the best transition, i.e. highest decommission rank
             best_transition = select_best_transition(df_rank)
-
+            # Check it the transition has PPA on it, if so only get plants that allow transition to ppa
             if "PPA" in best_transition["technology_destination"]:
                 best_candidates = list(
                     filter(

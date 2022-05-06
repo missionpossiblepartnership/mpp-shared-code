@@ -10,8 +10,8 @@ LOG_FORMATTER = logging.Formatter(
 )
 
 ### SECTOR CHOICE ###
-SECTOR = "chemicals"
-# SECTOR = "aluminium"
+# SECTOR = "chemicals"
+SECTOR = "aluminium"
 
 ### RUN CONFIGURATION ###
 
@@ -313,20 +313,17 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
     "chemicals": {
         "maximum_asset_additions": 10,
         "maximum_capacity_growth_rate": 0.3,
-        "years_rampup_phase": 10
+        "years_rampup_phase": 10,
     },
     "aluminium": {
         "maximum_asset_additions": 4,
         "maximum_capacity_growth_rate": 0.3,
-        "years_rampup_phase": 10
-    }
+        "years_rampup_phase": 10,
+    },
 }
 
 # Year from which newbuild capacity has to fulfill the 2050 emissions constraint
-YEAR_2050_EMISSIONS_CONSTRAINT = {
-    "chemicals": 2045,
-    "aluminium": 2045
-}
+YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2045, "aluminium": 2045}
 
 # Share of demand in each region that needs to be fulfilled by production in that region
 REGIONAL_PRODUCTION_SHARES = {
