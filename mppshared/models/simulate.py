@@ -6,14 +6,15 @@ from mppshared.agent_logic.agent_logic_functions import \
 from mppshared.agent_logic.brownfield import brownfield
 from mppshared.agent_logic.decommission import decommission
 from mppshared.agent_logic.greenfield import greenfield
-from mppshared.config import (END_YEAR, LOG_LEVEL, PRODUCTS, SECTOR,
-                              SECTORAL_CARBON_BUDGETS, START_YEAR)
+from mppshared.config import (END_YEAR, LOG_LEVEL, PRODUCTS,
+                              SECTORAL_CARBON_BUDGETS, START_YEAR, TECHNOLOGY_RAMP_UP_CONSTRAINTS)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.asset import AssetStack
-from mppshared.models.carbon_budget import CarbonBudget, carbon_budget_test
+from mppshared.models.carbon_budget import CarbonBudget
 # from mppshared.agent_logic.retrofit import retrofit
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
+from mppshared.models.technology_rampup import TechnologyRampup
 
 # from util.util import timing
 
@@ -42,7 +43,7 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
 
         # Run pathway simulation for each product
         for product in pathway.products:
-
+        
             logger.info(product)
 
             # Adjust capacity utilisation of each asset
@@ -78,6 +79,16 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
                 f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
             )
 
+            #! Development only
+            # assets = pathway.stacks[year].filter_assets()
+            # assets1 = pathway.stacks[year].filter_assets(product="Urea", technology_classification="initial")
+            # assets2 = pathway.stacks[year].filter_assets(product=product, technology_classification="transition")
+            # assets3 = pathway.stacks[year].filter_assets(product=product, technology_classification="end-state")
+
+            # df_agg = pathway.stacks[year].aggregate_stack(aggregation_vars=["technology", "product", "region"], product=product, technology_classification="end-state")
+
+            pass
+
         # Copy availability to next year
         # pathway.copy_availability(year=year)
 
@@ -99,9 +110,13 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
     carbon_budget = CarbonBudget(
         sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS,
         pathway_shape="linear",
+        sector=sector,
         importer=importer,
     )
     carbon_budget.output_emissions_pathway(sector=sector, importer=importer)
+
+    # Create technology ramp-up trajectory for each technology in the form of a dictionary
+    dict_technology_rampup = create_dict_technology_rampup(sector=sector, importer=importer)
 
     # Make pathway
     pathway = SimulationPathway(
@@ -112,39 +127,41 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         sector=sector,
         products=PRODUCTS[sector],
         carbon_budget=carbon_budget,
+        technology_rampup=dict_technology_rampup
     )
+
+    #! Development only
+    # pathway.stacks[2020].assets = pathway.stacks[2020].assets[0:3]
 
     # Optimize asset stack on a yearly basis
     pathway = simulate(
         pathway=pathway,
     )
 
-    #! Development only: export technology roadmap
-    pathway.output_technology_roadmap()
-
-    # Save rankings after they have been adjusted due to MTO
-    # Commening out the code as the processing of outputs is done independently
-    # pathway.save_rankings()
-    # pathway.save_availability()
-    # pathway.save_demand()
-
-    # for product in PRODUCTS[SECTOR]:
-    #     df_stack_total = pathway.aggregate_stacks(this_year=False, product=product)
-    #     df_stack_new = pathway.aggregate_stacks(this_year=True, product=product)
-
-    #     importer.export_data(
-    #         df=df_stack_total,
-    #         filename="technologies_over_time_region.csv",
-    #         export_dir=f"final/{product}",
-    #     )
-
-    #     importer.export_data(
-    #         df=df_stack_new,
-    #         filename="technologies_over_time_region_new.csv",
-    #         export_dir=f"final/{product}",
-    #     )
-
-    #     pathway.plot_stacks(df_stack_total, groupby="technology", product=product)
-    #     pathway.plot_stacks(df_stack_total, groupby="region", product=product)
-
     logger.info("Pathway simulation complete")
+
+def create_dict_technology_rampup(sector: str, importer: IntermediateDataImporter) -> dict:
+    """ Create dictionary of TechnologyRampup objects with the technologies in that sector as keys. Set None if the technology has no ramp-up trajectory."""
+
+    technology_characteristics = importer.get_technology_characteristics()
+    technologies = technology_characteristics["technology"].unique()
+    dict_technology_rampup = dict.fromkeys(technologies)
+
+    for technology in technologies:
+
+        # Expected maturity and classification are constant across regions, products and years, hence take the first row for that technology
+        df_characteristics = technology_characteristics.loc[technology_characteristics["technology"]==technology].iloc[0] 
+        expected_maturity = df_characteristics["expected_maturity"]
+        classification = df_characteristics["technology_classification"]
+
+        # Only define technology ramp-up rates for transition and end-state technologies
+        if classification in ["transition", "end-state"]:
+            dict_technology_rampup[technology] = TechnologyRampup(
+                technology=technology,
+                start_year=expected_maturity,
+                end_year=expected_maturity + TECHNOLOGY_RAMP_UP_CONSTRAINTS[sector]["years_rampup_phase"],
+                maximum_asset_additions=TECHNOLOGY_RAMP_UP_CONSTRAINTS[sector]["maximum_asset_additions"],
+                maximum_capacity_growth_rate=TECHNOLOGY_RAMP_UP_CONSTRAINTS[sector]["maximum_capacity_growth_rate"]
+            )
+
+    return dict_technology_rampup

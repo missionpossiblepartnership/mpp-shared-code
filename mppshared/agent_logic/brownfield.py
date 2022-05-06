@@ -1,10 +1,14 @@
 """ Logic for technology transitions of type brownfield rebuild and brownfield renovation."""
+import random
 import sys
 from copy import deepcopy
 from operator import methodcaller
 
+import numpy as np
+
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_transition, select_best_transition)
+    remove_all_transitions_with_destination_technology, remove_transition,
+    select_best_transition)
 from mppshared.config import LOG_LEVEL, MAX_ANNUAL_BROWNFIELD_TRANSITIONS
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -91,18 +95,20 @@ def brownfield(
             # Remove best transition from ranking table
             df_rank = remove_transition(df_rank, best_transition)
 
-        # If several candidates for best transition, choose asset with lowest annual production
-        # TODO: What happens if several assets have same annual production?
-        asset_to_update = min(
-            best_candidates, key=methodcaller("get_annual_production_volume")
-        )
+        # If several candidates for best transition, choose asset for transition randomly
+        asset_to_update = random.choice(best_candidates)
 
         # Update asset tentatively (needs deepcopy to provide changes to original stack)
         tentative_stack = deepcopy(new_stack)
         origin_technology = asset_to_update.technology
-        tentative_stack.update_asset(asset_to_update, new_technology=new_technology)
+        tentative_stack.update_asset(
+            asset_to_update,
+            new_technology=new_technology,
+            new_classification=best_transition["technology_classification"],
+        )
+
         # Check constraints with tentative new stack
-        no_constraint_hurt = check_constraints(
+        dict_constraints = check_constraints(
             pathway=pathway,
             stack=tentative_stack,
             product=product,
@@ -110,7 +116,8 @@ def brownfield(
             transition_type="brownfield",
         )
 
-        if no_constraint_hurt:
+        # If no constraint is hurt, execute the brownfield transition
+        if all(value == True for value in dict_constraints.values()):
             logger.debug(
                 f"Updating asset from technology {origin_technology} to technology {new_technology} in region {asset_to_update.region}, annual production {asset_to_update.get_annual_production_volume()} and UUID {asset_to_update.uuid}"
             )
@@ -120,14 +127,25 @@ def brownfield(
             if best_transition["switch_type"] == "brownfield_newbuild":
                 asset_to_update.rebuild = True
 
+            # Update asset stack
             new_stack.update_asset(
                 asset_to_update,
                 new_technology=new_technology,
+                new_classification=best_transition["technology_classification"],
             )
+
+            # Remove asset from candidates
+            candidates.remove(asset_to_update)
             n_assets_transitioned += 1
 
-        # If constraint is hurt, remove asset from list of candidates and try again
-        candidates.remove(asset_to_update)
+        # If the emissions constraint and/or the technology ramp-up constraint is hurt, remove remove that destination technology from the ranking table and try again
+        elif (dict_constraints["emissions_constraint"] == False) | dict_constraints[
+            "rampup_constraint"
+        ] == False:
+            df_rank = remove_all_transitions_with_destination_technology(
+                df_rank, best_transition["technology_destination"]
+            )
+
     logger.debug(
         f"{n_assets_transitioned} assets transitioned in year {year} for product {product} in sector {pathway.sector}"
     )

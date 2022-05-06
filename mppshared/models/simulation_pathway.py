@@ -21,6 +21,7 @@ from mppshared.import_data.intermediate_data import IntermediateDataImporter
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import Asset, AssetStack, create_assets
 from mppshared.models.carbon_budget import CarbonBudget
+from mppshared.models.technology_rampup import TechnologyRampup
 from mppshared.models.transition import TransitionRegistry
 from mppshared.utility.dataframe_utility import (flatten_columns,
                                                  get_emission_columns)
@@ -42,6 +43,7 @@ class SimulationPathway:
         sector: str,
         products: list,
         carbon_budget: CarbonBudget,
+        technology_rampup: dict,
     ):
         # Attributes describing the pathway
         self.start_year = start_year
@@ -55,6 +57,9 @@ class SimulationPathway:
 
         # Carbon Budget (already initialized with emissions pathway)
         self.carbon_budget = carbon_budget
+
+        # Technology ramp-up is a dictionary with the technologies as keys
+        self.technology_rampup = technology_rampup
 
         # Use importer to get all data required for simulating the pathway
         self.importer = IntermediateDataImporter(
@@ -329,40 +334,6 @@ class SimulationPathway:
     def update_ranking(self, df_rank, product, year, rank_type):
         """Update ranking for a product, year, type"""
         self.rankings[product][rank_type][year] = df_rank
-
-    def calculate_emissions_stack(self, year: int, product=None) -> dict:
-        """Calculate emissions of the current stack in MtGHG by GHG and scope, optionally filtered for specific product"""
-
-        # Get stack for given year
-        stack = self.get_stack(year)
-
-        # Get DataFrame with annual production volume by product, region and technology (optionally filtered for specific product)
-        df_stack = stack.aggregate_stack(
-            aggregation_vars=["technology", "product", "region"], product=product
-        )
-        df_stack = df_stack.reset_index()
-
-        # Get DataFrame with emissions for the given year by product, region and technology
-        df_emissions = self.emissions
-        df_emissions = df_emissions.reset_index()
-        df_emissions = df_emissions[(df_emissions.year == year)]
-
-        # Add emissions by GHG and scope to each technologyy
-        df_emissions_stack = df_stack.merge(
-            df_emissions, how="left", on=["technology", "product", "region"]
-        )
-
-        # Sum emissions by GHG and scope
-        emission_columns = get_emission_columns(ghgs=GHGS, scopes=EMISSION_SCOPES)
-        dict_emissions = dict.fromkeys(emission_columns)
-
-        for emission_item in emission_columns:
-            dict_emissions[emission_item] = (
-                df_emissions_stack[emission_item]
-                * df_emissions_stack["annual_production_volume"]
-            ).sum()
-
-        return dict_emissions
 
     def copy_availability(self, year):
         df = self.availability

@@ -5,6 +5,7 @@ from operator import methodcaller
 
 import numpy as np
 import pandas as pd
+import random
 
 from mppshared.agent_logic.agent_logic_functions import (
     remove_transition, select_best_transition)
@@ -124,11 +125,8 @@ def select_asset_to_decommission(
             # Remove best transition from ranking table
             df_rank = remove_transition(df_rank, best_transition)
 
-        # If several candidates for best transition, choose asset with lowest annual production
-        # TODO: What happens if several assets have same annual production?
-        asset_to_remove = min(
-            best_candidates, key=methodcaller("get_annual_production_volume")
-        )
+        # If several candidates for best transition, choose randomly
+        asset_to_remove = random.choice(best_candidates)
 
         # Remove asset tentatively (needs deepcopy to provide changes to original stack)
         tentative_stack = deepcopy(stack)

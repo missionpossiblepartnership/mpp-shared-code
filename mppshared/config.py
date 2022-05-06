@@ -10,8 +10,8 @@ LOG_FORMATTER = logging.Formatter(
 )
 
 ### SECTOR CHOICE ###
-# SECTOR = "chemicals"
-SECTOR = "aluminium"
+SECTOR = "chemicals"
+# SECTOR = "aluminium"
 
 ### RUN CONFIGURATION ###
 
@@ -259,8 +259,8 @@ indicates that for the newbuild rank, in the most_economic scenario, we favor bu
 4. Lower scope 3 emissions
 in that order!
 """
-lc_weight_cost = 0.8
-lc_weight_emissions = 0.2
+lc_weight_cost = 1
+lc_weight_emissions = 0
 RANKING_CONFIG = {
     "greenfield": {
         "bau": {
@@ -308,8 +308,27 @@ RANKING_CONFIG = {
 
 ### CONSTRAINTS ###
 
-# TODO: placeholder for external input
-# REGIONAL_PRODUCTION_SHARE Ammonia
+# Technology ramp-up parameters
+TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
+    "chemicals": {
+        "maximum_asset_additions": 10,
+        "maximum_capacity_growth_rate": 0.3,
+        "years_rampup_phase": 10
+    },
+    "aluminium": {
+        "maximum_asset_additions": 4,
+        "maximum_capacity_growth_rate": 0.3,
+        "years_rampup_phase": 10
+    }
+}
+
+# Year from which newbuild capacity has to fulfill the 2050 emissions constraint
+YEAR_2050_EMISSIONS_CONSTRAINT = {
+    "chemicals": 2045,
+    "aluminium": 2045
+}
+
+# Share of demand in each region that needs to be fulfilled by production in that region
 REGIONAL_PRODUCTION_SHARES = {
     "chemicals": {
         "Africa": 0.4,

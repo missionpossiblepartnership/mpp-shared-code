@@ -7,8 +7,9 @@ import pandas as pd
 
 from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                               CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
-                              DECOMMISSION_RATES, INVESTMENT_CYCLES, LOG_LEVEL)
+                             GHGS, EMISSION_SCOPES, INVESTMENT_CYCLES, LOG_LEVEL)
 from mppshared.utility.utils import first, get_logger
+from mppshared.utility.dataframe_utility import get_emission_columns
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -103,6 +104,11 @@ class AssetStack:
         # Keep track of all assets added this year
         self.new_ids = []
 
+    def __eq__(self, other):
+        self_uuids = {asset.uuid for asset in self.assets}
+        other_uuids = {asset.uuid for asset in other.assets}
+        return self_uuids == other_uuids
+
     def remove(self, remove_asset: Asset):
         """Remove asset from stack"""
         self.assets = [asset for asset in self.assets if asset != remove_asset]
@@ -112,15 +118,19 @@ class AssetStack:
         self.assets.append(new_asset)
         self.new_ids.append(new_asset.uuid)
 
-    def update_asset(self, asset_to_update: Asset, new_technology: str):
-        """Update an asset in AssetStack, unique ID remains the same"""
+    def update_asset(self, asset_to_update: Asset, new_technology: str, new_classification: str):
+        """Update an asset in AssetStack. This is done using the UUID to ensure correct updating."""
+        uuid_update = asset_to_update.uuid
         asset_to_update.technology = new_technology
+        asset_to_update.technology_classification = new_classification
+        self.assets = [asset for asset in self.assets if asset.uuid is not uuid_update]
+        self.assets.append(asset_to_update) 
 
     def empty(self) -> Boolean:
         """Return True if no asset in stack"""
         return not self.assets
 
-    def filter_assets(self, product=None, region=None, technology=None) -> list:
+    def filter_assets(self, product=None, region=None, technology=None, technology_classification=None) -> list:
         """Filter assets based on one or more criteria"""
         assets = self.assets
         if region is not None:
@@ -129,6 +139,8 @@ class AssetStack:
             assets = filter(lambda asset: asset.technology == technology, assets)
         if product is not None:
             assets = filter(lambda asset: (asset.product == product), assets)
+        if technology_classification is not None:
+            assets = filter(lambda asset: (asset.technology_classification==technology_classification), assets)
 
         return list(assets)
 
@@ -157,10 +169,10 @@ class AssetStack:
         """Get list of unique products produced by the AssetStack"""
         return list({asset.product for asset in self.assets})
 
-    def aggregate_stack(self, aggregation_vars, product=None) -> pd.DataFrame:
+    def aggregate_stack(self, aggregation_vars, technology_classification=None, product=None) -> pd.DataFrame:
         """
         Aggregate AssetStack according to product, technology or region, and show annual
-        production capacity, annual production volume and number of assets. Optionally filtered by product
+        production capacity, annual production volume and number of assets. Optionally filtered by technology classification and/or product
 
         Args:
             aggregation_vars: aggregate by these variables
@@ -169,8 +181,8 @@ class AssetStack:
             Dataframe with technologies
         """
 
-        # Optional filter by product
-        assets = self.filter_assets(product) if product else self.assets
+        # Optional filter by technology classification and product
+        assets = self.filter_assets(technology_classification=technology_classification, product=product)
 
         # Aggregate stack to DataFrame
         df = pd.DataFrame(
@@ -194,6 +206,43 @@ class AssetStack:
         except KeyError:
             # There are no assets
             return pd.DataFrame()
+
+    def calculate_emissions_stack(self, year: int, df_emissions: pd.DataFrame, technology_classification=None, product=None) -> dict:
+        """Calculate emissions of the current stack in MtGHG by GHG and scope, optionally filtered for technology classification and/or a specific product"""
+
+        # Sum emissions by GHG and scope
+        emission_columns = get_emission_columns(ghgs=GHGS, scopes=EMISSION_SCOPES)
+        dict_emissions = dict.fromkeys(emission_columns)
+
+        # Get DataFrame with annual production volume by product, region and technology (optionally filtered for technology classification and specific product)
+        df_stack = self.aggregate_stack(
+            aggregation_vars=["technology", "product", "region"], technology_classification=technology_classification, product=product
+        )
+
+        # If the stack DataFrame is empty, return 0 for all emissions
+        if df_stack.empty:
+            for scope in dict_emissions.keys():
+                dict_emissions[scope] = 0 
+            return dict_emissions
+
+        df_stack = df_stack.reset_index()
+
+        # Filter emissions DataFrame for the given year
+        df_emissions = df_emissions.reset_index()
+        df_emissions = df_emissions[(df_emissions.year == year)]
+
+        # Add emissions by GHG and scope to each technologyy
+        df_emissions_stack = df_stack.merge(
+            df_emissions, how="left", on=["technology", "product", "region"]
+        )
+
+        for emission_item in emission_columns:
+            dict_emissions[emission_item] = (
+                df_emissions_stack[emission_item]
+                * df_emissions_stack["annual_production_volume"]
+            ).sum()
+
+        return dict_emissions
 
     def export_stack_to_df(self) -> pd.DataFrame:
         """Format the entire AssetStack as a DataFrame (no aggregation)."""
@@ -315,6 +364,7 @@ def make_new_asset(
     Returns:
         The new asset
     """
+    # Filter row of technology characteristics DataFrame that corresponds to the asset transition
     technology_characteristics = df_technology_characteristics.loc[
         (df_technology_characteristics["product"] == asset_transition["product"])
         & (df_technology_characteristics["region"] == asset_transition["region"])
@@ -325,6 +375,7 @@ def make_new_asset(
         & (df_technology_characteristics["year"] == year)
     ]
 
+    # Create the new asset with the corresponding technology characteristics and assumptions
     return Asset(
         product=asset_transition["product"],
         technology=asset_transition["technology_destination"],
@@ -335,6 +386,7 @@ def make_new_asset(
         asset_lifetime=technology_characteristics["technology_lifetime"].values[0],
         technology_classification=technology_characteristics[
             "technology_classification"
-        ],
+        ].values[0],
         retrofit=False,
+        rebuild=False
     )

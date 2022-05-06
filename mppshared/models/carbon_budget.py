@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import plotly.express as px
-import plotly.io as pio
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
@@ -10,30 +9,25 @@ from mppshared.config import (CARBON_BUDGET_SECTOR_CSV, END_YEAR, PRODUCTS,
                               START_YEAR)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
-pio.kaleido.scope.mathjax = None
-
 
 class CarbonBudget:
     def __init__(
         self,
         sectoral_carbon_budgets: dict,
         pathway_shape: str,
+        sector: str,
         importer: IntermediateDataImporter,
     ):
         self.budgets = sectoral_carbon_budgets
         self.pathway_shape = pathway_shape
         self.importer = importer
-        self.pathways = self.set_emission_pathways()
+        self.df_pathway = self.create_emissions_pathway(pathway_shape=pathway_shape, sector=sector)
 
     def __repr__(self):
         return "Carbon Budget Class"
 
     def __str__(self):
         return "Instance of Carbon Budget"
-
-    def set_budget_dict(self, budget_dict: dict):
-        self.budgets = deepcopy(budget_dict)
-        self.pathways = {}
 
     def list_pathways(self):
         return list(self.pathways.keys())
@@ -69,19 +63,9 @@ class CarbonBudget:
             )
         return df
 
-    def set_emission_pathways(self):
-        """Set emission pathways for all sectors."""
-        return {
-            sector: self.create_emissions_pathway(
-                pathway_shape=self.pathway_shape, sector=sector
-            )
-            for sector in self.budgets.keys()
-        }
-
     def get_annual_emissions_limit(self, year: int, sector: str) -> float:
         """Get scope 1 and 2 CO2 emissions limit for a specific year for the given sector"""
-        df = self.pathways[sector]
-        return df.loc[year, "annual_limit"]
+        return self.df_pathway.loc[year, "annual_limit"]
 
     # TODO: implement
     def output_emissions_pathway(self, sector: str, importer: IntermediateDataImporter):
@@ -89,7 +73,7 @@ class CarbonBudget:
             df = self.importer.get_carbon_budget()
             df.set_index("year", inplace=True)
         else:
-            df = self.pathways[sector]
+            df = self.df_pathway
         fig = make_subplots()
         line_fig = px.line(df, x=df.index, y="annual_limit")
 
@@ -106,8 +90,6 @@ class CarbonBudget:
             auto_open=False,
         )
 
-        # TODO: debug why writing image with kaleido enters into seemingly infinite loop
-        # fig.write_image(importer.final_path.joinpath("carbon_budget.png"), engine="kaleido")
         importer.export_data(df, "carbon_budget.csv", "final")
 
     def pathway_getter(self, sector: str, year: int, value_type: str):
@@ -121,12 +103,3 @@ class CarbonBudget:
         mapper = {"annual": "annual_limit", "cumulative": "cumulative_limit"}
         return self.pathways[sector].loc[year][mapper[value_type]]
 
-
-def carbon_budget_test():
-    CarbonBudget = CarbonBudget()
-    CarbonBudget.set_budget_dict(CARBON_BUDGET_REF)
-    CarbonBudget.total_budget_all_sectors()
-    pathway = CarbonBudget.set_emissions_pathway(2020, 2050, "steel", "straight")
-    print(pathway)
-    CarbonBudget.plot_emissions_pathway("steel")
-    print(CarbonBudget.pathway_getter("steel", 2030, "annual"))
