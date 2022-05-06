@@ -183,9 +183,9 @@ MODEL_SCOPE = "Global"
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
-    "bau",
+    # "bau",
     # "fa",
-    # "lc",
+    "lc",
 ]
 
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
@@ -207,10 +207,7 @@ INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_as
 NUMBER_OF_BINS_RANKING = 10
 
 
-MAX_ANNUAL_BROWNFIELD_TRANSITIONS = {
-    "chemicals": 1000,
-    "aluminium": 10
-}
+MAX_ANNUAL_BROWNFIELD_TRANSITIONS = {"chemicals": 1000, "aluminium": 10}
 
 
 # GHGs and Emission scopes included in weighting when ranking technology transitions
