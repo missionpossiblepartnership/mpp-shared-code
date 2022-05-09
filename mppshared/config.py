@@ -170,6 +170,10 @@ EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
 # TODO: make sector-specific with dictionary
 CUF_LOWER_THRESHOLD = 0.6
 CUF_UPPER_THRESHOLD = 0.95
+COST_METRIC_CUF_ADJUSTMENT = {
+    "chemicals": "mc", # marginal cost of production
+    "aluminium": "lcox" # levelized cost of production
+}
 
 # TODO: Add more decomissioning rates
 DECOMMISSION_RATES = {
@@ -183,9 +187,9 @@ MODEL_SCOPE = "Global"
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
-    "bau",
+    # "bau",
     # "fa",
-    # "lc",
+    "lc",
 ]
 
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
@@ -262,8 +266,8 @@ indicates that for the newbuild rank, in the most_economic scenario, we favor bu
 4. Lower scope 3 emissions
 in that order!
 """
-lc_weight_cost = 1
-lc_weight_emissions = 0
+lc_weight_cost = 0.8
+lc_weight_emissions = 0.2
 RANKING_CONFIG = {
     "greenfield": {
         "bau": {
@@ -314,8 +318,8 @@ RANKING_CONFIG = {
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
     "chemicals": {
-        "maximum_asset_additions": 10,
-        "maximum_capacity_growth_rate": 0.3,
+        "maximum_asset_additions": 6,
+        "maximum_capacity_growth_rate": 1,
         "years_rampup_phase": 10
     },
     "aluminium": {
@@ -327,7 +331,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
 
 # Year from which newbuild capacity has to fulfill the 2050 emissions constraint
 YEAR_2050_EMISSIONS_CONSTRAINT = {
-    "chemicals": 2045,
+    "chemicals": 2050,
     "aluminium": 2045
 }
 

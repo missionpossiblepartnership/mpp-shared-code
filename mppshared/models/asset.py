@@ -88,6 +88,13 @@ class Asset:
         )["lcox"]
         return result.iloc[0]
 
+    def get_mc(self, df_cost: pd.DataFrame, year: int) -> float:
+        """Get MC (marginal cost of production for an asset in a specific year"""
+        result = df_cost.query(
+            f"product=='{self.product}' & technology_origin=='New-build' & year=={year} & region=='{self.region}' & technology_destination=='{self.technology}'"
+        )["marginal_cost"]
+        return result.iloc[0]
+
 
 def create_assets(n_assets: int, **kwargs) -> list:
     """Convenience function to create a list of asset at once"""

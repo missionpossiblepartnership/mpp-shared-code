@@ -5,6 +5,7 @@ from operator import methodcaller
 import pandas as pd
 
 from mppshared.config import (
+    COST_METRIC_CUF_ADJUSTMENT,
     CUF_LOWER_THRESHOLD,
     CUF_UPPER_THRESHOLD,
     LOG_LEVEL,
@@ -58,7 +59,7 @@ def remove_all_transitions_with_destination_technology(df_rank: pd.DataFrame, te
 def adjust_capacity_utilisation(
     pathway: SimulationPathway, product: str, year: int
 ) -> SimulationPathway:
-    """Adjust capacity utilisation of each asset within predefined thresholds to balance demand
+    """Adjust capacity utilisation of each asset based on a predefined cost metric (LCOX or marginal cost of production) within predefined thresholds to balance demand
     and production as much as possible in the given year.
 
     Args:
@@ -75,25 +76,24 @@ def adjust_capacity_utilisation(
     production = stack.get_annual_production_volume(product)
 
     # TODO: make sure that CUF adjustment does not overshoot demand and production balance
-    # TODO: integrate regional production constraint
     # If demand exceeds production, increase capacity utilisation of each asset to make production
-    # deficit as small as possible, starting at the asset with lowest LCOX
+    # deficit as small as possible, starting at the asset with the lowest cost metric
     if demand > production:
         logger.info(
             "Increasing capacity utilisation of assets to minimise production deficit"
         )
         pathway = increase_cuf_of_assets(
-            pathway=pathway, demand=demand, product=product, year=year
+            pathway=pathway, demand=demand, product=product, year=year, cost_metric=COST_METRIC_CUF_ADJUSTMENT[pathway.sector]
         )
 
     # If production exceeds demand, decrease capacity utilisation of each asset to make production
-    # surplus as small as possible, starting at asset with highest LCOX
+    # surplus as small as possible, starting at asset with highest cost metric
     elif production > demand:
         logger.info(
             "Decreasing capacity utilisation of assets to minimise production surplus"
         )
         pathway = decrease_cuf_of_assets(
-            pathway=pathway, demand=demand, product=product, year=year
+            pathway=pathway, demand=demand, product=product, year=year, cost_metric=COST_METRIC_CUF_ADJUSTMENT[pathway.sector]
         )
 
     production = stack.get_annual_production_volume(product)
@@ -101,7 +101,7 @@ def adjust_capacity_utilisation(
 
 
 def increase_cuf_of_assets(
-    pathway: SimulationPathway, demand: float, product: str, year: int
+    pathway: SimulationPathway, demand: float, product: str, year: int, cost_metric: str
 ) -> SimulationPathway:
     """Increase CUF of assets to minimise the production deficit."""
 
@@ -113,8 +113,8 @@ def increase_cuf_of_assets(
     assets_below_cuf_threshold = list(
         filter(lambda asset: asset.cuf < CUF_UPPER_THRESHOLD, stack.assets)
     )
-    assets_below_cuf_threshold = sort_assets_lcox(
-        assets_below_cuf_threshold, pathway, year
+    assets_below_cuf_threshold = sort_assets_cost_metric(
+        assets_below_cuf_threshold, pathway, year, cost_metric
     )
 
     # Increase CUF of assets to upper threshold in order of ascending LCOX until production meets
@@ -134,7 +134,7 @@ def increase_cuf_of_assets(
 
 
 def decrease_cuf_of_assets(
-    pathway: SimulationPathway, demand: float, product: str, year: int
+    pathway: SimulationPathway, demand: float, product: str, year: int, cost_metric: str
 ) -> SimulationPathway:
     """Decrease CUF of assets to minimise the production surplus."""
 
@@ -146,8 +146,8 @@ def decrease_cuf_of_assets(
     assets_above_cuf_threshold = list(
         filter(lambda asset: asset.cuf < CUF_UPPER_THRESHOLD, stack.assets)
     )
-    assets_above_cuf_threshold = sort_assets_lcox(
-        assets_above_cuf_threshold, pathway, year, descending=True
+    assets_above_cuf_threshold = sort_assets_cost_metric(
+        assets_above_cuf_threshold, pathway, year, cost_metric, descending=True
     )
 
     # Decrease CUF of assets to lower threshold in order of descending LCOX until production meets
@@ -166,12 +166,12 @@ def decrease_cuf_of_assets(
     return pathway
 
 
-def sort_assets_lcox(
-    assets: list, pathway: SimulationPathway, year: int, descending=False
+def sort_assets_cost_metric(
+    assets: list, pathway: SimulationPathway, year: int, cost_metric: str, descending=False
 ):
-    """Sort list of assets according to LCOX in the specified year in ascending order"""
+    """Sort list of assets according to a cost metric (LCOX or MC) in the specified year in ascending order"""
     return sorted(
         assets,
-        key=methodcaller("get_lcox", df_cost=pathway.df_cost, year=year),
+        key=methodcaller(f"get_{cost_metric}", df_cost=pathway.df_cost, year=year),
         reverse=descending,
     )
