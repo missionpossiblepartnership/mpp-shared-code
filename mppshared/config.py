@@ -170,6 +170,10 @@ EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
 # TODO: make sector-specific with dictionary
 CUF_LOWER_THRESHOLD = 0.6
 CUF_UPPER_THRESHOLD = 0.95
+COST_METRIC_CUF_ADJUSTMENT = {
+    "chemicals": "mc",  # marginal cost of production
+    "aluminium": "lcox",  # levelized cost of production
+}
 
 # TODO: Add more decomissioning rates
 DECOMMISSION_RATES = {
@@ -323,7 +327,10 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
 }
 
 # Year from which newbuild capacity has to fulfill the 2050 emissions constraint
-YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2045, "aluminium": 2045}
+YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2050, "aluminium": 2045}
+
+# Share of assets renovated annually (limits number of brownfield transitions)
+ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 1}
 
 # Share of demand in each region that needs to be fulfilled by production in that region
 REGIONAL_PRODUCTION_SHARES = {
@@ -380,7 +387,7 @@ SECTORAL_CARBON_BUDGETS = {
 }
 
 residual_share = 0.05
-emissions_chemicals_2020 = 0.62  # Gt CO2 (scope 1 and 2)
+emissions_chemicals_2020 = 0.9  # Gt CO2 (scope 1 and 2)
 
 SECTORAL_PATHWAYS = {
     "chemicals": {
