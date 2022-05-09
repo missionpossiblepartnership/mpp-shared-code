@@ -266,8 +266,8 @@ indicates that for the newbuild rank, in the most_economic scenario, we favor bu
 4. Lower scope 3 emissions
 in that order!
 """
-lc_weight_cost = 0.8
-lc_weight_emissions = 0.2
+lc_weight_cost = 1
+lc_weight_emissions = 0
 RANKING_CONFIG = {
     "greenfield": {
         "bau": {
@@ -396,7 +396,7 @@ SECTORAL_CARBON_BUDGETS = {
 }
 
 residual_share = 0.05
-emissions_chemicals_2020 = 0.62  # Gt CO2 (scope 1 and 2)
+emissions_chemicals_2020 = 0.9  # Gt CO2 (scope 1 and 2)
 
 SECTORAL_PATHWAYS = {
     "chemicals": {
