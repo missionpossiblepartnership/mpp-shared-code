@@ -315,6 +315,11 @@ class AssetStack:
             .sum()
         )
 
+    def get_number_of_assets(self, product=None, technology=None, region=None):
+        "Get number of assets in the asset stack"
+        assets = self.filter_assets(product=product, technology=technology, region=region)
+        return len(assets)
+
     def get_tech_asset_stack(self, technology: str):
         """Get AssetStack with a specific technology."""
         return AssetStack(
