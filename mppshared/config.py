@@ -318,7 +318,7 @@ RANKING_CONFIG = {
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
     "chemicals": {
-        "maximum_asset_additions": 6,
+        "maximum_asset_additions": 100,
         "maximum_capacity_growth_rate": 1,
         "years_rampup_phase": 10
     },
@@ -333,6 +333,12 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
 YEAR_2050_EMISSIONS_CONSTRAINT = {
     "chemicals": 2050,
     "aluminium": 2045
+}
+
+# Share of assets renovated annually (limits number of brownfield transitions)
+ANNUAL_RENOVATION_SHARE = {
+    "chemicals": 0.05,
+    "aluminium": 1
 }
 
 # Share of demand in each region that needs to be fulfilled by production in that region
