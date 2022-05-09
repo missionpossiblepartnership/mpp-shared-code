@@ -2,13 +2,24 @@
 import pandas as pd
 
 from mppshared.config import (
+    ANNUAL_RENOVATION_SHARE,
+    COST_METRIC_CUF_ADJUSTMENT,
+    CUF_LOWER_THRESHOLD,
+    CUF_UPPER_THRESHOLD,
     END_YEAR,
+    INVESTMENT_CYCLES,
     LOG_LEVEL,
     PRODUCTS,
+    RANKING_CONFIG,
+    REGIONAL_PRODUCTION_SHARES,
     SECTOR,
     SECTORAL_CARBON_BUDGETS,
     EMISSION_SCOPES,
     START_YEAR,
+    TECHNOLOGY_MORATORIUM,
+    TECHNOLOGY_RAMP_UP_CONSTRAINTS,
+    TRANSITIONAL_PERIOD_YEARS,
+    YEAR_2050_EMISSIONS_CONSTRAINT,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.solver.debugging_outputs import create_table_asset_transition_sequences
@@ -185,7 +196,9 @@ def calculate_outputs(pathway, sensitivity, sector):
         products=PRODUCTS[sector],
     )
 
-    
+    # Write key assumptions to txt file
+    write_key_assumptions_to_txt(importer)
+
     # Create summary table of asset transitions
     logger.info("Creating table with asset transition sequences.")
     df_transitions = create_table_asset_transition_sequences(importer)
@@ -242,3 +255,23 @@ def calculate_outputs(pathway, sensitivity, sector):
         df_stacks, f"plant_stack_transition_sensitivity_{sensitivity}.csv", "final"
     )
     logger.info("All data for all years processed.")
+
+def write_key_assumptions_to_txt(importer: IntermediateDataImporter):
+    type = "greenfield"
+    lines = [
+        f"Investment cycle: {INVESTMENT_CYCLES[sector]} years",
+        f"CUF: maximum={CUF_UPPER_THRESHOLD}, minimum={CUF_LOWER_THRESHOLD}, cost metric={COST_METRIC_CUF_ADJUSTMENT[sector]}",
+        f"Weights: {RANKING_CONFIG[type][pathway]}",
+        f"Technology ramp-up: {TECHNOLOGY_RAMP_UP_CONSTRAINTS[sector]}",
+        f"Year 2050 emissions constraint: {YEAR_2050_EMISSIONS_CONSTRAINT[sector]}",
+        f"Annual renovation share: {ANNUAL_RENOVATION_SHARE[sector]}",
+        f"Regional production shares: {REGIONAL_PRODUCTION_SHARES[sector]}"
+        f"Technology moratorium year: {TECHNOLOGY_MORATORIUM[sector]}",
+        f"Transitional period years: {TRANSITIONAL_PERIOD_YEARS[sector]}"
+    ]
+    
+    path = importer.final_path.joinpath("configuration.txt")
+    with open(path, "w") as f:
+        for line in lines:
+            f.write(line)
+            f.write('\n')

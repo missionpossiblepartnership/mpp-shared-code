@@ -35,7 +35,7 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
         The updated pathway
     """
 
-    for year in range(START_YEAR, END_YEAR + 1):
+    for year in range(START_YEAR, END_YEAR): # 2049 optimisation leads to 2050 stack (end-state)
         logger.info("Optimizing for %s", year)
 
         # Copy over last year's stack to this year
