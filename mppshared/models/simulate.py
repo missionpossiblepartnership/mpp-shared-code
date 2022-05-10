@@ -55,7 +55,6 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             pathway.export_stack_to_csv(year)
 
             # Decommission assets
-            # if pathway.pathway != "bau":
             start = timer()
             pathway = decommission(pathway=pathway, year=year, product=product)
             end = timer()
