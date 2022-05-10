@@ -20,6 +20,7 @@ from mppshared.utility.log_utility import get_logger
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
+
 def create_debugging_outputs(pathway: str, sensitivity: str, sector: str):
     """Create technology roadmap and emissions trajectory for quick debugging and refinement."""
 
@@ -33,60 +34,106 @@ def create_debugging_outputs(pathway: str, sensitivity: str, sector: str):
     # Create summary table of asset transitions
     logger.info("Creating table with asset transition sequences.")
     df_transitions = create_table_asset_transition_sequences(importer)
-    importer.export_data(df_transitions, f"asset_transition_sequences_sensitivity_{sensitivity}.csv", "final")
+    importer.export_data(
+        df_transitions,
+        f"asset_transition_sequences_sensitivity_{sensitivity}.csv",
+        "final",
+    )
 
     # Create outputs on rebuild capacity
-    output_renovation_transitions_by_year(df_transitions, importer, renovation_type="rebuild", technology_type="origin")
-    output_renovation_transitions_by_year(df_transitions, importer, renovation_type="rebuild", technology_type="destination")
+    output_renovation_transitions_by_year(
+        df_transitions, importer, renovation_type="rebuild", technology_type="origin"
+    )
+    output_renovation_transitions_by_year(
+        df_transitions,
+        importer,
+        renovation_type="rebuild",
+        technology_type="destination",
+    )
 
     # Create outputs on retrofit capacity
-    output_renovation_transitions_by_year(df_transitions, importer, renovation_type="retrofit", technology_type="origin")
-    output_renovation_transitions_by_year(df_transitions, importer, renovation_type="retrofit", technology_type="destination")
-    
+    output_renovation_transitions_by_year(
+        df_transitions, importer, renovation_type="retrofit", technology_type="origin"
+    )
+    output_renovation_transitions_by_year(
+        df_transitions,
+        importer,
+        renovation_type="retrofit",
+        technology_type="destination",
+    )
+
     # Create outputs on newbuild capacity
-    create_newbuild_capacity_outputs_by_region(df_transitions=df_transitions, importer=importer)
-    create_newbuild_capacity_outputs_by_technology(df_transitions=df_transitions, importer=importer)
+    create_newbuild_capacity_outputs_by_region(
+        df_transitions=df_transitions, importer=importer
+    )
+    create_newbuild_capacity_outputs_by_technology(
+        df_transitions=df_transitions, importer=importer
+    )
 
     # Create emissions trajectory and technology roadmap
     output_emissions_trajectory(importer)
     output_technology_roadmap(importer)
 
-def output_renovation_transitions_by_year(df_transitions: pd.DataFrame, importer: IntermediateDataImporter, renovation_type="retrofit", technology_type="origin"):
+
+def output_renovation_transitions_by_year(
+    df_transitions: pd.DataFrame,
+    importer: IntermediateDataImporter,
+    renovation_type="retrofit",
+    technology_type="origin",
+):
     """Plot origin or destination technologies of renovation transitions by year."""
     df_transitions = df_transitions.reset_index(drop=False).set_index("uuid")
-    df_transitions_renovation_status = df_transitions.loc[df_transitions["parameter"]==f"{renovation_type}_status"]
+    df_transitions_renovation_status = df_transitions.loc[
+        df_transitions["parameter"] == f"{renovation_type}_status"
+    ]
     renovation_techs = defaultdict()
 
     # Iterate over every year and create dictionary of newbuild technologies in that year (no newbuild in 2020)
     for year in np.arange(START_YEAR, END_YEAR):
-        renovation_cond1 = df_transitions.loc[df_transitions["parameter"]==f"{renovation_type}_status", year] == False
-        renovation_cond2 = df_transitions.loc[df_transitions["parameter"]==f"{renovation_type}_status", year+1] == True
-        renovation_uuids = df_transitions_renovation_status.loc[renovation_cond1 & renovation_cond2].index.unique()
-        renovation_df = df_transitions.loc[(
-            df_transitions.index.isin(renovation_uuids)) 
-            & (df_transitions["parameter"]=="technology")
+        renovation_cond1 = (
+            df_transitions.loc[
+                df_transitions["parameter"] == f"{renovation_type}_status", year
             ]
-        if technology_type=="origin":
-            renovation_techs[year+1] = list(renovation_df[year])
+            == False
+        )
+        renovation_cond2 = (
+            df_transitions.loc[
+                df_transitions["parameter"] == f"{renovation_type}_status", year + 1
+            ]
+            == True
+        )
+        renovation_uuids = df_transitions_renovation_status.loc[
+            renovation_cond1 & renovation_cond2
+        ].index.unique()
+        renovation_df = df_transitions.loc[
+            (df_transitions.index.isin(renovation_uuids))
+            & (df_transitions["parameter"] == "technology")
+        ]
+        if technology_type == "origin":
+            renovation_techs[year + 1] = list(renovation_df[year])
         else:
-            renovation_techs[year+1] = list(renovation_df[year+1])
-    
+            renovation_techs[year + 1] = list(renovation_df[year + 1])
+
     # Create DataFrame from dictionary with technologies as index
     df = pd.DataFrame.from_dict(renovation_techs, orient="index")
     df = df.transpose()
 
-    technologies = {value for value_list in renovation_techs.values() for value in value_list}
+    technologies = {
+        value for value_list in renovation_techs.values() for value in value_list
+    }
     df_agg = pd.DataFrame(index=technologies)
     df_agg.index.rename("technology", inplace=True)
     for year in renovation_techs.keys():
         for technology in df_agg.index:
-            df_agg.loc[df_agg.index==technology, year] = renovation_techs[year].count(technology)
-    
+            df_agg.loc[df_agg.index == technology, year] = renovation_techs[year].count(
+                technology
+            )
+
     # Melt to long format and plot barchart
     df_agg = df_agg.reset_index(drop=False).melt(
         id_vars="technology", var_name="year", value_name="number"
     )
-    df_agg = df_agg.loc[df_agg["number"]>0]
+    df_agg = df_agg.loc[df_agg["number"] > 0]
     fig = make_subplots()
     bar_fig = px.bar(df_agg, x="year", y="number", color="technology", text_auto=True)
 
@@ -95,48 +142,63 @@ def output_renovation_transitions_by_year(df_transitions: pd.DataFrame, importer
 
     fig.layout.xaxis.title = "Year"
     fig.layout.yaxis.title = f"Number of plants per technology"
-    fig.layout.title = f"Brownfield {renovation_type}: {technology_type} technology (# of plants)"
+    fig.layout.title = (
+        f"Brownfield {renovation_type}: {technology_type} technology (# of plants)"
+    )
 
     plot(
         fig,
-        filename=str(importer.final_path.joinpath(f"{renovation_type}_{technology_type}_technologies_by_year.html")),
-        auto_open=True,
+        filename=str(
+            importer.final_path.joinpath(
+                f"{renovation_type}_{technology_type}_technologies_by_year.html"
+            )
+        ),
+        auto_open=False,
     )
     pass
 
-def create_newbuild_capacity_outputs_by_region(df_transitions: pd.DataFrame, importer: IntermediateDataImporter):
+
+def create_newbuild_capacity_outputs_by_region(
+    df_transitions: pd.DataFrame, importer: IntermediateDataImporter
+):
     """Show newbuild capacity by region"""
-    
+
     df_transitions = df_transitions.reset_index(drop=False)
     newbuild_regions = defaultdict()
 
     # Iterate over every year and create dictionary of newbuild technologies in that year (no newbuild in 2020)
     for year in np.arange(START_YEAR, END_YEAR):
         newbuild_cond1 = df_transitions[year].isna()
-        newbuild_cond2 = df_transitions[year+1].notna()
-        newbuild_uuids = df_transitions.loc[newbuild_cond1 & newbuild_cond2, "uuid"].unique()
-        newbuild_df = df_transitions.loc[(
-            df_transitions["uuid"].isin(newbuild_uuids)) 
-            & (df_transitions["parameter"]=="technology")
-            ]
-        newbuild_regions[year+1] = list(newbuild_df["region"])
-    
+        newbuild_cond2 = df_transitions[year + 1].notna()
+        newbuild_uuids = df_transitions.loc[
+            newbuild_cond1 & newbuild_cond2, "uuid"
+        ].unique()
+        newbuild_df = df_transitions.loc[
+            (df_transitions["uuid"].isin(newbuild_uuids))
+            & (df_transitions["parameter"] == "technology")
+        ]
+        newbuild_regions[year + 1] = list(newbuild_df["region"])
+
     # Create DataFrame from dictionary with technologies as index
     df = pd.DataFrame.from_dict(newbuild_regions, orient="index")
     df = df.transpose()
 
-    regions = {value for value_list in newbuild_regions.values() for value in value_list}
+    regions = {
+        value for value_list in newbuild_regions.values() for value in value_list
+    }
     df_agg = pd.DataFrame(index=regions)
     df_agg.index.rename("region", inplace=True)
     for year in newbuild_regions.keys():
         for technology in df_agg.index:
-            df_agg.loc[df_agg.index==technology, year] = newbuild_regions[year].count(technology)
-    
+            df_agg.loc[df_agg.index == technology, year] = newbuild_regions[year].count(
+                technology
+            )
+
     # Melt to long format and plot barchart
     df_agg = df_agg.reset_index(drop=False).melt(
         id_vars="region", var_name="year", value_name="number"
     )
-    df_agg = df_agg.loc[df_agg["number"]>0]
+    df_agg = df_agg.loc[df_agg["number"] > 0]
     fig = make_subplots()
     bar_fig = px.bar(df_agg, x="year", y="number", color="region", text_auto=True)
 
@@ -150,42 +212,51 @@ def create_newbuild_capacity_outputs_by_region(df_transitions: pd.DataFrame, imp
     plot(
         fig,
         filename=str(importer.final_path.joinpath(f"newbuild_capacity_by_region.html")),
-        auto_open=True,
+        auto_open=False,
     )
 
-def create_newbuild_capacity_outputs_by_technology(df_transitions: pd.DataFrame, importer: IntermediateDataImporter):
+
+def create_newbuild_capacity_outputs_by_technology(
+    df_transitions: pd.DataFrame, importer: IntermediateDataImporter
+):
     """Show newbuild capacity by technology for every year, in stacked bar chart."""
-    
+
     df_transitions = df_transitions.reset_index(drop=False)
     newbuild_techs = defaultdict()
 
     # Iterate over every year and create dictionary of newbuild technologies in that year (no newbuild in 2020)
     for year in np.arange(START_YEAR, END_YEAR):
         newbuild_cond1 = df_transitions[year].isna()
-        newbuild_cond2 = df_transitions[year+1].notna()
-        newbuild_uuids = df_transitions.loc[newbuild_cond1 & newbuild_cond2, "uuid"].unique()
-        newbuild_df = df_transitions.loc[(
-            df_transitions["uuid"].isin(newbuild_uuids)) 
-            & (df_transitions["parameter"]=="technology")
-            ]
-        newbuild_techs[year+1] = list(newbuild_df[year+1])
-    
+        newbuild_cond2 = df_transitions[year + 1].notna()
+        newbuild_uuids = df_transitions.loc[
+            newbuild_cond1 & newbuild_cond2, "uuid"
+        ].unique()
+        newbuild_df = df_transitions.loc[
+            (df_transitions["uuid"].isin(newbuild_uuids))
+            & (df_transitions["parameter"] == "technology")
+        ]
+        newbuild_techs[year + 1] = list(newbuild_df[year + 1])
+
     # Create DataFrame from dictionary with technologies as index
     df = pd.DataFrame.from_dict(newbuild_techs, orient="index")
     df = df.transpose()
 
-    technologies = {value for value_list in newbuild_techs.values() for value in value_list}
+    technologies = {
+        value for value_list in newbuild_techs.values() for value in value_list
+    }
     df_agg = pd.DataFrame(index=technologies)
     df_agg.index.rename("technology", inplace=True)
     for year in newbuild_techs.keys():
         for technology in df_agg.index:
-            df_agg.loc[df_agg.index==technology, year] = newbuild_techs[year].count(technology)
-    
+            df_agg.loc[df_agg.index == technology, year] = newbuild_techs[year].count(
+                technology
+            )
+
     # Melt to long format and plot barchart
     df_agg = df_agg.reset_index(drop=False).melt(
         id_vars="technology", var_name="year", value_name="number"
     )
-    df_agg = df_agg.loc[df_agg["number"]>0]
+    df_agg = df_agg.loc[df_agg["number"] > 0]
     fig = make_subplots()
     bar_fig = px.bar(df_agg, x="year", y="number", color="technology", text_auto=True)
 
@@ -198,32 +269,61 @@ def create_newbuild_capacity_outputs_by_technology(df_transitions: pd.DataFrame,
 
     plot(
         fig,
-        filename=str(importer.final_path.joinpath(f"newbuild_capacity_by_technology.html")),
-        auto_open=True,
+        filename=str(
+            importer.final_path.joinpath(f"newbuild_capacity_by_technology.html")
+        ),
+        auto_open=False,
     )
     pass
-    
 
-def create_table_asset_transition_sequences(importer: IntermediateDataImporter) -> pd.DataFrame:
-    
+
+def create_table_asset_transition_sequences(
+    importer: IntermediateDataImporter,
+) -> pd.DataFrame:
+
     # Get initial stack and melt to long for that year
     multiindex = ["uuid", "product", "region", "parameter"]
-    df = importer.get_asset_stack(START_YEAR) 
-    df = df[["uuid", "product", "region", "technology", "annual_production_capacity", "annual_production_volume", "retrofit_status", "rebuild_status"]]  
+    df = importer.get_asset_stack(START_YEAR)
+    df = df[
+        [
+            "uuid",
+            "product",
+            "region",
+            "technology",
+            "annual_production_capacity",
+            "annual_production_volume",
+            "retrofit_status",
+            "rebuild_status",
+            "greenfield_status",
+        ]
+    ]
     df = df.set_index(["product", "region", "uuid"])
     df = df.melt(var_name="parameter", value_name=START_YEAR, ignore_index=False)
     df = df.sort_index()
     df = df.reset_index(drop=False).set_index(multiindex)
-    
-    for year in np.arange(START_YEAR+1, END_YEAR + 1):
+
+    for year in np.arange(START_YEAR + 1, END_YEAR + 1):
 
         # Get asset stack for that year
         df_stack = importer.get_asset_stack(year=year)
-        df_stack = df_stack[["uuid", "product", "region", "technology", "annual_production_capacity", "annual_production_volume", "retrofit_status", "rebuild_status"]]  
-        
+        df_stack = df_stack[
+            [
+                "uuid",
+                "product",
+                "region",
+                "technology",
+                "annual_production_capacity",
+                "annual_production_volume",
+                "retrofit_status",
+                "rebuild_status",
+            ]
+        ]
+
         # Reformat stack DataFrame
         df_stack = df_stack.set_index(["product", "region", "uuid"])
-        df_stack = df_stack.melt(var_name="parameter", value_name=year, ignore_index=False)
+        df_stack = df_stack.melt(
+            var_name="parameter", value_name=year, ignore_index=False
+        )
         df_stack = df_stack.reset_index().set_index("uuid")
         df_stack = df_stack.sort_index()
 
@@ -233,10 +333,22 @@ def create_table_asset_transition_sequences(importer: IntermediateDataImporter) 
 
         existing_uuids = [uuid for uuid in current_uuids if uuid in previous_uuids]
         new_uuids = [uuid for uuid in current_uuids if uuid not in previous_uuids]
-        vanished_uuids = [uuid for uuid in previous_uuids if uuid not in current_uuids] # Decommissioned assets (not relevant)
+        vanished_uuids = [
+            uuid for uuid in previous_uuids if uuid not in current_uuids
+        ]  # Decommissioned assets (not relevant)
 
-        newbuild_stack = df_stack[df_stack.index.isin(new_uuids)].reset_index().set_index(multiindex).sort_index()
-        existing_stack = df_stack[df_stack.index.isin(existing_uuids)].reset_index().set_index(multiindex).sort_index()
+        newbuild_stack = (
+            df_stack[df_stack.index.isin(new_uuids)]
+            .reset_index()
+            .set_index(multiindex)
+            .sort_index()
+        )
+        existing_stack = (
+            df_stack[df_stack.index.isin(existing_uuids)]
+            .reset_index()
+            .set_index(multiindex)
+            .sort_index()
+        )
 
         # Join existing stack and add newbuild stack
         df[year] = existing_stack[year]
@@ -244,25 +356,28 @@ def create_table_asset_transition_sequences(importer: IntermediateDataImporter) 
 
     return df
 
+
 def output_technology_roadmap(importer: IntermediateDataImporter):
     df_roadmap = create_technology_roadmap(importer)
     importer.export_data(df_roadmap, "technology_roadmap.csv", "final")
     plot_technology_roadmap(importer=importer, df_roadmap=df_roadmap)
 
+
 def output_emissions_trajectory(importer: IntermediateDataImporter):
     df_trajectory = create_emissions_trajectory(importer)
-    df_wide = pd.pivot_table(df_trajectory, values="value", index="variable", columns="year")
+    df_wide = pd.pivot_table(
+        df_trajectory, values="value", index="variable", columns="year"
+    )
     importer.export_data(df_wide, "emissions_trajectory.csv", "final")
     plot_emissions_trajectory(importer=importer, df_trajectory=df_trajectory)
+
 
 def create_technology_roadmap(importer: IntermediateDataImporter) -> pd.DataFrame:
     """Create technology roadmap that shows evolution of stack (supply mix) over model horizon."""
 
     # TODO: filter by product
     # Annual production volume in MtNH3 by technology
-    technologies = importer.get_technology_characteristics()[
-        "technology"
-    ].unique()
+    technologies = importer.get_technology_characteristics()["technology"].unique()
     df_roadmap = pd.DataFrame(data={"technology": technologies})
 
     for year in np.arange(START_YEAR, END_YEAR + 1):
@@ -275,12 +390,12 @@ def create_technology_roadmap(importer: IntermediateDataImporter) -> pd.DataFram
         )
 
         # Merge with roadmap DataFrame
-        df_roadmap = df_roadmap.merge(df_sum, on=["technology"], how="left").fillna(
-            0
-        )
+        df_roadmap = df_roadmap.merge(df_sum, on=["technology"], how="left").fillna(0)
 
     # Sort technologies as required
-    df_roadmap = df_roadmap.loc[~(df_roadmap["technology"]=="Waste Water to ammonium nitrate")]
+    df_roadmap = df_roadmap.loc[
+        ~(df_roadmap["technology"] == "Waste Water to ammonium nitrate")
+    ]
     technologies = [
         "Natural Gas SMR + ammonia synthesis",
         "Coal Gasification + ammonia synthesis",
@@ -302,9 +417,7 @@ def create_technology_roadmap(importer: IntermediateDataImporter) -> pd.DataFram
         "Biomass Gasification + ammonia synthesis",
         "Waste to ammonia",
     ]
-    tech_order = CategoricalDtype(
-        technologies, ordered=True
-    )
+    tech_order = CategoricalDtype(technologies, ordered=True)
     df_roadmap["technology"] = df_roadmap["technology"].astype(tech_order)
 
     df_roadmap = df_roadmap.sort_values(["technology"])
@@ -316,10 +429,13 @@ def create_technology_roadmap(importer: IntermediateDataImporter) -> pd.DataFram
     }
     df_roadmap["technology"] = df_roadmap["technology"].astype(str)
     df_roadmap["technology"] = df_roadmap["technology"].replace(shortened_tech_names)
-    
+
     return df_roadmap
 
-def plot_technology_roadmap(importer: IntermediateDataImporter, df_roadmap: pd.DataFrame):
+
+def plot_technology_roadmap(
+    importer: IntermediateDataImporter, df_roadmap: pd.DataFrame
+):
     """Plot the technology roadmap and save as .html"""
 
     # Melt roadmap DataFrame for easy plotting
@@ -342,30 +458,39 @@ def plot_technology_roadmap(importer: IntermediateDataImporter, df_roadmap: pd.D
         auto_open=False,
     )
 
+
 def create_emissions_trajectory(importer: IntermediateDataImporter) -> pd.DataFrame:
     """Create emissions trajectory for scope 1, 2, 3 along with demand."""
 
     # Get emissions for each technology
     df_emissions = importer.get_emissions()
     df_trajectory = pd.DataFrame()
-    
+
     greenhousegases = ["co2", "ch4", "n2o"]
-    emission_cols = [f"{ghg}_{scope}" for ghg in greenhousegases for scope in EMISSION_SCOPES] + ["co2_scope1_captured"]
+    emission_cols = [
+        f"{ghg}_{scope}" for ghg in greenhousegases for scope in EMISSION_SCOPES
+    ] + ["co2_scope1_captured"]
 
     for year in np.arange(START_YEAR, END_YEAR + 1):
 
         # Filter emissions for the year
-        df_em = df_emissions.loc[df_emissions["year"]==year]
+        df_em = df_emissions.loc[df_emissions["year"] == year]
 
         # Calculate annual production volume by technology, merge with emissions and sum for each scope
         df_stack = importer.get_asset_stack(year=year)
-        df_sum = df_stack.groupby(["product", "region", "technology"], as_index=True).sum()
+        df_sum = df_stack.groupby(
+            ["product", "region", "technology"], as_index=True
+        ).sum()
         df_sum = df_sum[["annual_production_volume"]].reset_index()
-        df_stack_emissions = df_sum.merge(df_em, on=["product", "technology", "region"], how="left")
+        df_stack_emissions = df_sum.merge(
+            df_em, on=["product", "technology", "region"], how="left"
+        )
 
         # Multiply production volume with emission factor for each region and technology
         for col in emission_cols:
-            df_stack_emissions[f"emissions_{col}"] = df_stack_emissions["annual_production_volume"] * df_stack_emissions[col]
+            df_stack_emissions[f"emissions_{col}"] = (
+                df_stack_emissions["annual_production_volume"] * df_stack_emissions[col]
+            )
 
         # Melt to long format and concatenate
         cols_to_keep = [f"emissions_{col}" for col in emission_cols]
@@ -376,7 +501,10 @@ def create_emissions_trajectory(importer: IntermediateDataImporter) -> pd.DataFr
 
     return df_trajectory
 
-def plot_emissions_trajectory(importer: IntermediateDataImporter, df_trajectory: pd.DataFrame):
+
+def plot_emissions_trajectory(
+    importer: IntermediateDataImporter, df_trajectory: pd.DataFrame
+):
     """Plot emissions trajectory."""
 
     fig = make_subplots()
@@ -393,6 +521,7 @@ def plot_emissions_trajectory(importer: IntermediateDataImporter, df_trajectory:
         filename=str(importer.final_path.joinpath("emission_trajectory.html")),
         auto_open=False,
     )
+
 
 def sort_technologies_by_classification(df: pd.DataFrame) -> pd.DataFrame:
     """Sort technologies by conventional, transition, end-state.
@@ -422,6 +551,7 @@ def sort_technologies_by_classification(df: pd.DataFrame) -> pd.DataFrame:
     df = df.sort_values(["tech_class", "technology"])
 
     return df
+
 
 def get_tech_classification() -> dict:
     return {

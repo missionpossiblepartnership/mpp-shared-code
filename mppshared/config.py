@@ -41,6 +41,11 @@ PKL_DATA_INTERMEDIATE = f"{PKL_FOLDER}/intermediate_data"
 PKL_DATA_FINAL = f"{PKL_FOLDER}/final_data"
 SOLVER_INPUT_DATA_PATH = f"{CORE_DATA_PATH}/solver_input_data"
 
+OUTPUT_WRITE_PATH = {
+    "chemicals": "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Current model outputs"
+    # "aluminium": TBD
+}
+
 
 # Naming of solver input tables
 SOLVER_INPUT_TABLES = [
@@ -157,11 +162,7 @@ INVESTMENT_CYCLES = {
 }
 
 # Emissions
-GHGS = [
-    "co2",
-    "ch4",
-    "n2o"
-]
+GHGS = ["co2", "ch4", "n2o"]
 
 # Emission scopes included in data analysis
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
@@ -171,8 +172,8 @@ EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
 CUF_LOWER_THRESHOLD = 0.6
 CUF_UPPER_THRESHOLD = 0.95
 COST_METRIC_CUF_ADJUSTMENT = {
-    "chemicals": "mc", # marginal cost of production
-    "aluminium": "lcox" # levelized cost of production
+    "chemicals": "mc",  # marginal cost of production
+    "aluminium": "lcox",  # levelized cost of production
 }
 
 # TODO: Add more decomissioning rates
@@ -188,8 +189,8 @@ ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 PATHWAYS = [
     "bau",
-    # "fa",
-    # "lc",
+    "fa",
+    "lc",
 ]
 
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
@@ -211,10 +212,7 @@ INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_as
 NUMBER_OF_BINS_RANKING = 10
 
 
-MAX_ANNUAL_BROWNFIELD_TRANSITIONS = {
-    "chemicals": 1000,
-    "aluminium": 10
-}
+MAX_ANNUAL_BROWNFIELD_TRANSITIONS = {"chemicals": 1000, "aluminium": 10}
 
 
 # GHGs and Emission scopes included in weighting when ranking technology transitions
@@ -320,26 +318,20 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
     "chemicals": {
         "maximum_asset_additions": 100,
         "maximum_capacity_growth_rate": 1,
-        "years_rampup_phase": 10
+        "years_rampup_phase": 10,
     },
     "aluminium": {
         "maximum_asset_additions": 4,
         "maximum_capacity_growth_rate": 0.3,
-        "years_rampup_phase": 10
-    }
+        "years_rampup_phase": 10,
+    },
 }
 
 # Year from which newbuild capacity has to fulfill the 2050 emissions constraint
-YEAR_2050_EMISSIONS_CONSTRAINT = {
-    "chemicals": 2050,
-    "aluminium": 2045
-}
+YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2050, "aluminium": 2045}
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-ANNUAL_RENOVATION_SHARE = {
-    "chemicals": 0.05,
-    "aluminium": 1
-}
+ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 1}
 
 # Share of demand in each region that needs to be fulfilled by production in that region
 REGIONAL_PRODUCTION_SHARES = {
