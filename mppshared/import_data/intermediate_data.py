@@ -54,6 +54,7 @@ class IntermediateDataImporter:
         """
         output_dir = self.aggregate_export_dir if aggregate else self.export_dir
         if export_dir is not None:
+            
             output_dir = output_dir.joinpath(export_dir)
         else:
             output_dir = output_dir
