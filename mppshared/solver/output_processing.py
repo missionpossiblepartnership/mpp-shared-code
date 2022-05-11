@@ -1,6 +1,8 @@
 """ Process outputs to standardised output table."""
 from collections import defaultdict
+from lib2to3.pgen2.pgen import DFAState
 from re import T
+from tkinter import END
 import pandas as pd
 import numpy as np
 
@@ -114,7 +116,7 @@ def _calculate_co2_captured(
 ) -> pd.DataFrame:
     """Calculate captured CO2 by product, region and technology for a given asset stack"""
 
-    logger.info("--Calculating CO2 captured")
+    logger.info("-- Calculating CO2 captured")
 
     # Captured CO2 by technology is calculated by multiplying with the annual production volume
     df_stack = df_stack.merge(df_emissions, on=["product", "region", "technology"])
@@ -150,24 +152,33 @@ def _calculate_emissions_intensity(
 
     logger.info("-- Calculating emissions intensity")
 
-    # Emissions are the emissions factor multiplied with the annual production volume
-    df_stack = df_stack.merge(df_emissions, on=["product", "region", "technology"])
+    # Emission scopes
     scopes = [f"{ghg}_{scope}" for scope in EMISSION_SCOPES for ghg in GHGS]
 
-    for scope in scopes:
-        df_stack[scope] = df_stack[scope] * df_stack["annual_production_volume"]
+    # If differentiated by technology, emissions intensity is identical to the emission factors calculated previously (even if zero production)
+    if agg_vars == ["product", "region", "technology"]:
+        for scope in scopes:
+            df_stack = df_emissions.rename(
+                {scope: f"emissions_intensity_{scope}" for scope in scopes}, axis=1
+            ).copy()
 
-    df_stack = (
-        df_stack.groupby(agg_vars)[scopes + ["annual_production_volume"]]
-        .sum()
-        .reset_index()
-    )
+    # Otherwise, Emissions are the emissions factor multiplied with the annual production volume
+    else:
+        df_stack = df_stack.merge(df_emissions, on=["product", "region", "technology"])
+        for scope in scopes:
+            df_stack[scope] = df_stack[scope] * df_stack["annual_production_volume"]
 
-    # Emissions intensity is the emissions divided by annual production volume
-    for scope in scopes:
-        df_stack[f"emissions_intensity_{scope}"] = (
-            df_stack[scope] / df_stack["annual_production_volume"]
+        df_stack = (
+            df_stack.groupby(agg_vars)[scopes + ["annual_production_volume"]]
+            .sum()
+            .reset_index()
         )
+
+        # Emissions intensity is the emissions divided by annual production volume
+        for scope in scopes:
+            df_stack[f"emissions_intensity_{scope}"] = (
+                df_stack[scope] / df_stack["annual_production_volume"]
+            )
 
     df_stack = df_stack.melt(
         id_vars=agg_vars,
@@ -195,23 +206,6 @@ def _calculate_emissions_intensity(
         df_stack["technology"] = "All"
 
     return df_stack
-
-
-def _calculate_lcox(df_stack, df_transitions):
-    logger.info("-- Calculating LCOX")
-    df_assets_lcox = df_stack.merge(
-        df_transitions,
-        left_on=["product", "region", "technology"],
-        right_on=["product", "region", "technology_destination"],
-    )
-    df_stack_lcox = (
-        df_assets_lcox.groupby(["product", "region", "technology"]).sum().reset_index()
-    )
-    df_stack_lcox.rename(columns={"lcox": "value"}, inplace=True)
-    df_stack_lcox["parameter"] = "LCOX"
-    df_stack_lcox["unit"] = "USD/t"
-    df_stack_lcox["parameter_group"] = "Cost"
-    return df_stack_lcox
 
 
 def _calculate_resource_consumption(
@@ -286,11 +280,6 @@ def create_table_all_data_year(
 
     df_inputs = pd.concat(data_variables)
 
-    # Calculate LCOX
-    df_transitions = importer.get_technology_transitions_and_cost()
-    df_transitions = df_transitions[df_transitions["year"] == year]
-    df_stack_lcox = _calculate_lcox(df_stack, df_transitions)
-
     # Concatenate all the output tables
     df_all_data_year = pd.concat(
         [
@@ -300,7 +289,6 @@ def create_table_all_data_year(
             df_emissions_intensity,
             df_emissions_intensity_all_tech,
             df_co2_captured,
-            df_stack_lcox,
             df_inputs,
         ]
     )
@@ -462,44 +450,166 @@ def calculate_weighted_average_lcox(
 ) -> pd.DataFrame:
     """Calculate weighted average of LCOX across the supply mix in a given year."""
 
-    df = pd.DataFrame()
-    # In every year, get LCOX of the asset based on the year it was commissioned and average according to desired aggregation
-    for year in np.arange(START_YEAR, END_YEAR + 1):
-        df_stack = importer.get_asset_stack(year)
-        df_stack = df_stack.rename(columns={"year_commissioned": "year"})
+    # If granularity on technology level, simply take LCOX from cost DataFrame
+    if agg_vars == ["product", "region", "technology"]:
+        df = df_cost.rename(
+            {"lcox": "value", "technology_destination": "technology"}, axis=1
+        ).copy()
+        df = df.loc[df["technology_origin"] == "New-build"]
 
-        # Assume that assets built before start of model time horizon have LCOX of start year
-        df_stack.loc[df_stack["year"] < START_YEAR, "year"] = START_YEAR
+    else:
+        df = pd.DataFrame()
+        # In every year, get LCOX of the asset based on the year it was commissioned and average according to desired aggregation
+        for year in np.arange(START_YEAR, END_YEAR + 1):
+            df_stack = importer.get_asset_stack(year)
+            df_stack = df_stack.rename(columns={"year_commissioned": "year"})
 
-        # Add LCOX to each asset
-        df_cost = df_cost.loc[df_cost["technology_origin"] == "New-build"]
-        df_cost = df_cost.rename(columns={"technology_destination": "technology"})
-        df_stack = df_stack.merge(
-            df_cost, on=["product", "region", "technology", "year"], how="left"
-        )
+            # Assume that assets built before start of model time horizon have LCOX of start year
+            df_stack.loc[df_stack["year"] < START_YEAR, "year"] = START_YEAR
 
-        # Calculate weighted average according to desired aggregation
-        df_stack = (
-            df_stack.groupby(agg_vars).apply(
-                lambda x: np.average(x["lcox"], weights=x["annual_production_volume"])
+            # Add LCOX to each asset
+            df_cost = df_cost.loc[df_cost["technology_origin"] == "New-build"]
+            df_cost = df_cost.rename(columns={"technology_destination": "technology"})
+            df_stack = df_stack.merge(
+                df_cost, on=["product", "region", "technology", "year"], how="left"
             )
-        ).reset_index(drop=False)
 
-        df_stack = df_stack.melt(
-            id_vars=agg_vars,
-            value_vars="lcox",
-            var_name="parameter",
-            value_name="value",
-        )
-        df_stack["year"] = year
+            # Calculate weighted average according to desired aggregation
+            df_stack = (
+                df_stack.groupby(agg_vars).apply(
+                    lambda x: np.average(
+                        x["lcox"], weights=x["annual_production_volume"]
+                    )
+                )
+            ).reset_index(drop=False)
 
-        df = pd.concat([df, df_stack])
+            df_stack = df_stack.melt(
+                id_vars=agg_vars,
+                value_vars="lcox",
+                var_name="parameter",
+                value_name="value",
+            )
+            df_stack["year"] = year
+
+            df = pd.concat([df, df_stack])
 
     # Transform to output table format
     df["parameter_group"] = "Cost"
     df["parameter"] = "LCOX"
     df["unit"] = "USD/t"
     df["sector"] = sector
+
+    for variable in [
+        agg_var
+        for agg_var in ["product", "region", "technology"]
+        if agg_var not in agg_vars
+    ]:
+        df[variable] = "All"
+
+    df = df.pivot_table(
+        index=[
+            "sector",
+            "product",
+            "region",
+            "technology",
+            "parameter_group",
+            "parameter",
+            "unit",
+        ],
+        columns="year",
+        values="value",
+    ).fillna(0)
+
+    return df
+
+
+def calculate_electrolysis_capacity(
+    importer: IntermediateDataImporter,
+    sector: str,
+    agg_vars=["product", "region", "technology"],
+) -> pd.DataFrame:
+    """Calculate electrolysis capacity in every year."""
+
+    df_stack = pd.DataFrame()
+
+    # Get annual production volume by technology in every year
+    for year in np.arange(START_YEAR, END_YEAR + 1):
+        stack = importer.get_asset_stack(year)
+        stack["year"] = year
+        df_stack = pd.concat([df_stack, stack])
+
+    # Filter for electrolysis technologies and group
+    df_stack = df_stack.loc[df_stack["technology"].str.contains("Electrolyser")]
+    df_stack = (
+        df_stack.groupby(["product", "region", "technology", "year"])[
+            "annual_production_volume"
+        ]
+        .sum()
+        .reset_index(drop=False)
+    )
+
+    # Add capacity factors, efficiencies and hydrogen proportions
+    electrolyser_cfs = importer.get_electrolyser_cfs().rename(
+        columns={"technology_destination": "technology"}
+    )
+    electrolyser_effs = importer.get_electrolyser_efficiencies().rename(
+        columns={"technology_destination": "technology"}
+    )
+    electrolyser_props = importer.get_electrolyser_proportions().rename(
+        columns={"technology_destination": "technology"}
+    )
+
+    merge_vars1 = ["product", "region", "technology", "year"]
+    merge_vars2 = ["product", "region", "year"]
+    df_stack = df_stack.merge(
+        electrolyser_cfs[merge_vars1 + ["electrolyser_capacity_factor"]],
+        on=merge_vars1,
+        how="left",
+    )
+    df_stack = df_stack.merge(
+        electrolyser_effs[merge_vars2 + ["electrolyser_efficiency"]],
+        on=merge_vars2,
+        how="left",
+    )
+    df_stack = df_stack.merge(
+        electrolyser_props[merge_vars2 + ["electrolyser_hydrogen_proportion"]],
+        on=merge_vars2,
+        how="left",
+    )
+    # Electrolysis capacity = Ammonia production * Proportion of H2 produced via electrolysis * Ratio of ammonia to H2 * Electrolyser efficiency / (365 * 24 * CUF)
+    df_stack["electrolysis_capacity"] = (
+        df_stack["annual_production_volume"]
+        * df_stack["electrolyser_hydrogen_proportion"]
+        * df_stack["electrolyser_efficiency"]
+        / (365 * 24 * df_stack["electrolyser_capacity_factor"])
+    )
+
+    def choose_ratio(row: pd.Series) -> float:
+        if row["product"] == "Ammonia":
+            ratio = H2_PER_AMMONIA
+        elif row["product"] == "Urea":
+            ratio = H2_PER_AMMONIA * AMMONIA_PER_UREA
+        elif row["product"] == "Ammonium nitrate":
+            ratio = H2_PER_AMMONIA * AMMONIA_PER_AMMONIUM_NITRATE
+        return ratio
+
+    df_stack["electrolysis_capacity"] = df_stack.apply(
+        lambda row: row["electrolysis_capacity"] * choose_ratio(row), axis=1
+    )
+
+    df = (
+        df_stack.groupby(agg_vars + ["year"])[["electrolysis_capacity"]]
+        .sum()
+        .reset_index(drop=False)
+    )
+
+    # Transform to output table format
+    df["parameter_group"] = "Capacity"
+    df["parameter"] = "Electrolysis capacity"
+    df["unit"] = "GW"
+    df["sector"] = sector
+    df = df.rename(columns={"electrolysis_capacity": "value"})
+    df["year"] = df["year"].astype(int)
 
     for variable in [
         agg_var
@@ -543,6 +653,23 @@ def calculate_outputs(pathway: str, sensitivity: str, sector: str):
         df_transitions,
         f"asset_transition_sequences_sensitivity_{sensitivity}.csv",
         "final",
+    )
+
+    # Calculate electrolysis capacity
+    df_electrolysis_capacity = calculate_electrolysis_capacity(
+        importer=importer, sector=sector, agg_vars=["product", "region", "technology"]
+    )
+
+    df_electrolysis_capacity_all_tech = calculate_electrolysis_capacity(
+        importer=importer, sector=sector, agg_vars=["product", "region"]
+    )
+
+    df_electrolysis_capacity_all_tech_all_regions = calculate_electrolysis_capacity(
+        importer=importer, sector=sector, agg_vars=["product"]
+    )
+
+    df_electrolysis_capacity_all_regions = calculate_electrolysis_capacity(
+        importer=importer, sector=sector, agg_vars=["product", "technology"]
     )
 
     # Calculate weighted average of LCOX
@@ -635,6 +762,7 @@ def calculate_outputs(pathway: str, sensitivity: str, sector: str):
             df_lcox,
             df_lcox_all_techs,
             df_lcox_all_regions,
+            df_electrolysis_capacity,
         ]
     )
     df_pivot.reset_index(inplace=True)
