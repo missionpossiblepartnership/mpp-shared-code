@@ -535,18 +535,18 @@ def calculate_electrolysis_capacity(
     # Get annual production volume by technology in every year
     for year in np.arange(START_YEAR, END_YEAR + 1):
         stack = importer.get_asset_stack(year)
+        stack = (
+            stack.groupby(["product", "region", "technology"])[
+                "annual_production_volume"
+            ]
+            .sum()
+            .reset_index(drop=False)
+        )
         stack["year"] = year
         df_stack = pd.concat([df_stack, stack])
 
     # Filter for electrolysis technologies and group
     df_stack = df_stack.loc[df_stack["technology"].str.contains("Electrolyser")]
-    df_stack = (
-        df_stack.groupby(["product", "region", "technology", "year"])[
-            "annual_production_volume"
-        ]
-        .sum()
-        .reset_index(drop=False)
-    )
 
     # Add capacity factors, efficiencies and hydrogen proportions
     electrolyser_cfs = importer.get_electrolyser_cfs().rename(
@@ -572,8 +572,8 @@ def calculate_electrolysis_capacity(
         how="left",
     )
     df_stack = df_stack.merge(
-        electrolyser_props[merge_vars2 + ["electrolyser_hydrogen_proportion"]],
-        on=merge_vars2,
+        electrolyser_props[merge_vars1 + ["electrolyser_hydrogen_proportion"]],
+        on=merge_vars1,
         how="left",
     )
     # Electrolysis capacity = Ammonia production * Proportion of H2 produced via electrolysis * Ratio of ammonia to H2 * Electrolyser efficiency / (365 * 24 * CUF)
@@ -763,6 +763,9 @@ def calculate_outputs(pathway: str, sensitivity: str, sector: str):
             df_lcox_all_techs,
             df_lcox_all_regions,
             df_electrolysis_capacity,
+            df_electrolysis_capacity_all_regions,
+            df_electrolysis_capacity_all_tech,
+            df_electrolysis_capacity_all_tech_all_regions,
         ]
     )
     df_pivot.reset_index(inplace=True)
