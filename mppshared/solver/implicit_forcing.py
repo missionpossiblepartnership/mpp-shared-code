@@ -14,6 +14,7 @@ from mppshared.config import (
     INITIAL_CARBON_COST,
     PRODUCTS,
     REGIONAL_TECHNOLOGY_BAN,
+    REGIONS_SALT_CAVERN_AVAILABILITY,
     TECHNOLOGY_MORATORIUM,
     TRANSITIONAL_PERIOD_YEARS,
 )
@@ -66,6 +67,11 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
         df_technology_switches, REGIONAL_TECHNOLOGY_BAN[sector]
     )
 
+    # Eliminate technologies with geological H2 storage in regions without salt caverns
+    df_technology_switches = apply_salt_cavern_availability_constraint(
+        df_technology_switches, sector
+    )
+
     # Apply technology moratorium (year after which newbuild capacity must be transition or
     # end-state technologies)
     if pathway != "bau":
@@ -115,6 +121,35 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
     )
 
     return df_ranking
+
+
+def apply_salt_cavern_availability_constraint(
+    df_technology_transitions: pd.DataFrame, sector: str
+) -> pd.DataFrame:
+    """Take out technologies with geological H2 storage in regions that do not have salt cavern availability"""
+    if sector not in REGIONS_SALT_CAVERN_AVAILABILITY.keys():
+        return df_technology_transitions
+
+    salt_cavern_availability = REGIONS_SALT_CAVERN_AVAILABILITY[sector]
+    for region in [
+        reg for reg in salt_cavern_availability if salt_cavern_availability[reg] == "no"
+    ]:
+        filter = (df_technology_transitions["region"] == region) & (
+            (
+                df_technology_transitions["technology_destination"].str.contains(
+                    "H2 storage - geological"
+                )
+                | (
+                    df_technology_transitions["technology_origin"].str.contains(
+                        "H2 storage - geological"
+                    )
+                )
+            )
+        )
+
+        df_technology_transitions = df_technology_transitions.loc[~filter]
+
+    return df_technology_transitions
 
 
 @timer_func

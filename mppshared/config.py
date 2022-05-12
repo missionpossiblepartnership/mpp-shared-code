@@ -20,7 +20,7 @@ PATHWAYS = [
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = True
+RUN_PARALLEL = False
 
 run_config = {
     "IMPORT_DATA",
@@ -332,6 +332,22 @@ YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2050, "aluminium": 2045}
 
 # Share of assets renovated annually (limits number of brownfield transitions)
 ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 1}
+
+# Regions with and without geological storage (salt caverns)
+REGIONS_SALT_CAVERN_AVAILABILITY = {
+    "chemicals": {
+        "Africa": "yes",  # suggest no
+        "China": "yes",  # suggest no
+        "Europe": "yes",
+        "India": "no",
+        "Latin America": "yes",  # suggest no
+        "Middle East": "yes",
+        "North America": "yes",
+        "Oceania": "yes",
+        "Russia": "yes",
+        "Rest of Asia": "yes",
+    }
+}
 
 # Share of demand in each region that needs to be fulfilled by production in that region
 REGIONAL_PRODUCTION_SHARES = {
