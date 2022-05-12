@@ -12,10 +12,15 @@ LOG_FORMATTER = logging.Formatter(
 ### SECTOR CHOICE ###
 SECTOR = "chemicals"
 # SECTOR = "aluminium"
+PATHWAYS = [
+    "bau",
+    "fa",
+    "lc",
+]
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 
 run_config = {
     "IMPORT_DATA",
@@ -187,11 +192,6 @@ MODEL_SCOPE = "Global"
 # Override asset parameters; annual production capacity in Mt/year
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
-PATHWAYS = [
-    # "bau",
-    # "fa",
-    "lc",
-]
 
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
 SENSITIVITIES = [
@@ -429,6 +429,14 @@ REGIONAL_TECHNOLOGY_BAN = {
 }
 
 ### OUTPUTS PROCESSING ###
+
+# Ratios for calculating electrolysis capacity
 H2_PER_AMMONIA = 0.176471
 AMMONIA_PER_UREA = 0.565724
 AMMONIA_PER_AMMONIUM_NITRATE = 0.425534
+
+# Global Warming Potentials for calculating CO2e
+GWP = {
+    "GWP-20": {"co2": 1, "ch4": 82.5, "n2o": 273},
+    "GWP-100": {"co2": 1, "ch4": 29.8, "n2o": 273},
+}

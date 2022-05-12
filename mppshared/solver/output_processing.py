@@ -109,6 +109,54 @@ def _calculate_emissions(
     return df_stack
 
 
+def _calculate_emissions_co2e(
+    df_stack: pd.DataFrame,
+    df_emissions: pd.DataFrame,
+    gwp="GWP-100",
+    agg_vars=["product", "region", "technology"],
+):
+    """Calculate GHG emissions in CO2e according to specified GWP (GWP-20 or GWP-100)."""
+
+    logger.info("-- Calculating emissions in CO2e")
+
+    # Emissions are the emissions factor multiplied with the annual production volume
+    df_stack = df_stack.merge(df_emissions, on=["product", "region", "technology"])
+    scopes = [f"{ghg}_{scope}" for scope in EMISSION_SCOPES for ghg in GHGS]
+
+    for scope in scopes:
+        df_stack[scope] = df_stack[scope] * df_stack["annual_production_volume"]
+
+    df_stack = (
+        df_stack.groupby(agg_vars)[scopes + ["annual_production_volume"]]
+        .sum()
+        .reset_index()
+    )
+
+    for scope in EMISSION_SCOPES:
+        df_stack[f"CO2e {str.capitalize(scope).replace('_', ' ')}"] = 0
+        for ghg in GHGS:
+            df_stack[f"CO2e {str.capitalize(scope).replace('_', ' ')}"] += (
+                df_stack[f"{ghg}_{scope}"] * GWP[gwp][ghg]
+            )
+
+    df_stack = df_stack.melt(
+        id_vars=agg_vars,
+        value_vars=[
+            f"CO2e {str.capitalize(scope).replace('_', ' ')}"
+            for scope in EMISSION_SCOPES
+        ],
+        var_name="parameter",
+        value_name="value",
+    )
+
+    df_stack["parameter_group"] = "Emissions"
+    df_stack["unit"] = "Mt CO2e"
+    if "technology" not in agg_vars:
+        df_stack["technology"] = "All"
+
+    return df_stack
+
+
 def _calculate_co2_captured(
     df_stack: pd.DataFrame,
     df_emissions: pd.DataFrame,
@@ -257,6 +305,12 @@ def create_table_all_data_year(
     df_emissions = importer.get_emissions()
     df_emissions = df_emissions[df_emissions["year"] == year]
     df_stack_emissions = _calculate_emissions(df_stack, df_emissions)
+    df_stack_emissions_co2e = _calculate_emissions_co2e(
+        df_stack, df_emissions, gwp="GWP-20"
+    )
+    df_stack_emissions_co2e_all_tech = _calculate_emissions_co2e(
+        df_stack, df_emissions, gwp="GWP-20", agg_vars=["product", "region"]
+    )
     df_emissions_intensity = _calculate_emissions_intensity(df_stack, df_emissions)
     df_emissions_intensity_all_tech = _calculate_emissions_intensity(
         df_stack, df_emissions, agg_vars=["product", "region"]
@@ -286,6 +340,8 @@ def create_table_all_data_year(
             df_total_assets,
             df_production_capacity,
             df_stack_emissions,
+            df_stack_emissions_co2e,
+            df_stack_emissions_co2e_all_tech,
             df_emissions_intensity,
             df_emissions_intensity_all_tech,
             df_co2_captured,
