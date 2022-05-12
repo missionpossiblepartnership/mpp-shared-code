@@ -20,7 +20,7 @@ PATHWAYS = [
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = True
+RUN_PARALLEL = False
 
 run_config = {
     "IMPORT_DATA",
@@ -270,8 +270,10 @@ indicates that for the newbuild rank, in the most_economic scenario, we favor bu
 4. Lower scope 3 emissions
 in that order!
 """
-lc_weight_cost = 1
-lc_weight_emissions = 0
+lc_weight_cost = 0.8
+lc_weight_emissions = 0.2
+fa_weight_cost = 0.2
+fa_weight_emissions = 0.8
 RANKING_CONFIG = {
     "chemicals": {
         "greenfield": {
@@ -280,8 +282,8 @@ RANKING_CONFIG = {
                 "emissions": 0.0,
             },
             "fa": {
-                "cost": 0.0,
-                "emissions": 1.0,
+                "cost": fa_weight_cost,
+                "emissions": fa_weight_emissions,
             },
             "lc": {
                 "cost": lc_weight_cost,
@@ -294,8 +296,8 @@ RANKING_CONFIG = {
                 "emissions": 0.0,
             },
             "fa": {
-                "cost": 0.0,
-                "emissions": 1.0,
+                "cost": fa_weight_cost,
+                "emissions": fa_weight_emissions,
             },
             "lc": {
                 "cost": lc_weight_cost,
@@ -308,8 +310,8 @@ RANKING_CONFIG = {
                 "emissions": 0,
             },
             "fa": {
-                "cost": 0.0,
-                "emissions": 1.0,
+                "cost": fa_weight_cost,
+                "emissions": fa_weight_emissions,
             },
             "lc": {
                 "cost": lc_weight_cost,
