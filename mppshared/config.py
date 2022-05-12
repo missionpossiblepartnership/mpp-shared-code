@@ -13,14 +13,14 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
-    # "bau",
+    "bau",
     "fa",
     "lc",
 ]
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 
 run_config = {
     "IMPORT_DATA",
@@ -229,7 +229,12 @@ TRANSITION_TYPES = [
     "brownfield_renovation",
     "brownfield_newbuild",
 ]
-RANK_TYPES = ["decommission", "greenfield", "brownfield"]
+
+# TODO: add decommission for chemicals
+RANK_TYPES = {
+    "chemicals": ["greenfield", "brownfield"],
+    "aluminium": ["decommission", "greenfield", "brownfield"],
+}
 
 MAP_LOW_COST_POWER_REGIONS = {
     "chemicals": {
@@ -268,46 +273,92 @@ in that order!
 lc_weight_cost = 1
 lc_weight_emissions = 0
 RANKING_CONFIG = {
-    "greenfield": {
-        "bau": {
-            "cost": 1.0,
-            "emissions": 0.0,
+    "chemicals": {
+        "greenfield": {
+            "bau": {
+                "cost": 1.0,
+                "emissions": 0.0,
+            },
+            "fa": {
+                "cost": 0.0,
+                "emissions": 1.0,
+            },
+            "lc": {
+                "cost": lc_weight_cost,
+                "emissions": lc_weight_emissions,
+            },
         },
-        "fa": {
-            "cost": 0.0,
-            "emissions": 1.0,
+        "brownfield": {
+            "bau": {
+                "cost": 1.0,
+                "emissions": 0.0,
+            },
+            "fa": {
+                "cost": 0.0,
+                "emissions": 1.0,
+            },
+            "lc": {
+                "cost": lc_weight_cost,
+                "emissions": lc_weight_emissions,
+            },
         },
-        "lc": {
-            "cost": lc_weight_cost,
-            "emissions": lc_weight_emissions,
+        "decommission": {
+            "bau": {
+                "cost": 1,
+                "emissions": 0,
+            },
+            "fa": {
+                "cost": 0.0,
+                "emissions": 1.0,
+            },
+            "lc": {
+                "cost": lc_weight_cost,
+                "emissions": lc_weight_emissions,
+            },
         },
     },
-    "brownfield": {
-        "bau": {
-            "cost": 1.0,
-            "emissions": 0.0,
+    "aluminium": {
+        "greenfield": {
+            "bau": {
+                "cost": 1.0,
+                "emissions": 0.0,
+            },
+            "fa": {
+                "cost": 0.0,
+                "emissions": 1.0,
+            },
+            "lc": {
+                "cost": lc_weight_cost,
+                "emissions": lc_weight_emissions,
+            },
         },
-        "fa": {
-            "cost": 0.0,
-            "emissions": 1.0,
+        "brownfield": {
+            "bau": {
+                "cost": 1.0,
+                "emissions": 0.0,
+            },
+            "fa": {
+                "cost": 0.0,
+                "emissions": 1.0,
+            },
+            "lc": {
+                "cost": lc_weight_cost,
+                "emissions": lc_weight_emissions,
+            },
         },
-        "lc": {
-            "cost": lc_weight_cost,
-            "emissions": lc_weight_emissions,
-        },
-    },
-    "decommission": {
-        "bau": {
-            "cost": 1,
-            "emissions": 0,
-        },
-        "fa": {
-            "cost": 0.0,
-            "emissions": 1.0,
-        },
-        "lc": {
-            "cost": lc_weight_cost,
-            "emissions": lc_weight_emissions,
+        "decommission": {
+            "bau": {
+                "cost": 1,
+                "emissions": 0,
+            },
+            "fa": {
+                "cost": 0.0,
+                "emissions": 1.0,
+            },
+            "lc": {
+                "cost": lc_weight_cost,
+                "emissions": lc_weight_emissions,
+            },
         },
     },
 }

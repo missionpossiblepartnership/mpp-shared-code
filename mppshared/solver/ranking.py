@@ -21,11 +21,11 @@ from mppshared.utility.utils import get_logger
 logger = get_logger(__name__)
 
 
-def get_rank_config(rank_type: str, pathway: str):
+def get_rank_config(rank_type: str, pathway: str, sector: str) -> dict:
     """Filter ranking configuration in config.py"""
     logger.debug("Getting configuration for ranking")
 
-    return RANKING_CONFIG[rank_type][pathway]
+    return RANKING_CONFIG[sector][rank_type][pathway]
 
 
 def bin_ranking(rank_array: np.array, n_bins: int = NUMBER_OF_BINS_RANKING) -> np.array:
@@ -139,7 +139,7 @@ def rank_technology_relative_uncertainty(
     df = get_ranking_table(df_ranking=df_ranking, rank_type=rank_type)
 
     # Get the config for the rank type
-    config = get_rank_config(rank_type, pathway)
+    config = get_rank_config(rank_type, pathway, sector)
 
     # Create cost bins
     rank_array = np.array(df[cost_metric])
@@ -230,8 +230,7 @@ def make_rankings(pathway: str, sensitivity: str, sector: str):
 
     # Make the ranking separately for each type of technology transition (all products together)
     df_ranking = importer.get_technologies_to_rank()
-    for rank_type in ["greenfield"]:
-        # for rank_type in RANK_TYPES:
+    for rank_type in RANK_TYPES[sector]:
 
         # Create ranking table
         if BIN_METHODOLOGY[sector] == "histogram":
