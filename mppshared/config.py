@@ -382,7 +382,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
 }
 
 # Year from which newbuild capacity has to fulfill the 2050 emissions constraint
-YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2035, "aluminium": 2045}
+YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2050, "aluminium": 2045}
 
 # Share of assets renovated annually (limits number of brownfield transitions)
 ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 1}
