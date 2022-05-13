@@ -13,7 +13,7 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
-    # "bau",
+    "bau",
     "fa",
     "lc",
 ]
@@ -370,7 +370,7 @@ RANKING_CONFIG = {
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
     "chemicals": {
-        "maximum_asset_additions": 6,
+        "maximum_asset_additions": 10,
         "maximum_capacity_growth_rate": 0.7,
         "years_rampup_phase": 5,
     },

@@ -1,34 +1,34 @@
 ﻿product,region,technology,year,annual_production_capacity,annual_production_volume,average_cuf,average_age
-Ammonia,China,Coal Gasification + ammonia synthesis,2020,52.5,41,0.780612245,9.1579
-Ammonia,China,Natural Gas SMR + ammonia synthesis,2020,17.5,13.7,0.780612245,9.1579
 Ammonia,North America,Natural Gas SMR + ammonia synthesis,2020,22.5,21.9,0.975395031,11.83333333
-Ammonia,Rest of Asia,Natural Gas SMR + ammonia synthesis,2020,25.9,22.5,0.871305088,17.72692308
+Ammonia,Latin America,Natural Gas SMR + ammonia synthesis,2020,10.9,6.4,0.592549813,13
+Ammonia,Africa,Natural Gas SMR + ammonia synthesis,2020,11.7,9.4,0.804616694,9.42
+Ammonia,Middle East,Natural Gas SMR + ammonia synthesis,2020,20.1,18,0.894632207,12.81746032
 Ammonia,Russia,Natural Gas SMR + ammonia synthesis,2020,20.3,18.2,0.897255454,8.75
 Ammonia,Europe,Natural Gas SMR + ammonia synthesis,2020,19.1,16.1,0.843258761,20.12380952
+Ammonia,China,Coal Gasification + ammonia synthesis,2020,52.5,41,0.780612245,9.1579
+Ammonia,China,Natural Gas SMR + ammonia synthesis,2020,17.5,13.7,0.780612245,9.1579
 Ammonia,India,Natural Gas SMR + ammonia synthesis,2020,17.8,15.8,0.886837881,12.077
-Ammonia,Middle East,Natural Gas SMR + ammonia synthesis,2020,20.1,18,0.894632207,12.81746032
-Ammonia,Africa,Natural Gas SMR + ammonia synthesis,2020,11.7,9.4,0.804616694,9.42
-Ammonia,Latin America,Natural Gas SMR + ammonia synthesis,2020,10.9,6.4,0.592549813,13
+Ammonia,Rest of Asia,Natural Gas SMR + ammonia synthesis,2020,25.9,22.5,0.871305088,17.72692308
 Ammonia,Oceania,Natural Gas SMR + ammonia synthesis,2020,2.2,2.1,0.919183673,5.5
-Ammonium nitrate,China,Coal Gasification + ammonia synthesis,2020,1.534006202,1.197464025,0.780612245,14
-Ammonium nitrate,China,Natural Gas SMR + ammonia synthesis,2020,1.244142323,0.971192732,0.780612245,9.75
-Ammonium nitrate,North America,Natural Gas SMR + ammonia synthesis,2020,0.597535452,0.582833111,0.975395031,9
-Ammonium nitrate,Rest of Asia,Natural Gas SMR + ammonia synthesis,2020,1.673270439,1.457929047,0.871305088,20.625
-Ammonium nitrate,Russia,Natural Gas SMR + ammonia synthesis,2020,0.974349934,0.874240792,0.897255454,10.25
-Ammonium nitrate,Europe,Natural Gas SMR + ammonia synthesis,2020,1.855585949,1.564739108,0.843258761,23.10869565
-Ammonium nitrate,India,Natural Gas SMR + ammonia synthesis,2020,3.104172099,2.752897406,0.886837881,12.11111111
-Ammonium nitrate,Middle East,Natural Gas SMR + ammonia synthesis,2020,0.566122798,0.506471689,0.894632207,12.11111111
-Ammonium nitrate,Africa,Natural Gas SMR + ammonia synthesis,2020,1.718955543,1.383100326,0.804616694,10.66666667
-Ammonium nitrate,Latin America,Natural Gas SMR + ammonia synthesis,2020,4.092747566,2.425156805,0.592549813,19
-Ammonium nitrate,Oceania,Natural Gas SMR + ammonia synthesis,2020,0.191231372,0.175776755,0.919183673,10.16666667
-Urea,China,Coal Gasification + ammonia synthesis,2020,16.67608696,6.4,0.780612245,9.722222222
-Urea,China,Natural Gas SMR + ammonia synthesis,2020,6.691304348,5.3,0.780612245,6.333333333
-Urea,North America,Natural Gas SMR + ammonia synthesis,2020,13.0826087,3.1,0.975395031,12.2202381
-Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,2020,25.32391304,7.8,0.871305088,12.81851852
-Urea,Russia,Natural Gas SMR + ammonia synthesis,2020,9.97826087,4.6,0.897255454,8.25
-Urea,Europe,Natural Gas SMR + ammonia synthesis,2020,16.69565217,8.50,0.843258761,13.11904762
-Urea,India,Natural Gas SMR + ammonia synthesis,2020,55.38074418,14.86514504,0.887,7.894736842
-Urea,Middle East,Natural Gas SMR + ammonia synthesis,2020,10.18882104,2.734854955,0.895,7.894736842
-Urea,Africa,Natural Gas SMR + ammonia synthesis,2020,26.0326087,7.5,0.804616694,9.318181818
-Urea,Latin America,Natural Gas SMR + ammonia synthesis,2020,29.53695652,13,0.592549813,14.22900433
-Urea,Oceania,Natural Gas SMR + ammonia synthesis,2020,0.567391304,0.9,0.919183673,7
+Ammonium nitrate,North America,Natural Gas SMR + ammonia synthesis,2020,2.116373299,2.0643,0.975395031,14
+Ammonium nitrate,Latin America,Natural Gas SMR + ammonia synthesis,2020,1.989368614,1.1788,0.592549813,9.75
+Ammonium nitrate,Africa,Natural Gas SMR + ammonia synthesis,2020,1.360399316,1.0946,0.804616694,9
+Ammonium nitrate,Middle East,Natural Gas SMR + ammonia synthesis,2020,2.593691555,2.3204,0.894632207,20.625
+Ammonium nitrate,Russia,Natural Gas SMR + ammonia synthesis,2020,1.739972706,1.5612,0.897255454,10.25
+Ammonium nitrate,Europe,Natural Gas SMR + ammonia synthesis,2020,2.281268916,1.9237,0.843258761,23.10869565
+Ammonium nitrate,China,Coal Gasification + ammonia synthesis,2020,5.189847862,4.051258791,0.780612245,12.11111111
+Ammonium nitrate,China,Natural Gas SMR + ammonia synthesis,2020,0.954816189,0.745341209,0.780612245,12.11111111
+Ammonium nitrate,India,Natural Gas SMR + ammonia synthesis,2020,2.295120725,2.0354,0.886837881,10.66666667
+Ammonium nitrate,Rest of Asia,Natural Gas SMR + ammonia synthesis,2020,4.283000354,3.7318,0.871305088,19
+Ammonium nitrate,Oceania,Natural Gas SMR + ammonia synthesis,2020,0.281445382,0.2587,0.919183673,10.16666667
+Urea,North America,Natural Gas SMR + ammonia synthesis,2020,10.23913723,9.98720358,0.975395031,9.722222222
+Urea,Latin America,Natural Gas SMR + ammonia synthesis,2020,9.624643466,5.703080686,0.592549813,6.333333333
+Urea,Africa,Natural Gas SMR + ammonia synthesis,2020,6.581345353,5.29546034,0.804616694,12.2202381
+Urea,Middle East,Natural Gas SMR + ammonia synthesis,2020,12.5483496,11.2261577,0.894632207,12.81851852
+Urea,Russia,Natural Gas SMR + ammonia synthesis,2020,8.418101863,7.553187809,0.897255454,8.25
+Urea,Europe,Natural Gas SMR + ammonia synthesis,2020,11.03691201,9.30697275,0.843258761,13.11904762
+Urea,China,Coal Gasification + ammonia synthesis,2020,25.10855448,19.60004508,0.780612245,7.894736842
+Urea,China,Natural Gas SMR + ammonia synthesis,2020,4.619413698,3.605970897,0.780612245,7.894736842
+Urea,India,Natural Gas SMR + ammonia synthesis,2020,11.10392428,9.847380683,0.886837881,9.318181818
+Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,2020,20.7210551,18.05436074,0.871305088,14.22900433
+Urea,Oceania,Natural Gas SMR + ammonia synthesis,2020,1.361526767,1.251493175,0.919183673,7

@@ -1,6 +1,7 @@
 import pandas as pd
+import numpy as np
 
-from mppshared.config import MODEL_YEARS
+from mppshared.config import END_YEAR, MODEL_YEARS, START_YEAR
 
 
 class CarbonCostTrajectory:
@@ -33,11 +34,14 @@ class CarbonCostTrajectory:
         if trajectory == "constant":
             self.df_carbon_cost["carbon_cost"] = initial_carbon_cost
 
-        # TODO: implement linear carbon cost
+        elif trajectory == "linear":
+            self.df_carbon_cost["carbon_cost"] = np.linspace(
+                initial_carbon_cost, final_carbon_cost, num=END_YEAR - START_YEAR
+            )
 
         # TODO: implement logistic carbon cost
 
-        # TODO: implement exponentialc carbon cost
+        # TODO: implement exponential carbon cost
 
     def get_carbon_cost(self, year: int) -> float:
         return self.df_carbon_cost.set_index("year").loc[year, "carbon_cost"]

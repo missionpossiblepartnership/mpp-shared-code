@@ -322,7 +322,7 @@ class SimulationPathway:
         df = df.reset_index(level=["product", "year"])
         return df[(df[("product", "")] == product) & (df[("year", "")] == year)]
 
-    def get_ranking(self, product, year, rank_type):
+    def get_ranking(self, year, rank_type):
         """Get ranking df for a specific year/product"""
         if rank_type not in RANK_TYPES[self.sector]:
             raise ValueError(

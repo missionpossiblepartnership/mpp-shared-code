@@ -43,9 +43,8 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
         production = old_stack.get_annual_production_volume(product)
 
         # Get ranking table for decommissioning
-        df_rank = pathway.get_ranking(
-            year=year, product=product, rank_type="decommission"
-        )
+        df_rank = pathway.get_ranking(year=year, rank_type="decommission")
+        df_rank = df_rank.loc[df_rank["product"] == product]
 
         # TODO: Decommission until one asset short of balance between demand and production
         surplus = production - demand
@@ -139,7 +138,6 @@ def select_asset_to_decommission(
         no_constraint_hurt = check_constraints(
             pathway=pathway,
             stack=tentative_stack,
-            product=product,
             year=year,
             transition_type="decommission",
         )
