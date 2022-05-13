@@ -51,7 +51,7 @@ class SimulationPathway:
         sector: str,
         products: list,
         carbon_budget: CarbonBudget,
-        technology_rampup: dict
+        technology_rampup: dict,
     ):
         # Attributes describing the pathway
         self.start_year = start_year
@@ -118,21 +118,15 @@ class SimulationPathway:
         logger.debug("Getting the transition registry to track technology transitions")
         self.transitions = TransitionRegistry()
 
-    def _import_rankings(self, japan_only=False):
+    def _import_rankings(self):
         """Import ranking for all products and rank types from the CSVs"""
         rankings = defaultdict(dict)
-        for rank_type in RANK_TYPES:
-            for product in self.products:
-                df_rank = self.importer.get_ranking(
-                    rank_type=rank_type,
-                    product=product,
-                )
+        for rank_type in RANK_TYPES[self.sector]:
+            df_rank = self.importer.get_ranking(rank_type=rank_type)
 
-                rankings[product][rank_type] = {}
-                for year in range(self.start_year, self.end_year + 1):
-                    rankings[product][rank_type][year] = df_rank.query(
-                        f"year == {year}"
-                    )
+            rankings[rank_type] = {}
+            for year in range(self.start_year, self.end_year + 1):
+                rankings[rank_type][year] = df_rank.query(f"year == {year}")
         return rankings
 
     def save_rankings(self):
@@ -330,7 +324,7 @@ class SimulationPathway:
 
     def get_ranking(self, product, year, rank_type):
         """Get ranking df for a specific year/product"""
-        if rank_type not in RANK_TYPES:
+        if rank_type not in RANK_TYPES[self.sector]:
             raise ValueError(
                 "Rank type %s not recognized, choose one of %s",
                 rank_type,
@@ -342,7 +336,6 @@ class SimulationPathway:
     def update_ranking(self, df_rank, product, year, rank_type):
         """Update ranking for a product, year, type"""
         self.rankings[product][rank_type][year] = df_rank
-
 
     def copy_availability(self, year):
         df = self.availability

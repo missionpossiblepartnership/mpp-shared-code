@@ -13,7 +13,7 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
-    "bau",
+    # "bau",
     "fa",
     "lc",
 ]
@@ -201,7 +201,7 @@ SENSITIVITIES = [
 
 # Products produced by each sector
 PRODUCTS = {
-    "chemicals": ["Ammonia"],
+    "chemicals": ["Ammonia", "Ammonium nitrate", "Urea"],
     "aluminium": ["Aluminium"],
 }
 
@@ -232,7 +232,7 @@ TRANSITION_TYPES = [
 
 # TODO: add decommission for chemicals
 RANK_TYPES = {
-    "chemicals": ["greenfield", "brownfield"],
+    "chemicals": ["decommission", "greenfield", "brownfield"],
     "aluminium": ["decommission", "greenfield", "brownfield"],
 }
 
@@ -370,9 +370,9 @@ RANKING_CONFIG = {
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
     "chemicals": {
-        "maximum_asset_additions": 100,
-        "maximum_capacity_growth_rate": 1,
-        "years_rampup_phase": 10,
+        "maximum_asset_additions": 6,
+        "maximum_capacity_growth_rate": 0.7,
+        "years_rampup_phase": 5,
     },
     "aluminium": {
         "maximum_asset_additions": 4,

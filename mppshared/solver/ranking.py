@@ -231,7 +231,6 @@ def make_rankings(pathway: str, sensitivity: str, sector: str):
     # Make the ranking separately for each type of technology transition (all products together)
     df_ranking = importer.get_technologies_to_rank()
     for rank_type in RANK_TYPES[sector]:
-
         # Create ranking table
         if BIN_METHODOLOGY[sector] == "histogram":
             df_rank = rank_technology_histogram(
@@ -249,6 +248,10 @@ def make_rankings(pathway: str, sensitivity: str, sector: str):
                 sector=sector,
                 cost_metric=RANKING_COST_METRIC[sector],
             )
+
+        # TODO: remove this workaround
+        # product = "Ammonia"
+        # df_rank = df_rank.loc[df_rank["product"] == "Ammonia"]
 
         # Save ranking table as csv
         importer.export_data(

@@ -51,13 +51,19 @@ def remove_transition(df_rank: pd.DataFrame, transition: dict) -> pd.DataFrame:
         ~(df_rank[list(transition)] == pd.Series(transition)).all(axis=1)
     ]
 
-def remove_all_transitions_with_destination_technology(df_rank: pd.DataFrame, technology_destination: str) -> pd.DataFrame:
+
+def remove_all_transitions_with_destination_technology(
+    df_rank: pd.DataFrame, technology_destination: str
+) -> pd.DataFrame:
     """Remove all transitions with a specific destination technology from the ranking table. This is done when the transition for this technology hits the technology ramp-up constraint."""
-    df_rank = df_rank.loc[~(df_rank["technology_destination"]==technology_destination)]
+    df_rank = df_rank.loc[
+        ~(df_rank["technology_destination"] == technology_destination)
+    ]
     return df_rank
 
+
 def adjust_capacity_utilisation(
-    pathway: SimulationPathway, product: str, year: int
+    pathway: SimulationPathway, year: int
 ) -> SimulationPathway:
     """Adjust capacity utilisation of each asset based on a predefined cost metric (LCOX or marginal cost of production) within predefined thresholds to balance demand
     and production as much as possible in the given year.
@@ -70,33 +76,46 @@ def adjust_capacity_utilisation(
     Returns:
         pathway with updated capacity factor for each Asset in the AssetStack of the given year
     """
-    # Get demand and production in that year
-    demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
-    stack = pathway.get_stack(year=year)
-    production = stack.get_annual_production_volume(product)
 
-    # TODO: make sure that CUF adjustment does not overshoot demand and production balance
-    # If demand exceeds production, increase capacity utilisation of each asset to make production
-    # deficit as small as possible, starting at the asset with the lowest cost metric
-    if demand > production:
-        logger.info(
-            "Increasing capacity utilisation of assets to minimise production deficit"
-        )
-        pathway = increase_cuf_of_assets(
-            pathway=pathway, demand=demand, product=product, year=year, cost_metric=COST_METRIC_CUF_ADJUSTMENT[pathway.sector]
-        )
+    # Adjust capacity utilisation for each product
+    for product in pathway.products:
 
-    # If production exceeds demand, decrease capacity utilisation of each asset to make production
-    # surplus as small as possible, starting at asset with highest cost metric
-    elif production > demand:
-        logger.info(
-            "Decreasing capacity utilisation of assets to minimise production surplus"
-        )
-        pathway = decrease_cuf_of_assets(
-            pathway=pathway, demand=demand, product=product, year=year, cost_metric=COST_METRIC_CUF_ADJUSTMENT[pathway.sector]
-        )
+        # Get demand and production in that year
+        demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
+        stack = pathway.get_stack(year=year)
+        production = stack.get_annual_production_volume(product)
 
-    production = stack.get_annual_production_volume(product)
+        # TODO: make sure that CUF adjustment does not overshoot demand and production balance
+        # If demand exceeds production, increase capacity utilisation of each asset to make production
+        # deficit as small as possible, starting at the asset with the lowest cost metric
+        if demand > production:
+            logger.info(
+                "Increasing capacity utilisation of assets to minimise production deficit"
+            )
+            pathway = increase_cuf_of_assets(
+                pathway=pathway,
+                demand=demand,
+                product=product,
+                year=year,
+                cost_metric=COST_METRIC_CUF_ADJUSTMENT[pathway.sector],
+            )
+
+        # If production exceeds demand, decrease capacity utilisation of each asset to make production
+        # surplus as small as possible, starting at asset with highest cost metric
+        elif production > demand:
+            logger.info(
+                "Decreasing capacity utilisation of assets to minimise production surplus"
+            )
+            pathway = decrease_cuf_of_assets(
+                pathway=pathway,
+                demand=demand,
+                product=product,
+                year=year,
+                cost_metric=COST_METRIC_CUF_ADJUSTMENT[pathway.sector],
+            )
+
+        production = stack.get_annual_production_volume(product)
+
     return pathway
 
 
@@ -167,7 +186,11 @@ def decrease_cuf_of_assets(
 
 
 def sort_assets_cost_metric(
-    assets: list, pathway: SimulationPathway, year: int, cost_metric: str, descending=False
+    assets: list,
+    pathway: SimulationPathway,
+    year: int,
+    cost_metric: str,
+    descending=False,
 ):
     """Sort list of assets according to a cost metric (LCOX or MC) in the specified year in ascending order"""
     return sorted(
