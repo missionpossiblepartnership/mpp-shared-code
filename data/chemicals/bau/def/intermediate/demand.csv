@@ -1,342 +1,1024 @@
 product,scenario,region,year,value
-Ammonia,BAU,Global,2020,185.2
-Ammonia,BAU,North America,2020,18.2
-Ammonia,BAU,Latin America,2020,10.4
-Ammonia,BAU,Africa,2020,9.7
-Ammonia,BAU,Middle East,2020,20.5
-Ammonia,BAU,Russia,2020,13.8
-Ammonia,BAU,Europe,2020,17.0
-Ammonia,BAU,China,2020,42.4
-Ammonia,BAU,India,2020,18.0
-Ammonia,BAU,Rest of Asia,2020,33.0
-Ammonia,BAU,Oceania,2020,2.3
-Ammonia,BAU,Global,2021,188.4
-Ammonia,BAU,North America,2021,18.5
-Ammonia,BAU,Latin America,2021,10.6
-Ammonia,BAU,Africa,2021,9.8
-Ammonia,BAU,Middle East,2021,20.9
-Ammonia,BAU,Russia,2021,14.0
-Ammonia,BAU,Europe,2021,17.3
-Ammonia,BAU,China,2021,42.4
-Ammonia,BAU,India,2021,18.3
-Ammonia,BAU,Rest of Asia,2021,34.2
-Ammonia,BAU,Oceania,2021,2.4
-Ammonia,BAU,Global,2022,191.8
-Ammonia,BAU,North America,2022,18.8
-Ammonia,BAU,Latin America,2022,11.1
-Ammonia,BAU,Africa,2022,10.3
-Ammonia,BAU,Middle East,2022,21.7
-Ammonia,BAU,Russia,2022,14.0
-Ammonia,BAU,Europe,2022,17.4
-Ammonia,BAU,China,2022,42.4
-Ammonia,BAU,India,2022,18.6
-Ammonia,BAU,Rest of Asia,2022,35.2
-Ammonia,BAU,Oceania,2022,2.4
-Ammonia,BAU,Global,2023,195.2
-Ammonia,BAU,North America,2023,19.0
-Ammonia,BAU,Latin America,2023,11.6
-Ammonia,BAU,Africa,2023,10.7
-Ammonia,BAU,Middle East,2023,22.6
-Ammonia,BAU,Russia,2023,14.0
-Ammonia,BAU,Europe,2023,17.5
-Ammonia,BAU,China,2023,42.4
-Ammonia,BAU,India,2023,18.8
-Ammonia,BAU,Rest of Asia,2023,36.1
-Ammonia,BAU,Oceania,2023,2.5
-Ammonia,BAU,Global,2024,198.5
-Ammonia,BAU,North America,2024,19.1
-Ammonia,BAU,Latin America,2024,12.1
-Ammonia,BAU,Africa,2024,11.1
-Ammonia,BAU,Middle East,2024,23.4
-Ammonia,BAU,Russia,2024,14.0
-Ammonia,BAU,Europe,2024,17.7
-Ammonia,BAU,China,2024,42.4
-Ammonia,BAU,India,2024,19.1
-Ammonia,BAU,Rest of Asia,2024,37.0
-Ammonia,BAU,Oceania,2024,2.6
-Ammonia,BAU,Global,2025,201.7
-Ammonia,BAU,North America,2025,19.3
-Ammonia,BAU,Latin America,2025,12.5
-Ammonia,BAU,Africa,2025,11.5
-Ammonia,BAU,Middle East,2025,24.3
-Ammonia,BAU,Russia,2025,14.0
-Ammonia,BAU,Europe,2025,17.8
-Ammonia,BAU,China,2025,42.4
-Ammonia,BAU,India,2025,19.3
-Ammonia,BAU,Rest of Asia,2025,37.9
-Ammonia,BAU,Oceania,2025,2.7
-Ammonia,BAU,Global,2026,204.8
-Ammonia,BAU,North America,2026,19.5
-Ammonia,BAU,Latin America,2026,13.0
-Ammonia,BAU,Africa,2026,12.0
-Ammonia,BAU,Middle East,2026,25.1
-Ammonia,BAU,Russia,2026,14.1
-Ammonia,BAU,Europe,2026,17.9
-Ammonia,BAU,China,2026,42.4
-Ammonia,BAU,India,2026,19.5
-Ammonia,BAU,Rest of Asia,2026,38.7
-Ammonia,BAU,Oceania,2026,2.7
-Ammonia,BAU,Global,2027,207.8
-Ammonia,BAU,North America,2027,19.7
-Ammonia,BAU,Latin America,2027,13.5
-Ammonia,BAU,Africa,2027,12.4
-Ammonia,BAU,Middle East,2027,25.9
-Ammonia,BAU,Russia,2027,14.2
-Ammonia,BAU,Europe,2027,18.0
-Ammonia,BAU,China,2027,42.4
-Ammonia,BAU,India,2027,19.7
-Ammonia,BAU,Rest of Asia,2027,39.4
-Ammonia,BAU,Oceania,2027,2.8
-Ammonia,BAU,Global,2028,210.7
-Ammonia,BAU,North America,2028,19.8
-Ammonia,BAU,Latin America,2028,13.9
-Ammonia,BAU,Africa,2028,12.8
-Ammonia,BAU,Middle East,2028,26.7
-Ammonia,BAU,Russia,2028,14.4
-Ammonia,BAU,Europe,2028,18.1
-Ammonia,BAU,China,2028,42.4
-Ammonia,BAU,India,2028,19.9
-Ammonia,BAU,Rest of Asia,2028,40.1
-Ammonia,BAU,Oceania,2028,2.8
-Ammonia,BAU,Global,2029,213.5
-Ammonia,BAU,North America,2029,20.0
-Ammonia,BAU,Latin America,2029,14.3
-Ammonia,BAU,Africa,2029,13.1
-Ammonia,BAU,Middle East,2029,27.4
-Ammonia,BAU,Russia,2029,14.5
-Ammonia,BAU,Europe,2029,18.2
-Ammonia,BAU,China,2029,42.4
-Ammonia,BAU,India,2029,20.0
-Ammonia,BAU,Rest of Asia,2029,40.7
-Ammonia,BAU,Oceania,2029,2.9
-Ammonia,BAU,Global,2030,216.3
-Ammonia,BAU,North America,2030,20.1
-Ammonia,BAU,Latin America,2030,14.8
-Ammonia,BAU,Africa,2030,13.5
-Ammonia,BAU,Middle East,2030,28.2
-Ammonia,BAU,Russia,2030,14.7
-Ammonia,BAU,Europe,2030,18.2
-Ammonia,BAU,China,2030,42.4
-Ammonia,BAU,India,2030,20.2
-Ammonia,BAU,Rest of Asia,2030,41.3
-Ammonia,BAU,Oceania,2030,2.9
-Ammonia,BAU,Global,2031,218.9
-Ammonia,BAU,North America,2031,20.3
-Ammonia,BAU,Latin America,2031,15.2
-Ammonia,BAU,Africa,2031,13.9
-Ammonia,BAU,Middle East,2031,28.9
-Ammonia,BAU,Russia,2031,14.8
-Ammonia,BAU,Europe,2031,18.3
-Ammonia,BAU,China,2031,42.4
-Ammonia,BAU,India,2031,20.3
-Ammonia,BAU,Rest of Asia,2031,41.9
-Ammonia,BAU,Oceania,2031,2.9
-Ammonia,BAU,Global,2032,221.5
-Ammonia,BAU,North America,2032,20.4
-Ammonia,BAU,Latin America,2032,15.6
-Ammonia,BAU,Africa,2032,14.3
-Ammonia,BAU,Middle East,2032,29.7
-Ammonia,BAU,Russia,2032,14.9
-Ammonia,BAU,Europe,2032,18.4
-Ammonia,BAU,China,2032,42.4
-Ammonia,BAU,India,2032,20.5
-Ammonia,BAU,Rest of Asia,2032,42.5
-Ammonia,BAU,Oceania,2032,3.0
-Ammonia,BAU,Global,2033,224.0
-Ammonia,BAU,North America,2033,20.5
-Ammonia,BAU,Latin America,2033,16.0
-Ammonia,BAU,Africa,2033,14.6
-Ammonia,BAU,Middle East,2033,30.4
-Ammonia,BAU,Russia,2033,15.0
-Ammonia,BAU,Europe,2033,18.4
-Ammonia,BAU,China,2033,42.4
-Ammonia,BAU,India,2033,20.6
-Ammonia,BAU,Rest of Asia,2033,43.0
-Ammonia,BAU,Oceania,2033,3.0
-Ammonia,BAU,Global,2034,226.4
-Ammonia,BAU,North America,2034,20.6
-Ammonia,BAU,Latin America,2034,16.4
-Ammonia,BAU,Africa,2034,15.0
-Ammonia,BAU,Middle East,2034,31.1
-Ammonia,BAU,Russia,2034,15.1
-Ammonia,BAU,Europe,2034,18.5
-Ammonia,BAU,China,2034,42.4
-Ammonia,BAU,India,2034,20.7
-Ammonia,BAU,Rest of Asia,2034,43.5
-Ammonia,BAU,Oceania,2034,3.1
-Ammonia,BAU,Global,2035,228.7
-Ammonia,BAU,North America,2035,20.7
-Ammonia,BAU,Latin America,2035,16.8
-Ammonia,BAU,Africa,2035,15.3
-Ammonia,BAU,Middle East,2035,31.7
-Ammonia,BAU,Russia,2035,15.2
-Ammonia,BAU,Europe,2035,18.5
-Ammonia,BAU,China,2035,42.4
-Ammonia,BAU,India,2035,20.8
-Ammonia,BAU,Rest of Asia,2035,44.0
-Ammonia,BAU,Oceania,2035,3.1
-Ammonia,BAU,Global,2036,230.9
-Ammonia,BAU,North America,2036,20.9
-Ammonia,BAU,Latin America,2036,17.2
-Ammonia,BAU,Africa,2036,15.7
-Ammonia,BAU,Middle East,2036,32.4
-Ammonia,BAU,Russia,2036,15.3
-Ammonia,BAU,Europe,2036,18.6
-Ammonia,BAU,China,2036,42.4
-Ammonia,BAU,India,2036,20.9
-Ammonia,BAU,Rest of Asia,2036,44.5
-Ammonia,BAU,Oceania,2036,3.1
-Ammonia,BAU,Global,2037,233.1
-Ammonia,BAU,North America,2037,20.9
-Ammonia,BAU,Latin America,2037,17.6
-Ammonia,BAU,Africa,2037,16.0
-Ammonia,BAU,Middle East,2037,33.1
-Ammonia,BAU,Russia,2037,15.4
-Ammonia,BAU,Europe,2037,18.6
-Ammonia,BAU,China,2037,42.4
-Ammonia,BAU,India,2037,21.0
-Ammonia,BAU,Rest of Asia,2037,44.9
-Ammonia,BAU,Oceania,2037,3.1
-Ammonia,BAU,Global,2038,235.1
-Ammonia,BAU,North America,2038,21.0
-Ammonia,BAU,Latin America,2038,17.9
-Ammonia,BAU,Africa,2038,16.3
-Ammonia,BAU,Middle East,2038,33.7
-Ammonia,BAU,Russia,2038,15.5
-Ammonia,BAU,Europe,2038,18.7
-Ammonia,BAU,China,2038,42.4
-Ammonia,BAU,India,2038,21.1
-Ammonia,BAU,Rest of Asia,2038,45.3
-Ammonia,BAU,Oceania,2038,3.2
-Ammonia,BAU,Global,2039,237.1
-Ammonia,BAU,North America,2039,21.1
-Ammonia,BAU,Latin America,2039,18.3
-Ammonia,BAU,Africa,2039,16.6
-Ammonia,BAU,Middle East,2039,34.3
-Ammonia,BAU,Russia,2039,15.6
-Ammonia,BAU,Europe,2039,18.7
-Ammonia,BAU,China,2039,42.4
-Ammonia,BAU,India,2039,21.2
-Ammonia,BAU,Rest of Asia,2039,45.6
-Ammonia,BAU,Oceania,2039,3.2
-Ammonia,BAU,Global,2040,238.9
-Ammonia,BAU,North America,2040,21.2
-Ammonia,BAU,Latin America,2040,18.6
-Ammonia,BAU,Africa,2040,16.9
-Ammonia,BAU,Middle East,2040,34.9
-Ammonia,BAU,Russia,2040,15.7
-Ammonia,BAU,Europe,2040,18.7
-Ammonia,BAU,China,2040,42.4
-Ammonia,BAU,India,2040,21.3
-Ammonia,BAU,Rest of Asia,2040,46.0
-Ammonia,BAU,Oceania,2040,3.2
-Ammonia,BAU,Global,2041,240.7
-Ammonia,BAU,North America,2041,21.3
-Ammonia,BAU,Latin America,2041,19.0
-Ammonia,BAU,Africa,2041,17.2
-Ammonia,BAU,Middle East,2041,35.5
-Ammonia,BAU,Russia,2041,15.8
-Ammonia,BAU,Europe,2041,18.7
-Ammonia,BAU,China,2041,42.4
-Ammonia,BAU,India,2041,21.4
-Ammonia,BAU,Rest of Asia,2041,46.3
-Ammonia,BAU,Oceania,2041,3.2
-Ammonia,BAU,Global,2042,242.4
-Ammonia,BAU,North America,2042,21.3
-Ammonia,BAU,Latin America,2042,19.3
-Ammonia,BAU,Africa,2042,17.5
-Ammonia,BAU,Middle East,2042,36.1
-Ammonia,BAU,Russia,2042,15.8
-Ammonia,BAU,Europe,2042,18.7
-Ammonia,BAU,China,2042,42.4
-Ammonia,BAU,India,2042,21.4
-Ammonia,BAU,Rest of Asia,2042,46.5
-Ammonia,BAU,Oceania,2042,3.3
-Ammonia,BAU,Global,2043,244.0
-Ammonia,BAU,North America,2043,21.4
-Ammonia,BAU,Latin America,2043,19.6
-Ammonia,BAU,Africa,2043,17.8
-Ammonia,BAU,Middle East,2043,36.6
-Ammonia,BAU,Russia,2043,15.9
-Ammonia,BAU,Europe,2043,18.7
-Ammonia,BAU,China,2043,42.4
-Ammonia,BAU,India,2043,21.5
-Ammonia,BAU,Rest of Asia,2043,46.8
-Ammonia,BAU,Oceania,2043,3.3
-Ammonia,BAU,Global,2044,245.5
-Ammonia,BAU,North America,2044,21.4
-Ammonia,BAU,Latin America,2044,20.0
-Ammonia,BAU,Africa,2044,18.1
-Ammonia,BAU,Middle East,2044,37.2
-Ammonia,BAU,Russia,2044,15.9
-Ammonia,BAU,Europe,2044,18.7
-Ammonia,BAU,China,2044,42.4
-Ammonia,BAU,India,2044,21.5
-Ammonia,BAU,Rest of Asia,2044,47.0
-Ammonia,BAU,Oceania,2044,3.3
-Ammonia,BAU,Global,2045,246.9
-Ammonia,BAU,North America,2045,21.5
-Ammonia,BAU,Latin America,2045,20.3
-Ammonia,BAU,Africa,2045,18.4
-Ammonia,BAU,Middle East,2045,37.7
-Ammonia,BAU,Russia,2045,16.0
-Ammonia,BAU,Europe,2045,18.7
-Ammonia,BAU,China,2045,42.4
-Ammonia,BAU,India,2045,21.6
-Ammonia,BAU,Rest of Asia,2045,47.2
-Ammonia,BAU,Oceania,2045,3.3
-Ammonia,BAU,Global,2046,248.3
-Ammonia,BAU,North America,2046,21.5
-Ammonia,BAU,Latin America,2046,20.6
-Ammonia,BAU,Africa,2046,18.6
-Ammonia,BAU,Middle East,2046,38.2
-Ammonia,BAU,Russia,2046,16.0
-Ammonia,BAU,Europe,2046,18.7
-Ammonia,BAU,China,2046,42.4
-Ammonia,BAU,India,2046,21.6
-Ammonia,BAU,Rest of Asia,2046,47.4
-Ammonia,BAU,Oceania,2046,3.3
-Ammonia,BAU,Global,2047,249.5
-Ammonia,BAU,North America,2047,21.5
-Ammonia,BAU,Latin America,2047,20.8
-Ammonia,BAU,Africa,2047,18.9
-Ammonia,BAU,Middle East,2047,38.7
-Ammonia,BAU,Russia,2047,16.1
-Ammonia,BAU,Europe,2047,18.7
-Ammonia,BAU,China,2047,42.4
-Ammonia,BAU,India,2047,21.7
-Ammonia,BAU,Rest of Asia,2047,47.5
-Ammonia,BAU,Oceania,2047,3.3
-Ammonia,BAU,Global,2048,250.7
-Ammonia,BAU,North America,2048,21.5
-Ammonia,BAU,Latin America,2048,21.1
-Ammonia,BAU,Africa,2048,19.1
-Ammonia,BAU,Middle East,2048,39.2
-Ammonia,BAU,Russia,2048,16.1
-Ammonia,BAU,Europe,2048,18.7
-Ammonia,BAU,China,2048,42.4
-Ammonia,BAU,India,2048,21.7
-Ammonia,BAU,Rest of Asia,2048,47.6
-Ammonia,BAU,Oceania,2048,3.3
-Ammonia,BAU,Global,2049,251.8
-Ammonia,BAU,North America,2049,21.6
-Ammonia,BAU,Latin America,2049,21.4
-Ammonia,BAU,Africa,2049,19.3
-Ammonia,BAU,Middle East,2049,39.6
-Ammonia,BAU,Russia,2049,16.2
-Ammonia,BAU,Europe,2049,18.7
-Ammonia,BAU,China,2049,42.4
-Ammonia,BAU,India,2049,21.7
-Ammonia,BAU,Rest of Asia,2049,47.7
-Ammonia,BAU,Oceania,2049,3.3
-Ammonia,BAU,Global,2050,252.8
-Ammonia,BAU,North America,2050,21.6
-Ammonia,BAU,Latin America,2050,21.6
-Ammonia,BAU,Africa,2050,19.6
-Ammonia,BAU,Middle East,2050,40.0
-Ammonia,BAU,Russia,2050,16.2
-Ammonia,BAU,Europe,2050,18.6
-Ammonia,BAU,China,2050,42.4
-Ammonia,BAU,India,2050,21.7
-Ammonia,BAU,Rest of Asia,2050,47.7
-Ammonia,BAU,Oceania,2050,3.3
+Ammonia,NZ+Circular,Global,2020,185.0
+Ammonia,NZ+Circular,North America,2020,20.7
+Ammonia,NZ+Circular,Latin America,2020,14.7
+Ammonia,NZ+Circular,Africa,2020,10.1
+Ammonia,NZ+Circular,Middle East,2020,7.7
+Ammonia,NZ+Circular,Russia,2020,5.8
+Ammonia,NZ+Circular,Europe,2020,27.2
+Ammonia,NZ+Circular,China,2020,19.6
+Ammonia,NZ+Circular,India,2020,24.3
+Ammonia,NZ+Circular,Rest of Asia,2020,52.0
+Ammonia,NZ+Circular,Oceania,2020,3.0
+Ammonium nitrate,NZ+Circular,Global,2020,13.8918018
+Ammonium nitrate,NZ+Circular,North America,2020,1.197464025
+Ammonium nitrate,NZ+Circular,Latin America,2020,0.971192732
+Ammonium nitrate,NZ+Circular,Africa,2020,0.582833111
+Ammonium nitrate,NZ+Circular,Middle East,2020,1.457929047
+Ammonium nitrate,NZ+Circular,Russia,2020,0.874240792
+Ammonium nitrate,NZ+Circular,Europe,2020,1.564739108
+Ammonium nitrate,NZ+Circular,China,2020,3.259369095
+Ammonium nitrate,NZ+Circular,India,2020,1.383100326
+Ammonium nitrate,NZ+Circular,Rest of Asia,2020,2.425156805
+Ammonium nitrate,NZ+Circular,Oceania,2020,0.175776755
+Urea,NZ+Circular,Global,2020,74.8
+Urea,NZ+Circular,North America,2020,6.4
+Urea,NZ+Circular,Latin America,2020,5.3
+Urea,NZ+Circular,Africa,2020,3.1
+Urea,NZ+Circular,Middle East,2020,7.8
+Urea,NZ+Circular,Russia,2020,4.6
+Urea,NZ+Circular,Europe,2020,8.5
+Urea,NZ+Circular,China,2020,17.6
+Urea,NZ+Circular,India,2020,7.5
+Urea,NZ+Circular,Rest of Asia,2020,13.0
+Urea,NZ+Circular,Oceania,2020,0.9
+Ammonia,NZ+Circular,Global,2021,187.4
+Ammonia,NZ+Circular,North America,2021,20.9
+Ammonia,NZ+Circular,Latin America,2021,14.9
+Ammonia,NZ+Circular,Africa,2021,10.7
+Ammonia,NZ+Circular,Middle East,2021,7.8
+Ammonia,NZ+Circular,Russia,2021,5.8
+Ammonia,NZ+Circular,Europe,2021,27.3
+Ammonia,NZ+Circular,China,2021,19.6
+Ammonia,NZ+Circular,India,2021,24.9
+Ammonia,NZ+Circular,Rest of Asia,2021,52.5
+Ammonia,NZ+Circular,Oceania,2021,3.0
+Ammonium nitrate,NZ+Circular,Global,2021,14.34458881
+Ammonium nitrate,NZ+Circular,North America,2021,1.248525236
+Ammonium nitrate,NZ+Circular,Latin America,2021,0.983734805
+Ammonium nitrate,NZ+Circular,Africa,2021,0.548231397
+Ammonium nitrate,NZ+Circular,Middle East,2021,1.574322148
+Ammonium nitrate,NZ+Circular,Russia,2021,0.905570401
+Ammonium nitrate,NZ+Circular,Europe,2021,1.74196426
+Ammonium nitrate,NZ+Circular,China,2021,3.290259916
+Ammonium nitrate,NZ+Circular,India,2021,1.399607578
+Ammonium nitrate,NZ+Circular,Rest of Asia,2021,2.473979199
+Ammonium nitrate,NZ+Circular,Oceania,2021,0.178393865
+Urea,NZ+Circular,Global,2021,77.4
+Urea,NZ+Circular,North America,2021,6.7
+Urea,NZ+Circular,Latin America,2021,5.4
+Urea,NZ+Circular,Africa,2021,2.9
+Urea,NZ+Circular,Middle East,2021,8.5
+Urea,NZ+Circular,Russia,2021,4.8
+Urea,NZ+Circular,Europe,2021,9.6
+Urea,NZ+Circular,China,2021,17.8
+Urea,NZ+Circular,India,2021,7.6
+Urea,NZ+Circular,Rest of Asia,2021,13.3
+Urea,NZ+Circular,Oceania,2021,1.0
+Ammonia,NZ+Circular,Global,2022,198.3
+Ammonia,NZ+Circular,North America,2022,21.1
+Ammonia,NZ+Circular,Latin America,2022,15.1
+Ammonia,NZ+Circular,Africa,2022,11.3
+Ammonia,NZ+Circular,Middle East,2022,7.9
+Ammonia,NZ+Circular,Russia,2022,5.8
+Ammonia,NZ+Circular,Europe,2022,32.9
+Ammonia,NZ+Circular,China,2022,19.6
+Ammonia,NZ+Circular,India,2022,25.5
+Ammonia,NZ+Circular,Rest of Asia,2022,56.1
+Ammonia,NZ+Circular,Oceania,2022,3.0
+Ammonium nitrate,NZ+Circular,Global,2022,14.65146521
+Ammonium nitrate,NZ+Circular,North America,2022,1.23620964
+Ammonium nitrate,NZ+Circular,Latin America,2022,0.952207913
+Ammonium nitrate,NZ+Circular,Africa,2022,0.540874386
+Ammonium nitrate,NZ+Circular,Middle East,2022,1.611942783
+Ammonium nitrate,NZ+Circular,Russia,2022,0.900796443
+Ammonium nitrate,NZ+Circular,Europe,2022,1.754848501
+Ammonium nitrate,NZ+Circular,China,2022,3.436226149
+Ammonium nitrate,NZ+Circular,India,2022,1.464427134
+Ammonium nitrate,NZ+Circular,Rest of Asia,2022,2.566857605
+Ammonium nitrate,NZ+Circular,Oceania,2022,0.187074653
+Urea,NZ+Circular,Global,2022,79.0
+Urea,NZ+Circular,North America,2022,6.6
+Urea,NZ+Circular,Latin America,2022,5.2
+Urea,NZ+Circular,Africa,2022,2.8
+Urea,NZ+Circular,Middle East,2022,8.7
+Urea,NZ+Circular,Russia,2022,4.8
+Urea,NZ+Circular,Europe,2022,9.6
+Urea,NZ+Circular,China,2022,18.6
+Urea,NZ+Circular,India,2022,7.9
+Urea,NZ+Circular,Rest of Asia,2022,13.8
+Urea,NZ+Circular,Oceania,2022,1.0
+Ammonia,NZ+Circular,Global,2023,203.0
+Ammonia,NZ+Circular,North America,2023,21.2
+Ammonia,NZ+Circular,Latin America,2023,15.3
+Ammonia,NZ+Circular,Africa,2023,12.0
+Ammonia,NZ+Circular,Middle East,2023,8.0
+Ammonia,NZ+Circular,Russia,2023,5.9
+Ammonia,NZ+Circular,Europe,2023,34.5
+Ammonia,NZ+Circular,China,2023,19.7
+Ammonia,NZ+Circular,India,2023,26.1
+Ammonia,NZ+Circular,Rest of Asia,2023,57.4
+Ammonia,NZ+Circular,Oceania,2023,3.0
+Ammonium nitrate,NZ+Circular,Global,2023,15.29250377
+Ammonium nitrate,NZ+Circular,North America,2023,1.27264398
+Ammonium nitrate,NZ+Circular,Latin America,2023,0.927598383
+Ammonium nitrate,NZ+Circular,Africa,2023,0.513332504
+Ammonium nitrate,NZ+Circular,Middle East,2023,1.658084605
+Ammonium nitrate,NZ+Circular,Russia,2023,0.929836425
+Ammonium nitrate,NZ+Circular,Europe,2023,1.664094847
+Ammonium nitrate,NZ+Circular,China,2023,3.747110025
+Ammonium nitrate,NZ+Circular,India,2023,1.599158623
+Ammonium nitrate,NZ+Circular,Rest of Asia,2023,2.776011841
+Ammonium nitrate,NZ+Circular,Oceania,2023,0.204632541
+Urea,NZ+Circular,Global,2023,82.7
+Urea,NZ+Circular,North America,2023,6.8
+Urea,NZ+Circular,Latin America,2023,5.0
+Urea,NZ+Circular,Africa,2023,2.6
+Urea,NZ+Circular,Middle East,2023,8.9
+Urea,NZ+Circular,Russia,2023,5.0
+Urea,NZ+Circular,Europe,2023,9.1
+Urea,NZ+Circular,China,2023,20.4
+Urea,NZ+Circular,India,2023,8.7
+Urea,NZ+Circular,Rest of Asia,2023,15.0
+Urea,NZ+Circular,Oceania,2023,1.1
+Ammonia,NZ+Circular,Global,2024,208.3
+Ammonia,NZ+Circular,North America,2024,21.4
+Ammonia,NZ+Circular,Latin America,2024,15.5
+Ammonia,NZ+Circular,Africa,2024,12.6
+Ammonia,NZ+Circular,Middle East,2024,8.1
+Ammonia,NZ+Circular,Russia,2024,5.9
+Ammonia,NZ+Circular,Europe,2024,36.4
+Ammonia,NZ+Circular,China,2024,19.7
+Ammonia,NZ+Circular,India,2024,26.7
+Ammonia,NZ+Circular,Rest of Asia,2024,58.9
+Ammonia,NZ+Circular,Oceania,2024,3.0
+Ammonium nitrate,NZ+Circular,Global,2024,15.09135421
+Ammonium nitrate,NZ+Circular,North America,2024,1.276488571
+Ammonium nitrate,NZ+Circular,Latin America,2024,0.921330372
+Ammonium nitrate,NZ+Circular,Africa,2024,0.522907575
+Ammonium nitrate,NZ+Circular,Middle East,2024,1.65937817
+Ammonium nitrate,NZ+Circular,Russia,2024,0.943170882
+Ammonium nitrate,NZ+Circular,Europe,2024,1.586934527
+Ammonium nitrate,NZ+Circular,China,2024,3.666181422
+Ammonium nitrate,NZ+Circular,India,2024,1.567553688
+Ammonium nitrate,NZ+Circular,Rest of Asia,2024,2.746366449
+Ammonium nitrate,NZ+Circular,Oceania,2024,0.201042557
+Urea,NZ+Circular,Global,2024,81.4
+Urea,NZ+Circular,North America,2024,6.8
+Urea,NZ+Circular,Latin America,2024,5.0
+Urea,NZ+Circular,Africa,2024,2.7
+Urea,NZ+Circular,Middle East,2024,8.9
+Urea,NZ+Circular,Russia,2024,5.0
+Urea,NZ+Circular,Europe,2024,8.7
+Urea,NZ+Circular,China,2024,20.0
+Urea,NZ+Circular,India,2024,8.5
+Urea,NZ+Circular,Rest of Asia,2024,14.8
+Urea,NZ+Circular,Oceania,2024,1.1
+Ammonia,NZ+Circular,Global,2025,223.3
+Ammonia,NZ+Circular,North America,2025,22.6
+Ammonia,NZ+Circular,Latin America,2025,16.0
+Ammonia,NZ+Circular,Africa,2025,13.6
+Ammonia,NZ+Circular,Middle East,2025,8.9
+Ammonia,NZ+Circular,Russia,2025,6.0
+Ammonia,NZ+Circular,Europe,2025,40.5
+Ammonia,NZ+Circular,China,2025,20.4
+Ammonia,NZ+Circular,India,2025,27.3
+Ammonia,NZ+Circular,Rest of Asia,2025,64.9
+Ammonia,NZ+Circular,Oceania,2025,2.9
+Ammonium nitrate,NZ+Circular,Global,2025,15.52811198
+Ammonium nitrate,NZ+Circular,North America,2025,1.31052646
+Ammonium nitrate,NZ+Circular,Latin America,2025,0.937004469
+Ammonium nitrate,NZ+Circular,Africa,2025,0.532605372
+Ammonium nitrate,NZ+Circular,Middle East,2025,1.678807569
+Ammonium nitrate,NZ+Circular,Russia,2025,0.980085608
+Ammonium nitrate,NZ+Circular,Europe,2025,1.574472875
+Ammonium nitrate,NZ+Circular,China,2025,3.810914769
+Ammonium nitrate,NZ+Circular,India,2025,1.631634017
+Ammonium nitrate,NZ+Circular,Rest of Asia,2025,2.862456349
+Ammonium nitrate,NZ+Circular,Oceania,2025,0.20960449
+Urea,NZ+Circular,Global,2025,83.8
+Urea,NZ+Circular,North America,2025,7.0
+Urea,NZ+Circular,Latin America,2025,5.0
+Urea,NZ+Circular,Africa,2025,2.7
+Urea,NZ+Circular,Middle East,2025,9.0
+Urea,NZ+Circular,Russia,2025,5.3
+Urea,NZ+Circular,Europe,2025,8.6
+Urea,NZ+Circular,China,2025,20.8
+Urea,NZ+Circular,India,2025,8.9
+Urea,NZ+Circular,Rest of Asia,2025,15.4
+Urea,NZ+Circular,Oceania,2025,1.1
+Ammonia,NZ+Circular,Global,2026,233.3
+Ammonia,NZ+Circular,North America,2026,23.1
+Ammonia,NZ+Circular,Latin America,2026,16.4
+Ammonia,NZ+Circular,Africa,2026,14.3
+Ammonia,NZ+Circular,Middle East,2026,9.2
+Ammonia,NZ+Circular,Russia,2026,6.1
+Ammonia,NZ+Circular,Europe,2026,44.0
+Ammonia,NZ+Circular,China,2026,20.7
+Ammonia,NZ+Circular,India,2026,27.9
+Ammonia,NZ+Circular,Rest of Asia,2026,68.5
+Ammonia,NZ+Circular,Oceania,2026,2.9
+Ammonium nitrate,NZ+Circular,Global,2026,15.45763351
+Ammonium nitrate,NZ+Circular,North America,2026,1.362916411
+Ammonium nitrate,NZ+Circular,Latin America,2026,0.984546416
+Ammonium nitrate,NZ+Circular,Africa,2026,0.689316629
+Ammonium nitrate,NZ+Circular,Middle East,2026,1.760421949
+Ammonium nitrate,NZ+Circular,Russia,2026,1.031177293
+Ammonium nitrate,NZ+Circular,Europe,2026,1.498766913
+Ammonium nitrate,NZ+Circular,China,2026,3.60467035
+Ammonium nitrate,NZ+Circular,India,2026,1.546405399
+Ammonium nitrate,NZ+Circular,Rest of Asia,2026,2.780282719
+Ammonium nitrate,NZ+Circular,Oceania,2026,0.199129426
+Urea,NZ+Circular,Global,2026,83.3
+Urea,NZ+Circular,North America,2026,7.3
+Urea,NZ+Circular,Latin America,2026,5.3
+Urea,NZ+Circular,Africa,2026,3.6
+Urea,NZ+Circular,Middle East,2026,9.4
+Urea,NZ+Circular,Russia,2026,5.5
+Urea,NZ+Circular,Europe,2026,8.1
+Urea,NZ+Circular,China,2026,19.6
+Urea,NZ+Circular,India,2026,8.4
+Urea,NZ+Circular,Rest of Asia,2026,14.9
+Urea,NZ+Circular,Oceania,2026,1.1
+Ammonia,NZ+Circular,Global,2027,255.3
+Ammonia,NZ+Circular,North America,2027,24.8
+Ammonia,NZ+Circular,Latin America,2027,17.1
+Ammonia,NZ+Circular,Africa,2027,15.5
+Ammonia,NZ+Circular,Middle East,2027,10.3
+Ammonia,NZ+Circular,Russia,2027,6.3
+Ammonia,NZ+Circular,Europe,2027,50.1
+Ammonia,NZ+Circular,China,2027,21.9
+Ammonia,NZ+Circular,India,2027,28.6
+Ammonia,NZ+Circular,Rest of Asia,2027,77.7
+Ammonia,NZ+Circular,Oceania,2027,2.9
+Ammonium nitrate,NZ+Circular,Global,2027,15.51774584
+Ammonium nitrate,NZ+Circular,North America,2027,1.440308246
+Ammonium nitrate,NZ+Circular,Latin America,2027,0.993393339
+Ammonium nitrate,NZ+Circular,Africa,2027,0.763123214
+Ammonium nitrate,NZ+Circular,Middle East,2027,1.850449155
+Ammonium nitrate,NZ+Circular,Russia,2027,1.074346073
+Ammonium nitrate,NZ+Circular,Europe,2027,1.489760352
+Ammonium nitrate,NZ+Circular,China,2027,3.478691534
+Ammonium nitrate,NZ+Circular,India,2027,1.495048557
+Ammonium nitrate,NZ+Circular,Rest of Asia,2027,2.739697135
+Ammonium nitrate,NZ+Circular,Oceania,2027,0.192928233
+Urea,NZ+Circular,Global,2027,83.5
+Urea,NZ+Circular,North America,2027,7.7
+Urea,NZ+Circular,Latin America,2027,5.3
+Urea,NZ+Circular,Africa,2027,4.0
+Urea,NZ+Circular,Middle East,2027,9.9
+Urea,NZ+Circular,Russia,2027,5.8
+Urea,NZ+Circular,Europe,2027,8.1
+Urea,NZ+Circular,China,2027,18.9
+Urea,NZ+Circular,India,2027,8.1
+Urea,NZ+Circular,Rest of Asia,2027,14.7
+Urea,NZ+Circular,Oceania,2027,1.0
+Ammonia,NZ+Circular,Global,2028,281.6
+Ammonia,NZ+Circular,North America,2028,26.9
+Ammonia,NZ+Circular,Latin America,2028,17.9
+Ammonia,NZ+Circular,Africa,2028,16.8
+Ammonia,NZ+Circular,Middle East,2028,11.7
+Ammonia,NZ+Circular,Russia,2028,6.5
+Ammonia,NZ+Circular,Europe,2028,57.5
+Ammonia,NZ+Circular,China,2028,23.3
+Ammonia,NZ+Circular,India,2028,29.2
+Ammonia,NZ+Circular,Rest of Asia,2028,88.8
+Ammonia,NZ+Circular,Oceania,2028,2.9
+Ammonium nitrate,NZ+Circular,Global,2028,15.7937808
+Ammonium nitrate,NZ+Circular,North America,2028,1.54003148
+Ammonium nitrate,NZ+Circular,Latin America,2028,0.953447781
+Ammonium nitrate,NZ+Circular,Africa,2028,0.898938757
+Ammonium nitrate,NZ+Circular,Middle East,2028,1.883809125
+Ammonium nitrate,NZ+Circular,Russia,2028,1.113911065
+Ammonium nitrate,NZ+Circular,Europe,2028,1.447630447
+Ammonium nitrate,NZ+Circular,China,2028,3.486716764
+Ammonium nitrate,NZ+Circular,India,2028,1.500435009
+Ammonium nitrate,NZ+Circular,Rest of Asia,2028,2.774941697
+Ammonium nitrate,NZ+Circular,Oceania,2028,0.193918676
+Urea,NZ+Circular,Global,2028,85.0
+Urea,NZ+Circular,North America,2028,8.3
+Urea,NZ+Circular,Latin America,2028,5.1
+Urea,NZ+Circular,Africa,2028,4.8
+Urea,NZ+Circular,Middle East,2028,10.1
+Urea,NZ+Circular,Russia,2028,6.0
+Urea,NZ+Circular,Europe,2028,7.8
+Urea,NZ+Circular,China,2028,18.9
+Urea,NZ+Circular,India,2028,8.1
+Urea,NZ+Circular,Rest of Asia,2028,14.8
+Urea,NZ+Circular,Oceania,2028,1.0
+Ammonia,NZ+Circular,Global,2029,309.4
+Ammonia,NZ+Circular,North America,2029,29.0
+Ammonia,NZ+Circular,Latin America,2029,18.8
+Ammonia,NZ+Circular,Africa,2029,18.2
+Ammonia,NZ+Circular,Middle East,2029,13.2
+Ammonia,NZ+Circular,Russia,2029,6.7
+Ammonia,NZ+Circular,Europe,2029,65.6
+Ammonia,NZ+Circular,China,2029,24.8
+Ammonia,NZ+Circular,India,2029,29.8
+Ammonia,NZ+Circular,Rest of Asia,2029,100.5
+Ammonia,NZ+Circular,Oceania,2029,2.9
+Ammonium nitrate,NZ+Circular,Global,2029,16.17094183
+Ammonium nitrate,NZ+Circular,North America,2029,1.580655992
+Ammonium nitrate,NZ+Circular,Latin America,2029,0.93511407
+Ammonium nitrate,NZ+Circular,Africa,2029,0.866411796
+Ammonium nitrate,NZ+Circular,Middle East,2029,1.831827522
+Ammonium nitrate,NZ+Circular,Russia,2029,1.188714176
+Ammonium nitrate,NZ+Circular,Europe,2029,1.467851417
+Ammonium nitrate,NZ+Circular,China,2029,3.627674124
+Ammonium nitrate,NZ+Circular,India,2029,1.562135271
+Ammonium nitrate,NZ+Circular,Rest of Asia,2029,2.908507117
+Ammonium nitrate,NZ+Circular,Oceania,2029,0.202050345
+Urea,NZ+Circular,Global,2029,87.0
+Urea,NZ+Circular,North America,2029,8.5
+Urea,NZ+Circular,Latin America,2029,5.0
+Urea,NZ+Circular,Africa,2029,4.6
+Urea,NZ+Circular,Middle East,2029,9.8
+Urea,NZ+Circular,Russia,2029,6.4
+Urea,NZ+Circular,Europe,2029,7.9
+Urea,NZ+Circular,China,2029,19.7
+Urea,NZ+Circular,India,2029,8.4
+Urea,NZ+Circular,Rest of Asia,2029,15.6
+Urea,NZ+Circular,Oceania,2029,1.1
+Ammonia,NZ+Circular,Global,2030,337.7
+Ammonia,NZ+Circular,North America,2030,31.1
+Ammonia,NZ+Circular,Latin America,2030,19.7
+Ammonia,NZ+Circular,Africa,2030,19.5
+Ammonia,NZ+Circular,Middle East,2030,14.6
+Ammonia,NZ+Circular,Russia,2030,6.9
+Ammonia,NZ+Circular,Europe,2030,74.3
+Ammonia,NZ+Circular,China,2030,26.2
+Ammonia,NZ+Circular,India,2030,30.4
+Ammonia,NZ+Circular,Rest of Asia,2030,112.3
+Ammonia,NZ+Circular,Oceania,2030,2.9
+Ammonium nitrate,NZ+Circular,Global,2030,16.3921564
+Ammonium nitrate,NZ+Circular,North America,2030,1.600966999
+Ammonium nitrate,NZ+Circular,Latin America,2030,0.95083846
+Ammonium nitrate,NZ+Circular,Africa,2030,0.880776263
+Ammonium nitrate,NZ+Circular,Middle East,2030,1.861657153
+Ammonium nitrate,NZ+Circular,Russia,2030,1.204431394
+Ammonium nitrate,NZ+Circular,Europe,2030,1.486125385
+Ammonium nitrate,NZ+Circular,China,2030,3.670767487
+Ammonium nitrate,NZ+Circular,India,2030,1.582223515
+Ammonium nitrate,NZ+Circular,Rest of Asia,2030,2.949489854
+Ammonium nitrate,NZ+Circular,Oceania,2030,0.204879886
+Urea,NZ+Circular,Global,2030,88.2
+Urea,NZ+Circular,North America,2030,8.6
+Urea,NZ+Circular,Latin America,2030,5.0
+Urea,NZ+Circular,Africa,2030,4.7
+Urea,NZ+Circular,Middle East,2030,9.9
+Urea,NZ+Circular,Russia,2030,6.5
+Urea,NZ+Circular,Europe,2030,8.0
+Urea,NZ+Circular,China,2030,19.9
+Urea,NZ+Circular,India,2030,8.5
+Urea,NZ+Circular,Rest of Asia,2030,15.8
+Urea,NZ+Circular,Oceania,2030,1.1
+Ammonia,NZ+Circular,Global,2031,388.3
+Ammonia,NZ+Circular,North America,2031,35.3
+Ammonia,NZ+Circular,Latin America,2031,20.9
+Ammonia,NZ+Circular,Africa,2031,21.5
+Ammonia,NZ+Circular,Middle East,2031,17.5
+Ammonia,NZ+Circular,Russia,2031,7.3
+Ammonia,NZ+Circular,Europe,2031,87.1
+Ammonia,NZ+Circular,China,2031,29.2
+Ammonia,NZ+Circular,India,2031,30.6
+Ammonia,NZ+Circular,Rest of Asia,2031,136.0
+Ammonia,NZ+Circular,Oceania,2031,2.9
+Ammonium nitrate,NZ+Circular,Global,2031,16.66775679
+Ammonium nitrate,NZ+Circular,North America,2031,1.626718219
+Ammonium nitrate,NZ+Circular,Latin America,2031,0.969436731
+Ammonium nitrate,NZ+Circular,Africa,2031,0.897821257
+Ammonium nitrate,NZ+Circular,Middle East,2031,1.89719494
+Ammonium nitrate,NZ+Circular,Russia,2031,1.224155906
+Ammonium nitrate,NZ+Circular,Europe,2031,1.509503885
+Ammonium nitrate,NZ+Circular,China,2031,3.671178354
+Ammonium nitrate,NZ+Circular,India,2031,1.607699183
+Ammonium nitrate,NZ+Circular,Rest of Asia,2031,3.052063947
+Ammonium nitrate,NZ+Circular,Oceania,2031,0.21198437
+Urea,NZ+Circular,Global,2031,89.7
+Urea,NZ+Circular,North America,2031,8.8
+Urea,NZ+Circular,Latin America,2031,5.1
+Urea,NZ+Circular,Africa,2031,4.8
+Urea,NZ+Circular,Middle East,2031,10.1
+Urea,NZ+Circular,Russia,2031,6.6
+Urea,NZ+Circular,Europe,2031,8.2
+Urea,NZ+Circular,China,2031,19.9
+Urea,NZ+Circular,India,2031,8.7
+Urea,NZ+Circular,Rest of Asia,2031,16.4
+Urea,NZ+Circular,Oceania,2031,1.1
+Ammonia,NZ+Circular,Global,2032,433.3
+Ammonia,NZ+Circular,North America,2032,38.9
+Ammonia,NZ+Circular,Latin America,2032,21.8
+Ammonia,NZ+Circular,Africa,2032,23.3
+Ammonia,NZ+Circular,Middle East,2032,20.0
+Ammonia,NZ+Circular,Russia,2032,7.6
+Ammonia,NZ+Circular,Europe,2032,99.4
+Ammonia,NZ+Circular,China,2032,31.7
+Ammonia,NZ+Circular,India,2032,30.8
+Ammonia,NZ+Circular,Rest of Asia,2032,156.9
+Ammonia,NZ+Circular,Oceania,2032,2.9
+Ammonium nitrate,NZ+Circular,Global,2032,16.95922391
+Ammonium nitrate,NZ+Circular,North America,2032,1.643833175
+Ammonium nitrate,NZ+Circular,Latin America,2032,1.011709245
+Ammonium nitrate,NZ+Circular,Africa,2032,0.935208194
+Ammonium nitrate,NZ+Circular,Middle East,2032,1.971530189
+Ammonium nitrate,NZ+Circular,Russia,2032,1.226276042
+Ammonium nitrate,NZ+Circular,Europe,2032,1.520311516
+Ammonium nitrate,NZ+Circular,China,2032,3.67158922
+Ammonium nitrate,NZ+Circular,India,2032,1.629534888
+Ammonium nitrate,NZ+Circular,Rest of Asia,2032,3.131140066
+Ammonium nitrate,NZ+Circular,Oceania,2032,0.218091373
+Urea,NZ+Circular,Global,2032,91.3
+Urea,NZ+Circular,North America,2032,8.9
+Urea,NZ+Circular,Latin America,2032,5.4
+Urea,NZ+Circular,Africa,2032,5.0
+Urea,NZ+Circular,Middle East,2032,10.5
+Urea,NZ+Circular,Russia,2032,6.6
+Urea,NZ+Circular,Europe,2032,8.2
+Urea,NZ+Circular,China,2032,19.9
+Urea,NZ+Circular,India,2032,8.8
+Urea,NZ+Circular,Rest of Asia,2032,16.8
+Urea,NZ+Circular,Oceania,2032,1.2
+Ammonia,NZ+Circular,Global,2033,485.1
+Ammonia,NZ+Circular,North America,2033,43.1
+Ammonia,NZ+Circular,Latin America,2033,23.0
+Ammonia,NZ+Circular,Africa,2033,25.3
+Ammonia,NZ+Circular,Middle East,2033,22.9
+Ammonia,NZ+Circular,Russia,2033,7.9
+Ammonia,NZ+Circular,Europe,2033,113.0
+Ammonia,NZ+Circular,China,2033,34.7
+Ammonia,NZ+Circular,India,2033,31.1
+Ammonia,NZ+Circular,Rest of Asia,2033,181.1
+Ammonia,NZ+Circular,Oceania,2033,2.9
+Ammonium nitrate,NZ+Circular,Global,2033,17.24310577
+Ammonium nitrate,NZ+Circular,North America,2033,1.66032724
+Ammonium nitrate,NZ+Circular,Latin America,2033,1.053294353
+Ammonium nitrate,NZ+Circular,Africa,2033,0.971973643
+Ammonium nitrate,NZ+Circular,Middle East,2033,2.044596231
+Ammonium nitrate,NZ+Circular,Russia,2033,1.227553202
+Ammonium nitrate,NZ+Circular,Europe,2033,1.530584601
+Ammonium nitrate,NZ+Circular,China,2033,3.672000087
+Ammonium nitrate,NZ+Circular,India,2033,1.65085459
+Ammonium nitrate,NZ+Circular,Rest of Asia,2033,3.207848566
+Ammonium nitrate,NZ+Circular,Oceania,2033,0.224073259
+Urea,NZ+Circular,Global,2033,92.8
+Urea,NZ+Circular,North America,2033,9.0
+Urea,NZ+Circular,Latin America,2033,5.6
+Urea,NZ+Circular,Africa,2033,5.2
+Urea,NZ+Circular,Middle East,2033,10.9
+Urea,NZ+Circular,Russia,2033,6.6
+Urea,NZ+Circular,Europe,2033,8.3
+Urea,NZ+Circular,China,2033,19.9
+Urea,NZ+Circular,India,2033,8.9
+Urea,NZ+Circular,Rest of Asia,2033,17.2
+Urea,NZ+Circular,Oceania,2033,1.2
+Ammonia,NZ+Circular,Global,2034,537.1
+Ammonia,NZ+Circular,North America,2034,47.3
+Ammonia,NZ+Circular,Latin America,2034,24.2
+Ammonia,NZ+Circular,Africa,2034,27.3
+Ammonia,NZ+Circular,Middle East,2034,25.8
+Ammonia,NZ+Circular,Russia,2034,8.3
+Ammonia,NZ+Circular,Europe,2034,126.8
+Ammonia,NZ+Circular,China,2034,37.8
+Ammonia,NZ+Circular,India,2034,31.3
+Ammonia,NZ+Circular,Rest of Asia,2034,205.3
+Ammonia,NZ+Circular,Oceania,2034,3.0
+Ammonium nitrate,NZ+Circular,Global,2034,17.51938947
+Ammonium nitrate,NZ+Circular,North America,2034,1.676185081
+Ammonium nitrate,NZ+Circular,Latin America,2034,1.094192824
+Ammonium nitrate,NZ+Circular,Africa,2034,1.008121243
+Ammonium nitrate,NZ+Circular,Middle East,2034,2.11640103
+Ammonium nitrate,NZ+Circular,Russia,2034,1.228038085
+Ammonium nitrate,NZ+Circular,Europe,2034,1.540319527
+Ammonium nitrate,NZ+Circular,China,2034,3.672410953
+Ammonium nitrate,NZ+Circular,India,2034,1.671640377
+Ammonium nitrate,NZ+Circular,Rest of Asia,2034,3.282155882
+Ammonium nitrate,NZ+Circular,Oceania,2034,0.229924465
+Urea,NZ+Circular,Global,2034,94.3
+Urea,NZ+Circular,North America,2034,9.1
+Urea,NZ+Circular,Latin America,2034,5.8
+Urea,NZ+Circular,Africa,2034,5.4
+Urea,NZ+Circular,Middle East,2034,11.3
+Urea,NZ+Circular,Russia,2034,6.6
+Urea,NZ+Circular,Europe,2034,8.3
+Urea,NZ+Circular,China,2034,19.9
+Urea,NZ+Circular,India,2034,9.0
+Urea,NZ+Circular,Rest of Asia,2034,17.6
+Urea,NZ+Circular,Oceania,2034,1.2
+Ammonia,NZ+Circular,Global,2035,588.4
+Ammonia,NZ+Circular,North America,2035,51.5
+Ammonia,NZ+Circular,Latin America,2035,25.4
+Ammonia,NZ+Circular,Africa,2035,29.3
+Ammonia,NZ+Circular,Middle East,2035,28.7
+Ammonia,NZ+Circular,Russia,2035,8.7
+Ammonia,NZ+Circular,Europe,2035,140.4
+Ammonia,NZ+Circular,China,2035,40.7
+Ammonia,NZ+Circular,India,2035,31.5
+Ammonia,NZ+Circular,Rest of Asia,2035,229.2
+Ammonia,NZ+Circular,Oceania,2035,3.0
+Ammonium nitrate,NZ+Circular,Global,2035,17.7880945
+Ammonium nitrate,NZ+Circular,North America,2035,1.691409159
+Ammonium nitrate,NZ+Circular,Latin America,2035,1.134410261
+Ammonium nitrate,NZ+Circular,Africa,2035,1.043655486
+Ammonium nitrate,NZ+Circular,Middle East,2035,2.18694908
+Ammonium nitrate,NZ+Circular,Russia,2035,1.227758747
+Ammonium nitrate,NZ+Circular,Europe,2035,1.54951661
+Ammonium nitrate,NZ+Circular,China,2035,3.672821819
+Ammonium nitrate,NZ+Circular,India,2035,1.691883497
+Ammonium nitrate,NZ+Circular,Rest of Asia,2035,3.354047892
+Ammonium nitrate,NZ+Circular,Oceania,2035,0.23564195
+Urea,NZ+Circular,Global,2035,95.8
+Urea,NZ+Circular,North America,2035,9.1
+Urea,NZ+Circular,Latin America,2035,6.0
+Urea,NZ+Circular,Africa,2035,5.6
+Urea,NZ+Circular,Middle East,2035,11.7
+Urea,NZ+Circular,Russia,2035,6.6
+Urea,NZ+Circular,Europe,2035,8.4
+Urea,NZ+Circular,China,2035,19.9
+Urea,NZ+Circular,India,2035,9.1
+Urea,NZ+Circular,Rest of Asia,2035,18.0
+Urea,NZ+Circular,Oceania,2035,1.3
+Ammonia,NZ+Circular,Global,2036,642.4
+Ammonia,NZ+Circular,North America,2036,56.0
+Ammonia,NZ+Circular,Latin America,2036,26.6
+Ammonia,NZ+Circular,Africa,2036,31.4
+Ammonia,NZ+Circular,Middle East,2036,31.8
+Ammonia,NZ+Circular,Russia,2036,9.0
+Ammonia,NZ+Circular,Europe,2036,154.3
+Ammonia,NZ+Circular,China,2036,44.0
+Ammonia,NZ+Circular,India,2036,31.8
+Ammonia,NZ+Circular,Rest of Asia,2036,254.4
+Ammonia,NZ+Circular,Oceania,2036,3.0
+Ammonium nitrate,NZ+Circular,Global,2036,18.05193903
+Ammonium nitrate,NZ+Circular,North America,2036,1.706245024
+Ammonium nitrate,NZ+Circular,Latin America,2036,1.174149392
+Ammonium nitrate,NZ+Circular,Africa,2036,1.078760108
+Ammonium nitrate,NZ+Circular,Middle East,2036,2.256626387
+Ammonium nitrate,NZ+Circular,Russia,2036,1.236296717
+Ammonium nitrate,NZ+Circular,Europe,2036,1.55839498
+Ammonium nitrate,NZ+Circular,China,2036,3.673735457
+Ammonium nitrate,NZ+Circular,India,2036,1.70874975
+Ammonium nitrate,NZ+Circular,Rest of Asia,2036,3.418633048
+Ammonium nitrate,NZ+Circular,Oceania,2036,0.240348169
+Urea,NZ+Circular,Global,2036,97.3
+Urea,NZ+Circular,North America,2036,9.2
+Urea,NZ+Circular,Latin America,2036,6.3
+Urea,NZ+Circular,Africa,2036,5.8
+Urea,NZ+Circular,Middle East,2036,12.0
+Urea,NZ+Circular,Russia,2036,6.7
+Urea,NZ+Circular,Europe,2036,8.4
+Urea,NZ+Circular,China,2036,19.9
+Urea,NZ+Circular,India,2036,9.2
+Urea,NZ+Circular,Rest of Asia,2036,18.4
+Urea,NZ+Circular,Oceania,2036,1.3
+Ammonia,NZ+Circular,Global,2037,702.0
+Ammonia,NZ+Circular,North America,2037,61.2
+Ammonia,NZ+Circular,Latin America,2037,28.2
+Ammonia,NZ+Circular,Africa,2037,33.8
+Ammonia,NZ+Circular,Middle East,2037,35.4
+Ammonia,NZ+Circular,Russia,2037,9.5
+Ammonia,NZ+Circular,Europe,2037,168.9
+Ammonia,NZ+Circular,China,2037,47.7
+Ammonia,NZ+Circular,India,2037,32.0
+Ammonia,NZ+Circular,Rest of Asia,2037,282.3
+Ammonia,NZ+Circular,Oceania,2037,3.0
+Ammonium nitrate,NZ+Circular,Global,2037,18.3082405
+Ammonium nitrate,NZ+Circular,North America,2037,1.720452451
+Ammonium nitrate,NZ+Circular,Latin America,2037,1.213213753
+Ammonium nitrate,NZ+Circular,Africa,2037,1.113256537
+Ammonium nitrate,NZ+Circular,Middle East,2037,2.325066621
+Ammonium nitrate,NZ+Circular,Russia,2037,1.247267365
+Ammonium nitrate,NZ+Circular,Europe,2037,1.566735041
+Ammonium nitrate,NZ+Circular,China,2037,3.674649094
+Ammonium nitrate,NZ+Circular,India,2037,1.724025997
+Ammonium nitrate,NZ+Circular,Rest of Asia,2037,3.478979166
+Ammonium nitrate,NZ+Circular,Oceania,2037,0.244594476
+Urea,NZ+Circular,Global,2037,98.7
+Urea,NZ+Circular,North America,2037,9.3
+Urea,NZ+Circular,Latin America,2037,6.5
+Urea,NZ+Circular,Africa,2037,5.9
+Urea,NZ+Circular,Middle East,2037,12.4
+Urea,NZ+Circular,Russia,2037,6.7
+Urea,NZ+Circular,Europe,2037,8.5
+Urea,NZ+Circular,China,2037,19.9
+Urea,NZ+Circular,India,2037,9.3
+Urea,NZ+Circular,Rest of Asia,2037,18.7
+Urea,NZ+Circular,Oceania,2037,1.3
+Ammonia,NZ+Circular,Global,2038,754.3
+Ammonia,NZ+Circular,North America,2038,65.8
+Ammonia,NZ+Circular,Latin America,2038,29.5
+Ammonia,NZ+Circular,Africa,2038,35.9
+Ammonia,NZ+Circular,Middle East,2038,38.6
+Ammonia,NZ+Circular,Russia,2038,9.9
+Ammonia,NZ+Circular,Europe,2038,181.6
+Ammonia,NZ+Circular,China,2038,50.9
+Ammonia,NZ+Circular,India,2038,32.2
+Ammonia,NZ+Circular,Rest of Asia,2038,306.9
+Ammonia,NZ+Circular,Oceania,2038,3.0
+Ammonium nitrate,NZ+Circular,Global,2038,18.55700392
+Ammonium nitrate,NZ+Circular,North America,2038,1.73403431
+Ammonium nitrate,NZ+Circular,Latin America,2038,1.251600793
+Ammonium nitrate,NZ+Circular,Africa,2038,1.147141426
+Ammonium nitrate,NZ+Circular,Middle East,2038,2.39225684
+Ammonium nitrate,NZ+Circular,Russia,2038,1.259171119
+Ammonium nitrate,NZ+Circular,Europe,2038,1.574537669
+Ammonium nitrate,NZ+Circular,China,2038,3.675562731
+Ammonium nitrate,NZ+Circular,India,2038,1.738207616
+Ammonium nitrate,NZ+Circular,Rest of Asia,2038,3.535966893
+Ammonium nitrate,NZ+Circular,Oceania,2038,0.248524524
+Urea,NZ+Circular,Global,2038,100.0
+Urea,NZ+Circular,North America,2038,9.4
+Urea,NZ+Circular,Latin America,2038,6.7
+Urea,NZ+Circular,Africa,2038,6.1
+Urea,NZ+Circular,Middle East,2038,12.8
+Urea,NZ+Circular,Russia,2038,6.8
+Urea,NZ+Circular,Europe,2038,8.5
+Urea,NZ+Circular,China,2038,20.0
+Urea,NZ+Circular,India,2038,9.4
+Urea,NZ+Circular,Rest of Asia,2038,19.0
+Urea,NZ+Circular,Oceania,2038,1.3
+Ammonia,NZ+Circular,Global,2039,814.6
+Ammonia,NZ+Circular,North America,2039,71.3
+Ammonia,NZ+Circular,Latin America,2039,31.1
+Ammonia,NZ+Circular,Africa,2039,38.3
+Ammonia,NZ+Circular,Middle East,2039,42.4
+Ammonia,NZ+Circular,Russia,2039,10.4
+Ammonia,NZ+Circular,Europe,2039,195.4
+Ammonia,NZ+Circular,China,2039,54.9
+Ammonia,NZ+Circular,India,2039,32.5
+Ammonia,NZ+Circular,Rest of Asia,2039,335.4
+Ammonia,NZ+Circular,Oceania,2039,3.0
+Ammonium nitrate,NZ+Circular,Global,2039,18.79821251
+Ammonium nitrate,NZ+Circular,North America,2039,1.746982903
+Ammonium nitrate,NZ+Circular,Latin America,2039,1.289307807
+Ammonium nitrate,NZ+Circular,Africa,2039,1.180408918
+Ammonium nitrate,NZ+Circular,Middle East,2039,2.458193763
+Ammonium nitrate,NZ+Circular,Russia,2039,1.2714126
+Ammonium nitrate,NZ+Circular,Europe,2039,1.581807564
+Ammonium nitrate,NZ+Circular,China,2039,3.676476369
+Ammonium nitrate,NZ+Circular,India,2039,1.751489246
+Ammonium nitrate,NZ+Circular,Rest of Asia,2039,3.58993831
+Ammonium nitrate,NZ+Circular,Oceania,2039,0.252195029
+Urea,NZ+Circular,Global,2039,101.4
+Urea,NZ+Circular,North America,2039,9.4
+Urea,NZ+Circular,Latin America,2039,6.9
+Urea,NZ+Circular,Africa,2039,6.3
+Urea,NZ+Circular,Middle East,2039,13.1
+Urea,NZ+Circular,Russia,2039,6.9
+Urea,NZ+Circular,Europe,2039,8.6
+Urea,NZ+Circular,China,2039,20.0
+Urea,NZ+Circular,India,2039,9.5
+Urea,NZ+Circular,Rest of Asia,2039,19.3
+Urea,NZ+Circular,Oceania,2039,1.4
+Ammonia,NZ+Circular,Global,2040,879.7
+Ammonia,NZ+Circular,North America,2040,77.4
+Ammonia,NZ+Circular,Latin America,2040,32.9
+Ammonia,NZ+Circular,Africa,2040,41.0
+Ammonia,NZ+Circular,Middle East,2040,46.6
+Ammonia,NZ+Circular,Russia,2040,10.9
+Ammonia,NZ+Circular,Europe,2040,209.6
+Ammonia,NZ+Circular,China,2040,59.3
+Ammonia,NZ+Circular,India,2040,32.7
+Ammonia,NZ+Circular,Rest of Asia,2040,366.3
+Ammonia,NZ+Circular,Oceania,2040,3.0
+Ammonium nitrate,NZ+Circular,Global,2040,19.03185147
+Ammonium nitrate,NZ+Circular,North America,2040,1.759307133
+Ammonium nitrate,NZ+Circular,Latin America,2040,1.326323823
+Ammonium nitrate,NZ+Circular,Africa,2040,1.213060881
+Ammonium nitrate,NZ+Circular,Middle East,2040,2.52287107
+Ammonium nitrate,NZ+Circular,Russia,2040,1.283698687
+Ammonium nitrate,NZ+Circular,Europe,2040,1.588541894
+Ammonium nitrate,NZ+Circular,China,2040,3.677390006
+Ammonium nitrate,NZ+Circular,India,2040,1.76396579
+Ammonium nitrate,NZ+Circular,Rest of Asia,2040,3.641058364
+Ammonium nitrate,NZ+Circular,Oceania,2040,0.255633824
+Urea,NZ+Circular,Global,2040,102.6
+Urea,NZ+Circular,North America,2040,9.5
+Urea,NZ+Circular,Latin America,2040,7.1
+Urea,NZ+Circular,Africa,2040,6.5
+Urea,NZ+Circular,Middle East,2040,13.5
+Urea,NZ+Circular,Russia,2040,6.9
+Urea,NZ+Circular,Europe,2040,8.6
+Urea,NZ+Circular,China,2040,20.0
+Urea,NZ+Circular,India,2040,9.5
+Urea,NZ+Circular,Rest of Asia,2040,19.6
+Urea,NZ+Circular,Oceania,2040,1.4
+Ammonia,NZ+Circular,Global,2041,943.7
+Ammonia,NZ+Circular,North America,2041,83.5
+Ammonia,NZ+Circular,Latin America,2041,34.9
+Ammonia,NZ+Circular,Africa,2041,43.6
+Ammonia,NZ+Circular,Middle East,2041,50.8
+Ammonia,NZ+Circular,Russia,2041,11.4
+Ammonia,NZ+Circular,Europe,2041,223.1
+Ammonia,NZ+Circular,China,2041,63.7
+Ammonia,NZ+Circular,India,2041,32.8
+Ammonia,NZ+Circular,Rest of Asia,2041,396.9
+Ammonia,NZ+Circular,Oceania,2041,3.0
+Ammonium nitrate,NZ+Circular,Global,2041,19.26065154
+Ammonium nitrate,NZ+Circular,North America,2041,1.771242024
+Ammonium nitrate,NZ+Circular,Latin America,2041,1.362863097
+Ammonium nitrate,NZ+Circular,Africa,2041,1.245287059
+Ammonium nitrate,NZ+Circular,Middle East,2041,2.586674047
+Ammonium nitrate,NZ+Circular,Russia,2041,1.294712388
+Ammonium nitrate,NZ+Circular,Europe,2041,1.594960647
+Ammonium nitrate,NZ+Circular,China,2041,3.678780323
+Ammonium nitrate,NZ+Circular,India,2041,1.776374382
+Ammonium nitrate,NZ+Circular,Rest of Asia,2041,3.690730547
+Ammonium nitrate,NZ+Circular,Oceania,2041,0.259027026
+Urea,NZ+Circular,Global,2041,103.9
+Urea,NZ+Circular,North America,2041,9.6
+Urea,NZ+Circular,Latin America,2041,7.3
+Urea,NZ+Circular,Africa,2041,6.7
+Urea,NZ+Circular,Middle East,2041,13.8
+Urea,NZ+Circular,Russia,2041,7.0
+Urea,NZ+Circular,Europe,2041,8.6
+Urea,NZ+Circular,China,2041,20.0
+Urea,NZ+Circular,India,2041,9.6
+Urea,NZ+Circular,Rest of Asia,2041,19.9
+Urea,NZ+Circular,Oceania,2041,1.4
+Ammonia,NZ+Circular,Global,2042,1006.8
+Ammonia,NZ+Circular,North America,2042,89.5
+Ammonia,NZ+Circular,Latin America,2042,36.9
+Ammonia,NZ+Circular,Africa,2042,46.3
+Ammonia,NZ+Circular,Middle East,2042,54.9
+Ammonia,NZ+Circular,Russia,2042,11.9
+Ammonia,NZ+Circular,Europe,2042,236.0
+Ammonia,NZ+Circular,China,2042,68.1
+Ammonia,NZ+Circular,India,2042,32.9
+Ammonia,NZ+Circular,Rest of Asia,2042,427.1
+Ammonia,NZ+Circular,Oceania,2042,3.0
+Ammonium nitrate,NZ+Circular,Global,2042,19.48190301
+Ammonium nitrate,NZ+Circular,North America,2042,1.782560857
+Ammonium nitrate,NZ+Circular,Latin America,2042,1.39871112
+Ammonium nitrate,NZ+Circular,Africa,2042,1.27688067
+Ammonium nitrate,NZ+Circular,Middle East,2042,2.649205017
+Ammonium nitrate,NZ+Circular,Russia,2042,1.305255841
+Ammonium nitrate,NZ+Circular,Europe,2042,1.600851264
+Ammonium nitrate,NZ+Circular,China,2042,3.680170641
+Ammonium nitrate,NZ+Circular,India,2042,1.788153742
+Ammonium nitrate,NZ+Circular,Rest of Asia,2042,3.737871847
+Ammonium nitrate,NZ+Circular,Oceania,2042,0.262242015
+Urea,NZ+Circular,Global,2042,105.1
+Urea,NZ+Circular,North America,2042,9.6
+Urea,NZ+Circular,Latin America,2042,7.5
+Urea,NZ+Circular,Africa,2042,6.8
+Urea,NZ+Circular,Middle East,2042,14.2
+Urea,NZ+Circular,Russia,2042,7.1
+Urea,NZ+Circular,Europe,2042,8.7
+Urea,NZ+Circular,China,2042,20.0
+Urea,NZ+Circular,India,2042,9.7
+Urea,NZ+Circular,Rest of Asia,2042,20.2
+Urea,NZ+Circular,Oceania,2042,1.4
+Ammonia,NZ+Circular,Global,2043,1015.8
+Ammonia,NZ+Circular,North America,2043,89.9
+Ammonia,NZ+Circular,Latin America,2043,36.9
+Ammonia,NZ+Circular,Africa,2043,46.8
+Ammonia,NZ+Circular,Middle East,2043,55.2
+Ammonia,NZ+Circular,Russia,2043,12.0
+Ammonia,NZ+Circular,Europe,2043,238.7
+Ammonia,NZ+Circular,China,2043,68.3
+Ammonia,NZ+Circular,India,2043,33.0
+Ammonia,NZ+Circular,Rest of Asia,2043,432.0
+Ammonia,NZ+Circular,Oceania,2043,3.0
+Ammonium nitrate,NZ+Circular,Global,2043,19.69564176
+Ammonium nitrate,NZ+Circular,North America,2043,1.793254247
+Ammonium nitrate,NZ+Circular,Latin America,2043,1.433860464
+Ammonium nitrate,NZ+Circular,Africa,2043,1.307854813
+Ammonium nitrate,NZ+Circular,Middle East,2043,2.710454093
+Ammonium nitrate,NZ+Circular,Russia,2043,1.315326548
+Ammonium nitrate,NZ+Circular,Europe,2043,1.606222017
+Ammonium nitrate,NZ+Circular,China,2043,3.681560959
+Ammonium nitrate,NZ+Circular,India,2043,1.799313161
+Ammonium nitrate,NZ+Circular,Rest of Asia,2043,3.782513879
+Ammonium nitrate,NZ+Circular,Oceania,2043,0.265281582
+Urea,NZ+Circular,Global,2043,106.3
+Urea,NZ+Circular,North America,2043,9.7
+Urea,NZ+Circular,Latin America,2043,7.7
+Urea,NZ+Circular,Africa,2043,7.0
+Urea,NZ+Circular,Middle East,2043,14.5
+Urea,NZ+Circular,Russia,2043,7.1
+Urea,NZ+Circular,Europe,2043,8.7
+Urea,NZ+Circular,China,2043,20.0
+Urea,NZ+Circular,India,2043,9.7
+Urea,NZ+Circular,Rest of Asia,2043,20.4
+Urea,NZ+Circular,Oceania,2043,1.4
+Ammonia,NZ+Circular,Global,2044,1017.8
+Ammonia,NZ+Circular,North America,2044,89.6
+Ammonia,NZ+Circular,Latin America,2044,36.7
+Ammonia,NZ+Circular,Africa,2044,47.2
+Ammonia,NZ+Circular,Middle East,2044,55.0
+Ammonia,NZ+Circular,Russia,2044,11.9
+Ammonia,NZ+Circular,Europe,2044,239.7
+Ammonia,NZ+Circular,China,2044,68.0
+Ammonia,NZ+Circular,India,2044,33.1
+Ammonia,NZ+Circular,Rest of Asia,2044,433.6
+Ammonia,NZ+Circular,Oceania,2044,3.1
+Ammonium nitrate,NZ+Circular,Global,2044,19.90180809
+Ammonium nitrate,NZ+Circular,North America,2044,1.803337181
+Ammonium nitrate,NZ+Circular,Latin America,2044,1.468301952
+Ammonium nitrate,NZ+Circular,Africa,2044,1.338186164
+Ammonium nitrate,NZ+Circular,Middle East,2044,2.770411078
+Ammonium nitrate,NZ+Circular,Russia,2044,1.324926096
+Ammonium nitrate,NZ+Circular,Europe,2044,1.611072596
+Ammonium nitrate,NZ+Circular,China,2044,3.682951276
+Ammonium nitrate,NZ+Circular,India,2044,1.809845605
+Ammonium nitrate,NZ+Circular,Rest of Asia,2044,3.824632319
+Ammonium nitrate,NZ+Circular,Oceania,2044,0.268143818
+Urea,NZ+Circular,Global,2044,107.4
+Urea,NZ+Circular,North America,2044,9.8
+Urea,NZ+Circular,Latin America,2044,7.9
+Urea,NZ+Circular,Africa,2044,7.2
+Urea,NZ+Circular,Middle East,2044,14.8
+Urea,NZ+Circular,Russia,2044,7.2
+Urea,NZ+Circular,Europe,2044,8.7
+Urea,NZ+Circular,China,2044,20.0
+Urea,NZ+Circular,India,2044,9.8
+Urea,NZ+Circular,Rest of Asia,2044,20.6
+Urea,NZ+Circular,Oceania,2044,1.4
+Ammonia,NZ+Circular,Global,2045,1019.8
+Ammonia,NZ+Circular,North America,2045,89.3
+Ammonia,NZ+Circular,Latin America,2045,36.5
+Ammonia,NZ+Circular,Africa,2045,47.5
+Ammonia,NZ+Circular,Middle East,2045,54.8
+Ammonia,NZ+Circular,Russia,2045,11.9
+Ammonia,NZ+Circular,Europe,2045,240.5
+Ammonia,NZ+Circular,China,2045,67.8
+Ammonia,NZ+Circular,India,2045,33.2
+Ammonia,NZ+Circular,Rest of Asia,2045,435.2
+Ammonia,NZ+Circular,Oceania,2045,3.1
+Ammonium nitrate,NZ+Circular,Global,2045,20.10040809
+Ammonium nitrate,NZ+Circular,North America,2045,1.812793695
+Ammonium nitrate,NZ+Circular,Latin America,2045,1.502027372
+Ammonium nitrate,NZ+Circular,Africa,2045,1.367876717
+Ammonium nitrate,NZ+Circular,Middle East,2045,2.829060819
+Ammonium nitrate,NZ+Circular,Russia,2045,1.334059252
+Ammonium nitrate,NZ+Circular,Europe,2045,1.615405373
+Ammonium nitrate,NZ+Circular,China,2045,3.684341594
+Ammonium nitrate,NZ+Circular,India,2045,1.819757958
+Ammonium nitrate,NZ+Circular,Rest of Asia,2045,3.864254541
+Ammonium nitrate,NZ+Circular,Oceania,2045,0.27083077
+Urea,NZ+Circular,Global,2045,108.5
+Urea,NZ+Circular,North America,2045,9.8
+Urea,NZ+Circular,Latin America,2045,8.0
+Urea,NZ+Circular,Africa,2045,7.3
+Urea,NZ+Circular,Middle East,2045,15.2
+Urea,NZ+Circular,Russia,2045,7.2
+Urea,NZ+Circular,Europe,2045,8.8
+Urea,NZ+Circular,China,2045,20.0
+Urea,NZ+Circular,India,2045,9.8
+Urea,NZ+Circular,Rest of Asia,2045,20.9
+Urea,NZ+Circular,Oceania,2045,1.5
+Ammonia,NZ+Circular,Global,2046,1020.7
+Ammonia,NZ+Circular,North America,2046,89.0
+Ammonia,NZ+Circular,Latin America,2046,36.3
+Ammonia,NZ+Circular,Africa,2046,47.8
+Ammonia,NZ+Circular,Middle East,2046,54.5
+Ammonia,NZ+Circular,Russia,2046,11.9
+Ammonia,NZ+Circular,Europe,2046,240.9
+Ammonia,NZ+Circular,China,2046,67.5
+Ammonia,NZ+Circular,India,2046,33.3
+Ammonia,NZ+Circular,Rest of Asia,2046,436.4
+Ammonia,NZ+Circular,Oceania,2046,3.1
+Ammonium nitrate,NZ+Circular,Global,2046,20.28417451
+Ammonium nitrate,NZ+Circular,North America,2046,1.821021399
+Ammonium nitrate,NZ+Circular,Latin America,2046,1.534435367
+Ammonium nitrate,NZ+Circular,Africa,2046,1.396373753
+Ammonium nitrate,NZ+Circular,Middle East,2046,2.885271497
+Ammonium nitrate,NZ+Circular,Russia,2046,1.34224906
+Ammonium nitrate,NZ+Circular,Europe,2046,1.618681225
+Ammonium nitrate,NZ+Circular,China,2046,3.684490291
+Ammonium nitrate,NZ+Circular,India,2046,1.828416753
+Ammonium nitrate,NZ+Circular,Rest of Asia,2046,3.8999895
+Ammonium nitrate,NZ+Circular,Oceania,2046,0.273245671
+Urea,NZ+Circular,Global,2046,109.5
+Urea,NZ+Circular,North America,2046,9.9
+Urea,NZ+Circular,Latin America,2046,8.2
+Urea,NZ+Circular,Africa,2046,7.5
+Urea,NZ+Circular,Middle East,2046,15.5
+Urea,NZ+Circular,Russia,2046,7.3
+Urea,NZ+Circular,Europe,2046,8.8
+Urea,NZ+Circular,China,2046,20.0
+Urea,NZ+Circular,India,2046,9.9
+Urea,NZ+Circular,Rest of Asia,2046,21.1
+Urea,NZ+Circular,Oceania,2046,1.5
+Ammonia,NZ+Circular,Global,2047,1039.3
+Ammonia,NZ+Circular,North America,2047,90.6
+Ammonia,NZ+Circular,Latin America,2047,36.7
+Ammonia,NZ+Circular,Africa,2047,48.9
+Ammonia,NZ+Circular,Middle East,2047,55.7
+Ammonia,NZ+Circular,Russia,2047,12.0
+Ammonia,NZ+Circular,Europe,2047,244.4
+Ammonia,NZ+Circular,China,2047,68.6
+Ammonia,NZ+Circular,India,2047,33.4
+Ammonia,NZ+Circular,Rest of Asia,2047,446.0
+Ammonia,NZ+Circular,Oceania,2047,3.1
+Ammonium nitrate,NZ+Circular,Global,2047,20.46028878
+Ammonium nitrate,NZ+Circular,North America,2047,1.828630854
+Ammonium nitrate,NZ+Circular,Latin America,2047,1.566087769
+Ammonium nitrate,NZ+Circular,Africa,2047,1.424199942
+Ammonium nitrate,NZ+Circular,Middle East,2047,2.94011954
+Ammonium nitrate,NZ+Circular,Russia,2047,1.349967892
+Ammonium nitrate,NZ+Circular,Europe,2047,1.621446124
+Ammonium nitrate,NZ+Circular,China,2047,3.684638988
+Ammonium nitrate,NZ+Circular,India,2047,1.836461917
+Ammonium nitrate,NZ+Circular,Rest of Asia,2047,3.933248388
+Ammonium nitrate,NZ+Circular,Oceania,2047,0.275487368
+Urea,NZ+Circular,Global,2047,110.5
+Urea,NZ+Circular,North America,2047,9.9
+Urea,NZ+Circular,Latin America,2047,8.4
+Urea,NZ+Circular,Africa,2047,7.6
+Urea,NZ+Circular,Middle East,2047,15.8
+Urea,NZ+Circular,Russia,2047,7.3
+Urea,NZ+Circular,Europe,2047,8.8
+Urea,NZ+Circular,China,2047,20.0
+Urea,NZ+Circular,India,2047,9.9
+Urea,NZ+Circular,Rest of Asia,2047,21.3
+Urea,NZ+Circular,Oceania,2047,1.5
+Ammonia,NZ+Circular,Global,2048,1057.1
+Ammonia,NZ+Circular,North America,2048,92.2
+Ammonia,NZ+Circular,Latin America,2048,37.2
+Ammonia,NZ+Circular,Africa,2048,49.9
+Ammonia,NZ+Circular,Middle East,2048,56.7
+Ammonia,NZ+Circular,Russia,2048,12.1
+Ammonia,NZ+Circular,Europe,2048,247.6
+Ammonia,NZ+Circular,China,2048,69.7
+Ammonia,NZ+Circular,India,2048,33.5
+Ammonia,NZ+Circular,Rest of Asia,2048,455.2
+Ammonia,NZ+Circular,Oceania,2048,3.1
+Ammonium nitrate,NZ+Circular,Global,2048,20.628753
+Ammonium nitrate,NZ+Circular,North America,2048,1.835630768
+Ammonium nitrate,NZ+Circular,Latin America,2048,1.596985827
+Ammonium nitrate,NZ+Circular,Africa,2048,1.451348013
+Ammonium nitrate,NZ+Circular,Middle East,2048,2.993596166
+Ammonium nitrate,NZ+Circular,Russia,2048,1.357225779
+Ammonium nitrate,NZ+Circular,Europe,2048,1.623712135
+Ammonium nitrate,NZ+Circular,China,2048,3.684787685
+Ammonium nitrate,NZ+Circular,India,2048,1.84388937
+Ammonium nitrate,NZ+Circular,Rest of Asia,2048,3.964022546
+Ammonium nitrate,NZ+Circular,Oceania,2048,0.277554717
+Urea,NZ+Circular,Global,2048,111.4
+Urea,NZ+Circular,North America,2048,9.9
+Urea,NZ+Circular,Latin America,2048,8.6
+Urea,NZ+Circular,Africa,2048,7.8
+Urea,NZ+Circular,Middle East,2048,16.1
+Urea,NZ+Circular,Russia,2048,7.3
+Urea,NZ+Circular,Europe,2048,8.8
+Urea,NZ+Circular,China,2048,20.0
+Urea,NZ+Circular,India,2048,10.0
+Urea,NZ+Circular,Rest of Asia,2048,21.4
+Urea,NZ+Circular,Oceania,2048,1.5
+Ammonia,NZ+Circular,Global,2049,1078.4
+Ammonia,NZ+Circular,North America,2049,94.1
+Ammonia,NZ+Circular,Latin America,2049,37.7
+Ammonia,NZ+Circular,Africa,2049,51.0
+Ammonia,NZ+Circular,Middle East,2049,58.1
+Ammonia,NZ+Circular,Russia,2049,12.3
+Ammonia,NZ+Circular,Europe,2049,251.3
+Ammonia,NZ+Circular,China,2049,71.1
+Ammonia,NZ+Circular,India,2049,33.6
+Ammonia,NZ+Circular,Rest of Asia,2049,466.1
+Ammonia,NZ+Circular,Oceania,2049,3.1
+Ammonium nitrate,NZ+Circular,Global,2049,20.78957578
+Ammonium nitrate,NZ+Circular,North America,2049,1.842026687
+Ammonium nitrate,NZ+Circular,Latin America,2049,1.627129526
+Ammonium nitrate,NZ+Circular,Africa,2049,1.477811822
+Ammonium nitrate,NZ+Circular,Middle East,2049,3.045686969
+Ammonium nitrate,NZ+Circular,Russia,2049,1.364010078
+Ammonium nitrate,NZ+Circular,Europe,2049,1.625479746
+Ammonium nitrate,NZ+Circular,China,2049,3.684936382
+Ammonium nitrate,NZ+Circular,India,2049,1.85070801
+Ammonium nitrate,NZ+Circular,Rest of Asia,2049,3.992336116
+Ammonium nitrate,NZ+Circular,Oceania,2049,0.279450441
+Urea,NZ+Circular,Global,2049,112.3
+Urea,NZ+Circular,North America,2049,10.0
+Urea,NZ+Circular,Latin America,2049,8.7
+Urea,NZ+Circular,Africa,2049,7.9
+Urea,NZ+Circular,Middle East,2049,16.4
+Urea,NZ+Circular,Russia,2049,7.4
+Urea,NZ+Circular,Europe,2049,8.8
+Urea,NZ+Circular,China,2049,20.0
+Urea,NZ+Circular,India,2049,10.0
+Urea,NZ+Circular,Rest of Asia,2049,21.6
+Urea,NZ+Circular,Oceania,2049,1.5
+Ammonia,NZ+Circular,Global,2050,1093.6
+Ammonia,NZ+Circular,North America,2050,95.5
+Ammonia,NZ+Circular,Latin America,2050,38.1
+Ammonia,NZ+Circular,Africa,2050,51.9
+Ammonia,NZ+Circular,Middle East,2050,59.0
+Ammonia,NZ+Circular,Russia,2050,12.4
+Ammonia,NZ+Circular,Europe,2050,253.8
+Ammonia,NZ+Circular,China,2050,72.0
+Ammonia,NZ+Circular,India,2050,33.7
+Ammonia,NZ+Circular,Rest of Asia,2050,474.2
+Ammonia,NZ+Circular,Oceania,2050,3.1
+Ammonium nitrate,NZ+Circular,Global,2050,20.94274409
+Ammonium nitrate,NZ+Circular,North America,2050,1.847821589
+Ammonium nitrate,NZ+Circular,Latin America,2050,1.656499376
+Ammonium nitrate,NZ+Circular,Africa,2050,1.503584863
+Ammonium nitrate,NZ+Circular,Middle East,2050,3.096377692
+Ammonium nitrate,NZ+Circular,Russia,2050,1.370330529
+Ammonium nitrate,NZ+Circular,Europe,2050,1.626753354
+Ammonium nitrate,NZ+Circular,China,2050,3.685085079
+Ammonium nitrate,NZ+Circular,India,2050,1.856918734
+Ammonium nitrate,NZ+Circular,Rest of Asia,2050,4.018198062
+Ammonium nitrate,NZ+Circular,Oceania,2050,0.281174813
+Urea,NZ+Circular,Global,2050,113.1
+Urea,NZ+Circular,North America,2050,10.0
+Urea,NZ+Circular,Latin America,2050,8.9
+Urea,NZ+Circular,Africa,2050,8.1
+Urea,NZ+Circular,Middle East,2050,16.6
+Urea,NZ+Circular,Russia,2050,7.4
+Urea,NZ+Circular,Europe,2050,8.8
+Urea,NZ+Circular,China,2050,20.0
+Urea,NZ+Circular,India,2050,10.1
+Urea,NZ+Circular,Rest of Asia,2050,21.7
+Urea,NZ+Circular,Oceania,2050,1.5
