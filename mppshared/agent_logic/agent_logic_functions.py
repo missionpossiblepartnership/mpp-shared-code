@@ -90,7 +90,7 @@ def adjust_capacity_utilisation(
         # deficit as small as possible, starting at the asset with the lowest cost metric
         if demand > production:
             logger.info(
-                "Increasing capacity utilisation of assets to minimise production deficit"
+                f"Increasing capacity utilisation of {product} assets to minimise production deficit"
             )
             pathway = increase_cuf_of_assets(
                 pathway=pathway,
@@ -104,7 +104,7 @@ def adjust_capacity_utilisation(
         # surplus as small as possible, starting at asset with highest cost metric
         elif production > demand:
             logger.info(
-                "Decreasing capacity utilisation of assets to minimise production surplus"
+                f"Decreasing capacity utilisation of {product} assets to minimise production surplus"
             )
             pathway = decrease_cuf_of_assets(
                 pathway=pathway,

@@ -46,16 +46,14 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
         pathway = pathway.copy_stack(year=year)
 
         # Adjust capacity utilisation of each asset
-        pathway = adjust_capacity_utilisation(
-            pathway=pathway, year=year, product=product
-        )
+        pathway = adjust_capacity_utilisation(pathway=pathway, year=year)
 
         # Write stack to csv
         pathway.export_stack_to_csv(year)
 
         # Decommission assets
         start = timer()
-        pathway = decommission(pathway=pathway, year=year, product=product)
+        pathway = decommission(pathway=pathway, year=year)
         end = timer()
         logger.debug(
             f"Time elapsed for decommission in year {year}: {timedelta(seconds=end-start)} seconds"

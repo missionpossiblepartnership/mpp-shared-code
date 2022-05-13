@@ -331,7 +331,7 @@ class SimulationPathway:
                 RANK_TYPES,
             )
 
-        return self.rankings[product][rank_type][year]
+        return self.rankings[rank_type][year]
 
     def update_ranking(self, df_rank, product, year, rank_type):
         """Update ranking for a product, year, type"""
