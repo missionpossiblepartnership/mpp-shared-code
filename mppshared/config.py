@@ -13,8 +13,8 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
-    "bau",
-    "fa",
+    # "bau",
+    # "fa",
     "lc",
 ]
 
@@ -382,7 +382,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
 }
 
 # Year from which newbuild capacity has to fulfill the 2050 emissions constraint
-YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2050, "aluminium": 2045}
+YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2040, "aluminium": 2045}
 
 # Share of assets renovated annually (limits number of brownfield transitions)
 ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 1}
@@ -476,7 +476,7 @@ SECTORAL_PATHWAYS = {
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = {
     "chemicals": 2020,
-    "aluminium": 2030,  # constraint currently not active
+    "aluminium": 2030,
 }
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
 TRANSITIONAL_PERIOD_YEARS = {"chemicals": 30, "aluminium": 10}

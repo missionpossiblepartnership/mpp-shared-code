@@ -47,11 +47,11 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     new_stack = pathway.get_stack(year=year + 1)
 
     # Get ranking table for greenfield transitions
-    df_rank = pathway.get_ranking(year=year, rank_type="greenfield")
+    df_ranking = pathway.get_ranking(year=year, rank_type="greenfield")
 
     # Greenfield for each product sequentially
     for product in pathway.products:
-        df_rank = df_rank.loc[df_rank["product"] == product]
+        df_rank = df_ranking.loc[df_ranking["product"] == product]
         # Get demand and production
         demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
         production = new_stack.get_annual_production_volume(

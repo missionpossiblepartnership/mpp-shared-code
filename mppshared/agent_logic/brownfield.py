@@ -38,6 +38,9 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     # Get ranking table for brownfield transitions
     df_rank = pathway.get_ranking(year=year, rank_type="brownfield")
 
+    # If pathway is BAU, take out brownfield renovation to avoid retrofits to end-state technologies
+    df_rank = df_rank.loc[~(df_rank["switch_type"] == "brownfield_renovation")]
+
     # Get assets eligible for brownfield transitions
     candidates = new_stack.get_assets_eligible_for_brownfield(
         year=year, sector=pathway.sector
