@@ -49,7 +49,7 @@ def check_constraints(
     # If pathway not bau, then check for constraints, else return true
     if pathway.pathway != "bau":
         # Check constraint for annual emissions limit from carbon budget
-        emissions_constraint = check_annual_carbon_budget_constraint(
+        emissions_constraint, flag_residual = check_annual_carbon_budget_constraint(
             pathway=pathway, stack=stack, year=year, transition_type=transition_type
         )
         # Check technology ramp-up constraint
@@ -60,6 +60,7 @@ def check_constraints(
         # TODO: Check resource availability constraint
         return {
             "emissions_constraint": emissions_constraint,
+            "flag_residual": flag_residual,
             "rampup_constraint": rampup_constraint,
         }
     else:
@@ -174,6 +175,7 @@ def check_annual_carbon_budget_constraint(
             df_emissions=pathway.emissions,
             technology_classification="end-state",
         )
+        flag_residual = True
 
     # In other cases, the limit is equivalent to that year's emission limit
     else:
@@ -182,6 +184,7 @@ def check_annual_carbon_budget_constraint(
         dict_stack_emissions = stack.calculate_emissions_stack(
             year=year, df_emissions=pathway.emissions, technology_classification=None
         )
+        flag_residual = False
 
     # Compare scope 1 and 2 CO2 emissions to the allowed limit in that year
     co2_scope1_2 = (
@@ -189,6 +192,6 @@ def check_annual_carbon_budget_constraint(
     ) / 1e3  # Gt CO2
 
     if np.round(co2_scope1_2, 2) <= np.round(limit, 2):
-        return True
+        return True, flag_residual
 
-    return False
+    return False, flag_residual

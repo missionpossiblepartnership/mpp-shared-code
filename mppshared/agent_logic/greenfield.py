@@ -193,12 +193,22 @@ def select_asset_for_greenfield(
         )
 
         # Asset can be created if no constraint hurt
-        if all(value == True for value in dict_constraints.values()):
+        if (dict_constraints["emissions_constraint"] == True) & (
+            dict_constraints["rampup_constraint"] == True
+        ):
             return new_asset
 
         # If annual emissions constraint hurt, remove best transition from ranking table and try again
         if dict_constraints["emissions_constraint"] == False:
             df_rank = remove_transition(df_rank, asset_transition)
+
+        # If residual emissions constraint hurt, remove all transitions with CCS (i.e. with residual emissions)
+        elif (dict_constraints["emissions_constraint"] == False) & (
+            dict_constraints["flag_residual"] == True
+        ):
+            df_rank = df_rank.loc[
+                ~(df_rank["technology_destination"].str.contains("CCS"))
+            ]
 
         # If only technology ramp-up constraint hurt, remove all transitions with that destination technology from the ranking table
         elif dict_constraints["rampup_constraint"] == False:
