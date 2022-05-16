@@ -51,6 +51,8 @@ OUTPUT_WRITE_PATH = {
     # "aluminium": TBD
 }
 
+# Carbon price (for sensitivity analysis)
+CARBON_COST = 0  # Values to test: 0, 50, 100, 150
 
 # Naming of solver input tables
 SOLVER_INPUT_TABLES = [
@@ -201,7 +203,11 @@ SENSITIVITIES = [
 
 # Products produced by each sector
 PRODUCTS = {
-    "chemicals": ["Ammonia", "Ammonium nitrate", "Urea"],
+    "chemicals": [
+        "Ammonia",
+        # "Ammonium nitrate",
+        # "Urea"
+    ],
     "aluminium": ["Aluminium"],
 }
 
@@ -372,7 +378,7 @@ RANKING_CONFIG = {
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
     "chemicals": {
-        "maximum_asset_additions": 10,
+        "maximum_asset_additions": 8,
         "maximum_capacity_growth_rate": 0.7,
         "years_rampup_phase": 5,
     },

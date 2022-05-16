@@ -91,7 +91,7 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
             how="left",
         )
 
-    if CARBON_PRICE == 0:
+    if CARBON_COST == 0:
         df_carbon_cost = df_technology_switches.copy()
     else:
         # Add carbon cost to TCO based on scope 1 and 2 CO2 emissions
@@ -175,7 +175,7 @@ def apply_carbon_price_to_cost_metric(
     """
     # Drop emission columns with other GHGs
     for ghg in [ghg for ghg in GHGS if ghg != "co2"]:
-        df_emissions = df_emissions.drop(df_emissions.filter(regex=ghg).columns)
+        df_emissions = df_emissions.drop(columns=df_emissions.filter(regex=ghg).columns)
 
     # Merge technology switches, emissions and technology characteristics
     df = df_technology_switches.merge(
@@ -188,7 +188,7 @@ def apply_carbon_price_to_cost_metric(
         df_technology_characteristics.rename(
             columns={"technology": "technology_destination"}
         ),
-        on=["product", "region", "technology_destination"],
+        on=["product", "region", "year", "technology_destination"],
         how="left",
     ).fillna(0)
 
@@ -231,10 +231,11 @@ def apply_carbon_price_to_cost_metric(
     elif cost_metric == "lcox":
         # Contribution of a cost to LCOX is net present cost divided by (CUF * total discounted production)
         # TODO: ensure that sector-specific
-        cuf = df_technology_characteristics["cuf"].unique()[0]
+        cuf = 0.95
         rate = df_technology_characteristics["wacc"].unique()[0]
         lifetime = df_technology_characteristics["technology_lifetime"].unique()[0]
-        total_discounted_production = np.sum((1 + rate) ** np.arange(0, lifetime + 1))
+        value_shares = (1 + rate) ** np.arange(0, lifetime + 1)
+        total_discounted_production = np.sum(1 / value_shares)
 
         df["carbon_cost_addition_lcox"] = (
             df["carbon_cost_addition"] / (cuf * total_discounted_production)
