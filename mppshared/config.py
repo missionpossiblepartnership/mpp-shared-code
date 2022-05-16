@@ -14,8 +14,8 @@ SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
     # "bau",
-    # "fa",
-    "lc",
+    "fa",
+    # "lc",
 ]
 
 ### RUN CONFIGURATION ###
@@ -209,7 +209,7 @@ PRODUCTS = {
 INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_assets"}
 
 ### RANKING ###
-NUMBER_OF_BINS_RANKING = 10
+NUMBER_OF_BINS_RANKING = {"chemicals": 50, "aluminium": 10}
 COST_METRIC_RELATIVE_UNCERTAINTY = {"chemicals": 0.1, "aluminium": 0.1}
 
 # GHGs and Emission scopes included in weighting when ranking technology transitions
@@ -221,7 +221,9 @@ EMISSION_SCOPES_RANKING = {
 
 # Cost metric for ranking
 RANKING_COST_METRIC = {"chemicals": "lcox", "aluminium": "tco"}
-BIN_METHODOLOGY = {"chemicals": "uncertainty", "aluminium": "histogram"}
+
+# Methodology for binning can be "uncertainty", "uncertainty_bins" or "histogram"
+BIN_METHODOLOGY = {"chemicals": "uncertainty_bins", "aluminium": "histogram"}
 
 TRANSITION_TYPES = [
     "decommission",
