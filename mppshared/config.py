@@ -4,7 +4,7 @@ import logging
 import numpy as np
 
 ### LOGGER ####
-LOG_LEVEL = "DEBUG"
+LOG_LEVEL = "INFO"
 LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
 )
@@ -15,12 +15,20 @@ SECTOR = "chemicals"
 PATHWAYS = [
     # "bau",
     "fa",
-    # "lc",
+    "lc",
+]
+
+
+# Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
+SENSITIVITIES = [
+    "def",
+    "ng_low",
+    "ng_high",
 ]
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 
 run_config = {
     "IMPORT_DATA",
@@ -52,7 +60,7 @@ OUTPUT_WRITE_PATH = {
 }
 
 # Carbon price (for sensitivity analysis)
-CARBON_COST = 0  # Values to test: 0, 50, 100, 150
+CARBON_COST = 50  # Values to test: 0, 50, 100, 150
 
 # Naming of solver input tables
 SOLVER_INPUT_TABLES = [
@@ -194,20 +202,11 @@ MODEL_SCOPE = "Global"
 # Override asset parameters; annual production capacity in Mt/year
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
-
-# Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
-SENSITIVITIES = [
-    "def",
-]
 ### SECTOR-SPECIFIC PARAMETERS ###
 
 # Products produced by each sector
 PRODUCTS = {
-    "chemicals": [
-        "Ammonia",
-        # "Ammonium nitrate",
-        # "Urea"
-    ],
+    "chemicals": ["Ammonia", "Ammonium nitrate", "Urea"],
     "aluminium": ["Aluminium"],
 }
 

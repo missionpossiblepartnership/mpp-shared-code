@@ -106,6 +106,10 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         sector=sector, importer=importer
     )
 
+    # TODO: fix this workaround to not set rampup constraint for CCS
+    for ccs_tech in [tech for tech in dict_technology_rampup.keys() if "CCS" in tech]:
+        dict_technology_rampup[ccs_tech] = None
+
     # Make pathway
     pathway = SimulationPathway(
         start_year=START_YEAR,

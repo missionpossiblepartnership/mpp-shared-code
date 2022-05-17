@@ -194,11 +194,15 @@ def _create_ranking_uncertainty_bins(
     # Calculate number of bins
     bin_interval = cost_uncertainty * df[cost_metric].min()
     bin_range = df[cost_metric].max() - df[cost_metric].min()
-    n_bins = int(bin_range / bin_interval)
 
-    # Bin the rank scores
-    _, bins = np.histogram(df["rank_raw"], bins=n_bins)
-    df["rank"] = np.digitize(df["rank_raw"], bins=bins)
+    if (bin_range != 0) & (bin_interval != 0):
+        n_bins = int(bin_range / bin_interval)
+        # Bin the rank scores
+        _, bins = np.histogram(df["rank_raw"], bins=n_bins)
+        df["rank"] = np.digitize(df["rank_raw"], bins=bins)
+    else:
+        # All rank scores are 0, so all ranks are 0
+        df["rank"] = df["rank_raw"]
 
     return df
 
@@ -327,8 +331,7 @@ def make_rankings(pathway: str, sensitivity: str, sector: str):
 
     # Make the ranking separately for each type of technology transition (all products together)
     df_ranking = importer.get_technologies_to_rank()
-    # for rank_type in RANK_TYPES[sector]:
-    for rank_type in ["greenfield"]:
+    for rank_type in RANK_TYPES[sector]:
         # Create ranking table
         if BIN_METHODOLOGY[sector] == "histogram":
             df_rank = rank_technology_histogram(

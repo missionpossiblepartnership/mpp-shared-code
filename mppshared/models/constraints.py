@@ -57,6 +57,8 @@ def check_constraints(
             pathway=pathway, stack=stack, year=year
         )
 
+        # TODO Remove this workaround
+        emissions_constraint = True
         # TODO: Check resource availability constraint
         return {
             "emissions_constraint": emissions_constraint,
