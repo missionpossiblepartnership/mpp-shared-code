@@ -1,19 +1,23 @@
 """ Apply implicit forcing mechanisms to the input tables: carbon cost, green premium and technology moratorium."""
 
 from datetime import timedelta
+from pathlib import Path
+from re import M
 from timeit import default_timer as timer
-
 import numpy as np
 import pandas as pd
 
 from mppshared.calculate.calculate_cost import discount_costs
 from mppshared.config import (
+    CARBON_COST_ADDITION_FROM_CSV,
     EMISSION_SCOPES,
     GHGS,
+    PATHWAYS,
     PRODUCTS,
     RANKING_COST_METRIC,
     REGIONAL_TECHNOLOGY_BAN,
     REGIONS_SALT_CAVERN_AVAILABILITY,
+    SENSITIVITIES,
     START_YEAR,
     TECHNOLOGY_MORATORIUM,
     TRANSITIONAL_PERIOD_YEARS,
@@ -94,25 +98,59 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
     if CARBON_COST == 0:
         df_carbon_cost = df_technology_switches.copy()
     else:
-        # Add carbon cost to TCO based on scope 1 and 2 CO2 emissions
-        # TODO: improve runtime
-        start = timer()
-        df_technology_switches = filter_df_for_development(df_technology_switches)
-        df_carbon_cost = apply_carbon_price_to_cost_metric(
-            df_technology_switches=df_technology_switches,
-            df_emissions=df_emissions,
-            df_technology_characteristics=df_technology_characteristics,
-            cost_metric=RANKING_COST_METRIC[sector],
-            carbon_cost=CARBON_COST,
-        )
-        end = timer()
-        logger.info(
-            f"Time elapsed to apply carbon cost to {len(df_carbon_cost)} rows: {timedelta(seconds=end-start)}"
+        # Write carbon cost addition to csv in first run
+        if CARBON_COST_ADDITION_FROM_CSV == False:
+            # Add carbon cost to TCO based on scope 1 and 2 CO2 emissions
+            start = timer()
+            # df_technology_switches = filter_df_for_development(df_technology_switches)
+            df_carbon_cost_addition = calculate_carbon_cost_addition_to_cost_metric(
+                df_technology_switches=df_technology_switches,
+                df_emissions=df_emissions,
+                df_technology_characteristics=df_technology_characteristics,
+                cost_metric=RANKING_COST_METRIC[sector],
+                carbon_cost=CARBON_COST,
+            )
+            end = timer()
+            logger.info(
+                f"Time elapsed to apply carbon cost to {len(df_carbon_cost_addition)} rows: {timedelta(seconds=end-start)}"
+            )
+
+            # Write carbon cost to all intermediate folders
+            for folder in [
+                f"{pathway}/{sensitivity}"
+                for sensitivity in SENSITIVITIES
+                for pathway in PATHWAYS
+            ]:
+                parent_path = Path(__file__).resolve().parents[2]
+                path = parent_path.joinpath(
+                    f"data/{sector}/{folder}/intermediate/carbon_cost_addition.csv"
+                )
+                df_carbon_cost_addition.to_csv(path, index=False)
+        else:
+            df_carbon_cost_addition = importer.get_carbon_cost_addition()
+
+        # Update cost metric in technology switching DataFrame with carbon cost
+        cost_metric = RANKING_COST_METRIC[sector]
+        merge_cols = [
+            "product",
+            "technology_origin",
+            "technology_destination",
+            "region",
+            "switch_type",
+            "year",
+        ]
+        df_carbon_cost = df_technology_switches.merge(
+            df_carbon_cost_addition[
+                merge_cols + [f"carbon_cost_addition_{cost_metric}"]
+            ],
+            on=merge_cols,
+            how="left",
         )
 
-    # TODO: add carbon cost to LCOX and other cost metrics
-
-    # TODO: Subtract green premium from eligible technologies
+        df_carbon_cost[cost_metric] = (
+            df_carbon_cost[cost_metric]
+            + df_carbon_cost[f"carbon_cost_addition_{cost_metric}"]
+        )
 
     # Calculate emission deltas between origin and destination technology
     df_ranking = calculate_emission_reduction(df_carbon_cost, df_emissions)
@@ -156,7 +194,7 @@ def apply_salt_cavern_availability_constraint(
 
 
 @timer_func
-def apply_carbon_price_to_cost_metric(
+def calculate_carbon_cost_addition_to_cost_metric(
     df_technology_switches: pd.DataFrame,
     df_emissions: pd.DataFrame,
     df_technology_characteristics: pd.DataFrame,
@@ -241,14 +279,17 @@ def apply_carbon_price_to_cost_metric(
             df["carbon_cost_addition"] / (cuf * total_discounted_production)
         ).fillna(0)
 
-    # Update cost metric in technology switching DataFrame
-    df_technology_switches = df_technology_switches.set_index(grouping_cols + ["year"])
-    df_technology_switches[cost_metric] = (
-        df[cost_metric] + df[f"carbon_cost_addition_{cost_metric}"]
+    # Return technology switch DataFrame with carbon cost addition
+    # TODO: improve this workaround
+    return df.reset_index(drop=False).drop(
+        columns=[
+            "technology_classification_x",
+            "technology_classification_y",
+            "wacc",
+            "trl_current",
+            "technology_lifetime",
+        ]
     )
-
-    # Return technology switch DataFrame with updated TCO
-    return df_technology_switches.reset_index(drop=False)
 
 
 def apply_technology_availability_constraint(

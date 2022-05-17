@@ -18,13 +18,16 @@ PATHWAYS = [
     "lc",
 ]
 
-
-# Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
+# Sensitivities
 SENSITIVITIES = [
     "def",
     "ng_low",
     "ng_high",
 ]
+
+# Carbon price (for sensitivity analysis)
+CARBON_COST = 0  # Values to test: 0, 50, 100, 150
+CARBON_COST_ADDITION_FROM_CSV = True
 
 ### RUN CONFIGURATION ###
 
@@ -58,9 +61,6 @@ OUTPUT_WRITE_PATH = {
     "chemicals": "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Current model outputs"
     # "aluminium": TBD
 }
-
-# Carbon price (for sensitivity analysis)
-CARBON_COST = 50  # Values to test: 0, 50, 100, 150
 
 # Naming of solver input tables
 SOLVER_INPUT_TABLES = [

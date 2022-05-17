@@ -96,6 +96,9 @@ class IntermediateDataImporter:
             self.intermediate_path.joinpath("electrolyser_proportions.csv")
         )
 
+    def get_carbon_cost_addition(self):
+        return pd.read_csv(self.intermediate_path.joinpath("carbon_cost_addition.csv"))
+
     # TODO: remove this legacy function
     def get_asset_specs(self):
         df_spec = pd.read_csv(
