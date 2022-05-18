@@ -1,9 +1,10 @@
 """ Logic for technology transitions of type brownfield rebuild and brownfield renovation."""
-
+import random
+import sys
 from copy import deepcopy
 from operator import methodcaller
+
 import numpy as np
-import random
 
 from mppshared.agent_logic.agent_logic_functions import (
     remove_transition,
@@ -57,6 +58,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
     # Enact brownfield transitions while there are still candidates
     while (candidates != []) & (n_assets_transitioned <= maximum_n_assets_transitioned):
+        # TODO: how do we avoid that all assets are retrofit at once in the beginning?
+        # TODO: implement foresight with brownfield rebuild
 
         # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
         best_candidates = []
@@ -68,17 +71,30 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
             # Choose the best transition, i.e. highest decommission rank
             best_transition = select_best_transition(df_rank)
-
-            best_candidates = list(
-                filter(
-                    lambda asset: (
-                        asset.technology == best_transition["technology_origin"]
+            # Check it the transition has PPA on it, if so only get plants that allow transition to ppa
+            if "PPA" in best_transition["technology_destination"]:
+                best_candidates = list(
+                    filter(
+                        lambda asset: (
+                            asset.technology == best_transition["technology_origin"]
+                        )
+                        & (asset.region == best_transition["region"])
+                        & (asset.product == best_transition["product"])
+                        & (asset.ppa_allowed == True),
+                        candidates,
                     )
-                    & (asset.region == best_transition["region"])
-                    & (asset.product == best_transition["product"]),
-                    candidates,
                 )
-            )
+            else:
+                best_candidates = list(
+                    filter(
+                        lambda asset: (
+                            asset.technology == best_transition["technology_origin"]
+                        )
+                        & (asset.region == best_transition["region"])
+                        & (asset.product == best_transition["product"]),
+                        candidates,
+                    )
+                )
             new_technology = best_transition["technology_destination"]
             # Remove best transition from ranking table
             df_rank = remove_transition(df_rank, best_transition)
