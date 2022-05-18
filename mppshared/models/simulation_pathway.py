@@ -11,28 +11,20 @@ import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.calculate.calculate_availablity import update_availability_from_asset
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    EMISSION_SCOPES,
-    END_YEAR,
-    GHGS,
-    INITIAL_ASSET_DATA_LEVEL,
-    LOG_LEVEL,
-    MODEL_SCOPE,
-    PRODUCTS,
-    RANK_TYPES,
-    SECTOR,
-    START_YEAR,
-)
+from mppshared.calculate.calculate_availablity import \
+    update_availability_from_asset
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                              EMISSION_SCOPES, END_YEAR, GHGS,
+                              INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL, MODEL_SCOPE,
+                              PRODUCTS, RANK_TYPES, SECTOR, START_YEAR)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import Asset, AssetStack, create_assets
 from mppshared.models.carbon_budget import CarbonBudget
-from mppshared.models.transition import TransitionRegistry
 from mppshared.models.technology_rampup import TechnologyRampup
-from mppshared.utility.dataframe_utility import flatten_columns
+from mppshared.models.transition import TransitionRegistry
+from mppshared.utility.dataframe_utility import (flatten_columns,
+                                                 get_emission_columns)
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -51,7 +43,7 @@ class SimulationPathway:
         sector: str,
         products: list,
         carbon_budget: CarbonBudget,
-        technology_rampup: dict
+        technology_rampup: dict,
     ):
         # Attributes describing the pathway
         self.start_year = start_year
@@ -343,7 +335,6 @@ class SimulationPathway:
         """Update ranking for a product, year, type"""
         self.rankings[product][rank_type][year] = df_rank
 
-
     def copy_availability(self, year):
         df = self.availability
 
@@ -504,6 +495,7 @@ class SimulationPathway:
                 cuf=row["capacity_factor"],
                 asset_lifetime=row["technology_lifetime"],
                 technology_classification=row["technology_classification"],
+                ppa_allowed=row["ppa_allowed"],
             ),
             axis=1,
         ).tolist()
