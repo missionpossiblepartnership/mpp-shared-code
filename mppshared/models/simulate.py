@@ -35,7 +35,7 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
         The updated pathway
     """
 
-    for year in range(START_YEAR, END_YEAR): # 2049 optimisation leads to 2050 stack (end-state)
+    for year in range(START_YEAR, END_YEAR + 1):
         logger.info("Optimizing for %s", year)
 
         # Copy over last year's stack to this year
@@ -55,7 +55,6 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             pathway.export_stack_to_csv(year)
 
             # Decommission assets
-            # if pathway.pathway != "bau":
             start = timer()
             pathway = decommission(pathway=pathway, year=year, product=product)
             end = timer()

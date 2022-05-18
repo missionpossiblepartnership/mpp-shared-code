@@ -54,6 +54,7 @@ class IntermediateDataImporter:
         """
         output_dir = self.aggregate_export_dir if aggregate else self.export_dir
         if export_dir is not None:
+
             output_dir = output_dir.joinpath(export_dir)
         else:
             output_dir = output_dir
@@ -80,6 +81,19 @@ class IntermediateDataImporter:
     def get_technology_characteristics(self):
         return pd.read_csv(
             self.intermediate_path.joinpath("technology_characteristics.csv")
+        )
+
+    def get_electrolyser_cfs(self):
+        return pd.read_csv(self.intermediate_path.joinpath("electrolyser_cfs.csv"))
+
+    def get_electrolyser_efficiencies(self):
+        return pd.read_csv(
+            self.intermediate_path.joinpath("electrolyser_efficiencies.csv")
+        )
+
+    def get_electrolyser_proportions(self):
+        return pd.read_csv(
+            self.intermediate_path.joinpath("electrolyser_proportions.csv")
         )
 
     # TODO: remove this legacy function
@@ -180,5 +194,3 @@ class IntermediateDataImporter:
         return pd.read_csv(
             self.intermediate_path.joinpath("inputs_outputs.csv"),
         )
-
-    

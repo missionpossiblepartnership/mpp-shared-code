@@ -5,9 +5,15 @@ from xmlrpc.client import Boolean
 
 import pandas as pd
 
-from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                              CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
-                             GHGS, EMISSION_SCOPES, INVESTMENT_CYCLES, LOG_LEVEL)
+from mppshared.config import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CUF_LOWER_THRESHOLD,
+    CUF_UPPER_THRESHOLD,
+    GHGS,
+    EMISSION_SCOPES,
+    INVESTMENT_CYCLES,
+    LOG_LEVEL,
+)
 from mppshared.utility.utils import first, get_logger
 from mppshared.utility.dataframe_utility import get_emission_columns
 
@@ -125,19 +131,23 @@ class AssetStack:
         self.assets.append(new_asset)
         self.new_ids.append(new_asset.uuid)
 
-    def update_asset(self, asset_to_update: Asset, new_technology: str, new_classification: str):
+    def update_asset(
+        self, asset_to_update: Asset, new_technology: str, new_classification: str
+    ):
         """Update an asset in AssetStack. This is done using the UUID to ensure correct updating."""
         uuid_update = asset_to_update.uuid
         asset_to_update.technology = new_technology
         asset_to_update.technology_classification = new_classification
         self.assets = [asset for asset in self.assets if asset.uuid is not uuid_update]
-        self.assets.append(asset_to_update) 
+        self.assets.append(asset_to_update)
 
     def empty(self) -> Boolean:
         """Return True if no asset in stack"""
         return not self.assets
 
-    def filter_assets(self, product=None, region=None, technology=None, technology_classification=None) -> list:
+    def filter_assets(
+        self, product=None, region=None, technology=None, technology_classification=None
+    ) -> list:
         """Filter assets based on one or more criteria"""
         assets = self.assets
         if region is not None:
@@ -147,7 +157,12 @@ class AssetStack:
         if product is not None:
             assets = filter(lambda asset: (asset.product == product), assets)
         if technology_classification is not None:
-            assets = filter(lambda asset: (asset.technology_classification==technology_classification), assets)
+            assets = filter(
+                lambda asset: (
+                    asset.technology_classification == technology_classification
+                ),
+                assets,
+            )
 
         return list(assets)
 
@@ -176,7 +191,9 @@ class AssetStack:
         """Get list of unique products produced by the AssetStack"""
         return list({asset.product for asset in self.assets})
 
-    def aggregate_stack(self, aggregation_vars, technology_classification=None, product=None) -> pd.DataFrame:
+    def aggregate_stack(
+        self, aggregation_vars, technology_classification=None, product=None
+    ) -> pd.DataFrame:
         """
         Aggregate AssetStack according to product, technology or region, and show annual
         production capacity, annual production volume and number of assets. Optionally filtered by technology classification and/or product
@@ -189,7 +206,9 @@ class AssetStack:
         """
 
         # Optional filter by technology classification and product
-        assets = self.filter_assets(technology_classification=technology_classification, product=product)
+        assets = self.filter_assets(
+            technology_classification=technology_classification, product=product
+        )
 
         # Aggregate stack to DataFrame
         df = pd.DataFrame(
@@ -214,7 +233,13 @@ class AssetStack:
             # There are no assets
             return pd.DataFrame()
 
-    def calculate_emissions_stack(self, year: int, df_emissions: pd.DataFrame, technology_classification=None, product=None) -> dict:
+    def calculate_emissions_stack(
+        self,
+        year: int,
+        df_emissions: pd.DataFrame,
+        technology_classification=None,
+        product=None,
+    ) -> dict:
         """Calculate emissions of the current stack in MtGHG by GHG and scope, optionally filtered for technology classification and/or a specific product"""
 
         # Sum emissions by GHG and scope
@@ -223,13 +248,15 @@ class AssetStack:
 
         # Get DataFrame with annual production volume by product, region and technology (optionally filtered for technology classification and specific product)
         df_stack = self.aggregate_stack(
-            aggregation_vars=["technology", "product", "region"], technology_classification=technology_classification, product=product
+            aggregation_vars=["technology", "product", "region"],
+            technology_classification=technology_classification,
+            product=product,
         )
 
         # If the stack DataFrame is empty, return 0 for all emissions
         if df_stack.empty:
             for scope in dict_emissions.keys():
-                dict_emissions[scope] = 0 
+                dict_emissions[scope] = 0
             return dict_emissions
 
         df_stack = df_stack.reset_index()
@@ -262,6 +289,7 @@ class AssetStack:
                 "annual_production_capacity": asset.get_annual_production_capacity(),
                 "annual_production_volume": asset.get_annual_production_volume(),
                 "cuf": asset.cuf,
+                "year_commissioned": asset.year_commissioned,
                 "asset_lifetime": asset.asset_lifetime,
                 "retrofit_status": asset.retrofit,
                 "rebuild_status": asset.rebuild,
@@ -319,7 +347,9 @@ class AssetStack:
 
     def get_number_of_assets(self, product=None, technology=None, region=None):
         "Get number of assets in the asset stack"
-        assets = self.filter_assets(product=product, technology=technology, region=region)
+        assets = self.filter_assets(
+            product=product, technology=technology, region=region
+        )
         return len(assets)
 
     def get_tech_asset_stack(self, technology: str):
@@ -400,5 +430,5 @@ def make_new_asset(
             "technology_classification"
         ].values[0],
         retrofit=False,
-        rebuild=False
+        rebuild=False,
     )

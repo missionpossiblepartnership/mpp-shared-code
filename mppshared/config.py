@@ -10,12 +10,18 @@ LOG_FORMATTER = logging.Formatter(
 )
 
 ### SECTOR CHOICE ###
-# SECTOR = "chemicals"
-SECTOR = "aluminium"
+SECTOR = "chemicals"
+# SECTOR = "aluminium"
+PATHWAYS = [
+    "bau",
+    "fa",
+    "lc",
+]
+
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 
 run_config = {
     "IMPORT_DATA",
@@ -40,6 +46,11 @@ PKL_DATA_IMPORTS = f"{PKL_FOLDER}/imported_data"
 PKL_DATA_INTERMEDIATE = f"{PKL_FOLDER}/intermediate_data"
 PKL_DATA_FINAL = f"{PKL_FOLDER}/final_data"
 SOLVER_INPUT_DATA_PATH = f"{CORE_DATA_PATH}/solver_input_data"
+
+OUTPUT_WRITE_PATH = {
+    "chemicals": "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Current model outputs"
+    # "aluminium": TBD
+}
 
 
 # Naming of solver input tables
@@ -157,11 +168,7 @@ INVESTMENT_CYCLES = {
 }
 
 # Emissions
-GHGS = [
-    "co2",
-    # "ch4",
-    # "n2o"
-]
+GHGS = ["co2", "ch4", "n2o"]
 
 # Emission scopes included in data analysis
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
@@ -186,11 +193,6 @@ MODEL_SCOPE = "Global"
 # Override asset parameters; annual production capacity in Mt/year
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
-PATHWAYS = [
-    # "bau",
-    # "fa",
-    "lc",
-]
 
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
 SENSITIVITIES = [
@@ -315,8 +317,8 @@ RANKING_CONFIG = {
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
     "chemicals": {
-        "maximum_asset_additions": 10,
-        "maximum_capacity_growth_rate": 0.3,
+        "maximum_asset_additions": 100,
+        "maximum_capacity_growth_rate": 1,
         "years_rampup_phase": 10,
     },
     "aluminium": {
@@ -387,7 +389,7 @@ SECTORAL_CARBON_BUDGETS = {
 }
 
 residual_share = 0.05
-emissions_chemicals_2020 = 0.9  # Gt CO2 (scope 1 and 2)
+emissions_chemicals_2020 = 0.62  # Gt CO2 (scope 1 and 2)
 
 SECTORAL_PATHWAYS = {
     "chemicals": {
@@ -425,4 +427,17 @@ REGIONAL_TECHNOLOGY_BAN = {
         ]
     },
     "aluminium": None,
+}
+
+### OUTPUTS PROCESSING ###
+
+# Ratios for calculating electrolysis capacity
+H2_PER_AMMONIA = 0.176471
+AMMONIA_PER_UREA = 0.565724
+AMMONIA_PER_AMMONIUM_NITRATE = 0.425534
+
+# Global Warming Potentials for calculating CO2e
+GWP = {
+    "GWP-20": {"co2": 1, "ch4": 82.5, "n2o": 273},
+    "GWP-100": {"co2": 1, "ch4": 29.8, "n2o": 273},
 }
