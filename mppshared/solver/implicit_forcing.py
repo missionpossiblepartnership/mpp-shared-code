@@ -15,6 +15,7 @@ from mppshared.config import (
     PRODUCTS,
     REGIONAL_TECHNOLOGY_BAN,
     REGIONS_SALT_CAVERN_AVAILABILITY,
+    START_YEAR,
     TECHNOLOGY_MORATORIUM,
     TRANSITIONAL_PERIOD_YEARS,
 )
@@ -57,7 +58,6 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
     df_technology_characteristics = importer.get_technology_characteristics()
 
     # Apply technology availability constraint
-    # TODO: eliminate transitions from one end-state technology to another!
     df_technology_switches = apply_technology_availability_constraint(
         df_technology_switches, df_technology_characteristics
     )
@@ -298,7 +298,7 @@ def apply_technology_availability_constraint(
         ].rename({"technology": "technology_destination"}, axis=1),
         on=["product", "year", "region", "technology_destination"],
         how="left",
-    )
+    ).fillna(START_YEAR)
     df = df.loc[df["year"] >= df["expected_maturity"]]
 
     return df.drop(

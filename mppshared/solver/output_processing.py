@@ -871,7 +871,7 @@ def write_key_assumptions_to_txt(
     lines = [
         f"Investment cycle: {INVESTMENT_CYCLES[sector]} years",
         f"CUF: maximum={CUF_UPPER_THRESHOLD}, minimum={CUF_LOWER_THRESHOLD}, cost metric={COST_METRIC_CUF_ADJUSTMENT[sector]}",
-        f"Weights: {RANKING_CONFIG[type][pathway]}",
+        f"Weights: {RANKING_CONFIG[sector][type][pathway]}",
         f"Technology ramp-up: {TECHNOLOGY_RAMP_UP_CONSTRAINTS[sector]}",
         f"Year 2050 emissions constraint: {YEAR_2050_EMISSIONS_CONSTRAINT[sector]}",
         f"Annual renovation share: {ANNUAL_RENOVATION_SHARE[sector]}",

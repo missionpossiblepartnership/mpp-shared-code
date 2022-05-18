@@ -20,9 +20,7 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def brownfield(
-    pathway: SimulationPathway, product: str, year: int
-) -> SimulationPathway:
+def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     """Apply brownfield rebuild or brownfield renovation transition to eligible Assets in the AssetStack.
 
     Args:
@@ -39,7 +37,10 @@ def brownfield(
     new_stack = pathway.get_stack(year=year + 1)
 
     # Get ranking table for brownfield transitions
-    df_rank = pathway.get_ranking(year=year, product=product, rank_type="brownfield")
+    df_rank = pathway.get_ranking(year=year, rank_type="brownfield")
+
+    # If pathway is BAU, take out brownfield renovation to avoid retrofits to end-state technologies
+    df_rank = df_rank.loc[~(df_rank["switch_type"] == "brownfield_renovation")]
 
     # Get assets eligible for brownfield transitions
     candidates = new_stack.get_assets_eligible_for_brownfield(
@@ -114,15 +115,16 @@ def brownfield(
         dict_constraints = check_constraints(
             pathway=pathway,
             stack=tentative_stack,
-            product=product,
             year=year,
             transition_type="brownfield",
         )
 
         # If no constraint is hurt, execute the brownfield transition
-        if all(value == True for value in dict_constraints.values()):
+        if (dict_constraints["emissions_constraint"] == True) & (
+            dict_constraints["rampup_constraint"] == True
+        ):
             logger.debug(
-                f"Updating asset from technology {origin_technology} to technology {new_technology} in region {asset_to_update.region}, annual production {asset_to_update.get_annual_production_volume()} and UUID {asset_to_update.uuid}"
+                f"Updating {asset_to_update.product} asset from technology {origin_technology} to technology {new_technology} in region {asset_to_update.region}, annual production {asset_to_update.get_annual_production_volume()} and UUID {asset_to_update.uuid}"
             )
             # Set retrofit or rebuild attribute to True according to type of brownfield transition
             if best_transition["switch_type"] == "brownfield_renovation":
@@ -149,8 +151,6 @@ def brownfield(
                 df_rank, best_transition["technology_destination"]
             )
 
-    logger.debug(
-        f"{n_assets_transitioned} assets transitioned in year {year} for product {product} in sector {pathway.sector}"
-    )
+    logger.debug(f"{n_assets_transitioned} assets transitioned in year {year}.")
 
     return pathway

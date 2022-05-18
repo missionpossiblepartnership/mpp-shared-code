@@ -13,6 +13,7 @@ from mppshared.config import (
     EMISSION_SCOPES,
     INVESTMENT_CYCLES,
     LOG_LEVEL,
+    MAP_LOW_COST_POWER_REGIONS,
 )
 from mppshared.utility.utils import first, get_logger
 from mppshared.utility.dataframe_utility import get_emission_columns
@@ -333,17 +334,23 @@ class AssetStack:
     def get_regional_production_volume(self, product):
         """Get annual production volume in each region for a specific product."""
         assets = self.filter_assets(product)
-        return (
-            pd.DataFrame(
-                {
-                    "region": asset.region,
-                    "annual_production_volume": asset.get_annual_production_volume(),
-                }
-                for asset in assets
-            )
-            .groupby("region", as_index=False)
-            .sum()
+        df = pd.DataFrame(
+            {
+                "region": asset.region,
+                "annual_production_volume": asset.get_annual_production_volume(),
+            }
+            for asset in assets
         )
+        df["region"] = df["region"].replace(
+            {
+                "Brazil": "Latin America",
+                "Namibia": "Africa",
+                "Saudi Arabia": "Middle East",
+                "Australia": "Oceania",
+            }
+        )
+        df = df.groupby("region", as_index=False).sum()
+        return df
 
     def get_number_of_assets(self, product=None, technology=None, region=None):
         "Get number of assets in the asset stack"

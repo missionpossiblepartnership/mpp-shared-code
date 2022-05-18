@@ -1,342 +1,1024 @@
 product,scenario,region,year,value
-Ammonia,BAU,Global,2020,185.2
-Ammonia,BAU,North America,2020,18.2
-Ammonia,BAU,Latin America,2020,10.4
-Ammonia,BAU,Africa,2020,9.7
-Ammonia,BAU,Middle East,2020,20.5
-Ammonia,BAU,Russia,2020,13.8
-Ammonia,BAU,Europe,2020,17.0
-Ammonia,BAU,China,2020,42.4
-Ammonia,BAU,India,2020,18.0
-Ammonia,BAU,Rest of Asia,2020,33.0
-Ammonia,BAU,Oceania,2020,2.3
-Ammonia,BAU,Global,2021,188.4
-Ammonia,BAU,North America,2021,18.5
-Ammonia,BAU,Latin America,2021,10.6
-Ammonia,BAU,Africa,2021,9.8
-Ammonia,BAU,Middle East,2021,20.9
-Ammonia,BAU,Russia,2021,14.0
-Ammonia,BAU,Europe,2021,17.3
-Ammonia,BAU,China,2021,42.4
-Ammonia,BAU,India,2021,18.3
-Ammonia,BAU,Rest of Asia,2021,34.2
-Ammonia,BAU,Oceania,2021,2.4
-Ammonia,BAU,Global,2022,191.8
-Ammonia,BAU,North America,2022,18.8
-Ammonia,BAU,Latin America,2022,11.1
-Ammonia,BAU,Africa,2022,10.3
-Ammonia,BAU,Middle East,2022,21.7
-Ammonia,BAU,Russia,2022,14.0
-Ammonia,BAU,Europe,2022,17.4
-Ammonia,BAU,China,2022,42.4
-Ammonia,BAU,India,2022,18.6
-Ammonia,BAU,Rest of Asia,2022,35.2
-Ammonia,BAU,Oceania,2022,2.4
-Ammonia,BAU,Global,2023,195.2
-Ammonia,BAU,North America,2023,19.0
-Ammonia,BAU,Latin America,2023,11.6
-Ammonia,BAU,Africa,2023,10.7
-Ammonia,BAU,Middle East,2023,22.6
-Ammonia,BAU,Russia,2023,14.0
-Ammonia,BAU,Europe,2023,17.5
-Ammonia,BAU,China,2023,42.4
-Ammonia,BAU,India,2023,18.8
-Ammonia,BAU,Rest of Asia,2023,36.1
-Ammonia,BAU,Oceania,2023,2.5
-Ammonia,BAU,Global,2024,198.5
-Ammonia,BAU,North America,2024,19.1
-Ammonia,BAU,Latin America,2024,12.1
-Ammonia,BAU,Africa,2024,11.1
-Ammonia,BAU,Middle East,2024,23.4
-Ammonia,BAU,Russia,2024,14.0
-Ammonia,BAU,Europe,2024,17.7
-Ammonia,BAU,China,2024,42.4
-Ammonia,BAU,India,2024,19.1
-Ammonia,BAU,Rest of Asia,2024,37.0
-Ammonia,BAU,Oceania,2024,2.6
-Ammonia,BAU,Global,2025,201.7
-Ammonia,BAU,North America,2025,19.3
-Ammonia,BAU,Latin America,2025,12.5
-Ammonia,BAU,Africa,2025,11.5
-Ammonia,BAU,Middle East,2025,24.3
-Ammonia,BAU,Russia,2025,14.0
-Ammonia,BAU,Europe,2025,17.8
-Ammonia,BAU,China,2025,42.4
-Ammonia,BAU,India,2025,19.3
-Ammonia,BAU,Rest of Asia,2025,37.9
-Ammonia,BAU,Oceania,2025,2.7
-Ammonia,BAU,Global,2026,204.8
-Ammonia,BAU,North America,2026,19.5
-Ammonia,BAU,Latin America,2026,13.0
-Ammonia,BAU,Africa,2026,12.0
-Ammonia,BAU,Middle East,2026,25.1
-Ammonia,BAU,Russia,2026,14.1
-Ammonia,BAU,Europe,2026,17.9
-Ammonia,BAU,China,2026,42.4
-Ammonia,BAU,India,2026,19.5
-Ammonia,BAU,Rest of Asia,2026,38.7
-Ammonia,BAU,Oceania,2026,2.7
-Ammonia,BAU,Global,2027,207.8
-Ammonia,BAU,North America,2027,19.7
-Ammonia,BAU,Latin America,2027,13.5
-Ammonia,BAU,Africa,2027,12.4
-Ammonia,BAU,Middle East,2027,25.9
-Ammonia,BAU,Russia,2027,14.2
-Ammonia,BAU,Europe,2027,18.0
-Ammonia,BAU,China,2027,42.4
-Ammonia,BAU,India,2027,19.7
-Ammonia,BAU,Rest of Asia,2027,39.4
-Ammonia,BAU,Oceania,2027,2.8
-Ammonia,BAU,Global,2028,210.7
-Ammonia,BAU,North America,2028,19.8
-Ammonia,BAU,Latin America,2028,13.9
-Ammonia,BAU,Africa,2028,12.8
-Ammonia,BAU,Middle East,2028,26.7
-Ammonia,BAU,Russia,2028,14.4
-Ammonia,BAU,Europe,2028,18.1
-Ammonia,BAU,China,2028,42.4
-Ammonia,BAU,India,2028,19.9
-Ammonia,BAU,Rest of Asia,2028,40.1
-Ammonia,BAU,Oceania,2028,2.8
-Ammonia,BAU,Global,2029,213.5
-Ammonia,BAU,North America,2029,20.0
-Ammonia,BAU,Latin America,2029,14.3
-Ammonia,BAU,Africa,2029,13.1
-Ammonia,BAU,Middle East,2029,27.4
-Ammonia,BAU,Russia,2029,14.5
-Ammonia,BAU,Europe,2029,18.2
-Ammonia,BAU,China,2029,42.4
-Ammonia,BAU,India,2029,20.0
-Ammonia,BAU,Rest of Asia,2029,40.7
-Ammonia,BAU,Oceania,2029,2.9
-Ammonia,BAU,Global,2030,216.3
-Ammonia,BAU,North America,2030,20.1
-Ammonia,BAU,Latin America,2030,14.8
-Ammonia,BAU,Africa,2030,13.5
-Ammonia,BAU,Middle East,2030,28.2
-Ammonia,BAU,Russia,2030,14.7
-Ammonia,BAU,Europe,2030,18.2
-Ammonia,BAU,China,2030,42.4
-Ammonia,BAU,India,2030,20.2
-Ammonia,BAU,Rest of Asia,2030,41.3
-Ammonia,BAU,Oceania,2030,2.9
-Ammonia,BAU,Global,2031,218.9
-Ammonia,BAU,North America,2031,20.3
-Ammonia,BAU,Latin America,2031,15.2
-Ammonia,BAU,Africa,2031,13.9
-Ammonia,BAU,Middle East,2031,28.9
-Ammonia,BAU,Russia,2031,14.8
-Ammonia,BAU,Europe,2031,18.3
-Ammonia,BAU,China,2031,42.4
-Ammonia,BAU,India,2031,20.3
-Ammonia,BAU,Rest of Asia,2031,41.9
-Ammonia,BAU,Oceania,2031,2.9
-Ammonia,BAU,Global,2032,221.5
-Ammonia,BAU,North America,2032,20.4
-Ammonia,BAU,Latin America,2032,15.6
-Ammonia,BAU,Africa,2032,14.3
-Ammonia,BAU,Middle East,2032,29.7
-Ammonia,BAU,Russia,2032,14.9
-Ammonia,BAU,Europe,2032,18.4
-Ammonia,BAU,China,2032,42.4
-Ammonia,BAU,India,2032,20.5
-Ammonia,BAU,Rest of Asia,2032,42.5
-Ammonia,BAU,Oceania,2032,3.0
-Ammonia,BAU,Global,2033,224.0
-Ammonia,BAU,North America,2033,20.5
-Ammonia,BAU,Latin America,2033,16.0
-Ammonia,BAU,Africa,2033,14.6
-Ammonia,BAU,Middle East,2033,30.4
-Ammonia,BAU,Russia,2033,15.0
-Ammonia,BAU,Europe,2033,18.4
-Ammonia,BAU,China,2033,42.4
-Ammonia,BAU,India,2033,20.6
-Ammonia,BAU,Rest of Asia,2033,43.0
-Ammonia,BAU,Oceania,2033,3.0
-Ammonia,BAU,Global,2034,226.4
-Ammonia,BAU,North America,2034,20.6
-Ammonia,BAU,Latin America,2034,16.4
-Ammonia,BAU,Africa,2034,15.0
-Ammonia,BAU,Middle East,2034,31.1
-Ammonia,BAU,Russia,2034,15.1
-Ammonia,BAU,Europe,2034,18.5
-Ammonia,BAU,China,2034,42.4
-Ammonia,BAU,India,2034,20.7
-Ammonia,BAU,Rest of Asia,2034,43.5
-Ammonia,BAU,Oceania,2034,3.1
-Ammonia,BAU,Global,2035,228.7
-Ammonia,BAU,North America,2035,20.7
-Ammonia,BAU,Latin America,2035,16.8
-Ammonia,BAU,Africa,2035,15.3
-Ammonia,BAU,Middle East,2035,31.7
-Ammonia,BAU,Russia,2035,15.2
-Ammonia,BAU,Europe,2035,18.5
-Ammonia,BAU,China,2035,42.4
-Ammonia,BAU,India,2035,20.8
-Ammonia,BAU,Rest of Asia,2035,44.0
-Ammonia,BAU,Oceania,2035,3.1
-Ammonia,BAU,Global,2036,230.9
-Ammonia,BAU,North America,2036,20.9
-Ammonia,BAU,Latin America,2036,17.2
-Ammonia,BAU,Africa,2036,15.7
-Ammonia,BAU,Middle East,2036,32.4
-Ammonia,BAU,Russia,2036,15.3
-Ammonia,BAU,Europe,2036,18.6
-Ammonia,BAU,China,2036,42.4
-Ammonia,BAU,India,2036,20.9
-Ammonia,BAU,Rest of Asia,2036,44.5
-Ammonia,BAU,Oceania,2036,3.1
-Ammonia,BAU,Global,2037,233.1
-Ammonia,BAU,North America,2037,20.9
-Ammonia,BAU,Latin America,2037,17.6
-Ammonia,BAU,Africa,2037,16.0
-Ammonia,BAU,Middle East,2037,33.1
-Ammonia,BAU,Russia,2037,15.4
-Ammonia,BAU,Europe,2037,18.6
-Ammonia,BAU,China,2037,42.4
-Ammonia,BAU,India,2037,21.0
-Ammonia,BAU,Rest of Asia,2037,44.9
-Ammonia,BAU,Oceania,2037,3.1
-Ammonia,BAU,Global,2038,235.1
-Ammonia,BAU,North America,2038,21.0
-Ammonia,BAU,Latin America,2038,17.9
-Ammonia,BAU,Africa,2038,16.3
-Ammonia,BAU,Middle East,2038,33.7
-Ammonia,BAU,Russia,2038,15.5
-Ammonia,BAU,Europe,2038,18.7
-Ammonia,BAU,China,2038,42.4
-Ammonia,BAU,India,2038,21.1
-Ammonia,BAU,Rest of Asia,2038,45.3
-Ammonia,BAU,Oceania,2038,3.2
-Ammonia,BAU,Global,2039,237.1
-Ammonia,BAU,North America,2039,21.1
-Ammonia,BAU,Latin America,2039,18.3
-Ammonia,BAU,Africa,2039,16.6
-Ammonia,BAU,Middle East,2039,34.3
-Ammonia,BAU,Russia,2039,15.6
-Ammonia,BAU,Europe,2039,18.7
-Ammonia,BAU,China,2039,42.4
-Ammonia,BAU,India,2039,21.2
-Ammonia,BAU,Rest of Asia,2039,45.6
-Ammonia,BAU,Oceania,2039,3.2
-Ammonia,BAU,Global,2040,238.9
-Ammonia,BAU,North America,2040,21.2
-Ammonia,BAU,Latin America,2040,18.6
-Ammonia,BAU,Africa,2040,16.9
-Ammonia,BAU,Middle East,2040,34.9
-Ammonia,BAU,Russia,2040,15.7
-Ammonia,BAU,Europe,2040,18.7
-Ammonia,BAU,China,2040,42.4
-Ammonia,BAU,India,2040,21.3
-Ammonia,BAU,Rest of Asia,2040,46.0
-Ammonia,BAU,Oceania,2040,3.2
-Ammonia,BAU,Global,2041,240.7
-Ammonia,BAU,North America,2041,21.3
-Ammonia,BAU,Latin America,2041,19.0
-Ammonia,BAU,Africa,2041,17.2
-Ammonia,BAU,Middle East,2041,35.5
-Ammonia,BAU,Russia,2041,15.8
-Ammonia,BAU,Europe,2041,18.7
-Ammonia,BAU,China,2041,42.4
-Ammonia,BAU,India,2041,21.4
-Ammonia,BAU,Rest of Asia,2041,46.3
-Ammonia,BAU,Oceania,2041,3.2
-Ammonia,BAU,Global,2042,242.4
-Ammonia,BAU,North America,2042,21.3
-Ammonia,BAU,Latin America,2042,19.3
-Ammonia,BAU,Africa,2042,17.5
-Ammonia,BAU,Middle East,2042,36.1
-Ammonia,BAU,Russia,2042,15.8
-Ammonia,BAU,Europe,2042,18.7
-Ammonia,BAU,China,2042,42.4
-Ammonia,BAU,India,2042,21.4
-Ammonia,BAU,Rest of Asia,2042,46.5
-Ammonia,BAU,Oceania,2042,3.3
-Ammonia,BAU,Global,2043,244.0
-Ammonia,BAU,North America,2043,21.4
-Ammonia,BAU,Latin America,2043,19.6
-Ammonia,BAU,Africa,2043,17.8
-Ammonia,BAU,Middle East,2043,36.6
-Ammonia,BAU,Russia,2043,15.9
-Ammonia,BAU,Europe,2043,18.7
-Ammonia,BAU,China,2043,42.4
-Ammonia,BAU,India,2043,21.5
-Ammonia,BAU,Rest of Asia,2043,46.8
-Ammonia,BAU,Oceania,2043,3.3
-Ammonia,BAU,Global,2044,245.5
-Ammonia,BAU,North America,2044,21.4
-Ammonia,BAU,Latin America,2044,20.0
-Ammonia,BAU,Africa,2044,18.1
-Ammonia,BAU,Middle East,2044,37.2
-Ammonia,BAU,Russia,2044,15.9
-Ammonia,BAU,Europe,2044,18.7
-Ammonia,BAU,China,2044,42.4
-Ammonia,BAU,India,2044,21.5
-Ammonia,BAU,Rest of Asia,2044,47.0
-Ammonia,BAU,Oceania,2044,3.3
-Ammonia,BAU,Global,2045,246.9
-Ammonia,BAU,North America,2045,21.5
-Ammonia,BAU,Latin America,2045,20.3
-Ammonia,BAU,Africa,2045,18.4
-Ammonia,BAU,Middle East,2045,37.7
-Ammonia,BAU,Russia,2045,16.0
-Ammonia,BAU,Europe,2045,18.7
-Ammonia,BAU,China,2045,42.4
-Ammonia,BAU,India,2045,21.6
-Ammonia,BAU,Rest of Asia,2045,47.2
-Ammonia,BAU,Oceania,2045,3.3
-Ammonia,BAU,Global,2046,248.3
-Ammonia,BAU,North America,2046,21.5
-Ammonia,BAU,Latin America,2046,20.6
-Ammonia,BAU,Africa,2046,18.6
-Ammonia,BAU,Middle East,2046,38.2
-Ammonia,BAU,Russia,2046,16.0
-Ammonia,BAU,Europe,2046,18.7
-Ammonia,BAU,China,2046,42.4
-Ammonia,BAU,India,2046,21.6
-Ammonia,BAU,Rest of Asia,2046,47.4
-Ammonia,BAU,Oceania,2046,3.3
-Ammonia,BAU,Global,2047,249.5
-Ammonia,BAU,North America,2047,21.5
-Ammonia,BAU,Latin America,2047,20.8
-Ammonia,BAU,Africa,2047,18.9
-Ammonia,BAU,Middle East,2047,38.7
-Ammonia,BAU,Russia,2047,16.1
-Ammonia,BAU,Europe,2047,18.7
-Ammonia,BAU,China,2047,42.4
-Ammonia,BAU,India,2047,21.7
-Ammonia,BAU,Rest of Asia,2047,47.5
-Ammonia,BAU,Oceania,2047,3.3
-Ammonia,BAU,Global,2048,250.7
-Ammonia,BAU,North America,2048,21.5
-Ammonia,BAU,Latin America,2048,21.1
-Ammonia,BAU,Africa,2048,19.1
-Ammonia,BAU,Middle East,2048,39.2
-Ammonia,BAU,Russia,2048,16.1
-Ammonia,BAU,Europe,2048,18.7
-Ammonia,BAU,China,2048,42.4
-Ammonia,BAU,India,2048,21.7
-Ammonia,BAU,Rest of Asia,2048,47.6
-Ammonia,BAU,Oceania,2048,3.3
-Ammonia,BAU,Global,2049,251.8
-Ammonia,BAU,North America,2049,21.6
-Ammonia,BAU,Latin America,2049,21.4
-Ammonia,BAU,Africa,2049,19.3
-Ammonia,BAU,Middle East,2049,39.6
-Ammonia,BAU,Russia,2049,16.2
-Ammonia,BAU,Europe,2049,18.7
-Ammonia,BAU,China,2049,42.4
-Ammonia,BAU,India,2049,21.7
-Ammonia,BAU,Rest of Asia,2049,47.7
-Ammonia,BAU,Oceania,2049,3.3
-Ammonia,BAU,Global,2050,252.8
-Ammonia,BAU,North America,2050,21.6
-Ammonia,BAU,Latin America,2050,21.6
-Ammonia,BAU,Africa,2050,19.6
-Ammonia,BAU,Middle East,2050,40.0
-Ammonia,BAU,Russia,2050,16.2
-Ammonia,BAU,Europe,2050,18.6
-Ammonia,BAU,China,2050,42.4
-Ammonia,BAU,India,2050,21.7
-Ammonia,BAU,Rest of Asia,2050,47.7
-Ammonia,BAU,Oceania,2050,3.3
+Ammonia,BAU,Global,2020,185.1630571
+Ammonia,BAU,North America,2020,18.23165928
+Ammonia,BAU,Latin America,2020,10.41098472
+Ammonia,BAU,Africa,2020,9.666873
+Ammonia,BAU,Middle East,2020,20.49337241
+Ammonia,BAU,Russia,2020,13.78835882
+Ammonia,BAU,Europe,2020,16.98989659
+Ammonia,BAU,China,2020,42.36262664
+Ammonia,BAU,India,2020,17.97641231
+Ammonia,BAU,Rest of Asia,2020,32.95827014
+Ammonia,BAU,Oceania,2020,2.28460319
+Ammonium nitrate,BAU,Global,2020,20.96546854
+Ammonium nitrate,BAU,North America,2020,2.064317175
+Ammonium nitrate,BAU,Latin America,2020,1.17880519
+Ammonium nitrate,BAU,Africa,2020,1.094551607
+Ammonium nitrate,BAU,Middle East,2020,2.320404303
+Ammonium nitrate,BAU,Russia,2020,1.561215329
+Ammonium nitrate,BAU,Europe,2020,1.923716037
+Ammonium nitrate,BAU,China,2020,4.79659566
+Ammonium nitrate,BAU,India,2020,2.035416311
+Ammonium nitrate,BAU,Rest of Asia,2020,3.731768023
+Ammonium nitrate,BAU,Oceania,2020,0.258678902
+Urea,BAU,Global,2020,101.4313134
+Urea,BAU,North America,2020,9.98720358
+Urea,BAU,Latin America,2020,5.703080686
+Urea,BAU,Africa,2020,5.29546034
+Urea,BAU,Middle East,2020,11.2261577
+Urea,BAU,Russia,2020,7.553187809
+Urea,BAU,Europe,2020,9.30697275
+Urea,BAU,China,2020,23.20601598
+Urea,BAU,India,2020,9.847380683
+Urea,BAU,Rest of Asia,2020,18.05436074
+Urea,BAU,Oceania,2020,1.251493175
+Ammonia,BAU,Global,2021,188.3925719
+Ammonia,BAU,North America,2021,18.54968397
+Ammonia,BAU,Latin America,2021,10.59257703
+Ammonia,BAU,Africa,2021,9.835472
+Ammonia,BAU,Middle East,2021,20.85072536
+Ammonia,BAU,Russia,2021,14.02882801
+Ammonia,BAU,Europe,2021,17.28622334
+Ammonia,BAU,China,2021,42.36262664
+Ammonia,BAU,India,2021,18.28996233
+Ammonia,BAU,Rest of Asia,2021,34.2241223
+Ammonia,BAU,Oceania,2021,2.372350923
+Ammonium nitrate,BAU,Global,2021,21.331137
+Ammonium nitrate,BAU,North America,2021,2.100326176
+Ammonium nitrate,BAU,Latin America,2021,1.199366352
+Ammonium nitrate,BAU,Africa,2021,1.113641576
+Ammonium nitrate,BAU,Middle East,2021,2.360866328
+Ammonium nitrate,BAU,Russia,2021,1.588442948
+Ammonium nitrate,BAU,Europe,2021,1.957268243
+Ammonium nitrate,BAU,China,2021,4.79659566
+Ammonium nitrate,BAU,India,2021,2.070918658
+Ammonium nitrate,BAU,Rest of Asia,2021,3.875096741
+Ammonium nitrate,BAU,Oceania,2021,0.26861432
+Urea,BAU,Global,2021,103.2004241
+Urea,BAU,North America,2021,10.16141577
+Urea,BAU,Latin America,2021,5.802555961
+Urea,BAU,Africa,2021,5.387817953
+Urea,BAU,Middle East,2021,11.42191371
+Urea,BAU,Russia,2021,7.684915521
+Urea,BAU,Europe,2021,9.469298924
+Urea,BAU,China,2021,23.20601598
+Urea,BAU,India,2021,10.01914167
+Urea,BAU,Rest of Asia,2021,18.74778765
+Urea,BAU,Oceania,2021,1.299560905
+Ammonia,BAU,Global,2022,191.8446802
+Ammonia,BAU,North America,2022,18.75432307
+Ammonia,BAU,Latin America,2022,11.08889356
+Ammonia,BAU,Africa,2022,10.2745617
+Ammonia,BAU,Middle East,2022,21.72407534
+Ammonia,BAU,Russia,2022,14.03686056
+Ammonia,BAU,Europe,2022,17.4169082
+Ammonia,BAU,China,2022,42.36262664
+Ammonia,BAU,India,2022,18.55634262
+Ammonia,BAU,Rest of Asia,2022,35.18290612
+Ammonia,BAU,Oceania,2022,2.447182383
+Ammonium nitrate,BAU,Global,2022,21.72200908
+Ammonium nitrate,BAU,North America,2022,2.12349686
+Ammonium nitrate,BAU,Latin America,2022,1.255562814
+Ammonium nitrate,BAU,Africa,2022,1.163358412
+Ammonium nitrate,BAU,Middle East,2022,2.459753177
+Ammonium nitrate,BAU,Russia,2022,1.58935245
+Ammonium nitrate,BAU,Europe,2022,1.972065306
+Ammonium nitrate,BAU,China,2022,4.79659566
+Ammonium nitrate,BAU,India,2022,2.101080116
+Ammonium nitrate,BAU,Rest of Asia,2022,3.983657015
+Ammonium nitrate,BAU,Oceania,2022,0.277087266
+Urea,BAU,Global,2022,105.0914702
+Urea,BAU,North America,2022,10.27351596
+Urea,BAU,Latin America,2022,6.074435451
+Urea,BAU,Africa,2022,5.628348898
+Urea,BAU,Middle East,2022,11.90033006
+Urea,BAU,Russia,2022,7.689315705
+Urea,BAU,Europe,2022,9.540887382
+Urea,BAU,China,2022,23.20601598
+Urea,BAU,India,2022,10.16506335
+Urea,BAU,Rest of Asia,2022,19.27300421
+Urea,BAU,Oceania,2022,1.340553171
+Ammonia,BAU,Global,2023,195.2086438
+Ammonia,BAU,North America,2023,18.95178826
+Ammonia,BAU,Latin America,2023,11.57720838
+Ammonia,BAU,Africa,2023,10.7063942
+Ammonia,BAU,Middle East,2023,22.58265202
+Ammonia,BAU,Russia,2023,14.03451084
+Ammonia,BAU,Europe,2023,17.54139175
+Ammonia,BAU,China,2023,42.36262664
+Ammonia,BAU,India,2023,18.81692326
+Ammonia,BAU,Rest of Asia,2023,36.11449863
+Ammonia,BAU,Oceania,2023,2.520649808
+Ammonium nitrate,BAU,Global,2023,22.10290078
+Ammonium nitrate,BAU,North America,2023,2.145855262
+Ammonium nitrate,BAU,Latin America,2023,1.310853266
+Ammonium nitrate,BAU,Africa,2023,1.212253536
+Ammonium nitrate,BAU,Middle East,2023,2.556967291
+Ammonium nitrate,BAU,Russia,2023,1.589086398
+Ammonium nitrate,BAU,Europe,2023,1.986160213
+Ammonium nitrate,BAU,China,2023,4.79659566
+Ammonium nitrate,BAU,India,2023,2.130584895
+Ammonium nitrate,BAU,Rest of Asia,2023,4.089138496
+Ammonium nitrate,BAU,Oceania,2023,0.285405766
+Urea,BAU,Global,2023,106.9342311
+Urea,BAU,North America,2023,10.38168631
+Urea,BAU,Latin America,2023,6.341931649
+Urea,BAU,Africa,2023,5.864904386
+Urea,BAU,Middle East,2023,12.37065369
+Urea,BAU,Russia,2023,7.688028544
+Urea,BAU,Europe,2023,9.609078794
+Urea,BAU,China,2023,23.20601598
+Urea,BAU,India,2023,10.307808
+Urea,BAU,Rest of Asia,2023,19.78332551
+Urea,BAU,Oceania,2023,1.380798226
+Ammonia,BAU,Global,2024,198.4844298
+Ammonia,BAU,North America,2024,19.14184445
+Ammonia,BAU,Latin America,2024,12.05754963
+Ammonia,BAU,Africa,2024,11.13106911
+Ammonia,BAU,Middle East,2024,23.42657778
+Ammonia,BAU,Russia,2024,14.0224513
+Ammonia,BAU,Europe,2024,17.6596291
+Ammonia,BAU,China,2024,42.36262664
+Ammonia,BAU,India,2024,19.07148334
+Ammonia,BAU,Rest of Asia,2024,37.01851447
+Ammonia,BAU,Oceania,2024,2.592683981
+Ammonium nitrate,BAU,Global,2024,22.4738084
+Ammonium nitrate,BAU,North America,2024,2.167374766
+Ammonium nitrate,BAU,Latin America,2024,1.365240893
+Ammonium nitrate,BAU,Africa,2024,1.260338227
+Ammonium nitrate,BAU,Middle East,2024,2.652522523
+Ammonium nitrate,BAU,Russia,2024,1.587720932
+Ammonium nitrate,BAU,Europe,2024,1.99954788
+Ammonium nitrate,BAU,China,2024,4.79659566
+Ammonium nitrate,BAU,India,2024,2.159407984
+Ammonium nitrate,BAU,Rest of Asia,2024,4.191497551
+Ammonium nitrate,BAU,Oceania,2024,0.293561984
+Urea,BAU,Global,2024,108.7286888
+Urea,BAU,North America,2024,10.48579806
+Urea,BAU,Latin America,2024,6.60505997
+Urea,BAU,Africa,2024,6.097538986
+Urea,BAU,Middle East,2024,12.83295162
+Urea,BAU,Russia,2024,7.681422392
+Urea,BAU,Europe,2024,9.673848567
+Urea,BAU,China,2024,23.20601598
+Urea,BAU,India,2024,10.44725462
+Urea,BAU,Rest of Asia,2024,20.27854045
+Urea,BAU,Oceania,2024,1.420258153
+Ammonia,BAU,Global,2025,201.6722883
+Ammonia,BAU,North America,2025,19.32456304
+Ammonia,BAU,Latin America,2025,12.53000661
+Ammonia,BAU,Africa,2025,11.54863523
+Ammonia,BAU,Middle East,2025,24.25594
+Ammonia,BAU,Russia,2025,14.00104475
+Ammonia,BAU,Europe,2025,17.77162153
+Ammonia,BAU,China,2025,42.36262664
+Ammonia,BAU,India,2025,19.31989411
+Ammonia,BAU,Rest of Asia,2025,37.89471557
+Ammonia,BAU,Oceania,2025,2.663240815
+Ammonium nitrate,BAU,Global,2025,22.83476025
+Ammonium nitrate,BAU,North America,2025,2.188063455
+Ammonium nitrate,BAU,Latin America,2025,1.418735808
+Ammonium nitrate,BAU,Africa,2025,1.307618011
+Ammonium nitrate,BAU,Middle East,2025,2.746428769
+Ammonium nitrate,BAU,Russia,2025,1.585297131
+Ammonium nitrate,BAU,Europe,2025,2.012228453
+Ammonium nitrate,BAU,China,2025,4.79659566
+Ammonium nitrate,BAU,India,2025,2.187534806
+Ammonium nitrate,BAU,Rest of Asia,2025,4.290707225
+Ammonium nitrate,BAU,Oceania,2025,0.301550927
+Urea,BAU,Global,2025,110.4749803
+Urea,BAU,North America,2025,10.58589031
+Urea,BAU,Latin America,2025,6.863869328
+Urea,BAU,Africa,2025,6.326279431
+Urea,BAU,Middle East,2025,13.28727173
+Urea,BAU,Russia,2025,7.669696002
+Urea,BAU,Europe,2025,9.735197409
+Urea,BAU,China,2025,23.20601598
+Urea,BAU,India,2025,10.58333269
+Urea,BAU,Rest of Asia,2025,20.75851864
+Urea,BAU,Oceania,2025,1.458908802
+Ammonia,BAU,Global,2026,204.7719345
+Ammonia,BAU,North America,2026,19.49986311
+Ammonia,BAU,Latin America,2026,12.99456316
+Ammonia,BAU,Africa,2026,11.95908287
+Ammonia,BAU,Middle East,2026,25.0707837
+Ammonia,BAU,Russia,2026,14.09482802
+Ammonia,BAU,Europe,2026,17.87733215
+Ammonia,BAU,China,2026,42.36262664
+Ammonia,BAU,India,2026,19.52132058
+Ammonia,BAU,Rest of Asia,2026,38.67132887
+Ammonia,BAU,Oceania,2026,2.720205396
+Ammonium nitrate,BAU,Global,2026,23.18572407
+Ammonium nitrate,BAU,North America,2026,2.207912166
+Ammonium nitrate,BAU,Latin America,2026,1.471336179
+Ammonium nitrate,BAU,Africa,2026,1.354091792
+Ammonium nitrate,BAU,Middle East,2026,2.838691125
+Ammonium nitrate,BAU,Russia,2026,1.595915935
+Ammonium nitrate,BAU,Europe,2026,2.024197756
+Ammonium nitrate,BAU,China,2026,4.79659566
+Ammonium nitrate,BAU,India,2026,2.210341733
+Ammonium nitrate,BAU,Rest of Asia,2026,4.378640867
+Ammonium nitrate,BAU,Oceania,2026,0.308000859
+Urea,BAU,Global,2026,112.1729496
+Urea,BAU,North America,2026,10.68191873
+Urea,BAU,Latin America,2026,7.118350869
+Urea,BAU,Africa,2026,6.551120416
+Urea,BAU,Middle East,2026,13.73363866
+Urea,BAU,Russia,2026,7.721069966
+Urea,BAU,Europe,2026,9.793105109
+Urea,BAU,China,2026,23.20601598
+Urea,BAU,India,2026,10.69367301
+Urea,BAU,Rest of Asia,2026,21.18394318
+Urea,BAU,Oceania,2026,1.490113689
+Ammonia,BAU,Global,2027,207.7835224
+Ammonia,BAU,North America,2027,19.66784817
+Ammonia,BAU,Latin America,2027,13.4512438
+Ammonia,BAU,Africa,2027,12.3624195
+Ammonia,BAU,Middle East,2027,25.87117485
+Ammonia,BAU,Russia,2027,14.22159222
+Ammonia,BAU,Europe,2027,17.97677495
+Ammonia,BAU,China,2027,42.36262664
+Ammonia,BAU,India,2027,19.70268071
+Ammonia,BAU,Rest of Asia,2027,39.39580246
+Ammonia,BAU,Oceania,2027,2.77135908
+Ammonium nitrate,BAU,Global,2027,23.52671731
+Ammonium nitrate,BAU,North America,2027,2.226932621
+Ammonium nitrate,BAU,Latin America,2027,1.523044786
+Ammonium nitrate,BAU,Africa,2027,1.399760412
+Ammonium nitrate,BAU,Middle East,2027,2.929317061
+Ammonium nitrate,BAU,Russia,2027,1.610269073
+Ammonium nitrate,BAU,Europe,2027,2.035457373
+Ammonium nitrate,BAU,China,2027,4.79659566
+Ammonium nitrate,BAU,India,2027,2.230876607
+Ammonium nitrate,BAU,Rest of Asia,2027,4.460670881
+Ammonium nitrate,BAU,Oceania,2027,0.31379284
+Urea,BAU,Global,2027,113.822681
+Urea,BAU,North America,2027,10.77394003
+Urea,BAU,Latin America,2027,7.368518039
+Urea,BAU,Africa,2027,6.772066019
+Urea,BAU,Middle East,2027,14.17208857
+Urea,BAU,Russia,2027,7.790510704
+Urea,BAU,Europe,2027,9.847579338
+Urea,BAU,China,2027,23.20601598
+Urea,BAU,India,2027,10.79302111
+Urea,BAU,Rest of Asia,2027,21.58080586
+Urea,BAU,Oceania,2027,1.518135399
+Ammonia,BAU,Global,2028,210.707188
+Ammonia,BAU,North America,2028,19.82854652
+Ammonia,BAU,Latin America,2028,13.90002143
+Ammonia,BAU,Africa,2028,12.75862004
+Ammonia,BAU,Middle East,2028,26.65696725
+Ammonia,BAU,Russia,2028,14.36145841
+Ammonia,BAU,Europe,2028,18.06994149
+Ammonia,BAU,China,2028,42.36262664
+Ammonia,BAU,India,2028,19.87055129
+Ammonia,BAU,Rest of Asia,2028,40.07984597
+Ammonia,BAU,Oceania,2028,2.818608948
+Ammonium nitrate,BAU,Global,2028,23.85775537
+Ammonium nitrate,BAU,North America,2028,2.245128022
+Ammonium nitrate,BAU,Latin America,2028,1.573858558
+Ammonium nitrate,BAU,Africa,2028,1.444621034
+Ammonium nitrate,BAU,Middle East,2028,3.018290025
+Ammonium nitrate,BAU,Russia,2028,1.62610571
+Ammonium nitrate,BAU,Europe,2028,2.046006345
+Ammonium nitrate,BAU,China,2028,4.79659566
+Ammonium nitrate,BAU,India,2028,2.249884099
+Ammonium nitrate,BAU,Rest of Asia,2028,4.538123117
+Ammonium nitrate,BAU,Oceania,2028,0.319142804
+Urea,BAU,Global,2028,115.4242491
+Urea,BAU,North America,2028,10.86196971
+Urea,BAU,Latin America,2028,7.614355978
+Urea,BAU,Africa,2028,6.989102518
+Urea,BAU,Middle East,2028,14.60254137
+Urea,BAU,Russia,2028,7.867128639
+Urea,BAU,Europe,2028,9.898615456
+Urea,BAU,China,2028,23.20601598
+Urea,BAU,India,2028,10.88497969
+Urea,BAU,Rest of Asia,2028,21.95552117
+Urea,BAU,Oceania,2028,1.544018619
+Ammonia,BAU,Global,2029,213.5427623
+Ammonia,BAU,North America,2029,19.98185259
+Ammonia,BAU,Latin America,2029,14.34086285
+Ammonia,BAU,Africa,2029,13.147622
+Ammonia,BAU,Middle East,2029,27.42815676
+Ammonia,BAU,Russia,2029,14.50656785
+Ammonia,BAU,Europe,2029,18.15690001
+Ammonia,BAU,China,2029,42.36262664
+Ammonia,BAU,India,2029,20.02750019
+Ammonia,BAU,Rest of Asia,2029,40.72797046
+Ammonia,BAU,Oceania,2029,2.862702947
+Ammonium nitrate,BAU,Global,2029,24.17881911
+Ammonium nitrate,BAU,North America,2029,2.262486418
+Ammonium nitrate,BAU,Latin America,2029,1.623773735
+Ammonium nitrate,BAU,Africa,2029,1.488666582
+Ammonium nitrate,BAU,Middle East,2029,3.105609545
+Ammonium nitrate,BAU,Russia,2029,1.642536025
+Ammonium nitrate,BAU,Europe,2029,2.055852403
+Ammonium nitrate,BAU,China,2029,4.79659566
+Ammonium nitrate,BAU,India,2029,2.267654962
+Ammonium nitrate,BAU,Rest of Asia,2029,4.611508347
+Ammonium nitrate,BAU,Oceania,2029,0.324135438
+Urea,BAU,Global,2029,116.9775613
+Urea,BAU,North America,2029,10.94594994
+Urea,BAU,Latin America,2029,7.855846504
+Urea,BAU,Africa,2029,7.202195668
+Urea,BAU,Middle East,2029,15.02499477
+Urea,BAU,Russia,2029,7.946618799
+Urea,BAU,Europe,2029,9.946250861
+Urea,BAU,China,2029,23.20601598
+Urea,BAU,India,2029,10.97095545
+Urea,BAU,Rest of Asia,2029,22.31056023
+Urea,BAU,Oceania,2029,1.568173071
+Ammonia,BAU,Global,2030,216.2901572
+Ammonia,BAU,North America,2030,20.12788523
+Ammonia,BAU,Latin America,2030,14.77366724
+Ammonia,BAU,Africa,2030,13.52947299
+Ammonia,BAU,Middle East,2030,28.18469765
+Ammonia,BAU,Russia,2030,14.65302305
+Ammonia,BAU,Europe,2030,18.23761033
+Ammonia,BAU,China,2030,42.36262664
+Ammonia,BAU,India,2030,20.17479023
+Ammonia,BAU,Rest of Asia,2030,41.34237247
+Ammonia,BAU,Oceania,2030,2.904011363
+Ammonium nitrate,BAU,Global,2030,24.48989856
+Ammonium nitrate,BAU,North America,2030,2.279021265
+Ammonium nitrate,BAU,Latin America,2030,1.672778904
+Ammonium nitrate,BAU,Africa,2030,1.531902447
+Ammonium nitrate,BAU,Middle East,2030,3.191270446
+Ammonium nitrate,BAU,Russia,2030,1.659118717
+Ammonium nitrate,BAU,Europe,2030,2.064990996
+Ammonium nitrate,BAU,China,2030,4.79659566
+Ammonium nitrate,BAU,India,2030,2.28433218
+Ammonium nitrate,BAU,Rest of Asia,2030,4.68107528
+Ammonium nitrate,BAU,Oceania,2030,0.328812668
+Urea,BAU,Global,2030,118.4825692
+Urea,BAU,North America,2030,11.02594582
+Urea,BAU,Latin America,2030,8.09293439
+Urea,BAU,Africa,2030,7.41137156
+Urea,BAU,Middle East,2030,15.43942375
+Urea,BAU,Russia,2030,8.026846159
+Urea,BAU,Europe,2030,9.990463536
+Urea,BAU,China,2030,23.20601598
+Urea,BAU,India,2030,11.05164012
+Urea,BAU,Rest of Asia,2030,22.6471263
+Urea,BAU,Oceania,2030,1.590801596
+Ammonia,BAU,Global,2031,218.9497368
+Ammonia,BAU,North America,2031,20.26657465
+Ammonia,BAU,Latin America,2031,15.19846235
+Ammonia,BAU,Africa,2031,13.90412399
+Ammonia,BAU,Middle East,2031,28.92643798
+Ammonia,BAU,Russia,2031,14.78103295
+Ammonia,BAU,Europe,2031,18.31218744
+Ammonia,BAU,China,2031,42.36262664
+Ammonia,BAU,India,2031,20.31900592
+Ammonia,BAU,Rest of Asia,2031,41.93476672
+Ammonia,BAU,Oceania,2031,2.944518158
+Ammonium nitrate,BAU,Global,2031,24.79103494
+Ammonium nitrate,BAU,North America,2031,2.294724659
+Ammonium nitrate,BAU,Latin America,2031,1.720877205
+Ammonium nitrate,BAU,Africa,2031,1.574323079
+Ammonium nitrate,BAU,Middle East,2031,3.275255522
+Ammonium nitrate,BAU,Russia,2031,1.673612902
+Ammonium nitrate,BAU,Europe,2031,2.073435142
+Ammonium nitrate,BAU,China,2031,4.79659566
+Ammonium nitrate,BAU,India,2031,2.300661298
+Ammonium nitrate,BAU,Rest of Asia,2031,4.748150339
+Ammonium nitrate,BAU,Oceania,2031,0.333399134
+Urea,BAU,Global,2031,119.9394724
+Urea,BAU,North America,2031,11.10191913
+Urea,BAU,Latin America,2031,8.325634837
+Urea,BAU,Africa,2031,7.61660334
+Urea,BAU,Middle East,2031,15.84574506
+Urea,BAU,Russia,2031,8.096969286
+Urea,BAU,Europe,2031,10.03131647
+Urea,BAU,China,2031,23.20601598
+Urea,BAU,India,2031,11.13064069
+Urea,BAU,Rest of Asia,2031,22.97163664
+Urea,BAU,Oceania,2031,1.612990998
+Ammonia,BAU,Global,2032,221.5210552
+Ammonia,BAU,North America,2032,20.3981053
+Ammonia,BAU,Latin America,2032,15.61513443
+Ammonia,BAU,Africa,2032,14.27133386
+Ammonia,BAU,Middle East,2032,29.65326576
+Ammonia,BAU,Russia,2032,14.90354963
+Ammonia,BAU,Europe,2032,18.38060617
+Ammonia,BAU,China,2032,42.36262664
+Ammonia,BAU,India,2032,20.45587588
+Ammonia,BAU,Rest of Asia,2032,42.49761433
+Ammonia,BAU,Oceania,2032,2.982943202
+Ammonium nitrate,BAU,Global,2032,25.08217776
+Ammonium nitrate,BAU,North America,2032,2.309617489
+Ammonium nitrate,BAU,Latin America,2032,1.768055759
+Ammonium nitrate,BAU,Africa,2032,1.615901172
+Ammonium nitrate,BAU,Middle East,2032,3.357552095
+Ammonium nitrate,BAU,Russia,2032,1.687485105
+Ammonium nitrate,BAU,Europe,2032,2.081181994
+Ammonium nitrate,BAU,China,2032,4.79659566
+Ammonium nitrate,BAU,India,2032,2.316158681
+Ammonium nitrate,BAU,Rest of Asia,2032,4.811879919
+Ammonium nitrate,BAU,Oceania,2032,0.337749888
+Urea,BAU,Global,2032,121.3480266
+Urea,BAU,North America,2032,11.1739709
+Urea,BAU,Latin America,2032,8.553885528
+Urea,BAU,Africa,2032,7.817758902
+Urea,BAU,Middle East,2032,16.24389736
+Urea,BAU,Russia,2032,8.164083255
+Urea,BAU,Europe,2032,10.06879587
+Urea,BAU,China,2032,23.20601598
+Urea,BAU,India,2032,11.20561731
+Urea,BAU,Rest of Asia,2032,23.2799615
+Urea,BAU,Oceania,2032,1.634040027
+Ammonia,BAU,Global,2033,224.0046992
+Ammonia,BAU,North America,2033,20.52231856
+Ammonia,BAU,Latin America,2033,16.02363512
+Ammonia,BAU,Africa,2033,14.63132622
+Ammonia,BAU,Middle East,2033,30.36507415
+Ammonia,BAU,Russia,2033,15.02055947
+Ammonia,BAU,Europe,2033,18.44297163
+Ammonia,BAU,China,2033,42.36262664
+Ammonia,BAU,India,2033,20.58552218
+Ammonia,BAU,Rest of Asia,2033,43.03134232
+Ammonia,BAU,Oceania,2033,3.019322908
+Ammonium nitrate,BAU,Global,2033,25.36339347
+Ammonium nitrate,BAU,North America,2033,2.323681791
+Ammonium nitrate,BAU,Latin America,2033,1.814309092
+Ammonium nitrate,BAU,Africa,2033,1.656662049
+Ammonium nitrate,BAU,Middle East,2033,3.438148066
+Ammonium nitrate,BAU,Russia,2033,1.700733785
+Ammonium nitrate,BAU,Europe,2033,2.088243452
+Ammonium nitrate,BAU,China,2033,4.79659566
+Ammonium nitrate,BAU,India,2033,2.330838151
+Ammonium nitrate,BAU,Rest of Asia,2033,4.872312369
+Ammonium nitrate,BAU,Oceania,2033,0.341869055
+Urea,BAU,Global,2033,122.7085533
+Urea,BAU,North America,2033,11.24201425
+Urea,BAU,Latin America,2033,8.77765998
+Urea,BAU,Africa,2033,8.014960756
+Urea,BAU,Middle East,2033,16.63382211
+Urea,BAU,Russia,2033,8.228180607
+Urea,BAU,Europe,2033,10.10295934
+Urea,BAU,China,2033,23.20601598
+Urea,BAU,India,2033,11.27663685
+Urea,BAU,Rest of Asia,2033,23.57233478
+Urea,BAU,Oceania,2033,1.653968632
+Ammonia,BAU,Global,2034,226.3999659
+Ammonia,BAU,North America,2034,20.63944868
+Ammonia,BAU,Latin America,2034,16.42386485
+Ammonia,BAU,Africa,2034,14.98377356
+Ammonia,BAU,Middle East,2034,31.0617887
+Ammonia,BAU,Russia,2034,15.13207163
+Ammonia,BAU,Europe,2034,18.49927954
+Ammonia,BAU,China,2034,42.36262664
+Ammonia,BAU,India,2034,20.70785313
+Ammonia,BAU,Rest of Asia,2034,43.53562679
+Ammonia,BAU,Oceania,2034,3.053632384
+Ammonium nitrate,BAU,Global,2034,25.63460248
+Ammonium nitrate,BAU,North America,2034,2.33694409
+Ammonium nitrate,BAU,Latin America,2034,1.859625928
+Ammonium nitrate,BAU,Africa,2034,1.696568625
+Ammonium nitrate,BAU,Middle East,2034,3.517035007
+Ammonium nitrate,BAU,Russia,2034,1.713359979
+Ammonium nitrate,BAU,Europe,2034,2.09461903
+Ammonium nitrate,BAU,China,2034,4.79659566
+Ammonium nitrate,BAU,India,2034,2.344689324
+Ammonium nitrate,BAU,Rest of Asia,2034,4.929411017
+Ammonium nitrate,BAU,Oceania,2034,0.345753816
+Urea,BAU,Global,2034,124.0206673
+Urea,BAU,North America,2034,11.30617749
+Urea,BAU,Latin America,2034,8.996903648
+Urea,BAU,Africa,2034,8.208029488
+Urea,BAU,Middle East,2034,17.01547855
+Urea,BAU,Russia,2034,8.289266359
+Urea,BAU,Europe,2034,10.1338045
+Urea,BAU,China,2034,23.20601598
+Urea,BAU,India,2034,11.34364907
+Urea,BAU,Rest of Asia,2034,23.84857906
+Urea,BAU,Oceania,2034,1.672763176
+Ammonia,BAU,Global,2035,228.7071404
+Ammonia,BAU,North America,2035,20.74925299
+Ammonia,BAU,Latin America,2035,16.81574353
+Ammonia,BAU,Africa,2035,15.32876745
+Ammonia,BAU,Middle East,2035,31.74326102
+Ammonia,BAU,Russia,2035,15.2381599
+Ammonia,BAU,Europe,2035,18.54956517
+Ammonia,BAU,China,2035,42.36262664
+Ammonia,BAU,India,2035,20.82297397
+Ammonia,BAU,Rest of Asia,2035,44.01088715
+Ammonia,BAU,Oceania,2035,3.085902567
+Ammonium nitrate,BAU,Global,2035,25.89583706
+Ammonium nitrate,BAU,North America,2035,2.349376909
+Ammonium nitrate,BAU,Latin America,2035,1.903997199
+Ammonium nitrate,BAU,Africa,2035,1.735631269
+Ammonium nitrate,BAU,Middle East,2035,3.594196114
+Ammonium nitrate,BAU,Russia,2035,1.725372042
+Ammonium nitrate,BAU,Europe,2035,2.100312724
+Ammonium nitrate,BAU,China,2035,4.79659566
+Ammonium nitrate,BAU,India,2035,2.357724119
+Ammonium nitrate,BAU,Rest of Asia,2035,4.983223351
+Ammonium nitrate,BAU,Oceania,2035,0.349407675
+Urea,BAU,Global,2035,125.2845249
+Urea,BAU,North America,2035,11.36632769
+Urea,BAU,Latin America,2035,9.211572654
+Urea,BAU,Africa,2035,8.397015261
+Urea,BAU,Middle East,2035,17.38878537
+Urea,BAU,Russia,2035,8.347380937
+Urea,BAU,Europe,2035,10.16135069
+Urea,BAU,China,2035,23.20601598
+Urea,BAU,India,2035,11.40671165
+Urea,BAU,Rest of Asia,2035,24.1089241
+Urea,BAU,Oceania,2035,1.690440607
+Ammonia,BAU,Global,2036,230.9263585
+Ammonia,BAU,North America,2036,20.85212283
+Ammonia,BAU,Latin America,2036,17.19927702
+Ammonia,BAU,Africa,2036,15.66619693
+Ammonia,BAU,Middle East,2036,32.4093494
+Ammonia,BAU,Russia,2036,15.33873676
+Ammonia,BAU,Europe,2036,18.59395429
+Ammonia,BAU,China,2036,42.36262664
+Ammonia,BAU,India,2036,20.93088574
+Ammonia,BAU,Rest of Asia,2036,44.45707335
+Ammonia,BAU,Oceania,2036,3.116135539
+Ammonium nitrate,BAU,Global,2036,26.1471126
+Ammonium nitrate,BAU,North America,2036,2.361024559
+Ammonium nitrate,BAU,Latin America,2036,1.947423568
+Ammonium nitrate,BAU,Africa,2036,1.773837416
+Ammonium nitrate,BAU,Middle East,2036,3.669615342
+Ammonium nitrate,BAU,Russia,2036,1.736760064
+Ammonium nitrate,BAU,Europe,2036,2.105338774
+Ammonium nitrate,BAU,China,2036,4.79659566
+Ammonium nitrate,BAU,India,2036,2.369942652
+Ammonium nitrate,BAU,Rest of Asia,2036,5.033743702
+Ammonium nitrate,BAU,Oceania,2036,0.352830865
+Urea,BAU,Global,2036,126.5002005
+Urea,BAU,North America,2036,11.42267923
+Urea,BAU,Latin America,2036,9.421670208
+Urea,BAU,Africa,2036,8.581857288
+Urea,BAU,Middle East,2036,17.75366495
+Urea,BAU,Russia,2036,8.402476393
+Urea,BAU,Europe,2036,10.18566681
+Urea,BAU,China,2036,23.20601598
+Urea,BAU,India,2036,11.46582513
+Urea,BAU,Rest of Asia,2036,24.35334246
+Urea,BAU,Oceania,2036,1.707002064
+Ammonia,BAU,Global,2037,233.0574855
+Ammonia,BAU,North America,2037,20.94782406
+Ammonia,BAU,Latin America,2037,17.57421188
+Ammonia,BAU,Africa,2037,15.99598971
+Ammonia,BAU,Middle East,2037,33.05990592
+Ammonia,BAU,Russia,2037,15.43387599
+Ammonia,BAU,Europe,2037,18.6323832
+Ammonia,BAU,China,2037,42.36262664
+Ammonia,BAU,India,2037,21.03169523
+Ammonia,BAU,Rest of Asia,2037,44.8746103
+Ammonia,BAU,Oceania,2037,3.14436258
+Ammonium nitrate,BAU,Global,2037,26.38841385
+Ammonium nitrate,BAU,North America,2037,2.371860527
+Ammonium nitrate,BAU,Latin America,2037,1.989876339
+Ammonium nitrate,BAU,Africa,2037,1.811178883
+Ammonium nitrate,BAU,Middle East,2037,3.743275944
+Ammonium nitrate,BAU,Russia,2037,1.7475324
+Ammonium nitrate,BAU,Europe,2037,2.109689967
+Ammonium nitrate,BAU,China,2037,4.79659566
+Ammonium nitrate,BAU,India,2037,2.381357013
+Ammonium nitrate,BAU,Rest of Asia,2037,5.081020183
+Ammonium nitrate,BAU,Oceania,2037,0.35602693
+Urea,BAU,Global,2037,127.6676203
+Urea,BAU,North America,2037,11.47510384
+Urea,BAU,Latin America,2037,9.627057478
+Urea,BAU,Africa,2037,8.762515976
+Urea,BAU,Middle East,2037,18.11003627
+Urea,BAU,Russia,2037,8.454593145
+Urea,BAU,Europe,2037,10.20671796
+Urea,BAU,China,2037,23.20601598
+Urea,BAU,India,2037,11.52104801
+Urea,BAU,Rest of Asia,2037,24.58206693
+Urea,BAU,Oceania,2037,1.722464683
+Ammonia,BAU,Global,2038,235.100561
+Ammonia,BAU,North America,2038,21.03646294
+Ammonia,BAU,Latin America,2038,17.9405528
+Ammonia,BAU,Africa,2038,16.31806053
+Ammonia,BAU,Middle East,2038,33.69485073
+Ammonia,BAU,Russia,2038,15.52369607
+Ammonia,BAU,Europe,2038,18.66502041
+Ammonia,BAU,China,2038,42.36262664
+Ammonia,BAU,India,2038,21.12534823
+Ammonia,BAU,Rest of Asia,2038,45.26337419
+Ammonia,BAU,Oceania,2038,3.17056846
+Ammonium nitrate,BAU,Global,2038,26.61974528
+Ammonium nitrate,BAU,North America,2038,2.381896847
+Ammonium nitrate,BAU,Latin America,2038,2.031356045
+Ammonium nitrate,BAU,Africa,2038,1.847646015
+Ammonium nitrate,BAU,Middle East,2038,3.815168878
+Ammonium nitrate,BAU,Russia,2038,1.757702463
+Ammonium nitrate,BAU,Europe,2038,2.113385382
+Ammonium nitrate,BAU,China,2038,4.79659566
+Ammonium nitrate,BAU,India,2038,2.391961067
+Ammonium nitrate,BAU,Rest of Asia,2038,5.125038776
+Ammonium nitrate,BAU,Oceania,2038,0.358994145
+Urea,BAU,Global,2038,128.7868059
+Urea,BAU,North America,2038,11.52365974
+Urea,BAU,Latin America,2038,9.827737041
+Urea,BAU,Africa,2038,8.938944616
+Urea,BAU,Middle East,2038,18.45785557
+Urea,BAU,Russia,2038,8.503796093
+Urea,BAU,Europe,2038,10.22459644
+Urea,BAU,China,2038,23.20601598
+Urea,BAU,India,2038,11.57235062
+Urea,BAU,Rest of Asia,2038,24.79502967
+Urea,BAU,Oceania,2038,1.736820121
+Ammonia,BAU,Global,2039,237.0557325
+Ammonia,BAU,North America,2039,21.11810378
+Ammonia,BAU,Latin America,2039,18.29833125
+Ammonia,BAU,Africa,2039,16.63235288
+Ammonia,BAU,Middle East,2039,34.31401049
+Ammonia,BAU,Russia,2039,15.608036
+Ammonia,BAU,Europe,2039,18.69185898
+Ammonia,BAU,China,2039,42.36262664
+Ammonia,BAU,India,2039,21.21195684
+Ammonia,BAU,Rest of Asia,2039,45.62366818
+Ammonia,BAU,Oceania,2039,3.194787455
+Ammonium nitrate,BAU,Global,2039,26.8411236
+Ammonium nitrate,BAU,North America,2039,2.3911408
+Ammonium nitrate,BAU,Latin America,2039,2.071866247
+Ammonium nitrate,BAU,Africa,2039,1.883232414
+Ammonium nitrate,BAU,Middle East,2039,3.885274518
+Ammonium nitrate,BAU,Russia,2039,1.767252026
+Ammonium nitrate,BAU,Europe,2039,2.116424234
+Ammonium nitrate,BAU,China,2039,4.79659566
+Ammonium nitrate,BAU,India,2039,2.401767505
+Ammonium nitrate,BAU,Rest of Asia,2039,5.165833805
+Ammonium nitrate,BAU,Oceania,2039,0.36173639
+Urea,BAU,Global,2039,129.8578382
+Urea,BAU,North America,2039,11.56838215
+Urea,BAU,Latin America,2039,10.02372612
+Urea,BAU,Africa,2039,9.111112251
+Urea,BAU,Middle East,2039,18.79702792
+Urea,BAU,Russia,2039,8.549997051
+Urea,BAU,Europe,2039,10.23929847
+Urea,BAU,China,2039,23.20601598
+Urea,BAU,India,2039,11.61979434
+Urea,BAU,Rest of Asia,2039,24.99239676
+Urea,BAU,Oceania,2039,1.750087155
+Ammonia,BAU,Global,2040,238.9227837
+Ammonia,BAU,North America,2040,21.19278058
+Ammonia,BAU,Latin America,2040,18.64729931
+Ammonia,BAU,Africa,2040,16.93875854
+Ammonia,BAU,Middle East,2040,34.91722208
+Ammonia,BAU,Russia,2040,15.68702242
+Ammonia,BAU,Europe,2040,18.7129499
+Ammonia,BAU,China,2040,42.36262664
+Ammonia,BAU,India,2040,21.2915244
+Ammonia,BAU,Rest of Asia,2040,45.95557918
+Ammonia,BAU,Oceania,2040,3.217020654
+Ammonium nitrate,BAU,Global,2040,27.05252432
+Ammonium nitrate,BAU,North America,2040,2.399596234
+Ammonium nitrate,BAU,Latin America,2040,2.111378874
+Ammonium nitrate,BAU,Africa,2040,1.917925826
+Ammonium nitrate,BAU,Middle East,2040,3.953574392
+Ammonium nitrate,BAU,Russia,2040,1.776195426
+Ammonium nitrate,BAU,Europe,2040,2.118812298
+Ammonium nitrate,BAU,China,2040,4.79659566
+Ammonium nitrate,BAU,India,2040,2.410776706
+Ammonium nitrate,BAU,Rest of Asia,2040,5.203415111
+Ammonium nitrate,BAU,Oceania,2040,0.36425379
+Urea,BAU,Global,2040,130.8805987
+Urea,BAU,North America,2040,11.60928969
+Urea,BAU,Latin America,2040,10.21488893
+Urea,BAU,Africa,2040,9.278959601
+Urea,BAU,Middle East,2040,19.12746394
+Urea,BAU,Russia,2040,8.59326538
+Urea,BAU,Europe,2040,10.25085196
+Urea,BAU,China,2040,23.20601598
+Urea,BAU,India,2040,11.66338101
+Urea,BAU,Rest of Asia,2040,25.17421579
+Urea,BAU,Oceania,2040,1.76226638
+Ammonia,BAU,Global,2041,240.7017565
+Ammonia,BAU,North America,2041,21.26062646
+Ammonia,BAU,Latin America,2041,18.98737568
+Ammonia,BAU,Africa,2041,17.23727719
+Ammonia,BAU,Middle East,2041,35.50433383
+Ammonia,BAU,Russia,2041,15.7606493
+Ammonia,BAU,Europe,2041,18.72837622
+Ammonia,BAU,China,2041,42.36262664
+Ammonia,BAU,India,2041,21.36406501
+Ammonia,BAU,Rest of Asia,2041,46.25915307
+Ammonia,BAU,Oceania,2041,3.237273102
+Ammonium nitrate,BAU,Global,2041,27.25395217
+Ammonium nitrate,BAU,North America,2041,2.407278224
+Ammonium nitrate,BAU,Latin America,2041,2.149884721
+Ammonium nitrate,BAU,Africa,2041,1.951726215
+Ammonium nitrate,BAU,Middle East,2041,4.02005133
+Ammonium nitrate,BAU,Russia,2041,1.78453198
+Ammonium nitrate,BAU,Europe,2041,2.120558974
+Ammonium nitrate,BAU,China,2041,4.79659566
+Ammonium nitrate,BAU,India,2041,2.418990266
+Ammonium nitrate,BAU,Rest of Asia,2041,5.23778789
+Ammonium nitrate,BAU,Oceania,2041,0.366546915
+Urea,BAU,Global,2041,131.8551103
+Urea,BAU,North America,2041,11.64645529
+Urea,BAU,Latin America,2041,10.40118091
+Urea,BAU,Africa,2041,9.442486493
+Urea,BAU,Middle East,2041,19.44908056
+Urea,BAU,Russia,2041,8.633597781
+Urea,BAU,Europe,2041,10.25930241
+Urea,BAU,China,2041,23.20601598
+Urea,BAU,India,2041,11.70311837
+Urea,BAU,Rest of Asia,2041,25.34051191
+Urea,BAU,Oceania,2041,1.77336056
+Ammonia,BAU,Global,2042,242.3926573
+Ammonia,BAU,North America,2042,21.32143586
+Ammonia,BAU,Latin America,2042,19.31863523
+Ammonia,BAU,Africa,2042,17.5278519
+Ammonia,BAU,Middle East,2042,36.07521182
+Ammonia,BAU,Russia,2042,15.8289702
+Ammonia,BAU,Europe,2042,18.73815772
+Ammonia,BAU,China,2042,42.36262664
+Ammonia,BAU,India,2042,21.42962452
+Ammonia,BAU,Rest of Asia,2042,46.53458496
+Ammonia,BAU,Oceania,2042,3.255558455
+Ammonium nitrate,BAU,Global,2042,27.4454079
+Ammonium nitrate,BAU,North America,2042,2.414163493
+Ammonium nitrate,BAU,Latin America,2042,2.187392266
+Ammonium nitrate,BAU,Africa,2042,1.984627135
+Ammonium nitrate,BAU,Middle East,2042,4.084690165
+Ammonium nitrate,BAU,Russia,2042,1.792267755
+Ammonium nitrate,BAU,Europe,2042,2.121666504
+Ammonium nitrate,BAU,China,2042,4.79659566
+Ammonium nitrate,BAU,India,2042,2.426413376
+Ammonium nitrate,BAU,Rest of Asia,2042,5.268974234
+Ammonium nitrate,BAU,Oceania,2042,0.368617312
+Urea,BAU,Global,2042,132.7813765
+Urea,BAU,North America,2042,11.67976635
+Urea,BAU,Latin America,2042,10.58264308
+Urea,BAU,Africa,2042,9.601661735
+Urea,BAU,Middle East,2042,19.7618044
+Urea,BAU,Russia,2042,8.671023601
+Urea,BAU,Europe,2042,10.26466067
+Urea,BAU,China,2042,23.20601598
+Urea,BAU,India,2042,11.73903151
+Urea,BAU,Rest of Asia,2042,25.49139201
+Urea,BAU,Oceania,2042,1.783377177
+Ammonia,BAU,Global,2043,243.9955078
+Ammonia,BAU,North America,2043,21.37549613
+Ammonia,BAU,Latin America,2043,19.64082331
+Ammonia,BAU,Africa,2043,17.81021982
+Ammonia,BAU,Middle East,2043,36.62983663
+Ammonia,BAU,Russia,2043,15.89190208
+Ammonia,BAU,Europe,2043,18.74237249
+Ammonia,BAU,China,2043,42.36262664
+Ammonia,BAU,India,2043,21.48826985
+Ammonia,BAU,Rest of Asia,2043,46.78206344
+Ammonia,BAU,Oceania,2043,3.271897418
+Ammonium nitrate,BAU,Global,2043,27.62689395
+Ammonium nitrate,BAU,North America,2043,2.420284578
+Ammonium nitrate,BAU,Latin America,2043,2.223872675
+Ammonium nitrate,BAU,Africa,2043,2.016598824
+Ammonium nitrate,BAU,Middle East,2043,4.147488702
+Ammonium nitrate,BAU,Russia,2043,1.799393347
+Ammonium nitrate,BAU,Europe,2043,2.12214373
+Ammonium nitrate,BAU,China,2043,4.79659566
+Ammonium nitrate,BAU,India,2043,2.433053615
+Ammonium nitrate,BAU,Rest of Asia,2043,5.296995494
+Ammonium nitrate,BAU,Oceania,2043,0.370467325
+Urea,BAU,Global,2043,133.6594093
+Urea,BAU,North America,2043,11.70938027
+Urea,BAU,Latin America,2043,10.75913596
+Urea,BAU,Africa,2043,9.756341342
+Urea,BAU,Middle East,2043,20.06562485
+Urea,BAU,Russia,2043,8.705497341
+Urea,BAU,Europe,2043,10.26696949
+Urea,BAU,China,2043,23.20601598
+Urea,BAU,India,2043,11.7711571
+Urea,BAU,Rest of Asia,2043,25.62695937
+Urea,BAU,Oceania,2043,1.792327572
+Ammonia,BAU,Global,2044,245.5104852
+Ammonia,BAU,North America,2044,21.42262995
+Ammonia,BAU,Latin America,2044,19.95387272
+Ammonia,BAU,Africa,2044,18.08457384
+Ammonia,BAU,Middle East,2044,37.16794818
+Ammonia,BAU,Russia,2044,15.94956953
+Ammonia,BAU,Europe,2044,18.74106988
+Ammonia,BAU,China,2044,42.36262664
+Ammonia,BAU,India,2044,21.54005058
+Ammonia,BAU,Rest of Asia,2044,47.00183976
+Ammonia,BAU,Oceania,2044,3.286304118
+Ammonium nitrate,BAU,Global,2044,27.79843039
+Ammonium nitrate,BAU,North America,2044,2.425621402
+Ammonium nitrate,BAU,Latin America,2044,2.259318339
+Ammonium nitrate,BAU,Africa,2044,2.047663123
+Ammonium nitrate,BAU,Middle East,2044,4.208417491
+Ammonium nitrate,BAU,Russia,2044,1.805922862
+Ammonium nitrate,BAU,Europe,2044,2.12199624
+Ammonium nitrate,BAU,China,2044,4.79659566
+Ammonium nitrate,BAU,India,2044,2.438916595
+Ammonium nitrate,BAU,Rest of Asia,2044,5.32188012
+Ammonium nitrate,BAU,Oceania,2044,0.372098553
+Urea,BAU,Global,2044,134.4893056
+Urea,BAU,North America,2044,11.73519992
+Urea,BAU,Latin America,2044,10.93062272
+Urea,BAU,Africa,2044,9.906630978
+Urea,BAU,Middle East,2044,20.36039943
+Urea,BAU,Russia,2044,8.737087253
+Urea,BAU,Europe,2044,10.26625593
+Urea,BAU,China,2044,23.20601598
+Urea,BAU,India,2044,11.7995223
+Urea,BAU,Rest of Asia,2044,25.74735163
+Urea,BAU,Oceania,2044,1.800219484
+Ammonia,BAU,Global,2045,246.9370003
+Ammonia,BAU,North America,2045,21.4631015
+Ammonia,BAU,Latin America,2045,20.2576733
+Ammonia,BAU,Africa,2045,18.35055423
+Ammonia,BAU,Middle East,2045,37.68934406
+Ammonia,BAU,Russia,2045,16.00194771
+Ammonia,BAU,Europe,2045,18.73427161
+Ammonia,BAU,China,2045,42.36262664
+Ammonia,BAU,India,2045,21.58493316
+Ammonia,BAU,Rest of Asia,2045,47.19377817
+Ammonia,BAU,Oceania,2045,3.298769925
+Ammonium nitrate,BAU,Global,2045,27.9599505
+Ammonium nitrate,BAU,North America,2045,2.430203877
+Ammonium nitrate,BAU,Latin America,2045,2.293716785
+Ammonium nitrate,BAU,Africa,2045,2.077779301
+Ammonium nitrate,BAU,Middle East,2045,4.267453614
+Ammonium nitrate,BAU,Russia,2045,1.81185349
+Ammonium nitrate,BAU,Europe,2045,2.121226492
+Ammonium nitrate,BAU,China,2045,4.79659566
+Ammonium nitrate,BAU,India,2045,2.443998518
+Ammonium nitrate,BAU,Rest of Asia,2045,5.343612743
+Ammonium nitrate,BAU,Oceania,2045,0.37351002
+Urea,BAU,Global,2045,135.2707428
+Urea,BAU,North America,2045,11.75737002
+Urea,BAU,Latin America,2045,11.09704302
+Urea,BAU,Africa,2045,10.05233359
+Urea,BAU,Middle East,2045,20.64601725
+Urea,BAU,Russia,2045,8.765779735
+Urea,BAU,Europe,2045,10.26253188
+Urea,BAU,China,2045,23.20601598
+Urea,BAU,India,2045,11.82410874
+Urea,BAU,Rest of Asia,2045,25.85249445
+Urea,BAU,Oceania,2045,1.807048185
+Ammonia,BAU,Global,2046,248.2757473
+Ammonia,BAU,North America,2046,21.49680526
+Ammonia,BAU,Latin America,2046,20.5523542
+Ammonia,BAU,Africa,2046,18.60832429
+Ammonia,BAU,Middle East,2046,38.19402124
+Ammonia,BAU,Russia,2046,16.04908524
+Ammonia,BAU,Europe,2046,18.72203456
+Ammonia,BAU,China,2046,42.36262664
+Ammonia,BAU,India,2046,21.6229949
+Ammonia,BAU,Rest of Asia,2046,47.35818357
+Ammonia,BAU,Oceania,2046,3.309317417
+Ammonium nitrate,BAU,Global,2046,28.11153288
+Ammonium nitrate,BAU,North America,2046,2.434020054
+Ammonium nitrate,BAU,Latin America,2046,2.327082638
+Ammonium nitrate,BAU,Africa,2046,2.106965847
+Ammonium nitrate,BAU,Middle East,2046,4.324596726
+Ammonium nitrate,BAU,Russia,2046,1.817190734
+Ammonium nitrate,BAU,Europe,2046,2.119840926
+Ammonium nitrate,BAU,China,2046,4.79659566
+Ammonium nitrate,BAU,India,2046,2.448308137
+Ammonium nitrate,BAU,Rest of Asia,2046,5.362227882
+Ammonium nitrate,BAU,Oceania,2046,0.374704281
+Urea,BAU,Global,2046,136.0041011
+Urea,BAU,North America,2046,11.77583275
+Urea,BAU,Latin America,2046,11.25846761
+Urea,BAU,Africa,2046,10.19353862
+Urea,BAU,Middle East,2046,20.92247666
+Urea,BAU,Russia,2046,8.791601417
+Urea,BAU,Europe,2046,10.25582849
+Urea,BAU,China,2046,23.20601598
+Urea,BAU,India,2046,11.84495875
+Urea,BAU,Rest of Asia,2046,25.94255483
+Urea,BAU,Oceania,2046,1.812826044
+Ammonia,BAU,Global,2047,249.5264451
+Ammonia,BAU,North America,2047,21.523778
+Ammonia,BAU,Latin America,2047,20.83758684
+Ammonia,BAU,Africa,2047,18.85772441
+Ammonia,BAU,Middle East,2047,38.68184068
+Ammonia,BAU,Russia,2047,16.09092873
+Ammonia,BAU,Europe,2047,18.70449363
+Ammonia,BAU,China,2047,42.36262664
+Ammonia,BAU,India,2047,21.65428917
+Ammonia,BAU,Rest of Asia,2047,47.49521392
+Ammonia,BAU,Oceania,2047,3.317963079
+Ammonium nitrate,BAU,Global,2047,28.25314572
+Ammonium nitrate,BAU,North America,2047,2.437074098
+Ammonium nitrate,BAU,Latin America,2047,2.359378691
+Ammonium nitrate,BAU,Africa,2047,2.135204689
+Ammonium nitrate,BAU,Middle East,2047,4.379831088
+Ammonium nitrate,BAU,Russia,2047,1.821928549
+Ammonium nitrate,BAU,Europe,2047,2.117854818
+Ammonium nitrate,BAU,China,2047,4.79659566
+Ammonium nitrate,BAU,India,2047,2.451851495
+Ammonium nitrate,BAU,Rest of Asia,2047,5.377743427
+Ammonium nitrate,BAU,Oceania,2047,0.375683204
+Urea,BAU,Global,2047,136.6892266
+Urea,BAU,North America,2047,11.79060827
+Urea,BAU,Latin America,2047,11.4147165
+Urea,BAU,Africa,2047,10.33015865
+Urea,BAU,Middle East,2047,21.18970149
+Urea,BAU,Russia,2047,8.814523054
+Urea,BAU,Europe,2047,10.24621966
+Urea,BAU,China,2047,23.20601598
+Urea,BAU,India,2047,11.86210158
+Urea,BAU,Rest of Asia,2047,26.01761931
+Urea,BAU,Oceania,2047,1.81756209
+Ammonia,BAU,Global,2048,250.6890977
+Ammonia,BAU,North America,2048,21.54408557
+Ammonia,BAU,Latin America,2048,21.11345765
+Ammonia,BAU,Africa,2048,19.09868957
+Ammonia,BAU,Middle East,2048,39.1525782
+Ammonia,BAU,Russia,2048,16.12757755
+Ammonia,BAU,Europe,2048,18.6815967
+Ammonia,BAU,China,2048,42.36262664
+Ammonia,BAU,India,2048,21.67882313
+Ammonia,BAU,Rest of Asia,2048,47.6049538
+Ammonia,BAU,Oceania,2048,3.3247089
+Ammonium nitrate,BAU,Global,2048,28.38478945
+Ammonium nitrate,BAU,North America,2048,2.439373465
+Ammonium nitrate,BAU,Latin America,2048,2.390614731
+Ammonium nitrate,BAU,Africa,2048,2.162488466
+Ammonium nitrate,BAU,Middle East,2048,4.433131313
+Ammonium nitrate,BAU,Russia,2048,1.826078187
+Ammonium nitrate,BAU,Europe,2048,2.115262267
+Ammonium nitrate,BAU,China,2048,4.79659566
+Ammonium nitrate,BAU,India,2048,2.454629402
+Ammonium nitrate,BAU,Rest of Asia,2048,5.39016895
+Ammonium nitrate,BAU,Oceania,2048,0.376447013
+Urea,BAU,Global,2048,137.3261213
+Urea,BAU,North America,2048,11.80173265
+Urea,BAU,Latin America,2048,11.56583702
+Urea,BAU,Africa,2048,10.46215805
+Urea,BAU,Middle East,2048,21.44756894
+Urea,BAU,Russia,2048,8.834599077
+Urea,BAU,Europe,2048,10.23367685
+Urea,BAU,China,2048,23.20601598
+Urea,BAU,India,2048,11.87554115
+Urea,BAU,Rest of Asia,2048,26.07773422
+Urea,BAU,Oceania,2048,1.821257414
+Ammonia,BAU,Global,2049,251.7635652
+Ammonia,BAU,North America,2049,21.55779438
+Ammonia,BAU,Latin America,2049,21.37976752
+Ammonia,BAU,Africa,2049,19.33106429
+Ammonia,BAU,Middle East,2049,39.60613451
+Ammonia,BAU,Russia,2049,16.15899391
+Ammonia,BAU,Europe,2049,18.6534366
+Ammonia,BAU,China,2049,42.36262664
+Ammonia,BAU,India,2049,21.69664096
+Ammonia,BAU,Rest of Asia,2049,47.68753783
+Ammonia,BAU,Oceania,2049,3.329568561
+Ammonium nitrate,BAU,Global,2049,28.50644825
+Ammonium nitrate,BAU,North America,2049,2.440925673
+Ammonium nitrate,BAU,Latin America,2049,2.420768216
+Ammonium nitrate,BAU,Africa,2049,2.188799572
+Ammonium nitrate,BAU,Middle East,2049,4.48448616
+Ammonium nitrate,BAU,Russia,2049,1.82963537
+Ammonium nitrate,BAU,Europe,2049,2.112073782
+Ammonium nitrate,BAU,China,2049,4.79659566
+Ammonium nitrate,BAU,India,2049,2.456646864
+Ammonium nitrate,BAU,Rest of Asia,2049,5.399519697
+Ammonium nitrate,BAU,Oceania,2049,0.376997259
+Urea,BAU,Global,2049,137.9147088
+Urea,BAU,North America,2049,11.80924226
+Urea,BAU,Latin America,2049,11.71172012
+Urea,BAU,Africa,2049,10.58945165
+Urea,BAU,Middle East,2049,21.69602461
+Urea,BAU,Russia,2049,8.851808789
+Urea,BAU,Europe,2049,10.2182509
+Urea,BAU,China,2049,23.20601598
+Urea,BAU,India,2049,11.88530166
+Urea,BAU,Rest of Asia,2049,26.1229733
+Urea,BAU,Oceania,2049,1.82391951
+Ammonia,BAU,Global,2050,252.7502165
+Ammonia,BAU,North America,2050,21.56494608
+Ammonia,BAU,Latin America,2050,21.63645757
+Ammonia,BAU,Africa,2050,19.55500086
+Ammonia,BAU,Middle East,2050,40.04235648
+Ammonia,BAU,Russia,2050,16.18519829
+Ammonia,BAU,Europe,2050,18.62006576
+Ammonia,BAU,China,2050,42.36262664
+Ammonia,BAU,India,2050,21.70780478
+Ammonia,BAU,Rest of Asia,2050,47.74319966
+Ammonia,BAU,Oceania,2050,3.332560387
+Ammonium nitrate,BAU,Global,2050,28.61816388
+Ammonium nitrate,BAU,North America,2050,2.44173544
+Ammonium nitrate,BAU,Latin America,2050,2.449832474
+Ammonium nitrate,BAU,Africa,2050,2.214155251
+Ammonium nitrate,BAU,Middle East,2050,4.533878291
+Ammonium nitrate,BAU,Russia,2050,1.832602415
+Ammonium nitrate,BAU,Europe,2050,2.108295299
+Ammonium nitrate,BAU,China,2050,4.79659566
+Ammonium nitrate,BAU,India,2050,2.45791091
+Ammonium nitrate,BAU,Rest of Asia,2050,5.405822122
+Ammonium nitrate,BAU,Oceania,2050,0.377336014
+Urea,BAU,Global,2050,138.455191
+Urea,BAU,North America,2050,11.81315993
+Urea,BAU,Latin America,2050,11.85233352
+Urea,BAU,Africa,2050,10.71212288
+Urea,BAU,Middle East,2050,21.93498463
+Urea,BAU,Russia,2050,8.866163407
+Urea,BAU,Europe,2050,10.19997053
+Urea,BAU,China,2050,23.20601598
+Urea,BAU,India,2050,11.89141714
+Urea,BAU,Rest of Asia,2050,26.15346455
+Urea,BAU,Oceania,2050,1.825558416

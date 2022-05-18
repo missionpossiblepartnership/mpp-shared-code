@@ -13,15 +13,15 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
-    "bau",
+    # "bau",
     "fa",
-    "lc",
+    # "lc",
 ]
 
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = True
+RUN_PARALLEL = False
 
 run_config = {
     "IMPORT_DATA",
@@ -202,7 +202,7 @@ SENSITIVITIES = [
 
 # Products produced by each sector
 PRODUCTS = {
-    "chemicals": ["Ammonia"],
+    "chemicals": ["Ammonia", "Ammonium nitrate", "Urea"],
     "aluminium": ["Aluminium"],
 }
 
@@ -210,7 +210,7 @@ PRODUCTS = {
 INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_assets"}
 
 ### RANKING ###
-NUMBER_OF_BINS_RANKING = 10
+NUMBER_OF_BINS_RANKING = {"chemicals": 50, "aluminium": 10}
 COST_METRIC_RELATIVE_UNCERTAINTY = {"chemicals": 0.1, "aluminium": 0.1}
 
 # GHGs and Emission scopes included in weighting when ranking technology transitions
@@ -222,7 +222,9 @@ EMISSION_SCOPES_RANKING = {
 
 # Cost metric for ranking
 RANKING_COST_METRIC = {"chemicals": "lcox", "aluminium": "tco"}
-BIN_METHODOLOGY = {"chemicals": "uncertainty", "aluminium": "histogram"}
+
+# Methodology for binning can be "uncertainty", "uncertainty_bins" or "histogram"
+BIN_METHODOLOGY = {"chemicals": "uncertainty_bins", "aluminium": "histogram"}
 
 TRANSITION_TYPES = [
     "decommission",
@@ -233,7 +235,7 @@ TRANSITION_TYPES = [
 
 # TODO: add decommission for chemicals
 RANK_TYPES = {
-    "chemicals": ["greenfield", "brownfield"],
+    "chemicals": ["decommission", "greenfield", "brownfield"],
     "aluminium": ["decommission", "greenfield", "brownfield"],
 }
 
@@ -271,8 +273,10 @@ indicates that for the newbuild rank, in the most_economic scenario, we favor bu
 4. Lower scope 3 emissions
 in that order!
 """
-lc_weight_cost = 1
-lc_weight_emissions = 0
+lc_weight_cost = 0.8
+lc_weight_emissions = 0.2
+fa_weight_cost = 0.2
+fa_weight_emissions = 0.8
 RANKING_CONFIG = {
     "chemicals": {
         "greenfield": {
@@ -281,8 +285,8 @@ RANKING_CONFIG = {
                 "emissions": 0.0,
             },
             "fa": {
-                "cost": 0.0,
-                "emissions": 1.0,
+                "cost": fa_weight_cost,
+                "emissions": fa_weight_emissions,
             },
             "lc": {
                 "cost": lc_weight_cost,
@@ -295,8 +299,8 @@ RANKING_CONFIG = {
                 "emissions": 0.0,
             },
             "fa": {
-                "cost": 0.0,
-                "emissions": 1.0,
+                "cost": fa_weight_cost,
+                "emissions": fa_weight_emissions,
             },
             "lc": {
                 "cost": lc_weight_cost,
@@ -309,8 +313,8 @@ RANKING_CONFIG = {
                 "emissions": 0,
             },
             "fa": {
-                "cost": 0.0,
-                "emissions": 1.0,
+                "cost": fa_weight_cost,
+                "emissions": fa_weight_emissions,
             },
             "lc": {
                 "cost": lc_weight_cost,
@@ -369,9 +373,9 @@ RANKING_CONFIG = {
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
     "chemicals": {
-        "maximum_asset_additions": 100,
-        "maximum_capacity_growth_rate": 1,
-        "years_rampup_phase": 10,
+        "maximum_asset_additions": 10,
+        "maximum_capacity_growth_rate": 0.7,
+        "years_rampup_phase": 5,
     },
     "aluminium": {
         "maximum_asset_additions": 4,
@@ -475,7 +479,7 @@ SECTORAL_PATHWAYS = {
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = {
     "chemicals": 2020,
-    "aluminium": 2030,  # constraint currently not active
+    "aluminium": 2030,
 }
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
 TRANSITIONAL_PERIOD_YEARS = {"chemicals": 30, "aluminium": 10}

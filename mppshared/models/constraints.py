@@ -6,7 +6,12 @@ import pandas as pd
 from pandera import Bool
 from pyparsing import col
 
-from mppshared.config import END_YEAR, LOG_LEVEL, REGIONAL_PRODUCTION_SHARES, YEAR_2050_EMISSIONS_CONSTRAINT
+from mppshared.config import (
+    END_YEAR,
+    LOG_LEVEL,
+    REGIONAL_PRODUCTION_SHARES,
+    YEAR_2050_EMISSIONS_CONSTRAINT,
+)
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
@@ -18,7 +23,6 @@ logger.setLevel(LOG_LEVEL)
 def check_constraints(
     pathway: SimulationPathway,
     stack: AssetStack,
-    product: str,
     year: int,
     transition_type: str,
 ) -> dict:
@@ -45,8 +49,8 @@ def check_constraints(
     # If pathway not bau, then check for constraints, else return true
     if pathway.pathway != "bau":
         # Check constraint for annual emissions limit from carbon budget
-        emissions_constraint = check_annual_carbon_budget_constraint(
-            pathway=pathway, stack=stack, product=product, year=year, transition_type=transition_type
+        emissions_constraint, flag_residual = check_annual_carbon_budget_constraint(
+            pathway=pathway, stack=stack, year=year, transition_type=transition_type
         )
         # Check technology ramp-up constraint
         rampup_constraint = check_technology_rampup_constraint(
@@ -56,13 +60,12 @@ def check_constraints(
         # TODO: Check resource availability constraint
         return {
             "emissions_constraint": emissions_constraint,
-            "rampup_constraint": rampup_constraint
+            "flag_residual": flag_residual,
+            "rampup_constraint": rampup_constraint,
         }
     else:
-        return {
-            "emissions_constraint": True,
-            "rampup_constraint": True
-        }
+        return {"emissions_constraint": True, "rampup_constraint": True}
+
 
 def check_technology_rampup_constraint(
     pathway: SimulationPathway, stack: AssetStack, year: int
@@ -75,27 +78,40 @@ def check_technology_rampup_constraint(
         year: year corresponding to the stack passed
     """
     # Get asset numbers of new and old stack for each technology
-    df_old_stack = pathway.stacks[year].aggregate_stack(aggregation_vars=["technology"])[["number_of_assets"]].rename({"number_of_assets": "number_old"}, axis=1)
-    df_new_stack = stack.aggregate_stack(aggregation_vars=["technology"])[["number_of_assets"]].rename({"number_of_assets": "number_new"}, axis=1)
+    df_old_stack = (
+        pathway.stacks[year]
+        .aggregate_stack(aggregation_vars=["technology"])[["number_of_assets"]]
+        .rename({"number_of_assets": "number_old"}, axis=1)
+    )
+    df_new_stack = stack.aggregate_stack(aggregation_vars=["technology"])[
+        ["number_of_assets"]
+    ].rename({"number_of_assets": "number_new"}, axis=1)
 
     # Create DataFrame for rampup comparison
     df_rampup = df_old_stack.join(df_new_stack, how="outer").fillna(0)
-    df_rampup["proposed_asset_additions"] = df_rampup["number_new"] - df_rampup["number_old"]
+    df_rampup["proposed_asset_additions"] = (
+        df_rampup["number_new"] - df_rampup["number_old"]
+    )
     for technology in df_rampup.index:
         rampup_constraint = pathway.technology_rampup[technology]
         if rampup_constraint:
-            df_rampup.loc[technology, "maximum_asset_additions"] = rampup_constraint.df_rampup.loc[year, "maximum_asset_additions"]
+            df_rampup.loc[
+                technology, "maximum_asset_additions"
+            ] = rampup_constraint.df_rampup.loc[year, "maximum_asset_additions"]
         else:
             df_rampup.loc[technology, "maximum_asset_additions"] = None
 
-    df_rampup["check"] = (df_rampup["proposed_asset_additions"] <= df_rampup["maximum_asset_additions"]) | (df_rampup["maximum_asset_additions"].isna())
-    
+    df_rampup["check"] = (
+        df_rampup["proposed_asset_additions"] <= df_rampup["maximum_asset_additions"]
+    ) | (df_rampup["maximum_asset_additions"].isna())
+
     if df_rampup["check"].all():
         return True
-    
-    technology_affected = list(df_rampup[df_rampup["check"]==False].index)
+
+    technology_affected = list(df_rampup[df_rampup["check"] == False].index)
     logger.debug(f"Technology ramp-up constraint hurt for {technology_affected}.")
     return False
+
 
 def check_constraint_regional_production(
     pathway: SimulationPathway, stack: AssetStack, product: str, year: int
@@ -142,36 +158,40 @@ def get_regional_production_constraint_table(
 
 
 def check_annual_carbon_budget_constraint(
-    pathway: SimulationPathway, stack: AssetStack, product: str, year: int, transition_type: str
+    pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
 ) -> Bool:
     """Check if the stack exceeds the Carbon Budget defined in the pathway for the given product and year"""
 
     # After a sector-specific year, all end-state newbuild capacity has to fulfill the 2050 emissions limit with a stack composed of only end-state technologies
-    if (transition_type == "greenfield") & (year >= YEAR_2050_EMISSIONS_CONSTRAINT[pathway.sector]):
+    if (transition_type == "greenfield") & (
+        year >= YEAR_2050_EMISSIONS_CONSTRAINT[pathway.sector]
+    ):
         limit = pathway.carbon_budget.get_annual_emissions_limit(
             END_YEAR, pathway.sector
         )
 
         dict_stack_emissions = stack.calculate_emissions_stack(
-            year=year, df_emissions=pathway.emissions, technology_classification="end-state"
+            year=year,
+            df_emissions=pathway.emissions,
+            technology_classification="end-state",
         )
-        
+        flag_residual = True
+
     # In other cases, the limit is equivalent to that year's emission limit
     else:
-        limit = pathway.carbon_budget.get_annual_emissions_limit(
-            year, pathway.sector
-        )
+        limit = pathway.carbon_budget.get_annual_emissions_limit(year, pathway.sector)
 
         dict_stack_emissions = stack.calculate_emissions_stack(
-            year=year, df_emissions=pathway.emissions, technology_classification=None 
+            year=year, df_emissions=pathway.emissions, technology_classification=None
         )
-    
+        flag_residual = False
+
     # Compare scope 1 and 2 CO2 emissions to the allowed limit in that year
     co2_scope1_2 = (
         dict_stack_emissions["co2_scope1"] + dict_stack_emissions["co2_scope2"]
     ) / 1e3  # Gt CO2
 
     if np.round(co2_scope1_2, 2) <= np.round(limit, 2):
-        return True
+        return True, flag_residual
 
-    return False
+    return False, flag_residual

@@ -177,17 +177,8 @@ class IntermediateDataImporter:
         file_path = self.intermediate_path.joinpath("technologies_to_rank.csv")
         return pd.read_csv(file_path)
 
-    def get_variable_per_year(self, product, variable):
-        file_path = self.export_dir.joinpath(
-            "final", product, f"{variable}_per_year.csv"
-        )
-        index_col = 0 if variable == "outputs" else [0, 1]
-        return pd.read_csv(file_path, header=[0, 1], index_col=index_col)
-
-    def get_ranking(self, rank_type, product):
-        file_path = self.export_dir.joinpath(
-            "ranking", product, f"{rank_type}_rank.csv"
-        )
+    def get_ranking(self, rank_type):
+        file_path = self.export_dir.joinpath("ranking", f"{rank_type}_rank.csv")
         return pd.read_csv(file_path)
 
     def get_inputs_outputs(self):
