@@ -21,7 +21,7 @@ PATHWAYS = [
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 
 run_config = {
     "IMPORT_DATA",
@@ -211,25 +211,31 @@ INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_as
 
 ### RANKING ###
 NUMBER_OF_BINS_RANKING = 10
-
-
-MAX_ANNUAL_BROWNFIELD_TRANSITIONS = {"chemicals": 1000, "aluminium": 10}
-
+COST_METRIC_RELATIVE_UNCERTAINTY = {"chemicals": 0.1, "aluminium": 0.1}
 
 # GHGs and Emission scopes included in weighting when ranking technology transitions
-GHGS_RANKING = [
-    "co2",
-    # "ch4",
-    # "n2o"
-]
-EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
+GHGS_RANKING = {"chemicals": ["co2"], "aluminium": ["co2"]}
+EMISSION_SCOPES_RANKING = {
+    "chemicals": ["scope1", "scope2"],
+    "aluminium": ["scope1", "scope2", "scope3_upstream", "scope3_downstream"],
+}
+
+# Cost metric for ranking
+RANKING_COST_METRIC = {"chemicals": "lcox", "aluminium": "tco"}
+BIN_METHODOLOGY = {"chemicals": "uncertainty", "aluminium": "histogram"}
+
 TRANSITION_TYPES = [
     "decommission",
     "greenfield",
     "brownfield_renovation",
     "brownfield_newbuild",
 ]
-RANK_TYPES = ["decommission", "greenfield", "brownfield"]
+
+# TODO: add decommission for chemicals
+RANK_TYPES = {
+    "chemicals": ["greenfield", "brownfield"],
+    "aluminium": ["decommission", "greenfield", "brownfield"],
+}
 
 MAP_LOW_COST_POWER_REGIONS = {
     "chemicals": {
@@ -268,46 +274,92 @@ in that order!
 lc_weight_cost = 1
 lc_weight_emissions = 0
 RANKING_CONFIG = {
-    "greenfield": {
-        "bau": {
-            "tco": 1.0,
-            "emissions": 0.0,
+    "chemicals": {
+        "greenfield": {
+            "bau": {
+                "cost": 1.0,
+                "emissions": 0.0,
+            },
+            "fa": {
+                "cost": 0.0,
+                "emissions": 1.0,
+            },
+            "lc": {
+                "cost": lc_weight_cost,
+                "emissions": lc_weight_emissions,
+            },
         },
-        "fa": {
-            "tco": 0.0,
-            "emissions": 1.0,
+        "brownfield": {
+            "bau": {
+                "cost": 1.0,
+                "emissions": 0.0,
+            },
+            "fa": {
+                "cost": 0.0,
+                "emissions": 1.0,
+            },
+            "lc": {
+                "cost": lc_weight_cost,
+                "emissions": lc_weight_emissions,
+            },
         },
-        "lc": {
-            "tco": lc_weight_cost,
-            "emissions": lc_weight_emissions,
+        "decommission": {
+            "bau": {
+                "cost": 1,
+                "emissions": 0,
+            },
+            "fa": {
+                "cost": 0.0,
+                "emissions": 1.0,
+            },
+            "lc": {
+                "cost": lc_weight_cost,
+                "emissions": lc_weight_emissions,
+            },
         },
     },
-    "brownfield": {
-        "bau": {
-            "tco": 1.0,
-            "emissions": 0.0,
+    "aluminium": {
+        "greenfield": {
+            "bau": {
+                "cost": 1.0,
+                "emissions": 0.0,
+            },
+            "fa": {
+                "cost": 0.0,
+                "emissions": 1.0,
+            },
+            "lc": {
+                "cost": lc_weight_cost,
+                "emissions": lc_weight_emissions,
+            },
         },
-        "fa": {
-            "tco": 0.0,
-            "emissions": 1.0,
+        "brownfield": {
+            "bau": {
+                "cost": 1.0,
+                "emissions": 0.0,
+            },
+            "fa": {
+                "cost": 0.0,
+                "emissions": 1.0,
+            },
+            "lc": {
+                "cost": lc_weight_cost,
+                "emissions": lc_weight_emissions,
+            },
         },
-        "lc": {
-            "tco": lc_weight_cost,
-            "emissions": lc_weight_emissions,
-        },
-    },
-    "decommission": {
-        "bau": {
-            "tco": 1,
-            "emissions": 0,
-        },
-        "fa": {
-            "tco": 0.0,
-            "emissions": 1.0,
-        },
-        "lc": {
-            "tco": lc_weight_cost,
-            "emissions": lc_weight_emissions,
+        "decommission": {
+            "bau": {
+                "cost": 1,
+                "emissions": 0,
+            },
+            "fa": {
+                "cost": 0.0,
+                "emissions": 1.0,
+            },
+            "lc": {
+                "cost": lc_weight_cost,
+                "emissions": lc_weight_emissions,
+            },
         },
     },
 }

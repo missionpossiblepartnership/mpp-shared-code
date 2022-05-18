@@ -7,10 +7,11 @@ from operator import methodcaller
 import numpy as np
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_all_transitions_with_destination_technology, remove_transition,
-    select_best_transition)
-from mppshared.config import (ANNUAL_RENOVATION_SHARE, LOG_LEVEL,
-                              MAX_ANNUAL_BROWNFIELD_TRANSITIONS)
+    remove_transition,
+    select_best_transition,
+    remove_all_transitions_with_destination_technology,
+)
+from mppshared.config import ANNUAL_RENOVATION_SHARE, LOG_LEVEL
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
@@ -55,11 +56,10 @@ def brownfield(
     )
 
     # Enact brownfield transitions while there are still candidates
-    while (candidates != []) & (
-        n_assets_transitioned <= MAX_ANNUAL_BROWNFIELD_TRANSITIONS[pathway.sector]
-    ):
+    while (candidates != []) & (n_assets_transitioned <= maximum_n_assets_transitioned):
         # TODO: how do we avoid that all assets are retrofit at once in the beginning?
         # TODO: implement foresight with brownfield rebuild
+
         # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
         best_candidates = []
         while not best_candidates:

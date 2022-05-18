@@ -742,11 +742,18 @@ def calculate_outputs(pathway: str, sensitivity: str, sector: str):
         sector=sector,
         agg_vars=["product", "region"],
     )
-    df_lcox_all_regions = calculate_weighted_average_lcox(
+    df_lcox_all_regions_all_techs = calculate_weighted_average_lcox(
         df_cost=df_cost,
         importer=importer,
         sector=sector,
         agg_vars=["product"],
+    )
+
+    df_lcox_all_regions = calculate_weighted_average_lcox(
+        df_cost=df_cost,
+        importer=importer,
+        sector=sector,
+        agg_vars=["product", "technology"],
     )
 
     # Calculate annual investments
@@ -818,6 +825,7 @@ def calculate_outputs(pathway: str, sensitivity: str, sector: str):
             df_lcox,
             df_lcox_all_techs,
             df_lcox_all_regions,
+            df_lcox_all_regions_all_techs,
             df_electrolysis_capacity,
             df_electrolysis_capacity_all_regions,
             df_electrolysis_capacity_all_tech,
