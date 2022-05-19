@@ -17,6 +17,7 @@ from mppshared.solver.implicit_forcing import apply_implicit_forcing
 from mppshared.solver.output_processing import calculate_outputs
 from mppshared.solver.ranking import make_rankings
 from mppshared.utility.utils import get_logger
+from mppshared.solver.sensitivity_analysis import conduct_sensitivity_analysis
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -28,8 +29,8 @@ funcs = {
     "MAKE_RANKINGS": make_rankings,
     "SIMULATE_PATHWAY": simulate_pathway,
     "CALCULATE_OUTPUTS": calculate_outputs,
-    # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs
-}
+    "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
+    # "SENSITIVITY_ANALYSIS": conduct_sensitivity_analysis,
 
 
 def _run_model(pathway, sensitivity):
@@ -38,11 +39,7 @@ def _run_model(pathway, sensitivity):
             logger.info(
                 f"Running pathway {pathway} sensitivity {sensitivity} section {name}"
             )
-            func(
-                pathway=pathway,
-                sensitivity=sensitivity,
-                sector=SECTOR,
-            )
+            func(pathway=pathway, sensitivity=sensitivity, sector=SECTOR)
 
 
 def run_model_sequential(runs):
@@ -70,6 +67,10 @@ def main():
         run_model_parallel(runs)
     else:
         run_model_sequential(runs)
+
+    # Conduct sensitivity analysis
+    # if "SENSITIVITY_ANALYSIS" in funcs:
+    #     conduct_sensitivity_analysis()
 
 
 if __name__ == "__main__":

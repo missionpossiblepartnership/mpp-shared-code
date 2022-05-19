@@ -4,7 +4,7 @@ import logging
 import numpy as np
 
 ### LOGGER ####
-LOG_LEVEL = "DEBUG"
+LOG_LEVEL = "INFO"
 LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
 )
@@ -15,13 +15,23 @@ SECTOR = "chemicals"
 PATHWAYS = [
     # "bau",
     "fa",
-    # "lc",
+    "lc",
 ]
 
+# Sensitivities
+SENSITIVITIES = [
+    "def",
+    "ng_low",
+    "ng_high",
+]
+
+# Carbon price (for sensitivity analysis)
+CARBON_COST = 0  # Values to test: 0, 50, 100, 150
+CARBON_COST_ADDITION_FROM_CSV = True
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 
 run_config = {
     "IMPORT_DATA",
@@ -51,7 +61,6 @@ OUTPUT_WRITE_PATH = {
     "chemicals": "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Current model outputs"
     # "aluminium": TBD
 }
-
 
 # Naming of solver input tables
 SOLVER_INPUT_TABLES = [
@@ -193,11 +202,6 @@ MODEL_SCOPE = "Global"
 # Override asset parameters; annual production capacity in Mt/year
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
-
-# Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
-SENSITIVITIES = [
-    "def",
-]
 ### SECTOR-SPECIFIC PARAMETERS ###
 
 # Products produced by each sector
@@ -373,7 +377,7 @@ RANKING_CONFIG = {
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
     "chemicals": {
-        "maximum_asset_additions": 10,
+        "maximum_asset_additions": 8,
         "maximum_capacity_growth_rate": 0.7,
         "years_rampup_phase": 5,
     },
