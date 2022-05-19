@@ -25,15 +25,10 @@ from mppshared.config import (
     SECTOR,
     START_YEAR,
 )
-from mppshared.import_data.intermediate_data import IntermediateDataImporter
-
-# from mppshared.rank.rank_technologies import import_tech_data, rank_tech
-from mppshared.models.asset import Asset, AssetStack, create_assets
-from mppshared.models.carbon_budget import CarbonBudget
-from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
-from mppshared.models.transition import TransitionRegistry
 from mppshared.models.technology_rampup import TechnologyRampup
-from mppshared.utility.dataframe_utility import flatten_columns
+from mppshared.models.transition import TransitionRegistry
+from mppshared.utility.dataframe_utility import (flatten_columns,
+                                                 get_emission_columns)
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -509,6 +504,7 @@ class SimulationPathway:
                 cuf=row["capacity_factor"],
                 asset_lifetime=row["technology_lifetime"],
                 technology_classification=row["technology_classification"],
+                ppa_allowed=row["ppa_allowed"],
             ),
             axis=1,
         ).tolist()
