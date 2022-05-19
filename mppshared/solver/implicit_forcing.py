@@ -21,7 +21,6 @@ from mppshared.config import (
     START_YEAR,
     TECHNOLOGY_MORATORIUM,
     TRANSITIONAL_PERIOD_YEARS,
-    CARBON_COST,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
@@ -36,7 +35,9 @@ from mppshared.utility.log_utility import get_logger
 logger = get_logger(__name__)
 
 
-def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.DataFrame:
+def apply_implicit_forcing(
+    pathway: str, sensitivity: str, sector: str, carbon_cost: CarbonCostTrajectory
+) -> pd.DataFrame:
     """Apply the implicit forcing mechanisms to the input tables.
 
     Args:
@@ -55,6 +56,7 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS[sector],
+        carbon_cost=carbon_cost,
     )
 
     df_technology_switches = importer.get_technology_transitions_and_cost()
@@ -64,11 +66,6 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
     # Apply technology availability constraint
     df_technology_switches = apply_technology_availability_constraint(
         df_technology_switches, df_technology_characteristics
-    )
-
-    # Apply regional technology bans
-    df_technology_switches = apply_regional_technology_ban(
-        df_technology_switches, REGIONAL_TECHNOLOGY_BAN[sector]
     )
 
     # Eliminate technologies with geological H2 storage in regions without salt caverns
@@ -94,13 +91,14 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
             on=["product", "year", "region", "technology_destination"],
             how="left",
         )
-
-    if CARBON_COST == 0:
+    df_cc = carbon_cost.df_carbon_cost
+    if df_cc["carbon_cost"].sum() == 0:
         df_carbon_cost = df_technology_switches.copy()
     else:
-        # Write carbon cost addition to csv in first run
-        if CARBON_COST_ADDITION_FROM_CSV == False:
-            # Add carbon cost to TCO based on scope 1 and 2 CO2 emissions
+        # TODO: loads of hardcoded stuff!
+        # Write carbon cost addition to csv in first run for subsequent multiplication
+        if df_cc.loc[df_cc["year"] == 2025, "carbon_cost"].item() == 1:
+
             start = timer()
             # df_technology_switches = filter_df_for_development(df_technology_switches)
             df_carbon_cost_addition = calculate_carbon_cost_addition_to_cost_metric(
@@ -108,7 +106,7 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
                 df_emissions=df_emissions,
                 df_technology_characteristics=df_technology_characteristics,
                 cost_metric=RANKING_COST_METRIC[sector],
-                carbon_cost=CARBON_COST,
+                df_carbon_cost=df_cc,
             )
             end = timer()
             logger.info(
@@ -145,6 +143,11 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
             ],
             on=merge_cols,
             how="left",
+        )
+        # Carbon cost addition is for 1 USD/tCO2, hence multiply with right factor
+        constant_carbon_cost = df_cc.loc[df_cc["year"] == 2025, "carbon_cost"].item()
+        df_carbon_cost[f"carbon_cost_addition_{cost_metric}"] = (
+            df_carbon_cost[f"carbon_cost_addition_{cost_metric}"] * constant_carbon_cost
         )
 
         df_carbon_cost[cost_metric] = (
@@ -199,7 +202,7 @@ def calculate_carbon_cost_addition_to_cost_metric(
     df_emissions: pd.DataFrame,
     df_technology_characteristics: pd.DataFrame,
     cost_metric: str,
-    carbon_cost: float,
+    df_carbon_cost: pd.DataFrame,
 ) -> pd.DataFrame:
     """Apply constant carbon cost to a cost metric.
 
@@ -231,7 +234,7 @@ def calculate_carbon_cost_addition_to_cost_metric(
     ).fillna(0)
 
     # Additional cost from carbon cost is carbon cost multiplied with sum of scope 1 and scope 2 CO2 emissions
-    df["carbon_cost"] = carbon_cost
+    df = df.merge(df_carbon_cost, on=["year"], how="left")
     df["carbon_cost_addition"] = (df["co2_scope1"] + df["co2_scope2"]) * df[
         "carbon_cost"
     ]
@@ -363,6 +366,14 @@ def apply_technology_availability_constraint(
         how="left",
     ).fillna(START_YEAR)
     df = df.loc[df["year"] >= df["expected_maturity"]]
+
+    # Constraint 3: no transitions between end-state technologies
+    df = df.loc[
+        ~(
+            (df["classification_destination"] == "end-state")
+            & (df["classification_origin"] == "end-state")
+        )
+    ]
 
     return df.drop(
         columns=[

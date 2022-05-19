@@ -12,12 +12,14 @@ from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_destination_technology,
     remove_transition,
     select_best_transition,
+    apply_regional_technology_ban,
 )
 from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
     LOG_LEVEL,
     MAP_LOW_COST_POWER_REGIONS,
     MODEL_SCOPE,
+    REGIONAL_TECHNOLOGY_BAN,
 )
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
@@ -25,6 +27,7 @@ from mppshared.models.constraints import (
     get_regional_production_constraint_table,
 )
 from mppshared.models.simulation_pathway import SimulationPathway
+from mppshared.solver.implicit_forcing import apply_regional_technology_ban
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -49,9 +52,20 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     # Get ranking table for greenfield transitions
     df_ranking = pathway.get_ranking(year=year, rank_type="greenfield")
 
+    # Apply regional technology bans
+    df_ranking = apply_regional_technology_ban(
+        df_ranking, REGIONAL_TECHNOLOGY_BAN[pathway.sector]
+    )
+
     # Greenfield for each product sequentially
     for product in pathway.products:
         df_rank = df_ranking.loc[df_ranking["product"] == product]
+
+        if pathway.sector == "chemicals":
+            df_rank = apply_greenfield_filters_chemicals(
+                df_rank, pathway, year, product
+            )
+
         # Get demand and production
         demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
         production = new_stack.get_annual_production_volume(
@@ -72,7 +86,9 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 row["annual_production_volume_minimum"]
                 - row["annual_production_volume"]
             )
-            number_new_assets = np.ceil(deficit / ASSUMED_ANNUAL_PRODUCTION_CAPACITY)
+            number_new_assets = np.ceil(
+                deficit / ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT[product]
+            )
             region_rank_filter = get_region_rank_filter(
                 region=row["region"], sector=pathway.sector
             )
@@ -226,3 +242,15 @@ def get_region_rank_filter(region: str, sector: str) -> list:
         if region in MAP_LOW_COST_POWER_REGIONS[sector].keys():
             return [region, MAP_LOW_COST_POWER_REGIONS[sector][region]]
     return [region]
+
+
+def apply_greenfield_filters_chemicals(
+    df_rank: pd.DataFrame, pathway: SimulationPathway, year: int, product: str
+) -> pd.DataFrame:
+    """For chemicals, new ammonia demand can only be supplied by transition and end-state technologies,
+    while new urea and ammonium nitrate demand can also be supplied by initial technologies"""
+    if product == "Ammonia":
+        filter = df_rank["technology_classification"] == "initial"
+        df_rank = df_rank.loc[~filter]
+        return df_rank
+    return df_rank

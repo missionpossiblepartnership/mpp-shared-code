@@ -1,0 +1,312 @@
+uuid,product,region,technology,annual_production_capacity,annual_production_volume,cuf,year_commissioned,asset_lifetime,retrofit_status,rebuild_status,greenfield_status
+7c32c096ca5a48a9abf194f831448b85,Ammonia,North America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,False,False,False
+1374511dfabc40c89b285863a723741f,Ammonia,North America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,False,False,False
+70076dc08a9742d7869f64d4e6e045c6,Ammonia,North America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,False,False,False
+430835ec0f254a09a8d9f7fa0fe6fef3,Ammonia,North America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,False,False,False
+f41c512aa533464391c6d7aa4c0dd959,Ammonia,North America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,False,False,False
+519c745bebde43ffb896c551449dbd4c,Ammonia,North America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,False,False,False
+1f9d164b283c43999953a9d0798fdf62,Ammonia,North America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,False,False,False
+f4221081683d4d72a133e20cae9efa06,Ammonia,North America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,False,False,False
+01a57a8686ed417d8e0877c996899403,Ammonia,North America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,False,False,False
+a1ecdc40b8554ad1bde159ff25c9df7a,Ammonia,North America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,False,False,False
+dc1935b2d99f4b748abcc5cb21e9c881,Ammonia,North America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,False,False,False
+66c8796b758246b4aa6a2d2163981b96,Ammonia,Latin America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2007.0,30,False,False,False
+79da215850ec4582988bb883e01a6353,Ammonia,Latin America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2007.0,30,False,False,False
+65fea2a382674082b03b2112d9cf25a9,Ammonia,Latin America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2007.0,30,False,False,False
+5cc48a700b574b2288f986f23c3067d2,Ammonia,Latin America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2007.0,30,False,False,False
+efa98c34e9b9470fb235fb9463306dbf,Ammonia,Latin America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2007.0,30,False,False,False
+7f6db282f1bd421ca9b933e665b327b5,Ammonia,Latin America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2007.0,30,False,False,False
+6370e6805945488b98e0da19abc0d8d0,Ammonia,Latin America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2007.0,30,False,False,False
+65ce700ed4774fbb9530458d7bad5c28,Ammonia,Latin America,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2007.0,30,False,False,False
+b6234fd2f431403eb45f39f2e2c5cb92,Ammonia,Africa,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2010.58,30,False,False,False
+b2ecbfebdf444a68a1b65fbde5ce74f4,Ammonia,Africa,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2010.58,30,False,False,False
+c94e23c0858340e29d5d85585755dd6f,Ammonia,Middle East,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2007.18253968,30,False,False,False
+e9b00c2941a640e99585feda9a0cd4f1,Ammonia,Middle East,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2007.18253968,30,False,False,False
+a2fec42b0fd848d8a30978ed4417b22f,Ammonia,Middle East,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2007.18253968,30,False,False,False
+ca0f0e4988ab4bb0ae461a6bc399f664,Ammonia,Middle East,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2007.18253968,30,False,False,False
+c9492698053d4a218ba778346c48a82a,Ammonia,Middle East,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2007.18253968,30,False,False,False
+236a50d0f27f471dabdf68816aa52ac8,Ammonia,Middle East,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2007.18253968,30,False,False,False
+2acf601bc7fc4043a930eb6ea76a614f,Ammonia,Middle East,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2007.18253968,30,False,False,False
+66463975368746cb964c8ac4a37ecee5,Ammonia,Russia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,False,False,False
+7b812f27895d42f6ae1d622b7c6ab48c,Ammonia,Russia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,False,False,False
+4497e9a9a22e4d3e9c0244308842f922,Ammonia,Russia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,False,False,False
+c512c98e5a7245ce88bf8cffaafd0a14,Ammonia,Russia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,False,False,False
+6a7c275fbd1f4a5fac4878acf6e3cd0f,Ammonia,Russia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,False,False,False
+12dab62198c946c4b8e08cd798a7c4ce,Ammonia,Russia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,False,False,False
+ecc1b3a46675443c8cdc8426d50f502f,Ammonia,Russia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,False,False,False
+28f543f44ba848749ade9f49d71d9792,Ammonia,Russia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,False,False,False
+6e6be3de97c645d8ab7de05bf6cbe88c,Ammonia,Russia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,False,False,False
+3eca7dbf8e6a47118c7ba8ded9f8e828,Ammonia,Russia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,False,False,False
+1d645feca3af494c94fab0c7d37fa2d7,Ammonia,Russia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,False,False,False
+d3fd3608dac04614ae94a13742070f8d,Ammonia,Russia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,False,False,False
+91d212dd887649f694947e5e46be8162,Ammonia,Russia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,False,False,False
+4cbb449c8b874a389d8de21abe8dd63f,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+31d79ac048a941959f8d8d738570f87d,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+4aabe5905b4a4aa2b18222b543354056,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+8f6d8815cabf4d518ece0fde478207a7,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+92a9c9157dae461cae942b0dcf962627,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+92235adbac634fdca8025784af8f47a0,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+2ce607d5021a4d59b7d699b1a3defabe,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+5c62ecd015fa4abf943fc204e6b8c0f7,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+de504b851bc8448198b4cbe0ae44edca,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+987c9ce783f04d0b982ff19dc56831c7,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+6c9f7e66e85c4aed90d13e3f3d7e5547,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+ee03374f47974dfabb3a866203a83708,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+c2564d59fcdd4a55bffe9da2dee3539f,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+d16331c9b1d942b989253ddbc754c142,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+5a029a34f83a42288015bde1a7cbdcbb,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+351450261bee4c7f9a37871ad836a3b5,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+f2d0072eed724a058379b6af7fdb65fc,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+0ab5a8aeee354fa0883650b20afccbb2,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+477c8ea28d9741c18e2dbf30092b7e64,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+9dbff4c93ae1424ebfa2e210a7b9b9cf,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+651e9be8ef75471bb7ec4b31acc59800,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+188680dafad042a7964e915f957c7527,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+1d79a26bd7e44826a7007d2ca3797c5f,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+75cc2fbc11f843648e5029725950ec14,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+4248924cf1854e6398c5be599213de17,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+7962a15a265e4cd4903c60b84c3e77aa,Ammonia,China,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+01c66aa46abc400b812059a9c2b8d6fe,Ammonia,China,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+b22a7c474de54c06b8779e56151aff87,Ammonia,China,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+e9e9b5f3896a442eb3ff96fb86169fa6,Ammonia,China,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+815ea1d6b39f4c2b90e848525544e647,Ammonia,India,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2007.923,30,False,False,False
+08d701a1827f4668a0c195ff8f362651,Ammonia,Rest of Asia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2002.27307692,30,False,False,False
+05e51441da3c4fd3858363e24f93de12,Ammonia,Rest of Asia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2002.27307692,30,False,False,False
+3aae0f488ee7461e825245d3dbd73970,Ammonia,Rest of Asia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2002.27307692,30,False,False,False
+5b141cfac54241e0bde2ff17a2791659,Ammonia,Rest of Asia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2002.27307692,30,False,False,False
+0fe79874198643528d43988d1fdc5447,Ammonia,Rest of Asia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2002.27307692,30,False,False,False
+33bb57c3d3024adc9e79c4493f112df9,Ammonia,Rest of Asia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2002.27307692,30,False,False,False
+b036278d6a024f7590c3a1b180fd61c9,Ammonia,Rest of Asia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2002.27307692,30,False,False,False
+643ba84519e14a189784201b26a8f43d,Ammonia,Rest of Asia,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2002.27307692,30,False,False,False
+475353be233d4e7eaba7e542a49fbc5e,Ammonium nitrate,North America,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2006.0,30,False,False,False
+18cd805403b540e1b0e14cdb0ce4ecb2,Ammonium nitrate,North America,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2006.0,30,False,False,False
+3bb27f50303a4485b6cba39038163d46,Ammonium nitrate,North America,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2006.0,30,False,False,False
+d050d87d58de4580af5ba54b5d70642d,Ammonium nitrate,North America,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2006.0,30,False,False,False
+1d7cb3eeafb04ba8b1fddfd78ab3b138,Ammonium nitrate,North America,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2006.0,30,False,False,False
+c88409c1229b417886be8ece8cfa2032,Ammonium nitrate,North America,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2006.0,30,False,False,False
+ce4b31e05f9e486aa8582854f95d5303,Ammonium nitrate,Latin America,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2010.25,30,False,False,False
+b13106d183fd4c6e8c6b177f4867bfd5,Ammonium nitrate,Africa,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2011.0,30,False,False,False
+5b421cc13bbf4720871b291266bdc9f4,Ammonium nitrate,Africa,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2011.0,30,False,False,False
+1257ce5496e5417db648fe2f517b6df1,Ammonium nitrate,Africa,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2011.0,30,False,False,False
+8d76512041eb44668ce9173bc5340354,Ammonium nitrate,Middle East,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1999.375,30,False,False,False
+83b3c6b0e58748018e3f37b615852ce9,Ammonium nitrate,Russia,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2009.75,30,False,False,False
+20cc1f64b50a40ae870fe22ab4762a04,Ammonium nitrate,Russia,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2009.75,30,False,False,False
+86248b75e35c4aa5b34d47da61f6bbbc,Ammonium nitrate,Russia,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2009.75,30,False,False,False
+49023a3e3a4b4a8998eaebc4e720d978,Ammonium nitrate,Russia,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2009.75,30,False,False,False
+3849af591bae48118cb780723e9b446c,Ammonium nitrate,Russia,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2009.75,30,False,False,False
+92e1faedfdf74793b93fbbfe62377225,Ammonium nitrate,Russia,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2009.75,30,False,False,False
+ae2242c0665d476a9e684b2238fd3cbc,Ammonium nitrate,Russia,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2009.75,30,False,False,False
+bd4187ccdaf94a72a54b721d16edcdf4,Ammonium nitrate,Europe,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,False,False,False
+640b5d1552624cb48ac0c701f0310646,Ammonium nitrate,Europe,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,False,False,False
+d4e913d9e6c9400282bc760c75912625,Ammonium nitrate,Europe,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,False,False,False
+1241073df5314f2aad2f75d4fb55d3b5,Ammonium nitrate,Europe,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,False,False,False
+63e3148d1c00479dbc55d653df62788f,Ammonium nitrate,Europe,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,False,False,False
+bc196b68f3634c159919ce4febee5ac2,Ammonium nitrate,Europe,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,False,False,False
+cfb7f70686b94e7d8c71655ee0838eb1,Ammonium nitrate,Europe,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,False,False,False
+0eee43e41262463ca9dae29ad779924e,Ammonium nitrate,Europe,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,False,False,False
+a125e718c32e45fba899a32b5911c1ee,Ammonium nitrate,China,Coal Gasification + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,False,False
+0b1f217e3ac0441686b2ee928dc5f59d,Ammonium nitrate,China,Coal Gasification + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,False,False
+11213d14e7214b9e9ef563b53441866e,Ammonium nitrate,China,Coal Gasification + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,False,False
+0338359e76b94362be61becdd1a36e7e,Ammonium nitrate,China,Coal Gasification + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,False,False
+1ddf94268521471b942b55572ef205cf,Ammonium nitrate,China,Coal Gasification + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,False,False
+14b438b2999341e4960179b7295caf2c,Ammonium nitrate,China,Coal Gasification + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,False,False
+213159b7ef6e4a5088e4f1a878977da6,Ammonium nitrate,China,Coal Gasification + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,False,False
+61be7bed6bfb4492a023ad698b8d7f46,Ammonium nitrate,China,Coal Gasification + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,False,False
+fe055d0359614dcdb25785e8ea50b082,Ammonium nitrate,China,Coal Gasification + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,False,False
+c685db73f3f74dbd9e356fc66e64d0fc,Ammonium nitrate,China,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,False,False
+4352239aea8845019d9d30a1353fbc61,Ammonium nitrate,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2001.0,30,False,False,False
+1bbab8b818614abda0367ae082df9448,Ammonium nitrate,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2001.0,30,False,False,False
+4c090520c7f242828cc9d0dfd9115af9,Ammonium nitrate,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2001.0,30,False,False,False
+0a491e8751fc4ae3bfdf9b8a6dc8b3fa,Ammonium nitrate,Oceania,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2009.83333333,30,False,False,False
+dfd9974e20c74be9a28e2730194d7562,Urea,North America,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,False,False,False
+d026dc62376146cb873eda12a944f60d,Urea,North America,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,False,False,False
+062ea9066db14360934bf3cfb9703ae3,Urea,North America,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,False,False,False
+f2da17b3c2a040f9bcd565ab83b76305,Urea,North America,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,False,False,False
+69c98ddaea5f44ea8c3acd5e11dc8890,Urea,North America,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,False,False,False
+d77599cbd0034511b280cd6796d926f9,Urea,North America,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,False,False,False
+72b2d3bb253040a49ced5a034f6b6ea0,Urea,North America,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,False,False,False
+d17e3885412e4c4287dd33157c4f3558,Urea,North America,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,False,False,False
+c55db2b264f648649f647eb06e6ff52d,Urea,North America,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,False,False,False
+1c7aedd5b3f84a408fa5a641d3277413,Urea,North America,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,False,False,False
+0148a785e62c47acb3a40fdb46fac7e8,Urea,North America,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,False,False,False
+b13c62dfe8244929b0893731517c5d20,Urea,North America,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,False,False,False
+74acd665e2984a62be37dbf84a9a9e89,Urea,Latin America,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2013.666666667,30,False,False,False
+45e62e19fd9741f78a84c4711f65b1e4,Urea,Latin America,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2013.666666667,30,False,False,False
+ca760cee6b0a477c991191aaefb37703,Urea,Africa,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,False,False,False
+8647e49d683e4dc096a90ce58d59651c,Urea,Africa,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,False,False,False
+4d0ca0f5f1c143ff9b6b314c00c9f5d7,Urea,Africa,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,False,False,False
+a207126c47b743e5b0d152bd13e471c0,Urea,Africa,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,False,False,False
+6c419050498141409bd97ded7c8a504b,Urea,Africa,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,False,False,False
+9d57533c66e04a48ad17f0fada23cc95,Urea,Africa,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,False,False,False
+ac5943f14463467aa7f167d9473d3d67,Urea,Africa,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,False,False,False
+49fc4b4951cb4599b370d6c7a931e6c7,Urea,Africa,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,False,False,False
+22c1c287c7e64217849e47865cbdce8f,Urea,Africa,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,False,False,False
+9d08f78ab30e4a548275112622412b0e,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+61371f49ab4d473d97e740d9316004cc,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+3fbefed190f94ec6b43b20496e4c7a34,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+059e96ebb4044e6f8c3a70279c731dd9,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+3413eba5699c4803a459f268ff2eb54b,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+b5e8511031c94ae78d32483e8cf8b13d,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+064e5c3fdeca429dba04ce8405a87ec7,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+5ebd7172cb9b4f248627724485b13a0c,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+13112a4af8ca4a8692404afcaade0b70,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+be2feb1e96bd4df58427b0a9c7f83766,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+888345d70a7b4319a09f66e869b1e1a3,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+cde580dc5c764af4945efce3fec1b0b6,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+20439b1914bc4116b1148984d53c968a,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+9615594ce79745ada8b650536c7f04b8,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+2381bbcb13914073b7cc6b71e4b06cd3,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+d961d2057d6f4dc1829d17b2eef4c656,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+2a8e0b118bb24687a8ebaff6f0f01a69,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+da2f079b6a4b4f88b0ec354d2c5ec6a2,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+e126a731ae384eff88f3d13fe60706f7,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+d7d7814e452c4e179b197d1885434a6d,Urea,Russia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2011.75,30,False,False,False
+28a8bf11c91a495ebf2cbc50f2743e4d,Urea,Russia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2011.75,30,False,False,False
+f505df77f2474c9cbde15731b0d57acc,Urea,Russia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2011.75,30,False,False,False
+2fce476ffb684c358fec7c5dc4fc4754,Urea,Russia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2011.75,30,False,False,False
+c06a97de31b64127a75d64eb3029bb61,Urea,Russia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2011.75,30,False,False,False
+a4de69d5db8c449c8c4efc052ccc720c,Urea,Russia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2011.75,30,False,False,False
+4f7f3eaa230e4a568c082fb851d93dd0,Urea,Russia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2011.75,30,False,False,False
+118b12ff5f574f3fbc609b3e0c66d162,Urea,Europe,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,False,False,False
+90613be1f67d4dea92e5dbdf53538ae6,Urea,Europe,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,False,False,False
+01a898a180ab4175b8648080d34ff451,Urea,Europe,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,False,False,False
+eb7d6c43a14b4f5c9aabd46bbc481aa6,Urea,Europe,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,False,False,False
+1d54bf8ef3f8460192c2f8a115c5e166,Urea,Europe,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,False,False,False
+0f8ca4478c6e42a19748f783bb2ba13f,Urea,Europe,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,False,False,False
+650091a7e33243e6987fa4277404c520,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+c5aafaf01db748478211ef3d95f10886,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+5524f7caec1a41a29582f6fc48127281,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+616c39b410b54c16826d8e230bb6b870,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+704b2e15e19343c480a847d79967984e,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+40561c31f5b743bb940810c813ba659b,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+c2a3eecbd56241bf817da81a94c7376d,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+ca45b3da33344709b3b7f814659afefc,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+3def8be0cad94d6ab4f4279b880ad08c,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+ce3d216db09549a4bd56f0691c905f37,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+9244c00ffe7c452d986fc4342c5a4409,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+dfc8ec779c714dfa920fd1c2f6607ac3,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+4a457992d49b47a7b66f15c01ce5fb1e,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+a2f3736e766d4056bf5a7227b648f888,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+34b9952edfa34259b806f50f17751e44,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+6b836c47d2d14225a94c8e83c16193ee,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+8446f274a79a4bd8a597b29a16e6923f,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+3e5edb7209484983926abb446494e8a7,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+a15e60f28d3548c39656374990b17487,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+8927f1ef49154008af01ac97cf0d07de,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+3d9b2095c88f464594209da355b7132c,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+5d9e5bcc660d496189536a4e625be344,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+794dbd0a234948fcaf5c502d286dfec6,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+c3344a985c2c4f7aaf1b0f182060bc11,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+764fdc88b9444757a0e0d20a42ccd7fe,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+6ebe2086abc54dbeaa10f973772b10fd,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+3145964e6afd4ec1a04be445e0316667,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+64beef9609b44c8b9703dd31f493e3ec,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+9c908a4f2c0d4196bbd1e66b8b2f36bf,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+d319236f41bb483d8315c981a8fe77ba,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+b0dc74d591624fc78a33f4e582cd70d0,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+30b85b40cb104b8d90c2cd871157a6fd,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+7232e88f2143478ca617737216d739be,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+4af21fa092794d13b5c3cc2abbfa46e9,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+8a87926a605b4c21b3246386370ff5a2,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+c76e827bfca04a8eac338c04b8f7eb91,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+ef2c33c58d784a5d9b841ddb751ad68c,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+079d7b3381814b4ebed7dd5eaf5cd412,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+a4602329e9504083bbbff6dd8ff35934,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+2313930bf5c74fb780677a97a9ed9fa0,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+fe1f79ef3bb54cf49708c7f520d719ce,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+2777f7af901f471493a4fa90684a18ed,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+c19d5b55c8e049ba867a53be3de85bd2,Urea,China,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+bff20c7c80c44cfdaffdd82793f65c20,Urea,China,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+60c3244937514b37bd23c21c9638a3c7,Urea,China,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+b3a203fc45a44e1f9dc1bd9529d83794,Urea,China,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+60a68723b2c94155a8e5fb8ca8d3eb4d,Urea,China,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+2453e271705c4ab785e2f84ec06a4769,Urea,China,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+679950608f314246aeecd688fac81974,Urea,China,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+4b7ba6b9cd51442d8b40feffb8fe3709,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+95b1923f6cb34c888889a4683b2ac9b4,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+159d35661ada451885e51baad5bdf5bb,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+fbbdb1b062dd44c182ba946371522df6,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+73cb18319a39459aaab15bc606ed19ff,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+a2b3cd304b974c599035b6bfd21b82d0,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+3e08fe47bc3840b3be20fa8abb5cea90,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+9441f48ad52d400283026e5379d6fd21,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+f6c89f41b393480c84d3a1362eb1dd91,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+e7a87fa0e12a4d4eb2c57585823bfbdb,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+0a8510cf6e3d4f44ad9a6a7e6b8ce023,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+5ae7b94a9de54b16963d6cfa32356fa5,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+37296d45559347e5ad31fcacb7aa611d,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+1a7e9ac8ba434f72b9bb22a5def8c395,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+ca1131e7b6e941ba90900ab16038664f,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+8252507535f845cdbe2079c06ede9afd,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+5d13711a36954753a20fb943c94b0885,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+d2447196f6ab496d983f79cc1e949289,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+73e6b2a40351402faa5a61ad4ae9323b,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+6c4beb53e7ec4770b5a178707f0e1dbc,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+08bc33b8ee7c49279e318bcc0cf09047,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+5202cb399e9b47238a7fb5f07babfdfa,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+05dc579505cf43eead638566e05aa61d,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+897169a2ca9b4f9fa33b9e82da549a6e,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+8b187a5c0b9d43fe845d3bb7f2422d1a,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+604e78a72ebe4bdfaaa474c716b08e7a,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+82e82dedad914e95af40bb137fce45b8,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+0a117d8e3d5a4615893b97d6cdff15a7,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+8526ee19a00e42b48dd95b117d7a14e7,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+f78a482d70b5488abbf1b6c8b084099a,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+39f25c2ea4ce441aabf1d12aeb04eb56,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+f7e70c57afb14b748c388bd3c656dec1,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+8beb29314fc44719b42c385fdae6c659,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+f815d5b1d735488ca7b194fbad7d6d65,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+d1efc531aa4d46088b7c182f9b10642b,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+52034a2bb7e74ff5a94f740d9c83e0d1,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+c7d91b09b58a4d988a9cb13954afa72e,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+9320915d8cc14fcc85392c44e0ebbeff,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+b69f3c0128ef42b3a4dc4a020e756fdb,Urea,Rest of Asia,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,False,False,False
+e512e74a22bf4fdb864d3f39b8650621,Ammonia,India,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2020.0,30,False,False,True
+101f94fb146d4b2fa0cc936ab8f176d3,Ammonia,India,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2020.0,30,False,False,True
+9729a70fbdbe4b38b477aa412fadae7f,Ammonia,India,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2020.0,30,False,False,True
+67fb1fd81e10465c8d30abcad2109acb,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2020.0,30,False,False,True
+0c41d65b8d5e40f2a2e6af65bf00f51f,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2020.0,30,False,False,True
+b3741cfb066c4097b2ad500dadb66b11,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2020.0,30,False,False,True
+d53380cc45774ceaa1a65caf34e7c99c,Ammonium nitrate,Latin America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2020.0,30,False,False,True
+dc2e8c382cbd4fdb9d3ff5a281717d7e,Ammonium nitrate,Middle East,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2020.0,30,False,False,True
+7353f2711a6f4da682b1718dca9bf75c,Ammonium nitrate,Rest of Asia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2020.0,30,False,False,True
+d8eee0bac4a94f97880f4b885f421a6e,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2021.0,30,False,False,True
+259b099da43249a18be4342e7fd4bd3f,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2021.0,30,False,False,True
+46052574d84a4dd28006a28bcec91a8d,Ammonium nitrate,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2021.0,30,False,False,True
+410040c78a1a47168ed8a0ec017cedfd,Urea,Latin America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2013.666666667,30,True,False,False
+89ec43090a1642c199022ef1a049b609,Urea,Rest of Asia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,False,False
+45eb4a7f863441f887b00f0da3f9838e,Urea,Oceania,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2013.0,30,True,False,False
+3d39b4c6691a4d6fa4113807f8069879,Ammonium nitrate,Europe,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,True,False,False
+53fcc13ac16e42a29804d50ff099c980,Ammonium nitrate,Europe,Electrolyser + SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,True,False,False
+66af3aa9c91c4975bc7d71d6fa74487c,Urea,Europe,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,True,False,False
+ed72c869fc744a269ca530d8efd0001c,Urea,Europe,Electrolyser + SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,True,False,False
+0423021fe6604f2988f9f91f19309dc8,Ammonia,Europe,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,1999.87619048,30,True,False,False
+4b543a61c73e4d15a3e858940c3930a2,Ammonia,Europe,Electrolyser + SMR + ammonia synthesis,0.73,0.7081,0.97,1999.87619048,30,True,False,False
+c6b7ff2272924e3f87e20c260dee950a,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2022.0,30,False,False,True
+b5c4aedacbda461e80ef348c4082181a,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2022.0,30,False,False,True
+c18f0de266cf4899b826a7f990e778a6,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2022.0,30,False,False,True
+b5fefe383ce0449cae61476235f62ee2,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2022.0,30,False,False,True
+741b8c71fe584248b288f35a4a0ee442,Urea,Latin America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2013.666666667,30,True,False,False
+70993f41432a4e49bdc77e2bccafce0f,Ammonium nitrate,Europe,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,True,False,False
+c8068b0e6fb948deb2c9662e8ff63c83,Ammonium nitrate,Europe,Electrolyser + SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,True,False,False
+6352f1c1841a411faf776617a3c132b9,Urea,Europe,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,True,False,False
+852abae28654471cb50d53cf20fa2c75,Urea,Europe,Electrolyser + SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,True,False,False
+c32dae69e78547b6b7fadb987734c756,Ammonia,Europe,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,1999.87619048,30,True,False,False
+7d34a91161a84460836aea5233a268db,Ammonia,Europe,Electrolyser + SMR + ammonia synthesis,0.73,0.7081,0.97,1999.87619048,30,True,False,False
+5cbc9688fdc14a70b32ef0ff2b427151,Ammonia,Africa,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2023.0,30,False,False,True
+c4c1398e252d4a15a5316ce57a5c1a03,Ammonia,Rest of Asia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2023.0,30,False,False,True
+4856eb57b0a04fc8be931ec8ce1f0397,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2023.0,30,False,False,True
+70f642d7dfae4a08815ac63c7acb0c21,Ammonium nitrate,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2023.0,30,False,False,True
+31d8be4eab424becaab86c716cd8494a,Urea,Latin America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2013.666666667,30,True,False,False
+93c52f7de89b409780b68d3b4d8538c7,Ammonium nitrate,Europe,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,True,False,False
+e2852f877d7043349704fc0a9172e446,Ammonium nitrate,Europe,Electrolyser + SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,True,False,False
+0c9fe15089b642b0931f935078a2ab17,Urea,Europe,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,True,False,False
+986aecf62b0a48159396943a92b59866,Urea,Europe,Electrolyser + SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,True,False,False
+9b35a035ed1d475696b3695494486e9b,Ammonia,Europe,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,1999.87619048,30,True,False,False
+b72f7b6d53e647b7a3add52fab977cb5,Ammonia,Rest of Asia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2024.0,30,False,False,True
+145248db44b349eda4d60e558923b829,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2024.0,30,False,False,True
+06c9326fd49b4f4685946c21e7e2870d,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2024.0,30,False,False,True
+53f3711e35354163a8304035f925134b,Ammonium nitrate,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2024.0,30,False,False,True
+b53e200174604d47b280513e882d6e45,Urea,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2024.0,30,False,False,True
+8d3b001036fc4fb1b41b4d797e0e92f3,Urea,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2024.0,30,False,False,True
+d1ebf69dd24d44e58da6a978f3d3bc8f,Urea,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2024.0,30,False,False,True

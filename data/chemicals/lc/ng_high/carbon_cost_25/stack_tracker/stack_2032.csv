@@ -1,0 +1,500 @@
+uuid,product,region,technology,annual_production_capacity,annual_production_volume,cuf,year_commissioned,asset_lifetime,retrofit_status,rebuild_status,greenfield_status
+8d09d47a2b2346559bf69a2d45455dc3,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+dfcd9b95faa14a798be7ba1019d75b4c,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+68ce6ade030244b59c1841ecd704873c,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+82d2022bfcb94762a7b9a8dd7c03965c,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+6c98385eb6aa4269862540662e3e24c7,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+a7fd16d143254cb39c13f8afa70fb432,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+f60a6a3b8feb4f958ab53b63e67313a1,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+206a4599b2d84638b7e4bdae62c52c79,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+301e33f9b1654dc2ad26983ec5fe8b2d,Ammonia,China,Coal Gasification + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+2c70dbe5585042838658e6327e2efccd,Ammonia,China,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+91416568faf54454bc7bcd4ad27f0069,Ammonia,China,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+6b8a40f885fe45f78879c969257cc0c3,Ammonia,China,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+21682ea845714f5da9727a2646c939e6,Ammonia,China,Natural Gas SMR + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,False,False
+880577be8cb14d0fa8b0ffc3d7be3b95,Ammonium nitrate,China,Natural Gas SMR + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,False,False
+715bb6618e14439886741b79313573b1,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+7d14898411d644c59f63e0f6e9fab8e8,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+059b9d19159d433d904b2c558266003d,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+bf97b78376ba44e3a0405e5196f3f0b8,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+1f57e70eeffc470c91e7183172ce0cb3,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+4910fb211b2e443bbc1b2411d3956d82,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+56a450faaa0246698121edb44302a112,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+ce8da5b5dcd64b8c86a53226f10c7606,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+f036cb0985624fe2a09a801c19956674,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+892bdda4f0064145983fa3184d9fc306,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+3cc8d284d08e41ca9633fd4499af804d,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+5dd3c7bb8f4a4ae895f4a8b2409169de,Urea,Middle East,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,False,False,False
+7612269b822645e69de494b1a8a461cc,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+307e9d5a1101424aaaf05dcfd78a84c1,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+0c00570f13614759ac7f0ced088e371c,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+b8844c467dfd4cfe8091abe451eb06ba,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+f0cb1fd583154268a96d8703bcfab376,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+9086e0b37884432981c096c5dd59fe6d,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+e1d9cfa266b74b23bc21ceff3af0fa07,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+7c095ac63906420f8c271e7ed38f3f30,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+c4de12ba661f418ea22e7af1b876f439,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+9bca72af396749ac968c8e529d97ffc5,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+7a1ac2a09e774ea097f95d92acd612e0,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+d479cb6148224214935b27e801656e6a,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+455130a6a16d4b9fb6d98c6ac314bda2,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+595e85dacd354138bbfcdab940dc3791,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+e5cb4b162c49472a9535bed101258d66,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+23c804370e304f77b0f5a441a04a6870,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+f2b9b6f59435439f9e5c55163d4ea3d8,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+4ed683849a924a3faac293fd07d509f5,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+526b77c4dfc741078b14cfa2231c2b7f,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+98bbc6f54ac241caae3c1ff03be44673,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+d175c46523f141a7a5f5c83c6aa1df81,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+bb6d2c7cbdfc4f789be56cc43af16938,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+22570ac411594b29a029ab97905cba30,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+601ea31bcfa443168c60ff1d01cfdebb,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+8050802c3fac4b37a391bac3a1aa67d6,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+1649fafc01944b9bb9a88ad542dae3b4,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+1ec4b81107f64009a5d7e60a32ef119b,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+91eae9ae32ca4b3b9c190f733d6f24e7,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+5e6e42c7350a49668915880517fab416,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+ea36841b93fb427c98743aa85bc2dba2,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+52af4f06ed7048d1909e7c41f21506e6,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+691fc2b57d69466880389e3dedd2ff6c,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+c5fa3a3bc390461a9eef44e6ce24e9db,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+89317b66a39b4b71879f9b66c0fce075,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+33e59134f45549f6a77d7d0fbf29317d,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+c9a17c97dcb0413485b6d24fec22684b,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+78ffaa8fa6ea42cda3f1cb474874b475,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+a0bb71bd266443b5a2309c2afd158540,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+e9aebfc4aa724c03aeddf5abdc20dd3e,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+54ac985e36e04f41b4026b58287eb080,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+aa954754de6b41d68e286bac12dc9c1c,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+9018028606b842a295836a59c20a5b2f,Urea,China,Coal Gasification + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+55ceb261cab64c2591c9a31343d568c0,Urea,China,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+43e47ed4d69a43a5a2d63f2cdaac3eeb,Urea,China,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+eafd6b9413874b109244c88b563c216b,Urea,China,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+dbe61cd86a0e4eaa937b6c2037d082cc,Urea,China,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+c7a2b6427a5746d199127fb54b3cc03d,Urea,China,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+f8bb400b3c1d4ede93552bcbbd339923,Urea,China,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+e9cad8b4ec4d413f8ee3475bc64515f4,Urea,China,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2012.105263158,30,False,False,False
+595450b1b88748aa8a9fa6e378653f23,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+5e8a57f152b44bb9ba80dbce5e8fed86,Urea,India,Natural Gas SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,False,False,False
+318010200b1846a88a8b41f34c7342c6,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2020.0,30,False,False,True
+ed60c9bd73eb489c93faffe7adfdf3b1,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2021.0,30,False,False,True
+9bdb16644c7543c1b9106d0cb9f0b82b,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2021.0,30,False,False,True
+5d6a661b5d734db3a8152e67505226f9,Urea,Latin America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2013.666666667,30,True,False,False
+d3850bf37dc74936983f475f63b6b19c,Urea,Oceania,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2013.0,30,True,False,False
+5777a3cd427e4b9b81933ab14f8ad2ff,Urea,Latin America,Electrolyser + SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2013.666666667,30,True,False,False
+74ee30f177614c668af1330fd64f9304,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2022.0,30,False,False,True
+077b376980b44424b3997876427898bb,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2022.0,30,False,False,True
+8c4a156b7a934422ada3469b36bdd893,Urea,Latin America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2013.666666667,30,True,False,False
+c74a78d9b95141bb992eda9488f97f40,Urea,India,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+337f536bfa794c5b94616bc0f637b622,Urea,Latin America,Electrolyser + SMR + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2013.666666667,30,True,False,False
+3d94edeee2b64b7c9b051888cc742721,Urea,Latin America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2013.666666667,30,True,False,False
+87aade73567f451997690fbd631830fe,Urea,India,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+54b7da2028924d59bfcabfc7021ca8bb,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2024.0,30,False,False,True
+4793c5b5ceb048ab82ca1010e721a913,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2024.0,30,False,False,True
+77d6bec021b1415fb987e0f740e05daf,Ammonia,China,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,True,False
+fdb55cae917b4b748c0ab689d09147d8,Ammonia,China,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,True,False
+cc29f28bf3154764bf28c0a74612ac00,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,True,False,False
+c178ae290b8a4d29be8c6ca5412401c4,Urea,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,True,False,False
+44a5c4bdc309431aa0aae31338aa7098,Ammonium nitrate,North America,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2006.0,30,True,False,False
+974c718b0cb34279bcd51b10b31a1253,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,True,False,False
+3b1ade1757da408cb02502217e799531,Urea,Russia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2011.75,30,True,False,False
+9c6841bf0b5547768711563c485ea485,Ammonia,Russia,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,True,False,False
+b2420c7324154e66a99df22381a3524d,Ammonia,Middle East,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2007.18253968,30,True,False,False
+e72e15a1ed5b4ac7bde2dec1a831f951,Ammonium nitrate,Middle East,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1999.375,30,True,False,False
+acf985cd5a23446896940199093cfcc0,Ammonium nitrate,Russia,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2009.75,30,True,False,False
+aadea5077f7a4a7a93cfdb325d500c34,Urea,Middle East,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,True,False,False
+9d9b33cdd82249779c27b8dc15c12be8,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,True,False,False
+f1b5945808924649a254e2c51f9330ec,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2024.0,30,True,False,True
+5f829288b7dc42fab90c76af8f76cb89,Urea,Russia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2011.75,30,True,False,False
+1ced3106656f4b5d965426bd87915b19,Ammonia,Russia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,True,False,False
+0e8ee1287256426abba9297013ca2e8e,Ammonium nitrate,North America,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2024.0,30,True,False,True
+f46c64d8f2f5470bbfb7296f5fba10b8,Ammonium nitrate,Middle East,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2020.0,30,True,False,True
+b3be222014504d3cbec81ec91e42b0e6,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2022.0,30,True,False,True
+3ed9f3c1da5246299604ab9098f4fdd5,Ammonia,Latin America,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2007.0,30,False,True,False
+ab6db0cba37240e48bdf7eb1e2dcac13,Ammonium nitrate,China,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,True,False
+dc2631d627034107a88495698f0ec050,Ammonium nitrate,Africa,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2011.0,30,True,False,False
+f3a9a0d5cf184ee68b482669821871fd,Ammonia,Latin America,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,0.73,0.7081,0.97,2007.0,30,False,True,False
+52152e5591f34afa93143fac648c40e0,Ammonium nitrate,China,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,True,False
+caba2cf9f6a04cc1aceecd09f3279784,Ammonia,India,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2007.923,30,False,True,False
+92147e0d707640f49a30232513e8a986,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,False,False
+8318ac9ee65445e1a5c060f59681efa7,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2023.0,30,False,True,True
+f796cee2cd324ab2a83967862b7794f7,Urea,Africa,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,True,False,False
+75b3b89320f442a5b85c40f5f6b8e2a1,Urea,India,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+8c71f6ad028944399d5a317db1218ef9,Ammonium nitrate,Latin America,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2020.0,30,True,False,True
+ad59b3d99f6947ba8fae1d49bad24c50,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,0.73,0.7081,0.97,2024.0,30,False,True,True
+dd2d51511b9e43d982c08a7982c2ea92,Ammonium nitrate,Rest of Asia,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2020.0,30,True,False,True
+907c8e45e3a8480585e1a2821a65d92e,Urea,India,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+afd1bc6b71704e35a5fd5e0adbf58c2e,Ammonia,Africa,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2010.58,30,False,True,False
+b0fa84411794443e8ae8ef1e0fee200f,Ammonia,Africa,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,0.73,0.7081,0.97,2010.58,30,False,True,False
+6fa754db03ad400b88399f4ee3434951,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2002.27307692,30,False,True,False
+60004f0a6a0348d39cf076a1d4bb40c5,Ammonia,India,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2020.0,30,False,True,True
+1c5963ba0c8447d99f7a56fb1b4d09ea,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,0.73,0.7081,0.97,2002.27307692,30,False,True,False
+f78ba3470a624af1a7f8aeda34c25e81,Ammonium nitrate,Europe,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,False,True,False
+558ee009c2254aee9f6503ffc553d290,Ammonium nitrate,Europe,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,False,True,False
+77a19d2464b445c9a168c565ee3b7fee,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2002.27307692,30,True,True,False
+1b2754bc31654a628903a48f9d199ded,Ammonium nitrate,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2001.0,30,True,True,False
+ebea6fd654634099886b2b5d6cfb8761,Ammonium nitrate,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2001.0,30,True,True,False
+2be05750a4084e2caeb5699c95f1aa11,Ammonium nitrate,Europe,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,True,True,False
+6209567818e547bbafc982e1fe1c9deb,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,0.73,0.7081,0.97,2002.27307692,30,True,True,False
+1acde2db7033426686adfd35b13fe8e5,Ammonia,Europe,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,1999.87619048,30,True,True,False
+88cd9e66b0e349d1b393c6bfd2a9d5fb,Ammonium nitrate,Europe,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,True,True,False
+b7f21e46ef6c47b7963b73c8abe3df97,Ammonium nitrate,Europe,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,True,False,False
+9298d1f42208446cb659267d4d2e1847,Ammonia,Rest of Asia,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2002.27307692,30,True,False,False
+8b333684d14147df812557a489fe3a25,Ammonia,Europe,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,0.73,0.7081,0.97,1999.87619048,30,True,True,False
+d81ea8a2ff94464f946ed470dedf358c,Ammonium nitrate,Rest of Asia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2001.0,30,True,True,False
+08446db8e64f48788a8ea3962be1b3ec,Ammonium nitrate,Europe,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,False,True,False
+420f9a72ce964dc282ee93d97e286317,Ammonium nitrate,Europe,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,True,True,False
+0d8fef6617e44f98b0b576979e1ebb64,Ammonium nitrate,Europe,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,True,True,False
+83d70695825241d0bd145d640a728d58,Ammonia,Africa,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2023.0,30,False,True,True
+5f4793f52c634ed5877114b2883de77f,Ammonium nitrate,Europe,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,True,True,False
+67206e03ccc149d2a239a5682ba561b3,Ammonium nitrate,Europe,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,True,False,False
+a55f7f5d76ae48098a65f8fa16437c5b,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,0.73,0.7081,0.97,2002.27307692,30,False,True,False
+b7635790836045f0924c28a355fa928d,Ammonia,Europe,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,1999.87619048,30,True,True,False
+a13b2f0bcfb247eda6a33468834b4327,Ammonium nitrate,Europe,Natural Gas SMR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,True,False,False
+923aeaa1f14041cd8cd9d0bc600043f7,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,0.73,0.7081,0.97,2002.27307692,30,True,True,False
+60ba04f5508848a19c89a6c230655e58,Ammonia,Europe,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,0.73,0.7081,0.97,1999.87619048,30,True,True,False
+d8ec757a921f4ced9a0ff31819923cab,Urea,Europe,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,True,False,False
+ae05582c01634cf198bf0d3d7874f92f,Ammonia,Rest of Asia,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2002.27307692,30,True,False,False
+f2991c31dd2040b584986a6a2cc83da9,Ammonium nitrate,Europe,Electrolyser - grid PPA + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,False,True,False
+83bde0706a884ebfbcf89e468fa8ec6d,Ammonia,India,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2020.0,30,True,False,True
+8ebb0cd24a2c4c6c96a41894a5066878,Ammonium nitrate,Europe,Electrolyser - grid PPA + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,True,True,False
+f3fca7f351d94865b9a440c3157681fb,Urea,Europe,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,False,True,False
+5f527aa0b1034ea082718782b14a9a4c,Urea,Europe,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,False,True,False
+441fa285ccc3477b8f18e622e67ebb83,Urea,Europe,Natural Gas SMR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,True,False,False
+d8f230658d3d439283523a97e190349d,Ammonia,Europe,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,0.73,0.7081,0.97,1999.87619048,30,True,True,False
+b5d6b749a89e4e5b8fc4adbca2bbc1ae,Ammonium nitrate,Europe,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,1996.89130435,30,True,True,False
+b8494c2c407e40d385195dc82e8ba649,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2025.0,30,False,False,True
+dfb47b6aa6db48fba79800469550b35b,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2025.0,30,False,False,True
+23ad18c35ffd4c3385839655ddc07904,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2025.0,30,False,False,True
+03a651243d7342d5a992409c39c7e5f1,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2025.0,30,False,False,True
+69eaa536c0c943288dd2707252131ce3,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2025.0,30,False,False,True
+76dd560931724966a2b5bab24ae0c824,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2025.0,30,False,False,True
+8402dfedd419489693060df6dac3006f,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2025.0,30,False,False,True
+ede5fccc053149aa905013f341465490,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2025.0,30,False,False,True
+170fc3e901bf4ad4be10943a7ce9ca55,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2025.0,30,False,False,True
+2bbccf7d0a7340d7916a17a639bd261c,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2025.0,30,False,False,True
+d50ffe3830f94f79a3e437b472fc89fd,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2025.0,30,False,False,True
+a6dbc43cfe904fe3bd6906eb1475304c,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2025.0,30,False,False,True
+d1646a4e7361440395cdded9a2c46ac8,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2025.0,30,False,False,True
+9dc8ab0621714faea55520a7bc5a60f9,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2025.0,30,False,False,True
+8973e83936464bff8a9757fde29318ff,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2025.0,30,False,False,True
+8d43d36710834664b0662ec3fce38e04,Ammonia,China,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,True,False
+53a5eb3469a1479d84f7680cfbabeae2,Ammonia,China,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,True,False
+a346c3a20cb246dcb09fc89392cefea3,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,True,False,False
+3dfd8df341054dac948d311200a1b494,Urea,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,True,False,False
+72c335079e1d42e98cb9c0063365c1a2,Ammonium nitrate,North America,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2006.0,30,True,False,False
+845c0be09dc14787858ad4ecdebfcf21,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,True,False,False
+38fd466ece1444d8863a813b0e9904ad,Urea,Russia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2011.75,30,True,False,False
+eac31bd8696d42a680b7e5ce6365d3f7,Ammonia,Russia,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,True,False,False
+da23bb5059ba48b698c182ebff40e624,Ammonia,Middle East,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2007.18253968,30,True,False,False
+028f850a49f142b6bc424f7b9e2d230b,Ammonium nitrate,Russia,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2009.75,30,True,False,False
+0548c65b94da4a8582132682a046d955,Urea,Middle East,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,True,False,False
+09ce2bd7f6af4d8495d306699bcb5221,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,True,False,False
+24b20648f92a4e329a12334a0a5f8a44,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2024.0,30,True,False,True
+898cda2edc294a54bbbb439e60edc72c,Urea,Russia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2011.75,30,True,False,False
+a7c44d2e9a3f43a6aa546490241882b4,Ammonia,Russia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,True,False,False
+8050e832708247dda9bf952a44af0c89,Ammonium nitrate,North America,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2006.0,30,True,False,False
+56d19caa728046398d2fb99d12ee4668,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2020.0,30,True,False,True
+89a12d1202f64a84a56d9a676713c86c,Ammonium nitrate,China,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,True,False
+c512d13e6d0444eb95803cbef8d11bba,Ammonium nitrate,China,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,True,False
+ea67f964b1d142caaf27b27c8a43de92,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,False,False
+a37fd09b75e94ef981da83a9b7f8f829,Urea,India,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+2b4c37a9056241a39194565c22408195,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,False,False
+b9a15795761945fcb37494c1b837063a,Urea,India,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+d9e6cce5e2c043d9a19419e1a190324a,Ammonia,India,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2020.0,30,False,True,True
+937e4f01169441e1a7f6c83fc8b476e8,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,True,False
+0677bf5064ef43878884fe8ea41b33c0,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2026.0,30,False,False,True
+889017b3668a44bb8413b3d694aa9084,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2026.0,30,False,False,True
+33e02f347875469897f94e5e0032939d,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2026.0,30,False,False,True
+14b75fb477624071be488eec90fbe7a9,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2026.0,30,False,False,True
+4a90c5a1c76040eabec6be68cd782bed,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2026.0,30,False,False,True
+1f2cf3f204224979a3fc86d6887dc8ef,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2026.0,30,False,False,True
+126dcb23d7dd4e35a59010a9498a4fa9,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2026.0,30,False,False,True
+615f925b6a3e4f6c877a49e79f3026fa,Ammonium nitrate,Middle East,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2026.0,30,False,False,True
+e66a059a92fd4684811598e6709fe4c6,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2026.0,30,False,False,True
+fd69ba8bb2a7424d92bda1adf77d4b47,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2026.0,30,False,False,True
+e39f4616051647aebef35014b543ec29,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2026.0,30,False,False,True
+9572775ee7dc4e7bbb0ae2c0376cb0a2,Ammonia,China,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,True,False
+43dce6dd70024a8d99cae8c183f6c8f7,Ammonia,China,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,True,False
+274fa8ec377a498397f16b1cb55bbb8a,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,True,False,False
+31f39d8d1b5b4793ba568ebce2fe31b2,Urea,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,True,False,False
+de1a94e2b10a46c893f47cc35ebe4301,Ammonium nitrate,North America,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2006.0,30,True,False,False
+1a26882fffbc4a3ebd83428805e89bc3,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,True,False,False
+eebae9b31f3d4245bc9a1198525a2994,Urea,Russia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2011.75,30,True,False,False
+ca63a321dc3b404096793b653455ac6d,Ammonia,Middle East,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2007.18253968,30,True,False,False
+e0e95d2e2a9c436288aca6c0eba69c27,Ammonia,Russia,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,True,False,False
+12b03f06db5545ce8046962df99f7b8e,Ammonium nitrate,Russia,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2009.75,30,True,False,False
+405e47ff237745868c9e307bb2907948,Urea,Middle East,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,True,False,False
+dcb6e38e2ee84928be727c6c0424d29c,Ammonium nitrate,Russia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2009.75,30,True,False,False
+173c224df8b44873b9db6244d2e767e8,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2024.0,30,True,False,True
+e9a4c58be0b4453e873db258ccc58a21,Urea,Russia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2011.75,30,True,False,False
+a2db4ea5164841cdb161f9217ab1bfee,Ammonia,Russia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,True,False,False
+daeadaf5e3d54d139ed0407166c1cb8c,Ammonium nitrate,North America,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2023.0,30,True,False,True
+201c626817fd41038300ff3b4258b7c0,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2022.0,30,True,False,True
+6a7bba2dba5f454692410814686efff6,Ammonia,Latin America,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2007.0,30,True,True,False
+8f3f4fdbb57d41e79767e7ff1e8cd312,Ammonia,Latin America,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,0.73,0.7081,0.97,2007.0,30,True,True,False
+b12320e3f0af4f5fb00dac27cd98700d,Ammonium nitrate,China,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,True,False
+4334414abd4d4c5ba8eb5d0f8121b5cf,Ammonium nitrate,China,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,True,False
+e6aa10f58dfe47f99a133e683e5b68cd,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,False,False
+22f587908c2a48fbb10eb7db04577360,Urea,India,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+f3cb164dcc21432fbb2d18da17ebc9b9,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,False,False
+880be24b5be74da48e555d0c700de073,Ammonia,Latin America,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2007.0,30,True,True,False
+4fa54414a2644a989f3e3357b3c3c8b7,Urea,India,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+79e74497c31e452ca736599ca4129742,Ammonia,Latin America,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,0.73,0.7081,0.97,2007.0,30,True,True,False
+d3a18d061f9c48e1a3c62e5aef195013,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,True,False
+2ed19f336a0e46c2921901fc9d18cc9b,Ammonia,Latin America,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,0.73,0.7081,0.97,2007.0,30,True,True,False
+7c4b71e8e2b24530b6edb4b01d5842c5,Ammonia,Latin America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2007.0,30,True,False,False
+0345af27dece4c5990fcd79d48fc57fb,Urea,Europe,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,True,False,False
+4dd762eff9b641cf85c78a94680f600f,Urea,Europe,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,True,True,False
+657b3f7aa4e94a468c99000306f00130,Urea,Europe,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,True,True,False
+09d3f8084b294576a477f8cdeb4634ef,Urea,Europe,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,True,True,False
+58fbac4ff87847d2aa1bd3296e7a0585,Urea,Europe,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,True,True,False
+c9f61ca2238c47a08fc2c3f9a5d2f2e7,Urea,Europe,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,True,True,False
+bbe4b862bf6d4a93aec777db7e7d3243,Urea,Europe,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,True,True,False
+92170acf251b46d0a0358a205ea2d9ab,Urea,Europe,Electrolyser - dedicated VRES + grid PPA + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2006.88095238,30,True,True,False
+da1728e8970b437ab46ea2e95befd268,Ammonia,Europe,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+9d21b39048664ad99dc764619a158bca,Ammonia,Europe,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+911646c9b6d34690becd4f1513f45c81,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+470a174c62074dd999fcd14425118117,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+0fafe504701345778941ab7332531701,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+c8d858ac77b14e8fbc0293414289ad61,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+8b75d6a1081b41e38529255d4df7bd1b,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+c1c14f119eb8491b8c35f1ffcc86dc65,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+cff6b046578b4a7ea9ba731d3131230a,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+07a873ff589541db804c1a4d0859024f,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+71114e11969840258b39328e7566d2a9,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+074357b611d8497d881ef00b290b4c15,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+4ee503c41d134e8baac25f3b013e7274,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+8e7d48125c034f5b939232075bbfddc9,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+2858499a621647039bab569efdf9c8a6,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+5734d39f05a0414a935bbf03683cae5a,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+18ef825d28984eaeb8ed7caebfa4f5b5,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+0760f62647c445f3a1685990b0724423,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+672ac2d58c2b45dc90711bebb457561e,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+87fa03b141c6468aae6cd947e1334499,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+48185e0d8e6f49e7957c6ebf6ef43424,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2027.0,30,False,False,True
+35bd7eaac32e4632a94a55c0cc419d18,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2027.0,30,False,False,True
+4363e854afeb4300bf6f1b31ee110723,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2027.0,30,False,False,True
+1e1044e0328843579bd3f4ea259d5185,Ammonia,China,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,True,False
+508778d2f7414e9aa2cf71c72b903c60,Ammonia,China,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,True,False
+c8d76ed44fe44eafbf57ab5332657d8c,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,True,False,False
+08de999ca33d4eacb0d7e91a9db31f35,Urea,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,True,False,False
+3840bb350da446a382f961cd4c8d3f45,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,True,False,False
+a221b7873ab340e59b360faea798bbf1,Urea,Russia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2011.75,30,True,False,False
+ea64f0a003f947ed87cad944e123248b,Ammonia,Middle East,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2007.18253968,30,True,False,False
+01e8fc7303da464ab7b40c0d9aef1857,Ammonia,Russia,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,True,False,False
+c8774711fec343b29cc0a703dd5c0357,Ammonium nitrate,Russia,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2009.75,30,True,False,False
+4d1eeebcaf264386ba99ac3a1793a530,Urea,Middle East,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,True,False,False
+22dbd773886d4dffb7ff93a3979a46f9,Ammonia,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,True,False,False
+4a0a6b8ca5ab48e1b06742704c84f173,Ammonia,Russia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,True,False,False
+32de4ee5d5624518b80d31a71096cbbf,Ammonium nitrate,North America,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2006.0,30,True,False,False
+a0d25ecf2e714f6b8a817067c6988b3a,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2023.0,30,True,False,True
+333de65c4f3746d283ce7cdb76abe728,Ammonia,Middle East,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2007.18253968,30,True,False,False
+44bda8a8fc9d4935b4c27c2760436c00,Ammonium nitrate,China,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,True,False
+13960e5397fd478b949e3d57d6ffe0f8,Ammonium nitrate,China,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,True,False
+df3e1d1064774457a7c98f6080b7cfe1,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,False,False
+5c098021c1834517ab9508bb6922dd12,Urea,India,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+d8c4d93f32fc42eda5222db4b7cda76a,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,False,False
+243a4f41dde841ff8a578bfb8aa0fd82,Urea,Africa,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,True,False,False
+cad9095a45a646169709a9ed193a3375,Urea,India,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+b91da23ef9c54e08bd0479f49211cc84,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,True,False
+d4e6368e164c4411afb2e282d569c1b1,Urea,Africa,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,True,True,False
+ca92b23b3ff94d2d879ed72c58748bee,Ammonia,Namibia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+09ba8f329a5f44d49d1592d2071f76b6,Ammonia,Europe,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+0ff4ad3b97fa4c4f921e4d3a4aaeaf93,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+2983219492044829adedbeddecc6bd95,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+e3000afadc4447db88399117da34ae5f,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+78d6bcc095fc47c6a84bbc3017fcece9,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+90c80fd9dc3d456aa33c3c7d481b5359,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+e37502f251e94c098e52476c50959129,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+b2de40075d604e95a6521a027fde9506,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+fb9e791c1ce34b7c8936c8d0366ee3da,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+04c50ef129e840719d78fb4cfcc7ade9,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+4b02e57474674541838a45cb9bc8678f,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+ad3a35e97f344610ae0bb1dd28c007fd,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+38326fbd80154264b5b2f70d4b01e1fd,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+3d41348de0964e66996543bc5061cd36,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+d5c02c25c7aa41bdad700d6d3d3cf34f,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+3618232dcc5d452c82b06d4762f9ef9b,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+f86b7b60627141538454cb8249a7a98d,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+47fef1ff4d6c457fb1adfe79b59742f2,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+ac876de11f004feb8286ee4d09233d53,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+0a5daefabe2947de8ecc479570baef46,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+2630fcd781df4796aba55f215d36975a,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+16fa472643e24c7b88ba2beb245ad6df,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+8e2899457dc94ad09de49e6f2073f3d1,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2028.0,30,False,False,True
+454beef188f042988a28c2b087cb9703,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2028.0,30,False,False,True
+ad4765c9dde9407e8b3acf74449b7d22,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2028.0,30,False,False,True
+8195610b6ccd4ddf9932238320f3cad3,Ammonia,China,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,True,False
+b6b89569508741d49e4a8d05c6839c3f,Ammonia,China,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,True,False
+b4505c85fa7441888f931b9ab86eae69,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,True,False,False
+24ba1ddd5142414383dc6efe0ca246f1,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,True,False,False
+544a1d0ebe9948648a342990cfbe5891,Ammonia,Russia,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,True,False,False
+bb700e68557649a493bf7d36e886a3ff,Urea,Middle East,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,True,False,False
+40be5c79fdb84a8192388a1bcc90df9c,Ammonia,Russia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,True,False,False
+5ea023751b9e4cac94b06b4ce4e9567b,Ammonium nitrate,North America,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2021.0,30,True,False,True
+2f58923b8da5447e9ba9b4a143411f77,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,True,False,False
+b2be0492f31c4178a3ca1ab144d967af,Ammonia,Middle East,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2007.18253968,30,True,False,False
+60f98e42431d4bc1adc70f26ed024eae,Ammonium nitrate,China,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2007.88888889,30,False,True,False
+3c6755673138422c9bfbf85bbd1df40d,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,False,False
+e7605414d728413c8348a81eb69b0d46,Urea,India,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+ca0b164714ec48eaa72c8f77b8978611,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,False,False
+0ae356f6cb874ec7bd372c11cf8d3019,Urea,Africa,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,True,False,False
+a5118bf10d264e23a24f1653addb4d05,Urea,India,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+a48f5b3f1c7b463e8b1e8d0ec13056ef,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,True,False
+39c61119f64848b6960da3572a154fba,Urea,Africa,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,True,True,False
+4796223bb8a34b07b4b84c7202e3b47c,Ammonia,Europe,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+998b9bc715c3461091947c4c359df8bf,Ammonia,Europe,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+ebe0ef392b684659a6ab76ba435f5eb1,Ammonia,Middle East,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+c522b98a7ca74bc1806cf4187679f086,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+141707dfdabb494eae357de72be4322e,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+fd35b74f047e4b8ea49d5b2057a2e4fb,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+94401963b67f4a1090d9e062bfce322f,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+9c225215474c4b16a1d3dedac6fb5813,Ammonia,Rest of Asia,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+ae1ea77b9bf44d328d0cdfa648cb24db,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+69deca118fed410d82cf0b4ff133ca5f,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+cde41455b14246faaeb117277b7cc9cd,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+7b662de58bfc4207897b46176c7f8b1f,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+f6fef339da404cc58b54e4cd988b5172,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+e087afc661c7459a90e7a782836e70c8,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+22b777b5c1a2465fba8a786c2c30e77d,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+bbb450f390124fdaa20337762c3203d3,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+fb912271c5cb41de86618dfb95bd9f79,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+8c98c2f2fdd2496ab6026c11da22f23e,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+b1a8f6c27d6f428e98b97ad598f83edd,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+1a6ff191826f409984371264d0aa1e84,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+c0de245c8aa4474eb73ec02b9aac69f2,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+2685addf8dc0468da2e5c5d68c6cda9d,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+fc58ba3780f44843ace44aec3b6d3732,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+92f18416e7ce407684afd029565e5827,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+93a8eeb371ef45db9a1fbf5d18170c88,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2029.0,30,False,False,True
+b6bfdee0ae1c4bf9bba1b71a425740bb,Ammonium nitrate,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2029.0,30,False,False,True
+10bfacb718054c99b36c93dab56e5b4b,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2029.0,30,False,False,True
+ba74d6c51d3d4a87a6c1260fb13f13bb,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2029.0,30,False,False,True
+89dbcdb674094f6fb94af368ab147f17,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2029.0,30,False,False,True
+318c9e7d0898495899ad9a326bc9407b,Ammonia,China,Waste to ammonia,0.73,0.7081,0.97,2010.8421,30,False,True,False
+3bea0d6de3c24be4aae563d81ccf5d5e,Ammonia,China,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,True,False
+124ad010ab03447295e8a7d246387738,Ammonia,China,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,True,False
+d4491cb6e960479ea8acf25765f52831,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,True,False,False
+bab018048f7e47dd904deba2f2a52edf,Ammonia,Russia,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,True,False,False
+ed3e33ea69824af68064efc18c94d4ac,Ammonia,Russia,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,True,False,False
+c1ee4c9492a14f6d93d556d1f02c4918,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,True,False,False
+109d0839d81143a9aa2e372f23ac4cb5,Urea,North America,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,True,False,False
+b3c8bc4646e542e399949ca291c89ceb,Urea,Middle East,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,True,False,False
+dab9a19e893040acb401232869c5184f,Ammonium nitrate,North America,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2006.0,30,True,False,False
+b066d22b905f4d68916ddab13888d2b3,Ammonium nitrate,Russia,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2009.75,30,True,False,False
+c1d1ccbe73994aea8cc4c2c13d64f1e2,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2020.0,30,True,False,True
+e3ad2b0238c443fd8c06b313dbc1b6f6,Ammonia,Middle East,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2007.18253968,30,True,False,False
+70028b37dca546bc97c33822346482e9,Urea,India,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+9695c1a8c09e4ae08625bb4bbeb6b1a1,Ammonium nitrate,Oceania,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2009.83333333,30,True,False,False
+481313ed6d824e7ca5e7754c113b4d5d,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,False,False
+ca564e246df54d8a95181cf0874ed904,Urea,Africa,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,True,False,False
+2561cbf0f34e46708d3ec3af707bd960,Urea,India,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+f2da8a059d73433990f4e14361d866bf,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,True,False
+eadda99b87f142aebb2ee253c89e7ebc,Urea,Africa,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,True,True,False
+74a99dbfb1b0436fb13465bf0027e7f1,Urea,Rest of Asia,ESMR Gas + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,True,False
+fd77284ece4b4673b6a708830d02fce0,Urea,Rest of Asia,ESMR Gas + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,True,False
+48cd82b5b97b49199e5d7ee1b9e57bae,Urea,Africa,ESMR Gas + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,True,True,False
+89b15f450eb14ba1a77189a0feb6a16f,Urea,Africa,ESMR Gas + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.7797619,30,True,True,False
+47a4475ba7ed4d6ca45556d1862117b7,Ammonia,Europe,Waste to ammonia,0.73,0.7081,0.97,2030.0,30,False,False,True
+4dfa70761a4c4040a1b80d1413079124,Ammonia,Europe,Waste to ammonia,0.73,0.7081,0.97,2030.0,30,False,False,True
+29cf94263df7402e80effc373ed4da73,Ammonia,Middle East,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+0316de9d4e5c4f3a964d3e9cfee42ec0,Ammonia,Rest of Asia,Waste to ammonia,0.73,0.7081,0.97,2030.0,30,False,False,True
+17d9828a8afd4d8799a88f20d30d2958,Ammonia,Rest of Asia,Waste to ammonia,0.73,0.7081,0.97,2030.0,30,False,False,True
+06b7606f954d440591a4140e8da28269,Ammonia,Rest of Asia,Waste to ammonia,0.73,0.7081,0.97,2030.0,30,False,False,True
+eb8c1450553a4b2aaaeb497a26229553,Ammonia,Rest of Asia,Waste to ammonia,0.73,0.7081,0.97,2030.0,30,False,False,True
+89579ffa9d5b45d9ba838cbe813e3c7f,Ammonia,Rest of Asia,Waste to ammonia,0.73,0.7081,0.97,2030.0,30,False,False,True
+75e71db2ad0f47e18252a0112d96f30b,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+36c92d1fba974c79bdee482401b3ff3e,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+e996ddb74ec5456ab75f0bd4cca58bec,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+4aefb57055a84a6697b7b6e0b4684a1b,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+cb4ec2224a5e4a509a9ca9c7c9e426c3,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+a2f9392c70cd45b1ac354a3d3da6b8cb,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+a1840e4b418c4a08aed4c1ea2c4e0474,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+7f73421a28244c8b830ba43e61c1d112,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+c7b7ad269bb947b2930f0f8207a87df1,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+0e5d1c7711e74555ac7b8aeda6173fee,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+c8f9e3ae9e28401a835fef2c46b9f1fb,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+8def8eaed0614e289acea63c00b935e7,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+af7866fc6ad04992b665d4835f27faaa,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+214180d01b2e4c12bfbb4789f7a16dc0,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+aa3dea47f32a4618b857356b6e3a2af8,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+a2138e5f16314b52b18150a5f1e236f1,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+bbc82bcd1cb84eb691d0dce4158d67f5,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2030.0,30,False,False,True
+2fd57fe9e1654032a6a8a1edcf079094,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2030.0,30,False,False,True
+46065927364847c8b370df3a98232d91,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2030.0,30,False,False,True
+33c71c2bedad4f4988da8a8c886539cd,Ammonia,China,Waste to ammonia,0.73,0.7081,0.97,2010.8421,30,False,True,False
+a7f51949d18648139a149040693ab3a5,Ammonia,China,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,True,False
+ccbdf6ccbe084e929957282d0b5c1370,Ammonia,China,Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis,0.73,0.7081,0.97,2010.8421,30,False,True,False
+9450d03f4feb4677a70653c7703d77a3,Ammonia,Russia,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2011.25,30,True,False,False
+1f2bfa01bb6548729d67751cfb2bb6c5,Urea,Middle East,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2007.18148148,30,True,False,False
+7fed6f6f02544f6581946e0b24b2f9a3,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.277777778,30,True,False,False
+728b620f66b047c993be98d844667cab,Ammonium nitrate,Russia,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2009.75,30,True,False,False
+bb11dfc3f39248c096827712e72434c8,Ammonia,North America,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2008.16666667,30,True,False,False
+8c45925b734f4e99b2bf3c82e665d754,Ammonium nitrate,Africa,Waste Water to ammonium nitrate,1.7154915940911888,1.664026846268453,0.97,2011.0,30,True,True,False
+aad92536e86743a5ba516b39f614b233,Urea,India,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+1955656ac5cc41ef918df30b4d72a515,Ammonium nitrate,Latin America,GHR + CCS + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2010.25,30,True,False,False
+f83d743c97644f00b1ef39cd04314a04,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,False,False
+9391d2d055ef47ee850f2b68365b0f02,Ammonium nitrate,Africa,Waste to ammonia,1.7154915940911888,1.664026846268453,0.97,2011.0,30,True,True,False
+93b90d88285f45999145cd1d67945d84,Urea,India,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+693fa95d4ee24ec79360b6eb4526f99d,Urea,India,Natural Gas SMR + CCS (process emissions only) + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2010.681818182,30,True,False,False
+916d543cd43649509734f9e1c0319bb7,Urea,Rest of Asia,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,True,False
+caa41417c2fb44689f298e6936eed1f0,Urea,Rest of Asia,ESMR Gas + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,True,False
+c4b4b2ed23c14ed3b6f3e694ccf98f06,Urea,Rest of Asia,ESMR Gas + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2005.77099567,30,True,True,False
+cb9d667bfd60469a8b4d3e45be651262,Ammonia,Africa,Waste to ammonia,0.73,0.7081,0.97,2031.0,30,False,False,True
+fd8cd3be934b471eaafc160a498b9ae9,Ammonia,Europe,Waste to ammonia,0.73,0.7081,0.97,2031.0,30,False,False,True
+f3a87bb4585a431795e2613bb7eb3c37,Ammonia,Europe,Waste to ammonia,0.73,0.7081,0.97,2031.0,30,False,False,True
+24920d51ccad479ca85948829c554eb9,Ammonia,Europe,Waste to ammonia,0.73,0.7081,0.97,2031.0,30,False,False,True
+d7f77f52d85d4bac833a038c934b03c4,Ammonia,Middle East,GHR + CCS + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+6a5e174a66d745e081046e716f642aa7,Ammonia,Rest of Asia,Waste to ammonia,0.73,0.7081,0.97,2031.0,30,False,False,True
+7d8bad6bedcb4276b7537d419f7112c6,Ammonia,Rest of Asia,Waste to ammonia,0.73,0.7081,0.97,2031.0,30,False,False,True
+3bc324f47f3a415cb33b2d6131921141,Ammonia,Rest of Asia,Waste to ammonia,0.73,0.7081,0.97,2031.0,30,False,False,True
+3eb3db0b9ba641c2ae65c7c1dc79e274,Ammonia,Rest of Asia,Waste to ammonia,0.73,0.7081,0.97,2031.0,30,False,False,True
+77d24d349a6c4ccebb9617402c086a33,Ammonia,Rest of Asia,Waste to ammonia,0.73,0.7081,0.97,2031.0,30,False,False,True
+ea07c5148132452cbe71f9ad38502262,Ammonia,Rest of Asia,Waste to ammonia,0.73,0.7081,0.97,2031.0,30,False,False,True
+5b785b263a624a8c846d9d5cbe2c79d5,Ammonia,Rest of Asia,Waste to ammonia,0.73,0.7081,0.97,2031.0,30,False,False,True
+7dfa69cb1bc44fd7a20d0f6471faec24,Ammonia,Rest of Asia,Waste to ammonia,0.73,0.7081,0.97,2031.0,30,False,False,True
+7bce9c107f724e2b9ea0eebb4f8d2ad1,Ammonia,Rest of Asia,Waste to ammonia,0.73,0.7081,0.97,2031.0,30,False,False,True
+a09314634e53476294ed7ae4e6f866a9,Ammonia,Rest of Asia,Waste to ammonia,0.73,0.7081,0.97,2031.0,30,False,False,True
+d12b0d2e5ddd4c7c8c742b120e8eea67,Ammonia,Rest of Asia,Waste to ammonia,0.73,0.7081,0.97,2031.0,30,False,False,True
+8c0fbdb79a7f4109b1d972732a6ec8b6,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+22755dd7daff43618d8c3230f5634e86,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+13e3365b7344442a8bb63b51bc08c3e0,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+eb8084d059ef4022950461b7d4c2493c,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+4198834ab19942c78153d55a1728775e,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+48ff52db6ac54f2d9ca456e0130e816f,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+e5821723a48f49d296c72f4124724382,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+4368513b1d58498088c0a313387316af,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+10c783e1cdcc43119050e4dbefa22e5a,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+78c0b2fcced9489c98f02a5def9d13f2,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+749f12852649402095ef338ad51ecb01,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+aad26e9940734daf87ebf291af6a956c,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+454d1c80bf4c438d89ddb788a64b486f,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+3a9962426c3a46278b1aae25b212b3dc,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+953e036efd3441c1b624b3ca39aa713c,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+7f4b957a69e449f8b0c87998091e8162,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+79fa9cc7a19d42ddbc14a2b7dfea9ab3,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+86ff8c8da59044bda98a81136f8a7b89,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+bf2e1a32a9614f63840300c2cc87b10c,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+94df1f352a3f49ad9e5b001592cbda0b,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+559859b76192401890a2d87c7f3e8395,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+5979ce86b6824e3da3332662be574f57,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+f2f6ff07b0df4049a0e401e932ce66f5,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+91766e15f2274e3599eaaeb87e010f3f,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+f65be08ecef84297b4b148c3ed949207,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+f39558c1974e4ed6a9c29bc9faad8359,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+f2908c761e7c45fb94afd6aab07277d3,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+7320409ebbb447f3b3acfd1456d3093c,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+e6da28834368483892f5f977298690ec,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+7dede001d58748688f2d82bbb6c27fbd,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+00c9262e982c4f03bb0bb8e2cb6e6cba,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+a3add77480e94da2b9bdb14747350a81,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+d14923fc16eb4c46a53f0a9a9b57e68a,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+b68ccd433d9c418a99fd66d79016a98b,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+a634624ce3784f0d933d6c22a4820cca,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+934e2b5d01c24249a1315b35393023cf,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+e9ceb2c9f9be4f1e9970dd37555e1e6f,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+9295d1af5adc4988b31113b1e6af6588,Ammonia,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,0.73,0.7081,0.97,2031.0,30,False,False,True
+9cd895428bdc41dc865391c1f13b5576,Ammonium nitrate,Brazil,Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis,1.7154915940911888,1.664026846268453,0.97,2031.0,30,False,False,True
+74e2b474185d47ea8d12ef006ead5738,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2031.0,30,False,False,True
+f971b72010da4cd1b4e0deb83096f6d5,Urea,North America,GHR + CCS + ammonia synthesis,1.2903818823313136,1.2516704258613742,0.97,2031.0,30,False,False,True

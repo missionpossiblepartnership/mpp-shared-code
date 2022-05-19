@@ -13,7 +13,7 @@ from plotly.subplots import make_subplots
 
 from mppshared.calculate.calculate_availablity import update_availability_from_asset
 from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
     EMISSION_SCOPES,
     END_YEAR,
     GHGS,
@@ -30,6 +30,7 @@ from mppshared.import_data.intermediate_data import IntermediateDataImporter
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import Asset, AssetStack, create_assets
 from mppshared.models.carbon_budget import CarbonBudget
+from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.models.transition import TransitionRegistry
 from mppshared.models.technology_rampup import TechnologyRampup
 from mppshared.utility.dataframe_utility import flatten_columns
@@ -52,6 +53,7 @@ class SimulationPathway:
         products: list,
         carbon_budget: CarbonBudget,
         technology_rampup: dict,
+        carbon_cost: CarbonCostTrajectory,
     ):
         # Attributes describing the pathway
         self.start_year = start_year
@@ -71,7 +73,11 @@ class SimulationPathway:
 
         # Use importer to get all data required for simulating the pathway
         self.importer = IntermediateDataImporter(
-            pathway=pathway, sensitivity=sensitivity, sector=sector, products=products
+            pathway=pathway,
+            sensitivity=sensitivity,
+            sector=sector,
+            products=products,
+            carbon_cost=carbon_cost,
         )
 
         # Make initial asset stack from input data
@@ -419,9 +425,13 @@ class SimulationPathway:
         # Get the number assets required
         # TODO: based on distribution of typical production capacities
         # TODO: create smaller asset to meet production capacity precisely
-        df_stack["number_assets"] = (
-            df_stack["annual_production_capacity"] / ASSUMED_ANNUAL_PRODUCTION_CAPACITY
-        ).apply(lambda x: int(x))
+        df_stack["number_assets"] = df_stack.apply(
+            lambda row: int(
+                row["annual_production_capacity"]
+                / ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT[row["product"]]
+            ),
+            axis=1,
+        )
 
         # Merge with technology specifications to get technology lifetime
         df_tech_characteristics = self.importer.get_technology_characteristics()
@@ -449,7 +459,9 @@ class SimulationPathway:
                 technology=row["technology"],
                 region=row["region"],
                 year_commissioned=row["year"] - row["average_age"],
-                annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT[
+                    row["product"]
+                ],
                 cuf=row["average_cuf"],
                 asset_lifetime=row["technology_lifetime"],
                 technology_classification=row["technology_classification"],

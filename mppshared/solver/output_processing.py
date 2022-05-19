@@ -8,6 +8,7 @@ import numpy as np
 
 from mppshared.config import *
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
+from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.solver.debugging_outputs import create_table_asset_transition_sequences
 from mppshared.utility.log_utility import get_logger
 
@@ -691,12 +692,15 @@ def calculate_electrolysis_capacity(
     return df
 
 
-def calculate_outputs(pathway: str, sensitivity: str, sector: str):
+def calculate_outputs(
+    pathway: str, sensitivity: str, sector: str, carbon_cost: CarbonCostTrajectory
+):
     importer = IntermediateDataImporter(
         pathway=pathway,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS[sector],
+        carbon_cost=carbon_cost,
     )
 
     # Write key assumptions to txt file

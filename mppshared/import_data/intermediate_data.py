@@ -3,7 +3,13 @@ from pathlib import Path
 
 import pandas as pd
 
-from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL
+from mppshared.config import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
+    FINAL_CARBON_COST,
+    LOG_LEVEL,
+    END_YEAR,
+)
+from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -19,6 +25,7 @@ class IntermediateDataImporter:
         sensitivity: str,
         sector: str,
         products: list,
+        carbon_cost: CarbonCostTrajectory,
     ):
         parent_path = Path(__file__).resolve().parents[2]
         self.input_path = parent_path.joinpath(
@@ -28,7 +35,12 @@ class IntermediateDataImporter:
         self.products = products
         self.pathway = pathway
         self.sensitivity = sensitivity
-        self.export_dir = parent_path.joinpath(f"data/{sector}/{pathway}/{sensitivity}")
+        final_carbon_cost = carbon_cost.df_carbon_cost.loc[
+            carbon_cost.df_carbon_cost["year"] == END_YEAR, "carbon_cost"
+        ].item()
+        self.export_dir = parent_path.joinpath(
+            f"data/{sector}/{pathway}/{sensitivity}/carbon_cost_{final_carbon_cost}"
+        )
         self.intermediate_path = self.export_dir.joinpath("intermediate")
         self.stack_tracker_path = self.export_dir.joinpath("stack_tracker")
         self.final_path = self.export_dir.joinpath("final")
@@ -98,51 +110,6 @@ class IntermediateDataImporter:
 
     def get_carbon_cost_addition(self):
         return pd.read_csv(self.intermediate_path.joinpath("carbon_cost_addition.csv"))
-
-    # TODO: remove this legacy function
-    def get_asset_specs(self):
-        df_spec = pd.read_csv(
-            self.intermediate_path.joinpath("technology_characteristics.csv"),
-            index_col=["product", "technology_destination", "region"],
-        )
-        df_spec.annual_production_capacity = (
-            ASSUMED_ANNUAL_PRODUCTION_CAPACITY * 365 / 1e6
-        )
-        df_spec["yearly_volume"] = (
-            df_spec.annual_production_capacity * df_spec.capacity_factor
-        )
-        df_spec["total_volume"] = df_spec.technology_lifetime * df_spec.yearly_volume
-        return df_spec
-
-    def get_asset_sizes(self):
-        """Get asset sizes for each different product/process"""
-        df_spec = self.get_asset_specs()
-        return df_spec.reset_index()[
-            [
-                "product",
-                "technology",
-                "annual_production_capacity",
-                "cuf",
-                "yearly_volume",
-                "total_volume",
-            ]
-        ].drop_duplicates(["product", "technology"])
-
-    def get_asset_capacities(self):
-        df_spec = self.get_asset_specs().reset_index()
-        df_spec.annual_production_capacity = ASSUMED_ANNUAL_PRODUCTION_CAPACITY
-        df_spec["yearly_volume"] = df_spec.annual_production_capacity * df_spec.cuf
-        df_spec["total_volume"] = df_spec.technology_lifetime * df_spec.yearly_volume
-        return df_spec.drop_duplicates(["product", "region", "technology"])[
-            [
-                "product",
-                "technology",
-                "region",
-                "annual_production_capacity",
-                "yearly_volume",
-                "total_volume",
-            ]
-        ]
 
     def get_demand(self, region=None):
         df = pd.read_csv(self.intermediate_path.joinpath("demand.csv"))

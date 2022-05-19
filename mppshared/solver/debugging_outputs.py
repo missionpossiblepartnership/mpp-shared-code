@@ -15,13 +15,16 @@ from mppshared.config import (
     START_YEAR,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
+from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def create_debugging_outputs(pathway: str, sensitivity: str, sector: str):
+def create_debugging_outputs(
+    pathway: str, sensitivity: str, sector: str, carbon_cost: CarbonCostTrajectory
+):
     """Create technology roadmap and emissions trajectory for quick debugging and refinement."""
 
     importer = IntermediateDataImporter(
@@ -29,6 +32,7 @@ def create_debugging_outputs(pathway: str, sensitivity: str, sector: str):
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS[sector],
+        carbon_cost=carbon_cost,
     )
 
     # Create summary table of asset transitions

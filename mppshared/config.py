@@ -14,25 +14,26 @@ SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
     # "bau",
-    "fa",
+    # "fa",
     "lc",
 ]
 
 # Sensitivities
 SENSITIVITIES = [
-    "def",
-    "ng_low",
+    # "def",
+    "ng_partial",
     "ng_high",
 ]
 
 # Carbon price (for sensitivity analysis)
-CARBON_COST = 0  # Values to test: 0, 50, 100, 150
+# CARBON_COSTS = [0]  # Values to test: 0, 25, 50
+# CARBON_COSTS = np.arange(0, 201, step=25)
+CARBON_COSTS = [0, 25, 50, 75, 100]
 CARBON_COST_ADDITION_FROM_CSV = True
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = True
-
+RUN_PARALLEL = False
 run_config = {
     "IMPORT_DATA",
     "CALCULATE_VARIABLES",
@@ -184,8 +185,9 @@ EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
 
 # Capacity utilisation factor thresholds
 # TODO: make sector-specific with dictionary
-CUF_LOWER_THRESHOLD = 0.6
-CUF_UPPER_THRESHOLD = 0.95
+#! Temporarily adjusted for chemicals
+CUF_LOWER_THRESHOLD = 0.5
+CUF_UPPER_THRESHOLD = 0.97
 COST_METRIC_CUF_ADJUSTMENT = {
     "chemicals": "mc",  # marginal cost of production
     "aluminium": "lcox",  # levelized cost of production
@@ -200,7 +202,19 @@ DECOMMISSION_RATES = {
 MODEL_SCOPE = "Global"
 
 # Override asset parameters; annual production capacity in Mt/year
-ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
+# Ratios for calculating electrolysis capacity
+H2_PER_AMMONIA = 0.176471
+AMMONIA_PER_UREA = 0.565724
+AMMONIA_PER_AMMONIUM_NITRATE = 0.425534
+ammonia_typical_plant_capacity_Mt = (2000 * 365) / 1e6
+
+ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT = {
+    "Ammonia": ammonia_typical_plant_capacity_Mt,
+    "Urea": ammonia_typical_plant_capacity_Mt / AMMONIA_PER_UREA,
+    "Ammonium nitrate": ammonia_typical_plant_capacity_Mt
+    / AMMONIA_PER_AMMONIUM_NITRATE,
+    "Aluminium": 1,
+}
 
 ### SECTOR-SPECIFIC PARAMETERS ###
 
@@ -392,7 +406,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
 YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2050, "aluminium": 2045}
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 1}
+ANNUAL_RENOVATION_SHARE = {"chemicals": 0.333, "aluminium": 1}
 
 # Regions with and without geological storage (salt caverns)
 REGIONS_SALT_CAVERN_AVAILABILITY = {
@@ -420,7 +434,7 @@ REGIONAL_PRODUCTION_SHARES = {
         "Latin America": 0.4,
         "Middle East": 0.4,
         "North America": 0.4,
-        "Oceania": 0.4,
+        "Oceania": 0,  # Needs to be relaxed because production in that region is tiny
         "Russia": 0.4,
         "Rest of Asia": 0.4,
     },
@@ -482,7 +496,7 @@ SECTORAL_PATHWAYS = {
 
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = {
-    "chemicals": 2020,
+    "chemicals": 2050,  # for chemicals, carbon price should drive transitions in LC scenario
     "aluminium": 2030,
 }
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
@@ -507,10 +521,6 @@ REGIONAL_TECHNOLOGY_BAN = {
 
 ### OUTPUTS PROCESSING ###
 
-# Ratios for calculating electrolysis capacity
-H2_PER_AMMONIA = 0.176471
-AMMONIA_PER_UREA = 0.565724
-AMMONIA_PER_AMMONIUM_NITRATE = 0.425534
 
 # Global Warming Potentials for calculating CO2e
 GWP = {
