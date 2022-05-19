@@ -31,7 +31,6 @@ funcs = {
     "CALCULATE_OUTPUTS": calculate_outputs,
     "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
     # "SENSITIVITY_ANALYSIS": conduct_sensitivity_analysis,
-}
 
 
 def _run_model(pathway, sensitivity):
