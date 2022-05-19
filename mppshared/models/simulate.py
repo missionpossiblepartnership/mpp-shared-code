@@ -1,6 +1,8 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
+from pyparsing import dict_of
+
 from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
 from mppshared.agent_logic.brownfield import brownfield
 from mppshared.agent_logic.decommission import decommission
@@ -16,6 +18,7 @@ from mppshared.config import (
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.asset import AssetStack
 from mppshared.models.carbon_budget import CarbonBudget
+from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 
 # from mppshared.agent_logic.retrofit import retrofit
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -81,7 +84,9 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
     return pathway
 
 
-def simulate_pathway(sector: str, pathway: str, sensitivity: str):
+def simulate_pathway(
+    sector: str, pathway: str, sensitivity: str, carbon_cost: CarbonCostTrajectory
+):
     """
     Get data per technology, ranking data and then run the pathway simulation
     """
@@ -90,6 +95,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS[sector],
+        carbon_cost=carbon_cost,
     )
 
     # Create carbon budget
@@ -106,9 +112,10 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         sector=sector, importer=importer
     )
 
-    # TODO: fix this workaround to not set rampup constraint for CCS
-    for ccs_tech in [tech for tech in dict_technology_rampup.keys() if "CCS" in tech]:
-        dict_technology_rampup[ccs_tech] = None
+    # Ammonia sector: tech ramp-up constraints will be back-calculated
+    if sector == "chemicals":
+        for key in dict_technology_rampup.keys():
+            dict_technology_rampup[key] = None
 
     # Make pathway
     pathway = SimulationPathway(
@@ -120,6 +127,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         products=PRODUCTS[sector],
         carbon_budget=carbon_budget,
         technology_rampup=dict_technology_rampup,
+        carbon_cost=carbon_cost,
     )
 
     #! Development only

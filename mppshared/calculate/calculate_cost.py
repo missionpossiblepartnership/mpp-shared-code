@@ -21,6 +21,8 @@ def discount_costs(df_cost: pd.DataFrame, grouping_cols: list) -> pd.DataFrame:
     """
     # Calculate NPV over data groups with cost series across model time horizon
     logger.info("Calculate NPV")
+    #! Debug only
+    df_cost = df_cost.loc[df_cost["carbon_cost_addition"] > 0]
     return df_cost.groupby(grouping_cols).apply(calculate_npv_costs)
 
 
@@ -43,6 +45,7 @@ def calculate_npv_costs(df_cost: pd.DataFrame) -> pd.DataFrame:
                 start_year=row.name,
                 lifetime=row["technology_lifetime"],
             ),
+            cols=["carbon_cost_addition"],
         ),
         axis=1,
     )
@@ -87,13 +90,17 @@ def subset_cost_df(
     ]
 
     # Expand DataFrame beyond model years if necessary, assuming that cost data stay constant after MODEL_END_YEAR
-    if start_year + lifetime > END_YEAR:
+    if start_year + lifetime > df_cost.index.max():
 
         # TODO: make this workaround nicer
-        cost_value = df_cost.loc[df_cost.index == END_YEAR].copy()
-        extension_length = int((start_year + lifetime) - END_YEAR)
+        cost_value = df_cost.loc[
+            df_cost.index == df_cost.index.max(), ["carbon_cost_addition"]
+        ]
+        extension_length = int((start_year + lifetime) - df_cost.index.max())
         cost_constant = pd.concat([cost_value] * extension_length)
-        cost_constant["year"] = np.arange(END_YEAR + 1, start_year + lifetime + 1)
+        cost_constant["year"] = np.arange(
+            df_cost.index.max() + 1, start_year + lifetime + 1
+        )
         cost_constant = cost_constant.set_index("year", drop=True)
         cost_constant.index = cost_constant.index.astype(int)
 

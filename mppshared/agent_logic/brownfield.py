@@ -5,13 +5,22 @@ from copy import deepcopy
 from operator import methodcaller
 
 import numpy as np
+import pandas as pd
+import random
+
 
 from mppshared.agent_logic.agent_logic_functions import (
     remove_transition,
     select_best_transition,
     remove_all_transitions_with_destination_technology,
+    apply_regional_technology_ban,
 )
-from mppshared.config import ANNUAL_RENOVATION_SHARE, LOG_LEVEL
+from mppshared.config import (
+    ANNUAL_RENOVATION_SHARE,
+    LOG_LEVEL,
+    RANKING_COST_METRIC,
+    REGIONAL_TECHNOLOGY_BAN,
+)
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
@@ -39,8 +48,22 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     # Get ranking table for brownfield transitions
     df_rank = pathway.get_ranking(year=year, rank_type="brownfield")
 
+    # Apply filters for the chemical sector
+    if pathway.sector == "chemicals":
+        df_rank = apply_brownfield_filters_chemicals(df_rank, pathway, year)
+
+    # Apply regional technology ban
+    df_rank = apply_regional_technology_ban(
+        df_rank, sector_bans=REGIONAL_TECHNOLOGY_BAN[pathway.sector]
+    )
+
+    # In 2020 and 2021 do nothing to picture historical trajectory
+    if year in [2020, 2021]:
+        df_rank = pd.DataFrame()
+
     # If pathway is BAU, take out brownfield renovation to avoid retrofits to end-state technologies
-    df_rank = df_rank.loc[~(df_rank["switch_type"] == "brownfield_renovation")]
+    if pathway.pathway == "BAU":
+        df_rank = df_rank.loc[~(df_rank["switch_type"] == "brownfield_renovation")]
 
     # Get assets eligible for brownfield transitions
     candidates = new_stack.get_assets_eligible_for_brownfield(
@@ -48,6 +71,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     )
 
     # Track number of assets that undergo transition
+    # TODO: renovation share applied to assets with initial technology?
     n_assets_transitioned = 0
     maximum_n_assets_transitioned = np.floor(
         ANNUAL_RENOVATION_SHARE[pathway.sector] * new_stack.get_number_of_assets()
@@ -96,7 +120,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     )
                 )
             new_technology = best_transition["technology_destination"]
-            # Remove best transition from ranking table
+
+            # emove best transition from ranking table (other assets could undergo the same transition)
             df_rank = remove_transition(df_rank, best_transition)
 
         # If several candidates for best transition, choose asset for transition randomly
@@ -154,3 +179,69 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     logger.debug(f"{n_assets_transitioned} assets transitioned in year {year}.")
 
     return pathway
+
+
+def apply_brownfield_filters_chemicals(
+    df_rank: pd.DataFrame, pathway: SimulationPathway, year: int
+) -> pd.DataFrame:
+    """For chemicals, the LC pathway is driven by a carbon price. Hence, brownfield transitions only happen
+    when they decrease LCOX. For the FA pathway, this is not the case."""
+
+    if pathway.pathway == "fa":
+        return df_rank
+
+    cost_metric = RANKING_COST_METRIC[pathway.sector]
+
+    # Get LCOX of origin technologies for retrofit
+    # TODO: check simplification that lcox of the current year is taken
+    #! Compare LCOX of newbuild technologies
+    df_greenfield = pathway.get_ranking(year=year, rank_type="greenfield")
+    df_lcox = df_greenfield.loc[df_greenfield["technology_origin"] == "New-build"]
+    df_lcox = df_lcox[
+        [
+            "product",
+            "region",
+            "technology_destination",
+            "year",
+            cost_metric,
+        ]
+    ]
+
+    df_destination_techs = df_lcox.rename(
+        {cost_metric: f"{cost_metric}_destination"}, axis=1
+    )
+
+    df_origin_techs = df_lcox.rename(
+        {
+            "technology_destination": "technology_origin",
+            cost_metric: f"{cost_metric}_origin",
+        },
+        axis=1,
+    )
+
+    # For China, add DAC component of LCOX to urea production with Natural Gas SMR after 2035
+    year_dac = 2035
+    lcox_comp_dac = 152.65  # USD/tUrea
+    df_origin_techs["lcox"] = np.where(
+        (df_origin_techs["region"] == "China") & (df_origin_techs["year"] >= year_dac),
+        df_origin_techs["lcox_origin"] + lcox_comp_dac,
+        df_origin_techs["lcox_origin"],
+    )
+
+    # Add to ranking table and filter out retrofits which would increase LCOX
+    df_rank = df_rank.merge(
+        df_origin_techs,
+        on=["product", "region", "technology_origin", "year"],
+        how="left",
+    ).fillna(0)
+
+    df_rank = df_rank.merge(
+        df_destination_techs,
+        on=["product", "region", "technology_destination", "year"],
+        how="left",
+    ).fillna(0)
+
+    filter = df_rank[f"{cost_metric}_destination"] < df_rank[f"{cost_metric}_origin"]
+    df_rank = df_rank.loc[filter]
+
+    return df_rank

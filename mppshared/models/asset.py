@@ -6,7 +6,7 @@ from xmlrpc.client import Boolean
 import pandas as pd
 
 from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
     CUF_LOWER_THRESHOLD,
     CUF_UPPER_THRESHOLD,
     GHGS,
@@ -352,10 +352,15 @@ class AssetStack:
         df = df.groupby("region", as_index=False).sum()
         return df
 
-    def get_number_of_assets(self, product=None, technology=None, region=None):
+    def get_number_of_assets(
+        self, technology_classification=None, product=None, technology=None, region=None
+    ):
         "Get number of assets in the asset stack"
         assets = self.filter_assets(
-            product=product, technology=technology, region=region
+            technology_classification=technology_classification,
+            product=product,
+            technology=technology,
+            region=region,
         )
         return len(assets)
 
@@ -372,10 +377,13 @@ class AssetStack:
         candidates = filter(lambda asset: asset.cuf < CUF_LOWER_THRESHOLD, self.assets)
 
         # Assets can be decommissioned if their age is at least as high as the sector's investment cycle
+        #! Chemicals: plant decommissioned right if its CUF gets too low
         # TODO: Decomission date.
-        candidates = filter(
-            lambda asset: asset.get_age(year) >= INVESTMENT_CYCLES[sector], candidates
-        )
+        if sector != "chemicals":
+            candidates = filter(
+                lambda asset: asset.get_age(year) >= INVESTMENT_CYCLES[sector],
+                candidates,
+            )
 
         return list(candidates)
 
@@ -430,7 +438,9 @@ def make_new_asset(
         technology=asset_transition["technology_destination"],
         region=asset_transition["region"],
         year_commissioned=year,
-        annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+        annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT[
+            asset_transition["product"]
+        ],
         cuf=CUF_UPPER_THRESHOLD,
         asset_lifetime=technology_characteristics["technology_lifetime"].values[0],
         technology_classification=technology_characteristics[

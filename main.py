@@ -1,9 +1,13 @@
 import itertools
 import multiprocessing as mp
+import os
 
 import numpy as np
+import distutils
 
 from mppshared.config import (
+    CARBON_COSTS,
+    END_YEAR,
     LOG_LEVEL,
     PATHWAYS,
     RUN_PARALLEL,
@@ -17,7 +21,9 @@ from mppshared.solver.implicit_forcing import apply_implicit_forcing
 from mppshared.solver.output_processing import calculate_outputs
 from mppshared.solver.ranking import make_rankings
 from mppshared.utility.utils import get_logger
-from mppshared.solver.sensitivity_analysis import conduct_sensitivity_analysis
+from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
+
+from mppshared.solver.sensitivity_outputs import create_sensitivity_outputs
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -30,22 +36,41 @@ funcs = {
     "SIMULATE_PATHWAY": simulate_pathway,
     "CALCULATE_OUTPUTS": calculate_outputs,
     "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
-    # "SENSITIVITY_ANALYSIS": conduct_sensitivity_analysis,
+    "SENSITIVITY_ANALYSIS": conduct_sensitivity_analysis,
+}
 
 
-def _run_model(pathway, sensitivity):
+def _run_model(pathway, sensitivity, carbon_cost):
     for name, func in funcs.items():
         if name in run_config:
             logger.info(
                 f"Running pathway {pathway} sensitivity {sensitivity} section {name}"
             )
-            func(pathway=pathway, sensitivity=sensitivity, sector=SECTOR)
+            func(
+                pathway=pathway,
+                sensitivity=sensitivity,
+                sector=SECTOR,
+                carbon_cost=carbon_cost,
+            )
 
 
 def run_model_sequential(runs):
     """Run model sequentially, slower but better for debugging"""
-    for pathway, sensitivity in runs:
-        _run_model(pathway=pathway, sensitivity=sensitivity)
+    for pathway, sensitivity, carbon_cost in runs:
+
+        # Copy intermediate folder to right carbon cost directory
+        cc = carbon_cost.df_carbon_cost.loc[
+            carbon_cost.df_carbon_cost["year"] == END_YEAR, "carbon_cost"
+        ].item()
+        for folder in ["final", "intermediate", "ranking", "stack_tracker"]:
+            final_folder = (
+                f"data/{SECTOR}/{pathway}/{sensitivity}/carbon_cost_{cc}/{folder}"
+            )
+            if not os.path.exists(final_folder):
+                os.makedirs(final_folder)
+            if folder == "intermediate":
+                source_dir = f"data/{SECTOR}/{pathway}/{sensitivity}/{folder}"
+        _run_model(pathway=pathway, sensitivity=sensitivity, carbon_cost=carbon_cost)
 
 
 def run_model_parallel(runs):
@@ -54,23 +79,53 @@ def run_model_parallel(runs):
     logger.info(f"{n_cores} cores detected")
     pool = mp.Pool(processes=n_cores)
     logger.info(f"Running model for scenario/sensitivity {runs}")
-    for pathway, sensitivity in runs:
-        pool.apply_async(_run_model, args=(pathway, sensitivity))
+    for pathway, sensitivity, carbon_cost in runs:
+
+        # Copy intermediate folder to right carbon cost directory
+        cc = carbon_cost.df_carbon_cost.loc[
+            carbon_cost.df_carbon_cost["year"] == END_YEAR, "carbon_cost"
+        ].item()
+        for folder in ["final", "intermediate", "ranking", "stack_tracker"]:
+            final_folder = (
+                f"data/{SECTOR}/{pathway}/{sensitivity}/carbon_cost_{cc}/{folder}"
+            )
+            if not os.path.exists(final_folder):
+                os.makedirs(final_folder)
+            if folder == "intermediate":
+                source_dir = f"data/{SECTOR}/{pathway}/{sensitivity}/{folder}"
+                distutils.dir_util.copy_tree(source_dir, final_folder)
+        pool.apply_async(_run_model, args=(pathway, sensitivity, carbon_cost))
     pool.close()
     pool.join()
 
 
 def main():
     logger.info(f"Running model for {SECTOR}")
-    runs = list(itertools.product(PATHWAYS, SENSITIVITIES))
+
+    # Create a list of carbon cost trajectories that each start in 2025 and have a constant carbon cost
+
+    carbon_costs = CARBON_COSTS
+    # carbon_costs = [1]  # for creating carbon cost addition DataFrame
+    carbon_cost_trajectories = []
+    for cc in carbon_costs:
+        carbon_cost_trajectories.append(
+            CarbonCostTrajectory(
+                trajectory="constant",
+                initial_carbon_cost=cc,
+                final_carbon_cost=cc,
+                start_year=2025,
+                end_year=2050,
+            )
+        )
+    runs = list(itertools.product(PATHWAYS, SENSITIVITIES, carbon_cost_trajectories))
     if RUN_PARALLEL:
         run_model_parallel(runs)
     else:
         run_model_sequential(runs)
 
-    # Conduct sensitivity analysis
-    # if "SENSITIVITY_ANALYSIS" in funcs:
-    #     conduct_sensitivity_analysis()
+    # Create sensitivity outputs
+    if "SENSITIVITY_OUTPUTS" in funcs:
+        create_sensitivity_outputs()
 
 
 if __name__ == "__main__":

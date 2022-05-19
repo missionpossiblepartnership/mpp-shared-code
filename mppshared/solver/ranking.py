@@ -16,6 +16,7 @@ from mppshared.config import (
     RANKING_COST_METRIC,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
+from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -316,7 +317,9 @@ def get_ranking_table(df_ranking: pd.DataFrame, rank_type: str) -> pd.DataFrame:
     return df
 
 
-def make_rankings(pathway: str, sensitivity: str, sector: str):
+def make_rankings(
+    pathway: str, sensitivity: str, sector: str, carbon_cost: CarbonCostTrajectory
+):
     """Create the ranking for all the possible rank types and scenarios.
 
     Args:
@@ -327,6 +330,7 @@ def make_rankings(pathway: str, sensitivity: str, sector: str):
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS[sector],
+        carbon_cost=carbon_cost,
     )
 
     # Make the ranking separately for each type of technology transition (all products together)
