@@ -10,12 +10,12 @@ LOG_FORMATTER = logging.Formatter(
 )
 
 ### SECTOR CHOICE ###
-SECTOR = "chemicals"
-# SECTOR = "aluminium"
+# SECTOR = "chemicals"
+SECTOR = "aluminium"
 PATHWAYS = [
-    # "bau",
+    "bau",
     "fa",
-    # "lc",
+    "lc",
 ]
 
 
@@ -168,7 +168,9 @@ INVESTMENT_CYCLES = {
 }
 
 # Emissions
-GHGS = ["co2", "ch4", "n2o"]
+GHGS = [
+    "co2",
+]  # "ch4", "n2o"]
 
 # Emission scopes included in data analysis
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
@@ -203,7 +205,7 @@ SENSITIVITIES = [
 # Products produced by each sector
 PRODUCTS = {
     "chemicals": ["Ammonia", "Ammonium nitrate", "Urea"],
-    "aluminium": ["Aluminium"],
+    "aluminium": ["Alumina"],
 }
 
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
@@ -378,9 +380,9 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
         "years_rampup_phase": 5,
     },
     "aluminium": {
-        "maximum_asset_additions": 4,
-        "maximum_capacity_growth_rate": 0.3,
-        "years_rampup_phase": 10,
+        "maximum_asset_additions": 10,
+        "maximum_capacity_growth_rate": 0.7,
+        "years_rampup_phase": 5,
     },
 }
 
@@ -430,11 +432,14 @@ REGIONAL_PRODUCTION_SHARES = {
         "Rest of Asia": 0.3,
         "North America": 0.3,
         "Russia": 0.3,
-        "Europe": 0.3,
+        "Rest of Europe": 0.3,
         "Middle East": 0.3,
         "Africa": 0.3,
         "South America": 0.3,
         "Oceania": 0.3,
+        "Canada": 0.3,
+        "Scandinavia": 0.3,
+        "US": 0.3,
     },
 }
 

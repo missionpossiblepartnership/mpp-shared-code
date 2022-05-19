@@ -1,26 +1,21 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
+from mppshared.agent_logic.agent_logic_functions import \
+    adjust_capacity_utilisation
 from mppshared.agent_logic.brownfield import brownfield
 from mppshared.agent_logic.decommission import decommission
 from mppshared.agent_logic.greenfield import greenfield
-from mppshared.config import (
-    END_YEAR,
-    LOG_LEVEL,
-    PRODUCTS,
-    SECTORAL_CARBON_BUDGETS,
-    START_YEAR,
-    TECHNOLOGY_RAMP_UP_CONSTRAINTS,
-)
+from mppshared.config import (END_YEAR, LOG_LEVEL, PRODUCTS,
+                              SECTORAL_CARBON_BUDGETS, START_YEAR,
+                              TECHNOLOGY_RAMP_UP_CONSTRAINTS)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.asset import AssetStack
 from mppshared.models.carbon_budget import CarbonBudget
-
 # from mppshared.agent_logic.retrofit import retrofit
 from mppshared.models.simulation_pathway import SimulationPathway
-from mppshared.utility.log_utility import get_logger
 from mppshared.models.technology_rampup import TechnologyRampup
+from mppshared.utility.log_utility import get_logger
 
 # from util.util import timing
 
@@ -125,7 +120,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
     pathway = simulate(
         pathway=pathway,
     )
-
+    pathway.output_technology_roadmap()
     logger.info("Pathway simulation complete")
 
 

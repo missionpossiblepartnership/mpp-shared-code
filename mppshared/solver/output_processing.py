@@ -3,12 +3,14 @@ from collections import defaultdict
 from lib2to3.pgen2.pgen import DFAState
 from re import T
 from tkinter import END
-import pandas as pd
+
 import numpy as np
+import pandas as pd
 
 from mppshared.config import *
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.solver.debugging_outputs import create_table_asset_transition_sequences
+from mppshared.solver.debugging_outputs import \
+    create_table_asset_transition_sequences
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -282,7 +284,15 @@ def _calculate_resource_consumption(
     ).reset_index()
 
     # Add unit
-    unit_map = {"Energy": "GJ", "Raw material": "GJ", "H2 storage": "GJ", "Cost": "USD"}
+    unit_map = {
+        "Energy": "GJ",
+        "Raw material": "GJ",
+        "H2 storage": "GJ",
+        "Cost": "USD",
+        "Capex": "USD",
+        "Opex": "USD",
+        "Lifetime": "Years",
+    }
     df_stack["unit"] = df_stack["parameter_group"].apply(lambda x: unit_map[x])
 
     if "technology" not in agg_vars:
@@ -534,7 +544,7 @@ def calculate_weighted_average_lcox(
             df_stack = (
                 df_stack.groupby(agg_vars).apply(
                     lambda x: np.average(
-                        x["lcox"], weights=x["annual_production_volume"]
+                        x["lcox"] + 1, weights=x["annual_production_volume"] + 1
                     )
                 )
             ).reset_index(drop=False)
@@ -711,22 +721,25 @@ def calculate_outputs(pathway: str, sensitivity: str, sector: str):
         "final",
     )
 
-    # Calculate electrolysis capacity
-    df_electrolysis_capacity = calculate_electrolysis_capacity(
-        importer=importer, sector=sector, agg_vars=["product", "region", "technology"]
-    )
+    if sector == "chemicals":
+        # Calculate electrolysis capacity
+        df_electrolysis_capacity = calculate_electrolysis_capacity(
+            importer=importer,
+            sector=sector,
+            agg_vars=["product", "region", "technology"],
+        )
 
-    df_electrolysis_capacity_all_tech = calculate_electrolysis_capacity(
-        importer=importer, sector=sector, agg_vars=["product", "region"]
-    )
+        df_electrolysis_capacity_all_tech = calculate_electrolysis_capacity(
+            importer=importer, sector=sector, agg_vars=["product", "region"]
+        )
 
-    df_electrolysis_capacity_all_tech_all_regions = calculate_electrolysis_capacity(
-        importer=importer, sector=sector, agg_vars=["product"]
-    )
+        df_electrolysis_capacity_all_tech_all_regions = calculate_electrolysis_capacity(
+            importer=importer, sector=sector, agg_vars=["product"]
+        )
 
-    df_electrolysis_capacity_all_regions = calculate_electrolysis_capacity(
-        importer=importer, sector=sector, agg_vars=["product", "technology"]
-    )
+        df_electrolysis_capacity_all_regions = calculate_electrolysis_capacity(
+            importer=importer, sector=sector, agg_vars=["product", "technology"]
+        )
 
     # Calculate weighted average of LCOX
     df_cost = importer.get_technology_transitions_and_cost()
@@ -815,23 +828,38 @@ def calculate_outputs(pathway: str, sensitivity: str, sector: str):
     )
 
     # Export as required
-    df_pivot = pd.concat(
-        [
-            df_pivot,
-            df_annual_investments,
-            df_annual_investments_all_tech,
-            df_annual_investments_all_tech_all_switch_types,
-            df_annual_investments_all_switch_types,
-            df_lcox,
-            df_lcox_all_techs,
-            df_lcox_all_regions,
-            df_lcox_all_regions_all_techs,
-            df_electrolysis_capacity,
-            df_electrolysis_capacity_all_regions,
-            df_electrolysis_capacity_all_tech,
-            df_electrolysis_capacity_all_tech_all_regions,
-        ]
-    )
+    if sector == "chemicals":
+        df_pivot = pd.concat(
+            [
+                df_pivot,
+                df_annual_investments,
+                df_annual_investments_all_tech,
+                df_annual_investments_all_tech_all_switch_types,
+                df_annual_investments_all_switch_types,
+                df_lcox,
+                df_lcox_all_techs,
+                df_lcox_all_regions,
+                df_lcox_all_regions_all_techs,
+                df_electrolysis_capacity,
+                df_electrolysis_capacity_all_regions,
+                df_electrolysis_capacity_all_tech,
+                df_electrolysis_capacity_all_tech_all_regions,
+            ]
+        )
+    else:
+        df_pivot = pd.concat(
+            [
+                df_pivot,
+                df_annual_investments,
+                df_annual_investments_all_tech,
+                df_annual_investments_all_tech_all_switch_types,
+                df_annual_investments_all_switch_types,
+                df_lcox,
+                df_lcox_all_techs,
+                df_lcox_all_regions,
+                df_lcox_all_regions_all_techs,
+            ]
+        )
     df_pivot.reset_index(inplace=True)
     df_pivot.fillna(0, inplace=True)
 
@@ -840,9 +868,9 @@ def calculate_outputs(pathway: str, sensitivity: str, sector: str):
     importer.export_data(
         df_pivot, f"simulation_outputs_{suffix}.csv", "final", index=False
     )
-    df_pivot.to_csv(
-        f"{OUTPUT_WRITE_PATH[sector]}/simulation_outputs_{suffix}.csv", index=False
-    )
+    # df_pivot.to_csv(
+    #     f"{OUTPUT_WRITE_PATH[sector]}/simulation_outputs_{suffix}.csv", index=False
+    # )
 
     columns = [
         "sector",
@@ -863,6 +891,7 @@ def calculate_outputs(pathway: str, sensitivity: str, sector: str):
     )
     logger.info("All data for all years processed.")
 
+
 def write_key_assumptions_to_txt(
     pathway: str, sector: str, importer: IntermediateDataImporter
 ):
@@ -879,4 +908,3 @@ def write_key_assumptions_to_txt(
         f"Technology moratorium year: {TECHNOLOGY_MORATORIUM[sector]}",
         f"Transitional period years: {TRANSITIONAL_PERIOD_YEARS[sector]}",
     ]
-            f.write("\n")

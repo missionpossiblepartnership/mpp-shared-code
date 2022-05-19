@@ -7,10 +7,8 @@ from operator import methodcaller
 import numpy as np
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_transition,
-    select_best_transition,
-    remove_all_transitions_with_destination_technology,
-)
+    remove_all_transitions_with_destination_technology, remove_transition,
+    select_best_transition)
 from mppshared.config import ANNUAL_RENOVATION_SHARE, LOG_LEVEL
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -40,7 +38,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     df_rank = pathway.get_ranking(year=year, rank_type="brownfield")
 
     # If pathway is BAU, take out brownfield renovation to avoid retrofits to end-state technologies
-    df_rank = df_rank.loc[~(df_rank["switch_type"] == "brownfield_renovation")]
+    # if pathway.pathway == "bau":
+    # df_rank = df_rank.loc[~(df_rank["switch_type"] == "brownfield_renovation")]
 
     # Get assets eligible for brownfield transitions
     candidates = new_stack.get_assets_eligible_for_brownfield(
@@ -64,7 +63,6 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
         best_candidates = []
         while not best_candidates:
-
             # If no more transitions available, break and return pathway
             if df_rank.empty:
                 return pathway
@@ -97,7 +95,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 )
             new_technology = best_transition["technology_destination"]
             # Remove best transition from ranking table
-            df_rank = remove_transition(df_rank, best_transition)
+            if len(best_candidates) == 0:
+                df_rank = remove_transition(df_rank, best_transition)
 
         # If several candidates for best transition, choose asset for transition randomly
         asset_to_update = random.choice(best_candidates)
