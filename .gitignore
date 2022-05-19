@@ -141,3 +141,6 @@ data/*/*/*/stack_tracker
 # Ignore outputs
 data/*/*/*/final
 data/*/*/*/outputs
+
+# Carbon cost files
+data/*/*/*/carbon_cost_*

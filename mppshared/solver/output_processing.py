@@ -867,6 +867,7 @@ def calculate_outputs(
     )
     logger.info("All data for all years processed.")
 
+
 def write_key_assumptions_to_txt(
     pathway: str, sector: str, importer: IntermediateDataImporter
 ):
@@ -883,4 +884,8 @@ def write_key_assumptions_to_txt(
         f"Technology moratorium year: {TECHNOLOGY_MORATORIUM[sector]}",
         f"Transitional period years: {TRANSITIONAL_PERIOD_YEARS[sector]}",
     ]
+    path = importer.final_path.joinpath("configuration.txt")
+    with open(path, "w") as f:
+        for line in lines:
+            f.write(line)
             f.write("\n")

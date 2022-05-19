@@ -22,7 +22,6 @@ from mppshared.solver.output_processing import calculate_outputs
 from mppshared.solver.ranking import make_rankings
 from mppshared.utility.utils import get_logger
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
-
 from mppshared.solver.sensitivity_outputs import create_sensitivity_outputs
 
 logger = get_logger(__name__)
@@ -36,7 +35,7 @@ funcs = {
     "SIMULATE_PATHWAY": simulate_pathway,
     "CALCULATE_OUTPUTS": calculate_outputs,
     "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
-    "SENSITIVITY_ANALYSIS": conduct_sensitivity_analysis,
+    "SENSITIVITY_ANALYSIS": create_sensitivity_outputs,
 }
 
 
@@ -70,6 +69,7 @@ def run_model_sequential(runs):
                 os.makedirs(final_folder)
             if folder == "intermediate":
                 source_dir = f"data/{SECTOR}/{pathway}/{sensitivity}/{folder}"
+                distutils.dir_util.copy_tree(source_dir, final_folder)
         _run_model(pathway=pathway, sensitivity=sensitivity, carbon_cost=carbon_cost)
 
 
