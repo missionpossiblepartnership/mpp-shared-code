@@ -1,5 +1,5 @@
 """ Logic for technology transitions of type greenfield (add new Asset to AssetStack."""
-
+import sys
 from copy import deepcopy
 from importlib.resources import path
 from multiprocessing.sharedctypes import Value
@@ -15,7 +15,8 @@ from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL,
                               MAP_LOW_COST_POWER_REGIONS, MODEL_SCOPE)
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
-    check_constraints, get_regional_production_constraint_table)
+    check_constraints, get_regional_production_constraint_table,
+    hydro_constraints)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 
@@ -40,6 +41,9 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
     # Get ranking table for greenfield transitions
     df_ranking = pathway.get_ranking(year=year, rank_type="greenfield")
+
+    # Hydro constrain for new-builds in aluminium
+    df_ranking = hydro_constraints(df_ranking)
 
     # Greenfield for each product sequentially
     for product in pathway.products:

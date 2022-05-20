@@ -191,3 +191,17 @@ def check_annual_carbon_budget_constraint(
         return True, flag_residual
 
     return False, flag_residual
+
+
+def hydro_constraints(df_ranking: pd.DataFrame) -> pd.DataFrame:
+    # check if the product is aluminium:
+    if "Aluminium" in df_ranking["product"].to_list():
+        logger.debug("Removing new builds Hydro")
+        return df_ranking[
+            ~(
+                df_ranking["technology_origin"].str.contains("New-build")
+                & df_ranking["technology_destination"].str.contains("Hydro")
+            )
+        ]
+    else:
+        return df_ranking
