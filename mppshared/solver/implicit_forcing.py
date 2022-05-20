@@ -163,6 +163,14 @@ def apply_hydro_constraint(
             )
             | (
                 (
+                    df_technology_transitions["technology_destination"].str.contains(
+                        "decommission"
+                    )
+                )
+                & (df_technology_transitions["technology_origin"].str.contains("Hydro"))
+            )
+            | (
+                (
                     df_technology_transitions["technology_origin"].str.contains(
                         "New-build"
                     )
