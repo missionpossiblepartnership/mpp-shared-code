@@ -379,11 +379,11 @@ class AssetStack:
 
         # Assets can be renovated at any time unless they've been renovated already
         # TODO: Fix it, what happens if we want to switch from transition to end-state technology
-        # candidates_renovation = filter(
-        #     lambda asset: (asset.retrofit == True)
-        #     & (asset.get_age(year) >= INVESTMENT_CYCLES[sector]),
-        #     self.assets,
-        # )
+        candidates_renovation = filter(
+            lambda asset: (asset.retrofit == False)
+            & (asset.get_age(year) >= INVESTMENT_CYCLES[sector]),
+            self.assets,
+        )
 
         # Assets can be rebuild if their CUF exceeds the threshold and they are older than the investment cycle
         candidates_rebuild = filter(
@@ -392,8 +392,7 @@ class AssetStack:
             self.assets,
         )
 
-        # return list(candidates_renovation) + list(candidates_rebuild)
-        return list(candidates_rebuild)
+        return list(candidates_renovation) + list(candidates_rebuild)
 
 
 def make_new_asset(
