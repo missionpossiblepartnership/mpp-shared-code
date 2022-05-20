@@ -3,14 +3,8 @@ import multiprocessing as mp
 
 import numpy as np
 
-from mppshared.config import (
-    LOG_LEVEL,
-    PATHWAYS,
-    RUN_PARALLEL,
-    SECTOR,
-    SENSITIVITIES,
-    run_config,
-)
+from mppshared.config import (LOG_LEVEL, PATHWAYS, RUN_PARALLEL, SECTOR,
+                              SENSITIVITIES, run_config)
 from mppshared.models.simulate import simulate_pathway
 from mppshared.solver.debugging_outputs import create_debugging_outputs
 from mppshared.solver.implicit_forcing import apply_implicit_forcing
@@ -25,9 +19,9 @@ np.random.seed(100)
 
 funcs = {
     "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    "MAKE_RANKINGS": make_rankings,
-    "SIMULATE_PATHWAY": simulate_pathway,
-    "CALCULATE_OUTPUTS": calculate_outputs,
+    # "MAKE_RANKINGS": make_rankings,
+    # "SIMULATE_PATHWAY": simulate_pathway,
+    # "CALCULATE_OUTPUTS": calculate_outputs,
     # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs
 }
 

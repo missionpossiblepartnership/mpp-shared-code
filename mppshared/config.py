@@ -205,14 +205,14 @@ SENSITIVITIES = [
 # Products produced by each sector
 PRODUCTS = {
     "chemicals": ["Ammonia", "Ammonium nitrate", "Urea"],
-    "aluminium": ["Alumina"],
+    "aluminium": ["Aluminium"],
 }
 
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
 INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_assets"}
 
 ### RANKING ###
-NUMBER_OF_BINS_RANKING = {"chemicals": 50, "aluminium": 10}
+NUMBER_OF_BINS_RANKING = {"chemicals": 50, "aluminium": 50}
 COST_METRIC_RELATIVE_UNCERTAINTY = {"chemicals": 0.1, "aluminium": 0.1}
 
 # GHGs and Emission scopes included in weighting when ranking technology transitions
@@ -275,10 +275,10 @@ indicates that for the newbuild rank, in the most_economic scenario, we favor bu
 4. Lower scope 3 emissions
 in that order!
 """
-lc_weight_cost = 0.8
-lc_weight_emissions = 0.2
-fa_weight_cost = 0.2
-fa_weight_emissions = 0.8
+lc_weight_cost = 1.0
+lc_weight_emissions = 0.0
+fa_weight_cost = 0.0
+fa_weight_emissions = 1.0
 RANKING_CONFIG = {
     "chemicals": {
         "greenfield": {
@@ -381,7 +381,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
     },
     "aluminium": {
         "maximum_asset_additions": 10,
-        "maximum_capacity_growth_rate": 0.7,
+        "maximum_capacity_growth_rate": 0.25,
         "years_rampup_phase": 5,
     },
 }
@@ -390,7 +390,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
 YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2050, "aluminium": 2045}
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 1}
+ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 0.5}
 
 # Regions with and without geological storage (salt caverns)
 REGIONS_SALT_CAVERN_AVAILABILITY = {

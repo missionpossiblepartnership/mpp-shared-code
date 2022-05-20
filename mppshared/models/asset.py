@@ -83,9 +83,9 @@ class Asset:
         Returns:
             LCOX for the asset in the given year
         """
-        # logger.debug(
-        #     f"product=='{self.product}' & technology_origin=='New-build' & year=={year} & region=='{self.region}' & technology_destination=='{self.technology}'"
-        # )
+        logger.debug(
+            f"product=='{self.product}' & technology_origin=='New-build' & year=={year} & region=='{self.region}' & technology_destination=='{self.technology}'"
+        )
         result = df_cost.query(
             f"product=='{self.product}' & technology_origin=='New-build' & year=={year} & region=='{self.region}' & technology_destination=='{self.technology}'"
         )["lcox"]

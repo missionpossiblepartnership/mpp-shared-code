@@ -292,6 +292,7 @@ def _calculate_resource_consumption(
         "Capex": "USD",
         "Opex": "USD",
         "Lifetime": "Years",
+        "CF": "%",
     }
     df_stack["unit"] = df_stack["parameter_group"].apply(lambda x: unit_map[x])
 
