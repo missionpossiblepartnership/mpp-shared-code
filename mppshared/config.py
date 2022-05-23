@@ -4,7 +4,7 @@ import logging
 import numpy as np
 
 ### LOGGER ####
-LOG_LEVEL = "INFO"
+LOG_LEVEL = "DEBUG"
 LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
 )
@@ -20,16 +20,24 @@ PATHWAYS = [
 
 # Sensitivities
 SENSITIVITIES = [
-    # "def",
-    "ng_partial",
-    "ng_high",
+    "def",
+    #     "ng_partial",
+    #     "ng_high",
 ]
 
 # Carbon price (for sensitivity analysis): needs to be run for 1 USD/tCO2 to create carbon_cost_addition.csv, then used for subsequent runs by multiplying accordingly
-CARBON_COSTS = [1]  # Values to test: 0, 25, 50
+CARBON_COSTS = [100]  # Values to test: 0, 25, 50
 # CARBON_COSTS = np.arange(0, 201, step=25)
 # CARBON_COSTS = [0, 25, 50, 75, 100]
 CARBON_COST_ADDITION_FROM_CSV = False
+
+# Scopes in CO2 price optimization
+SCOPES_CO2_COST = [
+    "scope1",
+    "scope2",
+    "scope3_upstream",
+    # "scope3_downstream"
+]
 
 ### RUN CONFIGURATION ###
 

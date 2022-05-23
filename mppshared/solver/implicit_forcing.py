@@ -17,6 +17,7 @@ from mppshared.config import (
     RANKING_COST_METRIC,
     REGIONAL_TECHNOLOGY_BAN,
     REGIONS_SALT_CAVERN_AVAILABILITY,
+    SCOPES_CO2_COST,
     SENSITIVITIES,
     START_YEAR,
     TECHNOLOGY_MORATORIUM,
@@ -233,11 +234,12 @@ def calculate_carbon_cost_addition_to_cost_metric(
         how="left",
     ).fillna(0)
 
-    # Additional cost from carbon cost is carbon cost multiplied with sum of scope 1 and scope 2 CO2 emissions
+    # Additional cost from carbon cost is carbon cost multiplied with sum of the co2 emission scopes included in the optimization
     df = df.merge(df_carbon_cost, on=["year"], how="left")
-    df["carbon_cost_addition"] = (df["co2_scope1"] + df["co2_scope2"]) * df[
-        "carbon_cost"
-    ]
+    df["sum_co2_emissions"] = 0
+    for scope in SCOPES_CO2_COST:
+        df["sum_co2_emissions"] += df[f"co2_{scope}"]
+    df["carbon_cost_addition"] = df["sum_co2_emissions"] * df["carbon_cost"]
 
     # Discount carbon cost addition
     # TODO: make grouping column function sector-specific

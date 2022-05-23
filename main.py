@@ -32,7 +32,7 @@ np.random.seed(100)
 funcs = {
     # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     # "MAKE_RANKINGS": make_rankings,
-    "SIMULATE_PATHWAY": simulate_pathway,
+    # "SIMULATE_PATHWAY": simulate_pathway,
     "CALCULATE_OUTPUTS": calculate_outputs,
     "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
     "SENSITIVITY_ANALYSIS": create_sensitivity_outputs,
