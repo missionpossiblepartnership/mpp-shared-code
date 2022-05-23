@@ -283,7 +283,12 @@ def _calculate_resource_consumption(
     ).reset_index()
 
     # Add unit
-    unit_map = {"Energy": "GJ", "Raw material": "GJ", "H2 storage": "GJ", "Cost": "USD"}
+    unit_map = {
+        "Energy": "PJ",
+        "Raw material": "PJ",
+        "H2 storage": "PJ",
+        "Cost": "USD",
+    }  # GJ/t * Mt = 10^9 * 10^6 J = 10^15 J = PJ
     df_stack["unit"] = df_stack["parameter_group"].apply(lambda x: unit_map[x])
 
     if "technology" not in agg_vars:
@@ -307,10 +312,10 @@ def create_table_all_data_year(
     df_emissions = df_emissions[df_emissions["year"] == year]
     df_stack_emissions = _calculate_emissions(df_stack, df_emissions)
     df_stack_emissions_co2e = _calculate_emissions_co2e(
-        df_stack, df_emissions, gwp="GWP-20"
+        df_stack, df_emissions, gwp="GWP-100"
     )
     df_stack_emissions_co2e_all_tech = _calculate_emissions_co2e(
-        df_stack, df_emissions, gwp="GWP-20", agg_vars=["product", "region"]
+        df_stack, df_emissions, gwp="GWP-100", agg_vars=["product", "region"]
     )
     df_emissions_intensity = _calculate_emissions_intensity(df_stack, df_emissions)
     df_emissions_intensity_all_tech = _calculate_emissions_intensity(
@@ -803,6 +808,10 @@ def calculate_outputs(
     df = pd.concat(data)
     df["sector"] = sector
 
+    # Express annual production volume in terms of ammonia
+    if SECTOR == "chemicals":
+        calculate_annual_production_volume_as_ammonia(df=df)
+
     # Pivot the dataframe to have the years as columns
     df_pivot = df.pivot_table(
         index=[
@@ -889,3 +898,54 @@ def write_key_assumptions_to_txt(
         for line in lines:
             f.write(line)
             f.write("\n")
+
+
+def calculate_annual_production_volume_as_ammonia(df):
+    """Transform ammonium nitrate and urea production to ammonia and add to product "All" """
+
+    df = df.loc[
+        (df["parameter_group"] == "Production")
+        & (df["parameter"] == "Annual production volume")
+    ]
+
+    df = df.set_index(
+        [
+            "sector",
+            "region",
+            "technology",
+            "parameter_group",
+            "parameter",
+            "year",
+            "unit",
+            "product",
+        ]
+    )
+    df = df.unstack(level=-1, fill_value=0).reset_index()
+
+    # TODO: improve this workaround
+    columns = [
+        "sector",
+        "region",
+        "technology",
+        "parameter_group",
+        "parameter",
+        "year",
+        "unit",
+        "ammonia",
+        "ammonium nitrate",
+        "urea",
+    ]
+    df.columns = columns
+
+    df["value"] = (
+        df["ammonia"]
+        + AMMONIA_PER_AMMONIUM_NITRATE * df["ammonium nitrate"]
+        + AMMONIA_PER_UREA * df["urea"]
+    )
+    df = df.drop(columns=["ammonia", "ammonium nitrate", "urea"])
+    df["product"] = "Ammonia_all"
+    df["unit"] = "MtNH3"
+
+    # df_test = df.groupby("year").sum()
+
+    return df
