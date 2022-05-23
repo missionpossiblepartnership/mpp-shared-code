@@ -1,4 +1,5 @@
 """ Process outputs to standardised output table."""
+import itertools
 from collections import defaultdict
 from lib2to3.pgen2.pgen import DFAState
 from re import T
@@ -909,3 +910,28 @@ def write_key_assumptions_to_txt(
         f"Technology moratorium year: {TECHNOLOGY_MORATORIUM[sector]}",
         f"Transitional period years: {TRANSITIONAL_PERIOD_YEARS[sector]}",
     ]
+
+
+def save_consolidated_outputs(sector: str):
+    data = []
+    for pathway, sensitivity in itertools.product(PATHWAYS, SENSITIVITIES):
+        df_ = pd.read_csv(
+            f"../mpp-shared-code/data/{SECTOR}/{pathway}/{sensitivity}/final/simulation_outputs_{SECTOR}_{pathway}_{sensitivity}.csv"
+        )
+        df_["pathway"] = pathway
+        df_["sensitivity"] = sensitivity
+        data.append(df_)
+    df = pd.concat(data)
+    columns = [
+        "sector",
+        "product",
+        "pathway",
+        "sensitivity",
+        "region",
+        "technology",
+        "parameter_group",
+        "parameter",
+        "unit",
+    ] + [str(i) for i in range(START_YEAR, END_YEAR + 1)]
+    df[columns]
+    df.to_csv(f"data/{sector}/simulation_outputs_{SECTOR}_consolidated.csv")

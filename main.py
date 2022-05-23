@@ -8,7 +8,8 @@ from mppshared.config import (LOG_LEVEL, PATHWAYS, RUN_PARALLEL, SECTOR,
 from mppshared.models.simulate import simulate_pathway
 from mppshared.solver.debugging_outputs import create_debugging_outputs
 from mppshared.solver.implicit_forcing import apply_implicit_forcing
-from mppshared.solver.output_processing import calculate_outputs
+from mppshared.solver.output_processing import (calculate_outputs,
+                                                save_consolidated_outputs)
 from mppshared.solver.ranking import make_rankings
 from mppshared.utility.utils import get_logger
 
@@ -18,9 +19,9 @@ logger.setLevel(LOG_LEVEL)
 np.random.seed(100)
 
 funcs = {
-    "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    "MAKE_RANKINGS": make_rankings,
-    "SIMULATE_PATHWAY": simulate_pathway,
+    # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
+    # "MAKE_RANKINGS": make_rankings,
+    # "SIMULATE_PATHWAY": simulate_pathway,
     "CALCULATE_OUTPUTS": calculate_outputs,
     # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
 }
@@ -64,6 +65,7 @@ def main():
         run_model_parallel(runs)
     else:
         run_model_sequential(runs)
+    save_consolidated_outputs(SECTOR)
 
 
 if __name__ == "__main__":
