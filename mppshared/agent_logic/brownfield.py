@@ -146,6 +146,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         elif (dict_constraints["emissions_constraint"] == False) | dict_constraints[
             "rampup_constraint"
         ] == False:
+            logger.debug(f"Removing {best_transition['technology_destination']}")
             df_rank = remove_all_transitions_with_destination_technology(
                 df_rank, best_transition["technology_destination"]
             )

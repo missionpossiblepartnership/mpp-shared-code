@@ -13,8 +13,8 @@ LOG_FORMATTER = logging.Formatter(
 # SECTOR = "chemicals"
 SECTOR = "aluminium"
 PATHWAYS = [
-    "bau",
-    "fa",
+    # "bau",
+    # "fa",
     "lc",
 ]
 
@@ -205,7 +205,7 @@ SENSITIVITIES = [
 # Products produced by each sector
 PRODUCTS = {
     "chemicals": ["Ammonia", "Ammonium nitrate", "Urea"],
-    "aluminium": ["Aluminium"],
+    "aluminium": ["Alumina"],
 }
 
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
@@ -380,9 +380,9 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
         "years_rampup_phase": 5,
     },
     "aluminium": {
-        "maximum_asset_additions": 10,
-        "maximum_capacity_growth_rate": 0.25,
-        "years_rampup_phase": 5,
+        "maximum_asset_additions": 4,  # 10
+        "maximum_capacity_growth_rate": 0.5,  # 0.25
+        "years_rampup_phase": 10,  # 5
     },
 }
 
@@ -484,7 +484,7 @@ SECTORAL_PATHWAYS = {
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = {
     "chemicals": 2020,
-    "aluminium": 2030,
+    "aluminium": 2050,
 }
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
 TRANSITIONAL_PERIOD_YEARS = {"chemicals": 30, "aluminium": 10}
