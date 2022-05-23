@@ -506,6 +506,8 @@ REGIONAL_TECHNOLOGY_BAN = {
     "aluminium": None,
 }
 
+HYDRO_TECHNOLOGY_BAN = {"aluminium": True, "chemicals": False}
+
 ### OUTPUTS PROCESSING ###
 
 # Ratios for calculating electrolysis capacity

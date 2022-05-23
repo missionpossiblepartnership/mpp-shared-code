@@ -8,8 +8,8 @@ import pandas as pd
 
 from mppshared.calculate.calculate_cost import discount_costs
 from mppshared.config import (EMISSION_SCOPES, FINAL_CARBON_COST, GHGS,
-                              INITIAL_CARBON_COST, PRODUCTS,
-                              REGIONAL_TECHNOLOGY_BAN,
+                              HYDRO_TECHNOLOGY_BAN, INITIAL_CARBON_COST,
+                              PRODUCTS, REGIONAL_TECHNOLOGY_BAN,
                               REGIONS_SALT_CAVERN_AVAILABILITY, START_YEAR,
                               TECHNOLOGY_MORATORIUM, TRANSITIONAL_PERIOD_YEARS)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
@@ -150,7 +150,8 @@ def apply_salt_cavern_availability_constraint(
 def apply_hydro_constraint(
     df_technology_transitions: pd.DataFrame, sector: str, products: list
 ) -> pd.DataFrame:
-    if sector == "aluminium" and "Aluminium" in products:
+    if HYDRO_TECHNOLOGY_BAN[sector]:
+        # if sector == "aluminium" and "Aluminium" in products:
         logger.debug("Filtering Hydro banned transitions")
         return df_technology_transitions[
             (
