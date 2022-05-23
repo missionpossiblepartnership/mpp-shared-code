@@ -160,10 +160,9 @@ def decrease_cuf_of_assets(
     # Get AssetStack for the given year
     stack = pathway.get_stack(year)
 
-    # Identify all assets that produce above CUF threshold and sort list so asset with highest
-    # LCOX is first
+    # Identify all assets that produce above CUF threshold and sort list so asset with highest cost metric is first
     assets_above_cuf_threshold = list(
-        filter(lambda asset: asset.cuf < CUF_UPPER_THRESHOLD, stack.assets)
+        filter(lambda asset: asset.cuf > CUF_LOWER_THRESHOLD, stack.assets)
     )
     assets_above_cuf_threshold = sort_assets_cost_metric(
         assets_above_cuf_threshold, pathway, year, cost_metric, descending=True
