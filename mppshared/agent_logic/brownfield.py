@@ -57,6 +57,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
     # Enact brownfield transitions while there are still candidates
     while (candidates != []) & (n_assets_transitioned <= maximum_n_assets_transitioned):
+        # logger.debug(f"{n_assets_transitioned}/{maximum_n_assets_transitioned}")
         # TODO: how do we avoid that all assets are retrofit at once in the beginning?
         # TODO: implement foresight with brownfield rebuild
 
@@ -64,11 +65,15 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         best_candidates = []
         while not best_candidates:
             # If no more transitions available, break and return pathway
+            logger.debug(
+                f"Len ranking {len(df_rank)}, assets_transitioned: {n_assets_transitioned}"
+            )
             if df_rank.empty:
                 return pathway
 
             # Choose the best transition, i.e. highest decommission rank
             best_transition = select_best_transition(df_rank)
+            # logger.debug(f"best rtransition; {best_transition}")
             # Check it the transition has PPA on it, if so only get plants that allow transition to ppa
             if "PPA" in best_transition["technology_destination"]:
                 best_candidates = list(
@@ -143,9 +148,9 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             n_assets_transitioned += 1
 
         # If the emissions constraint and/or the technology ramp-up constraint is hurt, remove remove that destination technology from the ranking table and try again
-        elif (dict_constraints["emissions_constraint"] == False) | dict_constraints[
-            "rampup_constraint"
-        ] == False:
+        elif (dict_constraints["emissions_constraint"] == False) | (
+            dict_constraints["rampup_constraint"] == False
+        ):
             logger.debug(f"Removing {best_transition['technology_destination']}")
             df_rank = remove_all_transitions_with_destination_technology(
                 df_rank, best_transition["technology_destination"]

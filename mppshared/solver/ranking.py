@@ -100,17 +100,35 @@ def rank_technology_histogram(
     df.fillna(0, inplace=True)
 
     # Calculate scores
-    logger.debug("Calculating scores")
-    df[f"{rank_type}_{pathway}_score"] = (
-        df["sum_emissions_delta_normalized"] * config["emissions"]
-    ) + (df[f"{cost_metric}_normalized"] * config["cost"])
-    logger.debug("Adding binned rankings")
+    if pathway == "lc":
+        logger.debug("Calculating reduction TCO")
+        df[f"{cost_metric}_adjusted_by_emissions"] = (1 + df[f"{cost_metric}"]) / (
+            1 + df["sum_emissions_delta"]
+        )
+        df[f"{cost_metric}_adjusted_by_emissions_normalized"] = 1 - (
+            df[f"{cost_metric}_adjusted_by_emissions"].max()
+            - df[f"{cost_metric}_adjusted_by_emissions"]
+        ) / (
+            df[f"{cost_metric}_adjusted_by_emissions"].max()
+            - df[f"{cost_metric}_adjusted_by_emissions"].min()
+        )
+        df.fillna(0, inplace=True)
+        df[f"{rank_type}_{pathway}_score"] = df[
+            f"{cost_metric}_adjusted_by_emissions_normalized"
+        ]
 
-    # Bin the rank scores
-    df_rank = df.groupby(["year"]).apply(
-        _add_binned_rankings, rank_type, pathway, n_bins
-    )
-    # df_rank = df
+    else:
+        logger.debug("Calculating scores")
+        df[f"{rank_type}_{pathway}_score"] = (
+            df["sum_emissions_delta_normalized"] * config["emissions"]
+        ) + (df[f"{cost_metric}_normalized"] * config["cost"])
+        logger.debug("Adding binned rankings")
+
+        # Bin the rank scores
+        df_rank = df.groupby(["year"]).apply(
+            _add_binned_rankings, rank_type, pathway, n_bins
+        )
+    df_rank = df
 
     # Calculate final rank for the transition type
     logger.debug("Calculating final rank")
