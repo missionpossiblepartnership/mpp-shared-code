@@ -43,6 +43,7 @@ def calculate_npv_costs(df_cost: pd.DataFrame) -> pd.DataFrame:
                 start_year=row.name,
                 lifetime=row["technology_lifetime"],
             ),
+            cols=["carbon_cost_addition"],
         ),
         axis=1,
     )
@@ -52,12 +53,10 @@ def net_present_value(
     df: pd.DataFrame, rate: float, cols: list[str] = None
 ) -> pd.Series:
     """Calculate net present value (NPV) of multiple dataframe columns at once.
-
     Args:
         df (pd.DataFrame): DataFrame with columns for NPV calculation
         rate: discount rate
         cols: the columns to calculate NPV of (if None, use all columns)
-
     Returns:
         pd.Series: NPVs of the cost columns, indexed by column name
     """
@@ -65,7 +64,6 @@ def net_present_value(
     value_share = (1 + rate) ** np.arange(0, len(df))
     if cols is None:
         cols = df.columns
-    logger.debug(df.dtypes)
     return df[cols].div(value_share, axis=0).sum()
 
 

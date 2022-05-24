@@ -14,8 +14,8 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "aluminium"
 PATHWAYS = [
     "bau",
-    # "fa",
-    # "lc",
+    "fa",
+    "lc",
 ]
 
 
@@ -23,16 +23,16 @@ PATHWAYS = [
 
 RUN_PARALLEL = False
 
-APPLY_CARBON_COST = True
+APPLY_CARBON_COST = False
 
 run_config = {
     "IMPORT_DATA",
     "CALCULATE_VARIABLES",
     "APPLY_IMPLICIT_FORCING",
     "MAKE_RANKINGS",
-    # "SIMULATE_PATHWAY",
-    # "CALCULATE_OUTPUTS",
-    # "CREATE_DEBUGGING_OUTPUTS",
+    "SIMULATE_PATHWAY",
+    "CALCULATE_OUTPUTS",
+    "CREATE_DEBUGGING_OUTPUTS",
     # "EXPORT_OUTPUTS",
     # "PLOT_AVAILABILITIES"
     # "MERGE_OUTPUTS"
