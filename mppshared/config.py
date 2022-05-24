@@ -390,7 +390,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
 YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2050, "aluminium": 2045}
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 1}
+ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 0.5}
 
 # Regions with and without geological storage (salt caverns)
 REGIONS_SALT_CAVERN_AVAILABILITY = {
