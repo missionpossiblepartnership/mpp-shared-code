@@ -7,9 +7,10 @@ import numpy as np
 import pandas as pd
 
 from mppshared.calculate.calculate_cost import discount_costs
-from mppshared.config import (EMISSION_SCOPES, FINAL_CARBON_COST, GHGS,
-                              HYDRO_TECHNOLOGY_BAN, INITIAL_CARBON_COST,
-                              PRODUCTS, REGIONAL_TECHNOLOGY_BAN,
+from mppshared.config import (APPLY_CARBON_COST, EMISSION_SCOPES,
+                              FINAL_CARBON_COST, GHGS, HYDRO_TECHNOLOGY_BAN,
+                              INITIAL_CARBON_COST, PRODUCTS,
+                              REGIONAL_TECHNOLOGY_BAN,
                               REGIONS_SALT_CAVERN_AVAILABILITY, START_YEAR,
                               TECHNOLOGY_MORATORIUM, TRANSITIONAL_PERIOD_YEARS)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
@@ -80,20 +81,29 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
     else:
         df_technology_switches = df_technology_switches.merge(
             df_technology_characteristics[
-                ["product", "year", "region", "technology", "technology_classification"]
+                [
+                    "product",
+                    "year",
+                    "region",
+                    "technology",
+                    "technology_classification",
+                    "technology_lifetime",
+                    "wacc",
+                ]
             ].rename({"technology": "technology_destination"}, axis=1),
             on=["product", "year", "region", "technology_destination"],
             how="left",
         )
 
-    carbon_cost = 0
-    if carbon_cost == 0:
+    # carbon_cost = 0
+    if APPLY_CARBON_COST == False:
         df_carbon_cost = df_technology_switches.copy()
     else:
         # Add carbon cost to TCO based on scope 1 and 2 CO2 emissions
         # TODO: improve runtime
         start = timer()
-        df_technology_switches = filter_df_for_development(df_technology_switches)
+        logger.debug("Applying carbon cost")
+        # df_technology_switches = filter_df_for_development(df_technology_switches)
         df_carbon_cost = apply_carbon_cost_to_tco(
             df_technology_switches, df_emissions, df_technology_characteristics
         )
@@ -222,21 +232,24 @@ def apply_carbon_cost_to_tco(
         how="left",
     ).fillna(0)
 
-    df = df.merge(
-        df_technology_characteristics.rename(
-            columns={"technology": "technology_destination"}
-        ),
-        on=["product", "region", "technology_destination"],
-        how="left",
-    ).fillna(0)
+    # df = df.merge(
+    #     df_technology_characteristics.rename(
+    #         columns={"technology": "technology_destination"}
+    #     ),
+    #     on=["product", "region", "technology_destination"],
+    #     how="left",
+    # ).fillna(0)
 
     # Additional cost from carbon cost is carbon cost multiplied with sum of scope 1 and scope 2 CO2 emissions
     cc = CarbonCostTrajectory(
-        trajectory="constant",
+        trajectory="linear",
         initial_carbon_cost=INITIAL_CARBON_COST,
         final_carbon_cost=FINAL_CARBON_COST,
     )
-    df_cc = df.merge(cc.df_carbon_cost, on=["year"])
+    cc.df_carbon_cost.to_csv("debug/carbon_cost.csv")
+    # df = df_technology_switches.copy()
+    logger.debug(df.columns)
+    df_cc = df.rename(columns={"year_x": "year"}).merge(cc.df_carbon_cost, on=["year"])
     df_cc["carbon_cost_addition"] = (df_cc["co2_scope1"] + df_cc["co2_scope2"]) * df_cc[
         "carbon_cost"
     ]

@@ -65,6 +65,7 @@ def net_present_value(
     value_share = (1 + rate) ** np.arange(0, len(df))
     if cols is None:
         cols = df.columns
+    logger.debug(df.dtypes)
     return df[cols].div(value_share, axis=0).sum()
 
 
@@ -87,16 +88,31 @@ def subset_cost_df(
     ]
 
     # Expand DataFrame beyond model years if necessary, assuming that cost data stay constant after MODEL_END_YEAR
-    if start_year + lifetime > END_YEAR:
-
+    if start_year + lifetime > df_cost.index.max():
         # TODO: make this workaround nicer
-        cost_value = df_cost.loc[df_cost.index == END_YEAR].copy()
-        extension_length = int((start_year + lifetime) - END_YEAR)
+        cost_value = df_cost.loc[
+            df_cost.index == df_cost.index.max(), ["carbon_cost_addition"]
+        ]
+        extension_length = int((start_year + lifetime) - df_cost.index.max())
         cost_constant = pd.concat([cost_value] * extension_length)
-        cost_constant["year"] = np.arange(END_YEAR + 1, start_year + lifetime + 1)
+        cost_constant["year"] = np.arange(
+            df_cost.index.max() + 1, start_year + lifetime + 1
+        )
         cost_constant = cost_constant.set_index("year", drop=True)
         cost_constant.index = cost_constant.index.astype(int)
-
         df_cost = pd.concat([df_cost, cost_constant])
-
     return df_cost
+    # if start_year + lifetime > END_YEAR:
+    #     logger.debug(start_year + lifetime)
+
+    #     # TODO: make this workaround nicer
+    #     cost_value = df_cost.loc[df_cost.index == END_YEAR].copy()
+    #     extension_length = int((start_year + lifetime) - END_YEAR)
+    #     cost_constant = pd.concat([cost_value] * extension_length)
+    #     cost_constant["year"] = np.arange(END_YEAR + 1, start_year + lifetime + 1)
+    #     cost_constant = cost_constant.set_index("year", drop=True)
+    #     cost_constant.index = cost_constant.index.astype(int)
+
+    #     df_cost = pd.concat([df_cost, cost_constant])
+
+    # return df_cost

@@ -83,6 +83,5 @@ class TechnologyRampup:
         df_rampup["maximum_asset_additions"] = df_rampup[
             "maximum_asset_additions"
         ].apply(lambda x: np.floor(x))
-        df_rampup.to_csv(f"debug/rampup_{self.technology}.csv")
 
         return df_rampup.loc[START_YEAR : END_YEAR + 1, ["maximum_asset_additions"]]
