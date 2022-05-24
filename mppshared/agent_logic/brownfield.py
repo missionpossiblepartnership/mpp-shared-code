@@ -169,9 +169,9 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             n_assets_transitioned += 1
 
         # If the emissions constraint and/or the technology ramp-up constraint is hurt, remove remove that destination technology from the ranking table and try again
-        elif (dict_constraints["emissions_constraint"] == False) | dict_constraints[
-            "rampup_constraint"
-        ] == False:
+        elif (dict_constraints["emissions_constraint"] == False) | (
+            dict_constraints["rampup_constraint"] == False
+        ):
             df_rank = remove_all_transitions_with_destination_technology(
                 df_rank, best_transition["technology_destination"]
             )

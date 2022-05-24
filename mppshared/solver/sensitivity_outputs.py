@@ -7,7 +7,7 @@ from plotly.subplots import make_subplots
 
 from mppshared.config import CARBON_COSTS, GWP
 
-AUTO_OPEN = False
+AUTO_OPEN = True
 
 
 def create_sensitivity_outputs():
@@ -19,7 +19,11 @@ def create_sensitivity_outputs():
         # "fa",
         "lc"
     ]
-    sensitivities = ["def", "ng_partial", "ng_high"]
+    sensitivities = [
+        "def",
+        # "ng_partial",
+        # "ng_high"
+    ]
 
     # For emissions calculations
     years = [2020, 2030, 2040, 2050]
@@ -38,7 +42,7 @@ def create_sensitivity_outputs():
     # Carbon costs
     anchor_carbon_cost = 75
     carbon_costs = CARBON_COSTS
-    carbon_costs = np.arange(0, 101, step=25)
+    # carbon_costs = np.arange(0, 101, step=25)
     # carbon_costs = [anchor_carbon_cost]
     # carbon_costs = [0]
 
@@ -52,7 +56,7 @@ def create_sensitivity_outputs():
         create_sensitivity_table(
             dict_sens, pathway, sensitivities, carbon_costs, save_path
         )
-        if len(sensitivities) > 1:
+        if len(sensitivities) > 0:
             ### SHARES BY NATURAL GAS PRICE ###
             create_shares_by_sensitivity(
                 dict_sens=dict_sens,

@@ -74,6 +74,21 @@ def apply_implicit_forcing(
         df_technology_switches, sector
     )
 
+    # TODO: remove this workaround
+    if sector == "chemicals":
+        switches_drop = (
+            df_technology_switches["technology_destination"]
+            == "GHR + CCS + ammonia synthesis"
+        ) & (df_technology_switches["switch_type"] == "brownfield_renovation")
+        df_technology_switches = df_technology_switches.loc[~switches_drop]
+
+        # Waste to ammonia and waste water to ammonium nitrate taken out
+        techs_to_drop = ["Waste to ammonia", "Waste Water to ammonium nitrate"]
+        switches_drop = (
+            df_technology_switches["technology_destination"].isin(techs_to_drop)
+        ) | (df_technology_switches["technology_origin"].isin(techs_to_drop))
+        df_technology_switches = df_technology_switches.loc[~switches_drop]
+
     # Apply technology moratorium (year after which newbuild capacity must be transition or
     # end-state technologies)
     if pathway != "bau":
