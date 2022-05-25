@@ -56,7 +56,7 @@ def create_sensitivity_outputs():
         create_sensitivity_table(
             dict_sens, pathway, sensitivities, carbon_costs, save_path
         )
-        if len(sensitivities) > 0:
+        if len(sensitivities) > 1:
             ### SHARES BY NATURAL GAS PRICE ###
             create_shares_by_sensitivity(
                 dict_sens=dict_sens,

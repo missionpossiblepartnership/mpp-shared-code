@@ -2,6 +2,7 @@
 from collections import defaultdict
 from lib2to3.pgen2.pgen import DFAState
 from re import T
+from this import d
 from tkinter import END
 import pandas as pd
 import numpy as np
@@ -630,12 +631,41 @@ def _calculate_plant_numbers_by_type(
 
 def calculate_weighted_average_cost_metric(
     df_cost: pd.DataFrame,
+    carbon_cost: CarbonCostTrajectory,
     importer: IntermediateDataImporter,
     sector: str,
     cost_metric="lcox",
     agg_vars=["product", "region", "technology"],
 ) -> pd.DataFrame:
     """Calculate weighted average of LCOX across the supply mix in a given year."""
+
+    # Add carbon cost to cost DataFrame
+    df_carbon_cost_addition = importer.get_carbon_cost_addition()
+    df_cc = carbon_cost.df_carbon_cost
+    merge_cols = [
+        "product",
+        "technology_destination",
+        "region",
+        "switch_type",
+        "year",
+    ]
+    df_cost = df_cost.merge(
+        df_carbon_cost_addition[merge_cols + [f"carbon_cost_addition_{cost_metric}"]],
+        on=merge_cols,
+        how="left",
+    )
+
+    # Carbon cost addition is for 1 USD/tCO2, hence multiply with right factor
+    constant_carbon_cost = df_cc.loc[df_cc["year"] == 2025, "carbon_cost"].item()
+    df_cost[f"carbon_cost_addition_{cost_metric}"] = (
+        df_cost[f"carbon_cost_addition_{cost_metric}"] * constant_carbon_cost
+    ).fillna(0)
+
+    df_cost[cost_metric] = (
+        df_cost[cost_metric] + df_cost[f"carbon_cost_addition_{cost_metric}"]
+    )
+
+    df_cost = df_cost.drop(columns=[f"carbon_cost_addition_{cost_metric}"])
 
     # If granularity on technology level, simply take LCOX from cost DataFrame
     if agg_vars == ["product", "region", "technology"]:
@@ -653,7 +683,8 @@ def calculate_weighted_average_cost_metric(
 
             if cost_metric == "lcox":
                 # Assume that assets built before start of model time horizon have LCOX of start year
-                df_stack.loc[df_stack["year"] < START_YEAR, "year"] = START_YEAR
+                # df_stack.loc[df_stack["year"] < START_YEAR, "year"] = START_YEAR
+                df_stack["year"] = year
             elif cost_metric == "marginal_cost":
                 # Marginal cost needs to correspond to curent year
                 df_stack["year"] = year
@@ -858,6 +889,12 @@ def calculate_outputs(
         agg_vars=["product", "region", "switch_type", "technology_destination"],
     )
 
+    df_plants_tech_only = _calculate_plant_numbers_by_type(
+        importer=importer,
+        sector=sector,
+        agg_vars=["switch_type", "technology_destination"],
+    )
+
     df_plants_all_tech = _calculate_plant_numbers_by_type(
         importer=importer,
         sector=sector,
@@ -896,6 +933,7 @@ def calculate_outputs(
     # Calculate weighted average of LCOX
     df_lcox = calculate_weighted_average_cost_metric(
         df_cost=df_cost,
+        carbon_cost=carbon_cost,
         importer=importer,
         sector=sector,
         cost_metric="lcox",
@@ -903,6 +941,7 @@ def calculate_outputs(
     )
     df_lcox_all_techs = calculate_weighted_average_cost_metric(
         df_cost=df_cost,
+        carbon_cost=carbon_cost,
         importer=importer,
         sector=sector,
         cost_metric="lcox",
@@ -910,6 +949,7 @@ def calculate_outputs(
     )
     df_lcox_all_regions_all_techs = calculate_weighted_average_cost_metric(
         df_cost=df_cost,
+        carbon_cost=carbon_cost,
         importer=importer,
         sector=sector,
         cost_metric="lcox",
@@ -918,6 +958,7 @@ def calculate_outputs(
 
     df_lcox_all_regions = calculate_weighted_average_cost_metric(
         df_cost=df_cost,
+        carbon_cost=carbon_cost,
         importer=importer,
         sector=sector,
         cost_metric="lcox",
@@ -927,6 +968,7 @@ def calculate_outputs(
     # Calculate weighted average of MC
     df_mc = calculate_weighted_average_cost_metric(
         df_cost=df_cost,
+        carbon_cost=carbon_cost,
         importer=importer,
         sector=sector,
         cost_metric="marginal_cost",
@@ -935,6 +977,7 @@ def calculate_outputs(
 
     df_mc_all_techs = calculate_weighted_average_cost_metric(
         df_cost=df_cost,
+        carbon_cost=carbon_cost,
         importer=importer,
         sector=sector,
         cost_metric="marginal_cost",
@@ -943,6 +986,7 @@ def calculate_outputs(
 
     df_mc_all_regions = calculate_weighted_average_cost_metric(
         df_cost=df_cost,
+        carbon_cost=carbon_cost,
         importer=importer,
         sector=sector,
         cost_metric="marginal_cost",
@@ -951,6 +995,7 @@ def calculate_outputs(
 
     df_mc_all_techs_all_regions = calculate_weighted_average_cost_metric(
         df_cost=df_cost,
+        carbon_cost=carbon_cost,
         importer=importer,
         sector=sector,
         cost_metric="marginal_cost",
@@ -1044,6 +1089,7 @@ def calculate_outputs(
             df_plants_all_regions,
             df_plants_all_tech,
             df_plants_all_regions_all_tech,
+            df_plants_tech_only,
         ]
     )
     df_pivot.reset_index(inplace=True)
@@ -1054,8 +1100,12 @@ def calculate_outputs(
     importer.export_data(
         df_pivot, f"simulation_outputs_{suffix}.csv", "final", index=False
     )
+    cc = carbon_cost.df_carbon_cost.loc[
+        carbon_cost.df_carbon_cost["year"] == 2050, "carbon_cost"
+    ].item()
     df_pivot.to_csv(
-        f"{OUTPUT_WRITE_PATH[sector]}/simulation_outputs_{suffix}.csv", index=False
+        f"{OUTPUT_WRITE_PATH[sector]}/{pathway}/{sensitivity}/carbon_cost_{cc}/simulation_outputs_{suffix}.csv",
+        index=False,
     )
 
     columns = [

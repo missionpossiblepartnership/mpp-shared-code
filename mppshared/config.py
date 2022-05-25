@@ -28,8 +28,8 @@ SENSITIVITIES = [
 # Carbon price (for sensitivity analysis): needs to be run for 1 USD/tCO2 to create carbon_cost_addition.csv, then used for subsequent runs by multiplying accordingly
 CARBON_COSTS = [75]  # Values to test: 0, 25, 50
 # CARBON_COSTS = np.arange(0, 301, step=25)
-CARBON_COSTS = [0, 25, 50, 75]
-# CARBON_COSTS = [0]
+CARBON_COSTS = [0, 25, 50, 75, 100, 125, 150]
+# CARBON_COSTS = [1]
 CARBON_COST_ADDITION_FROM_CSV = False
 
 # Scopes in CO2 price optimization
@@ -41,8 +41,7 @@ SCOPES_CO2_COST = [
 ]
 
 ### RUN CONFIGURATION ###
-
-RUN_PARALLEL = True
+RUN_PARALLEL = False
 run_config = {
     "IMPORT_DATA",
     "CALCULATE_VARIABLES",

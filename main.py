@@ -33,9 +33,9 @@ funcs = {
     # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     # "MAKE_RANKINGS": make_rankings,
     # "SIMULATE_PATHWAY": simulate_pathway,
-    "CALCULATE_OUTPUTS": calculate_outputs,
+    # "CALCULATE_OUTPUTS": calculate_outputs,
     # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
-    # "SENSITIVITY_ANALYSIS": create_sensitivity_outputs,
+    "SENSITIVITY_ANALYSIS": create_sensitivity_outputs,
 }
 
 
@@ -112,7 +112,7 @@ def main():
                 trajectory="constant",
                 initial_carbon_cost=cc,
                 final_carbon_cost=cc,
-                start_year=2025,
+                start_year=2030,
                 end_year=2050,
             )
         )
