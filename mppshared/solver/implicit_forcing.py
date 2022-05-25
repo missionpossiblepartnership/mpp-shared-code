@@ -1,5 +1,5 @@
 """ Apply implicit forcing mechanisms to the input tables: carbon cost, green premium and technology moratorium."""
-
+import sys
 from datetime import timedelta
 from timeit import default_timer as timer
 
@@ -11,7 +11,8 @@ from mppshared.config import (APPLY_CARBON_COST, EMISSION_SCOPES,
                               FINAL_CARBON_COST, GHGS, HYDRO_TECHNOLOGY_BAN,
                               INITIAL_CARBON_COST, PRODUCTS,
                               REGIONAL_TECHNOLOGY_BAN,
-                              REGIONS_SALT_CAVERN_AVAILABILITY, START_YEAR,
+                              REGIONS_SALT_CAVERN_AVAILABILITY,
+                              SCOPES_CO2_COST, START_YEAR,
                               TECHNOLOGY_MORATORIUM, TRANSITIONAL_PERIOD_YEARS)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
@@ -96,7 +97,7 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
         )
 
     # carbon_cost = 0
-    if APPLY_CARBON_COST == False:
+    if pathway != "cc":
         df_carbon_cost = df_technology_switches.copy()
     else:
         # Add carbon cost to TCO based on scope 1 and 2 CO2 emissions
@@ -104,8 +105,20 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
         start = timer()
         logger.debug("Applying carbon cost")
         # df_technology_switches = filter_df_for_development(df_technology_switches)
-        df_carbon_cost = apply_carbon_cost_to_tco(
-            df_technology_switches, df_emissions, df_technology_characteristics
+        df_technology_switches = df_technology_switches.drop_duplicates()
+
+        cc = CarbonCostTrajectory(
+            trajectory="linear",
+            initial_carbon_cost=INITIAL_CARBON_COST,
+            final_carbon_cost=FINAL_CARBON_COST,
+        )
+        df_cc = cc.df_carbon_cost
+        df_carbon_cost = calculate_carbon_cost_addition_to_cost_metric(
+            df_technology_switches=df_technology_switches,
+            df_emissions=df_emissions,
+            df_technology_characteristics=df_technology_characteristics,
+            cost_metric="tco",
+            df_carbon_cost=df_cc,
         )
         end = timer()
         logger.info(
@@ -118,6 +131,21 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
 
     # Calculate emission deltas between origin and destination technology
     df_ranking = calculate_emission_reduction(df_carbon_cost, df_emissions)
+    df_ranking = df_ranking.merge(
+        df_technology_characteristics[
+            [
+                "product",
+                "year",
+                "region",
+                "technology",
+                "technology_classification",
+                "technology_lifetime",
+                "wacc",
+            ]
+        ].rename({"technology": "technology_destination"}, axis=1),
+        on=["product", "year", "region", "technology_destination"],
+        how="left",
+    )
     importer.export_data(
         df=df_ranking,
         filename="technologies_to_rank.csv",
@@ -206,24 +234,24 @@ def apply_hydro_constraint(
 
 
 @timer_func
-def apply_carbon_cost_to_tco(
+def calculate_carbon_cost_addition_to_cost_metric(
     df_technology_switches: pd.DataFrame,
     df_emissions: pd.DataFrame,
     df_technology_characteristics: pd.DataFrame,
+    cost_metric: str,
+    df_carbon_cost: pd.DataFrame,
 ) -> pd.DataFrame:
-    """
-
+    """Apply constant carbon cost to a cost metric.
     Args:
         df_technology_switches: cost data for every technology switch (regional)
         df_emissions: emissions data for every technology (regional)
         df_technology_characteristics: characteristics for every technology
-
     Returns:
         pd.DataFrame: merge of the input DataFrames with additional column "carbon_cost_addition" added to TCO
     """
     # Drop emission columns with other GHGs
     for ghg in [ghg for ghg in GHGS if ghg != "co2"]:
-        df_emissions = df_emissions.drop(df_emissions.filter(regex=ghg).columns)
+        df_emissions = df_emissions.drop(columns=df_emissions.filter(regex=ghg).columns)
 
     # Merge technology switches, emissions and technology characteristics
     df = df_technology_switches.merge(
@@ -232,34 +260,27 @@ def apply_carbon_cost_to_tco(
         how="left",
     ).fillna(0)
 
-    # df = df.merge(
-    #     df_technology_characteristics.rename(
-    #         columns={"technology": "technology_destination"}
-    #     ),
-    #     on=["product", "region", "technology_destination"],
-    #     how="left",
-    # ).fillna(0)
+    df = df.merge(
+        df_technology_characteristics.rename(
+            columns={"technology": "technology_destination"}
+        ),
+        on=["product", "region", "year", "technology_destination"],
+        how="left",
+    ).fillna(0)
 
-    # Additional cost from carbon cost is carbon cost multiplied with sum of scope 1 and scope 2 CO2 emissions
-    cc = CarbonCostTrajectory(
-        trajectory="linear",
-        initial_carbon_cost=INITIAL_CARBON_COST,
-        final_carbon_cost=FINAL_CARBON_COST,
-    )
-    cc.df_carbon_cost.to_csv("debug/carbon_cost.csv")
-    # df = df_technology_switches.copy()
-    logger.debug(df.columns)
-    df_cc = df.rename(columns={"year_x": "year"}).merge(cc.df_carbon_cost, on=["year"])
-    df_cc["carbon_cost_addition"] = (df_cc["co2_scope1"] + df_cc["co2_scope2"]) * df_cc[
-        "carbon_cost"
-    ]
+    # Additional cost from carbon cost is carbon cost multiplied with sum of the co2 emission scopes included in the optimization
+    df = df.merge(df_carbon_cost, on=["year"], how="left")
+    df["sum_co2_emissions"] = 0
+    for scope in SCOPES_CO2_COST:
+        df["sum_co2_emissions"] += df[f"co2_{scope}"]
+    df["carbon_cost_addition"] = df["sum_co2_emissions"] * df["carbon_cost"]
 
     # Discount carbon cost addition
     # TODO: make grouping column function sector-specific
     grouping_cols = get_grouping_columns_for_npv_calculation("chemicals")
 
     df_discounted = discount_costs(
-        df_cc[
+        df[
             grouping_cols
             + ["year", "carbon_cost_addition", "technology_lifetime", "wacc"]
         ],
@@ -267,22 +288,167 @@ def apply_carbon_cost_to_tco(
     )
 
     # Add total discounted carbon cost to each technology switch
+    logger.debug("Setting index in df")
     df = df.set_index(grouping_cols + ["year"])
-    df["carbon_cost_addition"] = df_discounted["carbon_cost_addition"]
+    logger.debug("Setting carbon cost addition")
+    # df["carbon_cost_addition"] = df_discounted["carbon_cost_addition"]
+    df = df.drop(columns=["carbon_cost_addition"])
+    df = df.reset_index(drop=False).merge(
+        df_discounted.reset_index(drop=False),
+        on=[
+            "product",
+            "technology_origin",
+            "region",
+            "switch_type",
+            "technology_destination",
+            "year",
+        ],
+    )
+    logger.debug("Carbon cost addition set")
 
-    # Contribution of a cost to TCO is net present cost divided by (lifetime * capacity utilisation factor)
-    # TODO: integrate dynamic capacity utilisation functionality
-    cuf_dummy = 0.95
-    df["carbon_cost_addition_tco"] = (
-        df["carbon_cost_addition"] / (df["technology_lifetime"] * cuf_dummy)
-    ).fillna(0)
+    if cost_metric == "tco":
+        # Contribution of a cost to TCO is net present cost divided by (lifetime * capacity utilisation factor)
+        # TODO: integrate dynamic capacity utilisation functionality
+        cuf_dummy = 0.95
+        df["carbon_cost_addition_tco"] = (
+            df["carbon_cost_addition"] / (df["technology_lifetime"] * cuf_dummy)
+        ).fillna(0)
 
-    # Update TCO in technology switching DataFrame
-    df_technology_switches = df_technology_switches.set_index(grouping_cols + ["year"])
-    df_technology_switches["tco"] = df["tco"] + df["carbon_cost_addition_tco"]
+        # Update TCO in technology switching DataFrame
+        df_technology_switches = df_technology_switches.set_index(
+            grouping_cols + ["year"]
+        )
+        df_technology_switches["original_tco"] = df_technology_switches["tco"]
+        df_technology_switches["tco"] = df["tco"] + df["carbon_cost_addition"]
 
-    # Return technology switch DataFrame with updated TCO
-    return df_technology_switches.reset_index(drop=False)
+    elif cost_metric == "lcox":
+        # Contribution of a cost to LCOX is net present cost divided by (CUF * total discounted production)
+        # TODO: ensure that sector-specific
+        cuf = 0.95
+        rate = df_technology_characteristics["wacc"].unique()[0]
+        lifetime = df_technology_characteristics["technology_lifetime"].unique()[0]
+        value_shares = (1 + rate) ** np.arange(0, lifetime + 1)
+        total_discounted_production = np.sum(1 / value_shares)
+
+        df["carbon_cost_addition_lcox"] = (
+            df["carbon_cost_addition"] / (cuf * total_discounted_production)
+        ).fillna(0)
+
+    # Return technology switch DataFrame with carbon cost addition
+    # TODO: improve this workaround
+    return df.reset_index(drop=False).drop(
+        columns=[
+            "technology_classification_x",
+            "technology_classification_y",
+            "wacc",
+            "technology_lifetime",
+        ]
+    )
+
+
+# def apply_carbon_cost_to_tco(
+#     df_technology_switches: pd.DataFrame,
+#     df_emissions: pd.DataFrame,
+#     df_technology_characteristics: pd.DataFrame,
+# ) -> pd.DataFrame:
+#     """
+
+#     Args:
+#         df_technology_switches: cost data for every technology switch (regional)
+#         df_emissions: emissions data for every technology (regional)
+#         df_technology_characteristics: characteristics for every technology
+
+#     Returns:
+#         pd.DataFrame: merge of the input DataFrames with additional column "carbon_cost_addition" added to TCO
+#     """
+#     # Drop emission columns with other GHGs
+#     for ghg in [ghg for ghg in GHGS if ghg != "co2"]:
+#         df_emissions = df_emissions.drop(df_emissions.filter(regex=ghg).columns)
+
+#     # Merge technology switches, emissions and technology characteristics
+#     logger.debug("Merging switches with emissions")
+#     df = df_technology_switches.merge(
+#         df_emissions.rename(columns={"technology": "technology_destination"}),
+#         on=["product", "region", "year", "technology_destination"],
+#         how="left",
+#     ).fillna(0)
+#     logger.debug("Merging switches with characteristics")
+#     df = df.merge(
+#         df_technology_characteristics.rename(
+#             columns={"technology": "technology_destination"}
+#         ),
+#         on=["product", "region", "technology_destination"],
+#         how="left",
+#     ).fillna(0)
+
+#     # Additional cost from carbon cost is carbon cost multiplied with sum of scope 1 and scope 2 CO2 emissions
+#     logger.debug("Creating Carbon Cost trajectory")
+#     cc = CarbonCostTrajectory(
+#         trajectory="linear",
+#         initial_carbon_cost=INITIAL_CARBON_COST,
+#         final_carbon_cost=FINAL_CARBON_COST,
+#     )
+#     cc.df_carbon_cost.to_csv("debug/carbon_cost.csv")
+#     # df = df_technology_switches.copy()
+#     df_cc = df.rename(columns={"year_x": "year"}).merge(cc.df_carbon_cost, on=["year"])
+#     df_cc = df_cc.drop_duplicates()
+#     logger.debug("Calculating carbon cost addition")
+#     df_cc["carbon_cost_addition"] = (df_cc["co2_scope1"] + df_cc["co2_scope2"]) * df_cc[
+#         "carbon_cost"
+#     ]
+
+#     # Discount carbon cost addition
+#     # TODO: make grouping column function sector-specific
+#     logger.debug("Getting grouping columns")
+#     grouping_cols = get_grouping_columns_for_npv_calculation("chemicals")
+#     logger.debug("Calculating discount costs")
+#     df_discounted = discount_costs(
+#         df_cc[
+#             grouping_cols
+#             + ["year", "carbon_cost_addition", "technology_lifetime", "wacc"]
+#         ],
+#         grouping_cols,
+#     )
+#     df_discounted = df_discounted.drop_duplicates()
+#     df = df_cc.copy()
+
+#     df_discounted.to_csv("debug/df_discounted.csv")
+#     # Add total discounted carbon cost to each technology switch
+#     logger.debug("Add total discounted carbon cost to technology switches")
+#     df = df_cc.set_index(grouping_cols + ["year"])
+#     df.to_csv("debug/df_withouth_cost_addition.csv")
+#     df["carbon_cost_addition"] = df_discounted["carbon_cost_addition"]
+#     # df = df.reset_index(drop=False).merge(
+#     #     df_discounted.reset_index(drop=False),
+#     #     on=[
+#     #         "product",
+#     #         "technology_origin",
+#     #         "region",
+#     #         "switch_type",
+#     #         "technology_destination",
+#     #         "year",
+#     #     ],
+#     # )
+#     df.to_csv("debug/df_with_cost_addition.csv")
+
+#     # Contribution of a cost to TCO is net present cost divided by (lifetime * capacity utilisation factor)
+#     # TODO: integrate dynamic capacity utilisation functionality
+#     cuf_dummy = 0.95
+#     # df["carbon_cost_addition_tco"] = (
+#     #     df["carbon_cost_addition"] / (df["technology_lifetime"] * cuf_dummy)
+#     # ).fillna(0)
+
+#     df["original_tco"] = df["tco"]
+#     logger.debug("Calculating new TCO")
+#     df["tco"] = df["tco"] + df["carbon_cost_addition"]
+#     df.to_csv("debug/df_with_cost_addition.csv")
+#     # Update TCO in technology switching DataFrame
+#     # df_technology_switches = df_technology_switches.set_index(grouping_cols + ["year"])
+#     # df_technology_switches["tco"] = df["tco"] + df["carbon_cost_addition_tco"]
+
+#     # Return technology switch DataFrame with updated TCO
+#     # return df_technology_switches.reset_index(drop=False)
+#     return df
 
 
 def apply_technology_availability_constraint(

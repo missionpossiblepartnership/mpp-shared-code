@@ -127,12 +127,20 @@ class AssetStack:
         self.new_ids.append(new_asset.uuid)
 
     def update_asset(
-        self, asset_to_update: Asset, new_technology: str, new_classification: str
+        self,
+        asset_to_update: Asset,
+        new_technology: str,
+        new_classification: str,
+        switch_type: str,
     ):
         """Update an asset in AssetStack. This is done using the UUID to ensure correct updating."""
         uuid_update = asset_to_update.uuid
         asset_to_update.technology = new_technology
         asset_to_update.technology_classification = new_classification
+        if switch_type == "brownfield_renovation":
+            asset_to_update.retrofit = True
+        elif switch_type == "brownfield_newbuild":
+            asset_to_update.rebuild = True
         self.assets = [asset for asset in self.assets if asset.uuid is not uuid_update]
         self.assets.append(asset_to_update)
 

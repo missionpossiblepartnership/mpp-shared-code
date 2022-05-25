@@ -16,14 +16,19 @@ PATHWAYS = [
     "bau",
     "fa",
     "lc",
+    "cc",
 ]
 
+SCOPES_CO2_COST = [
+    "scope1",
+    "scope2",
+]
 
 ### RUN CONFIGURATION ###
 
 RUN_PARALLEL = False
 
-APPLY_CARBON_COST = False
+APPLY_CARBON_COST = True
 
 run_config = {
     "IMPORT_DATA",
@@ -340,6 +345,10 @@ RANKING_CONFIG = {
                 "cost": lc_weight_cost,
                 "emissions": lc_weight_emissions,
             },
+            "cc": {
+                "cost": 1.0,
+                "emissions": 0.0,
+            },
         },
         "brownfield": {
             "bau": {
@@ -353,6 +362,10 @@ RANKING_CONFIG = {
             "lc": {
                 "cost": lc_weight_cost,
                 "emissions": lc_weight_emissions,
+            },
+            "cc": {
+                "cost": 1.0,
+                "emissions": 0.0,
             },
         },
         "decommission": {
@@ -368,6 +381,10 @@ RANKING_CONFIG = {
                 "cost": lc_weight_cost,
                 "emissions": lc_weight_emissions,
             },
+            "cc": {
+                "cost": 1.0,
+                "emissions": 0.0,
+            },
         },
     },
 }
@@ -382,9 +399,9 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
         "years_rampup_phase": 5,
     },
     "aluminium": {
-        "maximum_asset_additions": 10,  # 10
+        "maximum_asset_additions": 6,  # 10
         "maximum_capacity_growth_rate": 0.5,  # 0.25
-        "years_rampup_phase": 5,  # 5
+        "years_rampup_phase": 8,  # 5
     },
 }
 
