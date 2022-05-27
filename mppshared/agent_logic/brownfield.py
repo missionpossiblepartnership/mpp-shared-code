@@ -1,6 +1,5 @@
 """ Logic for technology transitions of type brownfield rebuild and brownfield renovation."""
 import random
-import sys
 from copy import deepcopy
 from operator import methodcaller
 
@@ -124,6 +123,9 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 )
             new_technology = best_transition["technology_destination"]
             # Remove best transition from ranking table
+            if year == 2046:
+                print(best_transition)
+                print(f"len best candidates: {len(best_candidates)}")
             if len(best_candidates) == 0:
                 df_rank = remove_transition(df_rank, best_transition)
 
@@ -138,6 +140,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             new_technology=new_technology,
             new_classification=best_transition["technology_classification"],
             switch_type=best_transition["switch_type"],
+            origin_technology=origin_technology,
         )
 
         # Check constraints with tentative new stack
@@ -147,7 +150,6 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             year=year,
             transition_type="brownfield",
         )
-
         # If no constraint is hurt, execute the brownfield transition
         if (dict_constraints["emissions_constraint"] == True) & (
             dict_constraints["rampup_constraint"] == True
@@ -166,10 +168,12 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 new_technology=new_technology,
                 new_classification=best_transition["technology_classification"],
                 switch_type=best_transition["switch_type"],
+                origin_technology=origin_technology,
             )
             # Remove asset from candidates
             candidates.remove(asset_to_update)
-            n_assets_transitioned += 1
+            if origin_technology != new_technology:
+                n_assets_transitioned += 1
 
         # If the emissions constraint and/or the technology ramp-up constraint is hurt, remove remove that destination technology from the ranking table and try again
         elif dict_constraints["emissions_constraint"] == False:
@@ -179,6 +183,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 df_rank, best_transition["technology_destination"]
             )
 
-    logger.debug(f"{n_assets_transitioned} assets transitioned in year {year}.")
+    logger.debug(
+        f"{n_assets_transitioned} assets transitioned of maximum {maximum_n_assets_transitioned} in year {year}."
+    )
 
     return pathway

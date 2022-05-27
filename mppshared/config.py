@@ -14,9 +14,9 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "aluminium"
 PATHWAYS = [
     "bau",
-    "fa",
-    "lc",
-    "cc",
+    # "fa",
+    # "lc",
+    # "cc",
 ]
 
 SCOPES_CO2_COST = [
@@ -212,7 +212,7 @@ SENSITIVITIES = [
 # Products produced by each sector
 PRODUCTS = {
     "chemicals": ["Ammonia", "Ammonium nitrate", "Urea"],
-    "aluminium": ["Aluminium"],
+    "aluminium": ["Alumina"],
 }
 
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
