@@ -92,7 +92,7 @@ def rank_technology_histogram(
     logger.debug("Summing emissions delta")
     df["sum_emissions_delta"] = df[col_list].sum(axis=1)
     df["sum_emissions_delta"] = df["sum_emissions_delta"].apply(
-        lambda x: x if x > 0 else 0.000001
+        lambda x: x if x > 0 else (0.01 if x == 0 else 0.000001)
     )
     # Normalize the sum of emission reductions
     logger.debug("Normalization of emissions reductions")
