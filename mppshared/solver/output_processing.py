@@ -455,6 +455,7 @@ def _calculate_annual_investments(
         df["investment"] = (
             df["switch_capex"] * df["annual_production_capacity_destination"] * 1e6
         )
+        df.to_csv(f"debug/{year}_df_investment.csv")
         df = df.groupby(agg_vars)[["investment"]].sum().reset_index(drop=False)
 
         df = df.melt(

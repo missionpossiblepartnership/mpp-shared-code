@@ -13,8 +13,8 @@ LOG_FORMATTER = logging.Formatter(
 # SECTOR = "chemicals"
 SECTOR = "aluminium"
 PATHWAYS = [
-    "bau",
-    # "fa",
+    # "bau",
+    "fa",
     # "lc",
     # "cc",
 ]

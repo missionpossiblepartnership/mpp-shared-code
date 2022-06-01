@@ -1,4 +1,5 @@
 """Asset and asset stack classes, code adapted from MCC"""
+import sys
 from calendar import c
 from uuid import uuid4
 from xmlrpc.client import Boolean
@@ -147,10 +148,13 @@ class AssetStack:
             elif switch_type == "brownfield_newbuild":
                 asset_to_update.rebuild = True
                 asset_to_update.stay_same = False
-        elif origin_technology == new_technology:
+                print(asset_to_update.retrofit)
+                print(asset_to_update.stay_same)
+                sys.exit()
+        if origin_technology == new_technology:
             asset_to_update.stay_same = True
-            asset_to_update.rebuild = False
-            asset_to_update.retrofit = False
+            # asset_to_update.rebuild = False
+            # asset_to_update.retrofit = False
         self.assets = [asset for asset in self.assets if asset.uuid is not uuid_update]
         self.assets.append(asset_to_update)
 
