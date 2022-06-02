@@ -13,9 +13,9 @@ LOG_FORMATTER = logging.Formatter(
 # SECTOR = "chemicals"
 SECTOR = "aluminium"
 PATHWAYS = [
-    # "bau",
+    "bau",
     "fa",
-    # "lc",
+    "lc",
     # "cc",
 ]
 
@@ -503,7 +503,7 @@ SECTORAL_PATHWAYS = {
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = {
     "chemicals": 2020,
-    "aluminium": 2030,
+    "aluminium": 2020,
 }
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
 TRANSITIONAL_PERIOD_YEARS = {"chemicals": 30, "aluminium": 10}
