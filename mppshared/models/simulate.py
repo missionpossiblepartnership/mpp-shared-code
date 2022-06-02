@@ -156,8 +156,5 @@ def create_dict_technology_rampup(
                     "maximum_capacity_growth_rate"
                 ],
             )
-            dict_technology_rampup[technology].df_rampup.to_csv(
-                f"debug/{technology}_rampup.csv"
-            )
 
     return dict_technology_rampup
