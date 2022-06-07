@@ -122,6 +122,9 @@ class SimulationPathway:
         logger.debug("Getting the transition registry to track technology transitions")
         self.transitions = TransitionRegistry()
 
+        # Save carbon cost trajectory
+        self.carbon_cost = carbon_cost
+
     def _import_rankings(self):
         """Import ranking for all products and rank types from the CSVs"""
         rankings = defaultdict(dict)

@@ -147,9 +147,14 @@ class AssetStack:
         return not self.assets
 
     def filter_assets(
-        self, product=None, region=None, technology=None, technology_classification=None
+        self,
+        product=None,
+        region=None,
+        technology=None,
+        technology_classification=None,
+        status=None,
     ) -> list:
-        """Filter assets based on one or more criteria"""
+        """Filter assets based on one or more criteria, status is either of None, greenfield_status, rebuild_status, retrofit_status"""
         assets = self.assets
         if region is not None:
             assets = filter(lambda asset: asset.region == region, assets)
@@ -164,6 +169,12 @@ class AssetStack:
                 ),
                 assets,
             )
+        if status == "greenfield_status":
+            assets = filter(lambda asset: asset.greenfield == True, assets)
+        if status == "retrofit_status":
+            assets = filter(lambda asset: asset.retrofit == True, assets)
+        if status == "rebuild_status":
+            assets = filter(lambda asset: asset.rebuild == True, assets)
 
         return list(assets)
 
@@ -353,14 +364,20 @@ class AssetStack:
         return df
 
     def get_number_of_assets(
-        self, technology_classification=None, product=None, technology=None, region=None
+        self,
+        technology_classification=None,
+        product=None,
+        technology=None,
+        region=None,
+        status=None,
     ):
-        "Get number of assets in the asset stack"
+        "Get number of assets in the asset stack, status is either of None, greenfield_status, rebuild_status, retrofit_status"
         assets = self.filter_assets(
             technology_classification=technology_classification,
             product=product,
             technology=technology,
             region=region,
+            status=status,
         )
         return len(assets)
 
@@ -395,6 +412,12 @@ class AssetStack:
         candidates_renovation = filter(
             lambda asset: asset.retrofit == False, self.assets
         )
+
+        # Beyond 2045, force retrofit of Natural Gas + CCS with process emissions only
+        if (sector == "chemicals") & (year >= 2045):
+            candidates_renovation = self.filter_assets(
+                technology_classification="transition"
+            )
 
         # Assets can be rebuild if their CUF exceeds the threshold and they are older than the investment cycle
         candidates_rebuild = filter(

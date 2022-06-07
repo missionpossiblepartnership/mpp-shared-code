@@ -1,10 +1,11 @@
 """Configuration file for the library."""
 import logging
+from tkinter.tix import Tree
 
 import numpy as np
 
 ### LOGGER ####
-LOG_LEVEL = "DEBUG"
+LOG_LEVEL = "INFO"
 LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
 )
@@ -21,14 +22,16 @@ PATHWAYS = [
 # Sensitivities
 SENSITIVITIES = [
     "def",
-    # "ng_partial",
-    # "ng_high",
+    "ng_partial",
+    "ng_high",
+    "ng_low",
 ]
 
 # Carbon price (for sensitivity analysis): needs to be run for 1 USD/tCO2 to create carbon_cost_addition.csv, then used for subsequent runs by multiplying accordingly
-CARBON_COSTS = [75]  # Values to test: 0, 25, 50
+CARBON_COSTS = [1]
 # CARBON_COSTS = np.arange(0, 301, step=25)
-CARBON_COSTS = [0, 25, 50, 75, 100, 125, 150]
+CARBON_COSTS = [0, 25, 50, 75]
+# CARBON_COSTS = [60, 70]
 # CARBON_COSTS = [1]
 CARBON_COST_ADDITION_FROM_CSV = False
 
@@ -40,8 +43,20 @@ SCOPES_CO2_COST = [
     # "scope3_downstream"
 ]
 
-### RUN CONFIGURATION ###
+# Run parallel/sequential
 RUN_PARALLEL = False
+# Delays for brownfield transitions to make the model more realistic
+BROWNFIELD_RENOVATION_START_YEAR = {
+    "chemicals": 2025,  # means retrofit plants come online in 2026
+    "aluminium": 2020,
+}
+
+BROWNFIELD_REBUILD_START_YEAR = {
+    "chemicals": 2027,  # means rebuild plants come online in 2028
+    "aluminium": 2020,
+}
+
+### RUN CONFIGURATION ###
 run_config = {
     "IMPORT_DATA",
     "CALCULATE_VARIABLES",
@@ -237,7 +252,7 @@ INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_as
 
 ### RANKING ###
 NUMBER_OF_BINS_RANKING = {"chemicals": 50, "aluminium": 10}
-COST_METRIC_RELATIVE_UNCERTAINTY = {"chemicals": 0.1, "aluminium": 0.1}
+COST_METRIC_RELATIVE_UNCERTAINTY = {"chemicals": 0.05, "aluminium": 0.1}
 
 # GHGs and Emission scopes included in weighting when ranking technology transitions
 GHGS_RANKING = {"chemicals": ["co2"], "aluminium": ["co2"]}
@@ -399,9 +414,9 @@ RANKING_CONFIG = {
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
     "chemicals": {
-        "maximum_asset_additions": 8,
-        "maximum_capacity_growth_rate": 0.7,
-        "years_rampup_phase": 5,
+        "maximum_asset_additions": 6,
+        "maximum_capacity_growth_rate": 0.8,
+        "years_rampup_phase": 10,
     },
     "aluminium": {
         "maximum_asset_additions": 4,
@@ -414,7 +429,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
 YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2050, "aluminium": 2045}
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-ANNUAL_RENOVATION_SHARE = {"chemicals": 0.2, "aluminium": 1}
+ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 1}
 
 # Regions with and without geological storage (salt caverns)
 REGIONS_SALT_CAVERN_AVAILABILITY = {
@@ -430,6 +445,26 @@ REGIONS_SALT_CAVERN_AVAILABILITY = {
         "Russia": "yes",
         "Rest of Asia": "yes",
     }
+}
+
+# List of regions
+REGIONS = {
+    "chemicals": [
+        "Africa",
+        "China",
+        "Europe",
+        "India",
+        "Latin America",
+        "Middle East",
+        "North America",
+        "Oceania",
+        "Russia",
+        "Rest of Asia",
+        "Brazil",
+        "Australia",
+        "Namibia",
+        "Saudi Arabia",
+    ]
 }
 
 # Share of demand in each region that needs to be fulfilled by production in that region
@@ -501,6 +536,13 @@ SECTORAL_PATHWAYS = {
         "action_start": 2023,
     },
 }
+
+# Maximum share of global demand that can be supplied by one region
+MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION = {"chemicals": 0.3, "aluminium": 1}
+
+# Increase in cost metric required to enact a brownfield renovation or brownfield rebuild transition
+COST_METRIC_DECREASE_BROWNFIELD = {"chemicals": 0.05, "aluminium": 0}
+
 
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = {

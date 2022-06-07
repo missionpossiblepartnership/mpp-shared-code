@@ -49,9 +49,17 @@ class CarbonCostTrajectory:
                 self.df_carbon_cost["year"] >= start_year, "carbon_cost"
             ] = initial_carbon_cost
         elif trajectory == "linear":
-            self.df_carbon_cost["carbon_cost"] = np.linspace(
-                initial_carbon_cost, final_carbon_cost, num=END_YEAR - START_YEAR
+            self.df_carbon_cost.loc[
+                self.df_carbon_cost["year"] < start_year, "carbon_cost"
+            ] = 0
+            self.df_carbon_cost.loc[
+                self.df_carbon_cost["year"].between(start_year, end_year), "carbon_cost"
+            ] = np.linspace(
+                initial_carbon_cost, final_carbon_cost, num=end_year - start_year + 1
             )
+            self.df_carbon_cost.loc[
+                self.df_carbon_cost["year"] >= end_year, "carbon_cost"
+            ] = final_carbon_cost
 
         # TODO: implement logistic carbon cost
 

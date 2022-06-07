@@ -8,6 +8,8 @@ import numpy as np
 import pandas as pd
 import random
 
+from pandera import Bool
+
 
 from mppshared.agent_logic.agent_logic_functions import (
     remove_transition,
@@ -17,6 +19,10 @@ from mppshared.agent_logic.agent_logic_functions import (
 )
 from mppshared.config import (
     ANNUAL_RENOVATION_SHARE,
+    BROWNFIELD_REBUILD_START_YEAR,
+    BROWNFIELD_RENOVATION_START_YEAR,
+    COST_METRIC_DECREASE_BROWNFIELD,
+    END_YEAR,
     LOG_LEVEL,
     RANKING_COST_METRIC,
     REGIONAL_TECHNOLOGY_BAN,
@@ -57,13 +63,14 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         df_rank, sector_bans=REGIONAL_TECHNOLOGY_BAN[pathway.sector]
     )
 
-    # In 2020 and 2021 do nothing to picture historical trajectory
-    if year in [2020, 2021]:
-        df_rank = pd.DataFrame()
-
     # If pathway is BAU, take out brownfield renovation to avoid retrofits to end-state technologies
     if pathway.pathway == "BAU":
         df_rank = df_rank.loc[~(df_rank["switch_type"] == "brownfield_renovation")]
+
+    # Apply start years of brownfield transitions
+    df_rank = apply_start_years_brownfield_transitions(
+        df_rank=df_rank, pathway=pathway, year=year
+    )
 
     # Get assets eligible for brownfield transitions
     candidates = new_stack.get_assets_eligible_for_brownfield(
@@ -73,9 +80,16 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     # Track number of assets that undergo transition
     # TODO: renovation share applied to assets with initial technology?
     n_assets_transitioned = 0
-    maximum_n_assets_transitioned = np.floor(
+    maximum_n_assets_transitioned = np.ceil(
         ANNUAL_RENOVATION_SHARE[pathway.sector] * new_stack.get_number_of_assets()
     )
+
+    # From 2045 onwards, all transition techs need to be retrofit to end-state, so apply cap based on remaining number of assets
+    # TODO: improve this quick fix
+
+    # Avoid long exponential decline
+    # if maximum_n_assets_transitioned < 30:
+    #     maximum_n_assets_transitioned = 30
     logger.debug(
         f"Number of assets eligible for brownfield transition: {len(candidates)} in year {year}, of which maximum {maximum_n_assets_transitioned} can be transitioned."
     )
@@ -95,6 +109,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
             # Choose the best transition, i.e. highest decommission rank
             best_transition = select_best_transition(df_rank)
+
             # Check it the transition has PPA on it, if so only get plants that allow transition to ppa
             if "PPA" in best_transition["technology_destination"]:
                 best_candidates = list(
@@ -168,7 +183,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             candidates.remove(asset_to_update)
             n_assets_transitioned += 1
 
-        # If the emissions constraint and/or the technology ramp-up constraint is hurt, remove remove that destination technology from the ranking table and try again
+        # If the emissions constraint and/or the technology ramp-up constraint is hurt, remove that destination technology from the ranking table and try again
         elif (dict_constraints["emissions_constraint"] == False) | (
             dict_constraints["rampup_constraint"] == False
         ):
@@ -179,6 +194,20 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     logger.debug(f"{n_assets_transitioned} assets transitioned in year {year}.")
 
     return pathway
+
+
+def apply_start_years_brownfield_transitions(
+    df_rank: pd.DataFrame, pathway: SimulationPathway, year: int
+):
+    if pathway.pathway in ["fa", "lc"]:
+
+        if year < BROWNFIELD_RENOVATION_START_YEAR[pathway.sector]:
+            df_rank = df_rank.loc[df_rank["switch_type"] != "brownfield_renovation"]
+
+        if year < BROWNFIELD_REBUILD_START_YEAR[pathway.sector]:
+            df_rank = df_rank.loc[df_rank["switch_type"] != "brownfield_newbuild"]
+
+    return df_rank
 
 
 def apply_brownfield_filters_chemicals(
@@ -219,16 +248,7 @@ def apply_brownfield_filters_chemicals(
         axis=1,
     )
 
-    # For China, add DAC component of LCOX to urea production with Natural Gas SMR after 2035
-    year_dac = 2035
-    lcox_comp_dac = 152.65  # USD/tUrea
-    df_origin_techs["lcox"] = np.where(
-        (df_origin_techs["region"] == "China") & (df_origin_techs["year"] >= year_dac),
-        df_origin_techs["lcox_origin"] + lcox_comp_dac,
-        df_origin_techs["lcox_origin"],
-    )
-
-    # Add to ranking table and filter out retrofits which would increase LCOX
+    # Add to ranking table and filter out brownfield transitions which would not decrease LCOX "substantially"
     df_rank = df_rank.merge(
         df_origin_techs,
         on=["product", "region", "technology_origin", "year"],
@@ -241,7 +261,30 @@ def apply_brownfield_filters_chemicals(
         how="left",
     ).fillna(0)
 
-    filter = df_rank[f"{cost_metric}_destination"] < df_rank[f"{cost_metric}_origin"]
+    # Enforce retrofit of CCS with process emissions only
+    # TODO: remove this workaround
+    # df_cc = pathway.carbon_cost.df_carbon_cost
+    # flag_transition_forced_retrofit = False
+    # if df_cc.loc[df_cc["year"] == END_YEAR, "carbon_cost"].item() == 75:
+    #     flag_transition_forced_retrofit = True
+
+    # if flag_transition_forced_retrofit & (pathway.pathway == "def") & (year >= 2045):
+    #     # if year > 2050:
+    #     df_rank.loc[
+    #         (
+    #             df_rank["technology_origin"]
+    #             == "Natural Gas SMR + CCS (process emissions only) + ammonia synthesis"
+    #         )
+    #         & (
+    #             df_rank["technology_destination"]
+    #             == "Natural Gas SMR + CCS + ammonia synthesis"
+    #         ),
+    #         f"{cost_metric}_destination",
+    #     ] = 0
+
+    filter = df_rank[f"{cost_metric}_destination"] < df_rank[
+        f"{cost_metric}_origin"
+    ].apply(lambda x: x * (1 - COST_METRIC_DECREASE_BROWNFIELD[pathway.sector]))
     df_rank = df_rank.loc[filter]
 
     return df_rank

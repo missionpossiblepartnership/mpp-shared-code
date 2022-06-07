@@ -107,6 +107,8 @@ def apply_implicit_forcing(
             on=["product", "year", "region", "technology_destination"],
             how="left",
         )
+
+    # Apply carbon cost
     df_cc = carbon_cost.df_carbon_cost
     if df_cc["carbon_cost"].sum() == 0:
         df_carbon_cost = df_technology_switches.copy()

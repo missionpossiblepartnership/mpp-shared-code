@@ -13,6 +13,8 @@ from mppshared.config import (
     PRODUCTS,
     EMISSION_SCOPES,
     START_YEAR,
+    AMMONIA_PER_AMMONIUM_NITRATE,
+    AMMONIA_PER_UREA,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
@@ -372,6 +374,9 @@ def output_emissions_trajectory(importer: IntermediateDataImporter):
     df_wide = pd.pivot_table(
         df_trajectory, values="value", index="variable", columns="year"
     )
+    df_wide.loc["emissions_co2_scope1+2"] = (
+        df_wide.loc["emissions_co2_scope1"] + df_wide.loc["emissions_co2_scope2"]
+    )
     importer.export_data(df_wide, "emissions_trajectory.csv", "final")
     plot_emissions_trajectory(importer=importer, df_trajectory=df_trajectory)
 
@@ -388,7 +393,27 @@ def create_technology_roadmap(importer: IntermediateDataImporter) -> pd.DataFram
 
         # Group by technology and sum annual production volume
         df_stack = importer.get_asset_stack(year=year)
-        df_sum = df_stack.groupby(["technology"], as_index=False).sum()
+        df_sum = df_stack.groupby(["product", "technology"], as_index=False).sum()[
+            ["product", "technology", "annual_production_volume"]
+        ]
+
+        # Transform all production volumes to Mt NH3
+        df_sum = df_sum.set_index(
+            [
+                "technology",
+                "product",
+            ]
+        )
+        df_sum = df_sum.unstack(level=-1, fill_value=0).reset_index()
+        col_names = ["technology", "ammonia", "ammonium nitrate", "urea"]
+        df_sum.columns = col_names
+
+        df_sum["annual_production_volume"] = (
+            df_sum["ammonia"]
+            + AMMONIA_PER_AMMONIUM_NITRATE * df_sum["ammonium nitrate"]
+            + AMMONIA_PER_UREA * df_sum["urea"]
+        )
+        df_sum = df_sum.drop(columns=["ammonia", "ammonium nitrate", "urea"])
         df_sum = df_sum[["technology", "annual_production_volume"]].rename(
             {"annual_production_volume": year}, axis=1
         )
@@ -398,28 +423,31 @@ def create_technology_roadmap(importer: IntermediateDataImporter) -> pd.DataFram
 
     # Sort technologies as required
     df_roadmap = df_roadmap.loc[
-        ~(df_roadmap["technology"] == "Waste Water to ammonium nitrate")
+        ~(
+            df_roadmap["technology"].isin(
+                ["Waste to ammonia", "Waste Water to ammonium nitrate"]
+            )
+        )
     ]
     technologies = [
-        "Natural Gas SMR + ammonia synthesis",
-        "Coal Gasification + ammonia synthesis",
-        "Natural Gas SMR + CCS (process emissions only) + ammonia synthesis",
-        "Electrolyser + SMR + ammonia synthesis",
-        "Electrolyser + Coal Gasification + ammonia synthesis",
+        "Biomass Digestion + ammonia synthesis",
+        "Biomass Gasification + ammonia synthesis",
         "Electrolyser - grid PPA + ammonia synthesis",
         "Electrolyser - dedicated VRES + grid PPA + ammonia synthesis",
         "Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis",
         "Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis",
+        "Methane Pyrolysis + ammonia synthesis",
         "Coal Gasification+ CCS + ammonia synthesis",
         "Natural Gas ATR + CCS + ammonia synthesis",
         "Oversized ATR + CCS",
         "Natural Gas SMR + CCS + ammonia synthesis",
         "ESMR Gas + CCS + ammonia synthesis",
         "GHR + CCS + ammonia synthesis",
-        "Methane Pyrolysis + ammonia synthesis",
-        "Biomass Digestion + ammonia synthesis",
-        "Biomass Gasification + ammonia synthesis",
-        "Waste to ammonia",
+        "Natural Gas SMR + CCS (process emissions only) + ammonia synthesis",
+        "Electrolyser + SMR + ammonia synthesis",
+        "Electrolyser + Coal Gasification + ammonia synthesis",
+        "Natural Gas SMR + ammonia synthesis",
+        "Coal Gasification + ammonia synthesis",
     ]
     tech_order = CategoricalDtype(technologies, ordered=True)
     df_roadmap["technology"] = df_roadmap["technology"].astype(tech_order)
@@ -498,7 +526,11 @@ def create_emissions_trajectory(importer: IntermediateDataImporter) -> pd.DataFr
 
         # Melt to long format and concatenate
         cols_to_keep = [f"emissions_{col}" for col in emission_cols]
-        df_total = df_stack_emissions.groupby("product").sum()[cols_to_keep]
+        df_total = df_stack_emissions.groupby("product").sum()
+        df_total.loc["All"] = 0
+        for product in [product for product in df_total.index if product != "All"]:
+            df_total.loc["All"] += df_total.loc[product]
+        df_total = df_total.loc[df_total.index == "All", cols_to_keep]
         df_total = df_total.melt()
         df_total["year"] = year
         df_trajectory = pd.concat([df_total, df_trajectory], axis=0)

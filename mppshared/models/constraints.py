@@ -136,6 +136,7 @@ def get_regional_production_constraint_table(
     pathway: SimulationPathway, stack: AssetStack, product: str, year: int
 ) -> pd.DataFrame:
     """Get table that compares regional production with regional demand for a given year"""
+
     # Get regional production and demand
     df_regional_production = stack.get_regional_production_volume(product)
     df_demand = pathway.get_regional_demand(product, year)

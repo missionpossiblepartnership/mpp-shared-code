@@ -639,33 +639,42 @@ def calculate_weighted_average_cost_metric(
 ) -> pd.DataFrame:
     """Calculate weighted average of LCOX across the supply mix in a given year."""
 
-    # Add carbon cost to cost DataFrame
-    df_carbon_cost_addition = importer.get_carbon_cost_addition()
-    df_cc = carbon_cost.df_carbon_cost
-    merge_cols = [
-        "product",
-        "technology_destination",
-        "region",
-        "switch_type",
-        "year",
-    ]
-    df_cost = df_cost.merge(
-        df_carbon_cost_addition[merge_cols + [f"carbon_cost_addition_{cost_metric}"]],
-        on=merge_cols,
-        how="left",
-    )
+    if (
+        carbon_cost.df_carbon_cost.loc[
+            carbon_cost.df_carbon_cost["year"] == 2050, "carbon_cost"
+        ].item()
+        > 0
+    ):
+        # Add carbon cost to cost DataFrame
+        df_carbon_cost_addition = importer.get_carbon_cost_addition()
+        df_cc = carbon_cost.df_carbon_cost
+        df_cost = df_cost.loc[df_cost["technology_origin"] == "New-build"]
+        merge_cols = [
+            "product",
+            "technology_destination",
+            "region",
+            "switch_type",
+            "year",
+        ]
+        df_cost = df_cost.merge(
+            df_carbon_cost_addition[
+                merge_cols + [f"carbon_cost_addition_{cost_metric}"]
+            ],
+            on=merge_cols,
+            how="left",
+        )
 
-    # Carbon cost addition is for 1 USD/tCO2, hence multiply with right factor
-    constant_carbon_cost = df_cc.loc[df_cc["year"] == 2025, "carbon_cost"].item()
-    df_cost[f"carbon_cost_addition_{cost_metric}"] = (
-        df_cost[f"carbon_cost_addition_{cost_metric}"] * constant_carbon_cost
-    ).fillna(0)
+        # Carbon cost addition is for 1 USD/tCO2, hence multiply with right factor
+        constant_carbon_cost = df_cc.loc[df_cc["year"] == 2050, "carbon_cost"].item()
+        df_cost[f"carbon_cost_addition_{cost_metric}"] = (
+            df_cost[f"carbon_cost_addition_{cost_metric}"] * constant_carbon_cost
+        ).fillna(0)
 
-    df_cost[cost_metric] = (
-        df_cost[cost_metric] + df_cost[f"carbon_cost_addition_{cost_metric}"]
-    )
+        df_cost[cost_metric] = (
+            df_cost[cost_metric] + df_cost[f"carbon_cost_addition_{cost_metric}"]
+        )
 
-    df_cost = df_cost.drop(columns=[f"carbon_cost_addition_{cost_metric}"])
+        df_cost = df_cost.drop(columns=[f"carbon_cost_addition_{cost_metric}"])
 
     # If granularity on technology level, simply take LCOX from cost DataFrame
     if agg_vars == ["product", "region", "technology"]:
@@ -690,7 +699,6 @@ def calculate_weighted_average_cost_metric(
                 df_stack["year"] = year
 
             # Add LCOX to each asset
-            df_cost = df_cost.loc[df_cost["technology_origin"] == "New-build"]
             df_cost = df_cost.rename(columns={"technology_destination": "technology"})
             df_stack = df_stack.merge(
                 df_cost, on=["product", "region", "technology", "year"], how="left"

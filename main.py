@@ -109,11 +109,11 @@ def main():
     for cc in carbon_costs:
         carbon_cost_trajectories.append(
             CarbonCostTrajectory(
-                trajectory="constant",
-                initial_carbon_cost=cc,
+                trajectory="linear",
+                initial_carbon_cost=0,
                 final_carbon_cost=cc,
-                start_year=2030,
-                end_year=2050,
+                start_year=2025,
+                end_year=2030,
             )
         )
     runs = list(itertools.product(PATHWAYS, SENSITIVITIES, carbon_cost_trajectories))
