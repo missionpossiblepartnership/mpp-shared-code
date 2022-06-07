@@ -141,3 +141,5 @@ data/*/*/*/stack_tracker
 # Ignore outputs
 data/*/*/*/final
 data/*/*/*/outputs
+
+.idea/*

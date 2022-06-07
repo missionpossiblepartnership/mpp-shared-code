@@ -107,4 +107,4 @@ conda env create -f tests/environment-dev.yml
 
 - [Andrew Isabirye](andrew.isabirye@systemiq.earth)
 - [Luis Natera](luis.natera@systemiq.earth)
-- [Pim Sauter](pim.sauter@systemiq.earth)
+- [Shajeeshan Lingeswaran](shajeeshan.lingeswaran@systemiq.earth)
