@@ -125,6 +125,9 @@ class SimulationPathway:
         # Save carbon cost trajectory
         self.carbon_cost = carbon_cost
 
+        # Import CO2 storage constraint data
+        self.co2_storage_constraint = self.importer.get_co2_storage_constraint()
+
     def _import_rankings(self):
         """Import ranking for all products and rank types from the CSVs"""
         rankings = defaultdict(dict)

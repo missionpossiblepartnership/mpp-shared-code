@@ -111,6 +111,11 @@ class IntermediateDataImporter:
     def get_carbon_cost_addition(self):
         return pd.read_csv(self.intermediate_path.joinpath("carbon_cost_addition.csv"))
 
+    def get_co2_storage_constraint(self):
+        return pd.read_csv(
+            self.intermediate_path.joinpath("co2_storage_constraint.csv")
+        )
+
     def get_demand(self, region=None):
         df = pd.read_csv(self.intermediate_path.joinpath("demand.csv"))
 
