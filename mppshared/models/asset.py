@@ -145,16 +145,13 @@ class AssetStack:
             if switch_type == "brownfield_renovation":
                 asset_to_update.retrofit = True
                 asset_to_update.stay_same = False
-            elif switch_type == "brownfield_newbuild":
+            if (switch_type == "brownfield_rebuild") or (
+                switch_type == "brownfield_newbuild"
+            ):
                 asset_to_update.rebuild = True
                 asset_to_update.stay_same = False
-                print(asset_to_update.retrofit)
-                print(asset_to_update.stay_same)
-                sys.exit()
         if origin_technology == new_technology:
             asset_to_update.stay_same = True
-            # asset_to_update.rebuild = False
-            # asset_to_update.retrofit = False
         self.assets = [asset for asset in self.assets if asset.uuid is not uuid_update]
         self.assets.append(asset_to_update)
 

@@ -122,6 +122,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     )
                 )
             new_technology = best_transition["technology_destination"]
+            switch_type = best_transition["switch_type"]
             # Remove best transition from ranking table
             if len(best_candidates) == 0:
                 df_rank = remove_transition(df_rank, best_transition)
@@ -136,7 +137,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             asset_to_update,
             new_technology=new_technology,
             new_classification=best_transition["technology_classification"],
-            switch_type=best_transition["switch_type"],
+            switch_type="tentative",
             origin_technology=origin_technology,
         )
 
@@ -153,7 +154,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             & (dict_constraints["rampup_constraint"] == True)
         ) | (origin_technology == new_technology):
             logger.debug(
-                f"Updating {asset_to_update.product} asset from technology {origin_technology} to technology {new_technology} in region {asset_to_update.region}, annual production {asset_to_update.get_annual_production_volume()} and UUID {asset_to_update.uuid}"
+                f"Year {year} Updating {asset_to_update.product} asset from technology {origin_technology} to technology {new_technology} in region {asset_to_update.region}, annual production {asset_to_update.get_annual_production_volume()} and UUID {asset_to_update.uuid}"
             )
             # Set retrofit or rebuild attribute to True according to type of brownfield transition
             # if best_transition["switch_type"] == "brownfield_renovation":
@@ -165,7 +166,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 asset_to_update,
                 new_technology=new_technology,
                 new_classification=best_transition["technology_classification"],
-                switch_type=best_transition["switch_type"],
+                switch_type=switch_type,
                 origin_technology=origin_technology,
             )
             # Remove asset from candidates
