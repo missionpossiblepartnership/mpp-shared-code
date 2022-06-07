@@ -290,6 +290,43 @@ class AssetStack:
 
         return dict_emissions
 
+    def calculate_co2_captured_stack(
+        self,
+        year: int,
+        df_emissions: pd.DataFrame,
+        technology_classification=None,
+        product=None,
+    ) -> float:
+        """Calculate the CO2 captured by the stack in a given year."""
+
+        # Get DataFrame with annual production volume by product, region and technology (optionally filtered for technology classification and specific product)
+        df_stack = self.aggregate_stack(
+            aggregation_vars=["technology", "product", "region"],
+            technology_classification=technology_classification,
+            product=product,
+        )
+
+        # If the stack DataFrame is empty, return 0 for all emissions
+        if df_stack.empty:
+            return 0
+
+        df_stack = df_stack.reset_index()
+
+        # Filter emissions DataFrame for the given year
+        df_emissions = df_emissions.reset_index()
+        df_emissions = df_emissions[(df_emissions.year == year)]
+
+        # Add emissions by GHG and scope to each technologyy
+        df_stack = df_stack.merge(
+            df_emissions, how="left", on=["technology", "product", "region"]
+        )
+
+        co2_captured = (
+            df_stack["co2_scope1_captured"] * df_stack["annual_production_volume"]
+        ).sum()
+
+        return co2_captured
+
     def export_stack_to_df(self) -> pd.DataFrame:
         """Format the entire AssetStack as a DataFrame (no aggregation)."""
         return pd.DataFrame(
