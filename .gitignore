@@ -127,3 +127,19 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+play.py
+
+# Data files
+data/*/*/*/intermediate/technologies_to_rank.csv
+
+# Ignore all ranking files
+data/*/*/*/ranking
+
+# Ignore stack tracker
+data/*/*/*/stack_tracker
+
+# Ignore outputs
+data/*/*/*/final
+data/*/*/*/outputs
+
+.idea/*

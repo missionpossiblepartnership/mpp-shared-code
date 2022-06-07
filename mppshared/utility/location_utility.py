@@ -6,9 +6,8 @@ from collections import namedtuple
 import pandas as pd
 import pycountry
 
+from mppshared.config import FILES_TO_REFRESH, NEW_COUNTRY_COL_LIST
 from mppshared.utility.log_utility import get_logger
-
-from mppshared.config import NEW_COUNTRY_COL_LIST, FILES_TO_REFRESH
 
 logger = get_logger("Location Utility")
 

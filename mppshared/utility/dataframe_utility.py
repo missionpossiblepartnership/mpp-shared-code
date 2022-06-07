@@ -2,16 +2,13 @@
 
 from typing import List
 
-import pandas as pd
 import numpy as np
-from mppshared.utility.log_utility import get_logger
-from mppshared.utility.location_utility import get_region_from_country_code
+import pandas as pd
 
+from mppshared.config import PKL_DATA_INTERMEDIATE
 from mppshared.utility.file_handling_utility import read_pickle_folder
-
-from mppshared.config import (
-    PKL_DATA_INTERMEDIATE,
-)
+from mppshared.utility.location_utility import get_region_from_country_code
+from mppshared.utility.log_utility import get_logger
 
 logger = get_logger("DataFrame Utility")
 
@@ -245,3 +242,100 @@ def expand_melt_and_sort_years(
     years = [year_col for year_col in df_c.columns if isinstance(year_col, int)]
     df_c = df_c.melt(id_vars=set(df_c.columns).difference(set(years)), var_name="year")
     return df_c.sort_values(by=["year"], axis=0)
+
+
+def add_column_header_suffix(df: pd.DataFrame, cols: list, suffix: str) -> pd.DataFrame:
+    # sourcery skip: identity-comprehension
+    """Add a suffix with an underscore to each column header of the DataFrame that is in the cols list.
+
+    Args:
+        df (pd.DataFrame): contains column headers to be changed
+        cols (list): list of column headers to be changed
+        suffix (str): suffix to be appended to the selected column headers
+
+    Returns:
+        pd.DataFrame: selected column headers are appended with _suffix
+    """
+    suffix_cols = [f"{col_header}_{suffix}" for col_header in cols]
+    rename_dict = {k: v for k, v in zip(cols, suffix_cols)}
+    df = df.rename(columns=rename_dict)
+
+    return df
+
+
+def get_grouping_columns_for_npv_calculation(sector: str) -> list:
+    """Return the grouping columns for calculating NPV (sector-specific)
+
+    Args:
+        sector (str): currently only "chemicals"
+
+    Returns:
+        list: headers of grouping columns
+    """
+    grouping_cols = {
+        "chemicals": [
+            "product",
+            "technology_origin",
+            "region",
+            "switch_type",
+            "technology_destination",
+        ]
+    }
+    return grouping_cols[sector]
+
+
+def convert_df_to_regional(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Converts a dataframe that has both regional and global values to one that just has regional values.
+
+    Args:
+        df: Dataframe with mixed values
+
+    Returns:
+        Dataframe with only regional values
+    """
+
+    # Separate world and regional df
+    world_idx = df.region == "World"
+    df_world = df[world_idx].copy()
+    df_regional_1 = df[~world_idx]
+
+    # Regionalize the world df
+    df_world.drop(columns="region", inplace=True)
+    df_regions = pd.DataFrame({"region": list(REGIONS_OTHER)})
+    df_regional_2 = df_world.merge(df_regions, how="cross")
+
+    # Return the region df
+    return pd.concat([df_regional_1, df_regional_2])
+
+
+def flatten_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Return df with columns flattened from multi-index to normal index for columns
+    Args:
+        df: input df
+
+    Returns: the df with flattened column index
+
+    """
+    df.columns = ["_".join(col).strip() for col in df.columns.values]
+    return df
+
+
+def make_multi_df(df: pd.DataFrame, name: str) -> pd.DataFrame:
+    """
+    Make a df multi-column-indexed
+
+    Args:
+        df: Input df
+        name: Name of the multi-index top level
+
+    Returns:
+        multi-indexed df
+    """
+    return pd.concat({name: df}, axis=1)
+
+
+def get_emission_columns(ghgs: list, scopes: list) -> list:
+    """Get list of emissions columns for specified GHGs and emission scopes"""
+    return [f"{ghg}_{scope}" for scope in scopes for ghg in ghgs]

@@ -21,7 +21,7 @@ flake8 . --count --exit-zero --max-complexity=10 --max-line-length=88 --statisti
 # pydocstyle .
 
 # build the docs
-make -C ./docs html
+# make -C ./docs html
 
 # run the tests
 coverage run --source ./mppshared --module pytest --verbose
