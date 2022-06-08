@@ -84,9 +84,6 @@ def subset_cost_df(
         pd.DataFrame: subset DataFrame, expanded if necessary
     """
     # Filter year range
-    # logger.debug(
-    #     f"Getting subset with cost data for {start_year} {start_year + lifetime}"
-    # )
     df_cost = df_cost[
         (df_cost.index >= start_year) & (df_cost.index <= start_year + lifetime)
     ]
@@ -104,21 +101,19 @@ def subset_cost_df(
         cost_constant.index = cost_constant.index.astype(int)
 
         df_cost = pd.concat([df_cost, cost_constant])
-    # if start_year + lifetime > df_cost.index.max():
-    #     # TODO: make this workaround nicer
-    #     cost_value = df_cost.loc[
-    #         df_cost.index == df_cost.index.max(), ["carbon_cost_addition"]
-    #     ]
-    #     extension_length = int((start_year + lifetime) - df_cost.index.max())
-    #     cost_constant = pd.concat([cost_value] * extension_length)
-    #     logger.debug(cost_constant)
-    #     logger.debug(np.arange(df_cost.index.max() + 1, start_year + lifetime + 1))
-    #     cost_constant["year"] = np.arange(
-    #         df_cost.index.max() + 1, start_year + lifetime + 1
-    #     )
-    #     cost_constant = cost_constant.set_index("year", drop=True)
-    #     cost_constant.index = cost_constant.index.astype(int)
-    #     df_cost = pd.concat([df_cost, cost_constant])
+    if start_year + lifetime > df_cost.index.max():
+        #     # TODO: make this workaround nicer
+        cost_value = df_cost.loc[
+            df_cost.index == df_cost.index.max(), ["carbon_cost_addition"]
+        ]
+        extension_length = int((start_year + lifetime) - df_cost.index.max())
+        cost_constant = pd.concat([cost_value] * extension_length)
+        logger.debug(cost_constant)
+        logger.debug(np.arange(df_cost.index.max() + 1, start_year + lifetime + 1))
+        cost_constant["year"] = np.arange(
+            df_cost.index.max() + 1, start_year + lifetime + 1
+        )
+        cost_constant = cost_constant.set_index("year", drop=True)
+        cost_constant.index = cost_constant.index.astype(int)
+        df_cost = pd.concat([df_cost, cost_constant])
     return df_cost
-
-    # return df_cost
