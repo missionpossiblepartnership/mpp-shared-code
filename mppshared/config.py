@@ -10,12 +10,12 @@ LOG_FORMATTER = logging.Formatter(
 )
 
 ### SECTOR CHOICE ###
-SECTOR = "chemicals"
-# SECTOR = "aluminium"
+# SECTOR = "chemicals"
+SECTOR = "aluminium"
 PATHWAYS = [
-    # "bau",
+    "bau",
     "fa",
-    # "lc",
+    "lc",
 ]
 
 
@@ -168,7 +168,9 @@ INVESTMENT_CYCLES = {
 }
 
 # Emissions
-GHGS = ["co2", "ch4", "n2o"]
+GHGS = [
+    "co2",
+]  # "ch4", "n2o"]
 
 # Emission scopes included in data analysis
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
@@ -210,7 +212,7 @@ PRODUCTS = {
 INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_assets"}
 
 ### RANKING ###
-NUMBER_OF_BINS_RANKING = {"chemicals": 50, "aluminium": 10}
+NUMBER_OF_BINS_RANKING = {"chemicals": 50, "aluminium": 50}
 COST_METRIC_RELATIVE_UNCERTAINTY = {"chemicals": 0.1, "aluminium": 0.1}
 
 # GHGs and Emission scopes included in weighting when ranking technology transitions
@@ -273,10 +275,10 @@ indicates that for the newbuild rank, in the most_economic scenario, we favor bu
 4. Lower scope 3 emissions
 in that order!
 """
-lc_weight_cost = 0.8
-lc_weight_emissions = 0.2
-fa_weight_cost = 0.2
-fa_weight_emissions = 0.8
+lc_weight_cost = 1.0
+lc_weight_emissions = 0.0
+fa_weight_cost = 0.0
+fa_weight_emissions = 1.0
 RANKING_CONFIG = {
     "chemicals": {
         "greenfield": {
@@ -378,9 +380,9 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
         "years_rampup_phase": 5,
     },
     "aluminium": {
-        "maximum_asset_additions": 4,
-        "maximum_capacity_growth_rate": 0.3,
-        "years_rampup_phase": 10,
+        "maximum_asset_additions": 10,
+        "maximum_capacity_growth_rate": 0.25,
+        "years_rampup_phase": 5,
     },
 }
 
@@ -388,7 +390,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
 YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2050, "aluminium": 2045}
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 1}
+ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 0.5}
 
 # Regions with and without geological storage (salt caverns)
 REGIONS_SALT_CAVERN_AVAILABILITY = {
@@ -430,11 +432,14 @@ REGIONAL_PRODUCTION_SHARES = {
         "Rest of Asia": 0.3,
         "North America": 0.3,
         "Russia": 0.3,
-        "Europe": 0.3,
+        "Rest of Europe": 0.3,
         "Middle East": 0.3,
         "Africa": 0.3,
         "South America": 0.3,
         "Oceania": 0.3,
+        "Canada": 0.3,
+        "Scandinavia": 0.3,
+        "US": 0.3,
     },
 }
 
@@ -500,6 +505,8 @@ REGIONAL_TECHNOLOGY_BAN = {
     },
     "aluminium": None,
 }
+
+HYDRO_TECHNOLOGY_BAN = {"aluminium": True, "chemicals": False}
 
 ### OUTPUTS PROCESSING ###
 

@@ -5,18 +5,12 @@ from xmlrpc.client import Boolean
 
 import pandas as pd
 
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    CUF_LOWER_THRESHOLD,
-    CUF_UPPER_THRESHOLD,
-    GHGS,
-    EMISSION_SCOPES,
-    INVESTMENT_CYCLES,
-    LOG_LEVEL,
-    MAP_LOW_COST_POWER_REGIONS,
-)
-from mppshared.utility.utils import first, get_logger
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                              CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
+                              EMISSION_SCOPES, GHGS, INVESTMENT_CYCLES,
+                              LOG_LEVEL, MAP_LOW_COST_POWER_REGIONS)
 from mppshared.utility.dataframe_utility import get_emission_columns
+from mppshared.utility.utils import first, get_logger
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -287,6 +281,7 @@ class AssetStack:
                 "product": asset.product,
                 "region": asset.region,
                 "technology": asset.technology,
+                "technology_classification": asset.technology_classification,
                 "annual_production_capacity": asset.get_annual_production_capacity(),
                 "annual_production_volume": asset.get_annual_production_volume(),
                 "cuf": asset.cuf,
@@ -383,9 +378,11 @@ class AssetStack:
         """Return a list of Assets from the AssetStack that are eligible for a brownfield technology transition"""
 
         # Assets can be renovated at any time unless they've been renovated already
-        # TODO: Fix it, what happens if we want to switch from transition to end-statew technology
+        # TODO: Fix it, what happens if we want to switch from transition to end-state technology
         candidates_renovation = filter(
-            lambda asset: asset.retrofit == False, self.assets
+            lambda asset: (asset.retrofit == False)
+            & (asset.get_age(year) >= INVESTMENT_CYCLES[sector]),
+            self.assets,
         )
 
         # Assets can be rebuild if their CUF exceeds the threshold and they are older than the investment cycle

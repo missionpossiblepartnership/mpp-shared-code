@@ -7,25 +7,16 @@ import numpy as np
 import pandas as pd
 
 from mppshared.calculate.calculate_cost import discount_costs
-from mppshared.config import (
-    EMISSION_SCOPES,
-    FINAL_CARBON_COST,
-    GHGS,
-    INITIAL_CARBON_COST,
-    PRODUCTS,
-    REGIONAL_TECHNOLOGY_BAN,
-    REGIONS_SALT_CAVERN_AVAILABILITY,
-    START_YEAR,
-    TECHNOLOGY_MORATORIUM,
-    TRANSITIONAL_PERIOD_YEARS,
-)
+from mppshared.config import (EMISSION_SCOPES, FINAL_CARBON_COST, GHGS,
+                              HYDRO_TECHNOLOGY_BAN, INITIAL_CARBON_COST,
+                              PRODUCTS, REGIONAL_TECHNOLOGY_BAN,
+                              REGIONS_SALT_CAVERN_AVAILABILITY, START_YEAR,
+                              TECHNOLOGY_MORATORIUM, TRANSITIONAL_PERIOD_YEARS)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.solver.input_loading import filter_df_for_development
 from mppshared.utility.dataframe_utility import (
-    add_column_header_suffix,
-    get_grouping_columns_for_npv_calculation,
-)
+    add_column_header_suffix, get_grouping_columns_for_npv_calculation)
 from mppshared.utility.function_timer_utility import timer_func
 from mppshared.utility.log_utility import get_logger
 
@@ -72,6 +63,10 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
         df_technology_switches, sector
     )
 
+    # Eliminate Hydro technologies from switches not allowed
+    df_technology_switches = apply_hydro_constraint(
+        df_technology_switches, sector, PRODUCTS[sector]
+    )
     # Apply technology moratorium (year after which newbuild capacity must be transition or
     # end-state technologies)
     if pathway != "bau":
@@ -150,6 +145,54 @@ def apply_salt_cavern_availability_constraint(
         df_technology_transitions = df_technology_transitions.loc[~filter]
 
     return df_technology_transitions
+
+
+def apply_hydro_constraint(
+    df_technology_transitions: pd.DataFrame, sector: str, products: list
+) -> pd.DataFrame:
+    if HYDRO_TECHNOLOGY_BAN[sector]:
+        # if sector == "aluminium" and "Aluminium" in products:
+        logger.debug("Filtering Hydro banned transitions")
+        return df_technology_transitions[
+            (
+                (
+                    df_technology_transitions["technology_destination"].str.contains(
+                        "Hydro"
+                    )
+                )
+                & (df_technology_transitions["technology_origin"].str.contains("Hydro"))
+            )
+            | (
+                (
+                    df_technology_transitions["technology_destination"].str.contains(
+                        "decommission"
+                    )
+                )
+                & (df_technology_transitions["technology_origin"].str.contains("Hydro"))
+            )
+            | (
+                (
+                    df_technology_transitions["technology_origin"].str.contains(
+                        "New-build"
+                    )
+                )
+                & (
+                    df_technology_transitions["technology_destination"].str.contains(
+                        "Hydro"
+                    )
+                )
+            )
+            | (
+                ~(df_technology_transitions["technology_origin"].str.contains("Hydro"))
+                & ~(
+                    df_technology_transitions["technology_destination"].str.contains(
+                        "Hydro"
+                    )
+                )
+            )
+        ]
+    else:
+        return df_technology_transitions
 
 
 @timer_func

@@ -4,17 +4,11 @@ import sys
 import numpy as np
 import pandas as pd
 
-from mppshared.config import (
-    BIN_METHODOLOGY,
-    COST_METRIC_RELATIVE_UNCERTAINTY,
-    EMISSION_SCOPES_RANKING,
-    GHGS_RANKING,
-    NUMBER_OF_BINS_RANKING,
-    PRODUCTS,
-    RANK_TYPES,
-    RANKING_CONFIG,
-    RANKING_COST_METRIC,
-)
+from mppshared.config import (BIN_METHODOLOGY,
+                              COST_METRIC_RELATIVE_UNCERTAINTY,
+                              EMISSION_SCOPES_RANKING, GHGS_RANKING,
+                              NUMBER_OF_BINS_RANKING, PRODUCTS, RANK_TYPES,
+                              RANKING_CONFIG, RANKING_COST_METRIC)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.utils import get_logger
 
@@ -327,8 +321,7 @@ def make_rankings(pathway: str, sensitivity: str, sector: str):
 
     # Make the ranking separately for each type of technology transition (all products together)
     df_ranking = importer.get_technologies_to_rank()
-    # for rank_type in RANK_TYPES[sector]:
-    for rank_type in ["greenfield"]:
+    for rank_type in RANK_TYPES[sector]:
         # Create ranking table
         if BIN_METHODOLOGY[sector] == "histogram":
             df_rank = rank_technology_histogram(

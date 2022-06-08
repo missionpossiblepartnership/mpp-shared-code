@@ -6,12 +6,9 @@ import pandas as pd
 from pandera import Bool
 from pyparsing import col
 
-from mppshared.config import (
-    END_YEAR,
-    LOG_LEVEL,
-    REGIONAL_PRODUCTION_SHARES,
-    YEAR_2050_EMISSIONS_CONSTRAINT,
-)
+from mppshared.config import (END_YEAR, HYDRO_TECHNOLOGY_BAN, LOG_LEVEL,
+                              REGIONAL_PRODUCTION_SHARES,
+                              YEAR_2050_EMISSIONS_CONSTRAINT)
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
@@ -195,3 +192,18 @@ def check_annual_carbon_budget_constraint(
         return True, flag_residual
 
     return False, flag_residual
+
+
+def hydro_constraints(df_ranking: pd.DataFrame, sector: str) -> pd.DataFrame:
+    # check if the product is aluminium:
+    if HYDRO_TECHNOLOGY_BAN[sector]:
+        # if "Aluminium" in df_ranking["product"].to_list():
+        logger.debug("Removing new builds Hydro")
+        return df_ranking[
+            ~(
+                df_ranking["technology_origin"].str.contains("New-build")
+                & df_ranking["technology_destination"].str.contains("Hydro")
+            )
+        ]
+    else:
+        return df_ranking
