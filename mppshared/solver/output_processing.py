@@ -870,9 +870,6 @@ def calculate_outputs(pathway: str, sensitivity: str, sector: str):
     importer.export_data(
         df_pivot, f"simulation_outputs_{suffix}.csv", "final", index=False
     )
-    # df_pivot.to_csv(
-    #     f"{OUTPUT_WRITE_PATH[sector]}/simulation_outputs_{suffix}.csv", index=False
-    # )
 
     columns = [
         "sector",
