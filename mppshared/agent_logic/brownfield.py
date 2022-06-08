@@ -155,11 +155,6 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             logger.debug(
                 f"Year {year} Updating {asset_to_update.product} asset from technology {origin_technology} to technology {new_technology} in region {asset_to_update.region}, annual production {asset_to_update.get_annual_production_volume()} and UUID {asset_to_update.uuid}"
             )
-            # Set retrofit or rebuild attribute to True according to type of brownfield transition
-            # if best_transition["switch_type"] == "brownfield_renovation":
-            #     asset_to_update.retrofit = True
-            # if best_transition["switch_type"] == "brownfield_newbuild":
-            #     asset_to_update.rebuild = True
             # Update asset stack
             new_stack.update_asset(
                 asset_to_update,
@@ -170,8 +165,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             )
             # Remove asset from candidates
             candidates.remove(asset_to_update)
-            # Only count the transition if the technology is the same, if the asset staied the same
-            # is not a transition
+            # Only count the transition if the technology is the same
             if origin_technology != new_technology:
                 n_assets_transitioned += 1
 
