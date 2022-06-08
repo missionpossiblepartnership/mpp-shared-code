@@ -401,7 +401,6 @@ class AssetStack:
         # TODO: Fix it, what happens if we want to switch from transition to end-state technology
         candidates_renovation = filter(
             lambda asset: (asset.retrofit == False),
-            # & (asset.get_age(year) >= INVESTMENT_CYCLES[sector]),
             self.assets,
         )
 
