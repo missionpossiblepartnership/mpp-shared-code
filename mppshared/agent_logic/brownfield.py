@@ -96,7 +96,6 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
             # Choose the best transition, i.e. highest decommission rank
             best_transition = select_best_transition(df_rank)
-            # logger.debug(f"best rtransition; {best_transition}")
             # Check it the transition has PPA on it, if so only get plants that allow transition to ppa
             if "PPA" in best_transition["technology_destination"]:
                 best_candidates = list(
