@@ -32,6 +32,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
     # Next year's asset stack is changed by the brownfield transitions
     new_stack = pathway.get_stack(year=year + 1)
+    # Get the emissions, used for the LC scenario
     if year == 2050:
         emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(
             year, pathway.sector
@@ -45,8 +46,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     df_rank = pathway.get_ranking(year=year, rank_type="brownfield")
 
     # If pathway is BAU, take out brownfield renovation to avoid retrofits to end-state technologies
-    # if pathway.pathway == "bau":
-    # df_rank = df_rank.loc[~(df_rank["switch_type"] == "brownfield_renovation")]
+    if pathway.pathway == "bau":
+        df_rank = df_rank.loc[~(df_rank["switch_type"] == "brownfield_renovation")]
 
     # Get assets eligible for brownfield transitions
     candidates = new_stack.get_assets_eligible_for_brownfield(
@@ -75,8 +76,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             if df_rank.empty:
                 return pathway
 
-            ### TODO: Clean the hardcoded code into functions and apply it by sector
-            ### Check if LC pathway and check emissions to exit after being lower than the constraint
+            # Check if LC pathway and check emissions to exit after being lower than the constraint
+            # This check minimizes the investment as it only requieres some switches and not all of them
             if pathway.pathway == "lc":
                 dict_stack_emissions = new_stack.calculate_emissions_stack(
                     year=year,
@@ -136,7 +137,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             asset_to_update,
             new_technology=new_technology,
             new_classification=best_transition["technology_classification"],
-            switch_type="tentative",
+            switch_type=switch_type,
             origin_technology=origin_technology,
         )
 
@@ -170,6 +171,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             )
             # Remove asset from candidates
             candidates.remove(asset_to_update)
+            # Only count the transition if the technology is the same, if the asset staied the same
+            # is not a transition
             if origin_technology != new_technology:
                 n_assets_transitioned += 1
 
