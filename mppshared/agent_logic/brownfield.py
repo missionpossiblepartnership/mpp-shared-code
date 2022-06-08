@@ -65,7 +65,6 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
     # Enact brownfield transitions while there are still candidates
     while (candidates != []) & (n_assets_transitioned <= maximum_n_assets_transitioned):
-        # logger.debug(f"{n_assets_transitioned}/{maximum_n_assets_transitioned}")
         # TODO: how do we avoid that all assets are retrofit at once in the beginning?
         # TODO: implement foresight with brownfield rebuild
 
