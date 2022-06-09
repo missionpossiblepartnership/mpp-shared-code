@@ -14,8 +14,8 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "aluminium"
 PATHWAYS = [
     "bau",
-    "fa",
-    "lc",
+    # "fa",
+    # "lc",
     # "cc",
 ]
 
