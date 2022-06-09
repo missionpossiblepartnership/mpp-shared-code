@@ -328,7 +328,13 @@ def create_table_all_data_year(
     df_inputs_outputs = importer.get_inputs_outputs()
     data_variables = []
 
-    for resource in df_inputs_outputs["parameter"].unique():
+    resources = [
+        resource
+        for resource in df_inputs_outputs["parameter"].unique()
+        if resource
+        not in ["Variable OPEX", "Fixed OPEX", "Total OPEX", "Greenfield CAPEX"]
+    ]
+    for resource in resources:
         df_stack_variable = _calculate_resource_consumption(
             df_stack,
             df_inputs_outputs,
@@ -638,7 +644,7 @@ def calculate_weighted_average_cost_metric(
     agg_vars=["product", "region", "technology"],
 ) -> pd.DataFrame:
     """Calculate weighted average of LCOX across the supply mix in a given year."""
-
+    cost_metrics = ["lcox", "annualized_cost", "marginal_cost"]
     if (
         carbon_cost.df_carbon_cost.loc[
             carbon_cost.df_carbon_cost["year"] == 2050, "carbon_cost"
@@ -658,25 +664,26 @@ def calculate_weighted_average_cost_metric(
         ]
         df_cost = df_cost.merge(
             df_carbon_cost_addition[
-                merge_cols + [f"carbon_cost_addition_{cost_metric}"]
+                merge_cols + [f"carbon_cost_addition_{cm}" for cm in cost_metrics]
             ],
             on=merge_cols,
             how="left",
-        )
-
-        # Carbon cost addition is for 1 USD/tCO2, hence multiply with right factor
-        constant_carbon_cost = df_cc.loc[df_cc["year"] == 2050, "carbon_cost"].item()
-        df_cost[f"carbon_cost_addition_{cost_metric}"] = (
-            df_cost[f"carbon_cost_addition_{cost_metric}"] * constant_carbon_cost
         ).fillna(0)
 
-        df_cost[cost_metric] = (
-            df_cost[cost_metric] + df_cost[f"carbon_cost_addition_{cost_metric}"]
-        )
+        # Carbon cost addition is for 1 USD/tCO2, hence multiply with right factor
+        # constant_carbon_cost = df_cc.loc[df_cc["year"] == 2050, "carbon_cost"].item()
 
-        df_cost = df_cost.drop(columns=[f"carbon_cost_addition_{cost_metric}"])
+        # Always do for all three cost metrics to avoid inconsistencies
+        for cm in cost_metrics:
+            # df_cost[f"carbon_cost_addition_{cm}"] = (
+            #     df_cost[f"carbon_cost_addition_{cm}"] * constant_carbon_cost
+            # ).fillna(0)
 
-    # If granularity on technology level, simply take LCOX from cost DataFrame
+            df_cost[cm] = df_cost[cm] + df_cost[f"carbon_cost_addition_{cm}"]
+
+            df_cost = df_cost.drop(columns=[f"carbon_cost_addition_{cm}"])
+
+    # If granularity on technology level, simply take cost metric from cost DataFrame
     if agg_vars == ["product", "region", "technology"]:
         df = df_cost.rename(
             {cost_metric: "value", "technology_destination": "technology"}, axis=1
@@ -695,14 +702,29 @@ def calculate_weighted_average_cost_metric(
                 # df_stack.loc[df_stack["year"] < START_YEAR, "year"] = START_YEAR
                 df_stack["year"] = year
             elif cost_metric == "marginal_cost":
-                # Marginal cost needs to correspond to curent year
+                # Marginal cost needs to correspond to current year
                 df_stack["year"] = year
 
-            # Add LCOX to each asset
+            # Plants existing in 2020: CAPEX assumed to be fully depreciated
+            elif cost_metric == "annualized_cost":
+                df_stack["year_until_annualized_capex"] = (
+                    df_stack["year"].astype(int) + df_stack["asset_lifetime"]
+                )
+                df_stack["year"] = year
+
+            # Add cost metric to each asset
             df_cost = df_cost.rename(columns={"technology_destination": "technology"})
             df_stack = df_stack.merge(
                 df_cost, on=["product", "region", "technology", "year"], how="left"
             )
+
+            # Plants existing in 2020: CAPEX assumed to be fully depreciated, so annualized cost is MC
+            if cost_metric == "annualized_cost":
+                df_stack["annualized_cost"] = np.where(
+                    df_stack["year_until_annualized_capex"] > year,
+                    df_stack["marginal_cost"],
+                    df_stack["annualized_cost"],
+                )
 
             # Calculate weighted average according to desired aggregation
             df_stack = (
@@ -725,7 +747,11 @@ def calculate_weighted_average_cost_metric(
 
     # Transform to output table format
     df["parameter_group"] = "Cost"
-    parameter_map = {"lcox": "LCOX", "marginal_cost": "Marginal cost"}
+    parameter_map = {
+        "lcox": "LCOX",
+        "marginal_cost": "Marginal cost",
+        "annualized_cost": "Annualized Cost",
+    }
     df["parameter"] = parameter_map[cost_metric]
     df["unit"] = "USD/t"
     df["sector"] = sector
@@ -890,7 +916,6 @@ def calculate_outputs(
     )
 
     # Calculate plant numbers by retrofit, newbuild, rebuild, unchanged
-    df_cost = importer.get_technology_transitions_and_cost()
     df_plants = _calculate_plant_numbers_by_type(
         importer=importer,
         sector=sector,
@@ -938,77 +963,32 @@ def calculate_outputs(
         importer=importer, sector=sector, agg_vars=["product", "technology"]
     )
 
-    # Calculate weighted average of LCOX
-    df_lcox = calculate_weighted_average_cost_metric(
-        df_cost=df_cost,
-        carbon_cost=carbon_cost,
-        importer=importer,
-        sector=sector,
-        cost_metric="lcox",
-        agg_vars=["product", "region", "technology"],
-    )
-    df_lcox_all_techs = calculate_weighted_average_cost_metric(
-        df_cost=df_cost,
-        carbon_cost=carbon_cost,
-        importer=importer,
-        sector=sector,
-        cost_metric="lcox",
-        agg_vars=["product", "region"],
-    )
-    df_lcox_all_regions_all_techs = calculate_weighted_average_cost_metric(
-        df_cost=df_cost,
-        carbon_cost=carbon_cost,
-        importer=importer,
-        sector=sector,
-        cost_metric="lcox",
-        agg_vars=["product"],
+    # Add annualized cost to cost DataFrame
+    df_cost = importer.get_technology_transitions_and_cost()
+    df_tech_characteristics = importer.get_technology_characteristics()
+    df_cost = calculate_annualized_cost(
+        df_cost=df_cost, df_tech_characteristics=df_tech_characteristics
     )
 
-    df_lcox_all_regions = calculate_weighted_average_cost_metric(
-        df_cost=df_cost,
-        carbon_cost=carbon_cost,
-        importer=importer,
-        sector=sector,
-        cost_metric="lcox",
-        agg_vars=["product", "technology"],
-    )
-
-    # Calculate weighted average of MC
-    df_mc = calculate_weighted_average_cost_metric(
-        df_cost=df_cost,
-        carbon_cost=carbon_cost,
-        importer=importer,
-        sector=sector,
-        cost_metric="marginal_cost",
-        agg_vars=["product", "region", "technology"],
-    )
-
-    df_mc_all_techs = calculate_weighted_average_cost_metric(
-        df_cost=df_cost,
-        carbon_cost=carbon_cost,
-        importer=importer,
-        sector=sector,
-        cost_metric="marginal_cost",
-        agg_vars=["product", "region"],
-    )
-
-    df_mc_all_regions = calculate_weighted_average_cost_metric(
-        df_cost=df_cost,
-        carbon_cost=carbon_cost,
-        importer=importer,
-        sector=sector,
-        cost_metric="marginal_cost",
-        agg_vars=["product", "technology"],
-    )
-
-    df_mc_all_techs_all_regions = calculate_weighted_average_cost_metric(
-        df_cost=df_cost,
-        carbon_cost=carbon_cost,
-        importer=importer,
-        sector=sector,
-        cost_metric="marginal_cost",
-        agg_vars=["product"],
-    )
+    # Calculate cost metrics with different aggregation variables
+    aggregations = [
+        ["product", "region", "technology"],
+        ["product", "region"],
+        ["product", "technology"],
+        ["product"],
+    ]
+    df_cost_metrics = pd.DataFrame()
+    for cost_metric in ["annualized_cost", "lcox", "marginal_cost"]:
+        for agg_vars in aggregations:
+            df = calculate_weighted_average_cost_metric(
+                df_cost=df_cost,
+                carbon_cost=carbon_cost,
+                importer=importer,
+                sector=sector,
+                cost_metric=cost_metric,
+                agg_vars=agg_vars,
+            )
+            df_cost_metrics = pd.concat([df, df_cost_metrics])
 
     # Calculate annual investments
     df_annual_investments = _calculate_annual_investments(
@@ -1077,18 +1057,11 @@ def calculate_outputs(
     df_pivot = pd.concat(
         [
             df_pivot,
+            df_cost_metrics,
             df_annual_investments,
             df_annual_investments_all_tech,
             df_annual_investments_all_tech_all_switch_types,
             df_annual_investments_all_switch_types,
-            df_lcox,
-            df_lcox_all_techs,
-            df_lcox_all_regions,
-            df_lcox_all_regions_all_techs,
-            df_mc,
-            df_mc_all_techs,
-            df_mc_all_regions,
-            df_mc_all_techs_all_regions,
             df_electrolysis_capacity,
             df_electrolysis_capacity_all_regions,
             df_electrolysis_capacity_all_tech,
@@ -1157,6 +1130,34 @@ def write_key_assumptions_to_txt(
         for line in lines:
             f.write(line)
             f.write("\n")
+
+
+def calculate_annualized_cost(
+    df_cost: pd.DataFrame, df_tech_characteristics: pd.DataFrame
+) -> pd.DataFrame:
+    """Calculate annualized cost"""
+
+    # Add WACC and technology lifetime to cost DataFrame
+    df_cost = df_cost.merge(
+        df_tech_characteristics.rename(
+            {"technology": "technology_destination"}, axis=1
+        ),
+        on=["product", "region", "year", "technology_destination"],
+        how="left",
+    )
+
+    # Calculate capital recovery factor (CRF)
+    df_cost["capital_recovery_factor"] = df_cost["wacc"] / (
+        1 - np.power(1 + df_cost["wacc"], -df_cost["technology_lifetime"])
+    )
+
+    # Calculate annualized CAPEX and cost
+    df_cost["annualized_capex"] = (
+        df_cost["capital_recovery_factor"] * df_cost["switch_capex"]
+    )
+    df_cost["annualized_cost"] = df_cost["annualized_capex"] + df_cost["marginal_cost"]
+
+    return df_cost
 
 
 def calculate_annual_production_volume_as_ammonia(df):
