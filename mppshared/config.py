@@ -13,8 +13,8 @@ LOG_FORMATTER = logging.Formatter(
 # SECTOR = "chemicals"
 SECTOR = "aluminium"
 PATHWAYS = [
-    "bau",
-    "fa",
+    # "bau",
+    # "fa",
     "lc",
     # "cc",
 ]
@@ -55,8 +55,8 @@ PKL_DATA_FINAL = f"{PKL_FOLDER}/final_data"
 SOLVER_INPUT_DATA_PATH = f"{CORE_DATA_PATH}/solver_input_data"
 
 OUTPUT_WRITE_PATH = {
-    "chemicals": "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Current model outputs"
-    # "aluminium": TBD
+    "chemicals": "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Current model outputs",
+    "aluminium": "data/aluminium",
 }
 
 
@@ -212,7 +212,7 @@ SENSITIVITIES = [
 # Products produced by each sector
 PRODUCTS = {
     "chemicals": ["Ammonia", "Ammonium nitrate", "Urea"],
-    "aluminium": ["Aluminium"],
+    "aluminium": ["Alumina"],
 }
 
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
@@ -503,7 +503,7 @@ SECTORAL_PATHWAYS = {
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = {
     "chemicals": 2020,
-    "aluminium": 2030,
+    "aluminium": 2020,
 }
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
 TRANSITIONAL_PERIOD_YEARS = {"chemicals": 30, "aluminium": 10}
