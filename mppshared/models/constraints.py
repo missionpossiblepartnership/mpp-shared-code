@@ -57,16 +57,42 @@ def check_constraints(
             pathway=pathway, stack=stack, year=year
         )
 
+        # Check CO2 storage constraint
+        co2_storage_constraint = check_co2_storage_constraint(
+            pathway=pathway, stack=stack, year=year
+        )
+
         # TODO Remove this workaround
         emissions_constraint = True
         # TODO: Check resource availability constraint
         return {
             "emissions_constraint": emissions_constraint,
-            "flag_residual": flag_residual,
             "rampup_constraint": rampup_constraint,
+            "co2_storage_constraint": co2_storage_constraint,
         }
     else:
         return {"emissions_constraint": True, "rampup_constraint": True}
+
+
+def check_co2_storage_constraint(
+    pathway: SimulationPathway, stack: AssetStack, year: int
+) -> Bool:
+    """Check if the constraint on total CO2 storage (globally) is met"""
+
+    # Calculate CO2 captured annually by the stack (Mt CO2)
+    co2_captured = stack.calculate_co2_captured_stack(
+        year=year, df_emissions=pathway.emissions
+    )
+
+    # Compare with the limit on annual CO2 storage addition (MtCO2)
+    df_co2_storage = pathway.co2_storage_constraint
+    limit = df_co2_storage.loc[df_co2_storage["year"] == year, "value"].item()
+
+    if limit > co2_captured:
+        return True
+
+    logger.debug("CO2 storage constraint hurt.")
+    return False
 
 
 def check_technology_rampup_constraint(
