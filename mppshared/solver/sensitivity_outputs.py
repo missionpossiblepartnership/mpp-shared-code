@@ -19,7 +19,12 @@ def create_sensitivity_outputs():
         "fa",
         # "lc"
     ]
-    sensitivities = ["def", "ng_partial", "ng_high", "ng_low"]
+    sensitivities = [
+        "def",
+        # "ng_partial",
+        # "ng_high",
+        "ng_low",
+    ]
 
     # For emissions calculations
     years = [2020, 2030, 2040, 2050]
@@ -124,7 +129,8 @@ def create_sensitivity_table(
     df_sens = pd.DataFrame(
         index=sensitivities,
         columns=pd.MultiIndex.from_product(
-            [carbon_costs, ["blue", "green"]], names=["Carbon Cost", "Ammonia Type"]
+            [carbon_costs, ["blue", "green", "grey", "other", "transitional"]],
+            names=["Carbon Cost", "Ammonia Type"],
         ),
     )
 
@@ -138,8 +144,8 @@ def create_sensitivity_table(
             df = sum_ammonia_types(df, 2050)
 
             # Add into DataFrame
-            df_sens.loc[sensitivity, (carbon_cost, "blue")] = df.loc["blue", "2050"]
-            df_sens.loc[sensitivity, (carbon_cost, "green")] = df.loc["green", "2050"]
+            for type in ["blue", "green", "grey", "other", "transitional"]:
+                df_sens.loc[sensitivity, (carbon_cost, type)] = df.loc[type, "2050"]
 
     df_sens.to_csv(f"{save_path}/sensitivity_table_pathway={pathway}.csv")
 
@@ -147,15 +153,25 @@ def create_sensitivity_table(
 def sum_ammonia_types(df: pd.DataFrame, year: int) -> pd.DataFrame:
     df = df.groupby(["ammonia_type"]).sum()
 
+    if "other" not in df.index:
+        df.loc["other"] = 0
+
+    if "transitional" not in df.index:
+        df.loc["transitional"] = 0
+
     if "blue_10%" in df.index:
         df.loc["blue"] += df.loc["blue_10%"] * 0.1
         df.loc["grey"] += df.loc["blue_10%"] * 0.9
 
     # Calculate shares
     df.loc["total"] = (
-        df.loc["blue"] + df.loc["green"] + df.loc["grey"] + df.loc["other"]
+        df.loc["blue"]
+        + df.loc["green"]
+        + df.loc["grey"]
+        + df.loc["other"]
+        + df.loc["transitional"]
     )
-    for ammonia_type in ["blue", "green", "grey", "other"]:
+    for ammonia_type in ["blue", "green", "grey", "other", "transitional"]:
         df.loc[ammonia_type] = df.loc[ammonia_type] / df.loc["total"]
 
     # Drop auxiliary rows
@@ -279,7 +295,7 @@ def create_shares_by_sensitivity(
         y="share",
         color="ammonia_type",
         barmode="stack",
-        color_discrete_sequence=["blue", "green", "grey"],
+        color_discrete_sequence=["blue", "green", "grey", "yellow", "pink"],
         text=[f"{np.round(share*100)}%" for share in df_shares_sens["share"]],
     )
 
@@ -302,10 +318,10 @@ def add_ammonia_type_to_df(df: pd.DataFrame) -> pd.DataFrame:
     colour_map = {
         "Natural Gas SMR + ammonia synthesis": "grey",
         "Coal Gasification + ammonia synthesis": "grey",
-        "Electrolyser + SMR + ammonia synthesis": "blue_10%",
-        "Electrolyser + Coal Gasification + ammonia synthesis": "blue_10%",
+        "Electrolyser + SMR + ammonia synthesis": "transitional",  # "blue_10%",
+        "Electrolyser + Coal Gasification + ammonia synthesis": "transitional",  # "blue_10%",
         "Coal Gasification+ CCS + ammonia synthesis": "blue",
-        "Natural Gas SMR + CCS (process emissions only) + ammonia synthesis": "blue",
+        "Natural Gas SMR + CCS (process emissions only) + ammonia synthesis": "transitional",  # "blue",
         "Natural Gas ATR + CCS + ammonia synthesis": "blue",
         "GHR + CCS + ammonia synthesis": "blue",
         "ESMR Gas + CCS + ammonia synthesis": "blue",
@@ -367,7 +383,7 @@ def create_shares_by_carbon_price(
         y="share",
         color="ammonia_type",
         barmode="group",
-        color_discrete_sequence=["blue", "green", "grey"],
+        color_discrete_sequence=["blue", "green", "grey", "yellow", "pink"],
         text=[f"{np.round(share*100)}%" for share in df_shares_cc["share"]],
     )
 
