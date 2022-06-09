@@ -134,7 +134,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         tentative_stack = deepcopy(new_stack)
         origin_technology = asset_to_update.technology
         tentative_stack.update_asset(
-            asset_to_update,
+            deepcopy(asset_to_update),
             new_technology=new_technology,
             new_classification=best_transition["technology_classification"],
             switch_type=switch_type,
