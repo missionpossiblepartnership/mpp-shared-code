@@ -14,8 +14,8 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "aluminium"
 PATHWAYS = [
     "bau",
-    # "fa",
-    # "lc",
+    "fa",
+    "lc",
     # "cc",
 ]
 
@@ -26,7 +26,7 @@ SCOPES_CO2_COST = [
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = True
+RUN_PARALLEL = False
 
 APPLY_CARBON_COST = True
 
