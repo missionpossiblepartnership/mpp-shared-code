@@ -146,7 +146,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         tentative_stack = deepcopy(new_stack)
         origin_technology = asset_to_update.technology
         tentative_stack.update_asset(
-            asset_to_update,
+            deepcopy(asset_to_update),
             new_technology=new_technology,
             new_classification=best_transition["technology_classification"],
         )
@@ -160,9 +160,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         )
 
         # If no constraint is hurt, execute the brownfield transition
-        if (dict_constraints["emissions_constraint"] == True) & (
-            dict_constraints["rampup_constraint"] == True
-        ):
+        if all(constraint == True for constraint in dict_constraints.values()):
             logger.debug(
                 f"Updating {asset_to_update.product} asset from technology {origin_technology} to technology {new_technology} in region {asset_to_update.region}, annual production {asset_to_update.get_annual_production_volume()} and UUID {asset_to_update.uuid}"
             )
@@ -183,9 +181,11 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             candidates.remove(asset_to_update)
             n_assets_transitioned += 1
 
-        # If the emissions constraint and/or the technology ramp-up constraint is hurt, remove that destination technology from the ranking table and try again
-        elif (dict_constraints["emissions_constraint"] == False) | (
-            dict_constraints["rampup_constraint"] == False
+        # If the emissions constraint, the technology ramp-up constraint or the CO2 storage constraint is hurt, remove that destination technology from the ranking table and try again
+        elif (
+            (dict_constraints["emissions_constraint"] == False)
+            | (dict_constraints["rampup_constraint"] == False)
+            | (dict_constraints["co2_storage_constraint"] == False)
         ):
             df_rank = remove_all_transitions_with_destination_technology(
                 df_rank, best_transition["technology_destination"]
