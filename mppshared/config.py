@@ -1,7 +1,5 @@
 """Configuration file for the library."""
 import logging
-from tkinter.tix import Tree
-
 import numpy as np
 
 ### LOGGER ####
@@ -21,18 +19,26 @@ PATHWAYS = [
 
 # Sensitivities
 SENSITIVITIES = [
-    "def",
-    "ng_partial",
-    "ng_high",
+    # "def",
+    # "ng_partial",
+    # "ng_high",
     "ng_low",
 ]
 
 # Carbon price (for sensitivity analysis): needs to be run for 1 USD/tCO2 to create carbon_cost_addition.csv, then used for subsequent runs by multiplying accordingly
-CARBON_COSTS = [1]
-# CARBON_COSTS = np.arange(0, 301, step=25)
-CARBON_COSTS = [0, 25, 50, 75]
-# CARBON_COSTS = [60, 70]
 # CARBON_COSTS = [1]
+# CARBON_COSTS = [0, 25, 50, 75]
+# CARBON_COSTS = [75]
+# CARBON_COSTS = [0]
+CARBON_COSTS = [
+    0,
+    50,
+    100,
+    150,
+    200,
+    250,
+]
+# CARBON_COSTS = [0]
 CARBON_COST_ADDITION_FROM_CSV = False
 
 # Scopes in CO2 price optimization
@@ -45,6 +51,7 @@ SCOPES_CO2_COST = [
 
 # Run parallel/sequential
 RUN_PARALLEL = False
+
 # Delays for brownfield transitions to make the model more realistic
 BROWNFIELD_RENOVATION_START_YEAR = {
     "chemicals": 2025,  # means retrofit plants come online in 2026
@@ -257,7 +264,7 @@ COST_METRIC_RELATIVE_UNCERTAINTY = {"chemicals": 0.05, "aluminium": 0.1}
 # GHGs and Emission scopes included in weighting when ranking technology transitions
 GHGS_RANKING = {"chemicals": ["co2"], "aluminium": ["co2"]}
 EMISSION_SCOPES_RANKING = {
-    "chemicals": ["scope1", "scope2"],
+    "chemicals": ["scope1", "scope2", "scope3_upstream"],
     "aluminium": ["scope1", "scope2", "scope3_upstream", "scope3_downstream"],
 }
 
@@ -315,9 +322,9 @@ indicates that for the newbuild rank, in the most_economic scenario, we favor bu
 in that order!
 """
 lc_weight_cost = 0.8
-lc_weight_emissions = 0.2
-fa_weight_cost = 0.2
-fa_weight_emissions = 0.8
+lc_weight_emissions = 1 - lc_weight_cost
+fa_weight_cost = 0.01
+fa_weight_emissions = 1 - fa_weight_cost
 RANKING_CONFIG = {
     "chemicals": {
         "greenfield": {
@@ -570,7 +577,6 @@ REGIONAL_TECHNOLOGY_BAN = {
 }
 
 ### OUTPUTS PROCESSING ###
-
 
 # Global Warming Potentials for calculating CO2e
 GWP = {
