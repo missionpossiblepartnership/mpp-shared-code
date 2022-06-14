@@ -4,7 +4,7 @@ import logging
 import numpy as np
 
 ### LOGGER ####
-LOG_LEVEL = "INFO"
+LOG_LEVEL = "DEBUG"
 LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
 )
@@ -13,27 +13,36 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
-    # "bau",
-    # "fa",
     "lc",
+    # "fa",
+    # "bau",
 ]
 
 # Sensitivities
 SENSITIVITIES = [
-    # "def",
-    "ng_partial",
-    "ng_high",
+    "def",
+    # "ng_partial",
+    # "ng_high",
 ]
 
 # Carbon price (for sensitivity analysis): needs to be run for 1 USD/tCO2 to create carbon_cost_addition.csv, then used for subsequent runs by multiplying accordingly
-CARBON_COSTS = [1]  # Values to test: 0, 25, 50
-# CARBON_COSTS = np.arange(0, 201, step=25)
-# CARBON_COSTS = [0, 25, 50, 75, 100]
+CARBON_COSTS = [75]  # Values to test: 0, 25, 50
+# CARBON_COSTS = np.arange(0, 301, step=25)
+CARBON_COSTS = [0, 25, 50, 75]
+# CARBON_COSTS = [0]
 CARBON_COST_ADDITION_FROM_CSV = False
+
+# Scopes in CO2 price optimization
+SCOPES_CO2_COST = [
+    "scope1",
+    "scope2",
+    "scope3_upstream",
+    # "scope3_downstream"
+]
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 run_config = {
     "IMPORT_DATA",
     "CALCULATE_VARIABLES",
@@ -406,7 +415,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
 YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2050, "aluminium": 2045}
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-ANNUAL_RENOVATION_SHARE = {"chemicals": 0.333, "aluminium": 1}
+ANNUAL_RENOVATION_SHARE = {"chemicals": 0.2, "aluminium": 1}
 
 # Regions with and without geological storage (salt caverns)
 REGIONS_SALT_CAVERN_AVAILABILITY = {

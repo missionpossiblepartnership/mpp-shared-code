@@ -30,12 +30,12 @@ logger.setLevel(LOG_LEVEL)
 np.random.seed(100)
 
 funcs = {
-    "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    "MAKE_RANKINGS": make_rankings,
-    "SIMULATE_PATHWAY": simulate_pathway,
+    # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
+    # "MAKE_RANKINGS": make_rankings,
+    # "SIMULATE_PATHWAY": simulate_pathway,
     "CALCULATE_OUTPUTS": calculate_outputs,
-    "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
-    "SENSITIVITY_ANALYSIS": create_sensitivity_outputs,
+    # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
+    # "SENSITIVITY_ANALYSIS": create_sensitivity_outputs,
 }
 
 
@@ -56,20 +56,20 @@ def _run_model(pathway, sensitivity, carbon_cost):
 def run_model_sequential(runs):
     """Run model sequentially, slower but better for debugging"""
     for pathway, sensitivity, carbon_cost in runs:
-
-        # Copy intermediate folder to right carbon cost directory
-        cc = carbon_cost.df_carbon_cost.loc[
-            carbon_cost.df_carbon_cost["year"] == END_YEAR, "carbon_cost"
-        ].item()
-        for folder in ["final", "intermediate", "ranking", "stack_tracker"]:
-            final_folder = (
-                f"data/{SECTOR}/{pathway}/{sensitivity}/carbon_cost_{cc}/{folder}"
-            )
-            if not os.path.exists(final_folder):
-                os.makedirs(final_folder)
-            if folder == "intermediate":
-                source_dir = f"data/{SECTOR}/{pathway}/{sensitivity}/{folder}"
-                distutils.dir_util.copy_tree(source_dir, final_folder)
+        if "APPLY_IMPLICIT_FORCING" in funcs:
+            # Copy intermediate folder to right carbon cost directory
+            cc = carbon_cost.df_carbon_cost.loc[
+                carbon_cost.df_carbon_cost["year"] == END_YEAR, "carbon_cost"
+            ].item()
+            for folder in ["final", "intermediate", "ranking", "stack_tracker"]:
+                final_folder = (
+                    f"data/{SECTOR}/{pathway}/{sensitivity}/carbon_cost_{cc}/{folder}"
+                )
+                if not os.path.exists(final_folder):
+                    os.makedirs(final_folder)
+                if folder == "intermediate":
+                    source_dir = f"data/{SECTOR}/{pathway}/{sensitivity}/{folder}"
+                    distutils.dir_util.copy_tree(source_dir, final_folder)
         _run_model(pathway=pathway, sensitivity=sensitivity, carbon_cost=carbon_cost)
 
 
@@ -80,20 +80,20 @@ def run_model_parallel(runs):
     pool = mp.Pool(processes=n_cores)
     logger.info(f"Running model for scenario/sensitivity {runs}")
     for pathway, sensitivity, carbon_cost in runs:
-
-        # Copy intermediate folder to right carbon cost directory
-        cc = carbon_cost.df_carbon_cost.loc[
-            carbon_cost.df_carbon_cost["year"] == END_YEAR, "carbon_cost"
-        ].item()
-        for folder in ["final", "intermediate", "ranking", "stack_tracker"]:
-            final_folder = (
-                f"data/{SECTOR}/{pathway}/{sensitivity}/carbon_cost_{cc}/{folder}"
-            )
-            if not os.path.exists(final_folder):
-                os.makedirs(final_folder)
-            if folder == "intermediate":
-                source_dir = f"data/{SECTOR}/{pathway}/{sensitivity}/{folder}"
-                distutils.dir_util.copy_tree(source_dir, final_folder)
+        if "APPLY_IMPLICIT_FORCING" in funcs:
+            # Copy intermediate folder to right carbon cost directory
+            cc = carbon_cost.df_carbon_cost.loc[
+                carbon_cost.df_carbon_cost["year"] == END_YEAR, "carbon_cost"
+            ].item()
+            for folder in ["final", "intermediate", "ranking", "stack_tracker"]:
+                final_folder = (
+                    f"data/{SECTOR}/{pathway}/{sensitivity}/carbon_cost_{cc}/{folder}"
+                )
+                if not os.path.exists(final_folder):
+                    os.makedirs(final_folder)
+                if folder == "intermediate":
+                    source_dir = f"data/{SECTOR}/{pathway}/{sensitivity}/{folder}"
+                    distutils.dir_util.copy_tree(source_dir, final_folder)
         pool.apply_async(_run_model, args=(pathway, sensitivity, carbon_cost))
     pool.close()
     pool.join()
@@ -103,7 +103,6 @@ def main():
     logger.info(f"Running model for {SECTOR}")
 
     # Create a list of carbon cost trajectories that each start in 2025 and have a constant carbon cost
-
     carbon_costs = CARBON_COSTS
     # carbon_costs = [1]  # for creating carbon cost addition DataFrame
     carbon_cost_trajectories = []
@@ -122,9 +121,8 @@ def main():
         run_model_parallel(runs)
     else:
         run_model_sequential(runs)
-
     # Create sensitivity outputs
-    if "SENSITIVITY_OUTPUTS" in funcs:
+    if "SENSITIVITY_ANALYSIS" in funcs:
         create_sensitivity_outputs()
 
 

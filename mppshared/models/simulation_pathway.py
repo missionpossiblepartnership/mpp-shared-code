@@ -425,8 +425,10 @@ class SimulationPathway:
         # TODO: create smaller asset to meet production capacity precisely
         df_stack["number_assets"] = df_stack.apply(
             lambda row: int(
-                row["annual_production_capacity"]
-                / ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT[row["product"]]
+                np.ceil(
+                    row["annual_production_capacity"]
+                    / ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT[row["product"]]
+                )
             ),
             axis=1,
         )

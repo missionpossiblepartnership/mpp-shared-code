@@ -17,6 +17,7 @@ from mppshared.config import (
     RANKING_COST_METRIC,
     REGIONAL_TECHNOLOGY_BAN,
     REGIONS_SALT_CAVERN_AVAILABILITY,
+    SCOPES_CO2_COST,
     SENSITIVITIES,
     START_YEAR,
     TECHNOLOGY_MORATORIUM,
@@ -72,6 +73,21 @@ def apply_implicit_forcing(
     df_technology_switches = apply_salt_cavern_availability_constraint(
         df_technology_switches, sector
     )
+
+    # TODO: remove this workaround
+    if sector == "chemicals":
+        switches_drop = (
+            df_technology_switches["technology_destination"]
+            == "GHR + CCS + ammonia synthesis"
+        ) & (df_technology_switches["switch_type"] == "brownfield_renovation")
+        df_technology_switches = df_technology_switches.loc[~switches_drop]
+
+        # Waste to ammonia and waste water to ammonium nitrate taken out
+        techs_to_drop = ["Waste to ammonia", "Waste Water to ammonium nitrate"]
+        switches_drop = (
+            df_technology_switches["technology_destination"].isin(techs_to_drop)
+        ) | (df_technology_switches["technology_origin"].isin(techs_to_drop))
+        df_technology_switches = df_technology_switches.loc[~switches_drop]
 
     # Apply technology moratorium (year after which newbuild capacity must be transition or
     # end-state technologies)
@@ -233,11 +249,12 @@ def calculate_carbon_cost_addition_to_cost_metric(
         how="left",
     ).fillna(0)
 
-    # Additional cost from carbon cost is carbon cost multiplied with sum of scope 1 and scope 2 CO2 emissions
+    # Additional cost from carbon cost is carbon cost multiplied with sum of the co2 emission scopes included in the optimization
     df = df.merge(df_carbon_cost, on=["year"], how="left")
-    df["carbon_cost_addition"] = (df["co2_scope1"] + df["co2_scope2"]) * df[
-        "carbon_cost"
-    ]
+    df["sum_co2_emissions"] = 0
+    for scope in SCOPES_CO2_COST:
+        df["sum_co2_emissions"] += df[f"co2_{scope}"]
+    df["carbon_cost_addition"] = df["sum_co2_emissions"] * df["carbon_cost"]
 
     # Discount carbon cost addition
     # TODO: make grouping column function sector-specific

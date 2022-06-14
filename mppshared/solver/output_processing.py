@@ -283,7 +283,12 @@ def _calculate_resource_consumption(
     ).reset_index()
 
     # Add unit
-    unit_map = {"Energy": "GJ", "Raw material": "GJ", "H2 storage": "GJ", "Cost": "USD"}
+    unit_map = {
+        "Energy": "PJ",
+        "Raw material": "PJ",
+        "H2 storage": "PJ",
+        "Cost": "USD",
+    }  # GJ/t * Mt = 10^9 * 10^6 J = 10^15 J = PJ
     df_stack["unit"] = df_stack["parameter_group"].apply(lambda x: unit_map[x])
 
     if "technology" not in agg_vars:
@@ -307,10 +312,10 @@ def create_table_all_data_year(
     df_emissions = df_emissions[df_emissions["year"] == year]
     df_stack_emissions = _calculate_emissions(df_stack, df_emissions)
     df_stack_emissions_co2e = _calculate_emissions_co2e(
-        df_stack, df_emissions, gwp="GWP-20"
+        df_stack, df_emissions, gwp="GWP-100"
     )
     df_stack_emissions_co2e_all_tech = _calculate_emissions_co2e(
-        df_stack, df_emissions, gwp="GWP-20", agg_vars=["product", "region"]
+        df_stack, df_emissions, gwp="GWP-100", agg_vars=["product", "region"]
     )
     df_emissions_intensity = _calculate_emissions_intensity(df_stack, df_emissions)
     df_emissions_intensity_all_tech = _calculate_emissions_intensity(
@@ -499,10 +504,135 @@ def _calculate_annual_investments(
     return df_pivot
 
 
-def calculate_weighted_average_lcox(
+def _calculate_plant_numbers_by_type(
+    importer: IntermediateDataImporter,
+    sector: str,
+    agg_vars=["product", "region", "switch_type", "technology_destination"],
+) -> pd.DataFrame:
+    """Calculate annual investments."""
+
+    # Calculate invesment in newbuild, brownfield retrofit and brownfield rebuild technologies in every year
+    switch_types = ["greenfield", "rebuild", "retrofit"]
+    df_plants = pd.DataFrame()
+
+    for year in np.arange(START_YEAR + 1, END_YEAR + 1):
+
+        # Get current and previous stack
+        drop_cols = ["annual_production_volume", "cuf", "asset_lifetime"]
+        current_stack = (
+            importer.get_asset_stack(year)
+            .drop(columns=drop_cols)
+            .rename(
+                {
+                    "technology": "technology_destination",
+                    "annual_production_capacity": "annual_production_capacity_destination",
+                },
+                axis=1,
+            )
+        )
+        previous_stack = (
+            importer.get_asset_stack(year - 1)
+            .drop(columns=drop_cols)
+            .rename(
+                {
+                    "technology": "technology_origin",
+                    "annual_production_capacity": "annual_production_capacity_origin",
+                },
+                axis=1,
+            )
+        )
+
+        # Merge to compare retrofit, rebuild and greenfield status
+        previous_stack = previous_stack.rename(
+            {
+                f"{switch_type}_status": f"previous_{switch_type}_status"
+                for switch_type in switch_types
+            },
+            axis=1,
+        )
+        df = current_stack.merge(
+            previous_stack.drop(columns=["product", "region"]), on="uuid", how="left"
+        )
+
+        # Identify newly built assets
+        df.loc[
+            (df["greenfield_status"] == True)
+            & (df["previous_greenfield_status"].isna()),
+            ["switch_type", "technology_origin"],
+        ] = ["greenfield", "New-build"]
+
+        # Identify retrofit assets
+        df.loc[
+            (df["retrofit_status"] == True) & (df["previous_retrofit_status"] == False),
+            "switch_type",
+        ] = "brownfield_renovation"
+
+        # Identify rebuild assets
+        df.loc[
+            (df["rebuild_status"] == True) & (df["previous_rebuild_status"] == False),
+            "switch_type",
+        ] = "brownfield_newbuild"
+
+        # All assets that haven't undergone a transition are "unchanged"
+        df.loc[df["switch_type"].isna(), "switch_type"] = "unchanged"
+        df["year"] = year
+
+        # Calculate number of plants per switch type for the aggregation variables
+        df["plant_number"] = 1
+        df = df.groupby(agg_vars)[["plant_number"]].sum().reset_index(drop=False)
+
+        df = df.melt(
+            id_vars=agg_vars,
+            value_vars="plant_number",
+            var_name="parameter",
+            value_name="value",
+        )
+
+        df["year"] = year
+
+        df_plants = pd.concat([df_plants, df])
+
+    for variable in ["product", "region", "switch_type", "technology_destination"]:
+        if variable not in agg_vars:
+            df_plants[variable] = "All"
+
+    map_parameter_group = {
+        "brownfield_renovation": "Brownfield renovation plants",
+        "brownfield_newbuild": "Brownfield rebuild plants",
+        "greenfield": "Greenfield plants",
+        "unchanged": "Unchanged plants",
+    }
+    df_plants["parameter"] = df_plants["switch_type"].apply(
+        lambda x: map_parameter_group[x]
+    )
+
+    df_plants["parameter_group"] = "Production"
+    df_plants["unit"] = "Number of plants"
+    df_plants["sector"] = sector
+
+    df_plants = df_plants.rename(columns={"technology_destination": "technology"})
+    df_pivot = df_plants.pivot_table(
+        index=[
+            "sector",
+            "product",
+            "region",
+            "technology",
+            "parameter_group",
+            "parameter",
+            "unit",
+        ],
+        columns="year",
+        values="value",
+    ).fillna(0)
+
+    return df_pivot
+
+
+def calculate_weighted_average_cost_metric(
     df_cost: pd.DataFrame,
     importer: IntermediateDataImporter,
     sector: str,
+    cost_metric="lcox",
     agg_vars=["product", "region", "technology"],
 ) -> pd.DataFrame:
     """Calculate weighted average of LCOX across the supply mix in a given year."""
@@ -510,7 +640,7 @@ def calculate_weighted_average_lcox(
     # If granularity on technology level, simply take LCOX from cost DataFrame
     if agg_vars == ["product", "region", "technology"]:
         df = df_cost.rename(
-            {"lcox": "value", "technology_destination": "technology"}, axis=1
+            {cost_metric: "value", "technology_destination": "technology"}, axis=1
         ).copy()
         df = df.loc[df["technology_origin"] == "New-build"]
 
@@ -521,8 +651,12 @@ def calculate_weighted_average_lcox(
             df_stack = importer.get_asset_stack(year)
             df_stack = df_stack.rename(columns={"year_commissioned": "year"})
 
-            # Assume that assets built before start of model time horizon have LCOX of start year
-            df_stack.loc[df_stack["year"] < START_YEAR, "year"] = START_YEAR
+            if cost_metric == "lcox":
+                # Assume that assets built before start of model time horizon have LCOX of start year
+                df_stack.loc[df_stack["year"] < START_YEAR, "year"] = START_YEAR
+            elif cost_metric == "marginal_cost":
+                # Marginal cost needs to correspond to curent year
+                df_stack["year"] = year
 
             # Add LCOX to each asset
             df_cost = df_cost.loc[df_cost["technology_origin"] == "New-build"]
@@ -535,14 +669,14 @@ def calculate_weighted_average_lcox(
             df_stack = (
                 df_stack.groupby(agg_vars).apply(
                     lambda x: np.average(
-                        x["lcox"], weights=x["annual_production_volume"]
+                        x[cost_metric], weights=x["annual_production_volume"]
                     )
                 )
             ).reset_index(drop=False)
 
             df_stack = df_stack.melt(
                 id_vars=agg_vars,
-                value_vars="lcox",
+                value_vars=cost_metric,
                 var_name="parameter",
                 value_name="value",
             )
@@ -552,7 +686,8 @@ def calculate_weighted_average_lcox(
 
     # Transform to output table format
     df["parameter_group"] = "Cost"
-    df["parameter"] = "LCOX"
+    parameter_map = {"lcox": "LCOX", "marginal_cost": "Marginal cost"}
+    df["parameter"] = parameter_map[cost_metric]
     df["unit"] = "USD/t"
     df["sector"] = sector
 
@@ -715,6 +850,32 @@ def calculate_outputs(
         "final",
     )
 
+    # Calculate plant numbers by retrofit, newbuild, rebuild, unchanged
+    df_cost = importer.get_technology_transitions_and_cost()
+    df_plants = _calculate_plant_numbers_by_type(
+        importer=importer,
+        sector=sector,
+        agg_vars=["product", "region", "switch_type", "technology_destination"],
+    )
+
+    df_plants_all_tech = _calculate_plant_numbers_by_type(
+        importer=importer,
+        sector=sector,
+        agg_vars=["product", "region", "switch_type"],
+    )
+
+    df_plants_all_regions = _calculate_plant_numbers_by_type(
+        importer=importer,
+        sector=sector,
+        agg_vars=["product", "switch_type", "technology_destination"],
+    )
+
+    df_plants_all_regions_all_tech = _calculate_plant_numbers_by_type(
+        importer=importer,
+        sector=sector,
+        agg_vars=["product", "switch_type"],
+    )
+
     # Calculate electrolysis capacity
     df_electrolysis_capacity = calculate_electrolysis_capacity(
         importer=importer, sector=sector, agg_vars=["product", "region", "technology"]
@@ -733,31 +894,67 @@ def calculate_outputs(
     )
 
     # Calculate weighted average of LCOX
-    df_cost = importer.get_technology_transitions_and_cost()
-    df_lcox = calculate_weighted_average_lcox(
+    df_lcox = calculate_weighted_average_cost_metric(
         df_cost=df_cost,
         importer=importer,
         sector=sector,
+        cost_metric="lcox",
         agg_vars=["product", "region", "technology"],
     )
-    df_lcox_all_techs = calculate_weighted_average_lcox(
+    df_lcox_all_techs = calculate_weighted_average_cost_metric(
         df_cost=df_cost,
         importer=importer,
         sector=sector,
+        cost_metric="lcox",
         agg_vars=["product", "region"],
     )
-    df_lcox_all_regions_all_techs = calculate_weighted_average_lcox(
+    df_lcox_all_regions_all_techs = calculate_weighted_average_cost_metric(
         df_cost=df_cost,
         importer=importer,
         sector=sector,
+        cost_metric="lcox",
         agg_vars=["product"],
     )
 
-    df_lcox_all_regions = calculate_weighted_average_lcox(
+    df_lcox_all_regions = calculate_weighted_average_cost_metric(
         df_cost=df_cost,
         importer=importer,
         sector=sector,
+        cost_metric="lcox",
         agg_vars=["product", "technology"],
+    )
+
+    # Calculate weighted average of MC
+    df_mc = calculate_weighted_average_cost_metric(
+        df_cost=df_cost,
+        importer=importer,
+        sector=sector,
+        cost_metric="marginal_cost",
+        agg_vars=["product", "region", "technology"],
+    )
+
+    df_mc_all_techs = calculate_weighted_average_cost_metric(
+        df_cost=df_cost,
+        importer=importer,
+        sector=sector,
+        cost_metric="marginal_cost",
+        agg_vars=["product", "region"],
+    )
+
+    df_mc_all_regions = calculate_weighted_average_cost_metric(
+        df_cost=df_cost,
+        importer=importer,
+        sector=sector,
+        cost_metric="marginal_cost",
+        agg_vars=["product", "technology"],
+    )
+
+    df_mc_all_techs_all_regions = calculate_weighted_average_cost_metric(
+        df_cost=df_cost,
+        importer=importer,
+        sector=sector,
+        cost_metric="marginal_cost",
+        agg_vars=["product"],
     )
 
     # Calculate annual investments
@@ -803,6 +1000,11 @@ def calculate_outputs(
     df = pd.concat(data)
     df["sector"] = sector
 
+    # Express annual production volume in terms of ammonia
+    if SECTOR == "chemicals":
+        df_ammonia_all = calculate_annual_production_volume_as_ammonia(df=df)
+        df = pd.concat([df, df_ammonia_all])
+
     # Pivot the dataframe to have the years as columns
     df_pivot = df.pivot_table(
         index=[
@@ -830,10 +1032,18 @@ def calculate_outputs(
             df_lcox_all_techs,
             df_lcox_all_regions,
             df_lcox_all_regions_all_techs,
+            df_mc,
+            df_mc_all_techs,
+            df_mc_all_regions,
+            df_mc_all_techs_all_regions,
             df_electrolysis_capacity,
             df_electrolysis_capacity_all_regions,
             df_electrolysis_capacity_all_tech,
             df_electrolysis_capacity_all_tech_all_regions,
+            df_plants,
+            df_plants_all_regions,
+            df_plants_all_tech,
+            df_plants_all_regions_all_tech,
         ]
     )
     df_pivot.reset_index(inplace=True)
@@ -889,3 +1099,54 @@ def write_key_assumptions_to_txt(
         for line in lines:
             f.write(line)
             f.write("\n")
+
+
+def calculate_annual_production_volume_as_ammonia(df):
+    """Transform ammonium nitrate and urea production to ammonia and add to product "All" """
+
+    df = df.loc[
+        (df["parameter_group"] == "Production")
+        & (df["parameter"] == "Annual production volume")
+    ]
+
+    df = df.set_index(
+        [
+            "sector",
+            "region",
+            "technology",
+            "parameter_group",
+            "parameter",
+            "year",
+            "unit",
+            "product",
+        ]
+    )
+    df = df.unstack(level=-1, fill_value=0).reset_index()
+
+    # TODO: improve this workaround
+    columns = [
+        "sector",
+        "region",
+        "technology",
+        "parameter_group",
+        "parameter",
+        "year",
+        "unit",
+        "ammonia",
+        "ammonium nitrate",
+        "urea",
+    ]
+    df.columns = columns
+
+    df["value"] = (
+        df["ammonia"]
+        + AMMONIA_PER_AMMONIUM_NITRATE * df["ammonium nitrate"]
+        + AMMONIA_PER_UREA * df["urea"]
+    )
+    df = df.drop(columns=["ammonia", "ammonium nitrate", "urea"])
+    df["product"] = "Ammonia_all"
+    df["unit"] = "MtNH3"
+
+    # df_test = df.groupby("year").sum()
+
+    return df

@@ -11,7 +11,11 @@ from mppshared.agent_logic.agent_logic_functions import (
     remove_transition,
     select_best_transition,
 )
-from mppshared.config import LOG_LEVEL, MODEL_SCOPE
+from mppshared.config import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
+    LOG_LEVEL,
+    MODEL_SCOPE,
+)
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -51,7 +55,7 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
         logger.debug(
             f"Year: {year} Production: {production}, Demand: {demand}, Surplus: {surplus}"
         )
-        while surplus > 0:
+        while surplus > ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT[product]:
 
             # Identify asset to be decommissioned
             try:
