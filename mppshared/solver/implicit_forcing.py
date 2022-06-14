@@ -115,35 +115,37 @@ def apply_implicit_forcing(
     else:
         # TODO: loads of hardcoded stuff!
         # Write carbon cost addition to csv in first run for subsequent multiplication
-        if df_cc.loc[df_cc["year"] == 2050, "carbon_cost"].item() == 1:
+        # if df_cc.loc[df_cc["year"] == 2050, "carbon_cost"].item() == 1:
 
-            start = timer()
-            # df_technology_switches = filter_df_for_development(df_technology_switches)
-            df_carbon_cost_addition = calculate_carbon_cost_addition_to_cost_metric(
-                df_technology_switches=df_technology_switches,
-                df_emissions=df_emissions,
-                df_technology_characteristics=df_technology_characteristics,
-                cost_metric=RANKING_COST_METRIC[sector],
-                df_carbon_cost=df_cc,
-            )
-            end = timer()
-            logger.info(
-                f"Time elapsed to apply carbon cost to {len(df_carbon_cost_addition)} rows: {timedelta(seconds=end-start)}"
-            )
+        start = timer()
+        # df_technology_switches = filter_df_for_development(df_technology_switches)
+        df_carbon_cost_addition = calculate_carbon_cost_addition_to_cost_metric(
+            df_technology_switches=df_technology_switches,
+            df_emissions=df_emissions,
+            df_technology_characteristics=df_technology_characteristics,
+            cost_metric=RANKING_COST_METRIC[sector],
+            df_carbon_cost=df_cc,
+        )
+        end = timer()
+        logger.info(
+            f"Time elapsed to apply carbon cost to {len(df_carbon_cost_addition)} rows: {timedelta(seconds=end-start)}"
+        )
 
-            # Write carbon cost to all intermediate folders
-            for folder in [
-                f"{pathway}/{sensitivity}"
-                for sensitivity in SENSITIVITIES
-                for pathway in PATHWAYS
-            ]:
-                parent_path = Path(__file__).resolve().parents[2]
-                path = parent_path.joinpath(
-                    f"data/{sector}/{folder}/intermediate/carbon_cost_addition.csv"
-                )
-                df_carbon_cost_addition.to_csv(path, index=False)
-        else:
-            df_carbon_cost_addition = importer.get_carbon_cost_addition()
+        # Write carbon cost to all intermediate folders
+        # for folder in [
+        #     f"{pathway}/{sensitivity}"
+        #     for sensitivity in SENSITIVITIES
+        #     for pathway in PATHWAYS
+        # ]:
+        parent_path = Path(__file__).resolve().parents[2]
+        folder = f"{pathway}/{sensitivity}"
+        cc = df_cc.loc[df_cc["year"] == 2050, "carbon_cost"].item()
+        path = parent_path.joinpath(
+            f"data/{sector}/{folder}/carbon_cost_{cc}/intermediate/carbon_cost_addition.csv"
+        )
+        df_carbon_cost_addition.to_csv(path, index=False)
+        # else:
+        #     df_carbon_cost_addition = importer.get_carbon_cost_addition()
 
         # Update cost metric in technology switching DataFrame with carbon cost
         cost_metric = RANKING_COST_METRIC[sector]
@@ -163,10 +165,10 @@ def apply_implicit_forcing(
             how="left",
         )
         # Carbon cost addition is for 1 USD/tCO2, hence multiply with right factor
-        constant_carbon_cost = df_cc.loc[df_cc["year"] == 2050, "carbon_cost"].item()
-        df_carbon_cost[f"carbon_cost_addition_{cost_metric}"] = (
-            df_carbon_cost[f"carbon_cost_addition_{cost_metric}"] * constant_carbon_cost
-        )
+        # constant_carbon_cost = df_cc.loc[df_cc["year"] == 2050, "carbon_cost"].item()
+        # df_carbon_cost[f"carbon_cost_addition_{cost_metric}"] = (
+        #     df_carbon_cost[f"carbon_cost_addition_{cost_metric}"] * constant_carbon_cost
+        # )
 
         df_carbon_cost[cost_metric] = (
             df_carbon_cost[cost_metric]
@@ -258,6 +260,7 @@ def calculate_carbon_cost_addition_to_cost_metric(
         df["sum_co2_emissions"] += df[f"co2_{scope}"]
     df["carbon_cost_addition"] = df["sum_co2_emissions"] * df["carbon_cost"]
     df["carbon_cost_addition_marginal_cost"] = df["carbon_cost_addition"]
+    df["carbon_cost_addition_annualized_cost"] = df["carbon_cost_addition"]
 
     # Discount carbon cost addition
     # TODO: make grouping column function sector-specific

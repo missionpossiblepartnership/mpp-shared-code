@@ -33,9 +33,9 @@ funcs = {
     # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     # "MAKE_RANKINGS": make_rankings,
     # "SIMULATE_PATHWAY": simulate_pathway,
-    # "CALCULATE_OUTPUTS": calculate_outputs,
+    "CALCULATE_OUTPUTS": calculate_outputs,
     # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
-    "SENSITIVITY_ANALYSIS": create_sensitivity_outputs,
+    # "SENSITIVITY_ANALYSIS": create_sensitivity_outputs,
 }
 
 
@@ -106,6 +106,7 @@ def main():
     carbon_costs = CARBON_COSTS
     # carbon_costs = [1]  # for creating carbon cost addition DataFrame
     carbon_cost_trajectories = []
+    end_year_map = {0: 2025, 50: 2030, 100: 2035, 150: 2040, 200: 2045, 250: 2050}
     for cc in carbon_costs:
         carbon_cost_trajectories.append(
             CarbonCostTrajectory(
@@ -113,7 +114,7 @@ def main():
                 initial_carbon_cost=0,
                 final_carbon_cost=cc,
                 start_year=2025,
-                end_year=2030,
+                end_year=end_year_map[cc],
             )
         )
     runs = list(itertools.product(PATHWAYS, SENSITIVITIES, carbon_cost_trajectories))
