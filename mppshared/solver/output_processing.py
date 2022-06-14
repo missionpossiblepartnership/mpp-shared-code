@@ -1,9 +1,5 @@
 """ Process outputs to standardised output table."""
 from collections import defaultdict
-from lib2to3.pgen2.pgen import DFAState
-from re import T
-from this import d
-from tkinter import END
 import pandas as pd
 import numpy as np
 
@@ -69,10 +65,10 @@ def _calculate_emissions(
     """Calculate emissions for all GHGs and scopes by production, region and technology"""
 
     logger.info("-- Calculating emissions")
-
+    emission_scopes = EMISSION_SCOPES.remove("scope3_downstream")
     # Emissions are the emissions factor multiplied with the annual production volume
     df_stack = df_stack.merge(df_emissions, on=["product", "region", "technology"])
-    scopes = [f"{ghg}_{scope}" for scope in EMISSION_SCOPES for ghg in GHGS]
+    scopes = [f"{ghg}_{scope}" for scope in emission_scopes for ghg in GHGS]
 
     for scope in scopes:
         df_stack[scope] = df_stack[scope] * df_stack["annual_production_volume"]
@@ -93,12 +89,12 @@ def _calculate_emissions(
     # Add unit and parameter group
     map_unit = {
         f"{ghg}_{scope}": f"Mt {str.upper(ghg)}"
-        for scope in EMISSION_SCOPES
+        for scope in emission_scopes
         for ghg in GHGS
     }
     map_rename = {
         f"{ghg}_{scope}": f"{str.upper(ghg)} {str.capitalize(scope).replace('_', ' ')}"
-        for scope in EMISSION_SCOPES
+        for scope in emission_scopes
         for ghg in GHGS
     }
 
@@ -892,6 +888,105 @@ def calculate_electrolysis_capacity(
     return df
 
 
+def calculate_scope3_downstream_emissions(
+    importer: IntermediateDataImporter,
+    sector: str,
+    pathway: str,
+    gwp="GWP-100",
+    agg_vars=["product", "region"],
+) -> pd.DataFrame:
+
+    scope = "3_downstream"
+
+    # Calculate scope 3 downstream emissions for fertiliser in every region
+    df_drivers = importer.get_demand_drivers()
+    df_drivers = df_drivers.loc[df_drivers["region"] != "Global"]
+    df_drivers = df_drivers.loc[df_drivers["driver"] == "Fertiliser"]
+    df_drivers = df_drivers.drop(columns="unit").dropna(axis=1, how="all")
+
+    # Driver DataFrame to long format
+    df_drivers = df_drivers.melt(
+        id_vars=["product", "driver", "region"],
+        var_name="year",
+        value_name="demand",
+    )
+    df_drivers["year"] = df_drivers["year"].astype(int)
+
+    for ghg in GHGS:
+        df_efs = importer.get_emission_factors(ghg=ghg)
+
+        # Drop emission factors that are not right for the pathway
+        if not df_efs["scenario"].isna().all():
+            df_efs = df_efs.loc[
+                (df_efs["scenario"].isna())
+                | (df_efs["scenario"].str.contains(str.upper(pathway)))
+            ]
+        df_efs = df_efs.loc[df_efs["scope"] == scope]
+        df_efs = df_efs[["product", "region", "year", f"emission_factor_{ghg}"]]
+
+        # Add to demand drivers table
+        df_drivers = df_drivers.merge(
+            df_efs, on=["product", "region", "year"], how="left"
+        ).fillna(0)
+
+        # Scope 3 downstream emissions in Mt GHG is fertilizer end-use in Mt of product multiplied with emissions factor
+        df_drivers[
+            f"{str.upper(ghg)} Scope{str.capitalize(scope).replace('_', ' ')}"
+        ] = (df_drivers["demand"] * df_drivers[f"emission_factor_{ghg}"])
+
+    # Calculate CO2e
+    df_drivers["CO2e Scope3 downstream"] = 0
+    for ghg in GHGS:
+        df_drivers["CO2e Scope3 downstream"] += (
+            df_drivers[f"{str.upper(ghg)} Scope3 downstream"] * GWP[gwp][ghg]
+        )
+
+    # Aggregate and melt
+    df_drivers = df_drivers.groupby(agg_vars + ["year"], as_index=False).sum()
+
+    df_drivers = df_drivers[
+        agg_vars
+        + [
+            "year",
+            "CO2 Scope3 downstream",
+            "N2O Scope3 downstream",
+            "CH4 Scope3 downstream",
+            "CO2e Scope3 downstream",
+        ]
+    ].melt(id_vars=agg_vars + ["year"], value_name="value", var_name="parameter")
+
+    # Add parameter descriptions
+    df_drivers["parameter_group"] = "Emissions"
+    df_drivers["sector"] = sector
+    unit_map = {
+        "CO2 Scope3 downstream": "Mt CO2",
+        "N2O Scope3 downstream": "Mt N2O",
+        "CH4 Scope3 downstream": "Mt CH4",
+        "CO2e Scope3 downstream": "Mt CO2e",
+    }
+    df_drivers["unit"] = df_drivers["parameter"].apply(lambda x: unit_map[x])
+    for variable in ["product", "region", "technology"]:
+        if variable not in agg_vars:
+            df_drivers[variable] = "All"
+
+    # Pivot table
+    df = df_drivers.pivot_table(
+        index=[
+            "sector",
+            "product",
+            "region",
+            "technology",
+            "parameter_group",
+            "parameter",
+            "unit",
+        ],
+        columns="year",
+        values="value",
+    ).fillna(0)
+
+    return df
+
+
 def calculate_outputs(
     pathway: str, sensitivity: str, sector: str, carbon_cost: CarbonCostTrajectory
 ):
@@ -914,6 +1009,18 @@ def calculate_outputs(
         f"asset_transition_sequences_sensitivity_{sensitivity}.csv",
         "final",
     )
+
+    # Calculate scope 3 downstream emissions for fertilizer end-use
+    df_scope3 = pd.DataFrame()
+    aggregations = [["product", "region"], ["product"], []]
+    for agg_vars in aggregations:
+        df = calculate_scope3_downstream_emissions(
+            importer=importer,
+            sector=sector,
+            pathway=pathway,
+            agg_vars=agg_vars,
+        )
+        df_scope3 = pd.concat([df, df_scope3])
 
     # Calculate plant numbers by retrofit, newbuild, rebuild, unchanged
     df_plants = _calculate_plant_numbers_by_type(
@@ -1057,6 +1164,7 @@ def calculate_outputs(
     df_pivot = pd.concat(
         [
             df_pivot,
+            df_scope3,
             df_cost_metrics,
             df_annual_investments,
             df_annual_investments_all_tech,

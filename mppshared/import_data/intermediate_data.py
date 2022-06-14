@@ -147,6 +147,14 @@ class IntermediateDataImporter:
 
         return pd.read_csv(file_path, header=header, index_col=index_cols)
 
+    def get_demand_drivers(self):
+        file_path = self.intermediate_path.joinpath("demand_by_driver.csv")
+        return pd.read_csv(file_path).dropna(axis=0, how="all")
+
+    def get_emission_factors(self, ghg: str):
+        file_path = self.intermediate_path.joinpath(f"emission_factors_{ghg}.csv")
+        return pd.read_csv(file_path)
+
     def get_technologies_to_rank(self):
         """Return the list of technologies to rank with the TCO and emission deltas."""
         file_path = self.intermediate_path.joinpath("technologies_to_rank.csv")

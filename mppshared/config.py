@@ -12,17 +12,17 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
-    # "lc",
-    "fa",
-    "bau",
+    "lc",
+    # "fa",
+    # "bau",
 ]
 
 # Sensitivities
 SENSITIVITIES = [
     "def",
-    "ng_partial",
-    "ng_high",
-    "ng_low",
+    # "ng_partial",
+    # "ng_high",
+    # "ng_low",
 ]
 
 # Carbon price (for sensitivity analysis): needs to be run for 1 USD/tCO2 to create carbon_cost_addition.csv, then used for subsequent runs by multiplying accordingly
@@ -38,7 +38,7 @@ CARBON_COSTS = [
     200,
     250,
 ]
-CARBON_COSTS = [0]
+CARBON_COSTS = [100]
 CARBON_COST_ADDITION_FROM_CSV = False
 
 # Scopes in CO2 price optimization
@@ -50,7 +50,7 @@ SCOPES_CO2_COST = [
 ]
 
 # Run parallel/sequential
-RUN_PARALLEL = True
+RUN_PARALLEL = False
 
 # Delays for brownfield transitions to make the model more realistic
 BROWNFIELD_RENOVATION_START_YEAR = {
