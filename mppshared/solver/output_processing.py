@@ -65,7 +65,9 @@ def _calculate_emissions(
     """Calculate emissions for all GHGs and scopes by production, region and technology"""
 
     logger.info("-- Calculating emissions")
-    emission_scopes = EMISSION_SCOPES.remove("scope3_downstream")
+    emission_scopes = [
+        scope for scope in EMISSION_SCOPES if scope is not "scope3_downstream"
+    ]
     # Emissions are the emissions factor multiplied with the annual production volume
     df_stack = df_stack.merge(df_emissions, on=["product", "region", "technology"])
     scopes = [f"{ghg}_{scope}" for scope in emission_scopes for ghg in GHGS]
