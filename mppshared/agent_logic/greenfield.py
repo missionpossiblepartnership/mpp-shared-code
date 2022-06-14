@@ -18,8 +18,10 @@ from mppshared.config import (
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
     LOG_LEVEL,
     MAP_LOW_COST_POWER_REGIONS,
+    MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION,
     MODEL_SCOPE,
     REGIONAL_TECHNOLOGY_BAN,
+    REGIONS,
 )
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
@@ -47,6 +49,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     """
     logger.info(f"Starting greenfield transition logic for year {year}")
     # Next year's stack is updated with each decommissioning
+    current_stack = pathway.get_stack(year)
     new_stack = pathway.get_stack(year=year + 1)
 
     # Get ranking table for greenfield transitions
@@ -72,6 +75,15 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             product
         )  #! Development only
 
+        # Create DataFrame of maximum plant additions in each region
+        df_region_demand = create_dataframe_check_regional_share_global_demand(
+            demand=demand,
+            production=production,
+            product=product,
+            pathway=pathway,
+            current_stack=current_stack,
+        )
+
         # STEP ONE: BUILD NEW CAPACITY BY REGION
         # First, build new capacity in each region to make sure that the regional production constraint is met even if regional demand increases
         df_regional_production = get_regional_production_constraint_table(
@@ -79,15 +91,15 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         )
 
         # For each region with a production deficit, build new capacity until production meets required minimum
-        for (index, row) in df_regional_production.loc[
+        for (_, row) in df_regional_production.loc[
             df_regional_production["check"] == False
         ].iterrows():
             deficit = (
                 row["annual_production_volume_minimum"]
                 - row["annual_production_volume"]
             )
-            number_new_assets = np.ceil(
-                deficit / ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT[product]
+            number_new_assets = int(
+                np.ceil(deficit / ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT[product])
             )
             region_rank_filter = get_region_rank_filter(
                 region=row["region"], sector=pathway.sector
@@ -101,13 +113,21 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                         pathway=pathway,
                         stack=new_stack,
                         df_rank=df_rank_region,
-                        product=product,
                         year=year,
+                        df_region_demand=df_region_demand,
                     )
                     enact_greenfield_transition(
-                        pathway=pathway, stack=new_stack, new_asset=new_asset, year=year
+                        pathway=pathway,
+                        stack=new_stack,
+                        new_asset=new_asset,
+                        year=year,
                     )
                     number_new_assets -= 1
+
+                    # Add one plant to regional supply constraint DataFrame
+                    df_region_demand.loc[
+                        new_asset.region, "region_newbuild_additions"
+                    ] += 1
                 except ValueError:
                     logger.info(
                         "No more assets for greenfield transition within constraints"
@@ -116,9 +136,8 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
         # STEP TWO: BUILD NEW CAPACITY GLOBALLY
         # Build new assets while demand exceeds production
-        production = new_stack.get_annual_production_volume(
-            product
-        )  #! Development only
+        production = new_stack.get_annual_production_volume(product)
+
         while demand > new_stack.get_annual_production_volume(product):
 
             # Identify asset for greenfield transition
@@ -127,8 +146,8 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     pathway=pathway,
                     stack=new_stack,
                     df_rank=df_rank,
-                    product=product,
                     year=year,
+                    df_region_demand=df_region_demand,
                 )
             except ValueError:
                 logger.info(
@@ -137,16 +156,57 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 break
 
             # Enact greenfield transition
-            logger.debug(
-                f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}"
-            )
             enact_greenfield_transition(
                 pathway=pathway, stack=new_stack, new_asset=new_asset, year=year
             )
+
+            # Add one plant to regional supply constraint DataFrame
+            df_region_demand.loc[new_asset.region, "region_newbuild_additions"] += 1
+
         production = new_stack.get_annual_production_volume(
             product
         )  #! Development only
     return pathway
+
+
+def create_dataframe_check_regional_share_global_demand(
+    demand: float,
+    production: float,
+    product: str,
+    pathway: SimulationPathway,
+    current_stack: AssetStack,
+) -> pd.DataFrame:
+    """Create DataFrame that shows maximum plant additions in each region such that the constraint that each region can supply a maximum share of new demand is fulfilled."""
+
+    global_required_plant_additions = np.ceil(
+        (demand - production) / ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT[product]
+    )
+    global_plants_newbuild = current_stack.get_number_of_assets(
+        status="greenfield_status"
+    )
+    df_region_demand = pd.DataFrame(
+        index=REGIONS[pathway.sector],
+        data={
+            "global_plants_newbuild_proposed": global_plants_newbuild
+            + global_required_plant_additions
+        },
+    )
+    for region in REGIONS[pathway.sector]:
+        df_region_demand.loc[
+            region, "region_plants_newbuild"
+        ] = current_stack.get_number_of_assets(
+            region=region, status="greenfield_status"
+        )
+
+    df_region_demand["region_max_plants_newbuild"] = np.ceil(
+        MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION[pathway.sector]
+        * df_region_demand["global_plants_newbuild_proposed"]
+        - df_region_demand["region_plants_newbuild"]
+    )
+
+    df_region_demand["region_newbuild_additions"] = 0
+
+    return df_region_demand
 
 
 def enact_greenfield_transition(
@@ -169,8 +229,8 @@ def select_asset_for_greenfield(
     pathway: SimulationPathway,
     stack: AssetStack,
     df_rank: pd.DataFrame,
-    product: str,
     year: int,
+    df_region_demand: pd.DataFrame,
 ) -> Asset:
     """Select asset for newbuild (greenfield transition)
 
@@ -190,47 +250,62 @@ def select_asset_for_greenfield(
         asset_transition = select_best_transition(
             df_rank=df_rank,
         )
-
-        new_asset = make_new_asset(
-            asset_transition=asset_transition,
-            df_technology_characteristics=pathway.df_technology_characteristics,
-            year=year,
-        )
-        new_asset.greenfield = True
-
-        # Tentatively update the stack and check constraints
-        tentative_stack = deepcopy(stack)
-        tentative_stack.append(new_asset)
-        dict_constraints = check_constraints(
-            pathway=pathway,
-            stack=tentative_stack,
-            year=year,
-            transition_type="greenfield",
-        )
-
-        # Asset can be created if no constraint hurt
-        if (dict_constraints["emissions_constraint"] == True) & (
-            dict_constraints["rampup_constraint"] == True
-        ):
-            return new_asset
-
-        # If annual emissions constraint hurt, remove best transition from ranking table and try again
-        if dict_constraints["emissions_constraint"] == False:
-            df_rank = remove_transition(df_rank, asset_transition)
-
-        # If residual emissions constraint hurt, remove all transitions with CCS (i.e. with residual emissions)
-        elif (dict_constraints["emissions_constraint"] == False) & (
-            dict_constraints["flag_residual"] == True
-        ):
-            df_rank = df_rank.loc[
-                ~(df_rank["technology_destination"].str.contains("CCS"))
+        # Check if regional supply constraint is met
+        regional_supply_constraint_hurt = (
+            df_region_demand.loc[
+                asset_transition["region"], "region_newbuild_additions"
             ]
-
-        # If only technology ramp-up constraint hurt, remove all transitions with that destination technology from the ranking table
-        elif dict_constraints["rampup_constraint"] == False:
-            df_rank = remove_all_transitions_with_destination_technology(
-                df_rank, asset_transition["technology_destination"]
+            >= df_region_demand.loc[
+                asset_transition["region"], "region_max_plants_newbuild"
+            ]
+        )
+        if regional_supply_constraint_hurt == True:
+            df_rank = df_rank.loc[df_rank["region"] != asset_transition["region"]]
+            logger.debug(
+                f"Region {asset_transition['region']} already supplies {MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION[pathway.sector]*100} % of global demand."
             )
+
+        else:
+            new_asset = make_new_asset(
+                asset_transition=asset_transition,
+                df_technology_characteristics=pathway.df_technology_characteristics,
+                year=year,
+            )
+            new_asset.greenfield = True
+
+            # Tentatively update the stack and check constraints
+            tentative_stack = deepcopy(stack)
+            tentative_stack.append(new_asset)
+            dict_constraints = check_constraints(
+                pathway=pathway,
+                stack=tentative_stack,
+                year=year,
+                transition_type="greenfield",
+            )
+
+            # Asset can be created if no constraint hurt
+            if (dict_constraints["emissions_constraint"] == True) & (
+                dict_constraints["rampup_constraint"] == True
+            ):
+                return new_asset
+
+            # If annual emissions constraint hurt, remove best transition from ranking table and try again
+            if dict_constraints["emissions_constraint"] == False:
+                df_rank = remove_transition(df_rank, asset_transition)
+
+            # If residual emissions constraint hurt, remove all transitions with CCS (i.e. with residual emissions)
+            elif (dict_constraints["emissions_constraint"] == False) & (
+                dict_constraints["flag_residual"] == True
+            ):
+                df_rank = df_rank.loc[
+                    ~(df_rank["technology_destination"].str.contains("CCS"))
+                ]
+
+            # If only technology ramp-up constraint hurt, remove all transitions with that destination technology from the ranking table
+            elif dict_constraints["rampup_constraint"] == False:
+                df_rank = remove_all_transitions_with_destination_technology(
+                    df_rank, asset_transition["technology_destination"]
+                )
 
     # If ranking table empty, no greenfield construction possible
     raise ValueError

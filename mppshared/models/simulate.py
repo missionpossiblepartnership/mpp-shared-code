@@ -112,8 +112,9 @@ def simulate_pathway(
         sector=sector, importer=importer
     )
 
-    # Ammonia sector: tech ramp-up constraints will be back-calculated
+    # Ammonia sector: tech ramp-up constraints only for CCS
     if sector == "chemicals":
+        #  for key in [key for key in dict_technology_rampup.keys() if "CCS" not in key]:
         for key in dict_technology_rampup.keys():
             dict_technology_rampup[key] = None
 
@@ -131,7 +132,7 @@ def simulate_pathway(
     )
 
     #! Development only
-    # pathway.stacks[2020].assets = pathway.stacks[2020].assets[0:3]
+    # pathway.stacks[2020].assets = pathway.stacks[2020].assets[0:30]
 
     # Optimize asset stack on a yearly basis
     pathway = simulate(

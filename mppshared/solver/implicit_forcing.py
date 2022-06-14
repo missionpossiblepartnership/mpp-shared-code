@@ -107,13 +107,15 @@ def apply_implicit_forcing(
             on=["product", "year", "region", "technology_destination"],
             how="left",
         )
+
+    # Apply carbon cost
     df_cc = carbon_cost.df_carbon_cost
     if df_cc["carbon_cost"].sum() == 0:
         df_carbon_cost = df_technology_switches.copy()
     else:
         # TODO: loads of hardcoded stuff!
         # Write carbon cost addition to csv in first run for subsequent multiplication
-        if df_cc.loc[df_cc["year"] == 2025, "carbon_cost"].item() == 1:
+        if df_cc.loc[df_cc["year"] == 2050, "carbon_cost"].item() == 1:
 
             start = timer()
             # df_technology_switches = filter_df_for_development(df_technology_switches)
@@ -161,7 +163,7 @@ def apply_implicit_forcing(
             how="left",
         )
         # Carbon cost addition is for 1 USD/tCO2, hence multiply with right factor
-        constant_carbon_cost = df_cc.loc[df_cc["year"] == 2025, "carbon_cost"].item()
+        constant_carbon_cost = df_cc.loc[df_cc["year"] == 2050, "carbon_cost"].item()
         df_carbon_cost[f"carbon_cost_addition_{cost_metric}"] = (
             df_carbon_cost[f"carbon_cost_addition_{cost_metric}"] * constant_carbon_cost
         )
@@ -255,6 +257,7 @@ def calculate_carbon_cost_addition_to_cost_metric(
     for scope in SCOPES_CO2_COST:
         df["sum_co2_emissions"] += df[f"co2_{scope}"]
     df["carbon_cost_addition"] = df["sum_co2_emissions"] * df["carbon_cost"]
+    df["carbon_cost_addition_marginal_cost"] = df["carbon_cost_addition"]
 
     # Discount carbon cost addition
     # TODO: make grouping column function sector-specific

@@ -7,7 +7,7 @@ from plotly.subplots import make_subplots
 
 from mppshared.config import CARBON_COSTS, GWP
 
-AUTO_OPEN = True
+AUTO_OPEN = False
 
 
 def create_sensitivity_outputs():
@@ -16,25 +16,21 @@ def create_sensitivity_outputs():
     ### PARAMETERS ###
     save_path = "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Sensitivity analysis"
     pathways = [
-        # "fa",
-        "lc"
+        "fa",
+        # "lc"
     ]
-    sensitivities = [
-        "def",
-        # "ng_partial",
-        # "ng_high"
-    ]
+    sensitivities = ["def", "ng_partial", "ng_high", "ng_low"]
 
     # For emissions calculations
     years = [2020, 2030, 2040, 2050]
     emissions_list = [
         "CO2 Scope 1&2",
-        "CH4 Scope2",
-        "N2O Scope2",
+        # "CH4 Scope2",
+        # "N2O Scope2",
         "N2O Scope3 downstream",
         "CO2 Scope3 upstream",
         "CO2 Scope3 downstream",
-        "CO2e Scope1",
+        # "CO2e Scope1",
         "CO2e Scope3 upstream",
         "CO2e Scope3 downstream",
     ]
@@ -44,76 +40,77 @@ def create_sensitivity_outputs():
     carbon_costs = CARBON_COSTS
     # carbon_costs = np.arange(0, 101, step=25)
     # carbon_costs = [anchor_carbon_cost]
-    # carbon_costs = [0]
+    carbon_costs = [0]
 
     # Output file dictionary
     dict_sens = get_dict_sens(pathways, sensitivities, carbon_costs)
 
-    for pathway in pathways:
-        if pathway == "fa":
-            anchor_carbon_cost = 0
+    for anchor_carbon_cost in carbon_costs:
+        for pathway in pathways:
+            if pathway == "fa":
+                anchor_carbon_cost = 0
 
-        create_sensitivity_table(
-            dict_sens, pathway, sensitivities, carbon_costs, save_path
-        )
-        if len(sensitivities) > 0:
-            ### SHARES BY NATURAL GAS PRICE ###
-            create_shares_by_sensitivity(
-                dict_sens=dict_sens,
-                pathway=pathway,
-                save_path=save_path,
-                carbon_cost=anchor_carbon_cost,
-                sensitivities=sensitivities,
-                years=years,
+            create_sensitivity_table(
+                dict_sens, pathway, sensitivities, carbon_costs, save_path
             )
+            if len(sensitivities) > 1:
+                ### SHARES BY NATURAL GAS PRICE ###
+                create_shares_by_sensitivity(
+                    dict_sens=dict_sens,
+                    pathway=pathway,
+                    save_path=save_path,
+                    carbon_cost=anchor_carbon_cost,
+                    sensitivities=sensitivities,
+                    years=years,
+                )
 
-            ### CUMULATIVE EMISSIONS BY SENSITIVITY ###
-            create_cumulative_emissions_by_sensitivity(
-                dict_sens=dict_sens,
-                pathway=pathway,
-                save_path=save_path,
-                carbon_cost=anchor_carbon_cost,
-                sensitivities=sensitivities,
-                emissions_list=emissions_list,
-            )
-            ### RESIDUAL EMISSIONS BY SENSITIVITY ###
-            create_residual_emissions_by_sensitivity(
-                dict_sens=dict_sens,
-                pathway=pathway,
-                save_path=save_path,
-                carbon_cost=anchor_carbon_cost,
-                sensitivities=sensitivities,
-            )
+                ### CUMULATIVE EMISSIONS BY SENSITIVITY ###
+                create_cumulative_emissions_by_sensitivity(
+                    dict_sens=dict_sens,
+                    pathway=pathway,
+                    save_path=save_path,
+                    carbon_cost=anchor_carbon_cost,
+                    sensitivities=sensitivities,
+                    emissions_list=emissions_list,
+                )
+                ### RESIDUAL EMISSIONS BY SENSITIVITY ###
+                create_residual_emissions_by_sensitivity(
+                    dict_sens=dict_sens,
+                    pathway=pathway,
+                    save_path=save_path,
+                    carbon_cost=anchor_carbon_cost,
+                    sensitivities=sensitivities,
+                )
 
-        if len(carbon_costs) > 1:
-            ### SHARES BY CARBON PRICE ###
-            create_shares_by_carbon_price(
-                dict_sens=dict_sens,
-                pathway=pathway,
-                save_path=save_path,
-                carbon_costs=carbon_costs,
-                sensitivity="def",
-                years=years,
-            )
+            if len(carbon_costs) > 1:
+                ### SHARES BY CARBON PRICE ###
+                create_shares_by_carbon_price(
+                    dict_sens=dict_sens,
+                    pathway=pathway,
+                    save_path=save_path,
+                    carbon_costs=carbon_costs,
+                    sensitivity="def",
+                    years=years,
+                )
 
-            ### CUMULATIVE EMISSIONS BY CARBON PRICE ###
-            create_cumulative_emissions_by_carbon_price(
-                dict_sens=dict_sens,
-                pathway=pathway,
-                save_path=save_path,
-                carbon_costs=carbon_costs,
-                sensitivity="def",
-                emissions_list=emissions_list,
-            )
+                ### CUMULATIVE EMISSIONS BY CARBON PRICE ###
+                create_cumulative_emissions_by_carbon_price(
+                    dict_sens=dict_sens,
+                    pathway=pathway,
+                    save_path=save_path,
+                    carbon_costs=carbon_costs,
+                    sensitivity="def",
+                    emissions_list=emissions_list,
+                )
 
-            ### RESIDUAL EMISSIONS BY CARBON PRICE ###
-            create_residual_emissions_by_carbon_price(
-                dict_sens=dict_sens,
-                pathway=pathway,
-                save_path=save_path,
-                carbon_costs=carbon_costs,
-                sensitivity="def",
-            )
+                ### RESIDUAL EMISSIONS BY CARBON PRICE ###
+                create_residual_emissions_by_carbon_price(
+                    dict_sens=dict_sens,
+                    pathway=pathway,
+                    save_path=save_path,
+                    carbon_costs=carbon_costs,
+                    sensitivity="def",
+                )
 
 
 def create_sensitivity_table(
@@ -138,27 +135,35 @@ def create_sensitivity_table(
 
             # Sum production volume by ammonia type
             df = df.loc[df["parameter"] == "Annual production volume"]
-            df = df.groupby(["ammonia_type"]).sum()
-
-            if "blue_10%" in df.index:
-                df.loc["blue"] += df.loc["blue_10%"] * 0.1
-                df.loc["grey"] += df.loc["blue_10%"] * 0.9
-
-            # Calculate shares
-            df.loc["total"] = df.loc["blue"] + df.loc["green"] + df.loc["grey"]
-            for ammonia_type in ["blue", "green", "grey"]:
-                df.loc[ammonia_type] = df.loc[ammonia_type] / df.loc["total"]
-
-            # Drop auxiliary rows
-            rows_to_drop = [row for row in ["blue_10%", "total"] if row in df.index]
-            df = df.drop(index=rows_to_drop)
-            df = df["2050"]
+            df = sum_ammonia_types(df, 2050)
 
             # Add into DataFrame
-            df_sens.loc[sensitivity, (carbon_cost, "blue")] = df.loc["blue"]
-            df_sens.loc[sensitivity, (carbon_cost, "green")] = df.loc["green"]
+            df_sens.loc[sensitivity, (carbon_cost, "blue")] = df.loc["blue", "2050"]
+            df_sens.loc[sensitivity, (carbon_cost, "green")] = df.loc["green", "2050"]
 
     df_sens.to_csv(f"{save_path}/sensitivity_table_pathway={pathway}.csv")
+
+
+def sum_ammonia_types(df: pd.DataFrame, year: int) -> pd.DataFrame:
+    df = df.groupby(["ammonia_type"]).sum()
+
+    if "blue_10%" in df.index:
+        df.loc["blue"] += df.loc["blue_10%"] * 0.1
+        df.loc["grey"] += df.loc["blue_10%"] * 0.9
+
+    # Calculate shares
+    df.loc["total"] = (
+        df.loc["blue"] + df.loc["green"] + df.loc["grey"] + df.loc["other"]
+    )
+    for ammonia_type in ["blue", "green", "grey", "other"]:
+        df.loc[ammonia_type] = df.loc[ammonia_type] / df.loc["total"]
+
+    # Drop auxiliary rows
+    rows_to_drop = [row for row in ["blue_10%", "total"] if row in df.index]
+    df = df.drop(index=rows_to_drop)
+    df = df.loc[:, [str(year)]]
+    t = type(df)
+    return df
 
 
 def get_dict_sens(pathways, sensitivities, carbon_costs):
@@ -250,20 +255,7 @@ def create_shares_by_sensitivity(
 
         # Sum production volume by ammonia type
         df = df.loc[df["parameter"] == "Annual production volume"]
-        df = df.groupby(["ammonia_type"]).sum()
-
-        if "blue_10%" in df.index:
-            df.loc["blue"] += df.loc["blue_10%"] * 0.1
-            df.loc["grey"] += df.loc["blue_10%"] * 0.9
-
-        # Calculate shares
-        df.loc["total"] = df.loc["blue"] + df.loc["green"] + df.loc["grey"]
-        for ammonia_type in ["blue", "green", "grey"]:
-            df.loc[ammonia_type] = df.loc[ammonia_type] / df.loc["total"]
-
-        # Drop auxiliary rows
-        rows_to_drop = [row for row in ["blue_10%", "total"] if row in df.index]
-        df = df.drop(index=rows_to_drop)
+        df = sum_ammonia_types(df, 2050)
 
         # Melt so that years are column
         df = df.melt(var_name="year", value_name=sensitivity, ignore_index=False)
@@ -319,14 +311,14 @@ def add_ammonia_type_to_df(df: pd.DataFrame) -> pd.DataFrame:
         "ESMR Gas + CCS + ammonia synthesis": "blue",
         "Natural Gas SMR + CCS + ammonia synthesis": "blue",
         "Electrolyser - grid PPA + ammonia synthesis": "green",
-        "Biomass Digestion + ammonia synthesis": "green",
-        "Biomass Gasification + ammonia synthesis": "green",
-        "Methane Pyrolysis + ammonia synthesis": "blue",
+        "Biomass Digestion + ammonia synthesis": "other",
+        "Biomass Gasification + ammonia synthesis": "other",
+        "Methane Pyrolysis + ammonia synthesis": "other",
         "Electrolyser - dedicated VRES + grid PPA + ammonia synthesis": "green",
         "Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis": "green",
         "Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis": "green",
-        "Waste Water to ammonium nitrate": "green",
-        "Waste to ammonia": "green",
+        "Waste Water to ammonium nitrate": "other",
+        "Waste to ammonia": "other",
         "Oversized ATR + CCS": "blue",
         "All": "no type",
     }
@@ -351,16 +343,7 @@ def create_shares_by_carbon_price(
 
         # Sum production volume by ammonia type
         df = df.loc[df["parameter"] == "Annual production volume"]
-        df = df.groupby(["ammonia_type"]).sum()
-
-        # Calculate shares
-        df.loc["total"] = df.loc["blue"] + df.loc["green"] + df.loc["grey"]
-        for ammonia_type in ["blue", "green", "grey"]:
-            df.loc[ammonia_type] = df.loc[ammonia_type] / df.loc["total"]
-
-        # Drop auxiliary rows
-        rows_to_drop = [row for row in ["blue_10%", "total"] if row in df.index]
-        df = df.drop(index=rows_to_drop)
+        df = sum_ammonia_types(df, 2050)
 
         # Melt so that years are column
         df = df.melt(var_name="year", value_name=carbon_cost, ignore_index=False)
