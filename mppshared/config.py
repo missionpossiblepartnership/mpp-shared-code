@@ -12,16 +12,16 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
-    "lc",
-    # "fa",
-    # "bau",
+    # "lc",
+    "fa",
+    "bau",
 ]
 
 # Sensitivities
 SENSITIVITIES = [
-    # "def",
-    # "ng_partial",
-    # "ng_high",
+    "def",
+    "ng_partial",
+    "ng_high",
     "ng_low",
 ]
 
@@ -38,7 +38,7 @@ CARBON_COSTS = [
     200,
     250,
 ]
-# CARBON_COSTS = [0]
+CARBON_COSTS = [0]
 CARBON_COST_ADDITION_FROM_CSV = False
 
 # Scopes in CO2 price optimization
@@ -50,7 +50,7 @@ SCOPES_CO2_COST = [
 ]
 
 # Run parallel/sequential
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 
 # Delays for brownfield transitions to make the model more realistic
 BROWNFIELD_RENOVATION_START_YEAR = {
@@ -553,7 +553,7 @@ COST_METRIC_DECREASE_BROWNFIELD = {"chemicals": 0.05, "aluminium": 0}
 
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = {
-    "chemicals": 2050,  # for chemicals, carbon price should drive transitions in LC scenario
+    "chemicals": 2051,  # must be 2051 (not 2050 to not affect technology switches)
     "aluminium": 2030,
 }
 # Control for how many years is allowed to use transition technologies once the moratorium is enable

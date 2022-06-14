@@ -21,8 +21,8 @@ def create_sensitivity_outputs():
     ]
     sensitivities = [
         "def",
-        # "ng_partial",
-        # "ng_high",
+        "ng_partial",
+        "ng_high",
         "ng_low",
     ]
 

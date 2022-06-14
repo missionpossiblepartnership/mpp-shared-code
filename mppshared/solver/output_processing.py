@@ -721,7 +721,7 @@ def calculate_weighted_average_cost_metric(
             # Plants existing in 2020: CAPEX assumed to be fully depreciated, so annualized cost is MC
             if cost_metric == "annualized_cost":
                 df_stack["annualized_cost"] = np.where(
-                    df_stack["year_until_annualized_capex"] > year,
+                    df_stack["year_until_annualized_capex"] < year,
                     df_stack["marginal_cost"],
                     df_stack["annualized_cost"],
                 )
