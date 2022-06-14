@@ -13,9 +13,9 @@ LOG_FORMATTER = logging.Formatter(
 # SECTOR = "chemicals"
 SECTOR = "aluminium"
 PATHWAYS = [
-    "bau",
+    # "bau",
     "fa",
-    "lc",
+    # "lc",
     # "cc",
 ]
 
@@ -26,9 +26,9 @@ SCOPES_CO2_COST = [
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 
-APPLY_CARBON_COST = True
+APPLY_CARBON_COST = False
 
 run_config = {
     "IMPORT_DATA",
@@ -56,7 +56,7 @@ SOLVER_INPUT_DATA_PATH = f"{CORE_DATA_PATH}/solver_input_data"
 
 OUTPUT_WRITE_PATH = {
     "chemicals": "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Current model outputs",
-    "aluminium": "data/aluminium",
+    "aluminium": "/mnt/c/Users/LuisNatera/SYSTEMIQ Ltd/MPP Materials - Aluminum/04_WS1 - Sector Transition Strategy/04_Model/Model_Outputs/Latest_Runs",
 }
 
 
@@ -409,7 +409,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
 YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2050, "aluminium": 2045}
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 0.5}
+ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 0.2}
 
 # Regions with and without geological storage (salt caverns)
 REGIONS_SALT_CAVERN_AVAILABILITY = {

@@ -71,7 +71,7 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
     )
     # Apply technology moratorium (year after which newbuild capacity must be transition or
     # end-state technologies)
-    if pathway != "bau":
+    if pathway not in ["bau", "cc"]:
         df_technology_switches = apply_technology_moratorium(
             df_technology_switches=df_technology_switches,
             df_technology_characteristics=df_technology_characteristics,
@@ -96,8 +96,8 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
             how="left",
         )
 
-    # carbon_cost = 0
-    if pathway != "cc":
+    carbon_cost = 0
+    if carbon_cost == 0:
         df_carbon_cost = df_technology_switches.copy()
     else:
         # Add carbon cost to TCO based on scope 1 and 2 CO2 emissions
@@ -131,22 +131,22 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
 
     # Calculate emission deltas between origin and destination technology
     df_ranking = calculate_emission_reduction(df_carbon_cost, df_emissions)
-    if pathway == "cc":
-        df_ranking = df_ranking.merge(
-            df_technology_characteristics[
-                [
-                    "product",
-                    "year",
-                    "region",
-                    "technology",
-                    "technology_classification",
-                    "technology_lifetime",
-                    "wacc",
-                ]
-            ].rename({"technology": "technology_destination"}, axis=1),
-            on=["product", "year", "region", "technology_destination"],
-            how="left",
-        )
+    # if pathway == "cc":
+    #     df_ranking = df_ranking.merge(
+    #         df_technology_characteristics[
+    #             [
+    #                 "product",
+    #                 "year",
+    #                 "region",
+    #                 "technology",
+    #                 "technology_classification",
+    #                 "technology_lifetime",
+    #                 "wacc",
+    #             ]
+    #         ].rename({"technology": "technology_destination"}, axis=1),
+    #         on=["product", "year", "region", "technology_destination"],
+    #         how="left",
+    #     )
     importer.export_data(
         df=df_ranking,
         filename="technologies_to_rank.csv",

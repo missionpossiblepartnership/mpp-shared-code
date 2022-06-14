@@ -933,5 +933,9 @@ def save_consolidated_outputs(sector: str):
         "parameter",
         "unit",
     ] + [str(i) for i in range(START_YEAR, END_YEAR + 1)]
-    df[columns]
+    df = df[columns]
+    df.to_csv(
+        f"{OUTPUT_WRITE_PATH[sector]}/simulation_outputs_{SECTOR}_consolidated.csv",
+        index=False,
+    )
     df.to_csv(f"data/{sector}/simulation_outputs_{SECTOR}_consolidated.csv")
