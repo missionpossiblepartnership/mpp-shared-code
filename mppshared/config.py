@@ -13,10 +13,10 @@ LOG_FORMATTER = logging.Formatter(
 # SECTOR = "chemicals"
 SECTOR = "aluminium"
 PATHWAYS = [
-    # "bau",
+    "bau",
     "fa",
-    # "lc",
-    # "cc",
+    "lc",
+    "cc",
 ]
 
 SCOPES_CO2_COST = [
