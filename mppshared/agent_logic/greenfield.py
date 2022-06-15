@@ -82,6 +82,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             )
             df_pipeline["year"] = df_pipeline["year"].astype(int)
             df_pipeline = df_pipeline.loc[df_pipeline["year"] == year]
+            df_pipeline = df_pipeline.loc[df_pipeline["product"] == product]
 
             # Build new capacity in the regions where production capacity is added
             build_regions = df_pipeline.loc[

@@ -367,6 +367,7 @@ def _calculate_annual_investments(
     importer: IntermediateDataImporter,
     sector: str,
     agg_vars=["product", "region", "switch_type", "technology_destination"],
+    ammonia_type=False,
 ) -> pd.DataFrame:
     """Calculate annual investments."""
 
@@ -454,10 +455,18 @@ def _calculate_annual_investments(
         df["investment"] = (
             df["switch_capex"] * df["annual_production_capacity_destination"] * 1e6
         )
-        df = df.groupby(agg_vars)[["investment"]].sum().reset_index(drop=False)
+
+        # Add ammonia type classification
+        df = add_ammonia_type_to_df(df)
+
+        df = (
+            df.groupby(agg_vars + ["ammonia_type"])["investment"]
+            .sum()
+            .reset_index(drop=False)
+        )
 
         df = df.melt(
-            id_vars=agg_vars,
+            id_vars=agg_vars + ["ammonia_type"],
             value_vars="investment",
             var_name="parameter",
             value_name="value",
@@ -472,18 +481,23 @@ def _calculate_annual_investments(
             df_investment[variable] = "All"
 
     if "switch_type" in agg_vars:
-        map_parameter_group = {
-            "brownfield_renovation": "Brownfield renovation investment",
-            "brownfield_newbuild": "Brownfield rebuild investment",
-            "greenfield": "Greenfield investment",
-        }
-        df_investment["parameter"] = df_investment["switch_type"].apply(
-            lambda x: map_parameter_group[x]
-        )
+
+        def map_parameter_group(row: pd.Series) -> str:
+            map = {
+                "brownfield_renovation": "Brownfield renovation investment",
+                "brownfield_newbuild": "Brownfield rebuild investment",
+                "greenfield": "Greenfield investment",
+            }
+            name = f'{str.capitalize(row.loc["ammonia_type"])}: {map[row.loc["switch_type"]]}'
+            return name
+
+        df_investment["parameter"] = df_investment[
+            ["ammonia_type", "switch_type"]
+        ].apply(lambda row: map_parameter_group(row), axis=1)
     else:
-        df_investment[
-            "parameter"
-        ] = "Greenfield, brownfield renovation and brownfield rebuild investment"
+        df_investment["parameter"] = df_investment["ammonia_type"].apply(
+            lambda x: f"{str.capitalize(x)}: total investment"
+        )
 
     df_investment["parameter_group"] = "Investment"
     df_investment["unit"] = "USD"
@@ -1099,30 +1113,23 @@ def calculate_outputs(
             df_cost_metrics = pd.concat([df, df_cost_metrics])
 
     # Calculate annual investments
-    df_annual_investments = _calculate_annual_investments(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region", "switch_type", "technology_destination"],
-    )
-    df_annual_investments_all_tech = _calculate_annual_investments(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region", "switch_type"],
-    )
-    df_annual_investments_all_switch_types = _calculate_annual_investments(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region", "technology_destination"],
-    )
-    df_annual_investments_all_tech_all_switch_types = _calculate_annual_investments(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region"],
-    )
+    aggregations = [
+        ["product", "region", "switch_type", "technology_destination"],
+        ["product", "region", "switch_type"],
+        ["product", "region", "technology_destination"],
+        ["product", "region"],
+        ["product"],
+    ]
+    df_annual_investments = pd.DataFrame()
+    for agg_vars in aggregations:
+        df = _calculate_annual_investments(
+            df_cost=df_cost,
+            importer=importer,
+            sector=sector,
+            agg_vars=agg_vars,
+            ammonia_type=True,
+        )
+        df_annual_investments = pd.concat([df, df_annual_investments])
 
     # Create output table for every year and concatenate
     data = []
@@ -1168,9 +1175,6 @@ def calculate_outputs(
             df_scope3,
             df_cost_metrics,
             df_annual_investments,
-            df_annual_investments_all_tech,
-            df_annual_investments_all_tech_all_switch_types,
-            df_annual_investments_all_switch_types,
             df_electrolysis_capacity,
             df_electrolysis_capacity_all_regions,
             df_electrolysis_capacity_all_tech,
@@ -1239,6 +1243,36 @@ def write_key_assumptions_to_txt(
         for line in lines:
             f.write(line)
             f.write("\n")
+
+
+def add_ammonia_type_to_df(df: pd.DataFrame) -> pd.DataFrame:
+
+    # Add ammonia type
+    colour_map = {
+        "Natural Gas SMR + ammonia synthesis": "grey",
+        "Coal Gasification + ammonia synthesis": "grey",
+        "Electrolyser + SMR + ammonia synthesis": "transitional",  # "blue_10%",
+        "Electrolyser + Coal Gasification + ammonia synthesis": "transitional",  # "blue_10%",
+        "Coal Gasification+ CCS + ammonia synthesis": "blue",
+        "Natural Gas SMR + CCS (process emissions only) + ammonia synthesis": "transitional",  # "blue",
+        "Natural Gas ATR + CCS + ammonia synthesis": "blue",
+        "GHR + CCS + ammonia synthesis": "blue",
+        "ESMR Gas + CCS + ammonia synthesis": "blue",
+        "Natural Gas SMR + CCS + ammonia synthesis": "blue",
+        "Electrolyser - grid PPA + ammonia synthesis": "green",
+        "Biomass Digestion + ammonia synthesis": "other",
+        "Biomass Gasification + ammonia synthesis": "other",
+        "Methane Pyrolysis + ammonia synthesis": "other",
+        "Electrolyser - dedicated VRES + grid PPA + ammonia synthesis": "green",
+        "Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis": "green",
+        "Electrolyser - dedicated VRES + H2 storage - pipeline + ammonia synthesis": "green",
+        "Waste Water to ammonium nitrate": "other",
+        "Waste to ammonia": "other",
+        "Oversized ATR + CCS": "blue",
+        "All": "no type",
+    }
+    df["ammonia_type"] = df["technology_destination"].apply(lambda row: colour_map[row])
+    return df
 
 
 def calculate_annualized_cost(

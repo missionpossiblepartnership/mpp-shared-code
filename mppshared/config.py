@@ -13,8 +13,8 @@ SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
     "lc",
-    # "fa",
-    # "bau",
+    "fa",
+    "bau",
 ]
 
 # Sensitivities
