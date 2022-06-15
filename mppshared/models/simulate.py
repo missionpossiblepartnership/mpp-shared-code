@@ -62,14 +62,6 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             f"Time elapsed for decommission in year {year}: {timedelta(seconds=end-start)} seconds"
         )
 
-        # Renovate and rebuild assets (brownfield transition)
-        start = timer()
-        pathway = brownfield(pathway=pathway, year=year)
-        end = timer()
-        logger.debug(
-            f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
-        )
-
         # Build new assets
         start = timer()
         pathway = greenfield(pathway=pathway, year=year)
@@ -78,8 +70,13 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
         )
 
-        # Copy availability to next year
-        # pathway.copy_availability(year=year)
+        # Renovate and rebuild assets (brownfield transition)
+        start = timer()
+        pathway = brownfield(pathway=pathway, year=year)
+        end = timer()
+        logger.debug(
+            f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
+        )
 
     return pathway
 

@@ -16,6 +16,7 @@ from mppshared.agent_logic.agent_logic_functions import (
 )
 from mppshared.config import (
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
+    BUILD_CURRENT_PROJECT_PIPELINE,
     LOG_LEVEL,
     MAP_LOW_COST_POWER_REGIONS,
     MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION,
@@ -23,7 +24,12 @@ from mppshared.config import (
     REGIONAL_TECHNOLOGY_BAN,
     REGIONS,
 )
-from mppshared.models.asset import Asset, AssetStack, make_new_asset
+from mppshared.models.asset import (
+    Asset,
+    AssetStack,
+    make_new_asset,
+    make_new_asset_project_pipeline,
+)
 from mppshared.models.constraints import (
     check_constraints,
     get_regional_production_constraint_table,
@@ -63,6 +69,55 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     # Greenfield for each product sequentially
     for product in pathway.products:
         df_rank = df_ranking.loc[df_ranking["product"] == product]
+
+        # Build current project pipeline if desired
+        if BUILD_CURRENT_PROJECT_PIPELINE[pathway.sector]:
+
+            # Format current project pipeline for this year
+            df_pipeline = pathway.importer.get_project_pipeline()
+            df_pipeline = df_pipeline.melt(
+                id_vars=["region", "product", "technology"],
+                var_name="year",
+                value_name="production_capacity_addition",
+            )
+            df_pipeline["year"] = df_pipeline["year"].astype(int)
+            df_pipeline = df_pipeline.loc[df_pipeline["year"] == year]
+            df_pipeline = df_pipeline.loc[df_pipeline["product"] == product]
+
+            # Build new capacity in the regions where production capacity is added
+            build_regions = df_pipeline.loc[
+                df_pipeline["production_capacity_addition"] > 0, "region"
+            ].unique()
+            for region in build_regions:
+                df_pipeline_region = df_pipeline.loc[df_pipeline["region"] == region]
+
+                # Filter newbuild technologies
+                build_techs = df_pipeline_region.loc[
+                    df_pipeline_region["production_capacity_addition"] > 0, "technology"
+                ].unique()
+                for tech in build_techs:
+                    df_asset = df_pipeline_region.loc[
+                        df_pipeline_region["technology"] == tech
+                    ]
+
+                new_asset = make_new_asset_project_pipeline(
+                    region=region,
+                    product=df_asset["product"].item(),
+                    annual_production_capacity_mt=df_asset[
+                        "production_capacity_addition"
+                    ].item(),
+                    technology=df_asset["technology"].item(),
+                    df_technology_characteristics=pathway.df_technology_characteristics,
+                    year=year,
+                )
+
+                enact_greenfield_transition(
+                    pathway=pathway,
+                    stack=new_stack,
+                    new_asset=new_asset,
+                    year=year,
+                    project_pipeline=True,
+                )
 
         if pathway.sector == "chemicals":
             df_rank = apply_greenfield_filters_chemicals(
@@ -210,13 +265,17 @@ def create_dataframe_check_regional_share_global_demand(
 
 
 def enact_greenfield_transition(
-    pathway: SimulationPathway, stack: AssetStack, new_asset: Asset, year: int
+    pathway: SimulationPathway,
+    stack: AssetStack,
+    new_asset: Asset,
+    year: int,
+    project_pipeline=False,
 ):
     """Append new asset to stack and add entry to logger and TransitionRegistry."""
 
     # Enact greenfield transition and add to TransitionRegistry
     logger.debug(
-        f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}"
+        f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}. From project pipeline: {project_pipeline}"
     )
 
     stack.append(new_asset)

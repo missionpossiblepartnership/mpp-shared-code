@@ -2,8 +2,8 @@
 import logging
 import numpy as np
 
-### LOGGER ####
-LOG_LEVEL = "INFO"
+### LOGGER ###
+LOG_LEVEL = "DEBUG"
 LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
 )
@@ -13,8 +13,8 @@ SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
     "lc",
-    # "fa",
-    # "bau",
+    "fa",
+    "bau",
 ]
 
 # Sensitivities
@@ -38,7 +38,7 @@ CARBON_COSTS = [
     200,
     250,
 ]
-CARBON_COSTS = [100]
+CARBON_COSTS = [0]
 CARBON_COST_ADDITION_FROM_CSV = False
 
 # Scopes in CO2 price optimization
@@ -51,6 +51,9 @@ SCOPES_CO2_COST = [
 
 # Run parallel/sequential
 RUN_PARALLEL = False
+
+# Integrate current project pipeline or not
+BUILD_CURRENT_PROJECT_PIPELINE = {"chemicals": True, "aluminium": False}
 
 # Delays for brownfield transitions to make the model more realistic
 BROWNFIELD_RENOVATION_START_YEAR = {
