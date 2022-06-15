@@ -899,7 +899,6 @@ def calculate_scope3_downstream_emissions(
 ) -> pd.DataFrame:
 
     scope = "3_downstream"
-
     # Calculate scope 3 downstream emissions for fertiliser in every region
     df_drivers = importer.get_demand_drivers()
     df_drivers = df_drivers.loc[df_drivers["region"] != "Global"]

@@ -78,9 +78,6 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
         )
 
-        # Copy availability to next year
-        # pathway.copy_availability(year=year)
-
     return pathway
 
 

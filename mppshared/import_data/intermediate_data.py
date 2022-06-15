@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+from isort import file
 
 import pandas as pd
 
@@ -153,6 +154,10 @@ class IntermediateDataImporter:
 
     def get_emission_factors(self, ghg: str):
         file_path = self.intermediate_path.joinpath(f"emission_factors_{ghg}.csv")
+        return pd.read_csv(file_path)
+
+    def get_project_pipeline(self):
+        file_path = self.intermediate_path.joinpath("project_pipeline.csv")
         return pd.read_csv(file_path)
 
     def get_technologies_to_rank(self):
