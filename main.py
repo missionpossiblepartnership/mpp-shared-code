@@ -3,13 +3,21 @@ import multiprocessing as mp
 
 import numpy as np
 
-from mppshared.config import (LOG_LEVEL, PATHWAYS, RUN_PARALLEL, SECTOR,
-                              SENSITIVITIES, run_config)
+from mppshared.config import (
+    LOG_LEVEL,
+    PATHWAYS,
+    RUN_PARALLEL,
+    SECTOR,
+    SENSITIVITIES,
+    run_config,
+)
 from mppshared.models.simulate import simulate_pathway
 from mppshared.solver.debugging_outputs import create_debugging_outputs
 from mppshared.solver.implicit_forcing import apply_implicit_forcing
-from mppshared.solver.output_processing import (calculate_outputs,
-                                                save_consolidated_outputs)
+from mppshared.solver.output_processing import (
+    calculate_outputs,
+    save_consolidated_outputs,
+)
 from mppshared.solver.ranking import make_rankings
 from mppshared.utility.utils import get_logger
 
@@ -60,7 +68,11 @@ def run_model_parallel(runs):
 
 def main():
     logger.info(f"Running model for {SECTOR}")
-    runs = list(itertools.product(PATHWAYS, SENSITIVITIES))
+    # runs = list(itertools.product(PATHWAYS, SENSITIVITIES))
+    runs = []
+    for pathway, sensitivities in SENSITIVITIES.items():
+        for sensitivity in sensitivities:
+            runs.append((pathway, sensitivity))
     if RUN_PARALLEL:
         run_model_parallel(runs)
     else:
