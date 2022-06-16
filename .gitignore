@@ -152,3 +152,6 @@ data/*/simulation_outputs_chemicals_consolidated.csv
 debug/*
 
 *.Identifier
+
+data/aluminium_refineries/*
+data/aluminium_smelters/*
