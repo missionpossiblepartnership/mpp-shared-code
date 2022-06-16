@@ -26,9 +26,9 @@ SCOPES_CO2_COST = [
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = True
+RUN_PARALLEL = False
 
-APPLY_CARBON_COST = False
+APPLY_CARBON_COST = True
 
 run_config = {
     "IMPORT_DATA",
