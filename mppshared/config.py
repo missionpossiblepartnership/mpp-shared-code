@@ -13,8 +13,8 @@ LOG_FORMATTER = logging.Formatter(
 # SECTOR = "chemicals"
 SECTOR = "aluminium"
 PATHWAYS = [
-    "bau",
-    "fa",
+    # "bau",
+    # "fa",
     "lc",
     "cc",
 ]
@@ -206,6 +206,16 @@ ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
 SENSITIVITIES = [
     "def",
+    "Carbon Price_0.2",
+    "Carbon Price_-0.2",
+    "Coal Price_0.2",
+    "Coal Price_-0.2",
+    "Grid and PPA Prices_0.2",
+    "Grid and PPA Prices_-0.2",
+    "Hydrogen Price_0.2",
+    "Hydrogen Price_-0.2",
+    "Natural Gas Price_0.2",
+    "Natural Gas Price_-0.2",
 ]
 ### SECTOR-SPECIFIC PARAMETERS ###
 
