@@ -10,8 +10,7 @@ import pandas as pd
 
 from mppshared.config import *
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.solver.debugging_outputs import \
-    create_table_asset_transition_sequences
+from mppshared.solver.debugging_outputs import create_table_asset_transition_sequences
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -914,7 +913,12 @@ def write_key_assumptions_to_txt(
 
 def save_consolidated_outputs(sector: str):
     data = []
-    for pathway, sensitivity in itertools.product(PATHWAYS, SENSITIVITIES):
+    runs = []
+    for pathway, sensitivities in SENSITIVITIES.items():
+        for sensitivity in sensitivities:
+            runs.append((pathway, sensitivity))
+    # for pathway, sensitivity in itertools.product(PATHWAYS, SENSITIVITIES):
+    for pathway, sensitivity in runs:
         df_ = pd.read_csv(
             f"../mpp-shared-code/data/{SECTOR}/{pathway}/{sensitivity}/final/simulation_outputs_{SECTOR}_{pathway}_{sensitivity}.csv"
         )

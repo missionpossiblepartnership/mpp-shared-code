@@ -27,9 +27,9 @@ logger.setLevel(LOG_LEVEL)
 np.random.seed(100)
 
 funcs = {
-    "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    "MAKE_RANKINGS": make_rankings,
-    "SIMULATE_PATHWAY": simulate_pathway,
+    # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
+    # "MAKE_RANKINGS": make_rankings,
+    # "SIMULATE_PATHWAY": simulate_pathway,
     "CALCULATE_OUTPUTS": calculate_outputs,
     # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
 }
@@ -58,7 +58,7 @@ def run_model_parallel(runs):
     """Run model in parallel, faster but harder to debug"""
     n_cores = mp.cpu_count()
     logger.info(f"{n_cores} cores detected")
-    pool = mp.Pool(processes=n_cores)
+    pool = mp.Pool(processes=n_cores - 1)
     logger.info(f"Running model for scenario/sensitivity {runs}")
     for pathway, sensitivity in runs:
         pool.apply_async(_run_model, args=(pathway, sensitivity))
