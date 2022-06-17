@@ -54,11 +54,6 @@ PKL_DATA_INTERMEDIATE = f"{PKL_FOLDER}/intermediate_data"
 PKL_DATA_FINAL = f"{PKL_FOLDER}/final_data"
 SOLVER_INPUT_DATA_PATH = f"{CORE_DATA_PATH}/solver_input_data"
 
-OUTPUT_WRITE_PATH = {
-    "chemicals": "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Current model outputs",
-    "aluminium": "/mnt/c/Users/LuisNatera/SYSTEMIQ Ltd/MPP Materials - Aluminum/04_WS1 - Sector Transition Strategy/04_Model/Model_Outputs/Latest_Runs",
-}
-
 
 # Naming of solver input tables
 SOLVER_INPUT_TABLES = [
@@ -231,6 +226,10 @@ PRODUCTS = {
     "aluminium": ["Aluminium"],
 }
 
+OUTPUT_WRITE_PATH = {
+    "chemicals": "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Current model outputs",
+    "aluminium": f"/mnt/c/Users/LuisNatera/SYSTEMIQ Ltd/MPP Materials - Aluminum/04_WS1 - Sector Transition Strategy/04_Model/Model_Outputs/Latest_Runs/{PRODUCTS['aluminium'][0]}",
+}
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
 INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_assets"}
 
