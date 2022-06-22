@@ -73,6 +73,9 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         # Build current project pipeline if desired
         if BUILD_CURRENT_PROJECT_PIPELINE[pathway.sector]:
 
+            #! Development only
+            demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
+            production = new_stack.get_annual_production_volume(product)
             # Format current project pipeline for this year
             df_pipeline = pathway.importer.get_project_pipeline()
             df_pipeline = df_pipeline.melt(
@@ -221,6 +224,8 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         production = new_stack.get_annual_production_volume(
             product
         )  #! Development only
+        deficit = production - demand
+        pass
     return pathway
 
 
@@ -341,6 +346,13 @@ def select_asset_for_greenfield(
                 year=year,
                 transition_type="greenfield",
             )
+
+            # Ensure that newbuild capacity from project pipeline does not lead to erroneous constraint violation
+            if "CCS" not in asset_transition["technology_destination"]:
+                dict_constraints["co2_storage_constraint"] = True
+
+            if "Electrolyser" not in asset_transition["technology_destination"]:
+                dict_constraints["electrolysis_capacity_addition_constraint"] = True
 
             # Asset can be created if no constraint hurt
             if all(constraint == True for constraint in dict_constraints.values()):

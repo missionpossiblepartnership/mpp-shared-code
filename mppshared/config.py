@@ -12,9 +12,9 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
-    "lc",
+    # "lc",
     "fa",
-    "bau",
+    # "bau",
 ]
 
 # Sensitivities
@@ -65,6 +65,10 @@ BROWNFIELD_REBUILD_START_YEAR = {
     "chemicals": 2027,  # means rebuild plants come online in 2028
     "aluminium": 2020,
 }
+
+### TECHNOLOGY CONSTRAINTS ###
+CO2_STORAGE_CONSTRAINT = True
+ELECTROLYSER_CAPACITY_ADDITION_CONSTRAINT = True
 
 ### RUN CONFIGURATION ###
 run_config = {
