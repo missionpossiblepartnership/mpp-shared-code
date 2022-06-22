@@ -1,17 +1,22 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from mppshared.agent_logic.agent_logic_functions import \
-    adjust_capacity_utilisation
+from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
 from mppshared.agent_logic.brownfield import brownfield
 from mppshared.agent_logic.decommission import decommission
 from mppshared.agent_logic.greenfield import greenfield
-from mppshared.config import (END_YEAR, LOG_LEVEL, PRODUCTS,
-                              SECTORAL_CARBON_BUDGETS, START_YEAR,
-                              TECHNOLOGY_RAMP_UP_CONSTRAINTS)
+from mppshared.config import (
+    END_YEAR,
+    LOG_LEVEL,
+    PRODUCTS,
+    SECTORAL_CARBON_BUDGETS,
+    START_YEAR,
+    TECHNOLOGY_RAMP_UP_CONSTRAINTS,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.asset import AssetStack
 from mppshared.models.carbon_budget import CarbonBudget
+
 # from mppshared.agent_logic.retrofit import retrofit
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.technology_rampup import TechnologyRampup
@@ -37,11 +42,11 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
     for year in range(START_YEAR, END_YEAR + 1):
         logger.info("Optimizing for %s", year)
 
-        # Copy over last year's stack to this year
-        pathway = pathway.copy_stack(year=year)
-
         # Adjust capacity utilisation of each asset
         pathway = adjust_capacity_utilisation(pathway=pathway, year=year)
+
+        # Copy over last year's stack to this year
+        pathway = pathway.copy_stack(year=year)
 
         # Write stack to csv
         pathway.export_stack_to_csv(year)
