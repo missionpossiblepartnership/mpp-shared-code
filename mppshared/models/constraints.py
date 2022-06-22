@@ -1,5 +1,6 @@
 """ Enforce constraints in the yearly optimization of technology switches."""
 from copy import deepcopy
+from lib2to3.pytree import convert
 
 import numpy as np
 import pandas as pd
@@ -7,10 +8,14 @@ from pandera import Bool
 from pyparsing import col
 
 from mppshared.config import (
+    CUF_UPPER_THRESHOLD,
     END_YEAR,
     LOG_LEVEL,
     REGIONAL_PRODUCTION_SHARES,
     YEAR_2050_EMISSIONS_CONSTRAINT,
+    H2_PER_AMMONIA,
+    AMMONIA_PER_AMMONIUM_NITRATE,
+    AMMONIA_PER_UREA,
 )
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -62,6 +67,13 @@ def check_constraints(
             pathway=pathway, stack=stack, year=year
         )
 
+        # Check constraint on annual addition of electrolysis capacity
+        electrolysis_capacity_addition_constraint = (
+            check_electrolysis_capacity_addition_constraint(
+                pathway=pathway, stack=stack, year=year
+            )
+        )
+
         # TODO Remove this workaround
         emissions_constraint = True
         # TODO: Check resource availability constraint
@@ -69,9 +81,128 @@ def check_constraints(
             "emissions_constraint": emissions_constraint,
             "rampup_constraint": rampup_constraint,
             "co2_storage_constraint": co2_storage_constraint,
+            "electrolysis_capacity_addition_constraint": electrolysis_capacity_addition_constraint,
         }
     else:
         return {"emissions_constraint": True, "rampup_constraint": True}
+
+
+def check_electrolysis_capacity_addition_constraint(
+    pathway: SimulationPathway, stack: AssetStack, year: int
+) -> Bool:
+    """Check if the annual addition of electrolysis capacity fulfills the constraint"""
+
+    # Get annual production capacities per technology of current and tentative new stack
+    df_old_stack = (
+        pathway.stacks[year]
+        .aggregate_stack(
+            aggregation_vars=["product", "region", "technology"],
+        )
+        .reset_index()
+    )
+    df_new_stack = stack.aggregate_stack(
+        aggregation_vars=["product", "region", "technology"]
+    ).reset_index()
+
+    # Calculate required electrolysis capacity
+    df_old_stack = convert_production_volume_to_electrolysis_capacity(
+        df_old_stack.loc[df_old_stack["technology"].str.contains("Electrolyser")],
+        year,
+        pathway,
+    )
+    df_new_stack = convert_production_volume_to_electrolysis_capacity(
+        df_new_stack.loc[df_new_stack["technology"].str.contains("Electrolyser")],
+        year,
+        pathway,
+    )
+
+    # Sum to total required electrolysis capacity
+    capacity_old_stack = df_old_stack.sum()["electrolysis_capacity"]
+    capacity_new_stack = df_new_stack.sum()["electrolysis_capacity"]
+
+    # Compare to electrolysis capacity addition constraint in that year
+    capacity_addition = capacity_new_stack - capacity_old_stack
+    df_constr = (
+        pathway.importer.get_electrolysis_capacity_addition_constraint().set_index(
+            "year"
+        )
+    )
+    capacity_addition_constraint = df_constr.loc[year, "value"]
+
+    if capacity_addition <= capacity_addition_constraint:
+        return True
+
+    logger.debug("Annual electrolysis capacity addition constraint hurt.")
+    return False
+
+
+def convert_production_volume_to_electrolysis_capacity(
+    df_stack: pd.DataFrame, year: int, pathway: SimulationPathway
+) -> float:
+    """Convert a production volume in Mt into required electrolysis capacity in MW."""
+
+    # Get capacity factors, efficiencies and hydrogen proportions
+    electrolyser_cfs = pathway.importer.get_electrolyser_cfs().rename(
+        columns={"technology_destination": "technology"}
+    )
+    electrolyser_effs = pathway.importer.get_electrolyser_efficiencies().rename(
+        columns={"technology_destination": "technology"}
+    )
+    electrolyser_props = pathway.importer.get_electrolyser_proportions().rename(
+        columns={"technology_destination": "technology"}
+    )
+
+    # Add year to stack DataFrame
+    df_stack = df_stack.copy()
+    df_stack.loc[:, "year"] = year
+
+    # Merge with stack DataFrame
+    merge_vars1 = ["product", "region", "technology", "year"]
+    merge_vars2 = ["product", "region", "year"]
+
+    df_stack = df_stack.merge(
+        electrolyser_cfs[merge_vars1 + ["electrolyser_capacity_factor"]],
+        on=merge_vars1,
+        how="left",
+    )
+    df_stack = df_stack.merge(
+        electrolyser_effs[merge_vars2 + ["electrolyser_efficiency"]],
+        on=merge_vars2,
+        how="left",
+    )
+    df_stack = df_stack.merge(
+        electrolyser_props[merge_vars1 + ["electrolyser_hydrogen_proportion"]],
+        on=merge_vars1,
+        how="left",
+    )
+    # Production volume needs to be based on standard CUF (user upper threshold)
+    df_stack["annual_production_volume"] = (
+        df_stack["annual_production_capacity"] * CUF_UPPER_THRESHOLD
+    )
+
+    # Electrolysis capacity  = Ammonia production * Proportion of H2 produced via electrolysis * Ratio of ammonia to H2 * Electrolyser efficiency / (365 * 24 * CUF)
+    df_stack["electrolysis_capacity"] = (
+        df_stack["annual_production_volume"]  # MtNH3
+        * df_stack["electrolyser_hydrogen_proportion"]
+        * df_stack["electrolyser_efficiency"]  # kWh/tH2
+        / (365 * 24 * df_stack["electrolyser_capacity_factor"])
+    )
+
+    def choose_ratio(row: pd.Series) -> float:
+        if row["product"] == "Ammonia":
+            ratio = H2_PER_AMMONIA  # tH2/tNH3
+        elif row["product"] == "Urea":
+            ratio = H2_PER_AMMONIA * AMMONIA_PER_UREA
+        elif row["product"] == "Ammonium nitrate":
+            ratio = H2_PER_AMMONIA * AMMONIA_PER_AMMONIUM_NITRATE
+        return ratio
+
+    # Electrolysis capacity in GW
+    df_stack["electrolysis_capacity"] = df_stack.apply(
+        lambda row: row["electrolysis_capacity"] * choose_ratio(row), axis=1
+    )
+
+    return df_stack
 
 
 def check_co2_storage_constraint(

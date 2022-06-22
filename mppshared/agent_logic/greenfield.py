@@ -358,9 +358,15 @@ def select_asset_for_greenfield(
             #         ~(df_rank["technology_destination"].str.contains("CCS"))
             #     ]
 
-            # If only technology ramp-up constraint or CO2 storage constraint is hurt, remove all transitions with that destination technology from the ranking table
-            elif (dict_constraints["rampup_constraint"] == False) | (
-                dict_constraints["co2_storage_constraint"] == False
+            # If only technology ramp-up constraint, CO2 storage constraint or annual electrolysis capacity addition constraint is hurt,
+            # remove all transitions with that destination technology from the ranking table
+            elif (
+                (dict_constraints["rampup_constraint"] == False)
+                | (dict_constraints["co2_storage_constraint"] == False)
+                | (
+                    dict_constraints["electrolysis_capacity_addition_constraint"]
+                    == False
+                )
             ):
                 df_rank = remove_all_transitions_with_destination_technology(
                     df_rank, asset_transition["technology_destination"]

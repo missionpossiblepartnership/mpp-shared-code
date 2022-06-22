@@ -117,6 +117,9 @@ class IntermediateDataImporter:
             self.intermediate_path.joinpath("co2_storage_constraint.csv")
         )
 
+    def get_electrolysis_capacity_addition_constraint(self):
+        return pd.read_csv(self.intermediate_path.joinpath("electrolysis_capacity_addition_constraint.csv"))
+
     def get_demand(self, region=None):
         df = pd.read_csv(self.intermediate_path.joinpath("demand.csv"))
 

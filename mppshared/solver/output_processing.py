@@ -528,7 +528,7 @@ def _calculate_plant_numbers_by_type(
     sector: str,
     agg_vars=["product", "region", "switch_type", "technology_destination"],
 ) -> pd.DataFrame:
-    """Calculate annual investments."""
+    """Calculate plant numbers, based on standard CUF (upper threshold)."""
 
     # Calculate invesment in newbuild, brownfield retrofit and brownfield rebuild technologies in every year
     switch_types = ["greenfield", "rebuild", "retrofit"]
@@ -1038,52 +1038,35 @@ def calculate_outputs(
         df_scope3 = pd.concat([df, df_scope3])
 
     # Calculate plant numbers by retrofit, newbuild, rebuild, unchanged
-    df_plants = _calculate_plant_numbers_by_type(
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region", "switch_type", "technology_destination"],
-    )
-
-    df_plants_tech_only = _calculate_plant_numbers_by_type(
-        importer=importer,
-        sector=sector,
-        agg_vars=["switch_type", "technology_destination"],
-    )
-
-    df_plants_all_tech = _calculate_plant_numbers_by_type(
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region", "switch_type"],
-    )
-
-    df_plants_all_regions = _calculate_plant_numbers_by_type(
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "switch_type", "technology_destination"],
-    )
-
-    df_plants_all_regions_all_tech = _calculate_plant_numbers_by_type(
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "switch_type"],
-    )
+    aggregations = [
+        ["product", "region", "switch_type", "technology_destination"],
+        ["switch_type", "technology_destination"],
+        ["product", "region", "switch_type"],
+        ["product", "switch_type", "technology_destination"],
+        ["product", "switch_type"],
+    ]
+    df_plants = pd.DataFrame()
+    for agg_vars in aggregations:
+        df = _calculate_plant_numbers_by_type(
+            importer=importer,
+            sector=sector,
+            agg_vars=agg_vars,
+        )
+        df_plants = pd.concat([df, df_plants])
 
     # Calculate electrolysis capacity
-    df_electrolysis_capacity = calculate_electrolysis_capacity(
-        importer=importer, sector=sector, agg_vars=["product", "region", "technology"]
-    )
-
-    df_electrolysis_capacity_all_tech = calculate_electrolysis_capacity(
-        importer=importer, sector=sector, agg_vars=["product", "region"]
-    )
-
-    df_electrolysis_capacity_all_tech_all_regions = calculate_electrolysis_capacity(
-        importer=importer, sector=sector, agg_vars=["product"]
-    )
-
-    df_electrolysis_capacity_all_regions = calculate_electrolysis_capacity(
-        importer=importer, sector=sector, agg_vars=["product", "technology"]
-    )
+    aggregations = [
+        ["product", "region", "technology"],
+        ["product", "region"],
+        ["product"],
+        ["product", "technology"],
+    ]
+    df_electrolysis_capacity = pd.DataFrame()
+    for agg_vars in aggregations:
+        df = calculate_electrolysis_capacity(
+            importer=importer, sector=sector, agg_vars=agg_vars
+        )
+        df_electrolysis_capacity = pd.concat([df, df_electrolysis_capacity])
 
     # Add annualized cost to cost DataFrame
     df_cost = importer.get_technology_transitions_and_cost()
@@ -1175,15 +1158,7 @@ def calculate_outputs(
             df_scope3,
             df_cost_metrics,
             df_annual_investments,
-            df_electrolysis_capacity,
-            df_electrolysis_capacity_all_regions,
-            df_electrolysis_capacity_all_tech,
-            df_electrolysis_capacity_all_tech_all_regions,
             df_plants,
-            df_plants_all_regions,
-            df_plants_all_tech,
-            df_plants_all_regions_all_tech,
-            df_plants_tech_only,
         ]
     )
     df_pivot.reset_index(inplace=True)
