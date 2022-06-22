@@ -45,11 +45,11 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
     for year in range(START_YEAR, END_YEAR + 1):
         logger.info("Optimizing for %s", year)
 
-        # Copy over last year's stack to this year
-        pathway = pathway.copy_stack(year=year)
-
         # Adjust capacity utilisation of each asset
         pathway = adjust_capacity_utilisation(pathway=pathway, year=year)
+
+        # Copy over this year's stack to the next year (for modification by decommission, greenfield and brownfield transitions)
+        pathway = pathway.copy_stack(year=year)
 
         # Write stack to csv
         pathway.export_stack_to_csv(year)
