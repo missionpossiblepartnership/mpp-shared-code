@@ -8,7 +8,9 @@ from pandera import Bool
 from pyparsing import col
 
 from mppshared.config import (
+    CO2_STORAGE_CONSTRAINT,
     CUF_UPPER_THRESHOLD,
+    ELECTROLYSER_CAPACITY_ADDITION_CONSTRAINT,
     END_YEAR,
     LOG_LEVEL,
     REGIONAL_PRODUCTION_SHARES,
@@ -63,16 +65,22 @@ def check_constraints(
         )
 
         # Check CO2 storage constraint
-        co2_storage_constraint = check_co2_storage_constraint(
-            pathway=pathway, stack=stack, year=year
-        )
-
-        # Check constraint on annual addition of electrolysis capacity
-        electrolysis_capacity_addition_constraint = (
-            check_electrolysis_capacity_addition_constraint(
+        if CO2_STORAGE_CONSTRAINT:
+            co2_storage_constraint = check_co2_storage_constraint(
                 pathway=pathway, stack=stack, year=year
             )
-        )
+        else:
+            co2_storage_constraint = True
+
+        # Check constraint on annual addition of electrolysis capacity
+        if ELECTROLYSER_CAPACITY_ADDITION_CONSTRAINT:
+            electrolysis_capacity_addition_constraint = (
+                check_electrolysis_capacity_addition_constraint(
+                    pathway=pathway, stack=stack, year=year
+                )
+            )
+        else:
+            electrolysis_capacity_addition_constraint = True
 
         # TODO Remove this workaround
         emissions_constraint = True
@@ -217,7 +225,7 @@ def check_co2_storage_constraint(
 
     # Compare with the limit on annual CO2 storage addition (MtCO2)
     df_co2_storage = pathway.co2_storage_constraint
-    limit = df_co2_storage.loc[df_co2_storage["year"] == year, "value"].item()
+    limit = df_co2_storage.loc[df_co2_storage["year"] == year + 1, "value"].item()
 
     if limit > co2_captured:
         return True

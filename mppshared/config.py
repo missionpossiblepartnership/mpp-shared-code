@@ -13,8 +13,8 @@ SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
     "lc",
-    "fa",
-    "bau",
+    # "fa",
+    # "bau",
 ]
 
 # Sensitivities
@@ -38,7 +38,7 @@ CARBON_COSTS = [
     200,
     250,
 ]
-CARBON_COSTS = [0]
+CARBON_COSTS = [100]
 CARBON_COST_ADDITION_FROM_CSV = False
 
 # Scopes in CO2 price optimization
@@ -65,6 +65,10 @@ BROWNFIELD_REBUILD_START_YEAR = {
     "chemicals": 2027,  # means rebuild plants come online in 2028
     "aluminium": 2020,
 }
+
+### TECHNOLOGY CONSTRAINTS ###
+CO2_STORAGE_CONSTRAINT = True
+ELECTROLYSER_CAPACITY_ADDITION_CONSTRAINT = True
 
 ### RUN CONFIGURATION ###
 run_config = {

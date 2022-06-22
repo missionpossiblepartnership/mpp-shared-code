@@ -45,11 +45,11 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
     for year in range(START_YEAR, END_YEAR + 1):
         logger.info("Optimizing for %s", year)
 
-        # Copy over last year's stack to this year
-        pathway = pathway.copy_stack(year=year)
-
-        # Adjust capacity utilisation of each asset
+        # Adjust capacity utilisation of each asset in this year'stack
         pathway = adjust_capacity_utilisation(pathway=pathway, year=year)
+
+        # Copy over this year's stack to the next year (for modification by decommission, greenfield and brownfield transitions)
+        pathway = pathway.copy_stack(year=year)
 
         # Write stack to csv
         pathway.export_stack_to_csv(year)
@@ -62,20 +62,20 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             f"Time elapsed for decommission in year {year}: {timedelta(seconds=end-start)} seconds"
         )
 
-        # Build new assets
-        start = timer()
-        pathway = greenfield(pathway=pathway, year=year)
-        end = timer()
-        logger.debug(
-            f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
-        )
-
         # Renovate and rebuild assets (brownfield transition)
         start = timer()
         pathway = brownfield(pathway=pathway, year=year)
         end = timer()
         logger.debug(
             f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
+        )
+
+        # Build new assets
+        start = timer()
+        pathway = greenfield(pathway=pathway, year=year)
+        end = timer()
+        logger.debug(
+            f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
         )
 
     return pathway

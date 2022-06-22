@@ -1158,6 +1158,7 @@ def calculate_outputs(
             df_scope3,
             df_cost_metrics,
             df_annual_investments,
+            df_electrolysis_capacity,
             df_plants,
         ]
     )
