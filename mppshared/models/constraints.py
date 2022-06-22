@@ -8,10 +8,14 @@ from pandera import Bool
 from pyparsing import col
 
 from mppshared.config import (
+    CUF_UPPER_THRESHOLD,
     END_YEAR,
     LOG_LEVEL,
     REGIONAL_PRODUCTION_SHARES,
     YEAR_2050_EMISSIONS_CONSTRAINT,
+    H2_PER_AMMONIA,
+    AMMONIA_PER_AMMONIUM_NITRATE,
+    AMMONIA_PER_UREA,
 )
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -148,10 +152,14 @@ def convert_production_volume_to_electrolysis_capacity(
         columns={"technology_destination": "technology"}
     )
 
+    # Add year to stack DataFrame
+    df_stack = df_stack.copy()
+    df_stack.loc[:, "year"] = year
+
     # Merge with stack DataFrame
     merge_vars1 = ["product", "region", "technology", "year"]
     merge_vars2 = ["product", "region", "year"]
-    df_stack["year"] = year
+
     df_stack = df_stack.merge(
         electrolyser_cfs[merge_vars1 + ["electrolyser_capacity_factor"]],
         on=merge_vars1,
@@ -167,14 +175,33 @@ def convert_production_volume_to_electrolysis_capacity(
         on=merge_vars1,
         how="left",
     )
+    # Production volume needs to be based on standard CUF (user upper threshold)
+    df_stack["annual_production_volume"] = (
+        df_stack["annual_production_capacity"] * CUF_UPPER_THRESHOLD
+    )
 
-    # Electrolysis capacity = Ammonia production * Proportion of H2 produced via electrolysis * Ratio of ammonia to H2 * Electrolyser efficiency / (365 * 24 * CUF)
+    # Electrolysis capacity  = Ammonia production * Proportion of H2 produced via electrolysis * Ratio of ammonia to H2 * Electrolyser efficiency / (365 * 24 * CUF)
     df_stack["electrolysis_capacity"] = (
-        df_stack["annual_production_volume"]
+        df_stack["annual_production_volume"]  # MtNH3
         * df_stack["electrolyser_hydrogen_proportion"]
-        * df_stack["electrolyser_efficiency"]
+        * df_stack["electrolyser_efficiency"]  # kWh/tH2
         / (365 * 24 * df_stack["electrolyser_capacity_factor"])
     )
+
+    def choose_ratio(row: pd.Series) -> float:
+        if row["product"] == "Ammonia":
+            ratio = H2_PER_AMMONIA  # tH2/tNH3
+        elif row["product"] == "Urea":
+            ratio = H2_PER_AMMONIA * AMMONIA_PER_UREA
+        elif row["product"] == "Ammonium nitrate":
+            ratio = H2_PER_AMMONIA * AMMONIA_PER_AMMONIUM_NITRATE
+        return ratio
+
+    # Electrolysis capacity in GW
+    df_stack["electrolysis_capacity"] = df_stack.apply(
+        lambda row: row["electrolysis_capacity"] * choose_ratio(row), axis=1
+    )
+
     return df_stack
 
 
