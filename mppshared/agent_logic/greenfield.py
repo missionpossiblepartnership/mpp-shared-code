@@ -74,7 +74,9 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         if BUILD_CURRENT_PROJECT_PIPELINE[pathway.sector]:
 
             #! Development only
-            demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
+            demand = pathway.get_demand(
+                product=product, year=year + 1, region=MODEL_SCOPE
+            )
             production = new_stack.get_annual_production_volume(product)
             # Format current project pipeline for this year
             df_pipeline = pathway.importer.get_project_pipeline()
@@ -127,8 +129,8 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 df_rank, pathway, year, product
             )
 
-        # Get demand and production
-        demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
+        # Get demand (for next year) and production (in current year)
+        demand = pathway.get_demand(product=product, year=year + 1, region=MODEL_SCOPE)
         production = new_stack.get_annual_production_volume(
             product
         )  #! Development only

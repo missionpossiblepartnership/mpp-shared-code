@@ -225,7 +225,7 @@ def check_co2_storage_constraint(
 
     # Compare with the limit on annual CO2 storage addition (MtCO2)
     df_co2_storage = pathway.co2_storage_constraint
-    limit = df_co2_storage.loc[df_co2_storage["year"] == year, "value"].item()
+    limit = df_co2_storage.loc[df_co2_storage["year"] == year + 1, "value"].item()
 
     if limit > co2_captured:
         return True
