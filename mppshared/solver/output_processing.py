@@ -13,23 +13,43 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def _calculate_number_of_assets(df_stack: pd.DataFrame) -> pd.DataFrame:
+def _calculate_number_of_assets(
+    df_stack: pd.DataFrame, use_standard_cuf=False
+) -> pd.DataFrame:
     """Calculate number of assets by product, region and technology for a given asset stack"""
 
     logger.info("-- Calculating number of assets")
 
-    # Count number of assets
-    df_stack["asset"] = 1
-    df_stack = (
-        df_stack.groupby(["product", "region", "technology"])
-        .count()["asset"]
-        .reset_index()
-    )
+    if use_standard_cuf:
+        df_stack = (
+            df_stack.groupby(["product", "region", "technology"])
+            .sum()["annual_production_volume"]
+            .reset_index()
+        )
+        df_stack["asset"] = df_stack[["product", "annual_production_volume"]].apply(
+            lambda x: int(
+                x[1]
+                / (CUF_UPPER_THRESHOLD * ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT[x[0]])
+            ),
+            axis=1,
+        )
+        df_stack["parameter"] = "Number of plants (standard CUF)"
+        df_stack = df_stack.drop(columns=["annual_production_volume"])
+    else:
+        # Count number of assets
+        df_stack["asset"] = 1
+        df_stack = (
+            df_stack.groupby(["product", "region", "technology"])
+            .count()["asset"]
+            .reset_index()
+        )
+
+        df_stack["parameter"] = "Number of plants (from model)"
 
     # Add parameter descriptions
     df_stack.rename(columns={"asset": "value"}, inplace=True)
     df_stack["parameter_group"] = "Production"
-    df_stack["parameter"] = "Number of plants"
+
     df_stack["unit"] = "plant"
 
     return df_stack
@@ -303,7 +323,10 @@ def create_table_all_data_year(
 
     # Calculate asset numbers and production volumes for the stack in that year
     df_stack = importer.get_asset_stack(year)
-    df_total_assets = _calculate_number_of_assets(df_stack)
+    df_total_assets = _calculate_number_of_assets(df_stack, use_standard_cuf=False)
+    df_total_assets_std_cuf = _calculate_number_of_assets(
+        df_stack, use_standard_cuf=True
+    )
     df_production_capacity = _calculate_production_volume(df_stack)
 
     # Calculate emissions, CO2 captured and emissions intensity
@@ -349,6 +372,7 @@ def create_table_all_data_year(
     df_all_data_year = pd.concat(
         [
             df_total_assets,
+            df_total_assets_std_cuf,
             df_production_capacity,
             df_stack_emissions,
             df_stack_emissions_co2e,
@@ -527,6 +551,7 @@ def _calculate_plant_numbers_by_type(
     importer: IntermediateDataImporter,
     sector: str,
     agg_vars=["product", "region", "switch_type", "technology_destination"],
+    use_standard_CUF=True,
 ) -> pd.DataFrame:
     """Calculate plant numbers, based on standard CUF (upper threshold)."""
 
@@ -537,7 +562,7 @@ def _calculate_plant_numbers_by_type(
     for year in np.arange(START_YEAR + 1, END_YEAR + 1):
 
         # Get current and previous stack
-        drop_cols = ["annual_production_volume", "cuf", "asset_lifetime"]
+        drop_cols = ["cuf", "asset_lifetime"]
         current_stack = (
             importer.get_asset_stack(year)
             .drop(columns=drop_cols)
@@ -545,6 +570,7 @@ def _calculate_plant_numbers_by_type(
                 {
                     "technology": "technology_destination",
                     "annual_production_capacity": "annual_production_capacity_destination",
+                    "annual_production_volume": "annual_production_volume_destination",
                 },
                 axis=1,
             )
@@ -556,6 +582,7 @@ def _calculate_plant_numbers_by_type(
                 {
                     "technology": "technology_origin",
                     "annual_production_capacity": "annual_production_capacity_origin",
+                    "annual_production_volume": "annual_production_volume_origin",
                 },
                 axis=1,
             )
@@ -597,8 +624,32 @@ def _calculate_plant_numbers_by_type(
         df["year"] = year
 
         # Calculate number of plants per switch type for the aggregation variables
-        df["plant_number"] = 1
-        df = df.groupby(agg_vars)[["plant_number"]].sum().reset_index(drop=False)
+        if use_standard_CUF:
+            if "product" not in agg_vars:
+                agg_vars += ["product"]
+
+            df = (
+                df.groupby(agg_vars)[["annual_production_volume_destination"]]
+                .sum()
+                .reset_index(drop=False)
+            )
+
+            df["plant_number"] = df[
+                ["product", "annual_production_volume_destination"]
+            ].apply(
+                lambda x: int(
+                    x[1]
+                    / (
+                        ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT[x[0]]
+                        * CUF_UPPER_THRESHOLD
+                    )
+                ),
+                axis=1,
+            )
+
+        else:
+            df["plant_number"] = 1
+            df = df.groupby(agg_vars)[["plant_number"]].sum().reset_index(drop=False)
 
         df = df.melt(
             id_vars=agg_vars,
@@ -626,7 +677,12 @@ def _calculate_plant_numbers_by_type(
     )
 
     df_plants["parameter_group"] = "Production"
-    df_plants["unit"] = "Number of plants"
+
+    if use_standard_CUF:
+        df_plants["unit"] = "Number of plants from standard CUF"
+    else:
+        df_plants["unit"] = "Number of plants in model"
+
     df_plants["sector"] = sector
 
     df_plants = df_plants.rename(columns={"technology_destination": "technology"})
@@ -1046,13 +1102,15 @@ def calculate_outputs(
         ["product", "switch_type"],
     ]
     df_plants = pd.DataFrame()
-    for agg_vars in aggregations:
-        df = _calculate_plant_numbers_by_type(
-            importer=importer,
-            sector=sector,
-            agg_vars=agg_vars,
-        )
-        df_plants = pd.concat([df, df_plants])
+    for use_standard_cuf in [True, False]:
+        for agg_vars in aggregations:
+            df = _calculate_plant_numbers_by_type(
+                importer=importer,
+                sector=sector,
+                agg_vars=agg_vars,
+                use_standard_CUF=use_standard_cuf,
+            )
+            df_plants = pd.concat([df, df_plants])
 
     # Calculate electrolysis capacity
     aggregations = [
