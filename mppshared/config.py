@@ -204,21 +204,20 @@ ALL_SENSITIVITIES = [
     "def",
     "Carbon Price_0.2",
     "Carbon Price_-0.2",
-    # "Coal Price_0.2",
-    # "Coal Price_-0.2",
-    # "Grid and PPA Prices_0.2",
-    # "Grid and PPA Prices_-0.2",
-    # "Hydrogen Price_0.2",
-    # "Hydrogen Price_-0.2",
-    # "Natural Gas Price_0.2",
-    # "Natural Gas Price_-0.2",
+    "Coal Price_0.2",
+    "Coal Price_-0.2",
+    "Grid and PPA Prices_0.2",
+    "Grid and PPA Prices_-0.2",
+    "Hydrogen Price_0.2",
+    "Hydrogen Price_-0.2",
+    "Natural Gas Price_0.2",
+    "Natural Gas Price_-0.2",
 ]
 SENSITIVITIES = {
     "bau": ["def"],  # ALL_SENSITIVITIES,
-    "cc": ["def"],
-    # "fa": ["def"],
-    # "lc": ["def"],
-    # "lc": ALL_SENSITIVITIES,
+    "cc": ALL_SENSITIVITIES,
+    "fa": ["def"],
+    "lc": ALL_SENSITIVITIES,
 }
 ### SECTOR-SPECIFIC PARAMETERS ###
 
