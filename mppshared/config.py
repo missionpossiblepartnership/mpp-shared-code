@@ -12,9 +12,9 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
-    "lc",
-    # "fa",
-    # "bau",
+    # "lc",
+    "fa",
+    "bau",
 ]
 
 # Sensitivities
@@ -38,7 +38,7 @@ CARBON_COSTS = [
     200,
     250,
 ]
-CARBON_COSTS = [100]
+CARBON_COSTS = [0]
 CARBON_COST_ADDITION_FROM_CSV = False
 
 # Scopes in CO2 price optimization
@@ -50,7 +50,7 @@ SCOPES_CO2_COST = [
 ]
 
 # Run parallel/sequential
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 
 # Integrate current project pipeline or not
 BUILD_CURRENT_PROJECT_PIPELINE = {"chemicals": True, "aluminium": False}
@@ -67,10 +67,11 @@ BROWNFIELD_REBUILD_START_YEAR = {
 }
 
 ### TECHNOLOGY CONSTRAINTS ###
-CO2_STORAGE_CONSTRAINT = True
+CO2_STORAGE_CONSTRAINT = {"bau": False, "fa": True, "lc": True}
 CO2_STORAGE_CONSTRAINT_CUMULATIVE = False
-ELECTROLYSER_CAPACITY_ADDITION_CONSTRAINT = True
-GLOBAL_DEMAND_SHARE_CONSTRAINT = True
+
+ELECTROLYSER_CAPACITY_ADDITION_CONSTRAINT = {"bau": False, "fa": False, "lc": True}
+GLOBAL_DEMAND_SHARE_CONSTRAINT = {"bau": False, "fa": False, "lc": False}
 
 TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE = [
     "Biomass Gasification + ammonia synthesis",
@@ -233,7 +234,7 @@ EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
 # TODO: make sector-specific with dictionary
 #! Temporarily adjusted for chemicals
 CUF_LOWER_THRESHOLD = 0.5
-CUF_UPPER_THRESHOLD = 0.97
+CUF_UPPER_THRESHOLD = 0.95
 COST_METRIC_CUF_ADJUSTMENT = {
     "chemicals": "mc",  # marginal cost of production
     "aluminium": "lcox",  # levelized cost of production
