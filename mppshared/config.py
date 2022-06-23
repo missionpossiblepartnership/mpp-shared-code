@@ -70,6 +70,14 @@ BROWNFIELD_REBUILD_START_YEAR = {
 CO2_STORAGE_CONSTRAINT = True
 CO2_STORAGE_CONSTRAINT_CUMULATIVE = False
 ELECTROLYSER_CAPACITY_ADDITION_CONSTRAINT = True
+GLOBAL_DEMAND_SHARE_CONSTRAINT = True
+
+TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE = [
+    "Biomass Gasification + ammonia synthesis",
+    "Biomass Digestion + ammonia synthesis",
+    "Methane Pyrolysis + ammonia synthesis",
+]
+MAXIMUM_GLOBAL_DEMAND_SHARE = 0.01
 
 ### RUN CONFIGURATION ###
 run_config = {

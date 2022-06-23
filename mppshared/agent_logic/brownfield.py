@@ -187,6 +187,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             | (dict_constraints["rampup_constraint"] == False)
             | (dict_constraints["co2_storage_constraint"] == False)
             | (dict_constraints["electrolysis_capacity_addition_constraint"] == False)
+            | (dict_constraints["demand_share_constraint"] == False)
         ):
             df_rank = remove_all_transitions_with_destination_technology(
                 df_rank, best_transition["technology_destination"]

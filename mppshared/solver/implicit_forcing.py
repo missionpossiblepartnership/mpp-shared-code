@@ -86,9 +86,6 @@ def apply_implicit_forcing(
         techs_to_drop = [
             "Waste to ammonia",
             "Waste Water to ammonium nitrate",
-            "Biomass Gasification + ammonia synthesis",
-            "Biomass Digestion + ammonia synthesis",
-            "Methane Pyrolysis + ammonia synthesis",
         ]
         switches_drop = (
             df_technology_switches["technology_destination"].isin(techs_to_drop)

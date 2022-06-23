@@ -381,6 +381,7 @@ def select_asset_for_greenfield(
                     dict_constraints["electrolysis_capacity_addition_constraint"]
                     == False
                 )
+                | (dict_constraints["demand_share_constraint"] == False)
             ):
                 df_rank = remove_all_transitions_with_destination_technology(
                     df_rank, asset_transition["technology_destination"]
