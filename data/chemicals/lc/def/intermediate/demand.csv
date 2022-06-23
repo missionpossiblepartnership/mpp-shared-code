@@ -1,15 +1,15 @@
 product,scenario,region,year,value
-Ammonia,NZ,Global,2020,62.77
-Ammonia,NZ,North America,2020,6.18
-Ammonia,NZ,Latin America,2020,3.53
-Ammonia,NZ,Africa,2020,3.28
-Ammonia,NZ,Middle East,2020,6.95
-Ammonia,NZ,Russia,2020,4.67
-Ammonia,NZ,Europe,2020,5.76
-Ammonia,NZ,China,2020,14.36
-Ammonia,NZ,India,2020,6.09
-Ammonia,NZ,Rest of Asia,2020,11.17
-Ammonia,NZ,Oceania,2020,0.77
+Ammonia,NZ,Global,2020,62.8
+Ammonia,NZ,North America,2020,6.2
+Ammonia,NZ,Latin America,2020,3.5
+Ammonia,NZ,Africa,2020,3.3
+Ammonia,NZ,Middle East,2020,6.9
+Ammonia,NZ,Russia,2020,4.7
+Ammonia,NZ,Europe,2020,5.8
+Ammonia,NZ,China,2020,14.4
+Ammonia,NZ,India,2020,6.1
+Ammonia,NZ,Rest of Asia,2020,11.2
+Ammonia,NZ,Oceania,2020,0.8
 Ammonium nitrate,NZ,Global,2020,49.27
 Ammonium nitrate,NZ,North America,2020,4.85
 Ammonium nitrate,NZ,Latin America,2020,2.77
@@ -32,16 +32,16 @@ Urea,NZ,China,2020,41.02
 Urea,NZ,India,2020,17.41
 Urea,NZ,Rest of Asia,2020,31.91
 Urea,NZ,Oceania,2020,2.21
-Ammonia,NZ,Global,2021,64.51
-Ammonia,NZ,North America,2021,6.29
-Ammonia,NZ,Latin America,2021,3.59
-Ammonia,NZ,Africa,2021,3.33
-Ammonia,NZ,Middle East,2021,7.07
-Ammonia,NZ,Russia,2021,4.76
-Ammonia,NZ,Europe,2021,5.86
-Ammonia,NZ,China,2021,14.36
+Ammonia,NZ,Global,2021,64.5
+Ammonia,NZ,North America,2021,6.3
+Ammonia,NZ,Latin America,2021,3.6
+Ammonia,NZ,Africa,2021,3.3
+Ammonia,NZ,Middle East,2021,7.1
+Ammonia,NZ,Russia,2021,4.8
+Ammonia,NZ,Europe,2021,5.9
+Ammonia,NZ,China,2021,14.4
 Ammonia,NZ,India,2021,6.2
-Ammonia,NZ,Rest of Asia,2021,12.25
+Ammonia,NZ,Rest of Asia,2021,12.3
 Ammonia,NZ,Oceania,2021,0.8
 Ammonium nitrate,NZ,Global,2021,50.13
 Ammonium nitrate,NZ,North America,2021,4.94
@@ -65,16 +65,16 @@ Urea,NZ,China,2021,41.02
 Urea,NZ,India,2021,17.71
 Urea,NZ,Rest of Asia,2021,33.14
 Urea,NZ,Oceania,2021,2.3
-Ammonia,NZ,Global,2022,66.33
-Ammonia,NZ,North America,2022,6.36
-Ammonia,NZ,Latin America,2022,3.76
-Ammonia,NZ,Africa,2022,3.48
-Ammonia,NZ,Middle East,2022,7.36
-Ammonia,NZ,Russia,2022,4.76
+Ammonia,NZ,Global,2022,66.3
+Ammonia,NZ,North America,2022,6.4
+Ammonia,NZ,Latin America,2022,3.8
+Ammonia,NZ,Africa,2022,3.5
+Ammonia,NZ,Middle East,2022,7.4
+Ammonia,NZ,Russia,2022,4.8
 Ammonia,NZ,Europe,2022,5.9
-Ammonia,NZ,China,2022,14.84
-Ammonia,NZ,India,2022,6.29
-Ammonia,NZ,Rest of Asia,2022,12.78
+Ammonia,NZ,China,2022,14.8
+Ammonia,NZ,India,2022,6.3
+Ammonia,NZ,Rest of Asia,2022,12.8
 Ammonia,NZ,Oceania,2022,0.8
 Ammonium nitrate,NZ,Global,2022,51.05
 Ammonium nitrate,NZ,North America,2022,4.99
@@ -98,17 +98,17 @@ Urea,NZ,China,2022,42.38
 Urea,NZ,India,2022,17.97
 Urea,NZ,Rest of Asia,2022,32.8
 Urea,NZ,Oceania,2022,2.28
-Ammonia,NZ,Global,2023,68.12
-Ammonia,NZ,North America,2023,6.42
-Ammonia,NZ,Latin America,2023,3.92
-Ammonia,NZ,Africa,2023,3.63
-Ammonia,NZ,Middle East,2023,7.66
-Ammonia,NZ,Russia,2023,4.76
-Ammonia,NZ,Europe,2023,5.95
-Ammonia,NZ,China,2023,15.31
-Ammonia,NZ,India,2023,6.38
+Ammonia,NZ,Global,2023,68.1
+Ammonia,NZ,North America,2023,6.4
+Ammonia,NZ,Latin America,2023,3.9
+Ammonia,NZ,Africa,2023,3.6
+Ammonia,NZ,Middle East,2023,7.7
+Ammonia,NZ,Russia,2023,4.8
+Ammonia,NZ,Europe,2023,5.9
+Ammonia,NZ,China,2023,15.3
+Ammonia,NZ,India,2023,6.4
 Ammonia,NZ,Rest of Asia,2023,13.3
-Ammonia,NZ,Oceania,2023,0.79
+Ammonia,NZ,Oceania,2023,0.8
 Ammonium nitrate,NZ,Global,2023,51.94
 Ammonium nitrate,NZ,North America,2023,5.04
 Ammonium nitrate,NZ,Latin America,2023,3.08
@@ -131,17 +131,17 @@ Urea,NZ,China,2023,43.74
 Urea,NZ,India,2023,18.22
 Urea,NZ,Rest of Asia,2023,32.43
 Urea,NZ,Oceania,2023,2.26
-Ammonia,NZ,Global,2024,69.88
-Ammonia,NZ,North America,2024,6.49
-Ammonia,NZ,Latin America,2024,4.09
-Ammonia,NZ,Africa,2024,3.77
-Ammonia,NZ,Middle East,2024,7.94
-Ammonia,NZ,Russia,2024,4.75
-Ammonia,NZ,Europe,2024,5.99
-Ammonia,NZ,China,2024,15.79
-Ammonia,NZ,India,2024,6.46
-Ammonia,NZ,Rest of Asia,2024,13.81
-Ammonia,NZ,Oceania,2024,0.79
+Ammonia,NZ,Global,2024,69.9
+Ammonia,NZ,North America,2024,6.5
+Ammonia,NZ,Latin America,2024,4.1
+Ammonia,NZ,Africa,2024,3.8
+Ammonia,NZ,Middle East,2024,7.9
+Ammonia,NZ,Russia,2024,4.8
+Ammonia,NZ,Europe,2024,6.0
+Ammonia,NZ,China,2024,15.8
+Ammonia,NZ,India,2024,6.5
+Ammonia,NZ,Rest of Asia,2024,13.8
+Ammonia,NZ,Oceania,2024,0.8
 Ammonium nitrate,NZ,Global,2024,52.81
 Ammonium nitrate,NZ,North America,2024,5.09
 Ammonium nitrate,NZ,Latin America,2024,3.21
@@ -164,17 +164,17 @@ Urea,NZ,China,2024,45.1
 Urea,NZ,India,2024,18.47
 Urea,NZ,Rest of Asia,2024,32.03
 Urea,NZ,Oceania,2024,2.24
-Ammonia,NZ,Global,2025,75.55
-Ammonia,NZ,North America,2025,6.97
-Ammonia,NZ,Latin America,2025,4.39
-Ammonia,NZ,Africa,2025,4.07
-Ammonia,NZ,Middle East,2025,8.51
-Ammonia,NZ,Russia,2025,4.78
-Ammonia,NZ,Europe,2025,6.75
-Ammonia,NZ,China,2025,16.57
-Ammonia,NZ,India,2025,6.55
-Ammonia,NZ,Rest of Asia,2025,16.18
-Ammonia,NZ,Oceania,2025,0.78
+Ammonia,NZ,Global,2025,75.6
+Ammonia,NZ,North America,2025,7.0
+Ammonia,NZ,Latin America,2025,4.4
+Ammonia,NZ,Africa,2025,4.1
+Ammonia,NZ,Middle East,2025,8.5
+Ammonia,NZ,Russia,2025,4.8
+Ammonia,NZ,Europe,2025,6.7
+Ammonia,NZ,China,2025,16.6
+Ammonia,NZ,India,2025,6.5
+Ammonia,NZ,Rest of Asia,2025,16.2
+Ammonia,NZ,Oceania,2025,0.8
 Ammonium nitrate,NZ,Global,2025,53.66
 Ammonium nitrate,NZ,North America,2025,5.14
 Ammonium nitrate,NZ,Latin America,2025,3.33
@@ -197,17 +197,17 @@ Urea,NZ,China,2025,46.46
 Urea,NZ,India,2025,18.71
 Urea,NZ,Rest of Asia,2025,31.61
 Urea,NZ,Oceania,2025,2.22
-Ammonia,NZ,Global,2026,78.64
-Ammonia,NZ,North America,2026,7.18
+Ammonia,NZ,Global,2026,78.7
+Ammonia,NZ,North America,2026,7.2
 Ammonia,NZ,Latin America,2026,4.6
-Ammonia,NZ,Africa,2026,4.26
-Ammonia,NZ,Middle East,2026,8.89
-Ammonia,NZ,Russia,2026,4.83
-Ammonia,NZ,Europe,2026,7.04
-Ammonia,NZ,China,2026,17.16
-Ammonia,NZ,India,2026,6.62
+Ammonia,NZ,Africa,2026,4.3
+Ammonia,NZ,Middle East,2026,8.9
+Ammonia,NZ,Russia,2026,4.8
+Ammonia,NZ,Europe,2026,7.1
+Ammonia,NZ,China,2026,17.2
+Ammonia,NZ,India,2026,6.6
 Ammonia,NZ,Rest of Asia,2026,17.3
-Ammonia,NZ,Oceania,2026,0.77
+Ammonia,NZ,Oceania,2026,0.8
 Ammonium nitrate,NZ,Global,2026,54.49
 Ammonium nitrate,NZ,North America,2026,5.19
 Ammonium nitrate,NZ,Latin America,2026,3.46
@@ -230,17 +230,17 @@ Urea,NZ,China,2026,47.82
 Urea,NZ,India,2026,18.9
 Urea,NZ,Rest of Asia,2026,31.09
 Urea,NZ,Oceania,2026,2.19
-Ammonia,NZ,Global,2027,86.57
-Ammonia,NZ,North America,2027,7.91
-Ammonia,NZ,Latin America,2027,4.99
-Ammonia,NZ,Africa,2027,4.64
-Ammonia,NZ,Middle East,2027,9.63
-Ammonia,NZ,Russia,2027,4.93
-Ammonia,NZ,Europe,2027,8.21
-Ammonia,NZ,China,2027,18.13
-Ammonia,NZ,India,2027,6.68
-Ammonia,NZ,Rest of Asia,2027,20.71
-Ammonia,NZ,Oceania,2027,0.75
+Ammonia,NZ,Global,2027,82.5
+Ammonia,NZ,North America,2027,7.5
+Ammonia,NZ,Latin America,2027,4.8
+Ammonia,NZ,Africa,2027,4.5
+Ammonia,NZ,Middle East,2027,9.3
+Ammonia,NZ,Russia,2027,4.9
+Ammonia,NZ,Europe,2027,7.5
+Ammonia,NZ,China,2027,17.8
+Ammonia,NZ,India,2027,6.7
+Ammonia,NZ,Rest of Asia,2027,18.8
+Ammonia,NZ,Oceania,2027,0.8
 Ammonium nitrate,NZ,Global,2027,55.29
 Ammonium nitrate,NZ,North America,2027,5.23
 Ammonium nitrate,NZ,Latin America,2027,3.58
@@ -263,17 +263,17 @@ Urea,NZ,China,2027,49.18
 Urea,NZ,India,2027,19.08
 Urea,NZ,Rest of Asia,2027,30.53
 Urea,NZ,Oceania,2027,2.15
-Ammonia,NZ,Global,2028,95.86
-Ammonia,NZ,North America,2028,8.79
-Ammonia,NZ,Latin America,2028,5.42
-Ammonia,NZ,Africa,2028,5.07
-Ammonia,NZ,Middle East,2028,10.46
-Ammonia,NZ,Russia,2028,5.05
-Ammonia,NZ,Europe,2028,9.65
-Ammonia,NZ,China,2028,19.2
-Ammonia,NZ,India,2028,6.74
-Ammonia,NZ,Rest of Asia,2028,24.76
-Ammonia,NZ,Oceania,2028,0.74
+Ammonia,NZ,Global,2028,86.9
+Ammonia,NZ,North America,2028,7.8
+Ammonia,NZ,Latin America,2028,5.1
+Ammonia,NZ,Africa,2028,4.7
+Ammonia,NZ,Middle East,2028,9.8
+Ammonia,NZ,Russia,2028,5.0
+Ammonia,NZ,Europe,2028,8.0
+Ammonia,NZ,China,2028,18.5
+Ammonia,NZ,India,2028,6.7
+Ammonia,NZ,Rest of Asia,2028,20.5
+Ammonia,NZ,Oceania,2028,0.7
 Ammonium nitrate,NZ,Global,2028,56.07
 Ammonium nitrate,NZ,North America,2028,5.28
 Ammonium nitrate,NZ,Latin America,2028,3.7
@@ -296,17 +296,17 @@ Urea,NZ,China,2028,50.54
 Urea,NZ,India,2028,19.24
 Urea,NZ,Rest of Asia,2028,29.92
 Urea,NZ,Oceania,2028,2.1
-Ammonia,NZ,Global,2029,105.35
-Ammonia,NZ,North America,2029,9.69
-Ammonia,NZ,Latin America,2029,5.86
-Ammonia,NZ,Africa,2029,5.5
-Ammonia,NZ,Middle East,2029,11.3
-Ammonia,NZ,Russia,2029,5.17
-Ammonia,NZ,Europe,2029,11.12
-Ammonia,NZ,China,2029,20.3
-Ammonia,NZ,India,2029,6.79
-Ammonia,NZ,Rest of Asia,2029,28.9
-Ammonia,NZ,Oceania,2029,0.72
+Ammonia,NZ,Global,2029,92.5
+Ammonia,NZ,North America,2029,8.3
+Ammonia,NZ,Latin America,2029,5.4
+Ammonia,NZ,Africa,2029,5.0
+Ammonia,NZ,Middle East,2029,10.3
+Ammonia,NZ,Russia,2029,5.1
+Ammonia,NZ,Europe,2029,8.8
+Ammonia,NZ,China,2029,19.3
+Ammonia,NZ,India,2029,6.8
+Ammonia,NZ,Rest of Asia,2029,22.8
+Ammonia,NZ,Oceania,2029,0.7
 Ammonium nitrate,NZ,Global,2029,56.82
 Ammonium nitrate,NZ,North America,2029,5.32
 Ammonium nitrate,NZ,Latin America,2029,3.82
@@ -329,16 +329,16 @@ Urea,NZ,China,2029,51.9
 Urea,NZ,India,2029,19.39
 Urea,NZ,Rest of Asia,2029,29.27
 Urea,NZ,Oceania,2029,2.06
-Ammonia,NZ,Global,2030,114.58
-Ammonia,NZ,North America,2030,10.56
-Ammonia,NZ,Latin America,2030,6.29
-Ammonia,NZ,Africa,2030,5.92
-Ammonia,NZ,Middle East,2030,12.12
-Ammonia,NZ,Russia,2030,5.29
-Ammonia,NZ,Europe,2030,12.55
-Ammonia,NZ,China,2030,21.37
-Ammonia,NZ,India,2030,6.84
-Ammonia,NZ,Rest of Asia,2030,32.93
+Ammonia,NZ,Global,2030,99.4
+Ammonia,NZ,North America,2030,8.9
+Ammonia,NZ,Latin America,2030,5.7
+Ammonia,NZ,Africa,2030,5.3
+Ammonia,NZ,Middle East,2030,11.0
+Ammonia,NZ,Russia,2030,5.2
+Ammonia,NZ,Europe,2030,9.8
+Ammonia,NZ,China,2030,20.2
+Ammonia,NZ,India,2030,6.8
+Ammonia,NZ,Rest of Asia,2030,25.8
 Ammonia,NZ,Oceania,2030,0.7
 Ammonium nitrate,NZ,Global,2030,57.55
 Ammonium nitrate,NZ,North America,2030,5.36
@@ -362,17 +362,17 @@ Urea,NZ,China,2030,53.26
 Urea,NZ,India,2030,19.54
 Urea,NZ,Rest of Asia,2030,28.6
 Urea,NZ,Oceania,2030,2.01
-Ammonia,NZ,Global,2031,133.76
-Ammonia,NZ,North America,2031,12.43
-Ammonia,NZ,Latin America,2031,7.06
-Ammonia,NZ,Africa,2031,6.7
-Ammonia,NZ,Middle East,2031,13.62
-Ammonia,NZ,Russia,2031,5.5
-Ammonia,NZ,Europe,2031,15.67
-Ammonia,NZ,China,2031,22.49
-Ammonia,NZ,India,2031,7.17
-Ammonia,NZ,Rest of Asia,2031,42.38
-Ammonia,NZ,Oceania,2031,0.73
+Ammonia,NZ,Global,2031,109.1
+Ammonia,NZ,North America,2031,9.8
+Ammonia,NZ,Latin America,2031,6.1
+Ammonia,NZ,Africa,2031,5.8
+Ammonia,NZ,Middle East,2031,11.8
+Ammonia,NZ,Russia,2031,5.3
+Ammonia,NZ,Europe,2031,11.2
+Ammonia,NZ,China,2031,20.6
+Ammonia,NZ,India,2031,7.2
+Ammonia,NZ,Rest of Asia,2031,30.7
+Ammonia,NZ,Oceania,2031,0.7
 Ammonium nitrate,NZ,Global,2031,58.26
 Ammonium nitrate,NZ,North America,2031,5.39
 Ammonium nitrate,NZ,Latin America,2031,4.04
@@ -395,17 +395,17 @@ Urea,NZ,China,2031,52.65
 Urea,NZ,India,2031,20.5
 Urea,NZ,Rest of Asia,2031,28.92
 Urea,NZ,Oceania,2031,2.09
-Ammonia,NZ,Global,2032,150.11
-Ammonia,NZ,North America,2032,14.0
-Ammonia,NZ,Latin America,2032,7.72
-Ammonia,NZ,Africa,2032,7.37
-Ammonia,NZ,Middle East,2032,14.91
-Ammonia,NZ,Russia,2032,5.67
-Ammonia,NZ,Europe,2032,18.28
-Ammonia,NZ,China,2032,23.39
-Ammonia,NZ,India,2032,7.51
-Ammonia,NZ,Rest of Asia,2032,50.5
-Ammonia,NZ,Oceania,2032,0.76
+Ammonia,NZ,Global,2032,121.5
+Ammonia,NZ,North America,2032,10.9
+Ammonia,NZ,Latin America,2032,6.7
+Ammonia,NZ,Africa,2032,6.3
+Ammonia,NZ,Middle East,2032,12.8
+Ammonia,NZ,Russia,2032,5.4
+Ammonia,NZ,Europe,2032,13.0
+Ammonia,NZ,China,2032,21.1
+Ammonia,NZ,India,2032,7.5
+Ammonia,NZ,Rest of Asia,2032,37.0
+Ammonia,NZ,Oceania,2032,0.8
 Ammonium nitrate,NZ,Global,2032,58.94
 Ammonium nitrate,NZ,North America,2032,5.43
 Ammonium nitrate,NZ,Latin America,2032,4.15
@@ -428,17 +428,17 @@ Urea,NZ,China,2032,52.03
 Urea,NZ,India,2032,21.46
 Urea,NZ,Rest of Asia,2032,29.21
 Urea,NZ,Oceania,2032,2.17
-Ammonia,NZ,Global,2033,169.23
-Ammonia,NZ,North America,2033,15.86
-Ammonia,NZ,Latin America,2033,8.49
-Ammonia,NZ,Africa,2033,8.14
-Ammonia,NZ,Middle East,2033,16.4
-Ammonia,NZ,Russia,2033,5.87
-Ammonia,NZ,Europe,2033,21.4
-Ammonia,NZ,China,2033,24.5
-Ammonia,NZ,India,2033,7.85
-Ammonia,NZ,Rest of Asia,2033,59.93
-Ammonia,NZ,Oceania,2033,0.78
+Ammonia,NZ,Global,2033,137.8
+Ammonia,NZ,North America,2033,12.5
+Ammonia,NZ,Latin America,2033,7.3
+Ammonia,NZ,Africa,2033,6.9
+Ammonia,NZ,Middle East,2033,14.1
+Ammonia,NZ,Russia,2033,5.6
+Ammonia,NZ,Europe,2033,15.6
+Ammonia,NZ,China,2033,22.0
+Ammonia,NZ,India,2033,7.8
+Ammonia,NZ,Rest of Asia,2033,45.1
+Ammonia,NZ,Oceania,2033,0.8
 Ammonium nitrate,NZ,Global,2033,59.6
 Ammonium nitrate,NZ,North America,2033,5.46
 Ammonium nitrate,NZ,Latin America,2033,4.26
@@ -461,17 +461,17 @@ Urea,NZ,China,2033,51.42
 Urea,NZ,India,2033,22.41
 Urea,NZ,Rest of Asia,2033,29.47
 Urea,NZ,Oceania,2033,2.24
-Ammonia,NZ,Global,2034,188.31
-Ammonia,NZ,North America,2034,17.72
-Ammonia,NZ,Latin America,2034,9.25
-Ammonia,NZ,Africa,2034,8.92
-Ammonia,NZ,Middle East,2034,17.89
-Ammonia,NZ,Russia,2034,6.07
-Ammonia,NZ,Europe,2034,24.51
-Ammonia,NZ,China,2034,25.62
-Ammonia,NZ,India,2034,8.18
-Ammonia,NZ,Rest of Asia,2034,69.34
-Ammonia,NZ,Oceania,2034,0.81
+Ammonia,NZ,Global,2034,159.4
+Ammonia,NZ,North America,2034,14.6
+Ammonia,NZ,Latin America,2034,8.2
+Ammonia,NZ,Africa,2034,7.8
+Ammonia,NZ,Middle East,2034,15.8
+Ammonia,NZ,Russia,2034,5.8
+Ammonia,NZ,Europe,2034,19.2
+Ammonia,NZ,China,2034,23.3
+Ammonia,NZ,India,2034,8.2
+Ammonia,NZ,Rest of Asia,2034,55.7
+Ammonia,NZ,Oceania,2034,0.8
 Ammonium nitrate,NZ,Global,2034,60.24
 Ammonium nitrate,NZ,North America,2034,5.49
 Ammonium nitrate,NZ,Latin America,2034,4.37
@@ -494,17 +494,17 @@ Urea,NZ,China,2034,50.81
 Urea,NZ,India,2034,23.37
 Urea,NZ,Rest of Asia,2034,29.68
 Urea,NZ,Oceania,2034,2.32
-Ammonia,NZ,Global,2035,207.13
-Ammonia,NZ,North America,2035,19.56
-Ammonia,NZ,Latin America,2035,10.0
-Ammonia,NZ,Africa,2035,9.67
-Ammonia,NZ,Middle East,2035,19.35
-Ammonia,NZ,Russia,2035,6.26
-Ammonia,NZ,Europe,2035,27.58
-Ammonia,NZ,China,2035,26.71
-Ammonia,NZ,India,2035,8.52
-Ammonia,NZ,Rest of Asia,2035,78.64
-Ammonia,NZ,Oceania,2035,0.84
+Ammonia,NZ,Global,2035,188.3
+Ammonia,NZ,North America,2035,17.5
+Ammonia,NZ,Latin America,2035,9.3
+Ammonia,NZ,Africa,2035,9.0
+Ammonia,NZ,Middle East,2035,18.0
+Ammonia,NZ,Russia,2035,6.1
+Ammonia,NZ,Europe,2035,24.1
+Ammonia,NZ,China,2035,25.2
+Ammonia,NZ,India,2035,8.5
+Ammonia,NZ,Rest of Asia,2035,69.8
+Ammonia,NZ,Oceania,2035,0.8
 Ammonium nitrate,NZ,Global,2035,60.85
 Ammonium nitrate,NZ,North America,2035,5.52
 Ammonium nitrate,NZ,Latin America,2035,4.47
@@ -527,17 +527,17 @@ Urea,NZ,China,2035,50.2
 Urea,NZ,India,2035,24.33
 Urea,NZ,Rest of Asia,2035,29.87
 Urea,NZ,Oceania,2035,2.39
-Ammonia,NZ,Global,2036,227.31
-Ammonia,NZ,North America,2036,21.54
-Ammonia,NZ,Latin America,2036,10.79
-Ammonia,NZ,Africa,2036,10.48
-Ammonia,NZ,Middle East,2036,20.91
-Ammonia,NZ,Russia,2036,6.47
-Ammonia,NZ,Europe,2036,30.91
-Ammonia,NZ,China,2036,27.92
-Ammonia,NZ,India,2036,8.85
-Ammonia,NZ,Rest of Asia,2036,88.57
-Ammonia,NZ,Oceania,2036,0.86
+Ammonia,NZ,Global,2036,227.3
+Ammonia,NZ,North America,2036,21.5
+Ammonia,NZ,Latin America,2036,10.8
+Ammonia,NZ,Africa,2036,10.5
+Ammonia,NZ,Middle East,2036,20.9
+Ammonia,NZ,Russia,2036,6.5
+Ammonia,NZ,Europe,2036,30.9
+Ammonia,NZ,China,2036,27.9
+Ammonia,NZ,India,2036,8.9
+Ammonia,NZ,Rest of Asia,2036,88.6
+Ammonia,NZ,Oceania,2036,0.9
 Ammonium nitrate,NZ,Global,2036,61.45
 Ammonium nitrate,NZ,North America,2036,5.55
 Ammonium nitrate,NZ,Latin America,2036,4.58
@@ -560,17 +560,17 @@ Urea,NZ,China,2036,49.59
 Urea,NZ,India,2036,25.29
 Urea,NZ,Rest of Asia,2036,30.02
 Urea,NZ,Oceania,2036,2.46
-Ammonia,NZ,Global,2037,250.24
-Ammonia,NZ,North America,2037,23.81
-Ammonia,NZ,Latin America,2037,11.69
+Ammonia,NZ,Global,2037,250.2
+Ammonia,NZ,North America,2037,23.8
+Ammonia,NZ,Latin America,2037,11.7
 Ammonia,NZ,Africa,2037,11.4
-Ammonia,NZ,Middle East,2037,22.67
+Ammonia,NZ,Middle East,2037,22.7
 Ammonia,NZ,Russia,2037,6.7
-Ammonia,NZ,Europe,2037,34.74
-Ammonia,NZ,China,2037,29.34
-Ammonia,NZ,India,2037,9.19
-Ammonia,NZ,Rest of Asia,2037,99.81
-Ammonia,NZ,Oceania,2037,0.88
+Ammonia,NZ,Europe,2037,34.7
+Ammonia,NZ,China,2037,29.3
+Ammonia,NZ,India,2037,9.2
+Ammonia,NZ,Rest of Asia,2037,99.8
+Ammonia,NZ,Oceania,2037,0.9
 Ammonium nitrate,NZ,Global,2037,62.01
 Ammonium nitrate,NZ,North America,2037,5.57
 Ammonium nitrate,NZ,Latin America,2037,4.68
@@ -593,17 +593,17 @@ Urea,NZ,China,2037,48.97
 Urea,NZ,India,2037,26.25
 Urea,NZ,Rest of Asia,2037,30.13
 Urea,NZ,Oceania,2037,2.52
-Ammonia,NZ,Global,2038,270.36
-Ammonia,NZ,North America,2038,25.79
-Ammonia,NZ,Latin America,2038,12.48
+Ammonia,NZ,Global,2038,270.4
+Ammonia,NZ,North America,2038,25.8
+Ammonia,NZ,Latin America,2038,12.5
 Ammonia,NZ,Africa,2038,12.2
-Ammonia,NZ,Middle East,2038,24.22
+Ammonia,NZ,Middle East,2038,24.2
 Ammonia,NZ,Russia,2038,6.9
-Ammonia,NZ,Europe,2038,38.06
-Ammonia,NZ,China,2038,30.55
-Ammonia,NZ,India,2038,9.53
-Ammonia,NZ,Rest of Asia,2038,109.72
-Ammonia,NZ,Oceania,2038,0.91
+Ammonia,NZ,Europe,2038,38.1
+Ammonia,NZ,China,2038,30.5
+Ammonia,NZ,India,2038,9.5
+Ammonia,NZ,Rest of Asia,2038,109.7
+Ammonia,NZ,Oceania,2038,0.9
 Ammonium nitrate,NZ,Global,2038,62.56
 Ammonium nitrate,NZ,North America,2038,5.6
 Ammonium nitrate,NZ,Latin America,2038,4.77
@@ -626,17 +626,17 @@ Urea,NZ,China,2038,48.36
 Urea,NZ,India,2038,27.21
 Urea,NZ,Rest of Asia,2038,30.21
 Urea,NZ,Oceania,2038,2.59
-Ammonia,NZ,Global,2039,294.39
-Ammonia,NZ,North America,2039,28.19
-Ammonia,NZ,Latin America,2039,13.42
-Ammonia,NZ,Africa,2039,13.16
-Ammonia,NZ,Middle East,2039,26.06
-Ammonia,NZ,Russia,2039,7.13
+Ammonia,NZ,Global,2039,294.4
+Ammonia,NZ,North America,2039,28.2
+Ammonia,NZ,Latin America,2039,13.4
+Ammonia,NZ,Africa,2039,13.2
+Ammonia,NZ,Middle East,2039,26.1
+Ammonia,NZ,Russia,2039,7.1
 Ammonia,NZ,Europe,2039,42.1
-Ammonia,NZ,China,2039,32.06
-Ammonia,NZ,India,2039,9.86
-Ammonia,NZ,Rest of Asia,2039,121.49
-Ammonia,NZ,Oceania,2039,0.93
+Ammonia,NZ,China,2039,32.1
+Ammonia,NZ,India,2039,9.9
+Ammonia,NZ,Rest of Asia,2039,121.5
+Ammonia,NZ,Oceania,2039,0.9
 Ammonium nitrate,NZ,Global,2039,63.08
 Ammonium nitrate,NZ,North America,2039,5.62
 Ammonium nitrate,NZ,Latin America,2039,4.87
@@ -659,17 +659,17 @@ Urea,NZ,China,2039,47.75
 Urea,NZ,India,2039,28.17
 Urea,NZ,Rest of Asia,2039,30.25
 Urea,NZ,Oceania,2039,2.65
-Ammonia,NZ,Global,2040,320.94
-Ammonia,NZ,North America,2040,30.86
-Ammonia,NZ,Latin America,2040,14.44
-Ammonia,NZ,Africa,2040,14.21
-Ammonia,NZ,Middle East,2040,28.08
-Ammonia,NZ,Russia,2040,7.39
+Ammonia,NZ,Global,2040,320.9
+Ammonia,NZ,North America,2040,30.9
+Ammonia,NZ,Latin America,2040,14.4
+Ammonia,NZ,Africa,2040,14.2
+Ammonia,NZ,Middle East,2040,28.1
+Ammonia,NZ,Russia,2040,7.4
 Ammonia,NZ,Europe,2040,46.6
-Ammonia,NZ,China,2040,33.78
+Ammonia,NZ,China,2040,33.8
 Ammonia,NZ,India,2040,10.2
-Ammonia,NZ,Rest of Asia,2040,134.44
-Ammonia,NZ,Oceania,2040,0.95
+Ammonia,NZ,Rest of Asia,2040,134.4
+Ammonia,NZ,Oceania,2040,1.0
 Ammonium nitrate,NZ,Global,2040,63.57
 Ammonium nitrate,NZ,North America,2040,5.64
 Ammonium nitrate,NZ,Latin America,2040,4.96
@@ -692,17 +692,17 @@ Urea,NZ,China,2040,47.14
 Urea,NZ,India,2040,29.13
 Urea,NZ,Rest of Asia,2040,30.26
 Urea,NZ,Oceania,2040,2.71
-Ammonia,NZ,Global,2041,347.47
-Ammonia,NZ,North America,2041,33.52
-Ammonia,NZ,Latin America,2041,15.46
-Ammonia,NZ,Africa,2041,15.26
-Ammonia,NZ,Middle East,2041,30.09
-Ammonia,NZ,Russia,2041,7.65
+Ammonia,NZ,Global,2041,347.5
+Ammonia,NZ,North America,2041,33.5
+Ammonia,NZ,Latin America,2041,15.5
+Ammonia,NZ,Africa,2041,15.3
+Ammonia,NZ,Middle East,2041,30.1
+Ammonia,NZ,Russia,2041,7.6
 Ammonia,NZ,Europe,2041,51.1
 Ammonia,NZ,China,2041,35.5
-Ammonia,NZ,India,2041,10.53
-Ammonia,NZ,Rest of Asia,2041,147.38
-Ammonia,NZ,Oceania,2041,0.97
+Ammonia,NZ,India,2041,10.5
+Ammonia,NZ,Rest of Asia,2041,147.4
+Ammonia,NZ,Oceania,2041,1.0
 Ammonium nitrate,NZ,Global,2041,64.05
 Ammonium nitrate,NZ,North America,2041,5.66
 Ammonium nitrate,NZ,Latin America,2041,5.05
@@ -725,17 +725,17 @@ Urea,NZ,China,2041,46.53
 Urea,NZ,India,2041,30.09
 Urea,NZ,Rest of Asia,2041,30.24
 Urea,NZ,Oceania,2041,2.77
-Ammonia,NZ,Global,2042,373.96
-Ammonia,NZ,North America,2042,36.19
-Ammonia,NZ,Latin America,2042,16.48
+Ammonia,NZ,Global,2042,374.0
+Ammonia,NZ,North America,2042,36.2
+Ammonia,NZ,Latin America,2042,16.5
 Ammonia,NZ,Africa,2042,16.3
 Ammonia,NZ,Middle East,2042,32.1
 Ammonia,NZ,Russia,2042,7.9
 Ammonia,NZ,Europe,2042,55.6
-Ammonia,NZ,China,2042,37.21
-Ammonia,NZ,India,2042,10.87
-Ammonia,NZ,Rest of Asia,2042,160.31
-Ammonia,NZ,Oceania,2042,0.99
+Ammonia,NZ,China,2042,37.2
+Ammonia,NZ,India,2042,10.9
+Ammonia,NZ,Rest of Asia,2042,160.3
+Ammonia,NZ,Oceania,2042,1.0
 Ammonium nitrate,NZ,Global,2042,64.5
 Ammonium nitrate,NZ,North America,2042,5.67
 Ammonium nitrate,NZ,Latin America,2042,5.14
@@ -758,17 +758,17 @@ Urea,NZ,China,2042,45.91
 Urea,NZ,India,2042,31.05
 Urea,NZ,Rest of Asia,2042,30.18
 Urea,NZ,Oceania,2042,2.83
-Ammonia,NZ,Global,2043,377.24
-Ammonia,NZ,North America,2043,36.35
-Ammonia,NZ,Latin America,2043,16.64
-Ammonia,NZ,Africa,2043,16.45
-Ammonia,NZ,Middle East,2043,32.39
-Ammonia,NZ,Russia,2043,7.94
-Ammonia,NZ,Europe,2043,55.86
-Ammonia,NZ,China,2043,37.11
-Ammonia,NZ,India,2043,11.21
-Ammonia,NZ,Rest of Asia,2043,162.28
-Ammonia,NZ,Oceania,2043,1.01
+Ammonia,NZ,Global,2043,377.2
+Ammonia,NZ,North America,2043,36.4
+Ammonia,NZ,Latin America,2043,16.6
+Ammonia,NZ,Africa,2043,16.4
+Ammonia,NZ,Middle East,2043,32.4
+Ammonia,NZ,Russia,2043,7.9
+Ammonia,NZ,Europe,2043,55.9
+Ammonia,NZ,China,2043,37.1
+Ammonia,NZ,India,2043,11.2
+Ammonia,NZ,Rest of Asia,2043,162.3
+Ammonia,NZ,Oceania,2043,1.0
 Ammonium nitrate,NZ,Global,2043,64.92
 Ammonium nitrate,NZ,North America,2043,5.69
 Ammonium nitrate,NZ,Latin America,2043,5.23
@@ -791,17 +791,17 @@ Urea,NZ,China,2043,45.3
 Urea,NZ,India,2043,32.01
 Urea,NZ,Rest of Asia,2043,30.09
 Urea,NZ,Oceania,2043,2.89
-Ammonia,NZ,Global,2044,377.71
-Ammonia,NZ,North America,2044,36.22
+Ammonia,NZ,Global,2044,377.7
+Ammonia,NZ,North America,2044,36.2
 Ammonia,NZ,Latin America,2044,16.7
-Ammonia,NZ,Africa,2044,16.49
-Ammonia,NZ,Middle East,2044,32.47
-Ammonia,NZ,Russia,2044,7.94
-Ammonia,NZ,Europe,2044,55.61
-Ammonia,NZ,China,2044,36.78
-Ammonia,NZ,India,2044,11.54
-Ammonia,NZ,Rest of Asia,2044,162.93
-Ammonia,NZ,Oceania,2044,1.03
+Ammonia,NZ,Africa,2044,16.5
+Ammonia,NZ,Middle East,2044,32.5
+Ammonia,NZ,Russia,2044,7.9
+Ammonia,NZ,Europe,2044,55.6
+Ammonia,NZ,China,2044,36.8
+Ammonia,NZ,India,2044,11.5
+Ammonia,NZ,Rest of Asia,2044,162.9
+Ammonia,NZ,Oceania,2044,1.0
 Ammonium nitrate,NZ,Global,2044,65.33
 Ammonium nitrate,NZ,North America,2044,5.7
 Ammonium nitrate,NZ,Latin America,2044,5.31
@@ -824,17 +824,17 @@ Urea,NZ,China,2044,44.69
 Urea,NZ,India,2044,32.97
 Urea,NZ,Rest of Asia,2044,29.97
 Urea,NZ,Oceania,2044,2.94
-Ammonia,NZ,Global,2045,378.39
-Ammonia,NZ,North America,2045,36.11
-Ammonia,NZ,Latin America,2045,16.76
-Ammonia,NZ,Africa,2045,16.53
-Ammonia,NZ,Middle East,2045,32.56
-Ammonia,NZ,Russia,2045,7.95
-Ammonia,NZ,Europe,2045,55.39
-Ammonia,NZ,China,2045,36.48
-Ammonia,NZ,India,2045,11.88
-Ammonia,NZ,Rest of Asia,2045,163.68
-Ammonia,NZ,Oceania,2045,1.05
+Ammonia,NZ,Global,2045,378.4
+Ammonia,NZ,North America,2045,36.1
+Ammonia,NZ,Latin America,2045,16.8
+Ammonia,NZ,Africa,2045,16.5
+Ammonia,NZ,Middle East,2045,32.6
+Ammonia,NZ,Russia,2045,7.9
+Ammonia,NZ,Europe,2045,55.4
+Ammonia,NZ,China,2045,36.5
+Ammonia,NZ,India,2045,11.9
+Ammonia,NZ,Rest of Asia,2045,163.7
+Ammonia,NZ,Oceania,2045,1.0
 Ammonium nitrate,NZ,Global,2045,65.71
 Ammonium nitrate,NZ,North America,2045,5.71
 Ammonium nitrate,NZ,Latin America,2045,5.39
@@ -858,16 +858,16 @@ Urea,NZ,India,2045,33.93
 Urea,NZ,Rest of Asia,2045,29.81
 Urea,NZ,Oceania,2045,2.99
 Ammonia,NZ,Global,2046,378.8
-Ammonia,NZ,North America,2046,35.97
-Ammonia,NZ,Latin America,2046,16.81
-Ammonia,NZ,Africa,2046,16.57
-Ammonia,NZ,Middle East,2046,32.63
-Ammonia,NZ,Russia,2046,7.95
-Ammonia,NZ,Europe,2046,55.13
-Ammonia,NZ,China,2046,36.15
-Ammonia,NZ,India,2046,12.22
+Ammonia,NZ,North America,2046,36.0
+Ammonia,NZ,Latin America,2046,16.8
+Ammonia,NZ,Africa,2046,16.6
+Ammonia,NZ,Middle East,2046,32.6
+Ammonia,NZ,Russia,2046,8.0
+Ammonia,NZ,Europe,2046,55.1
+Ammonia,NZ,China,2046,36.2
+Ammonia,NZ,India,2046,12.2
 Ammonia,NZ,Rest of Asia,2046,164.3
-Ammonia,NZ,Oceania,2046,1.07
+Ammonia,NZ,Oceania,2046,1.1
 Ammonium nitrate,NZ,Global,2046,66.06
 Ammonium nitrate,NZ,North America,2046,5.72
 Ammonium nitrate,NZ,Latin America,2046,5.47
@@ -890,17 +890,17 @@ Urea,NZ,China,2046,43.47
 Urea,NZ,India,2046,34.89
 Urea,NZ,Rest of Asia,2046,29.61
 Urea,NZ,Oceania,2046,3.04
-Ammonia,NZ,Global,2047,387.06
-Ammonia,NZ,North America,2047,36.68
-Ammonia,NZ,Latin America,2047,17.14
+Ammonia,NZ,Global,2047,387.1
+Ammonia,NZ,North America,2047,36.7
+Ammonia,NZ,Latin America,2047,17.1
 Ammonia,NZ,Africa,2047,16.9
-Ammonia,NZ,Middle East,2047,33.27
-Ammonia,NZ,Russia,2047,8.03
-Ammonia,NZ,Europe,2047,56.31
-Ammonia,NZ,China,2047,36.45
-Ammonia,NZ,India,2047,12.55
-Ammonia,NZ,Rest of Asia,2047,168.64
-Ammonia,NZ,Oceania,2047,1.08
+Ammonia,NZ,Middle East,2047,33.3
+Ammonia,NZ,Russia,2047,8.0
+Ammonia,NZ,Europe,2047,56.3
+Ammonia,NZ,China,2047,36.5
+Ammonia,NZ,India,2047,12.6
+Ammonia,NZ,Rest of Asia,2047,168.6
+Ammonia,NZ,Oceania,2047,1.1
 Ammonium nitrate,NZ,Global,2047,66.39
 Ammonium nitrate,NZ,North America,2047,5.73
 Ammonium nitrate,NZ,Latin America,2047,5.54
@@ -923,16 +923,16 @@ Urea,NZ,China,2047,42.86
 Urea,NZ,India,2047,35.85
 Urea,NZ,Rest of Asia,2047,29.39
 Urea,NZ,Oceania,2047,3.09
-Ammonia,NZ,Global,2048,395.07
-Ammonia,NZ,North America,2048,37.36
-Ammonia,NZ,Latin America,2048,17.47
-Ammonia,NZ,Africa,2048,17.22
-Ammonia,NZ,Middle East,2048,33.89
+Ammonia,NZ,Global,2048,395.1
+Ammonia,NZ,North America,2048,37.4
+Ammonia,NZ,Latin America,2048,17.5
+Ammonia,NZ,Africa,2048,17.2
+Ammonia,NZ,Middle East,2048,33.9
 Ammonia,NZ,Russia,2048,8.1
-Ammonia,NZ,Europe,2048,57.45
-Ammonia,NZ,China,2048,36.73
-Ammonia,NZ,India,2048,12.89
-Ammonia,NZ,Rest of Asia,2048,172.85
+Ammonia,NZ,Europe,2048,57.5
+Ammonia,NZ,China,2048,36.7
+Ammonia,NZ,India,2048,12.9
+Ammonia,NZ,Rest of Asia,2048,172.9
 Ammonia,NZ,Oceania,2048,1.1
 Ammonium nitrate,NZ,Global,2048,66.7
 Ammonium nitrate,NZ,North America,2048,5.73
@@ -956,17 +956,17 @@ Urea,NZ,China,2048,42.24
 Urea,NZ,India,2048,36.81
 Urea,NZ,Rest of Asia,2048,29.13
 Urea,NZ,Oceania,2048,3.14
-Ammonia,NZ,Global,2049,404.66
-Ammonia,NZ,North America,2049,38.21
-Ammonia,NZ,Latin America,2049,17.85
-Ammonia,NZ,Africa,2049,17.61
-Ammonia,NZ,Middle East,2049,34.63
-Ammonia,NZ,Russia,2049,8.18
-Ammonia,NZ,Europe,2049,58.88
-Ammonia,NZ,China,2049,37.13
-Ammonia,NZ,India,2049,13.22
-Ammonia,NZ,Rest of Asia,2049,177.82
-Ammonia,NZ,Oceania,2049,1.11
+Ammonia,NZ,Global,2049,404.7
+Ammonia,NZ,North America,2049,38.2
+Ammonia,NZ,Latin America,2049,17.8
+Ammonia,NZ,Africa,2049,17.6
+Ammonia,NZ,Middle East,2049,34.6
+Ammonia,NZ,Russia,2049,8.2
+Ammonia,NZ,Europe,2049,58.9
+Ammonia,NZ,China,2049,37.1
+Ammonia,NZ,India,2049,13.2
+Ammonia,NZ,Rest of Asia,2049,177.8
+Ammonia,NZ,Oceania,2049,1.1
 Ammonium nitrate,NZ,Global,2049,66.99
 Ammonium nitrate,NZ,North America,2049,5.74
 Ammonium nitrate,NZ,Latin America,2049,5.69
@@ -989,17 +989,17 @@ Urea,NZ,China,2049,41.63
 Urea,NZ,India,2049,37.77
 Urea,NZ,Rest of Asia,2049,28.84
 Urea,NZ,Oceania,2049,3.18
-Ammonia,NZ,Global,2050,411.68
-Ammonia,NZ,North America,2050,38.79
-Ammonia,NZ,Latin America,2050,18.13
-Ammonia,NZ,Africa,2050,17.89
-Ammonia,NZ,Middle East,2050,35.17
-Ammonia,NZ,Russia,2050,8.24
-Ammonia,NZ,Europe,2050,59.85
-Ammonia,NZ,China,2050,37.34
-Ammonia,NZ,India,2050,13.56
-Ammonia,NZ,Rest of Asia,2050,181.58
-Ammonia,NZ,Oceania,2050,1.13
+Ammonia,NZ,Global,2050,411.7
+Ammonia,NZ,North America,2050,38.8
+Ammonia,NZ,Latin America,2050,18.1
+Ammonia,NZ,Africa,2050,17.9
+Ammonia,NZ,Middle East,2050,35.2
+Ammonia,NZ,Russia,2050,8.2
+Ammonia,NZ,Europe,2050,59.8
+Ammonia,NZ,China,2050,37.3
+Ammonia,NZ,India,2050,13.6
+Ammonia,NZ,Rest of Asia,2050,181.6
+Ammonia,NZ,Oceania,2050,1.1
 Ammonium nitrate,NZ,Global,2050,67.25
 Ammonium nitrate,NZ,North America,2050,5.74
 Ammonium nitrate,NZ,Latin America,2050,5.76

@@ -303,6 +303,8 @@ class SimulationPathway:
         Returns:
 
         """
+        if year > END_YEAR:
+            year = END_YEAR
         df = self.demand
         return df.loc[
             (df["product"] == product)

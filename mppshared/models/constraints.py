@@ -13,8 +13,11 @@ from mppshared.config import (
     CUF_UPPER_THRESHOLD,
     ELECTROLYSER_CAPACITY_ADDITION_CONSTRAINT,
     END_YEAR,
+    GLOBAL_DEMAND_SHARE_CONSTRAINT,
     LOG_LEVEL,
+    MAXIMUM_GLOBAL_DEMAND_SHARE,
     REGIONAL_PRODUCTION_SHARES,
+    TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE,
     YEAR_2050_EMISSIONS_CONSTRAINT,
     H2_PER_AMMONIA,
     AMMONIA_PER_AMMONIUM_NITRATE,
@@ -83,6 +86,14 @@ def check_constraints(
         else:
             electrolysis_capacity_addition_constraint = True
 
+        # Check global demand share constraint for specified technologies
+        if GLOBAL_DEMAND_SHARE_CONSTRAINT:
+            demand_share_constraint = check_global_demand_share_constraint(
+                pathway=pathway, stack=stack, year=year
+            )
+        else:
+            demand_share_constraint = True
+
         # TODO Remove this workaround
         emissions_constraint = True
         # TODO: Check resource availability constraint
@@ -91,9 +102,53 @@ def check_constraints(
             "rampup_constraint": rampup_constraint,
             "co2_storage_constraint": co2_storage_constraint,
             "electrolysis_capacity_addition_constraint": electrolysis_capacity_addition_constraint,
+            "demand_share_constraint": demand_share_constraint,
         }
     else:
         return {"emissions_constraint": True, "rampup_constraint": True}
+
+
+def check_global_demand_share_constraint(
+    pathway: SimulationPathway, stack: AssetStack, year: int
+) -> Bool:
+    "Check for specified technologies whether they fulfill the constraint of supplying a maximum share of global demand"
+
+    df_stack = stack.aggregate_stack(
+        aggregation_vars=["product", "technology"]
+    ).reset_index()
+    constraint = True
+
+    for technology in TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE:
+
+        # Calculate annual production volume based on CUF upper threshold
+        df = (
+            df_stack.loc[df_stack["technology"] == technology]
+            .groupby("product", as_index=False)
+            .sum()
+        )
+        df["annual_production_volume"] = (
+            df["annual_production_capacity"] * CUF_UPPER_THRESHOLD
+        )
+
+        # Add global demand and corresponding constraint
+        df["demand"] = df["product"].apply(
+            lambda x: pathway.get_demand(product=x, year=year, region="Global")
+        )
+        df["demand_maximum"] = MAXIMUM_GLOBAL_DEMAND_SHARE * df["demand"]
+
+        # Compare
+        df["check"] = np.where(
+            df["annual_production_volume"] <= df["demand_maximum"], True, False
+        )
+
+        if df["check"].all():
+            constraint = constraint & True
+
+        else:
+            logger.debug(f"Maximum demand share hurt for technology {technology}.")
+            return False
+
+    return constraint
 
 
 def check_electrolysis_capacity_addition_constraint(
