@@ -9,6 +9,7 @@ from pyparsing import col
 
 from mppshared.config import (
     CO2_STORAGE_CONSTRAINT,
+    CO2_STORAGE_CONSTRAINT_CUMULATIVE,
     CUF_UPPER_THRESHOLD,
     ELECTROLYSER_CAPACITY_ADDITION_CONSTRAINT,
     END_YEAR,
@@ -218,20 +219,42 @@ def check_co2_storage_constraint(
 ) -> Bool:
     """Check if the constraint on total CO2 storage (globally) is met"""
 
-    # Calculate CO2 captured annually by the stack (Mt CO2)
-    co2_captured = stack.calculate_co2_captured_stack(
-        year=year, df_emissions=pathway.emissions
-    )
-
-    # Compare with the limit on annual CO2 storage addition (MtCO2)
+    # Get constraint value
     df_co2_storage = pathway.co2_storage_constraint
     limit = df_co2_storage.loc[df_co2_storage["year"] == year + 1, "value"].item()
 
-    if limit > co2_captured:
-        return True
+    # Constraint based on total CO2 storage available in that year
+    if CO2_STORAGE_CONSTRAINT_CUMULATIVE:
+        # Calculate CO2 captured annually by the stack (Mt CO2)
+        co2_captured = stack.calculate_co2_captured_stack(
+            year=year, df_emissions=pathway.emissions
+        )
 
-    logger.debug("CO2 storage constraint hurt.")
-    return False
+        # Compare with the limit on annual CO2 storage addition (MtCO2)
+        if limit >= co2_captured:
+            return True
+
+        logger.debug("CO2 storage constraint hurt.")
+        return False
+
+    # Constraint based on addition of storage capacity for additional captured CO2 in that year
+    else:
+        # Calculate new CO2 captured
+        co2_captured_old_stack = pathway.stacks[year].calculate_co2_captured_stack(
+            year=year, df_emissions=pathway.emissions
+        )
+        co2_captured_new_stack = stack.calculate_co2_captured_stack(
+            year=year + 1, df_emissions=pathway.emissions
+        )
+
+        additional_co2_captured = co2_captured_new_stack - co2_captured_old_stack
+
+        # Compare with the limit on additional storage capacity
+        if limit >= additional_co2_captured:
+            return True
+
+        logger.debug("CO2 storage constraint hurt.")
+        return False
 
 
 def check_technology_rampup_constraint(
