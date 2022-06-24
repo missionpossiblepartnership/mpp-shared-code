@@ -21,8 +21,8 @@ def create_sensitivity_outputs():
     ]
     sensitivities = [
         "def",
-        "ng_partial",
-        "ng_high",
+        # "ng_partial",
+        # "ng_high",
         "ng_low",
     ]
 
@@ -41,7 +41,7 @@ def create_sensitivity_outputs():
     ]
 
     # Carbon costs
-    anchor_carbon_cost = 75
+    anchor_carbon_cost = 100
     carbon_costs = CARBON_COSTS
     # carbon_costs = np.arange(0, 101, step=25)
     # carbon_costs = [anchor_carbon_cost]

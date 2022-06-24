@@ -14,7 +14,7 @@ SECTOR = "chemicals"
 PATHWAYS = [
     # "lc",
     "fa",
-    "bau",
+    # "bau",
 ]
 
 # Sensitivities
@@ -22,14 +22,11 @@ SENSITIVITIES = [
     "def",
     # "ng_partial",
     # "ng_high",
-    # "ng_low",
+    "ng_low",
 ]
 
 # Carbon price (for sensitivity analysis): needs to be run for 1 USD/tCO2 to create carbon_cost_addition.csv, then used for subsequent runs by multiplying accordingly
-# CARBON_COSTS = [1]
-# CARBON_COSTS = [0, 25, 50, 75]
-# CARBON_COSTS = [75]
-# CARBON_COSTS = [0]
+
 CARBON_COSTS = [
     0,
     50,
@@ -50,7 +47,7 @@ SCOPES_CO2_COST = [
 ]
 
 # Run parallel/sequential
-RUN_PARALLEL = True
+RUN_PARALLEL = False
 
 # Integrate current project pipeline or not
 BUILD_CURRENT_PROJECT_PIPELINE = {"chemicals": True, "aluminium": False}
@@ -71,14 +68,48 @@ CO2_STORAGE_CONSTRAINT = {"bau": False, "fa": True, "lc": True}
 CO2_STORAGE_CONSTRAINT_CUMULATIVE = False
 
 ELECTROLYSER_CAPACITY_ADDITION_CONSTRAINT = {"bau": False, "fa": False, "lc": True}
-GLOBAL_DEMAND_SHARE_CONSTRAINT = {"bau": False, "fa": False, "lc": False}
+GLOBAL_DEMAND_SHARE_CONSTRAINT = {"bau": False, "fa": False, "lc": True}
 
 TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE = [
     "Biomass Gasification + ammonia synthesis",
     "Biomass Digestion + ammonia synthesis",
     "Methane Pyrolysis + ammonia synthesis",
 ]
-MAXIMUM_GLOBAL_DEMAND_SHARE = 0.01
+
+# TODO: transfer this to input file
+MAXIMUM_GLOBAL_DEMAND_SHARE = {
+    2020: 0.02,
+    2021: 0.02,
+    2022: 0.02,
+    2023: 0.02,
+    2024: 0.02,
+    2025: 0.02,
+    2026: 0.02,
+    2027: 0.02,
+    2028: 0.02,
+    2029: 0.02,
+    2030: 0.02,
+    2031: 0.02,
+    2032: 0.02,
+    2033: 0.02,
+    2034: 0.02,
+    2035: 0.02,
+    2036: 0.02,
+    2037: 0.02,
+    2038: 0.02,
+    2039: 0.02,
+    2040: 0.02,
+    2041: 1,
+    2042: 1,
+    2043: 1,
+    2044: 1,
+    2045: 1,
+    2046: 1,
+    2047: 1,
+    2048: 1,
+    2049: 1,
+    2050: 1,
+}
 
 ### RUN CONFIGURATION ###
 run_config = {
