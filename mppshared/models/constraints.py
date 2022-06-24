@@ -69,7 +69,7 @@ def check_constraints(
         )
 
         # Check CO2 storage constraint
-        if CO2_STORAGE_CONSTRAINT:
+        if CO2_STORAGE_CONSTRAINT[pathway.pathway]:
             co2_storage_constraint = check_co2_storage_constraint(
                 pathway=pathway, stack=stack, year=year
             )
@@ -77,7 +77,7 @@ def check_constraints(
             co2_storage_constraint = True
 
         # Check constraint on annual addition of electrolysis capacity
-        if ELECTROLYSER_CAPACITY_ADDITION_CONSTRAINT:
+        if ELECTROLYSER_CAPACITY_ADDITION_CONSTRAINT[pathway.pathway]:
             electrolysis_capacity_addition_constraint = (
                 check_electrolysis_capacity_addition_constraint(
                     pathway=pathway, stack=stack, year=year
@@ -87,7 +87,7 @@ def check_constraints(
             electrolysis_capacity_addition_constraint = True
 
         # Check global demand share constraint for specified technologies
-        if GLOBAL_DEMAND_SHARE_CONSTRAINT:
+        if GLOBAL_DEMAND_SHARE_CONSTRAINT[pathway.pathway]:
             demand_share_constraint = check_global_demand_share_constraint(
                 pathway=pathway, stack=stack, year=year
             )
@@ -134,7 +134,7 @@ def check_global_demand_share_constraint(
         df["demand"] = df["product"].apply(
             lambda x: pathway.get_demand(product=x, year=year, region="Global")
         )
-        df["demand_maximum"] = MAXIMUM_GLOBAL_DEMAND_SHARE * df["demand"]
+        df["demand_maximum"] = MAXIMUM_GLOBAL_DEMAND_SHARE[year] * df["demand"]
 
         # Compare
         df["check"] = np.where(
