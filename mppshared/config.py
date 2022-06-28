@@ -215,9 +215,9 @@ ALL_SENSITIVITIES = [
 ]
 SENSITIVITIES = {
     "bau": ["def"],  # ALL_SENSITIVITIES,
-    "cc": ALL_SENSITIVITIES,
-    "fa": ["def"],
-    "lc": ALL_SENSITIVITIES,
+    "cc": ["def"],  # ALL_SENSITIVITIES,
+    # "fa": ["def"],
+    # "lc": ALL_SENSITIVITIES,
 }
 ### SECTOR-SPECIFIC PARAMETERS ###
 
@@ -229,7 +229,8 @@ PRODUCTS = {
 
 OUTPUT_WRITE_PATH = {
     "chemicals": "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Current model outputs",
-    "aluminium": f"/mnt/c/Users/LuisNatera/SYSTEMIQ Ltd/MPP Materials - Aluminum/04_WS1 - Sector Transition Strategy/04_Model/Model_Outputs/Latest_Runs/{PRODUCTS['aluminium'][0]}",
+    # "aluminium": f"/mnt/c/Users/LuisNatera/SYSTEMIQ Ltd/MPP Materials - Aluminum/04_WS1 - Sector Transition Strategy/04_Model/Model_Outputs/Latest_Runs/{PRODUCTS['aluminium'][0]}",
+    "aluminium": "data/aluminium/outputs",
 }
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
 INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_assets"}
