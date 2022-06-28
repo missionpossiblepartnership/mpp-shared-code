@@ -153,4 +153,5 @@ data/aluminium_refineries/*
 data/aluminium_smelters/*
 data/*/outputs/*
 data/*.csv
+data/*.xlsx
 *.Identifier
