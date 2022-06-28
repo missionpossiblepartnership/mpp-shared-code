@@ -1,0 +1,182 @@
+﻿,shorthand,region,country,coordinates,product,technology,annual_production_capacity,year,capacity_factor,ppa_allowed
+0,Alum,South America,Argentina,"-42.737502, -65.046776",Aluminium,Carbon Anode + Natural Gas,0.46,1971,0.8192,TRUE
+1,Alum,Oceania,Australia,"-23.928241, 151.339019",Aluminium,Carbon Anode + Grid,0.585,1982,0.8717,TRUE
+2,Alum,Oceania,Australia,"-38.386151, 141.631294",Aluminium,Carbon Anode + Grid,0.358,1986,0,TRUE
+3,Alum,Oceania,Australia,"-41.124719, 146.869574",Aluminium,Carbon Anode + PPA+Grid,0.195,1955,0.9692,FALSE
+4,Alum,Oceania,Australia,"-32.821857, 151.720009",Aluminium,Carbon Anode + Grid,0.597,1983,0.99,FALSE
+5,Alum,Middle East,Azerbaijan,"40.690544, 46.423296",Aluminium,Carbon Anode + Grid,0.055,2013,0.9449,FALSE
+6,Alum,Middle East,Bahrain,"26.088486, 50.604081",Aluminium,Carbon Anode + Natural Gas,1.561,1971,0.9872,TRUE
+7,Alum,Rest of Europe,Bosnia and Herzegovina,"43.280119, 17.824988",Aluminium,Carbon Anode + Grid,0.35,1975,0,FALSE
+8,Alum,South America,Brazil,"-2.707227, -44.331490",Aluminium,Carbon Anode + PPA+Grid,0.447,2023,0,FALSE
+9,Alum,South America,Brazil,"-1.557386, -48.734998",Aluminium,Carbon Anode + PPA+Grid,0.46,1985,0.9283,FALSE
+10,Alum,South America,Brazil,"-23.532415, -47.267933",Aluminium,Carbon Anode + Hydro,0.475,1955,0.6463,FALSE
+11,Alum,Africa,Cameroon,"3.819955, 10.124405",Aluminium,Carbon Anode + Grid,0.1,1954,0.493,FALSE
+12,Alum,Canada,Canada,"46.694846, -71.948122",Aluminium,Carbon Anode + PPA+Grid,0.287,1992,0,FALSE
+13,Alum,Canada,Canada,"49.254464, -68.149013",Aluminium,Carbon Anode + PPA+Grid,0.312,1957,0,FALSE
+14,Alum,Canada,Canada,"50.158517, -66.440542",Aluminium,Carbon Anode + PPA+Grid,0.622,1992,1.0113,FALSE
+15,Alum,Canada,Canada,"48.585317, -71.689234",Aluminium,Carbon Anode + Hydro,0.473,2000,0.9958,FALSE
+16,Alum,Canada,Canada,"48.430413, -71.165668",Aluminium,Carbon Anode + Hydro,0.174,1926,0.9655,FALSE
+17,Alum,Canada,Canada,"48.430413, -71.165668",Aluminium,Carbon Anode + Hydro,0.06,1926,0.9655,FALSE
+18,Alum,Canada,Canada,"48.305907, -70.925449",Aluminium,Carbon Anode + Hydro,0.233,1980,0.9954,FALSE
+19,Alum,Canada,Canada,"54.014473, -128.701677",Aluminium,Carbon Anode + Hydro,0.432,1954,0.7616,FALSE
+20,Alum,Canada,Canada,"48.300538, -71.129035",Aluminium,Carbon Anode + Hydro,0.257,1989,0.9727,FALSE
+21,Alum,Canada,Canada,"46.380570, -72.383278",Aluminium,Carbon Anode + PPA+Grid,0.462,1986,0.8656,FALSE
+22,Alum,Middle East,Egypt,"25.989175, 32.332151",Aluminium,Carbon Anode + PPA+Grid,0.32,1975,0,FALSE
+23,Alum,Rest of Europe,France,"50.999789, 2.169872",Aluminium,Carbon Anode + Grid,0.285,1991,0.82,FALSE
+24,Alum,Rest of Europe,France,"45.270340, 6.375211",Aluminium,Carbon Anode + Grid,0.15,1907,0.9667,FALSE
+25,Alum,Rest of Europe,Germany,"51.148990, 6.781876",Aluminium,Carbon Anode + Grid,0.235,1962,0,FALSE
+26,Alum,Rest of Europe,Germany,"51.493634, 6.963672",Aluminium,Carbon Anode + Grid,0.165,1971,1,FALSE
+27,Alum,Rest of Europe,Germany,"53.511575, 9.894409",Aluminium,Carbon Anode + Grid,0.135,1970,1,FALSE
+28,Alum,Rest of Europe,Germany,"51.621911, 6.614610",Aluminium,Carbon Anode + Grid,0.095,1971,1,FALSE
+29,Alum,Africa,Ghana,"5.667995, 0.022149",Aluminium,Carbon Anode + PPA+Grid,0.2,1967,0,FALSE
+30,Alum,Rest of Europe,Greece,"38.362709, 22.689281",Aluminium,Carbon Anode + Natural Gas,0.19,1960,0.9663,FALSE
+31,Alum,Scandinavia,Iceland,"65.034268, -14.101182",Aluminium,Carbon Anode + PPA+Grid,0.351,2007,0,FALSE
+32,Alum,Scandinavia,Iceland,"64.363992, -21.774589",Aluminium,Carbon Anode + PPA+Grid,0.317,1998,0.9874,FALSE
+33,Alum,Scandinavia,Iceland,"64.045738, -22.026341",Aluminium,Carbon Anode + PPA+Grid,0.212,1969,0.9575,FALSE
+34,Alum,Rest of Asia,India,"21.738921, 84.050425",Aluminium,Carbon Anode + Coal,0.36,2013,1.0049,TRUE
+35,Alum,Rest of Asia,India,"21.532692, 83.906588",Aluminium,Carbon Anode + Coal,0.216,2013,0.7135,FALSE
+36,Alum,Rest of Asia,India,"24.231308, 82.437016",Aluminium,Carbon Anode + Coal,0.359,2015,0.9948,TRUE
+37,Alum,Rest of Asia,India,"24.217857, 83.029665",Aluminium,Carbon Anode + Coal,0.41,1962,0.9977,TRUE
+38,Alum,Rest of Asia,India,"20.827461, 85.159789",Aluminium,Carbon Anode + Coal,0.46,1987,0.9098,TRUE
+39,Alum,Rest of Asia,India,"21.806927, 84.041112",Aluminium,Carbon Anode + Coal,1.75,2008,0.7714,FALSE
+40,Alum,Rest of Asia,India,"22.398597, 82.731866",Aluminium,Carbon Anode + Coal,0.57,1965,1.0088,TRUE
+41,Alum,Rest of Asia,Indonesia,"3.347914, 99.455510",Aluminium,Carbon Anode + Hydro,0.26,1976,0.9,FALSE
+42,Alum,Middle East,Iran,"27.164185, 56.082941",Aluminium,Carbon Anode + Natural Gas,0.11,1997,0.642,TRUE
+43,Alum,Middle East,Iran,"27.164185, 56.082941",Aluminium,Carbon Anode + Natural Gas,0.147,1997,0.642,TRUE
+44,Alum,Middle East,Iran,"34.076164, 49.762179",Aluminium,Carbon Anode + Grid,0.23,1967,0.7722,TRUE
+45,Alum,Middle East,Iran,"27.387977, 53.259092",Aluminium,Carbon Anode + Grid,0.3,2020,0.596,TRUE
+46,Alum,Rest of Europe,Italy,"39.201427, 8.405401",Aluminium,Carbon Anode + Grid,0.15,2023,0,FALSE
+47,Alum,Rest of Asia,Kazakhstan,"52.253766, 77.049439",Aluminium,Carbon Anode + Grid,0.25,2007,1.06,FALSE
+48,Alum,Rest of Asia,Malaysia,"2.968857, 112.375989",Aluminium,Carbon Anode + PPA+Grid,0.12,2009,1,FALSE
+49,Alum,Rest of Asia,Malaysia,"3.551257, 113.323461",Aluminium,Carbon Anode + PPA+Grid,0.96,2012,1,FALSE
+50,Alum,Rest of Europe,Montenegro,"42.395216, 19.227570",Aluminium,Carbon Anode + Grid,0.12,1969,0,FALSE
+51,Alum,Africa,Mozambique,"-25.914387, 32.407732",Aluminium,Carbon Anode + PPA+Grid,0.58,1998,0.4569,FALSE
+52,Alum,Rest of Europe,Netherlands,"53.310164, 6.978198",Aluminium,Carbon Anode + Grid,0.11,1966,0,TRUE
+53,Alum,Oceania,New Zealand,"-46.588563, 168.386072",Aluminium,Carbon Anode + PPA+Grid,0.373,1971,0.8928,FALSE
+54,Alum,Africa,Nigeria,"4.570606, 7.578276",Aluminium,Carbon Anode + Natural Gas,0.193,2023,0,FALSE
+55,Alum,Scandinavia,Norway,"58.072504, 6.785369",Aluminium,Carbon Anode + PPA+Grid,0.094,1962,0,FALSE
+56,Alum,Scandinavia,Norway,"65.846361, 13.190513",Aluminium,Carbon Anode + PPA+Grid,0.2,1962,0,FALSE
+57,Alum,Scandinavia,Norway,"61.311276, 7.823018",Aluminium,Carbon Anode + Hydro,0.202,1948,0.995,FALSE
+58,Alum,Scandinavia,Norway,"61.218427, 6.067978",Aluminium,Carbon Anode + Hydro,0.066,1917,1,FALSE
+59,Alum,Scandinavia,Norway,"59.867941, 5.769198",Aluminium,Carbon Anode + Hydro,0.195,1965,0.8667,FALSE
+60,Alum,Scandinavia,Norway,"59.314503, 5.310508",Aluminium,Carbon Anode + Hydro,0.271,1967,0.9815,FALSE
+61,Alum,Scandinavia,Norway,"62.679442, 8.554155",Aluminium,Carbon Anode + Hydro,0.425,1954,0.9953,FALSE
+62,Alum,Middle East,Oman,"24.417262, 56.550682",Aluminium,Carbon Anode + Natural Gas,0.395,2004,1,TRUE
+63,Alum,Middle East,Qatar,"24.967998, 51.573632",Aluminium,Carbon Anode + Natural Gas,0.636,2009,1,TRUE
+64,Alum,Rest of Europe,Romania,"44.447044, 24.390634",Aluminium,Carbon Anode + Grid,0.265,1965,1.0238,FALSE
+65,Alum,Russia,Russia,"58.069283, 97.316230",Aluminium,Carbon Anode + Hydro,0.298,2019,0,FALSE
+66,Alum,Russia,Russia,"56.128670, 101.451061",Aluminium,Carbon Anode + Hydro,1.009,1966,1,FALSE
+67,Alum,Russia,Russia,"52.190191, 104.080259",Aluminium,Carbon Anode + Hydro,0.422,1962,1,FALSE
+68,Alum,Russia,Russia,"67.194427, 32.426914",Aluminium,Carbon Anode + Grid,0.076,1951,0.92,FALSE
+69,Alum,Russia,Russia,"53.190766, 91.449160",Aluminium,Carbon Anode + Hydro,0.297,2006,1.04,FALSE
+70,Alum,Russia,Russia,"56.094478, 93.014721",Aluminium,Carbon Anode + Hydro,1.019,1964,1,FALSE
+71,Alum,Russia,Russia,"53.780781, 87.240683",Aluminium,Carbon Anode + Grid,0.215,1943,1,FALSE
+72,Alum,Russia,Russia,"53.199710, 91.451921",Aluminium,Carbon Anode + Hydro,0.542,1985,0.98,FALSE
+73,Alum,Russia,Russia,"55.988376, 98.127028",Aluminium,Carbon Anode + Hydro,0.429,2021,0.4196,FALSE
+74,Alum,Russia,Russia,"56.371517, 61.970504",Aluminium,Carbon Anode + Grid,0.075,1939,0,TRUE
+75,Alum,Russia,Russia,"48.832155, 44.591588",Aluminium,Carbon Anode + PPA+Grid,0.069,1959,1.01,FALSE
+76,Alum,Middle East,Saudi Arabia,"27.516375, 49.168508",Aluminium,Carbon Anode + Grid,0.78,2012,1.0205,TRUE
+77,Alum,Rest of Europe,Slovakia,"48.564256, 18.848043",Aluminium,Carbon Anode + Grid,0.175,1993,0.9371,FALSE
+78,Alum,Rest of Europe,Slovenia,"46.393259, 15.790214",Aluminium,Carbon Anode + Grid,0.1004,1954,0.5,FALSE
+79,Alum,Africa,South Africa,"-28.766263, 32.028996",Aluminium,Carbon Anode + Grid,0.72,2001,0.9958,TRUE
+80,Alum,Rest of Europe,Spain,"43.699862, -7.477310",Aluminium,Carbon Anode + PPA+Grid,0.228,2024,0,FALSE
+81,Alum,Scandinavia,Sweden,"62.373236, 17.369216",Aluminium,Carbon Anode + Grid,0.128,1942,0.91,FALSE
+82,Alum,Middle East,Tajikistan,"38.546431, 68.225628",Aluminium,Carbon Anode + PPA+Grid,0.517,1975,0.1987,FALSE
+83,Alum,Middle East,Turkey,"37.445172, 31.846318",Aluminium,Carbon Anode + Hydro,0.082,1974,0.8938,FALSE
+84,Alum,Middle East,United Arab Emirates,"24.790299, 54.726098",Aluminium,Carbon Anode + Natural Gas,1.5,2009,0,FALSE
+85,Alum,Middle East,United Arab Emirates,"25.031487, 55.095233",Aluminium,Carbon Anode + Natural Gas,1,1979,0,FALSE
+86,Alum,Rest of Europe,United Kingdom,"56.827960, -5.072148",Aluminium,Carbon Anode + Hydro,0.0475,1929,0.8421,FALSE
+87,Alum,US,United States,"48.845511, -122.705254",Aluminium,Carbon Anode + Grid,0.279,1966,0,FALSE
+88,Alum,US,United States,"44.960676, -74.891914",Aluminium,Carbon Anode + PPA+Grid,0.13,1902,0,FALSE
+89,Alum,US,United States,"37.919136, -87.329551",Aluminium,Carbon Anode + Coal,0.269,1960,0,FALSE
+90,Alum,US,United States,"37.944389, -86.787717",Aluminium,Carbon Anode + Grid,0.25,1969,0.68,FALSE
+91,Alum,US,United States,"33.050838, -80.053257",Aluminium,Carbon Anode + Grid,0.229,1970,0.4672,FALSE
+92,Alum,US,United States,"37.657386, -87.499630",Aluminium,Carbon Anode + Grid,0.22,1973,0.9273,FALSE
+93,Alum,US,United States,"36.508713, -89.563988",Aluminium,Carbon Anode + Grid,0.263,1971,0,FALSE
+94,Alum,South America,Venezuela,"8.269188, -62.811914",Aluminium,Carbon Anode + PPA+Grid,0.21,1967,0,FALSE
+95,Alum,South America,Venezuela,"8.278633, -62.829004",Aluminium,Carbon Anode + PPA+Grid,0.43,1978,0,FALSE
+96,Alum,Rest of Asia,Vietnam,"11.968851, 107.595029",Aluminium,Carbon Anode + Grid,0.65,2016,0.8923,FALSE
+97,Alum,China - North West,China - North West,"37.904304, 105.947839",Aluminium,Carbon Anode + Coal,0.43,1970,0.973,TRUE
+98,Alum,China - North West,China - North West,"38.224064, 106.53847",Aluminium,Carbon Anode + Coal,0.57,2009,0.997,TRUE
+99,Alum,China - North West,China - North West,"37.564099, 105.638459",Aluminium,Carbon Anode + Grid,0.3,2010,0.626,TRUE
+100,Alum,China - North West,China - North West,"36.645388, 101.744546",Aluminium,Carbon Anode + Grid,0.575,2010,0.975,TRUE
+101,Alum,China - North West,China - North West,"36.893482, 101.744715",Aluminium,Carbon Anode + Grid,0.4,1987,1.005,TRUE
+102,Alum,China - North West,China - North West,"36.921569, 101.717559",Aluminium,Carbon Anode + Grid,0.3,2004,0.967,TRUE
+103,Alum,China - North West,China - North West,"36.309629, 102.90386",Aluminium,Carbon Anode + Grid,0.45,2011,0.914,TRUE
+104,Alum,China - North West,China - North West,"36.655787, 101.777853",Aluminium,Carbon Anode + Grid,0.1,2012,1.001,TRUE
+105,Alum,China - North West,China - North West,"36.534795, 101.533989",Aluminium,Carbon Anode + Grid,0.7,2003,0.791,TRUE
+106,Alum,China - North West,China - North West,"36.557929, 101.50976",Aluminium,Carbon Anode + Grid,0.24,2014,0,TRUE
+107,Alum,China - North West,China - North West,"36.125987, 102.255092",Aluminium,Carbon Anode + Grid,0.07,1995,0.771,TRUE
+108,Alum,China - Central,China - Central,"34.431468, 112.501389",Aluminium,Carbon Anode + Coal,0.6,2002,0.979,FALSE
+109,Alum,China - Central,China - Central,"34.750403, 112.0719",Aluminium,Carbon Anode + Coal,0.58,1997,0.878,FALSE
+110,Alum,China - Central,China - Central,"35.24661, 113.381152",Aluminium,Carbon Anode + Coal,0.43,1966,0.86,FALSE
+111,Alum,China - Central,China - Central,"33.927502, 116.449167",Aluminium,Carbon Anode + Coal,0.25,1998,0,FALSE
+112,Alum,China - Central,China - Central,"34.750751, 112.98945",Aluminium,Carbon Anode + Coal,0.25,1997,0.936,FALSE
+113,Alum,China - Central,China - Central,"34.387774, 113.13945",Aluminium,Carbon Anode + Coal,0.04,1993,0.99,FALSE
+114,Alum,China - South,China - South,"24.914599, 102.981726",Aluminium,Carbon Anode + Grid,1.28,1972,0.946,FALSE
+115,Alum,China - South,China - South,"25.662595, 104.043111",Aluminium,Carbon Anode + Grid,0.38,2006,0.924,FALSE
+116,Alum,China - South,China - South,"27.501148, 103.723807",Aluminium,Carbon Anode + PPA+Grid,0.45,2018,0.751,FALSE
+117,Alum,China - South,China - South,"26.517917, 100.223667",Aluminium,Carbon Anode + PPA+Grid,0.42,2019,0.847,FALSE
+118,Alum,China - South,China - South,"23.472631, 105.754267",Aluminium,Carbon Anode + PPA+Grid,0.6,2019,0.408,FALSE
+119,Alum,China - South,China - South,"26.219069, 100.284708",Aluminium,Carbon Anode + PPA+Grid,0.1,2020,0.058,FALSE
+120,Alum,China - South,China - South,"23.448707, 104.149896",Aluminium,Carbon Anode + PPA+Grid,0.5,2020,0.43,FALSE
+121,Alum,China - South,China - South,"23.691754, 104.36486",Aluminium,Carbon Anode + PPA+Grid,0.11,2020,0.264,FALSE
+122,Alum,China - South,China - South,"27.529518, 106.853324",Aluminium,Carbon Anode + Grid,0.42,1988,0.978,FALSE
+123,Alum,China - South,China - South,"26.565874, 105.040097",Aluminium,Carbon Anode + Grid,0.145,2008,0.919,FALSE
+124,Alum,China - South,China - South,"26.318194, 105.957274",Aluminium,Carbon Anode + Grid,0.133,2003,0.729,FALSE
+125,Alum,China - South,China - South,"25.48087, 105.426172",Aluminium,Carbon Anode + Grid,0.25,2016,1.005,FALSE
+126,Alum,China - South,China - South,"26.760338, 106.305164",Aluminium,Carbon Anode + Grid,0.5,2017,0.98,FALSE
+127,Alum,China - North,China - North,"37.614085, 120.510137",Aluminium,Carbon Anode + Coal,0.84,2003,0.997,FALSE
+128,Alum,China - North,China - North,"36.609856, 116.256346",Aluminium,Carbon Anode + Coal,1.58,1999,1.035,FALSE
+129,Alum,China - North,China - North,"36.880604, 117.780264",Aluminium,Carbon Anode + Coal,5.86,2001,0.963,FALSE
+130,Alum,China - South,China - South,"23.266401, 106.397734",Aluminium,Carbon Anode + Coal,0.32,2008,0.842,FALSE
+131,Alum,China - South,China - South,"23.845169, 106.685853",Aluminium,Carbon Anode + Grid,0.22,2002,0.984,FALSE
+132,Alum,China - South,China - South,"23.531413, 108.957401",Aluminium,Carbon Anode + Grid,0.5,2009,0.914,FALSE
+133,Alum,China - South,China - South,"24.788072, 105.347465",Aluminium,Carbon Anode + Grid,0.075,2011,0.487,FALSE
+134,Alum,China - South,China - South,"23.819907, 106.836355",Aluminium,Carbon Anode + Coal,0.3,2016,0.994,FALSE
+135,Alum,China - South,China - South,"23.361288, 106.597134",Aluminium,Carbon Anode + Grid,0.25,2018,1.076,FALSE
+136,Alum,China - South,China - South,"23.817349, 106.830611",Aluminium,Carbon Anode + Grid,0.13,2018,0.98,FALSE
+137,Alum,China - South,China - South,"23.80145, 106.841147",Aluminium,Carbon Anode + Grid,0.2,2016,0.996,FALSE
+138,Alum,China - South,China - South,"23.336769, 107.527227",Aluminium,Carbon Anode + Coal,0.4,2017,0.962,FALSE
+139,Alum,China - North,China - North,"35.656089, 110.67931",Aluminium,Carbon Anode + Coal,0.42,2006,0.721,FALSE
+140,Alum,China - North,China - North,"37.87402, 113.633056",Aluminium,Carbon Anode + Coal,0.22,1996,0.572,FALSE
+141,Alum,China - North,China - North,"38.075477, 112.708834",Aluminium,Carbon Anode + Grid,0.1,2004,0,FALSE
+142,Alum,China - North,China - North,"39.318323, 112.482749",Aluminium,Carbon Anode + Grid,0.06,2004,0.706,TRUE
+143,Alum,China - North,China - North,"38.643001, 110.988214",Aluminium,Carbon Anode + Grid,0.5,2018,0.576,FALSE
+144,Alum,China - North West,China - North West,"36.0999, 103.734798",Aluminium,Carbon Anode + Grid,0.54,1974,0.29,TRUE
+145,Alum,China - North West,China - North West,"36.151531, 103.341863",Aluminium,Carbon Anode + Coal,0.42,1958,0.956,TRUE
+146,Alum,China - North West,China - North West,"34.986833, 104.647655",Aluminium,Carbon Anode + Grid,0.39,1967,0.875,FALSE
+147,Alum,China - North West,China - North West,"39.8547, 98.24719",Aluminium,Carbon Anode + Coal,1.35,2011,0.969,TRUE
+148,Alum,China - North West,China - North West,"35.251234, 103.856512",Aluminium,Carbon Anode + Grid,0.1,1997,1.117,TRUE
+149,Alum,China - North West,China - North West,"36.706598, 104.543561",Aluminium,Carbon Anode + Grid,0.07,2018,0,TRUE
+150,Alum,China - North,China - North,"40.574962, 110.102339",Aluminium,Carbon Anode + Coal,0.56,2003,1.008,TRUE
+151,Alum,China - North,China - North,"40.596861, 109.814264",Aluminium,Carbon Anode + Coal,0.88,2003,0.978,TRUE
+152,Alum,China - North,China - North,"40.986134, 110.054962",Aluminium,Carbon Anode + Coal,0.5,2018,0.88,TRUE
+153,Alum,China - North,China - North,"45.461772, 119.628135",Aluminium,Carbon Anode + Coal,0.86,2004,1.06,TRUE
+154,Alum,China - North,China - North,"40.180796, 111.368292",Aluminium,Carbon Anode + Coal,0.287,2014,0.992,TRUE
+155,Alum,China - North,China - North,"43.563618, 122.2168",Aluminium,Carbon Anode + Coal,1.0003,2013,1,TRUE
+156,Alum,China - North,China - North,"40.577231, 110.137672",Aluminium,Carbon Anode + Coal,0.75,2017,0.979,TRUE
+157,Alum,China - North,China - North,"45.444727, 119.437694",Aluminium,Carbon Anode + Coal,0.77,2018,0.606,TRUE
+158,Alum,China - North,China - North,"40.285285, 110.095751",Aluminium,Carbon Anode + Grid,0.5,2018,0.998,TRUE
+159,Alum,China - Central,China - Central,"30.001993, 103.753568",Aluminium,Carbon Anode + PPA+Grid,0.13,2003,0.993,FALSE
+160,Alum,China - Central,China - Central,"30.001956, 103.748897",Aluminium,Carbon Anode + PPA+Grid,0.13,2003,0.997,FALSE
+161,Alum,China - Central,China - Central,"32.409319, 105.776377",Aluminium,Carbon Anode + PPA+Grid,0.12,2000,0.828,FALSE
+162,Alum,China - Central,China - Central,"30.988884, 103.625051",Aluminium,Carbon Anode + PPA+Grid,0.2,1991,0.992,FALSE
+163,Alum,China - Central,China - Central,"32.410218, 105.778563",Aluminium,Carbon Anode + PPA+Grid,0.42,2019,0.575,FALSE
+164,Alum,China - North West,China - North West,"38.530019, 109.888123",Aluminium,Carbon Anode + Coal,0.63,2012,0.952,FALSE
+165,Alum,China - North West,China - North West,"34.980499, 108.995261",Aluminium,Carbon Anode + Coal,0.3,2018,1.022,FALSE
+166,Alum,China - North,China - North,"32.541941, 111.517602",Aluminium,Carbon Anode + PPA+Grid,0.06,1970,0.917,FALSE
+167,Alum,China - North,China - North,"30.418583, 112.817854",Aluminium,Carbon Anode + Coal,0.066,1997,0.54,FALSE
+168,Alum,China - North East,China - North East,"40.576698, 122.286949",Aluminium,Carbon Anode + Grid,0.8,2015,0.439,TRUE
+169,Alum,China - North West,China - North West,"44.279032, 87.693982",Aluminium,Carbon Anode + Coal,1.9,2010,0.752,FALSE
+170,Alum,China - North West,China - North West,"44.434618, 86.106388",Aluminium,Carbon Anode + Coal,1.2,2011,0.999,FALSE
+171,Alum,China - North West,China - North West,"44.098977, 88.37052",Aluminium,Carbon Anode + Coal,0.245,2022,0.973,TRUE
+172,Alum,China - North West,China - North West,"43.922882, 87.596873",Aluminium,Carbon Anode + Grid,0.18,1970,1.002,FALSE
+173,Alum,China - North West,China - North West,"44.696965, 89.1315",Aluminium,Carbon Anode + Coal,0.8,2012,1.094,FALSE
+174,Alum,China - North West,China - North West,"44.899609, 89.053906",Aluminium,Carbon Anode + Coal,0.82,2012,0.983,FALSE
+175,Alum,China - North West,China - North West,"44.886316, 89.042225",Aluminium,Carbon Anode + Coal,0.84,2012,0.904,FALSE
+176,Alum,China - North West,China - North West,"44.316399, 86.423926",Aluminium,Carbon Anode + Coal,0.45,2013,0.994,FALSE
+177,Alum,China - East,China - East,"26.651094, 118.197064",Aluminium,Carbon Anode + Grid,0.075,1960,0.94,FALSE
+178,Alum,China - Central,China - Central,"29.356732, 106.353413",Aluminium,Carbon Anode + Grid,0.1,2013,0.953,FALSE
+179,Alum,China - Central,China - Central,"29.786044, 107.448972",Aluminium,Carbon Anode + Grid,0.08,1996,0.546,FALSE
+180,Alum,China - Central,China - Central,"29.012515, 106.580908",Aluminium,Carbon Anode + Coal,0.34,2013,0.943,FALSE
