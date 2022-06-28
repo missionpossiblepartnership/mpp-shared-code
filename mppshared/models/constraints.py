@@ -6,13 +6,9 @@ import pandas as pd
 from pandera import Bool
 from pyparsing import col
 
-from mppshared.config import (
-    END_YEAR,
-    HYDRO_TECHNOLOGY_BAN,
-    LOG_LEVEL,
-    REGIONAL_PRODUCTION_SHARES,
-    YEAR_2050_EMISSIONS_CONSTRAINT,
-)
+from mppshared.config import (END_YEAR, HYDRO_TECHNOLOGY_BAN, LOG_LEVEL,
+                              REGIONAL_PRODUCTION_SHARES,
+                              YEAR_2050_EMISSIONS_CONSTRAINT)
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
@@ -65,14 +61,14 @@ def check_constraints(
             "flag_residual": flag_residual,
             "rampup_constraint": rampup_constraint,
         }
-    elif pathway.pathway == "cc":
+    elif pathway.pathway in ["cc"]:
         rampup_constraint = check_technology_rampup_constraint(
             pathway=pathway, stack=stack, year=year
         )
         return {
             "emissions_constraint": True,
             "flag_residual": False,
-            "rampup_constraint": True,
+            "rampup_constraint": True,  # rampup_constraint,
         }
     else:
         return {"emissions_constraint": True, "rampup_constraint": True}
