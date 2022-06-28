@@ -1,0 +1,95 @@
+﻿shorthand,region,country,coordinates,product,technology,annual_production_capacity,year,capacity_factor,ppa_allowed
+Alum,Oceania,Australia,"-32.192803, 115.778179",Alumina,Gas-Boiler + Gas-Calciner,2.19,1963,1,TRUE
+Alum,Oceania,Australia,"-32.643451, 115.949544",Alumina,Gas-Boiler + Gas-Calciner,4.23,1972,1,TRUE
+Alum,Oceania,Australia,"-32.914487, 115.915322",Alumina,Gas-Boiler + Gas-Calciner,2.56,1984,1,TRUE
+Alum,Oceania,Australia,"-23.828357, 151.154210",Alumina,Coal-Boiler + Gas-Calciner,3.2,2004,0.99,TRUE
+Alum,Oceania,Australia,"-23.865808, 151.290751",Alumina,Coal-Boiler + Gas-Calciner,3.95,1967,0.94,TRUE
+Alum,Oceania,Australia,"-33.238330, 116.068500",Alumina,Coal-Boiler + Gas-Calciner,4.6,1984,0.84,TRUE
+Alum,Middle East,Azerbaijan,"40.693204, 46.411926",Alumina,Coal-Boiler + Oil-Calciner,0.45,1933,0,TRUE
+Alum,Rest of Europe,Bosnia and Herzegovina,"44.419125, 19.112116",Alumina,Oil-Boiler + Oil-Calciner,0.6,1978,0,TRUE
+Alum,South America,Brazil,"-21.843218, -46.589446",Alumina,Gas-Boiler + Gas-Calciner,0.39,1970,1,TRUE
+Alum,South America,Brazil,"-2.710826, -44.346324",Alumina,Oil-Boiler + Oil-Calciner,3.83,1984,1,TRUE
+Alum,South America,Brazil,"-1.545880, -48.730613",Alumina,Coal-Boiler + Gas-Calciner,6.3,1995,0.87,TRUE
+Alum,Canada,Canada,"48.429356, -71.157885",Alumina,Gas-Boiler + Gas-Calciner,1.56,1936,0.87,TRUE
+Alum,Rest of Europe,Germany,"53.652962, 9.496364",Alumina,Gas-Boiler + Gas-Calciner,1,1973,0.9,TRUE
+Alum,Rest of Europe,Greece,"38.361542, 22.694489",Alumina,Gas-Boiler + Gas-Calciner,0.86,1966,0.96,TRUE
+Alum,Africa,Guinea,"10.386786, -13.578347",Alumina,Oil-Boiler + Oil-Calciner,0.65,1999,0.68,TRUE
+Alum,Rest of Asia,India,"17.594676, 82.748291",Alumina,Coal-Boiler + Oil-Calciner,1.5,2013,0,TRUE
+Alum,Rest of Asia,India,"22.397845, 82.740433",Alumina,Coal-Boiler + Oil-Calciner,0.2,1974,0,TRUE
+Alum,Rest of Asia,India,"23.379808, 85.873095",Alumina,Coal-Boiler + Oil-Calciner,0.45,1948,0.64,TRUE
+Alum,Rest of Asia,India,"24.223988, 83.030190",Alumina,Coal-Boiler + Oil-Calciner,0.7,1962,0.98,TRUE
+Alum,Rest of Asia,India,"19.184771, 83.028059",Alumina,Coal-Boiler + Oil-Calciner,1.5,2012,1.04,TRUE
+Alum,Rest of Asia,India,"11.809796, 77.827301",Alumina,Coal-Boiler + Oil-Calciner,0.09,1965,0,TRUE
+Alum,Rest of Asia,India,"18.772826, 82.917431",Alumina,Coal-Boiler + Oil-Calciner,2.28,1986,0.93,TRUE
+Alum,Rest of Asia,India,"19.708692, 83.398615",Alumina,Coal-Boiler + Oil-Calciner,2,2007,0.75,TRUE
+Alum,Rest of Asia,Indonesia,"-2.363759, 110.160065",Alumina,Coal-Boiler + Gas-Calciner,1,2016,1,TRUE
+Alum,Middle East,Iran,"36.993399, 56.437304",Alumina,Oil-Boiler + Gas-Calciner,0.28,2003,0.83,TRUE
+Alum,Rest of Europe,Ireland,"52.629099, -9.057957",Alumina,Gas-Boiler + Gas-Calciner,1.99,1983,0.95,TRUE
+Alum,Rest of Europe,Italy,"39.206656, 8.396895",Alumina,Oil-Boiler + Oil-Calciner,1.05,1973,0,TRUE
+Alum,South America,Jamaica,"17.968080, -77.608927",Alumina,Oil-Boiler + Oil-Calciner,1.65,1968,0,TRUE
+Alum,South America,Jamaica,"17.900667, -77.240530",Alumina,Gas-Boiler + Gas-Calciner,1.42,1972,0,TRUE
+Alum,South America,Jamaica,"18.170779, -77.065048",Alumina,Oil-Boiler + Oil-Calciner,0.63,1959,0.43,TRUE
+Alum,South America,Jamaica,"18.081689, -77.474800",Alumina,Oil-Boiler + Oil-Calciner,0.59,1952,0.43,TRUE
+Alum,Rest of Asia,Kazakhstan,"52.257828, 77.047154",Alumina,Coal-Boiler + Gas-Calciner,1.5,1964,1,TRUE
+Alum,Rest of Europe,Romania,"45.180857, 28.768040",Alumina,Gas-Boiler + Gas-Calciner,0.6,1975,0.71,TRUE
+Alum,Russia,Russia,"56.269501, 90.495240",Alumina,Coal-Boiler + Oil-Calciner,1.07,1970,0.84,TRUE
+Alum,Russia,Russia,"59.763534, 60.193574",Alumina,Coal-Boiler + Gas-Calciner,1.03,1943,0.96,TRUE
+Alum,Russia,Russia,"56.415240, 61.917764",Alumina,Gas-Boiler + Gas-Calciner,0.91,1939,1.02,TRUE
+Alum,Middle East,Saudi Arabia,"27.047209, 49.558893",Alumina,Gas-Boiler + Gas-Calciner,1.8,2016,0.99,TRUE
+Alum,Rest of Europe,Spain,"43.698990, -7.459916",Alumina,Gas-Boiler + Gas-Calciner,1.5,1980,0.34,TRUE
+Alum,Middle East,Turkey,"37.445175, 31.847175",Alumina,Gas-Boiler + Gas-Calciner,0.2,1973,0.81,TRUE
+Alum,Rest of Europe,Ukraine,"46.777242, 31.951480",Alumina,Gas-Boiler + Gas-Calciner,1.76,1980,0.98,TRUE
+Alum,Middle East,United Arab Emirates,"24.786545, 54.730482",Alumina,Gas-Boiler + Gas-Calciner,2,2019,1,TRUE
+Alum,US,United States,"30.059307, -90.666919",Alumina,Gas-Boiler + Gas-Calciner,1.18,1959,0.52,TRUE
+Alum,US,United States,"30.134730, -90.915896",Alumina,Gas-Boiler + Gas-Calciner,0.54,1956,0,TRUE
+Alum,South America,Venezuela,"8.292261, -62.815954",Alumina,Oil-Boiler + Oil-Calciner,2,1977,0,TRUE
+Alum,Rest of Asia,Vietnam,"11.659493, 107.797649",Alumina,Coal-Boiler + Gas-Calciner,0.65,2012,0.86,TRUE
+Alum,Rest of Asia,Vietnam,"11.968334, 107.585122",Alumina,Coal-Boiler + Gas-Calciner,0.65,2017,0.92,TRUE
+Alum,China - North,Refinery,"37.87402, 113.633056",Alumina,Coal-Boiler + Gas-Calciner,1.1,2009,0,TRUE
+Alum,China - North,Refinery,"37.853564, 113.666494",Alumina,Coal-Boiler + Gas-Calciner,2.8,2006,1,TRUE
+Alum,China - North,Refinery,"35.663797, 110.688561",Alumina,Coal-Boiler + Gas-Calciner,2.4,1987,0.78,TRUE
+Alum,China - North,Refinery,"36.902298, 111.479559",Alumina,Coal-Boiler + Gas-Calciner,2.8,2011,0,TRUE
+Alum,China - North,Refinery,"37.094302, 111.785514",Alumina,Coal-Boiler + Gas-Calciner,0.4,2005,0.74,TRUE
+Alum,China - North,Refinery,"37.092503, 111.856269",Alumina,Coal-Boiler + Gas-Calciner,2.8,2008,0.98,TRUE
+Alum,China - North,Refinery,"37.137509, 111.839925",Alumina,Coal-Boiler + Gas-Calciner,0.4,2008,1.01,TRUE
+Alum,China - North,Refinery,"37.065935, 111.777996",Alumina,Coal-Boiler + Gas-Calciner,0.3,2010,0.92,TRUE
+Alum,China - North,Refinery,"37.591936, 110.928975",Alumina,Coal-Boiler + Gas-Calciner,1.3,2016,0.9,TRUE
+Alum,China - North,Refinery,"37.143113, 111.886187",Alumina,Coal-Boiler + Gas-Calciner,3.6,2013,0.69,TRUE
+Alum,China - North,Refinery,"38.649953, 110.995035",Alumina,Coal-Boiler + Gas-Calciner,2,2014,0.62,TRUE
+Alum,China - North,Refinery,"37.15224, 111.864563",Alumina,Coal-Boiler + Gas-Calciner,0.4,2016,0.95,TRUE
+Alum,China - North,Refinery,"34.844333, 111.253653",Alumina,Coal-Boiler + Gas-Calciner,0.8,2014,1.05,TRUE
+Alum,China - North,Refinery,"37.077491, 111.455388",Alumina,Coal-Boiler + Gas-Calciner,0.9,2015,0.96,TRUE
+Alum,China - North,Refinery,"36.742357, 111.778406",Alumina,Coal-Boiler + Gas-Calciner,3,2014,0.73,TRUE
+Alum,China - Central,Refinery,"34.722769, 111.070392",Alumina,Coal-Boiler + Gas-Calciner,2.1,2006,1,TRUE
+Alum,China - Central,Refinery,"34.805924, 111.814125",Alumina,Coal-Boiler + Gas-Calciner,2.8,2006,0.62,TRUE
+Alum,China - Central,Refinery,"34.79166, 111.66272",Alumina,Coal-Boiler + Gas-Calciner,0.65,2004,0.77,TRUE
+Alum,China - Central,Refinery,"34.726079, 112.08107",Alumina,Coal-Boiler + Gas-Calciner,1.4,2007,0.82,TRUE
+Alum,China - Central,Refinery,"33.829232, 112.937522",Alumina,Coal-Boiler + Gas-Calciner,0.85,1995,0,TRUE
+Alum,China - Central,Refinery,"34.820278, 113.293393",Alumina,Coal-Boiler + Gas-Calciner,2,1961,0.67,TRUE
+Alum,China - Central,Refinery,"34.712032, 113.201782",Alumina,Coal-Boiler + Gas-Calciner,2.8,1993,0.95,TRUE
+Alum,China - Central,Refinery,"34.394299, 113.19233",Alumina,Coal-Boiler + Gas-Calciner,0.47,2006,0.48,TRUE
+Alum,China - North,Refinery,"36.761111, 118.05686",Alumina,Coal-Boiler + Gas-Calciner,2.4,1954,0.92,TRUE
+Alum,China - North,Refinery,"37.604928, 120.489307",Alumina,Coal-Boiler + Gas-Calciner,1.7,2006,1.02,TRUE
+Alum,China - North,Refinery,"36.594453, 116.202383",Alumina,Coal-Boiler + Gas-Calciner,5,2005,0.83,TRUE
+Alum,China - North,Refinery,"36.880604, 117.780264",Alumina,Coal-Boiler + Gas-Calciner,17.5,2006,0.97,TRUE
+Alum,China - North,Refinery,"38.093111, 117.737002",Alumina,Coal-Boiler + Gas-Calciner,1,2007,0.98,TRUE
+Alum,China - North,Refinery,"38.071805, 117.73245",Alumina,Coal-Boiler + Gas-Calciner,0.5,2013,1.06,TRUE
+Alum,China - Central,Refinery,"29.113047, 107.059038",Alumina,Coal-Boiler + Gas-Calciner,1.1,2007,0.71,TRUE
+Alum,China - Central,Refinery,"29.263897, 107.308917",Alumina,Coal-Boiler + Gas-Calciner,0.8,2010,0.63,TRUE
+Alum,China - South,Refinery,"26.350394, 106.329478",Alumina,Coal-Boiler + Gas-Calciner,0.2,2006,0,TRUE
+Alum,China - South,Refinery,"27.370616, 106.990207",Alumina,Coal-Boiler + Gas-Calciner,1,2016,1,TRUE
+Alum,China - South,Refinery,"26.874661, 106.697714",Alumina,Coal-Boiler + Gas-Calciner,0.2,2016,0,TRUE
+Alum,China - South,Refinery,"26.63839, 106.299022",Alumina,Coal-Boiler + Gas-Calciner,0.6,2012,0.82,TRUE
+Alum,China - South,Refinery,"26.646162, 107.782707",Alumina,Coal-Boiler + Gas-Calciner,1.1,2013,0.9,TRUE
+Alum,China - South,Refinery,"26.798809, 106.288154",Alumina,Coal-Boiler + Gas-Calciner,1.6,2015,1.01,TRUE
+Alum,China - South,Refinery,"28.712857, 107.904552",Alumina,Coal-Boiler + Gas-Calciner,1,2020,0.3,TRUE
+Alum,China - South,Refinery,"23.343781, 107.531596",Alumina,Coal-Boiler + Gas-Calciner,2.5,1995,1.01,TRUE
+Alum,China - South,Refinery,"23.380175, 106.607063",Alumina,Coal-Boiler + Gas-Calciner,2.25,2007,1.02,TRUE
+Alum,China - South,Refinery,"23.266401, 106.397734",Alumina,Coal-Boiler + Gas-Calciner,3,2008,0.78,TRUE
+Alum,China - South,Refinery,"23.647255, 107.134997",Alumina,Coal-Boiler + Gas-Calciner,0.9,2012,1,TRUE
+Alum,China - South,Refinery,"28.272592, 107.355748",Alumina,Coal-Boiler + Gas-Calciner,0.8,2019,0.91,TRUE
+Alum,China - South,Refinery,"21.578541, 108.454732",Alumina,Coal-Boiler + Gas-Calciner,2,2020,0.23,TRUE
+Alum,China - North,Refinery,"23.44662, 105.853041",Alumina,Coal-Boiler + Gas-Calciner,0.2,2012,0,TRUE
+Alum,China - North,Refinery,"40.294759, 110.15023",Alumina,Coal-Boiler + Gas-Calciner,1,2013,0.41,TRUE
+Alum,China - North,Refinery,"39.838019, 106.789477",Alumina,Coal-Boiler + Gas-Calciner,0.2,2013,0.04,TRUE
+Alum,China - South,Refinery,"23.448707, 104.149896",Alumina,Coal-Boiler + Gas-Calciner,1.4,2013,0.93,TRUE
