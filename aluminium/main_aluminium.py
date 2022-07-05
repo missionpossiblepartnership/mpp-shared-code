@@ -16,14 +16,14 @@ from mppshared.config import (
 
 from aluminium.solver.implicit_forcing import apply_implicit_forcing
 
-# from mppshared.models.simulate import simulate_pathway
-# from mppshared.solver.debugging_outputs import create_debugging_outputs
+from mppshared.models.simulate import simulate_pathway
+from mppshared.solver.debugging_outputs import create_debugging_outputs
 
-# from mppshared.solver.output_processing import (
-#     calculate_outputs,
-#     save_consolidated_outputs,
-# )
-# from mppshared.solver.ranking import make_rankings
+from mppshared.solver.output_processing import (
+    calculate_outputs,
+    save_consolidated_outputs,
+)
+from mppshared.solver.ranking import make_rankings
 
 # Initialize logger
 from mppshared.utility.utils import get_logger
