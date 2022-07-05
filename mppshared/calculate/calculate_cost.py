@@ -11,21 +11,22 @@ logger = get_logger("Cost calculations")
 
 def discount_costs(df_cost: pd.DataFrame, grouping_cols: list) -> pd.DataFrame:
     """Calculate NPV of all columns in the cost DataFrame apart from the grouping columns.
+
     Args:
         df_cost: contains columns with cost data and "lifetime" and "wacc"
         grouping_cols: list of column headers for grouping of the cost data
+
     Returns:
         pd.DataFrame: columns with NPV of various cost components
     """
     # Calculate NPV over data groups with cost series across model time horizon
     logger.info("Calculate NPV")
-    #! Debug only
-    df_cost = df_cost.loc[df_cost["carbon_cost_addition"] > 0]
     return df_cost.groupby(grouping_cols).apply(calculate_npv_costs)
 
 
 def calculate_npv_costs(df_cost: pd.DataFrame) -> pd.DataFrame:
     """Calculate net present value (NPV) of all cost columns in the DataFrame of costs.
+
     Args:
         df_cost: DataFrame indexed by product, technology_origin, technology_destination, region, type and year
     Returns:
@@ -51,6 +52,7 @@ def net_present_value(
     df: pd.DataFrame, rate: float, cols: list[str] = None
 ) -> pd.Series:
     """Calculate net present value (NPV) of multiple dataframe columns at once.
+
     Args:
         df (pd.DataFrame): DataFrame with columns for NPV calculation
         rate: discount rate
@@ -69,6 +71,7 @@ def subset_cost_df(
     df_cost: pd.DataFrame, start_year: int, lifetime: int
 ) -> pd.DataFrame:
     """Filter DataFrame with cost data for a year range and expand with constant value of the last year if necessary.
+
     Args:
         df_cost (pd.DataFrame): contains columns with cost data, indexed by year (int)
         start_year (int): first year of year range filtering
@@ -84,7 +87,6 @@ def subset_cost_df(
     # Expand DataFrame beyond model years if necessary, assuming that cost data stay constant after MODEL_END_YEAR
     if start_year + lifetime > df_cost.index.max():
 
-        # TODO: make this workaround nicer
         cost_value = df_cost.loc[
             df_cost.index == df_cost.index.max(), ["carbon_cost_addition"]
         ]
