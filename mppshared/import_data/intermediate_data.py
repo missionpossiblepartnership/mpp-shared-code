@@ -33,7 +33,7 @@ class IntermediateDataImporter:
                 carbon_cost_trajectory.df_carbon_cost["year"] == END_YEAR, "carbon_cost"
             ].item()
             self.export_dir = parent_path.joinpath(
-                f"data/{sector}/{pathway}/{sensitivity}/carbon_cost_{final_carbon_cost}"
+                f"{sector}/data/{pathway}/{sensitivity}/carbon_cost_{final_carbon_cost}"
             )
         else:
             self.export_dir = parent_path.joinpath(
