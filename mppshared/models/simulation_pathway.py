@@ -11,8 +11,6 @@ import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.calculate.calculate_availablity import \
-    update_availability_from_asset
 from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                               EMISSION_SCOPES, END_YEAR, GHGS,
                               INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL, MODEL_SCOPE,
@@ -354,7 +352,7 @@ class SimulationPathway:
             asset: update based on this asset
         """
         df = self.availability
-        df = update_availability_from_asset(df, asset=asset, year=year)
+        df = None
         self.availability = df.round(1)
         return self
 
