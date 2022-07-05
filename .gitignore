@@ -158,3 +158,6 @@ data/*.xlsx
 *.html
 *.png
 *.csv
+
+# Allow
+! aluminium/data/bau/def/*
