@@ -230,7 +230,7 @@ PRODUCTS = {
 OUTPUT_WRITE_PATH = {
     "chemicals": "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Current model outputs",
     # "aluminium": f"/mnt/c/Users/LuisNatera/SYSTEMIQ Ltd/MPP Materials - Aluminum/04_WS1 - Sector Transition Strategy/04_Model/Model_Outputs/Latest_Runs/{PRODUCTS['aluminium'][0]}",
-    "aluminium": "data/aluminium/outputs",
+    "aluminium": "aluminium/data/outputs",
 }
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
 INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_assets"}
