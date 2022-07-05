@@ -356,6 +356,44 @@ def calculate_carbon_cost_addition_to_cost_metric(
     )
 
 
+def add_carbon_cost_addition_to_technology_switches(
+    df_technology_switches: pd.DataFrame,
+    df_carbon_cost_addition: pd.DataFrame,
+    cost_metric: str,
+) -> pd.DataFrame:
+    """Add the cost metric component from the carbon cost to each cost metric in the technology switching table.
+
+    Args:
+        df_technology_switches (pd.DataFrame): contains technology switches along with a cost metric
+        df_carbon_cost_addition (pd.DataFrame): contains cost metric component from the carbon cost
+        cost_metric (str): the cost metric to which the carbon cost should be added (LCOX, TCO or MC)
+
+    Returns:
+        pd.DataFrame: contains technology switches with the cost metric including the carbon cost component
+    """
+
+    merge_cols = [
+        "product",
+        "technology_origin",
+        "technology_destination",
+        "region",
+        "switch_type",
+        "year",
+    ]
+    df_carbon_cost = df_technology_switches.merge(
+        df_carbon_cost_addition[merge_cols + [f"carbon_cost_addition_{cost_metric}"]],
+        on=merge_cols,
+        how="left",
+    )
+
+    df_carbon_cost[cost_metric] = (
+        df_carbon_cost[cost_metric]
+        + df_carbon_cost[f"carbon_cost_addition_{cost_metric}"]
+    )
+
+    return df_carbon_cost
+
+
 # def apply_carbon_cost_to_tco(
 #     df_technology_switches: pd.DataFrame,
 #     df_emissions: pd.DataFrame,
