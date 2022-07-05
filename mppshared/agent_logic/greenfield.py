@@ -9,14 +9,22 @@ import numpy as np
 import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_all_transitions_with_destination_technology, remove_transition,
-    select_best_transition)
-from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL,
-                              MAP_LOW_COST_POWER_REGIONS, MODEL_SCOPE)
+    remove_all_transitions_with_destination_technology,
+    remove_transition,
+    select_best_transition,
+)
+from mppshared.config import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    LOG_LEVEL,
+    MAP_LOW_COST_POWER_REGIONS,
+    MODEL_SCOPE,
+)
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
-    check_constraints, get_regional_production_constraint_table,
-    hydro_constraints)
+    check_constraints,
+    get_regional_production_constraint_table,
+    hydro_constraints,
+)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 
@@ -53,6 +61,9 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         production = new_stack.get_annual_production_volume(
             product
         )  #! Development only
+        logger.debug(
+            f"Demand: {demand}, production: {production}, difference {demand - production}"
+        )
 
         # STEP ONE: BUILD NEW CAPACITY BY REGION
         # First, build new capacity in each region to make sure that the regional production constraint is met even if regional demand increases
@@ -76,6 +87,9 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
             # Build the required number of assets to meet the minimum production volume
             while number_new_assets >= 1:
+                logger.debug(
+                    f"Building {number_new_assets} to meet the regional demand"
+                )
                 try:
                     new_asset = select_asset_for_greenfield(
                         pathway=pathway,
@@ -99,7 +113,10 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         production = new_stack.get_annual_production_volume(
             product
         )  #! Development only
-        while demand > new_stack.get_annual_production_volume(product):
+        while round(demand, 2) > round(production, 2):
+            logger.debug(
+                f"Demand ({demand}), higher than production ({production}), difference: {demand - production}"
+            )
 
             # Identify asset for greenfield transition
             try:
@@ -110,22 +127,24 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     product=product,
                     year=year,
                 )
+                logger.debug(
+                    f"Tentative new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}"
+                )
+                # Enact greenfield transition
+                # logger.debug(
+                #     f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}"
+                # )
+                enact_greenfield_transition(
+                    pathway=pathway, stack=new_stack, new_asset=new_asset, year=year
+                )
+                production = new_stack.get_annual_production_volume(
+                    product
+                )  #! Development only
             except ValueError:
                 logger.info(
                     "No more assets for greenfield transition within constraints"
                 )
                 break
-
-            # Enact greenfield transition
-            logger.debug(
-                f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}"
-            )
-            enact_greenfield_transition(
-                pathway=pathway, stack=new_stack, new_asset=new_asset, year=year
-            )
-        production = new_stack.get_annual_production_volume(
-            product
-        )  #! Development only
     return pathway
 
 

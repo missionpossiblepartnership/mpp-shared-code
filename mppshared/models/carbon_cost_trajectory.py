@@ -1,5 +1,5 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from mppshared.config import END_YEAR, MODEL_YEARS, START_YEAR
 
@@ -36,7 +36,7 @@ class CarbonCostTrajectory:
 
         elif trajectory == "linear":
             self.df_carbon_cost["carbon_cost"] = np.linspace(
-                initial_carbon_cost, final_carbon_cost, num=END_YEAR - START_YEAR
+                initial_carbon_cost, final_carbon_cost, num=len(MODEL_YEARS)
             )
 
         # TODO: implement logistic carbon cost

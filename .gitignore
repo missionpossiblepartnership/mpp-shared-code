@@ -148,3 +148,16 @@ data/*/*/*/outputs
 # Consolidated outputs
 data/*/simulation_outputs_aluminium_consolidated.csv
 data/*/simulation_outputs_chemicals_consolidated.csv
+debug/*
+data/aluminium_refineries/*
+data/aluminium_smelters/*
+data/*/outputs/*
+data/*.csv
+data/*.xlsx
+*.Identifier
+*.html
+*.png
+*.csv
+
+# Allow
+!aluminium/data/bau/def/intermediate/*.csv

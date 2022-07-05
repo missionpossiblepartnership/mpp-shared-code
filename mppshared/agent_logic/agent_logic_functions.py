@@ -4,13 +4,8 @@ from operator import methodcaller
 
 import pandas as pd
 
-from mppshared.config import (
-    COST_METRIC_CUF_ADJUSTMENT,
-    CUF_LOWER_THRESHOLD,
-    CUF_UPPER_THRESHOLD,
-    LOG_LEVEL,
-    MODEL_SCOPE,
-)
+from mppshared.config import (COST_METRIC_CUF_ADJUSTMENT, CUF_LOWER_THRESHOLD,
+                              CUF_UPPER_THRESHOLD, LOG_LEVEL, MODEL_SCOPE)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 
@@ -161,9 +156,8 @@ def decrease_cuf_of_assets(
     stack = pathway.get_stack(year)
 
     # Identify all assets that produce above CUF threshold and sort list so asset with highest
-    # LCOX is first
     assets_above_cuf_threshold = list(
-        filter(lambda asset: asset.cuf < CUF_UPPER_THRESHOLD, stack.assets)
+        filter(lambda asset: asset.cuf > CUF_LOWER_THRESHOLD, stack.assets)
     )
     assets_above_cuf_threshold = sort_assets_cost_metric(
         assets_above_cuf_threshold, pathway, year, cost_metric, descending=True

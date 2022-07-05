@@ -1,4 +1,5 @@
 """Asset and asset stack classes, code adapted from MCC"""
+import sys
 from calendar import c
 from uuid import uuid4
 from xmlrpc.client import Boolean
@@ -32,6 +33,7 @@ class Asset:
         retrofit=False,
         rebuild=False,
         greenfield=False,
+        stay_same=False,
         ppa_allowed=True,
     ):
         # Unique ID to identify and compare assets
@@ -54,6 +56,7 @@ class Asset:
         self.asset_lifetime = asset_lifetime  # unit: years
         self.technology_classification = technology_classification
         self.ppa_allowed = ppa_allowed
+        self.stay_same = stay_same
 
     def __str__(self):
         return f"<Asset with UUID {self.uuid}, technology {self.technology} in region {self.region}>"
@@ -127,12 +130,28 @@ class AssetStack:
         self.new_ids.append(new_asset.uuid)
 
     def update_asset(
-        self, asset_to_update: Asset, new_technology: str, new_classification: str
+        self,
+        asset_to_update: Asset,
+        new_technology: str,
+        new_classification: str,
+        switch_type: str,
+        origin_technology: str,
     ):
         """Update an asset in AssetStack. This is done using the UUID to ensure correct updating."""
         uuid_update = asset_to_update.uuid
         asset_to_update.technology = new_technology
         asset_to_update.technology_classification = new_classification
+        if origin_technology != new_technology:
+            if switch_type == "brownfield_renovation":
+                asset_to_update.retrofit = True
+                asset_to_update.stay_same = False
+            if (switch_type == "brownfield_rebuild") or (
+                switch_type == "brownfield_newbuild"
+            ):
+                asset_to_update.rebuild = True
+                asset_to_update.stay_same = False
+        if origin_technology == new_technology:
+            asset_to_update.stay_same = True
         self.assets = [asset for asset in self.assets if asset.uuid is not uuid_update]
         self.assets.append(asset_to_update)
 
@@ -290,6 +309,7 @@ class AssetStack:
                 "retrofit_status": asset.retrofit,
                 "rebuild_status": asset.rebuild,
                 "greenfield_status": asset.greenfield,
+                "stay_same_status": asset.stay_same,
             }
             for asset in self.assets
         )
@@ -380,8 +400,7 @@ class AssetStack:
         # Assets can be renovated at any time unless they've been renovated already
         # TODO: Fix it, what happens if we want to switch from transition to end-state technology
         candidates_renovation = filter(
-            lambda asset: (asset.retrofit == False)
-            & (asset.get_age(year) >= INVESTMENT_CYCLES[sector]),
+            lambda asset: (asset.retrofit == False),
             self.assets,
         )
 

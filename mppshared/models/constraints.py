@@ -44,7 +44,8 @@ def check_constraints(
     # )
 
     # If pathway not bau, then check for constraints, else return true
-    if pathway.pathway != "bau":
+    # if pathway.pathway != "bau":
+    if pathway.pathway in ["fa", "lc"]:
         # Check constraint for annual emissions limit from carbon budget
         emissions_constraint, flag_residual = check_annual_carbon_budget_constraint(
             pathway=pathway, stack=stack, year=year, transition_type=transition_type
@@ -59,6 +60,15 @@ def check_constraints(
             "emissions_constraint": emissions_constraint,
             "flag_residual": flag_residual,
             "rampup_constraint": rampup_constraint,
+        }
+    elif pathway.pathway in ["cc"]:
+        rampup_constraint = check_technology_rampup_constraint(
+            pathway=pathway, stack=stack, year=year
+        )
+        return {
+            "emissions_constraint": True,
+            "flag_residual": False,
+            "rampup_constraint": True,  # rampup_constraint,
         }
     else:
         return {"emissions_constraint": True, "rampup_constraint": True}

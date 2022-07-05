@@ -1,5 +1,6 @@
 """Configuration file for the library."""
 import logging
+from pickle import FALSE
 
 import numpy as np
 
@@ -16,12 +17,19 @@ PATHWAYS = [
     "bau",
     "fa",
     "lc",
+    "cc",
 ]
 
+SCOPES_CO2_COST = [
+    "scope1",
+    "scope2",
+]
 
 ### RUN CONFIGURATION ###
 
 RUN_PARALLEL = False
+
+APPLY_CARBON_COST = True
 
 run_config = {
     "IMPORT_DATA",
@@ -46,11 +54,6 @@ PKL_DATA_IMPORTS = f"{PKL_FOLDER}/imported_data"
 PKL_DATA_INTERMEDIATE = f"{PKL_FOLDER}/intermediate_data"
 PKL_DATA_FINAL = f"{PKL_FOLDER}/final_data"
 SOLVER_INPUT_DATA_PATH = f"{CORE_DATA_PATH}/solver_input_data"
-
-OUTPUT_WRITE_PATH = {
-    "chemicals": "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Current model outputs"
-    # "aluminium": TBD
-}
 
 
 # Naming of solver input tables
@@ -197,9 +200,25 @@ ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
-SENSITIVITIES = [
+ALL_SENSITIVITIES = [
     "def",
+    "Carbon Price_0.2",
+    "Carbon Price_-0.2",
+    "Coal Price_0.2",
+    "Coal Price_-0.2",
+    "Grid and PPA Prices_0.2",
+    "Grid and PPA Prices_-0.2",
+    "Hydrogen Price_0.2",
+    "Hydrogen Price_-0.2",
+    "Natural Gas Price_0.2",
+    "Natural Gas Price_-0.2",
 ]
+SENSITIVITIES = {
+    "bau": ["def"],  # ALL_SENSITIVITIES,
+    # "cc": ["def"],  # ALL_SENSITIVITIES,
+    # "fa": ["def"],
+    # "lc": ALL_SENSITIVITIES,
+}
 ### SECTOR-SPECIFIC PARAMETERS ###
 
 # Products produced by each sector
@@ -208,6 +227,11 @@ PRODUCTS = {
     "aluminium": ["Aluminium"],
 }
 
+OUTPUT_WRITE_PATH = {
+    "chemicals": "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Current model outputs",
+    # "aluminium": f"/mnt/c/Users/LuisNatera/SYSTEMIQ Ltd/MPP Materials - Aluminum/04_WS1 - Sector Transition Strategy/04_Model/Model_Outputs/Latest_Runs/{PRODUCTS['aluminium'][0]}",
+    "aluminium": "aluminium/data/outputs",
+}
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
 INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_assets"}
 
@@ -338,6 +362,10 @@ RANKING_CONFIG = {
                 "cost": lc_weight_cost,
                 "emissions": lc_weight_emissions,
             },
+            "cc": {
+                "cost": 1.0,
+                "emissions": 0.0,
+            },
         },
         "brownfield": {
             "bau": {
@@ -351,6 +379,10 @@ RANKING_CONFIG = {
             "lc": {
                 "cost": lc_weight_cost,
                 "emissions": lc_weight_emissions,
+            },
+            "cc": {
+                "cost": 1.0,
+                "emissions": 0.0,
             },
         },
         "decommission": {
@@ -366,6 +398,10 @@ RANKING_CONFIG = {
                 "cost": lc_weight_cost,
                 "emissions": lc_weight_emissions,
             },
+            "cc": {
+                "cost": 1.0,
+                "emissions": 0.0,
+            },
         },
     },
 }
@@ -380,17 +416,17 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
         "years_rampup_phase": 5,
     },
     "aluminium": {
-        "maximum_asset_additions": 10,
-        "maximum_capacity_growth_rate": 0.25,
-        "years_rampup_phase": 5,
+        "maximum_asset_additions": 6,  # 10
+        "maximum_capacity_growth_rate": 0.5,  # 0.25
+        "years_rampup_phase": 8,  # 5
     },
 }
 
 # Year from which newbuild capacity has to fulfill the 2050 emissions constraint
-YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2050, "aluminium": 2045}
+YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2050, "aluminium": 2050}
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 0.5}
+ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 0.2}
 
 # Regions with and without geological storage (salt caverns)
 REGIONS_SALT_CAVERN_AVAILABILITY = {
@@ -487,7 +523,7 @@ TECHNOLOGY_MORATORIUM = {
     "aluminium": 2030,
 }
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
-TRANSITIONAL_PERIOD_YEARS = {"chemicals": 30, "aluminium": 10}
+TRANSITIONAL_PERIOD_YEARS = {"chemicals": 30, "aluminium": 20}
 
 # Regional ban of technologies (sector-specific)
 REGIONAL_TECHNOLOGY_BAN = {

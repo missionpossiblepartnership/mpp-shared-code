@@ -10,8 +10,7 @@ import pandas as pd
 
 from mppshared.config import *
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.solver.debugging_outputs import \
-    create_table_asset_transition_sequences
+from mppshared.solver.debugging_outputs import create_table_asset_transition_sequences
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -870,9 +869,9 @@ def calculate_outputs(pathway: str, sensitivity: str, sector: str):
     importer.export_data(
         df_pivot, f"simulation_outputs_{suffix}.csv", "final", index=False
     )
-    # df_pivot.to_csv(
-    #     f"{OUTPUT_WRITE_PATH[sector]}/simulation_outputs_{suffix}.csv", index=False
-    # )
+    df_pivot.to_csv(
+        f"{OUTPUT_WRITE_PATH[sector]}/simulation_outputs_{suffix}.csv", index=False
+    )
 
     columns = [
         "sector",
@@ -914,9 +913,14 @@ def write_key_assumptions_to_txt(
 
 def save_consolidated_outputs(sector: str):
     data = []
-    for pathway, sensitivity in itertools.product(PATHWAYS, SENSITIVITIES):
+    runs = []
+    for pathway, sensitivities in SENSITIVITIES.items():
+        for sensitivity in sensitivities:
+            runs.append((pathway, sensitivity))
+    # for pathway, sensitivity in itertools.product(PATHWAYS, SENSITIVITIES):
+    for pathway, sensitivity in runs:
         df_ = pd.read_csv(
-            f"../mpp-shared-code/data/{SECTOR}/{pathway}/{sensitivity}/final/simulation_outputs_{SECTOR}_{pathway}_{sensitivity}.csv"
+            f"{SECTOR}/data/{pathway}/{sensitivity}/final/simulation_outputs_{SECTOR}_{pathway}_{sensitivity}.csv"
         )
         df_["pathway"] = pathway
         df_["sensitivity"] = sensitivity
@@ -933,5 +937,9 @@ def save_consolidated_outputs(sector: str):
         "parameter",
         "unit",
     ] + [str(i) for i in range(START_YEAR, END_YEAR + 1)]
-    df[columns]
+    df = df[columns]
+    df.to_csv(
+        f"{OUTPUT_WRITE_PATH[sector]}/simulation_outputs_{SECTOR}_consolidated.csv",
+        index=False,
+    )
     df.to_csv(f"data/{sector}/simulation_outputs_{SECTOR}_consolidated.csv")
