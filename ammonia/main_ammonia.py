@@ -7,7 +7,7 @@ import os
 import numpy as np
 import distutils
 
-from mppshared.config import (
+from ammonia.config_ammonia import (
     CARBON_COSTS,
     END_YEAR,
     LOG_LEVEL,
@@ -17,9 +17,9 @@ from mppshared.config import (
     SENSITIVITIES,
     run_config,
 )
+from ammonia.solver.implicit_forcing import apply_implicit_forcing
 from mppshared.models.simulate import simulate_pathway
 from mppshared.solver.debugging_outputs import create_debugging_outputs
-from mppshared.solver.implicit_forcing import apply_implicit_forcing
 from mppshared.solver.output_processing import calculate_outputs
 from mppshared.solver.ranking import make_rankings
 from mppshared.utility.utils import get_logger
@@ -34,10 +34,10 @@ np.random.seed(100)
 
 funcs = {
     "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    "MAKE_RANKINGS": make_rankings,
-    "SIMULATE_PATHWAY": simulate_pathway,
-    "CALCULATE_OUTPUTS": calculate_outputs,
-    "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
+    # "MAKE_RANKINGS": make_rankings,
+    # "SIMULATE_PATHWAY": simulate_pathway,
+    # "CALCULATE_OUTPUTS": calculate_outputs,
+    # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
     # "SENSITIVITY_ANALYSIS": create_sensitivity_outputs,
 }
 
@@ -52,7 +52,7 @@ def _run_model(pathway, sensitivity, carbon_cost):
                 pathway=pathway,
                 sensitivity=sensitivity,
                 sector=SECTOR,
-                carbon_cost=carbon_cost,
+                carbon_cost_trajectory=carbon_cost,
             )
 
 
@@ -71,7 +71,7 @@ def run_model_sequential(runs):
                 if not os.path.exists(final_folder):
                     os.makedirs(final_folder)
                 if folder == "intermediate":
-                    source_dir = f"data/{SECTOR}/{pathway}/{sensitivity}/{folder}"
+                    source_dir = f"{SECTOR}/data/{pathway}/{sensitivity}/{folder}"
                     distutils.dir_util.copy_tree(source_dir, final_folder)
         _run_model(pathway=pathway, sensitivity=sensitivity, carbon_cost=carbon_cost)
 
@@ -90,7 +90,7 @@ def run_model_parallel(runs):
             ].item()
             for folder in ["final", "intermediate", "ranking", "stack_tracker"]:
                 final_folder = (
-                    f"data/{SECTOR}/{pathway}/{sensitivity}/carbon_cost_{cc}/{folder}"
+                    f"{SECTOR}/data/{pathway}/{sensitivity}/carbon_cost_{cc}/{folder}"
                 )
                 if not os.path.exists(final_folder):
                     os.makedirs(final_folder)
@@ -126,8 +126,8 @@ def main():
     else:
         run_model_sequential(runs)
     # Create sensitivity outputs
-    if "SENSITIVITY_ANALYSIS" in funcs:
-        create_sensitivity_outputs()
+    # if "SENSITIVITY_ANALYSIS" in funcs:
+    #     create_sensitivity_outputs()
 
 
 if __name__ == "__main__":
