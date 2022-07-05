@@ -920,7 +920,7 @@ def save_consolidated_outputs(sector: str):
     # for pathway, sensitivity in itertools.product(PATHWAYS, SENSITIVITIES):
     for pathway, sensitivity in runs:
         df_ = pd.read_csv(
-            f"../mpp-shared-code/data/{SECTOR}/{pathway}/{sensitivity}/final/simulation_outputs_{SECTOR}_{pathway}_{sensitivity}.csv"
+            f"{SECTOR}/data/{pathway}/{sensitivity}/final/simulation_outputs_{SECTOR}_{pathway}_{sensitivity}.csv"
         )
         df_["pathway"] = pathway
         df_["sensitivity"] = sensitivity
