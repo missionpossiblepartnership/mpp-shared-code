@@ -1,5 +1,4 @@
 """ Apply implicit forcing mechanisms to the input tables: carbon cost, green premium and technology moratorium."""
-import sys
 from datetime import timedelta
 from timeit import default_timer as timer
 
@@ -7,18 +6,28 @@ import numpy as np
 import pandas as pd
 
 from mppshared.calculate.calculate_cost import discount_costs
-from mppshared.config import (APPLY_CARBON_COST, EMISSION_SCOPES,
-                              FINAL_CARBON_COST, GHGS, HYDRO_TECHNOLOGY_BAN,
-                              INITIAL_CARBON_COST, PRODUCTS,
-                              REGIONAL_TECHNOLOGY_BAN,
-                              REGIONS_SALT_CAVERN_AVAILABILITY,
-                              SCOPES_CO2_COST, START_YEAR,
-                              TECHNOLOGY_MORATORIUM, TRANSITIONAL_PERIOD_YEARS)
+from mppshared.config import (
+    APPLY_CARBON_COST,
+    EMISSION_SCOPES,
+    FINAL_CARBON_COST,
+    GHGS,
+    HYDRO_TECHNOLOGY_BAN,
+    INITIAL_CARBON_COST,
+    PRODUCTS,
+    REGIONAL_TECHNOLOGY_BAN,
+    REGIONS_SALT_CAVERN_AVAILABILITY,
+    SCOPES_CO2_COST,
+    START_YEAR,
+    TECHNOLOGY_MORATORIUM,
+    TRANSITIONAL_PERIOD_YEARS,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.solver.input_loading import filter_df_for_development
 from mppshared.utility.dataframe_utility import (
-    add_column_header_suffix, get_grouping_columns_for_npv_calculation)
+    add_column_header_suffix,
+    get_grouping_columns_for_npv_calculation,
+)
 from mppshared.utility.function_timer_utility import timer_func
 from mppshared.utility.log_utility import get_logger
 
@@ -658,3 +667,34 @@ def calculate_emission_reduction(
     # df = df.drop(columns=drop_cols)
 
     return df
+
+
+def add_technology_classification_to_switching_table(
+    df_technology_switches: pd.DataFrame, df_technology_characteristics: pd.DataFrame
+) -> pd.DataFrame:
+    """Add column "technology_classification" to the technology switching table.
+
+    Args:
+        df_technology_switches (pd.DataFrame): technology switching input table to the solver
+        df_technology_characteristics (pd.DataFrame): contains column "technology_classification"
+
+    Returns:
+        pd.DataFrame: _description_
+    """
+    df_technology_switches = df_technology_switches.merge(
+        df_technology_characteristics[
+            [
+                "product",
+                "year",
+                "region",
+                "technology",
+                "technology_classification",
+                "technology_lifetime",
+                "wacc",
+            ]
+        ].rename({"technology": "technology_destination"}, axis=1),
+        on=["product", "year", "region", "technology_destination"],
+        how="left",
+    )
+
+    return df_technology_switches
