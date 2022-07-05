@@ -160,4 +160,4 @@ data/*.xlsx
 *.csv
 
 # Allow
-! aluminium/data/bau/def/*
+!aluminium/data/bau/def/intermediate/*.csv
