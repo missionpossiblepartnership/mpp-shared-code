@@ -243,7 +243,6 @@ def apply_hydro_constraint(
         return df_technology_transitions
 
 
-@timer_func
 def calculate_carbon_cost_addition_to_cost_metric(
     df_technology_switches: pd.DataFrame,
     df_emissions: pd.DataFrame,
@@ -284,6 +283,8 @@ def calculate_carbon_cost_addition_to_cost_metric(
     for scope in SCOPES_CO2_COST:
         df["sum_co2_emissions"] += df[f"co2_{scope}"]
     df["carbon_cost_addition"] = df["sum_co2_emissions"] * df["carbon_cost"]
+    df["carbon_cost_addition_marginal_cost"] = df["carbon_cost_addition"]
+    df["carbon_cost_addition_annualized_cost"] = df["carbon_cost_addition"]
 
     # Discount carbon cost addition
     # TODO: make grouping column function sector-specific
@@ -298,23 +299,8 @@ def calculate_carbon_cost_addition_to_cost_metric(
     )
 
     # Add total discounted carbon cost to each technology switch
-    logger.debug("Setting index in df")
     df = df.set_index(grouping_cols + ["year"])
-    logger.debug("Setting carbon cost addition")
-    # df["carbon_cost_addition"] = df_discounted["carbon_cost_addition"]
-    df = df.drop(columns=["carbon_cost_addition"])
-    df = df.reset_index(drop=False).merge(
-        df_discounted.reset_index(drop=False),
-        on=[
-            "product",
-            "technology_origin",
-            "region",
-            "switch_type",
-            "technology_destination",
-            "year",
-        ],
-    )
-    logger.debug("Carbon cost addition set")
+    df["carbon_cost_addition"] = df_discounted["carbon_cost_addition"]
 
     if cost_metric == "tco":
         # Contribution of a cost to TCO is net present cost divided by (lifetime * capacity utilisation factor)
@@ -328,8 +314,7 @@ def calculate_carbon_cost_addition_to_cost_metric(
         df_technology_switches = df_technology_switches.set_index(
             grouping_cols + ["year"]
         )
-        df_technology_switches["original_tco"] = df_technology_switches["tco"]
-        df_technology_switches["tco"] = df["tco"] + df["carbon_cost_addition"]
+        df_technology_switches["tco"] = df["tco"] + df["carbon_cost_addition_tco"]
 
     elif cost_metric == "lcox":
         # Contribution of a cost to LCOX is net present cost divided by (CUF * total discounted production)
@@ -351,6 +336,7 @@ def calculate_carbon_cost_addition_to_cost_metric(
             "technology_classification_x",
             "technology_classification_y",
             "wacc",
+            "trl_current",
             "technology_lifetime",
         ]
     )
