@@ -171,9 +171,7 @@ INVESTMENT_CYCLES = {
 }
 
 # Emissions
-GHGS = [
-    "co2",
-]  # "ch4", "n2o"]
+GHGS = ["co2", "ch4", "n2o"]
 
 # Emission scopes included in data analysis
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
@@ -428,21 +426,6 @@ YEAR_2050_EMISSIONS_CONSTRAINT = {"ammonia": 2050, "aluminium": 2050}
 # Share of assets renovated annually (limits number of brownfield transitions)
 ANNUAL_RENOVATION_SHARE = {"ammonia": 0.05, "aluminium": 0.2}
 
-# Regions with and without geological storage (salt caverns)
-REGIONS_SALT_CAVERN_AVAILABILITY = {
-    "ammonia": {
-        "Africa": "yes",  # suggest no
-        "China": "yes",  # suggest no
-        "Europe": "yes",
-        "India": "no",
-        "Latin America": "yes",  # suggest no
-        "Middle East": "yes",
-        "North America": "yes",
-        "Oceania": "yes",
-        "Russia": "yes",
-        "Rest of Asia": "yes",
-    }
-}
 
 # Share of demand in each region that needs to be fulfilled by production in that region
 REGIONAL_PRODUCTION_SHARES = {

@@ -2,54 +2,12 @@
 import logging
 import numpy as np
 
-### LOGGER ###
-LOG_LEVEL = "INFO"
+### RUN CONFIRGUATION ###
+LOG_LEVEL = "DEBUG"
 LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
 )
-
-### SECTOR CHOICE ###
-SECTOR = "ammonia"
-# SECTOR = "aluminium"
-PATHWAYS = [
-    "lc",
-    # "fa",
-    # "bau",
-]
-
-# Sensitivities
-SENSITIVITIES = [
-    "def",
-    # "ng_partial",
-    # "ng_high",
-    # "ng_low",
-]
-
-# Carbon price (for sensitivity analysis): needs to be run for 1 USD/tCO2 to create carbon_cost_addition.csv, then used for subsequent runs by multiplying accordingly
-
-CARBON_COSTS = [
-    # 0,
-    50,
-    100,
-    150,
-    200,
-    250,
-]
-# CARBON_COSTS = [0]
-
-
-# Scopes in CO2 price optimization
-SCOPES_CO2_COST = [
-    "scope1",
-    "scope2",
-    "scope3_upstream",
-    # "scope3_downstream"
-]
-
-START_YEAR = 2020
-END_YEAR = 2050
 RUN_PARALLEL = False
-
 run_config = {
     "IMPORT_DATA",
     "CALCULATE_VARIABLES",
@@ -62,3 +20,74 @@ run_config = {
     # "PLOT_AVAILABILITIES"
     # "MERGE_OUTPUTS"
 }
+START_YEAR = 2020
+END_YEAR = 2050
+PRODUCTS = ["Ammonia", "Ammonium nitrate", "Urea"]
+
+### PATHWAYS, SENSITIVITIES AND CARBON COSTS ###
+PATHWAYS = [
+    "lc",
+    # "fa",
+    # "bau",
+]
+
+SENSITIVITIES = [
+    "def",
+    # "ng_partial",
+    # "ng_high",
+    # "ng_low",
+]
+
+CARBON_COSTS = [
+    # 0,
+    50,
+    100,
+    150,
+    200,
+    250,
+]
+
+
+### STANDARD ASSUMPTIONS FOR AMMOINA PLANTS ###
+STANDARD_CUF = 0.95
+STANDARD_LIFETIME = 30  # years
+STANDARD_WACC = 0.08
+
+### EMISSIONS CALCULATIONS ###
+GHGS = ["co2", "n2o", "ch4"]
+
+### COST CALCULATIONS ###
+GROUPING_COLS_FOR_NPV = [
+    "product",
+    "technology_origin",
+    "region",
+    "switch_type",
+    "technology_destination",
+]
+
+### CONSTRAINTS ON POSSIBLE TECHNOLOGY SWITCHES ###
+
+# Regions where geological H2 storage is not allowed because no salt caverns are available
+REGIONS_SALT_CAVERN_AVAILABILITY = {
+    "Africa": "yes",
+    "China": "yes",
+    "Europe": "yes",
+    "India": "no",
+    "Latin America": "yes",
+    "Middle East": "yes",
+    "North America": "yes",
+    "Oceania": "yes",
+    "Russia": "yes",
+    "Rest of Asia": "yes",
+}
+
+# Year from which newbuild capacity must have transition or end-state technology
+TECHNOLOGY_MORATORIUM = 2020
+
+# Duration for which transition technologies are still allowed after the technology moratorium comes into force
+TRANSITIONAL_PERIOD_YEARS = 30
+
+### TECHNOLOGY RANKING CONFIGURATION ###
+
+# Cost metric used for ranking according to lowest cost
+RANKING_COST_METRIC = "lcox"
