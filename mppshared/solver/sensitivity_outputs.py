@@ -1,11 +1,20 @@
+from doctest import TestResults
 import os
+from tkinter import END
 import pandas as pd
 import numpy as np
 import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.config import CARBON_COSTS, GWP
+from mppshared.config import (
+    AMMONIA_PER_AMMONIUM_NITRATE,
+    AMMONIA_PER_UREA,
+    CARBON_COSTS,
+    END_YEAR,
+    GWP,
+    START_YEAR,
+)
 
 AUTO_OPEN = False
 
@@ -16,13 +25,14 @@ def create_sensitivity_outputs():
     ### PARAMETERS ###
     save_path = "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Sensitivity analysis"
     pathways = [
-        "fa",
-        # "lc"
+        # "fa",
+        # "bau"
+        "lc"
     ]
     sensitivities = [
         "def",
-        # "ng_partial",
-        # "ng_high",
+        "ng_partial",
+        "ng_high",
         "ng_low",
     ]
 
@@ -45,10 +55,38 @@ def create_sensitivity_outputs():
     carbon_costs = CARBON_COSTS
     # carbon_costs = np.arange(0, 101, step=25)
     # carbon_costs = [anchor_carbon_cost]
-    carbon_costs = [0]
+    # carbon_costs = [0]
 
     # Output file dictionary
     dict_sens = get_dict_sens(pathways, sensitivities, carbon_costs)
+
+    # Create table with regional split
+    create_regional_split_table(
+        dict_sens=dict_sens,
+        pathway="lc",
+        sensitivities=["def", "ng_low"],
+        carbon_cost=100,
+        save_path=save_path,
+        output_volumes=True,
+    )
+
+    # create_regional_split_table(
+    #     dict_sens=dict_sens,
+    #     pathway="fa",
+    #     sensitivities=["def", "ng_low"],
+    #     carbon_cost=0,
+    #     save_path=save_path,
+    #     output_volumes=False,
+    # )
+
+    # create_regional_split_table(
+    #     dict_sens=dict_sens,
+    #     pathway="bau",
+    #     sensitivities=["def", "ng_low"],
+    #     carbon_cost=0,
+    #     save_path=save_path,
+    #     output_volumes=False,
+    # )
 
     for anchor_carbon_cost in carbon_costs:
         for pathway in pathways:
@@ -118,6 +156,73 @@ def create_sensitivity_outputs():
                 )
 
 
+def create_regional_split_table(
+    dict_sens: dict,
+    pathway: str,
+    sensitivities: list,
+    carbon_cost: float,
+    save_path: str,
+    output_volumes=False,
+):
+    """Create sensitivity table for ammonia split for each region"""
+    regions = dict_sens[pathway][sensitivities[0]][carbon_cost]["region"].unique()
+
+    regions = [
+        "Africa",
+        "Australia",
+        "Brazil",
+        "China",
+        "Europe",
+        "India",
+        "Latin America",
+        "Middle East",
+        "Saudi Arabia",
+        "Namibia",
+        "North America",
+        "Oceania",
+        "Russia",
+        "Rest of Asia",
+    ]
+    years = np.arange(START_YEAR, END_YEAR + 1)
+
+    df_reg = pd.DataFrame(
+        index=pd.MultiIndex.from_product(
+            [regions, sensitivities], names=["Region", "Sensitivity"]
+        ),
+        columns=pd.MultiIndex.from_product(
+            [years, ["blue", "green", "grey", "other", "transitional"]],
+            names=["Year", "Ammonia Type"],
+        ),
+    )
+
+    for region in regions:
+        for sensitivity in sensitivities:
+            df = dict_sens[pathway][sensitivity][carbon_cost]
+            df = df.loc[df["region"] == region]
+            df = add_ammonia_type_to_df(df)
+
+            # Sum production volume by ammonia type
+            df = df.loc[df["parameter"] == "Annual production volume"]
+
+            for year in years:
+                df_sum = sum_ammonia_types(df, year, output_volumes=output_volumes)
+
+                # Add into DataFrame
+                for type in ["blue", "green", "grey", "other", "transitional"]:
+                    df_reg.loc[(region, sensitivity), (year, type)] = df_sum.loc[
+                        type, str(year)
+                    ]
+
+    if output_volumes:
+        df_reg.to_csv(
+            f"{save_path}/regional_production_table_pathway={pathway}_cc={carbon_cost}.csv"
+        )
+    else:
+        df_reg.to_csv(
+            f"{save_path}/regional_split_table_pathway={pathway}_cc={carbon_cost}.csv"
+        )
+
+
 def create_sensitivity_table(
     dict_sens: dict,
     pathway: str,
@@ -150,29 +255,35 @@ def create_sensitivity_table(
     df_sens.to_csv(f"{save_path}/sensitivity_table_pathway={pathway}.csv")
 
 
-def sum_ammonia_types(df: pd.DataFrame, year: int) -> pd.DataFrame:
+def sum_ammonia_types(
+    df: pd.DataFrame, year: int, output_volumes=False
+) -> pd.DataFrame:
+
+    df = df.loc[df["product"] == "Ammonia_all"]
     df = df.groupby(["ammonia_type"]).sum()
 
-    if "other" not in df.index:
-        df.loc["other"] = 0
-
-    if "transitional" not in df.index:
-        df.loc["transitional"] = 0
+    for type_not_in_index in [
+        type
+        for type in ["grey", "green", "blue", "other", "transitional"]
+        if type not in df.index
+    ]:
+        df.loc[type_not_in_index] = 0
 
     if "blue_10%" in df.index:
         df.loc["blue"] += df.loc["blue_10%"] * 0.1
         df.loc["grey"] += df.loc["blue_10%"] * 0.9
 
-    # Calculate shares
-    df.loc["total"] = (
-        df.loc["blue"]
-        + df.loc["green"]
-        + df.loc["grey"]
-        + df.loc["other"]
-        + df.loc["transitional"]
-    )
-    for ammonia_type in ["blue", "green", "grey", "other", "transitional"]:
-        df.loc[ammonia_type] = df.loc[ammonia_type] / df.loc["total"]
+    if output_volumes == False:
+        # Calculate shares
+        df.loc["total"] = (
+            df.loc["blue"]
+            + df.loc["green"]
+            + df.loc["grey"]
+            + df.loc["other"]
+            + df.loc["transitional"]
+        )
+        for ammonia_type in ["blue", "green", "grey", "other", "transitional"]:
+            df.loc[ammonia_type] = df.loc[ammonia_type] / df.loc["total"]
 
     # Drop auxiliary rows
     rows_to_drop = [row for row in ["blue_10%", "total"] if row in df.index]
@@ -194,7 +305,13 @@ def get_dict_sens(pathways, sensitivities, carbon_costs):
         for carbon_cost in carbon_costs
         for sens in sensitivities
     }
-    dict_sens = {"fa": dict_fa, "lc": dict_lc}
+
+    dict_bau = {
+        sens: {carbon_cost: None}
+        for carbon_cost in carbon_costs
+        for sens in sensitivities
+    }
+    dict_sens = {"fa": dict_fa, "lc": dict_lc, "bau": dict_bau}
 
     # Get simulation outputs for each combination
     for pathway in pathways:

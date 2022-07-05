@@ -86,7 +86,7 @@ def _calculate_emissions(
 
     logger.info("-- Calculating emissions")
     emission_scopes = [
-        scope for scope in EMISSION_SCOPES if scope is not "scope3_downstream"
+        scope for scope in EMISSION_SCOPES if scope != "scope3_downstream"
     ]
     # Emissions are the emissions factor multiplied with the annual production volume
     df_stack = df_stack.merge(df_emissions, on=["product", "region", "technology"])
@@ -123,8 +123,12 @@ def _calculate_emissions(
     df_stack["parameter_group"] = "Emissions"
     df_stack["unit"] = df_stack["parameter"].apply(lambda x: map_unit[x])
     df_stack["parameter"] = df_stack["parameter"].replace(map_rename)
-    if "technology" not in agg_vars:
-        df_stack["technology"] = "All"
+    for var in [
+        agg_var
+        for agg_var in ["product", "region", "technology"]
+        if agg_var not in agg_vars
+    ]:
+        df_stack[var] = "All"
 
     return df_stack
 
@@ -141,7 +145,11 @@ def _calculate_emissions_co2e(
 
     # Emissions are the emissions factor multiplied with the annual production volume
     df_stack = df_stack.merge(df_emissions, on=["product", "region", "technology"])
-    scopes = [f"{ghg}_{scope}" for scope in EMISSION_SCOPES for ghg in GHGS]
+
+    emission_scopes = [
+        scope for scope in EMISSION_SCOPES if scope != "scope3_downstream"
+    ]
+    scopes = [f"{ghg}_{scope}" for scope in emission_scopes for ghg in GHGS]
 
     for scope in scopes:
         df_stack[scope] = df_stack[scope] * df_stack["annual_production_volume"]
@@ -152,7 +160,7 @@ def _calculate_emissions_co2e(
         .reset_index()
     )
 
-    for scope in EMISSION_SCOPES:
+    for scope in emission_scopes:
         df_stack[f"CO2e {str.capitalize(scope).replace('_', ' ')}"] = 0
         for ghg in GHGS:
             df_stack[f"CO2e {str.capitalize(scope).replace('_', ' ')}"] += (
@@ -163,7 +171,7 @@ def _calculate_emissions_co2e(
         id_vars=agg_vars,
         value_vars=[
             f"CO2e {str.capitalize(scope).replace('_', ' ')}"
-            for scope in EMISSION_SCOPES
+            for scope in emission_scopes
         ],
         var_name="parameter",
         value_name="value",
@@ -171,8 +179,12 @@ def _calculate_emissions_co2e(
 
     df_stack["parameter_group"] = "Emissions"
     df_stack["unit"] = "Mt CO2e"
-    if "technology" not in agg_vars:
-        df_stack["technology"] = "All"
+    for var in [
+        agg_var
+        for agg_var in ["product", "region", "technology"]
+        if agg_var not in agg_vars
+    ]:
+        df_stack[var] = "All"
 
     return df_stack
 
@@ -270,8 +282,12 @@ def _calculate_emissions_intensity(
     df_stack["parameter_group"] = "Emissions intensity"
     df_stack["unit"] = df_stack["parameter"].apply(lambda x: map_unit[x])
     df_stack["parameter"] = df_stack["parameter"].replace(map_rename)
-    if "technology" not in agg_vars:
-        df_stack["technology"] = "All"
+    for var in [
+        agg_var
+        for agg_var in ["product", "region", "technology"]
+        if agg_var not in agg_vars
+    ]:
+        df_stack[var] = "All"
 
     return df_stack
 
@@ -330,19 +346,40 @@ def create_table_all_data_year(
     df_production_capacity = _calculate_production_volume(df_stack)
 
     # Calculate emissions, CO2 captured and emissions intensity
+    aggregations = [
+        ["product"],
+        ["product", "region"],
+        ["product", "region", "technology"],
+    ]
     df_emissions = importer.get_emissions()
     df_emissions = df_emissions[df_emissions["year"] == year]
-    df_stack_emissions = _calculate_emissions(df_stack, df_emissions)
-    df_stack_emissions_co2e = _calculate_emissions_co2e(
-        df_stack, df_emissions, gwp="GWP-100"
-    )
-    df_stack_emissions_co2e_all_tech = _calculate_emissions_co2e(
-        df_stack, df_emissions, gwp="GWP-100", agg_vars=["product", "region"]
-    )
-    df_emissions_intensity = _calculate_emissions_intensity(df_stack, df_emissions)
-    df_emissions_intensity_all_tech = _calculate_emissions_intensity(
-        df_stack, df_emissions, agg_vars=["product", "region"]
-    )
+    df_stack_emissions = pd.DataFrame()
+    df_stack_emissions_co2e = pd.DataFrame()
+    df_emissions_intensity = pd.DataFrame()
+    for agg_vars in aggregations:
+        df_stack_emissions = pd.concat(
+            [
+                df_stack_emissions,
+                _calculate_emissions(df_stack, df_emissions, agg_vars=agg_vars),
+            ]
+        )
+        df_stack_emissions_co2e = pd.concat(
+            [
+                df_stack_emissions_co2e,
+                _calculate_emissions_co2e(
+                    df_stack, df_emissions, gwp="GWP-100", agg_vars=agg_vars
+                ),
+            ]
+        )
+        df_emissions_intensity = pd.concat(
+            [
+                df_emissions_intensity,
+                _calculate_emissions_intensity(
+                    df_stack, df_emissions, agg_vars=agg_vars
+                ),
+            ]
+        )
+
     df_co2_captured = _calculate_co2_captured(df_stack, df_emissions)
 
     # Calculate feedstock and energy consumption
@@ -376,9 +413,7 @@ def create_table_all_data_year(
             df_production_capacity,
             df_stack_emissions,
             df_stack_emissions_co2e,
-            df_stack_emissions_co2e_all_tech,
             df_emissions_intensity,
-            df_emissions_intensity_all_tech,
             df_co2_captured,
             df_inputs,
         ]
@@ -786,7 +821,7 @@ def calculate_weighted_average_cost_metric(
                 df_cost, on=["product", "region", "technology", "year"], how="left"
             )
 
-            # Plants existing in 2020: CAPEX assumed to be fully depreciated, so annualized cost is MC
+            # If CAPEX is fully depreciated, annualized cost is equal to marginal cost
             if cost_metric == "annualized_cost":
                 df_stack["annualized_cost"] = np.where(
                     df_stack["year_until_annualized_capex"] < year,
@@ -1083,7 +1118,11 @@ def calculate_outputs(
 
     # Calculate scope 3 downstream emissions for fertilizer end-use
     df_scope3 = pd.DataFrame()
-    aggregations = [["product", "region"], ["product"], []]
+    aggregations = [
+        ["product", "region"],
+        ["product"],
+        [],
+    ]
     for agg_vars in aggregations:
         df = calculate_scope3_downstream_emissions(
             importer=importer,

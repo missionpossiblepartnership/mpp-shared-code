@@ -3,7 +3,7 @@ import logging
 import numpy as np
 
 ### LOGGER ###
-LOG_LEVEL = "DEBUG"
+LOG_LEVEL = "INFO"
 LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
 )
@@ -12,14 +12,14 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
-    # "lc",
-    "fa",
+    "lc",
+    # "fa",
     # "bau",
 ]
 
 # Sensitivities
 SENSITIVITIES = [
-    "def",
+    # "def",
     # "ng_partial",
     # "ng_high",
     "ng_low",
@@ -35,7 +35,7 @@ CARBON_COSTS = [
     200,
     250,
 ]
-CARBON_COSTS = [0]
+# CARBON_COSTS = [0]
 CARBON_COST_ADDITION_FROM_CSV = False
 
 # Scopes in CO2 price optimization
@@ -47,7 +47,7 @@ SCOPES_CO2_COST = [
 ]
 
 # Run parallel/sequential
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 
 # Integrate current project pipeline or not
 BUILD_CURRENT_PROJECT_PIPELINE = {"chemicals": True, "aluminium": False}
