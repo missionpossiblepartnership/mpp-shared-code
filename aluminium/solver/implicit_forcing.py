@@ -9,6 +9,7 @@ from aluminium.config_aluminium import (
     PRODUCTS,
     TECHNOLOGY_MORATORIUM,
     TRANSITIONAL_PERIOD_YEARS,
+    EMISSION_SCOPES,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.solver.implicit_forcing import (
