@@ -1,5 +1,4 @@
-from mppshared.config import SECTOR
-
+SECTOR = "aluminium"
 if SECTOR == "aluminium":
     from aluminium.main_aluminium import main
 

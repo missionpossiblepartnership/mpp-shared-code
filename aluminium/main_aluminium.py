@@ -5,12 +5,9 @@ import numpy as np
 
 from mppshared.config import (
     LOG_LEVEL,
-    PATHWAYS,
-    RUN_PARALLEL,
-    SECTOR,
-    SENSITIVITIES,
     run_config,
 )
+from aluminium.config_aluminium import SECTOR, RUN_PARALLEL, SENSITIVITIES
 from mppshared.models.simulate import simulate_pathway
 from mppshared.solver.debugging_outputs import create_debugging_outputs
 from mppshared.solver.implicit_forcing import apply_implicit_forcing
