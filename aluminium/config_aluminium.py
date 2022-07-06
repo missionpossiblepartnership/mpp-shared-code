@@ -84,3 +84,5 @@ TECHNOLOGY_MORATORIUM = {
 }
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
 TRANSITIONAL_PERIOD_YEARS = {"ammonia": 30, "aluminium": 20}
+# Emission scopes included in data analysis
+EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
