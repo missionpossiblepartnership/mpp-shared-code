@@ -16,6 +16,18 @@ SCOPES_CO2_COST = [
 
 ### RUN CONFIGURATION ###
 
+run_config = {
+    "IMPORT_DATA",
+    "CALCULATE_VARIABLES",
+    "APPLY_IMPLICIT_FORCING",
+    "MAKE_RANKINGS",
+    "SIMULATE_PATHWAY",
+    "CALCULATE_OUTPUTS",
+    "CREATE_DEBUGGING_OUTPUTS",
+    # "EXPORT_OUTPUTS",
+    # "PLOT_AVAILABILITIES"
+    # "MERGE_OUTPUTS"
+}
 RUN_PARALLEL = False
 APPLY_CARBON_COST = True
 
@@ -44,3 +56,23 @@ SENSITIVITIES = {
     # "fa": ["def"],
     # "lc": ALL_SENSITIVITIES,
 }
+INVESTMENT_CYCLES = {
+    "chemicals": 20,  # years
+    "aluminium": 10,
+}
+CUF_LOWER_THRESHOLD = 0.6
+CUF_UPPER_THRESHOLD = 0.95
+COST_METRIC_CUF_ADJUSTMENT = {
+    "chemicals": "mc",  # marginal cost of production
+    "aluminium": "lcox",  # levelized cost of production
+}
+# Products produced by each sector
+PRODUCTS = {
+    "chemicals": ["Ammonia", "Ammonium nitrate", "Urea"],
+    "aluminium": ["Aluminium"],
+}
+# Scope of the model run - to be specified
+MODEL_SCOPE = "Global"
+
+# Override asset parameters; annual production capacity in Mt/year
+ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
