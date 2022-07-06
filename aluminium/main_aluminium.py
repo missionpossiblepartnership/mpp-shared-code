@@ -1,8 +1,10 @@
-import itertools
-import multiprocessing as mp
+"""Execute the MPP Aluminium model."""
 
+# Library imports
+import multiprocessing as mp
 import numpy as np
 
+# Shared imports
 from mppshared.config import (
     LOG_LEVEL,
     PATHWAYS,
@@ -11,26 +13,29 @@ from mppshared.config import (
     SENSITIVITIES,
     run_config,
 )
+
+from aluminium.solver.implicit_forcing import apply_implicit_forcing
+
 from mppshared.models.simulate import simulate_pathway
 from mppshared.solver.debugging_outputs import create_debugging_outputs
-from mppshared.solver.implicit_forcing import apply_implicit_forcing
+
 from mppshared.solver.output_processing import (
     calculate_outputs,
     save_consolidated_outputs,
 )
 from mppshared.solver.ranking import make_rankings
+
+# Initialize logger
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
-np.random.seed(100)
-
 funcs = {
     "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    "MAKE_RANKINGS": make_rankings,
-    "SIMULATE_PATHWAY": simulate_pathway,
-    "CALCULATE_OUTPUTS": calculate_outputs,
+    # "MAKE_RANKINGS": make_rankings,
+    # "SIMULATE_PATHWAY": simulate_pathway,
+    # "CALCULATE_OUTPUTS": calculate_outputs,
     # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
 }
 

@@ -11,13 +11,13 @@ LOG_FORMATTER = logging.Formatter(
 )
 
 ### SECTOR CHOICE ###
-# SECTOR = "chemicals"
-SECTOR = "aluminium"
+SECTOR = "ammonia"
+# SECTOR = "aluminium"
 PATHWAYS = [
     "bau",
-    "fa",
-    "lc",
-    "cc",
+    # "fa",
+    # "lc",
+    # "cc",
 ]
 
 SCOPES_CO2_COST = [
@@ -166,14 +166,12 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 # (Artificial) investment cycles after which plants can be rebuilt and decommissioned
 INVESTMENT_CYCLES = {
-    "chemicals": 20,  # years
+    "ammonia": 20,  # years
     "aluminium": 10,
 }
 
 # Emissions
-GHGS = [
-    "co2",
-]  # "ch4", "n2o"]
+GHGS = ["co2", "ch4", "n2o"]
 
 # Emission scopes included in data analysis
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
@@ -183,7 +181,7 @@ EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
 CUF_LOWER_THRESHOLD = 0.6
 CUF_UPPER_THRESHOLD = 0.95
 COST_METRIC_CUF_ADJUSTMENT = {
-    "chemicals": "mc",  # marginal cost of production
+    "ammonia": "mc",  # marginal cost of production
     "aluminium": "lcox",  # levelized cost of production
 }
 
@@ -223,34 +221,34 @@ SENSITIVITIES = {
 
 # Products produced by each sector
 PRODUCTS = {
-    "chemicals": ["Ammonia", "Ammonium nitrate", "Urea"],
+    "ammonia": ["Ammonia", "Ammonium nitrate", "Urea"],
     "aluminium": ["Aluminium"],
 }
 
 OUTPUT_WRITE_PATH = {
-    "chemicals": "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Current model outputs",
+    "ammonia": "C:/Users/JohannesWuellenweber/SYSTEMIQ Ltd/MPP Materials - 1. Ammonia/01_Work Programme/3_Data/4_Model results/Current model outputs",
     # "aluminium": f"/mnt/c/Users/LuisNatera/SYSTEMIQ Ltd/MPP Materials - Aluminum/04_WS1 - Sector Transition Strategy/04_Model/Model_Outputs/Latest_Runs/{PRODUCTS['aluminium'][0]}",
     "aluminium": "aluminium/data/outputs",
 }
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
-INITIAL_ASSET_DATA_LEVEL = {"chemicals": "regional", "aluminium": "individual_assets"}
+INITIAL_ASSET_DATA_LEVEL = {"ammonia": "regional", "aluminium": "individual_assets"}
 
 ### RANKING ###
-NUMBER_OF_BINS_RANKING = {"chemicals": 50, "aluminium": 50}
-COST_METRIC_RELATIVE_UNCERTAINTY = {"chemicals": 0.1, "aluminium": 0.1}
+NUMBER_OF_BINS_RANKING = {"ammonia": 50, "aluminium": 50}
+COST_METRIC_RELATIVE_UNCERTAINTY = {"ammonia": 0.1, "aluminium": 0.1}
 
 # GHGs and Emission scopes included in weighting when ranking technology transitions
-GHGS_RANKING = {"chemicals": ["co2"], "aluminium": ["co2"]}
+GHGS_RANKING = {"ammonia": ["co2"], "aluminium": ["co2"]}
 EMISSION_SCOPES_RANKING = {
-    "chemicals": ["scope1", "scope2"],
+    "ammonia": ["scope1", "scope2"],
     "aluminium": ["scope1", "scope2", "scope3_upstream", "scope3_downstream"],
 }
 
 # Cost metric for ranking
-RANKING_COST_METRIC = {"chemicals": "lcox", "aluminium": "tco"}
+RANKING_COST_METRIC = {"ammonia": "lcox", "aluminium": "tco"}
 
 # Methodology for binning can be "uncertainty", "uncertainty_bins" or "histogram"
-BIN_METHODOLOGY = {"chemicals": "uncertainty_bins", "aluminium": "histogram"}
+BIN_METHODOLOGY = {"ammonia": "uncertainty_bins", "aluminium": "histogram"}
 
 TRANSITION_TYPES = [
     "decommission",
@@ -261,12 +259,12 @@ TRANSITION_TYPES = [
 
 # TODO: add decommission for chemicals
 RANK_TYPES = {
-    "chemicals": ["decommission", "greenfield", "brownfield"],
+    "ammonia": ["decommission", "greenfield", "brownfield"],
     "aluminium": ["decommission", "greenfield", "brownfield"],
 }
 
 MAP_LOW_COST_POWER_REGIONS = {
-    "chemicals": {
+    "ammonia": {
         "Middle East": "Saudi Arabia",
         "Africa": "Namibia",
         "Oceania": "Australia",
@@ -304,7 +302,7 @@ lc_weight_emissions = 0.0
 fa_weight_cost = 0.0
 fa_weight_emissions = 1.0
 RANKING_CONFIG = {
-    "chemicals": {
+    "ammonia": {
         "greenfield": {
             "bau": {
                 "cost": 1.0,
@@ -410,7 +408,7 @@ RANKING_CONFIG = {
 
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
-    "chemicals": {
+    "ammonia": {
         "maximum_asset_additions": 10,
         "maximum_capacity_growth_rate": 0.7,
         "years_rampup_phase": 5,
@@ -423,30 +421,15 @@ TECHNOLOGY_RAMP_UP_CONSTRAINTS = {
 }
 
 # Year from which newbuild capacity has to fulfill the 2050 emissions constraint
-YEAR_2050_EMISSIONS_CONSTRAINT = {"chemicals": 2050, "aluminium": 2050}
+YEAR_2050_EMISSIONS_CONSTRAINT = {"ammonia": 2050, "aluminium": 2050}
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-ANNUAL_RENOVATION_SHARE = {"chemicals": 0.05, "aluminium": 0.2}
+ANNUAL_RENOVATION_SHARE = {"ammonia": 0.05, "aluminium": 0.2}
 
-# Regions with and without geological storage (salt caverns)
-REGIONS_SALT_CAVERN_AVAILABILITY = {
-    "chemicals": {
-        "Africa": "yes",  # suggest no
-        "China": "yes",  # suggest no
-        "Europe": "yes",
-        "India": "no",
-        "Latin America": "yes",  # suggest no
-        "Middle East": "yes",
-        "North America": "yes",
-        "Oceania": "yes",
-        "Russia": "yes",
-        "Rest of Asia": "yes",
-    }
-}
 
 # Share of demand in each region that needs to be fulfilled by production in that region
 REGIONAL_PRODUCTION_SHARES = {
-    "chemicals": {
+    "ammonia": {
         "Africa": 0.4,
         "China": 0.4,
         "Europe": 0.4,
@@ -485,7 +468,7 @@ REGIONAL_PRODUCTION_SHARES = {
 CARBON_BUDGET_SECTOR_CSV = {
     "aluminium": True,
     # "cement": False,
-    "chemicals": False,
+    "ammonia": False,
     # "steel": False,
     # "aviation": False,
     # "shipping": False,
@@ -494,7 +477,7 @@ CARBON_BUDGET_SECTOR_CSV = {
 SECTORAL_CARBON_BUDGETS = {
     "aluminium": 11,
     # "cement": 42,
-    "chemicals": 32,
+    "ammonia": 32,
     # "steel": 56,
     # "aviation": 17,
     # "shipping": 16,
@@ -505,7 +488,7 @@ residual_share = 0.05
 emissions_chemicals_2020 = 0.62  # Gt CO2 (scope 1 and 2)
 
 SECTORAL_PATHWAYS = {
-    "chemicals": {
+    "ammonia": {
         "emissions_start": emissions_chemicals_2020,
         "emissions_end": residual_share * emissions_chemicals_2020,
         "action_start": 2023,
@@ -519,15 +502,15 @@ SECTORAL_PATHWAYS = {
 
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = {
-    "chemicals": 2020,
+    "ammonia": 2020,
     "aluminium": 2030,
 }
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
-TRANSITIONAL_PERIOD_YEARS = {"chemicals": 30, "aluminium": 20}
+TRANSITIONAL_PERIOD_YEARS = {"ammonia": 30, "aluminium": 20}
 
 # Regional ban of technologies (sector-specific)
 REGIONAL_TECHNOLOGY_BAN = {
-    "chemicals": {
+    "ammonia": {
         "China": [
             "Natural Gas SMR + ammonia synthesis",
             "Natural Gas ATR + CCS + ammonia synthesis",
@@ -542,7 +525,7 @@ REGIONAL_TECHNOLOGY_BAN = {
     "aluminium": None,
 }
 
-HYDRO_TECHNOLOGY_BAN = {"aluminium": True, "chemicals": False}
+HYDRO_TECHNOLOGY_BAN = {"aluminium": True, "ammonia": False}
 
 ### OUTPUTS PROCESSING ###
 

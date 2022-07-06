@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL
+from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL, END_YEAR
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -19,16 +19,26 @@ class IntermediateDataImporter:
         sensitivity: str,
         sector: str,
         products: list,
+        carbon_cost_trajectory=None,
     ):
         parent_path = Path(__file__).resolve().parents[2]
-        self.input_path = parent_path.joinpath(
-            "data/Master template - python copy.xlsx"
-        )
         self.sector = sector
         self.products = products
         self.pathway = pathway
         self.sensitivity = sensitivity
-        self.export_dir = parent_path.joinpath(f"{sector}/data/{pathway}/{sensitivity}")
+
+        # Export directory depends on whether a CarbonCostTrajectory is passed or not
+        if carbon_cost_trajectory:
+            final_carbon_cost = carbon_cost_trajectory.df_carbon_cost.loc[
+                carbon_cost_trajectory.df_carbon_cost["year"] == END_YEAR, "carbon_cost"
+            ].item()
+            self.export_dir = parent_path.joinpath(
+                f"{sector}/data/{pathway}/{sensitivity}/carbon_cost_{final_carbon_cost}"
+            )
+        else:
+            self.export_dir = parent_path.joinpath(
+                f"{sector}/data/{pathway}/{sensitivity}"
+            )
         self.intermediate_path = self.export_dir.joinpath("intermediate")
         self.stack_tracker_path = self.export_dir.joinpath("stack_tracker")
         self.final_path = self.export_dir.joinpath("final")
@@ -54,7 +64,6 @@ class IntermediateDataImporter:
         """
         output_dir = self.aggregate_export_dir if aggregate else self.export_dir
         if export_dir is not None:
-
             output_dir = output_dir.joinpath(export_dir)
         else:
             output_dir = output_dir
@@ -96,50 +105,20 @@ class IntermediateDataImporter:
             self.intermediate_path.joinpath("electrolyser_proportions.csv")
         )
 
-    # TODO: remove this legacy function
-    def get_asset_specs(self):
-        df_spec = pd.read_csv(
-            self.intermediate_path.joinpath("technology_characteristics.csv"),
-            index_col=["product", "technology_destination", "region"],
-        )
-        df_spec.annual_production_capacity = (
-            ASSUMED_ANNUAL_PRODUCTION_CAPACITY * 365 / 1e6
-        )
-        df_spec["yearly_volume"] = (
-            df_spec.annual_production_capacity * df_spec.capacity_factor
-        )
-        df_spec["total_volume"] = df_spec.technology_lifetime * df_spec.yearly_volume
-        return df_spec
+    def get_carbon_cost_addition(self):
+        return pd.read_csv(self.intermediate_path.joinpath("carbon_cost_addition.csv"))
 
-    def get_asset_sizes(self):
-        """Get asset sizes for each different product/process"""
-        df_spec = self.get_asset_specs()
-        return df_spec.reset_index()[
-            [
-                "product",
-                "technology",
-                "annual_production_capacity",
-                "cuf",
-                "yearly_volume",
-                "total_volume",
-            ]
-        ].drop_duplicates(["product", "technology"])
+    def get_co2_storage_constraint(self):
+        return pd.read_csv(
+            self.intermediate_path.joinpath("co2_storage_constraint.csv")
+        )
 
-    def get_asset_capacities(self):
-        df_spec = self.get_asset_specs().reset_index()
-        df_spec.annual_production_capacity = ASSUMED_ANNUAL_PRODUCTION_CAPACITY
-        df_spec["yearly_volume"] = df_spec.annual_production_capacity * df_spec.cuf
-        df_spec["total_volume"] = df_spec.technology_lifetime * df_spec.yearly_volume
-        return df_spec.drop_duplicates(["product", "region", "technology"])[
-            [
-                "product",
-                "technology",
-                "region",
-                "annual_production_capacity",
-                "yearly_volume",
-                "total_volume",
-            ]
-        ]
+    def get_electrolysis_capacity_addition_constraint(self):
+        return pd.read_csv(
+            self.intermediate_path.joinpath(
+                "electrolysis_capacity_addition_constraint.csv"
+            )
+        )
 
     def get_demand(self, region=None):
         df = pd.read_csv(self.intermediate_path.joinpath("demand.csv"))
@@ -171,6 +150,18 @@ class IntermediateDataImporter:
         )
 
         return pd.read_csv(file_path, header=header, index_col=index_cols)
+
+    def get_demand_drivers(self):
+        file_path = self.intermediate_path.joinpath("demand_by_driver.csv")
+        return pd.read_csv(file_path).dropna(axis=0, how="all")
+
+    def get_emission_factors(self, ghg: str):
+        file_path = self.intermediate_path.joinpath(f"emission_factors_{ghg}.csv")
+        return pd.read_csv(file_path)
+
+    def get_project_pipeline(self):
+        file_path = self.intermediate_path.joinpath("project_pipeline.csv")
+        return pd.read_csv(file_path)
 
     def get_technologies_to_rank(self):
         """Return the list of technologies to rank with the TCO and emission deltas."""
