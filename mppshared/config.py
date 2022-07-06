@@ -172,8 +172,6 @@ INVESTMENT_CYCLES = {
 # Emissions
 GHGS = ["co2", "ch4", "n2o"]
 
-# Emission scopes included in data analysis
-EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
 
 # Capacity utilisation factor thresholds
 # TODO: make sector-specific with dictionary
@@ -478,13 +476,6 @@ SECTORAL_PATHWAYS = {
     },
 }
 
-# Year from which newbuild capacity must have transition or end-state technology
-TECHNOLOGY_MORATORIUM = {
-    "ammonia": 2020,
-    "aluminium": 2030,
-}
-# Control for how many years is allowed to use transition technologies once the moratorium is enable
-TRANSITIONAL_PERIOD_YEARS = {"ammonia": 30, "aluminium": 20}
 
 # Regional ban of technologies (sector-specific)
 REGIONAL_TECHNOLOGY_BAN = {
