@@ -9,7 +9,6 @@ import pandas as pd
 # Shared code imports
 from mppshared.calculate.calculate_cost import discount_costs
 from mppshared.config import (
-    GHGS,
     HYDRO_TECHNOLOGY_BAN,
     SCOPES_CO2_COST,
     START_YEAR,
@@ -123,6 +122,7 @@ def calculate_carbon_cost_addition_to_cost_metric(
     standard_lifetime: float,
     standard_wacc: float,
     grouping_cols_for_npv: list,
+    GHGS: list,
 ) -> pd.DataFrame:
     """Apply the carbon cost to the cost metric for each technology switch across the entire model time horizon.
 
@@ -410,6 +410,7 @@ def calculate_emission_reduction(
     df_technology_switches: pd.DataFrame,
     df_emissions: pd.DataFrame,
     EMISSION_SCOPES: list,
+    GHGS: list,
 ) -> pd.DataFrame:
     """Calculate emission reduction when switching from origin to destination technology by scope.
 
