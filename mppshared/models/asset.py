@@ -6,10 +6,16 @@ from xmlrpc.client import Boolean
 
 import pandas as pd
 
-from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                              CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
-                              emission_scopes, GHGS, INVESTMENT_CYCLES,
-                              LOG_LEVEL, MAP_LOW_COST_POWER_REGIONS)
+from mppshared.config import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CUF_LOWER_THRESHOLD,
+    CUF_UPPER_THRESHOLD,
+    EMISSION_SCOPES_DEFAULT,
+    GHGS,
+    INVESTMENT_CYCLES,
+    LOG_LEVEL,
+    MAP_LOW_COST_POWER_REGIONS,
+)
 from mppshared.utility.dataframe_utility import get_emission_columns
 from mppshared.utility.utils import first, get_logger
 
@@ -35,7 +41,7 @@ class Asset:
         greenfield=False,
         stay_same=False,
         ppa_allowed=True,
-        emission_scopes: list
+        emission_scopes: list = EMISSION_SCOPES_DEFAULT,
     ):
         # Unique ID to identify and compare assets
         self.uuid = uuid4().hex

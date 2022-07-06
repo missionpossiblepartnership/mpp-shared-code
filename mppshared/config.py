@@ -508,3 +508,5 @@ GWP = {
     "GWP-20": {"co2": 1, "ch4": 82.5, "n2o": 273},
     "GWP-100": {"co2": 1, "ch4": 29.8, "n2o": 273},
 }
+# Emission scopes included in data analysis
+EMISSION_SCOPES_DEFAULT = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
