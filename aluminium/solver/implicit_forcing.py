@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 # Shared code imports
-from mppshared.config import (
+from aluminium.config_aluminium import (
     PRODUCTS,
     TECHNOLOGY_MORATORIUM,
     TRANSITIONAL_PERIOD_YEARS,

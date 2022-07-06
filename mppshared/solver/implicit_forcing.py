@@ -9,7 +9,6 @@ import pandas as pd
 # Shared code imports
 from mppshared.calculate.calculate_cost import discount_costs
 from mppshared.config import (
-    EMISSION_SCOPES,
     GHGS,
     HYDRO_TECHNOLOGY_BAN,
     SCOPES_CO2_COST,
@@ -408,7 +407,9 @@ def apply_technology_moratorium(
 
 
 def calculate_emission_reduction(
-    df_technology_switches: pd.DataFrame, df_emissions: pd.DataFrame
+    df_technology_switches: pd.DataFrame,
+    df_emissions: pd.DataFrame,
+    EMISSION_SCOPES: list,
 ) -> pd.DataFrame:
     """Calculate emission reduction when switching from origin to destination technology by scope.
 

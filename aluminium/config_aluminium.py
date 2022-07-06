@@ -76,3 +76,11 @@ MODEL_SCOPE = "Global"
 
 # Override asset parameters; annual production capacity in Mt/year
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
+
+# Year from which newbuild capacity must have transition or end-state technology
+TECHNOLOGY_MORATORIUM = {
+    "ammonia": 2020,
+    "aluminium": 2030,
+}
+# Control for how many years is allowed to use transition technologies once the moratorium is enable
+TRANSITIONAL_PERIOD_YEARS = {"ammonia": 30, "aluminium": 20}
