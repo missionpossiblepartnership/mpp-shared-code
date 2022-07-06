@@ -86,3 +86,5 @@ TECHNOLOGY_MORATORIUM = {
 TRANSITIONAL_PERIOD_YEARS = {"ammonia": 30, "aluminium": 20}
 # Emission scopes included in data analysis
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
+# Emissions
+GHGS = ["co2"]
