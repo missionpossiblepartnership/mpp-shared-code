@@ -21,7 +21,7 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
+def decommission_default(pathway: SimulationPathway, year: int) -> SimulationPathway:
     """Apply decommission transition to eligible Assets in the AssetStack.
 
     Args:
@@ -46,7 +46,7 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
         df_rank = pathway.get_ranking(year=year, rank_type="decommission")
         df_rank = df_rank.loc[df_rank["product"] == product]
 
-        # TODO: Decommission until one asset short of balance between demand and production
+        # Decommission while production exceeds demand
         surplus = production - demand
         logger.debug(
             f"Year: {year} Production: {production}, Demand: {demand}, Surplus: {surplus}"
@@ -82,14 +82,16 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
     return pathway
 
 
-def select_asset_to_decommission(
-    pathway: SimulationPathway,
+def get_best_asset_to_decommission(
     stack: AssetStack,
     df_rank: pd.DataFrame,
     product: str,
     year: int,
+    cuf_lower_threshold: float,
+    minimum_decommission_age: int,
 ) -> Asset:
-    """Select asset to decommission according to decommission ranking. Choose randomly if several assets have the same decommission ranking.
+    """Get best asset to decommission according to decommission ranking. Choose randomly if several assets have the same decommission ranking.
+    Does not check whether removing the asset hurts any constraints.
 
     Args:
         stack:
@@ -102,52 +104,36 @@ def select_asset_to_decommission(
     """
     # Get all assets eligible for decommissioning
     candidates = stack.get_assets_eligible_for_decommission(
-        year=year, sector=pathway.sector
+        year=year,
+        product=product,
+        cuf_lower_threshold=cuf_lower_threshold,
+        minimum_decommission_age=minimum_decommission_age,
     )
-    logger.debug(f"Candidates for decommissioning: {len(candidates)}")
-
-    while candidates:
-        # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
-        best_candidates = []
-        while not best_candidates:
-            # Choose the best transition, i.e. highest decommission rank (filter )
-            best_transition = select_best_transition(df_rank)
-
-            best_candidates = list(
-                filter(
-                    lambda asset: (
-                        asset.technology == best_transition["technology_origin"]
-                    )
-                    & (asset.region == best_transition["region"])
-                    & (asset.product == best_transition["product"]),
-                    candidates,
-                )
-            )
-
-            # Remove best transition from ranking table
-            df_rank = remove_transition(df_rank, best_transition)
-
-        # If several candidates for best transition, choose randomly
-        asset_to_remove = random.choice(best_candidates)
-
-        # Remove asset tentatively (needs deepcopy to provide changes to original stack)
-        tentative_stack = deepcopy(stack)
-        tentative_stack.remove(asset_to_remove)
-
-        # Check constraints with tentative new stack
-        no_constraint_hurt = check_constraints(
-            pathway=pathway,
-            stack=tentative_stack,
-            year=year,
-            transition_type="decommission",
-        )
-
-        if no_constraint_hurt:
-            return asset_to_remove
-
-        # If constraint is hurt, remove asset from list of candidates and try again
-        candidates.remove(asset_to_remove)
-
     # If no more assets to decommission, raise ValueError
     if not candidates:
         raise ValueError
+
+    # Select best asset to decommission from the list of candidates
+    logger.debug(f"Candidates for decommissioning: {len(candidates)}")
+
+    best_candidates = []
+    while not best_candidates:
+
+        best_transition = select_best_transition(df_rank)
+
+        best_candidates = list(
+            filter(
+                lambda asset: (asset.technology == best_transition["technology_origin"])
+                & (asset.region == best_transition["region"])
+                & (asset.product == best_transition["product"]),
+                candidates,
+            )
+        )
+
+        # Remove best transition from ranking table
+        df_rank = remove_transition(df_rank, best_transition)
+
+    # If several candidates for best transition, choose randomly
+    best_asset_to_decommission = random.choice(best_candidates)
+
+    return best_asset_to_decommission

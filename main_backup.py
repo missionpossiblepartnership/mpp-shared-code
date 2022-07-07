@@ -11,7 +11,7 @@ from mppshared.config import (
     SENSITIVITIES,
     run_config,
 )
-from mppshared.models.simulate import simulate_pathway
+from mppshared.solver.simulate import simulate_pathway
 from mppshared.solver.debugging_outputs import create_debugging_outputs
 from mppshared.solver.implicit_forcing import apply_implicit_forcing
 from mppshared.solver.output_processing import (

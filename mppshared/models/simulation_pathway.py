@@ -28,6 +28,7 @@ from mppshared.import_data.intermediate_data import IntermediateDataImporter
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import Asset, AssetStack, create_assets
 from mppshared.models.carbon_budget import CarbonBudget
+from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.models.technology_rampup import TechnologyRampup
 from mppshared.models.transition import TransitionRegistry
 from mppshared.utility.dataframe_utility import flatten_columns, get_emission_columns
@@ -48,8 +49,9 @@ class SimulationPathway:
         sensitivity: str,
         sector: str,
         products: list,
-        carbon_budget: CarbonBudget,
-        technology_rampup: dict,
+        carbon_budget: CarbonBudget = None,
+        technology_rampup: dict = None,
+        carbon_cost_trajectory: CarbonCostTrajectory = None,
     ):
         # Attributes describing the pathway
         self.start_year = start_year
@@ -69,8 +71,13 @@ class SimulationPathway:
 
         # Use importer to get all data required for simulating the pathway
         self.importer = IntermediateDataImporter(
-            pathway=pathway, sensitivity=sensitivity, sector=sector, products=products
+            pathway=pathway,
+            sensitivity=sensitivity,
+            sector=sector,
+            products=products,
+            carbon_cost_trajectory=carbon_cost_trajectory,
         )
+        self.carbon_cost_trajectory = carbon_cost_trajectory
 
         # Make initial asset stack from input data
         logger.debug("Making asset stack")

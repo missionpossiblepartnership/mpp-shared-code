@@ -19,6 +19,8 @@ from ammonia.config_ammonia import (
 )
 from ammonia.solver.implicit_forcing import apply_implicit_forcing
 from ammonia.solver.ranking import make_rankings
+from ammonia.solver.simulate import simulate_pathway
+
 from mppshared.solver.debugging_outputs import create_debugging_outputs
 from mppshared.solver.output_processing import calculate_outputs
 from mppshared.utility.utils import get_logger
@@ -34,7 +36,7 @@ np.random.seed(100)
 funcs = {
     "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     "MAKE_RANKINGS": make_rankings,
-    # "SIMULATE_PATHWAY": simulate_pathway,
+    "SIMULATE_PATHWAY": simulate_pathway,
     # "CALCULATE_OUTPUTS": calculate_outputs,
     # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
     # "SENSITIVITY_ANALYSIS": create_sensitivity_outputs,

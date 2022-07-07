@@ -4,9 +4,16 @@ from operator import methodcaller
 
 import pandas as pd
 
-from mppshared.config import (COST_METRIC_CUF_ADJUSTMENT, CUF_LOWER_THRESHOLD,
-                              CUF_UPPER_THRESHOLD, LOG_LEVEL, MODEL_SCOPE)
+from mppshared.config import (
+    COST_METRIC_CUF_ADJUSTMENT,
+    CUF_LOWER_THRESHOLD,
+    CUF_UPPER_THRESHOLD,
+    LOG_LEVEL,
+    MODEL_SCOPE,
+)
 from mppshared.models.simulation_pathway import SimulationPathway
+from mppshared.import_data.intermediate_data import IntermediateDataImporter
+from mppshared.models.technology_rampup import TechnologyRampup
 from mppshared.utility.utils import get_logger
 
 logger = logger = get_logger(__name__)
@@ -192,3 +199,37 @@ def sort_assets_cost_metric(
         key=methodcaller(f"get_{cost_metric}", df_cost=pathway.df_cost, year=year),
         reverse=descending,
     )
+
+
+def create_dict_technology_rampup(
+    importer: IntermediateDataImporter,
+    maximum_asset_additions: int,
+    maximum_capacity_growth_rate: float,
+    years_rampup_phase: int,
+) -> dict:
+    """Create dictionary of TechnologyRampup objects with the technologies in that sector as keys. Set None if the technology has no ramp-up trajectory."""
+
+    technology_characteristics = importer.get_technology_characteristics()
+    technologies = technology_characteristics["technology"].unique()
+    dict_technology_rampup = dict.fromkeys(technologies)
+
+    for technology in technologies:
+
+        # Expected maturity and classification are constant across regions, products and years, hence take the first row for that technology
+        df_characteristics = technology_characteristics.loc[
+            technology_characteristics["technology"] == technology
+        ].iloc[0]
+        expected_maturity = df_characteristics["expected_maturity"]
+        classification = df_characteristics["technology_classification"]
+
+        # Only define technology ramp-up rates for transition and end-state technologies
+        if classification in ["transition", "end-state"]:
+            dict_technology_rampup[technology] = TechnologyRampup(
+                technology=technology,
+                start_year=expected_maturity,
+                end_year=expected_maturity + years_rampup_phase,
+                maximum_asset_additions=maximum_asset_additions,
+                maximum_capacity_growth_rate=maximum_capacity_growth_rate,
+            )
+
+    return dict_technology_rampup

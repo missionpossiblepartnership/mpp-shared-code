@@ -387,16 +387,24 @@ class AssetStack:
             assets=[asset for asset in self.assets if asset.technology == technology]
         )
 
-    def get_assets_eligible_for_decommission(self, year: int, sector: str) -> list:
+    def get_assets_eligible_for_decommission(
+        self,
+        year: int,
+        product: str,
+        cuf_lower_threshold: float,
+        minimum_decommission_age: float,
+    ) -> list:
         """Return a list of Assets from the AssetStack that are eligible for decommissioning"""
 
-        # Assets can be decommissioned if their CUF is lower than the threshold
-        candidates = filter(lambda asset: asset.cuf < CUF_LOWER_THRESHOLD, self.assets)
+        # Filter for assets with the specified product
+        assets = self.filter_assets(product=product)
 
-        # Assets can be decommissioned if their age is at least as high as the sector's investment cycle
-        # TODO: Decomission date.
+        # Assets can be decommissioned if their CUF is lower than or equal to the lower threshold
+        candidates = filter(lambda asset: asset.cuf <= cuf_lower_threshold, assets)
+
+        # Assets can be decommissioned if their age is at least as high as the minimum decommission age
         candidates = filter(
-            lambda asset: asset.get_age(year) >= INVESTMENT_CYCLES[sector], candidates
+            lambda asset: asset.get_age(year) >= minimum_decommission_age, candidates
         )
 
         return list(candidates)
