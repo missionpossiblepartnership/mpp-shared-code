@@ -105,3 +105,53 @@ TRANSITION_TYPES = [
 ]
 
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
+
+# Ranking configuration depends on type of technology switch and pathway
+lc_weight_cost = 0.8
+lc_weight_emissions = 1 - lc_weight_cost
+fa_weight_cost = 0.01
+fa_weight_emissions = 1 - fa_weight_cost
+RANKING_CONFIG = {
+    "greenfield": {
+        "bau": {
+            "cost": 1.0,
+            "emissions": 0.0,
+        },
+        "fa": {
+            "cost": fa_weight_cost,
+            "emissions": fa_weight_emissions,
+        },
+        "lc": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+    },
+    "brownfield": {
+        "bau": {
+            "cost": 1.0,
+            "emissions": 0.0,
+        },
+        "fa": {
+            "cost": fa_weight_cost,
+            "emissions": fa_weight_emissions,
+        },
+        "lc": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+    },
+    "decommission": {
+        "bau": {
+            "cost": 1,
+            "emissions": 0,
+        },
+        "fa": {
+            "cost": fa_weight_cost,
+            "emissions": fa_weight_emissions,
+        },
+        "lc": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+    },
+}
