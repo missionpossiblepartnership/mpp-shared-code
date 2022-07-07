@@ -4,11 +4,17 @@ import sys
 import numpy as np
 import pandas as pd
 
-from mppshared.config import (BIN_METHODOLOGY,
-                              COST_METRIC_RELATIVE_UNCERTAINTY,
-                              EMISSION_SCOPES_RANKING, GHGS_RANKING,
-                              NUMBER_OF_BINS_RANKING, PRODUCTS, RANK_TYPES,
-                              RANKING_CONFIG, RANKING_COST_METRIC)
+from mppshared.config import (
+    BIN_METHODOLOGY,
+    COST_METRIC_RELATIVE_UNCERTAINTY,
+    EMISSION_SCOPES_RANKING,
+    GHGS_RANKING,
+    NUMBER_OF_BINS_RANKING,
+    PRODUCTS,
+    RANK_TYPES,
+    RANKING_CONFIG,
+    RANKING_COST_METRIC,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.utils import get_logger
 
@@ -164,6 +170,7 @@ def rank_technology_uncertainty_bins(
         cost_metric,
         COST_METRIC_RELATIVE_UNCERTAINTY[sector],
         config,
+        pathway,
     )
 
     return df
@@ -175,6 +182,7 @@ def _create_ranking_uncertainty_bins(
     cost_metric: str,
     cost_uncertainty: float,
     config: dict,
+    pathway: str,
 ):
 
     # Normalize cost metric
@@ -206,14 +214,24 @@ def _create_ranking_uncertainty_bins(
         + df["emissions_delta_normalized"] * config["emissions"]
     )
 
-    # Calculate number of bins
-    bin_interval = cost_uncertainty * df[cost_metric].min()
-    bin_range = df[cost_metric].max() - df[cost_metric].min()
-    n_bins = int(bin_range / bin_interval)
+    if pathway in ["lc", "bau"]:
+        # Calculate number of bins
+        bin_interval = cost_uncertainty * df[cost_metric].min()
+        bin_range = df[cost_metric].max() - df[cost_metric].min()
 
-    # Bin the rank scores
-    _, bins = np.histogram(df["rank_raw"], bins=n_bins)
-    df["rank"] = np.digitize(df["rank_raw"], bins=bins)
+        if (bin_range != 0) & (bin_interval != 0):
+            n_bins = int(bin_range / bin_interval)
+
+            # Bin the rank scores
+            _, bins = np.histogram(df["rank_raw"], bins=n_bins)
+            df["rank"] = np.digitize(df["rank_raw"], bins=bins)
+        else:
+            # All rank scores are 0, so all ranks are 0
+            df["rank"] = df["rank_raw"]
+    elif pathway == "fa":
+        n_bins = int(len(df))
+        _, bins = np.histogram(df["rank_raw"], bins=n_bins)
+        df["rank"] = np.digitize(df["rank_raw"], bins=sorted(df["rank_raw"]))
 
     return df
 
@@ -241,6 +259,7 @@ def rank_technology_relative_uncertainty(
         cost_metric=cost_metric,
         cost_uncertainty=COST_METRIC_RELATIVE_UNCERTAINTY[sector],
         config=config,
+        pathway=pathway,
     )
 
     return df_rank
@@ -252,6 +271,7 @@ def _create_ranking_uncertainty(
     cost_metric: str,
     cost_uncertainty: float,
     config: dict,
+    pathway: str,
 ) -> pd.DataFrame:
     """Create ranking based on relative cost uncertainty for a DataFrame."""
 
