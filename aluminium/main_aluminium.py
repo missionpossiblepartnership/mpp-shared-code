@@ -7,6 +7,7 @@ import numpy as np
 
 from aluminium.config_aluminium import RUN_PARALLEL, SECTOR, SENSITIVITIES, run_config
 from aluminium.solver.implicit_forcing import apply_implicit_forcing
+from aluminium.solver.ranking import make_rankings
 
 # Shared imports
 from mppshared.config import LOG_LEVEL
@@ -16,7 +17,6 @@ from mppshared.solver.output_processing import (
     calculate_outputs,
     save_consolidated_outputs,
 )
-from mppshared.solver.ranking import make_rankings
 
 # Initialize logger
 from mppshared.utility.utils import get_logger
@@ -26,7 +26,7 @@ logger.setLevel(LOG_LEVEL)
 
 funcs = {
     "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    # "MAKE_RANKINGS": make_rankings,
+    "MAKE_RANKINGS": make_rankings,
     # "SIMULATE_PATHWAY": simulate_pathway,
     # "CALCULATE_OUTPUTS": calculate_outputs,
     # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,

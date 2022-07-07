@@ -161,3 +161,4 @@ data/*.xlsx
 
 # Allow
 !aluminium/data/bau/def/intermediate/*.csv
+!ammonia/data/lc/def/intermediate/*.csv

@@ -10,17 +10,18 @@ import pandas as pd
 
 # Shared imports
 from ammonia.config_ammonia import (
+    GHGS,
     GROUPING_COLS_FOR_NPV,
     REGIONS_SALT_CAVERN_AVAILABILITY,
     TECHNOLOGY_MORATORIUM,
     TRANSITIONAL_PERIOD_YEARS,
     PRODUCTS,
-    RANKING_COST_METRIC,
     SCOPES_CO2_COST,
     STANDARD_LIFETIME,
     STANDARD_CUF,
     STANDARD_WACC,
 )
+from mppshared.config import EMISSION_SCOPES, END_YEAR
 from mppshared.solver.implicit_forcing import (
     add_carbon_cost_addition_to_technology_switches,
     add_technology_classification_to_switching_table,
@@ -92,40 +93,48 @@ def apply_implicit_forcing(
             df_technology_switches, df_technology_characteristics
         )
 
-    # Apply carbon cost
-    start = timer()
-    df_carbon_cost_addition = calculate_carbon_cost_addition_to_cost_metric(
-        df_technology_switches=df_technology_switches,
-        df_emissions=df_emissions,
-        df_technology_characteristics=df_technology_characteristics,
-        df_carbon_cost=carbon_cost_trajectory.df_carbon_cost,
-        scopes_co2_cost=SCOPES_CO2_COST,
-        cost_metrics=["annualized_cost", "marginal_cost", "lcox"],
-        standard_cuf=STANDARD_CUF,
-        standard_lifetime=STANDARD_LIFETIME,
-        standard_wacc=STANDARD_WACC,
-        grouping_cols_for_npv=GROUPING_COLS_FOR_NPV,
-    )
-    end = timer()
-    logger.info(
-        f"Time elapsed to apply carbon cost to {len(df_carbon_cost_addition)} rows: {timedelta(seconds=end-start)}"
-    )
+    # Apply carbon cost if not zero
+    df_cc = carbon_cost_trajectory.df_carbon_cost
+    if df_cc["carbon_cost"].sum() != 0:
+        start = timer()
+        df_carbon_cost_addition = calculate_carbon_cost_addition_to_cost_metric(
+            df_technology_switches=df_technology_switches,
+            df_emissions=df_emissions,
+            df_technology_characteristics=df_technology_characteristics,
+            df_carbon_cost=df_cc,
+            scopes_co2_cost=SCOPES_CO2_COST,
+            cost_metrics=["annualized_cost", "marginal_cost", "lcox"],
+            standard_cuf=STANDARD_CUF,
+            standard_lifetime=STANDARD_LIFETIME,
+            standard_wacc=STANDARD_WACC,
+            grouping_cols_for_npv=GROUPING_COLS_FOR_NPV,
+            ghgs=GHGS,
+        )
+        end = timer()
+        logger.info(
+            f"Time elapsed to apply carbon cost to {len(df_carbon_cost_addition)} rows: {timedelta(seconds=end-start)}"
+        )
 
-    # Output carbon cost addition to intermediate folder
-    importer.export_data(
-        df=df_carbon_cost_addition,
-        filename="carbon_cost_addition.csv",
-        export_dir="intermediate",
-        index=False,
-    )
+        # Output carbon cost addition to intermediate folder
+        importer.export_data(
+            df=df_carbon_cost_addition,
+            filename="carbon_cost_addition.csv",
+            export_dir="intermediate",
+            index=False,
+        )
 
-    # Update LCOX in technology switching DataFrame with carbon cost
-    df_technology_switches = add_carbon_cost_addition_to_technology_switches(
-        df_technology_switches, df_carbon_cost_addition, "lcox"
-    )
+        # Update LCOX in technology switching DataFrame with carbon cost
+        df_technology_switches = add_carbon_cost_addition_to_technology_switches(
+            df_technology_switches, df_carbon_cost_addition, "lcox"
+        )
 
     # Calculate emission deltas between origin and destination technology
-    df_ranking = calculate_emission_reduction(df_technology_switches, df_emissions)
+    df_ranking = calculate_emission_reduction(
+        df_technology_switches=df_technology_switches,
+        df_emissions=df_emissions,
+        emission_scopes=EMISSION_SCOPES,
+        ghgs=GHGS,
+    )
 
     importer.export_data(
         df=df_ranking,

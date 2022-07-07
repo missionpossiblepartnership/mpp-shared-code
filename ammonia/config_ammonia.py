@@ -2,6 +2,8 @@
 import logging
 import numpy as np
 
+SECTOR = "ammonia"
+
 ### RUN CONFIRGUATION ###
 LOG_LEVEL = "DEBUG"
 LOG_FORMATTER = logging.Formatter(
@@ -39,7 +41,7 @@ SENSITIVITIES = [
 ]
 
 CARBON_COSTS = [
-    # 0,
+    0,
     50,
     100,
     150,
@@ -65,6 +67,8 @@ GROUPING_COLS_FOR_NPV = [
     "technology_destination",
 ]
 
+SCOPES_CO2_COST = ["scope1", "scope2", "scope3_upstream"]
+
 ### CONSTRAINTS ON POSSIBLE TECHNOLOGY SWITCHES ###
 
 # Regions where geological H2 storage is not allowed because no salt caverns are available
@@ -87,7 +91,67 @@ TECHNOLOGY_MORATORIUM = 2020
 # Duration for which transition technologies are still allowed after the technology moratorium comes into force
 TRANSITIONAL_PERIOD_YEARS = 30
 
-### TECHNOLOGY RANKING CONFIGURATION ###
-
-# Cost metric used for ranking according to lowest cost
+### RANKING OF TECHNOLOGY SWITCHES ###
 RANKING_COST_METRIC = "lcox"
+COST_METRIC_RELATIVE_UNCERTAINTY = 0.05
+GHGS_RANKING = ["co2"]
+EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3_upstream"]
+
+TRANSITION_TYPES = [
+    "decommission",
+    "greenfield",
+    "brownfield_renovation",
+    "brownfield_newbuild",
+]
+
+RANK_TYPES = ["decommission", "greenfield", "brownfield"]
+
+# Ranking configuration depends on type of technology switch and pathway
+lc_weight_cost = 0.8
+lc_weight_emissions = 1 - lc_weight_cost
+fa_weight_cost = 0.01
+fa_weight_emissions = 1 - fa_weight_cost
+RANKING_CONFIG = {
+    "greenfield": {
+        "bau": {
+            "cost": 1.0,
+            "emissions": 0.0,
+        },
+        "fa": {
+            "cost": fa_weight_cost,
+            "emissions": fa_weight_emissions,
+        },
+        "lc": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+    },
+    "brownfield": {
+        "bau": {
+            "cost": 1.0,
+            "emissions": 0.0,
+        },
+        "fa": {
+            "cost": fa_weight_cost,
+            "emissions": fa_weight_emissions,
+        },
+        "lc": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+    },
+    "decommission": {
+        "bau": {
+            "cost": 1,
+            "emissions": 0,
+        },
+        "fa": {
+            "cost": fa_weight_cost,
+            "emissions": fa_weight_emissions,
+        },
+        "lc": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+    },
+}
