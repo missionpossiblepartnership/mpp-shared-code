@@ -2,6 +2,7 @@ import numpy as np
 
 SECTOR = "aluminium"
 LOG_LEVEL = "DEBUG"
+MODEL_SCOPE = "Global"
 
 PATHWAYS = [
     "bau",
