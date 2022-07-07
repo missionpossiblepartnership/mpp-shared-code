@@ -67,10 +67,8 @@ COST_METRIC_CUF_ADJUSTMENT = {
     "aluminium": "lcox",  # levelized cost of production
 }
 # Products produced by each sector
-PRODUCTS = {
-    "chemicals": ["Ammonia", "Ammonium nitrate", "Urea"],
-    "aluminium": ["Aluminium"],
-}
+PRODUCTS = ["Aluminium"]
+
 # Scope of the model run - to be specified
 MODEL_SCOPE = "Global"
 
@@ -78,13 +76,26 @@ MODEL_SCOPE = "Global"
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 # Year from which newbuild capacity must have transition or end-state technology
-TECHNOLOGY_MORATORIUM = {
-    "ammonia": 2020,
-    "aluminium": 2030,
-}
+TECHNOLOGY_MORATORIUM = 2030
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
-TRANSITIONAL_PERIOD_YEARS = {"ammonia": 30, "aluminium": 20}
+TRANSITIONAL_PERIOD_YEARS = 20
 # Emission scopes included in data analysis
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
 # Emissions
 GHGS = ["co2"]
+
+### RANKING OF TECHNOLOGY SWITCHES ###
+RANKING_COST_METRIC = "tco"
+BIN_METHODOLOGY = "histogram"
+NUMBER_OF_BINS_RANKING = 50
+GHGS_RANKING = ["co2"]
+EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
+
+TRANSITION_TYPES = [
+    "decommission",
+    "greenfield",
+    "brownfield_renovation",
+    "brownfield_newbuild",
+]
+
+RANK_TYPES = ["decommission", "greenfield", "brownfield"]

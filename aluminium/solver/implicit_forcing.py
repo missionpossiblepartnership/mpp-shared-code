@@ -45,7 +45,7 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
         pathway=pathway,
         sensitivity=sensitivity,
         sector=sector,
-        products=PRODUCTS[sector],
+        products=PRODUCTS,
     )
 
     df_technology_switches = importer.get_technology_transitions_and_cost()
@@ -59,15 +59,15 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
 
     # Eliminate disallowed technology switches with hydro technologies
     df_technology_switches = apply_hydro_constraint(
-        df_technology_switches, sector, PRODUCTS[sector]
+        df_technology_switches, sector, PRODUCTS
     )
     # Apply technology moratorium (year after which newbuild capacity must be transition or end-state technologies)
     if pathway not in ["bau", "cc"]:
         df_technology_switches = apply_technology_moratorium(
             df_technology_switches=df_technology_switches,
             df_technology_characteristics=df_technology_characteristics,
-            moratorium_year=TECHNOLOGY_MORATORIUM[sector],
-            transitional_period_years=TRANSITIONAL_PERIOD_YEARS[sector],
+            moratorium_year=TECHNOLOGY_MORATORIUM,
+            transitional_period_years=TRANSITIONAL_PERIOD_YEARS,
         )
     # Add technology classification
     else:
