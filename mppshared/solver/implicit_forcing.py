@@ -433,11 +433,13 @@ def calculate_emission_reduction(
     emission_scopes: list,
     ghgs: list,
 ) -> pd.DataFrame:
-    """Calculate emission reduction when switching from origin to destination technology by scope.
+    """Calculate emission reduction (origin technology emissions - destination technolgoy emissions) when switching from origin to destination technology by scope.
 
     Args:
         df_technology_switches (pd.DataFrame): cost data for every technology switch (regional)
         df_emissions (pd.DataFrame): emissions data for every technology
+        emission_scopes (list): scopes for which to calculate the emission reduction
+        ghgs (list): GHGs for which to calculate the emission reduction
 
     Returns:
         pd.DataFrame: contains "delta_{}" for every scope and GHG considered
@@ -480,15 +482,6 @@ def calculate_emission_reduction(
             df[f"delta_{ghg}_{scope}"] = df[f"{ghg}_{scope}_origin"].fillna(0) - df[
                 f"{ghg}_{scope}_destination"
             ].fillna(0)
-
-    # Drop emissions of destination and origin technology
-    # drop_cols = [
-    #     f"{ghg}_{scope}_{switch_locator}"
-    #     for switch_locator in ["origin", "destination"]
-    #     for ghg in GHGS
-    #     for scope in EMISSION_SCOPES
-    # ]
-    # df = df.drop(columns=drop_cols)
 
     return df
 
