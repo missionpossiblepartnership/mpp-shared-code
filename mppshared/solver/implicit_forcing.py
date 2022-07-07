@@ -126,7 +126,7 @@ def calculate_carbon_cost_addition_to_cost_metric(
     standard_lifetime: float,
     standard_wacc: float,
     grouping_cols_for_npv: list,
-    GHGS: list,
+    ghgs: list,
 ) -> pd.DataFrame:
     """Apply the carbon cost to the cost metric for each technology switch across the entire model time horizon.
 
@@ -154,7 +154,7 @@ def calculate_carbon_cost_addition_to_cost_metric(
 
     logger.info("Calculating carbon cost addition to cost metric")
     # Drop emission columns with other GHGs than CO2
-    for ghg in [ghg for ghg in GHGS if ghg != "co2"]:
+    for ghg in [ghg for ghg in ghgs if ghg != "co2"]:
         df_emissions = df_emissions.drop(columns=df_emissions.filter(regex=ghg).columns)
 
     # Merge technology switches, emissions and technology characteristics
@@ -430,8 +430,8 @@ def apply_technology_moratorium(
 def calculate_emission_reduction(
     df_technology_switches: pd.DataFrame,
     df_emissions: pd.DataFrame,
-    EMISSION_SCOPES: list,
-    GHGS: list,
+    emission_scopes: list,
+    ghgs: list,
 ) -> pd.DataFrame:
     """Calculate emission reduction when switching from origin to destination technology by scope.
 
@@ -443,7 +443,7 @@ def calculate_emission_reduction(
         pd.DataFrame: contains "delta_{}" for every scope and GHG considered
     """
     # Get columns containing emissions and filter emissions table accordingly
-    cols = [f"{ghg}_{scope}" for ghg in GHGS for scope in EMISSION_SCOPES]
+    cols = [f"{ghg}_{scope}" for ghg in ghgs for scope in emission_scopes]
     df_emissions = df_emissions[["product", "technology", "year", "region"] + cols]
 
     # Rename column headers for origin and destination technology emissions and drop captured emissions columns
@@ -475,8 +475,8 @@ def calculate_emission_reduction(
     ).fillna(0)
 
     # Calculate emissions reduction for each technology switch by GHG and scope
-    for ghg in GHGS:
-        for scope in EMISSION_SCOPES:
+    for ghg in ghgs:
+        for scope in emission_scopes:
             df[f"delta_{ghg}_{scope}"] = df[f"{ghg}_{scope}_origin"].fillna(0) - df[
                 f"{ghg}_{scope}_destination"
             ].fillna(0)

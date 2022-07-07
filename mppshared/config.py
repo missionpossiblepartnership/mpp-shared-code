@@ -25,6 +25,12 @@ SCOPES_CO2_COST = [
     "scope2",
 ]
 
+EMISSION_SCOPES_DEFAULT = [
+    "scope1",
+    "scope2",
+]
+
+
 ### RUN CONFIGURATION ###
 
 RUN_PARALLEL = False

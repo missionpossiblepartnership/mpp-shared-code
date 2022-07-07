@@ -18,10 +18,9 @@ from ammonia.config_ammonia import (
     run_config,
 )
 from ammonia.solver.implicit_forcing import apply_implicit_forcing
-from mppshared.models.simulate import simulate_pathway
+from ammonia.solver.ranking import make_rankings
 from mppshared.solver.debugging_outputs import create_debugging_outputs
 from mppshared.solver.output_processing import calculate_outputs
-from mppshared.solver.ranking import make_rankings
 from mppshared.utility.utils import get_logger
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 
@@ -34,7 +33,7 @@ np.random.seed(100)
 
 funcs = {
     "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    # "MAKE_RANKINGS": make_rankings,
+    "MAKE_RANKINGS": make_rankings,
     # "SIMULATE_PATHWAY": simulate_pathway,
     # "CALCULATE_OUTPUTS": calculate_outputs,
     # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
@@ -66,7 +65,7 @@ def run_model_sequential(runs):
             ].item()
             for folder in ["final", "intermediate", "ranking", "stack_tracker"]:
                 final_folder = (
-                    f"data/{SECTOR}/{pathway}/{sensitivity}/carbon_cost_{cc}/{folder}"
+                    f"{SECTOR}/data/{pathway}/{sensitivity}/carbon_cost_{cc}/{folder}"
                 )
                 if not os.path.exists(final_folder):
                     os.makedirs(final_folder)
