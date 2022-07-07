@@ -5,10 +5,12 @@ import numpy as np
 import pandas as pd
 
 # Shared code imports
-from mppshared.config import (
+from aluminium.config_aluminium import (
     PRODUCTS,
     TECHNOLOGY_MORATORIUM,
     TRANSITIONAL_PERIOD_YEARS,
+    EMISSION_SCOPES,
+    GHGS,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.solver.implicit_forcing import (
@@ -74,7 +76,9 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
         )
 
     # Calculate emission deltas between origin and destination technology
-    df_ranking = calculate_emission_reduction(df_technology_switches, df_emissions)
+    df_ranking = calculate_emission_reduction(
+        df_technology_switches, df_emissions, EMISSION_SCOPES, GHGS
+    )
 
     # Export technology switching table to be used for ranking
     importer.export_data(

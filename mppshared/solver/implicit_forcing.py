@@ -9,8 +9,6 @@ import pandas as pd
 # Shared code imports
 from mppshared.calculate.calculate_cost import discount_costs
 from mppshared.config import (
-    EMISSION_SCOPES,
-    GHGS,
     HYDRO_TECHNOLOGY_BAN,
     SCOPES_CO2_COST,
     START_YEAR,
@@ -42,6 +40,7 @@ def apply_salt_cavern_availability_constraint(
     """
 
     # Take out technologies with geological H2 storage for each region without salt cavern availability
+    logger.info("Applying salt cavern availability constraint")
     for region in [
         reg
         for reg in regions_salt_cavern_availability
@@ -61,6 +60,7 @@ def apply_salt_cavern_availability_constraint(
         )
 
         df_technology_switches = df_technology_switches.loc[~filter]
+    logger.info("Applied salt cavern availability constraint")
 
     return df_technology_switches
 
@@ -68,9 +68,10 @@ def apply_salt_cavern_availability_constraint(
 def apply_hydro_constraint(
     df_technology_transitions: pd.DataFrame, sector: str, products: list
 ) -> pd.DataFrame:
+    logger.info("Applying hydro constraint")
     if HYDRO_TECHNOLOGY_BAN[sector]:
         # if sector == "aluminium" and "Aluminium" in products:
-        logger.debug("Filtering Hydro banned transitions")
+        logger.debug(f"{sector}: Filtering Hydro banned transitions")
         return df_technology_transitions[
             (
                 (
@@ -110,6 +111,7 @@ def apply_hydro_constraint(
             )
         ]
     else:
+        logger.debug(f"{sector}: No hydro band transitions")
         return df_technology_transitions
 
 
@@ -124,6 +126,7 @@ def calculate_carbon_cost_addition_to_cost_metric(
     standard_lifetime: float,
     standard_wacc: float,
     grouping_cols_for_npv: list,
+    GHGS: list,
 ) -> pd.DataFrame:
     """Apply the carbon cost to the cost metric for each technology switch across the entire model time horizon.
 
@@ -149,6 +152,7 @@ def calculate_carbon_cost_addition_to_cost_metric(
         pd.DataFrame: all technology switches in df_technology_switches along with the carbon cost addition to all cost metrics
     """
 
+    logger.info("Calculating carbon cost addition to cost metric")
     # Drop emission columns with other GHGs than CO2
     for ghg in [ghg for ghg in GHGS if ghg != "co2"]:
         df_emissions = df_emissions.drop(columns=df_emissions.filter(regex=ghg).columns)
@@ -214,6 +218,7 @@ def calculate_carbon_cost_addition_to_cost_metric(
         ).fillna(0)
 
     # Return technology switches with carbon cost addition to each cost metric
+    logger.info("Carbon cost addition to cost metric calculated")
     return df.reset_index(drop=False).drop(
         columns=[
             "wacc",
@@ -239,6 +244,8 @@ def add_carbon_cost_addition_to_technology_switches(
         pd.DataFrame: contains technology switches with the cost metric including the carbon cost component
     """
 
+    logger.info("Adding carbon cost addition to cost metric")
+
     merge_cols = [
         "product",
         "technology_origin",
@@ -257,6 +264,7 @@ def add_carbon_cost_addition_to_technology_switches(
         df_carbon_cost[cost_metric]
         + df_carbon_cost[f"carbon_cost_addition_{cost_metric}"]
     )
+    logger.info("Carbon cost addition to cost metric added")
 
     return df_carbon_cost
 
@@ -273,6 +281,7 @@ def apply_technology_availability_constraint(
     Returns:
         pd.DataFrame: _description_
     """
+    logger.info("Applying technology availability constraint")
 
     # Add classification of origin and destination technologies to each technology switch
     df_tech_char_destination = df_technology_characteristics[
@@ -307,6 +316,9 @@ def apply_technology_availability_constraint(
     ).fillna(0)
 
     # Constraint 1: no switches from transition or end-state to initial technologies
+    logger.info(
+        "Applying constraint 1. No switches from transition or end-state to initial technologies"
+    )
     df = df.loc[
         ~(
             (
@@ -325,6 +337,9 @@ def apply_technology_availability_constraint(
     ]
 
     # Constraint 2: transitions to a technology are only possible when it has reached maturity
+    logger.info(
+        "Applying constraint 2. Transitions to a technology are only possible when it has reached maturity"
+    )
     df = df.merge(
         df_technology_characteristics[
             ["product", "year", "region", "technology", "expected_maturity"]
@@ -333,6 +348,8 @@ def apply_technology_availability_constraint(
         how="left",
     ).fillna(START_YEAR)
     df = df.loc[df["year"] >= df["expected_maturity"]]
+
+    logger.info("Technology availability constraint applied")
 
     return df.drop(
         columns=[
@@ -347,13 +364,16 @@ def apply_regional_technology_ban(
     df_technology_switches: pd.DataFrame, sector_bans: dict
 ) -> pd.DataFrame:
     """Remove certain technologies from the technology switching table that are banned in certain regions (defined in config.py)"""
+    logger.info("Applying regional technology ban")
     if not sector_bans:
+        logger.info("No regional technology ban applied")
         return df_technology_switches
     for region in sector_bans.keys():
         banned_transitions = (df_technology_switches["region"] == region) & (
             df_technology_switches["technology_destination"].isin(sector_bans[region])
         )
         df_technology_switches = df_technology_switches.loc[~banned_transitions]
+    logger.info("Regional technology ban applied")
     return df_technology_switches
 
 
@@ -408,7 +428,10 @@ def apply_technology_moratorium(
 
 
 def calculate_emission_reduction(
-    df_technology_switches: pd.DataFrame, df_emissions: pd.DataFrame
+    df_technology_switches: pd.DataFrame,
+    df_emissions: pd.DataFrame,
+    EMISSION_SCOPES: list,
+    GHGS: list,
 ) -> pd.DataFrame:
     """Calculate emission reduction when switching from origin to destination technology by scope.
 

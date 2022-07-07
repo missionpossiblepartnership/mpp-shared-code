@@ -11,7 +11,7 @@ from mppshared.config import (
     END_YEAR,
     LOG_LEVEL,
     PRODUCTS,
-    EMISSION_SCOPES,
+    EMISSION_SCOPES_DEFAULT,
     START_YEAR,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
@@ -468,7 +468,7 @@ def create_emissions_trajectory(importer: IntermediateDataImporter) -> pd.DataFr
 
     greenhousegases = ["co2", "ch4", "n2o"]
     emission_cols = [
-        f"{ghg}_{scope}" for ghg in greenhousegases for scope in EMISSION_SCOPES
+        f"{ghg}_{scope}" for ghg in greenhousegases for scope in EMISSION_SCOPES_DEFAULT
     ] + ["co2_scope1_captured"]
 
     for year in np.arange(START_YEAR, END_YEAR + 1):

@@ -27,7 +27,6 @@ SCOPES_CO2_COST = [
 
 ### RUN CONFIGURATION ###
 
-RUN_PARALLEL = False
 
 APPLY_CARBON_COST = True
 
@@ -173,8 +172,6 @@ INVESTMENT_CYCLES = {
 # Emissions
 GHGS = ["co2", "ch4", "n2o"]
 
-# Emission scopes included in data analysis
-EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
 
 # Capacity utilisation factor thresholds
 # TODO: make sector-specific with dictionary
@@ -196,27 +193,6 @@ MODEL_SCOPE = "Global"
 # Override asset parameters; annual production capacity in Mt/year
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
-
-# Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
-ALL_SENSITIVITIES = [
-    "def",
-    "Carbon Price_0.2",
-    "Carbon Price_-0.2",
-    "Coal Price_0.2",
-    "Coal Price_-0.2",
-    "Grid and PPA Prices_0.2",
-    "Grid and PPA Prices_-0.2",
-    "Hydrogen Price_0.2",
-    "Hydrogen Price_-0.2",
-    "Natural Gas Price_0.2",
-    "Natural Gas Price_-0.2",
-]
-SENSITIVITIES = {
-    "bau": ["def"],  # ALL_SENSITIVITIES,
-    # "cc": ["def"],  # ALL_SENSITIVITIES,
-    # "fa": ["def"],
-    # "lc": ALL_SENSITIVITIES,
-}
 ### SECTOR-SPECIFIC PARAMETERS ###
 
 # Products produced by each sector
@@ -500,13 +476,6 @@ SECTORAL_PATHWAYS = {
     },
 }
 
-# Year from which newbuild capacity must have transition or end-state technology
-TECHNOLOGY_MORATORIUM = {
-    "ammonia": 2020,
-    "aluminium": 2030,
-}
-# Control for how many years is allowed to use transition technologies once the moratorium is enable
-TRANSITIONAL_PERIOD_YEARS = {"ammonia": 30, "aluminium": 20}
 
 # Regional ban of technologies (sector-specific)
 REGIONAL_TECHNOLOGY_BAN = {
@@ -539,3 +508,5 @@ GWP = {
     "GWP-20": {"co2": 1, "ch4": 82.5, "n2o": 273},
     "GWP-100": {"co2": 1, "ch4": 29.8, "n2o": 273},
 }
+# Emission scopes included in data analysis
+EMISSION_SCOPES_DEFAULT = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
