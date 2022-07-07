@@ -48,8 +48,8 @@ class SimulationPathway:
         sensitivity: str,
         sector: str,
         products: list,
-        carbon_budget: CarbonBudget,
-        technology_rampup: dict,
+        carbon_budget: CarbonBudget = None,
+        technology_rampup: dict = None,
     ):
         # Attributes describing the pathway
         self.start_year = start_year

@@ -1,28 +1,26 @@
+"""Year-by-year optimisation logic of plant investment decisions to simulate a pathway for the aluminium supply technology mix."""
+
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
-from mppshared.agent_logic.brownfield import brownfield
-from mppshared.agent_logic.decommission import decommission_default
-from mppshared.agent_logic.greenfield import greenfield
-from mppshared.config import (
+from aluminium.config_aluminium import (
+    PRODUCTS,
+    START_YEAR,
     END_YEAR,
     LOG_LEVEL,
-    PRODUCTS,
-    SECTORAL_CARBON_BUDGETS,
-    START_YEAR,
-    TECHNOLOGY_RAMP_UP_CONSTRAINTS,
+    TECHNOLOGY_RAMP_UP_CONSTRAINT,
 )
+from aluminium.solver.decommission import decommission
+from aluminium.solver.brownfield import brownfield
+from aluminium.solver.greenfield import greenfield
+
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.models.asset import AssetStack
-from mppshared.models.carbon_budget import CarbonBudget
-from mppshared.agent_logic.agent_logic_functions import create_dict_technology_rampup
-
-# from mppshared.agent_logic.retrofit import retrofit
 from mppshared.models.simulation_pathway import SimulationPathway
+from mppshared.models.carbon_budget import CarbonBudget
+from mppshared.config import SECTORAL_CARBON_BUDGETS
+from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
+from mppshared.agent_logic.agent_logic_functions import create_dict_technology_rampup
 from mppshared.utility.log_utility import get_logger
-
-# from util.util import timing
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -53,30 +51,27 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
 
         # Decommission assets
         start = timer()
-        pathway = decommission_default(pathway=pathway, year=year)
+        pathway = decommission(pathway=pathway, year=year)
         end = timer()
         logger.debug(
             f"Time elapsed for decommission in year {year}: {timedelta(seconds=end-start)} seconds"
         )
 
         # Renovate and rebuild assets (brownfield transition)
-        start = timer()
-        pathway = brownfield(pathway=pathway, year=year)
-        end = timer()
-        logger.debug(
-            f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
-        )
+        # start = timer()
+        # pathway = brownfield(pathway=pathway, year=year)
+        # end = timer()
+        # logger.debug(
+        #     f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
+        # )
 
-        # Build new assets
-        start = timer()
-        pathway = greenfield(pathway=pathway, year=year)
-        end = timer()
-        logger.debug(
-            f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
-        )
-
-        # Copy availability to next year
-        # pathway.copy_availability(year=year)
+        # # Build new assets
+        # start = timer()
+        # pathway = greenfield(pathway=pathway, year=year)
+        # end = timer()
+        # logger.debug(
+        #     f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
+        # )
 
     return pathway
 
@@ -89,21 +84,19 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         pathway=pathway,
         sensitivity=sensitivity,
         sector=sector,
-        products=PRODUCTS[sector],
+        products=PRODUCTS,
     )
-
-    # Create carbon budget
-    carbon_budget = CarbonBudget(
-        sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS,
-        pathway_shape="linear",
-        sector=sector,
-        importer=importer,
-    )
-    carbon_budget.output_emissions_pathway(sector=sector, importer=importer)
 
     # Create technology ramp-up trajectory for each technology in the form of a dictionary
     dict_technology_rampup = create_dict_technology_rampup(
         importer=importer,
+        maximum_asset_additions=TECHNOLOGY_RAMP_UP_CONSTRAINT[
+            "maximum_asset_additions"
+        ],
+        maximum_capacity_growth_rate=TECHNOLOGY_RAMP_UP_CONSTRAINT[
+            "maximum_capacity_growth_rate"
+        ],
+        years_rampup_phase=TECHNOLOGY_RAMP_UP_CONSTRAINT["years_rampup_phase"],
     )
 
     # Make pathway
@@ -113,8 +106,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         pathway=pathway,
         sensitivity=sensitivity,
         sector=sector,
-        products=PRODUCTS[sector],
-        carbon_budget=carbon_budget,
+        products=PRODUCTS,
         technology_rampup=dict_technology_rampup,
     )
 

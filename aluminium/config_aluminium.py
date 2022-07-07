@@ -1,6 +1,7 @@
 import numpy as np
 
 SECTOR = "aluminium"
+LOG_LEVEL = "DEBUG"
 
 PATHWAYS = [
     "bau",
@@ -56,16 +57,10 @@ SENSITIVITIES = {
     # "fa": ["def"],
     # "lc": ALL_SENSITIVITIES,
 }
-INVESTMENT_CYCLES = {
-    "chemicals": 20,  # years
-    "aluminium": 10,
-}
+INVESTMENT_CYCLE = 10  # years
 CUF_LOWER_THRESHOLD = 0.6
 CUF_UPPER_THRESHOLD = 0.95
-COST_METRIC_CUF_ADJUSTMENT = {
-    "chemicals": "mc",  # marginal cost of production
-    "aluminium": "lcox",  # levelized cost of production
-}
+COST_METRIC_CUF_ADJUSTMENT = "lcox"
 # Products produced by each sector
 PRODUCTS = ["Aluminium"]
 
@@ -160,4 +155,12 @@ RANKING_CONFIG = {
             "emissions": 0.0,
         },
     },
+}
+
+### CONSTRAINTS ###
+# Technology ramp-up parameters
+TECHNOLOGY_RAMP_UP_CONSTRAINT = {
+    "maximum_asset_additions": 6,  # 10
+    "maximum_capacity_growth_rate": 0.5,  # 0.25
+    "years_rampup_phase": 8,  # 5
 }
