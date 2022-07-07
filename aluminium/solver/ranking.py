@@ -7,6 +7,9 @@ from aluminium.config_aluminium import (
     RANK_TYPES,
     RANKING_COST_METRIC,
     NUMBER_OF_BINS_RANKING,
+    EMISSION_SCOPES_RANKING,
+    GHGS_RANKING,
+    RANKING_CONFIG,
 )
 
 
@@ -27,9 +30,11 @@ def make_rankings(pathway: str, sensitivity: str, sector: str):
             df_ranking=df_ranking,
             rank_type=rank_type,
             pathway=pathway,
-            sector=sector,
             cost_metric=RANKING_COST_METRIC,
             n_bins=NUMBER_OF_BINS_RANKING,
+            ranking_config=RANKING_CONFIG[rank_type][pathway],
+            emission_scopes_ranking=EMISSION_SCOPES_RANKING,
+            ghgs_ranking=GHGS_RANKING,
         )
 
         # Save ranking table as csv
