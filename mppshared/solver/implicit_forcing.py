@@ -40,6 +40,7 @@ def apply_salt_cavern_availability_constraint(
     """
 
     # Take out technologies with geological H2 storage for each region without salt cavern availability
+    logger.info("Applying salt cavern availability constraint")
     for region in [
         reg
         for reg in regions_salt_cavern_availability
@@ -59,6 +60,7 @@ def apply_salt_cavern_availability_constraint(
         )
 
         df_technology_switches = df_technology_switches.loc[~filter]
+    logger.info("Applied salt cavern availability constraint")
 
     return df_technology_switches
 
@@ -66,9 +68,10 @@ def apply_salt_cavern_availability_constraint(
 def apply_hydro_constraint(
     df_technology_transitions: pd.DataFrame, sector: str, products: list
 ) -> pd.DataFrame:
+    logger.info("Applying hydro constraint")
     if HYDRO_TECHNOLOGY_BAN[sector]:
         # if sector == "aluminium" and "Aluminium" in products:
-        logger.debug("Filtering Hydro banned transitions")
+        logger.debug(f"{sector}: Filtering Hydro banned transitions")
         return df_technology_transitions[
             (
                 (
@@ -108,6 +111,7 @@ def apply_hydro_constraint(
             )
         ]
     else:
+        logger.debug(f"{sector}: No hydro band transitions")
         return df_technology_transitions
 
 
