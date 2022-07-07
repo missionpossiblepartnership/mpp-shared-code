@@ -7,6 +7,8 @@ from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
 
+from rich.logging import RichHandler
+
 from mppshared.config import LOG_PATH
 
 LOG_FORMATTER = logging.Formatter(
@@ -20,7 +22,7 @@ def get_console_handler() -> logging.StreamHandler:
     Returns:
         StreamHandler: A formatted stream handler.
     """
-    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler = RichHandler()
     console_handler.setFormatter(LOG_FORMATTER)
     return console_handler
 
