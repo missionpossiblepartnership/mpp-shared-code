@@ -11,11 +11,8 @@ from aluminium.config_aluminium import (
 
 
 def make_rankings(pathway: str, sensitivity: str, sector: str):
-    """Create the ranking for all the possible rank types and scenarios.
+    """Create the ranking for the three types of technology switches"""
 
-    Args:
-        df_ranking:
-    """
     importer = IntermediateDataImporter(
         pathway=pathway,
         sensitivity=sensitivity,
