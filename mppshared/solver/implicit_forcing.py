@@ -152,6 +152,7 @@ def calculate_carbon_cost_addition_to_cost_metric(
         pd.DataFrame: all technology switches in df_technology_switches along with the carbon cost addition to all cost metrics
     """
 
+    logger.info("Calculating carbon cost addition to cost metric")
     # Drop emission columns with other GHGs than CO2
     for ghg in [ghg for ghg in GHGS if ghg != "co2"]:
         df_emissions = df_emissions.drop(columns=df_emissions.filter(regex=ghg).columns)
@@ -217,6 +218,7 @@ def calculate_carbon_cost_addition_to_cost_metric(
         ).fillna(0)
 
     # Return technology switches with carbon cost addition to each cost metric
+    logger.info("Carbon cost addition to cost metric calculated")
     return df.reset_index(drop=False).drop(
         columns=[
             "wacc",
