@@ -244,6 +244,8 @@ def add_carbon_cost_addition_to_technology_switches(
         pd.DataFrame: contains technology switches with the cost metric including the carbon cost component
     """
 
+    logger.info("Adding carbon cost addition to cost metric")
+
     merge_cols = [
         "product",
         "technology_origin",
@@ -262,6 +264,7 @@ def add_carbon_cost_addition_to_technology_switches(
         df_carbon_cost[cost_metric]
         + df_carbon_cost[f"carbon_cost_addition_{cost_metric}"]
     )
+    logger.info("Carbon cost addition to cost metric added")
 
     return df_carbon_cost
 
@@ -278,6 +281,7 @@ def apply_technology_availability_constraint(
     Returns:
         pd.DataFrame: _description_
     """
+    logger.info("Applying technology availability constraint")
 
     # Add classification of origin and destination technologies to each technology switch
     df_tech_char_destination = df_technology_characteristics[
@@ -312,6 +316,9 @@ def apply_technology_availability_constraint(
     ).fillna(0)
 
     # Constraint 1: no switches from transition or end-state to initial technologies
+    logger.info(
+        "Applying constraint 1. No switches from transition or end-state to initial technologies"
+    )
     df = df.loc[
         ~(
             (
@@ -330,6 +337,9 @@ def apply_technology_availability_constraint(
     ]
 
     # Constraint 2: transitions to a technology are only possible when it has reached maturity
+    logger.info(
+        "Applying constraint 2. Transitions to a technology are only possible when it has reached maturity"
+    )
     df = df.merge(
         df_technology_characteristics[
             ["product", "year", "region", "technology", "expected_maturity"]
@@ -338,6 +348,8 @@ def apply_technology_availability_constraint(
         how="left",
     ).fillna(START_YEAR)
     df = df.loc[df["year"] >= df["expected_maturity"]]
+
+    logger.info("Technology availability constraint applied")
 
     return df.drop(
         columns=[
@@ -352,13 +364,16 @@ def apply_regional_technology_ban(
     df_technology_switches: pd.DataFrame, sector_bans: dict
 ) -> pd.DataFrame:
     """Remove certain technologies from the technology switching table that are banned in certain regions (defined in config.py)"""
+    logger.info("Applying regional technology ban")
     if not sector_bans:
+        logger.info("No regional technology ban applied")
         return df_technology_switches
     for region in sector_bans.keys():
         banned_transitions = (df_technology_switches["region"] == region) & (
             df_technology_switches["technology_destination"].isin(sector_bans[region])
         )
         df_technology_switches = df_technology_switches.loc[~banned_transitions]
+    logger.info("Regional technology ban applied")
     return df_technology_switches
 
 
