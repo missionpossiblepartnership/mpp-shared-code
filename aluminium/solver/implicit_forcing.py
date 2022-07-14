@@ -5,22 +5,15 @@ import numpy as np
 import pandas as pd
 
 # Shared code imports
-from aluminium.config_aluminium import (
-    PRODUCTS,
-    TECHNOLOGY_MORATORIUM,
-    TRANSITIONAL_PERIOD_YEARS,
-    EMISSION_SCOPES,
-    GHGS,
-)
+from aluminium.config_aluminium import (EMISSION_SCOPES, GHGS,
+                                        PATHWAYS_WITH_TECHNOLOGY_MORATORIUM,
+                                        PRODUCTS, TECHNOLOGY_MORATORIUM,
+                                        TRANSITIONAL_PERIOD_YEARS)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.solver.implicit_forcing import (
-    add_technology_classification_to_switching_table,
-    apply_technology_availability_constraint,
-    apply_hydro_constraint,
-    apply_technology_moratorium,
-    calculate_emission_reduction,
-)
-
+    add_technology_classification_to_switching_table, apply_hydro_constraint,
+    apply_technology_availability_constraint, apply_technology_moratorium,
+    calculate_emission_reduction)
 # Initialize logger
 from mppshared.utility.log_utility import get_logger
 
@@ -61,8 +54,9 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
     df_technology_switches = apply_hydro_constraint(
         df_technology_switches, sector, PRODUCTS
     )
+
     # Apply technology moratorium (year after which newbuild capacity must be transition or end-state technologies)
-    if pathway not in ["bau", "cc"]:
+    if pathway in PATHWAYS_WITH_TECHNOLOGY_MORATORIUM:
         df_technology_switches = apply_technology_moratorium(
             df_technology_switches=df_technology_switches,
             df_technology_characteristics=df_technology_characteristics,

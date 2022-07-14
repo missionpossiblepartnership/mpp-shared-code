@@ -11,6 +11,7 @@ PATHWAYS = [
     "cc",
 ]
 
+PATHWAYS_TECHNOLOGY_MORATORIUM = ["lc", "cc"]
 SCOPES_CO2_COST = [
     "scope1",
     "scope2",
