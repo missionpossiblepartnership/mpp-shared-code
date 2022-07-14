@@ -6,16 +6,9 @@ from xmlrpc.client import Boolean
 
 import pandas as pd
 
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    CUF_LOWER_THRESHOLD,
-    CUF_UPPER_THRESHOLD,
-    EMISSION_SCOPES_DEFAULT,
-    GHGS,
-    INVESTMENT_CYCLES,
-    LOG_LEVEL,
-    MAP_LOW_COST_POWER_REGIONS,
-)
+from mppshared.config import (CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
+                              EMISSION_SCOPES_DEFAULT, GHGS, INVESTMENT_CYCLES,
+                              LOG_LEVEL)
 from mppshared.utility.dataframe_utility import get_emission_columns
 from mppshared.utility.utils import first, get_logger
 
@@ -430,7 +423,10 @@ class AssetStack:
 
 
 def make_new_asset(
-    asset_transition: dict, df_technology_characteristics: pd.DataFrame, year: int
+    asset_transition: dict,
+    df_technology_characteristics: pd.DataFrame,
+    year: int,
+    annual_production_capacity: float,
 ):
     """Make a new asset, based on asset transition from the ranking DataFrame. The asset is
     assumed to start operating at the highest possible capacity utilisation
@@ -439,7 +435,7 @@ def make_new_asset(
         asset_transition: The best transition (destination is the asset to build)
         df_technology_characteristics: needed for asset lifetime and technology classification
         year: Build the asset in this year
-        retrofit: Asset is retrofitted from an old asset
+        annual_production_capacity: The annual production capacity of the asset
 
     Returns:
         The new asset
@@ -461,7 +457,7 @@ def make_new_asset(
         technology=asset_transition["technology_destination"],
         region=asset_transition["region"],
         year_commissioned=year,
-        annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+        annual_production_capacity=annual_production_capacity,
         cuf=CUF_UPPER_THRESHOLD,
         asset_lifetime=technology_characteristics["technology_lifetime"].values[0],
         technology_classification=technology_characteristics[
