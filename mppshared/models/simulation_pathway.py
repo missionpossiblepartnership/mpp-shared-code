@@ -41,8 +41,8 @@ class SimulationPathway:
         rank_types: list,
         initial_asset_data_level: str,
         assumed_annual_production_capacity: float,
-        carbon_budget: CarbonBudget = None,
-        technology_rampup: dict = None,
+        technology_rampup: dict,
+        carbon_budget: CarbonBudget,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
     ):
         # Attributes describing the pathway
