@@ -87,7 +87,16 @@ def simulate_pathway(
 
     # Create technology ramp-up trajectory for each technology in the form of a dictionary
     dict_technology_rampup = create_dict_technology_rampup(
-        sector=sector, importer=importer
+        importer=importer,
+        model_start_year=START_YEAR,
+        model_end_year=END_YEAR,
+        maximum_asset_additions=TECHNOLOGY_RAMP_UP_CONSTRAINT[
+            "maximum_asset_additions"
+        ],
+        maximum_capacity_growth_rate=TECHNOLOGY_RAMP_UP_CONSTRAINT[
+            "maximum_capacity_growth_rate"
+        ],
+        years_rampup_phase=TECHNOLOGY_RAMP_UP_CONSTRAINT["years_rampup_phase"],
     )
 
     # Make pathway
