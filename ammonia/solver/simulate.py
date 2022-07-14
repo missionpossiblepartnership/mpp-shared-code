@@ -3,15 +3,15 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from ammonia.config_ammonia import PRODUCTS, START_YEAR, END_YEAR, LOG_LEVEL
-from ammonia.solver.decommission import decommission
+from ammonia.config_ammonia import END_YEAR, LOG_LEVEL, PRODUCTS, START_YEAR
 from ammonia.solver.brownfield import brownfield
+from ammonia.solver.decommission import decommission
 from ammonia.solver.greenfield import greenfield
-
+from mppshared.agent_logic.agent_logic_functions import (
+    adjust_capacity_utilisation, create_dict_technology_rampup)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
-from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
+from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -85,6 +85,11 @@ def simulate_pathway(
         carbon_cost_trajectory=carbon_cost_trajectory,
     )
 
+    # Create technology ramp-up trajectory for each technology in the form of a dictionary
+    dict_technology_rampup = create_dict_technology_rampup(
+        sector=sector, importer=importer
+    )
+
     # Make pathway
     pathway = SimulationPathway(
         start_year=START_YEAR,
@@ -93,6 +98,7 @@ def simulate_pathway(
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,
+        technology_rampup=dict_technology_rampup,
         carbon_cost_trajectory=carbon_cost_trajectory,
     )
 
