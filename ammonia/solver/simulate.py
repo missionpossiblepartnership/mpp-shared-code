@@ -122,14 +122,15 @@ def simulate_pathway(
         start_year=START_YEAR,
         end_year=END_YEAR,
         pathway=pathway,
-        rank_types=RANK_TYPES,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,
+        rank_types=RANK_TYPES,
         initial_asset_data_level=INITIAL_ASSET_DATA_LEVEL,
-        technology_rampup=dict_technology_rampup,
-        carbon_cost_trajectory=carbon_cost_trajectory,
         assumed_annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+        technology_rampup=dict_technology_rampup,
+        carbon_budget=carbon_budget,
+        carbon_cost_trajectory=carbon_cost_trajectory,
     )
 
     # Optimize asset stack on a yearly basis
