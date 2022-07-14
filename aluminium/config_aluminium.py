@@ -53,10 +53,10 @@ ALL_SENSITIVITIES = [
     "Natural Gas Price_-0.2",
 ]
 SENSITIVITIES = {
-    "bau": ["def"],  # ALL_SENSITIVITIES,
+    # "bau": ["def"],  # ALL_SENSITIVITIES,
     # "cc": ["def"],  # ALL_SENSITIVITIES,
     # "fa": ["def"],
-    # "lc": ALL_SENSITIVITIES,
+    "lc": ["def"]  # ALL_SENSITIVITIES,
 }
 INVESTMENT_CYCLE = 10  # years
 CUF_LOWER_THRESHOLD = 0.6
