@@ -11,7 +11,7 @@ import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL
+from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import Asset, AssetStack, create_assets
@@ -43,6 +43,7 @@ class SimulationPathway:
         carbon_budget: CarbonBudget = None,
         technology_rampup: dict = None,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
+        assumed_annual_production_capacity: float
     ):
         # Attributes describing the pathway
         self.start_year = start_year
@@ -69,6 +70,8 @@ class SimulationPathway:
             carbon_cost_trajectory=carbon_cost_trajectory,
         )
         self.carbon_cost_trajectory = carbon_cost_trajectory
+
+        self.assumed_annual_production_capacity = assumed_annual_production_capacity
 
         # Make initial asset stack from input data
         logger.debug("Making asset stack")
@@ -416,7 +419,7 @@ class SimulationPathway:
         # TODO: based on distribution of typical production capacities
         # TODO: create smaller asset to meet production capacity precisely
         df_stack["number_assets"] = (
-            df_stack["annual_production_capacity"] / ASSUMED_ANNUAL_PRODUCTION_CAPACITY
+            df_stack["annual_production_capacity"] /self.assumed_annual_production_capacity 
         ).apply(lambda x: int(x))
 
         # Merge with technology specifications to get technology lifetime
@@ -445,7 +448,7 @@ class SimulationPathway:
                 technology=row["technology"],
                 region=row["region"],
                 year_commissioned=row["year"] - row["average_age"],
-                annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                annual_production_capacity=self.assumed_annual_production_capacity,
                 cuf=row["average_cuf"],
                 asset_lifetime=row["technology_lifetime"],
                 technology_classification=row["technology_classification"],
