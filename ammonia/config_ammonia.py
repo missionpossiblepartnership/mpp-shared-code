@@ -5,6 +5,8 @@ import numpy as np
 
 SECTOR = "ammonia"
 
+INITAL_ASSET_DATA_LEVEL = "regional"
+
 ### RUN CONFIRGUATION ###
 LOG_LEVEL = "DEBUG"
 LOG_FORMATTER = logging.Formatter(
