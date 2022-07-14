@@ -21,7 +21,9 @@ class CarbonBudget:
         self.budgets = sectoral_carbon_budgets
         self.pathway_shape = pathway_shape
         self.importer = importer
-        self.df_pathway = self.create_emissions_pathway(pathway_shape=pathway_shape, sector=sector)
+        self.df_pathway = self.create_emissions_pathway(
+            pathway_shape=pathway_shape, sector=sector
+        )
 
     def __repr__(self):
         return "Carbon Budget Class"
@@ -102,4 +104,3 @@ class CarbonBudget:
         """
         mapper = {"annual": "annual_limit", "cumulative": "cumulative_limit"}
         return self.pathways[sector].loc[year][mapper[value_type]]
-
