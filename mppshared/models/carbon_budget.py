@@ -5,7 +5,6 @@ from plotly.offline import plot
 from plotly.subplots import make_subplots
 
 from mppshared.config import (CARBON_BUDGET_SECTOR_CSV, END_YEAR, LOG_LEVEL,
-                              PRODUCTS, SECTORAL_CARBON_BUDGETS,
                               SECTORAL_PATHWAYS, START_YEAR)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.utils import get_logger
@@ -22,12 +21,14 @@ class CarbonBudget:
         sector: str,
         importer: IntermediateDataImporter,
     ):
+        logger.info("Initializing Carbon Budget")
         self.budgets = sectoral_carbon_budgets
         self.pathway_shape = pathway_shape
         self.importer = importer
         self.df_pathway = self.create_emissions_pathway(
             pathway_shape=pathway_shape, sector=sector
         )
+        logger.info("Carbon Budget initialized")
 
     def __repr__(self):
         return "Carbon Budget Class"
