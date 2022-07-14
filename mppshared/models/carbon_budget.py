@@ -4,8 +4,8 @@ import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.config import (CARBON_BUDGET_SECTOR_CSV, END_YEAR, LOG_LEVEL,
-                              SECTORAL_PATHWAYS, START_YEAR)
+from mppshared.config import (CARBON_BUDGET_SECTOR_CSV, LOG_LEVEL,
+                              SECTORAL_PATHWAYS)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.utils import get_logger
 
@@ -17,6 +17,7 @@ class CarbonBudget:
     def __init__(
         self,
         start_year: int,
+        end_year: int,
         sectoral_carbon_budgets: dict,
         pathway_shape: str,
         sector: str,
@@ -24,6 +25,7 @@ class CarbonBudget:
     ):
         logger.info("Initializing Carbon Budget")
         self.start_year = start_year
+        self.end_year = end_year
         self.budgets = sectoral_carbon_budgets
         self.pathway_shape = pathway_shape
         self.importer = importer
@@ -50,20 +52,22 @@ class CarbonBudget:
             df = self.importer.get_carbon_budget()
             df.set_index("year", inplace=True)
         else:
-            index = pd.RangeIndex(START_YEAR, END_YEAR + 1, step=1, name="year")
+            index = pd.RangeIndex(
+                self.start_year, self.end_year + 1, step=1, name="year"
+            )
 
             # Annual emissions are reduced linearly
             # TODO: implement in a better way
             trajectory = SECTORAL_PATHWAYS[sector]
             if pathway_shape == "linear":
                 initial_level = np.full(
-                    trajectory["action_start"] - START_YEAR,
+                    trajectory["action_start"] - self.start_year,
                     trajectory["emissions_start"],
                 )
                 linear_reduction = np.linspace(
                     trajectory["emissions_start"],
                     trajectory["emissions_end"],
-                    num=END_YEAR - trajectory["action_start"] + 1,
+                    num=self.end_year - trajectory["action_start"] + 1,
                 )
                 values = np.concatenate((initial_level, linear_reduction))
             # TODO: implement other pathway shapes

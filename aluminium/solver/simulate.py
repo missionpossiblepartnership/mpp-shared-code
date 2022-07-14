@@ -87,6 +87,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
     # Create carbon budget
     carbon_budget = CarbonBudget(
         start_year=START_YEAR,
+        end_year=END_YEAR,
         sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS,
         pathway_shape="linear",
         sector=sector,
