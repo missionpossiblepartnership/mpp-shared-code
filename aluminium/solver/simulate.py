@@ -3,23 +3,18 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from aluminium.config_aluminium import (
-    PRODUCTS,
-    START_YEAR,
-    END_YEAR,
-    LOG_LEVEL,
-    TECHNOLOGY_RAMP_UP_CONSTRAINT,
-)
-from aluminium.solver.decommission import decommission
+from aluminium.config_aluminium import (END_YEAR, LOG_LEVEL, PRODUCTS,
+                                        START_YEAR,
+                                        TECHNOLOGY_RAMP_UP_CONSTRAINT)
 from aluminium.solver.brownfield import brownfield
+from aluminium.solver.decommission import decommission
 from aluminium.solver.greenfield import greenfield
-
-from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.models.simulation_pathway import SimulationPathway
-from mppshared.models.carbon_budget import CarbonBudget
+from mppshared.agent_logic.agent_logic_functions import (
+    adjust_capacity_utilisation, create_dict_technology_rampup)
 from mppshared.config import SECTORAL_CARBON_BUDGETS
-from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
-from mppshared.agent_logic.agent_logic_functions import create_dict_technology_rampup
+from mppshared.import_data.intermediate_data import IntermediateDataImporter
+from mppshared.models.carbon_budget import CarbonBudget
+from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -90,6 +85,8 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
     # Create technology ramp-up trajectory for each technology in the form of a dictionary
     dict_technology_rampup = create_dict_technology_rampup(
         importer=importer,
+        model_start_year=START_YEAR,
+        model_end_year=END_YEAR,
         maximum_asset_additions=TECHNOLOGY_RAMP_UP_CONSTRAINT[
             "maximum_asset_additions"
         ],
