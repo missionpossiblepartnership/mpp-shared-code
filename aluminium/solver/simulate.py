@@ -3,8 +3,8 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from aluminium.config_aluminium import (END_YEAR, LOG_LEVEL, PRODUCTS,
-                                        START_YEAR,
+from aluminium.config_aluminium import (END_YEAR, INITIAL_ASSET_DATA_LEVEL,
+                                        LOG_LEVEL, PRODUCTS, START_YEAR,
                                         TECHNOLOGY_RAMP_UP_CONSTRAINT)
 from aluminium.solver.brownfield import brownfield
 from aluminium.solver.decommission import decommission
@@ -104,6 +104,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,
+        initial_asset_data_level=INITIAL_ASSET_DATA_LEVEL,
         technology_rampup=dict_technology_rampup,
     )
 

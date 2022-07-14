@@ -66,6 +66,8 @@ COST_METRIC_CUF_ADJUSTMENT = "lcox"
 # Products produced by each sector
 PRODUCTS = ["Aluminium"]
 
+# Specify whether sector uses region-specific or asset-specific data for initial asset stack
+INITIAL_ASSET_DATA_LEVEL = "individual_assets"
 # Scope of the model run - to be specified
 MODEL_SCOPE = "Global"
 
