@@ -11,9 +11,8 @@ import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, GHGS,
-                              INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL, MODEL_SCOPE,
-                              RANK_TYPES)
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                              INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL, RANK_TYPES)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import Asset, AssetStack, create_assets
@@ -40,6 +39,7 @@ class SimulationPathway:
         sensitivity: str,
         sector: str,
         products: list,
+        initial_asset_data_level: str,
         carbon_budget: CarbonBudget = None,
         technology_rampup: dict = None,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
@@ -51,8 +51,7 @@ class SimulationPathway:
         self.sensitivity = sensitivity
         self.sector = sector
         self.products = products
-        self.start_year = start_year
-        self.end_year = end_year
+        self.initial_asset_data_level = initial_asset_data_level
 
         # Carbon Budget (already initialized with emissions pathway)
         self.carbon_budget = carbon_budget
@@ -72,9 +71,9 @@ class SimulationPathway:
 
         # Make initial asset stack from input data
         logger.debug("Making asset stack")
-        if INITIAL_ASSET_DATA_LEVEL[sector] == "regional":
+        if self.initial_asset_data_level == "regional":
             self.stacks = self.make_initial_asset_stack_from_regional_data()
-        elif INITIAL_ASSET_DATA_LEVEL[sector] == "individual_assets":
+        elif self.initial_asset_data_level == "individual_assets":
             self.stacks = self.make_initial_asset_stack_from_asset_data()
 
         # Import demand for all regions
