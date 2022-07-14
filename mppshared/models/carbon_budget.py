@@ -16,12 +16,14 @@ logger.setLevel(LOG_LEVEL)
 class CarbonBudget:
     def __init__(
         self,
+        start_year: int,
         sectoral_carbon_budgets: dict,
         pathway_shape: str,
         sector: str,
         importer: IntermediateDataImporter,
     ):
         logger.info("Initializing Carbon Budget")
+        self.start_year = start_year
         self.budgets = sectoral_carbon_budgets
         self.pathway_shape = pathway_shape
         self.importer = importer
