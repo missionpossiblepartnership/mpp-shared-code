@@ -4,14 +4,17 @@ from datetime import timedelta
 from timeit import default_timer as timer
 
 from ammonia.config_ammonia import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                                    END_YEAR, INITIAL_ASSET_DATA_LEVEL,
-                                    LOG_LEVEL, PRODUCTS, RANK_TYPES,
-                                    START_YEAR, TECHNOLOGY_RAMP_UP_CONSTRAINT)
+                                    CARBON_BUDGET_SECTOR_CSV, END_YEAR,
+                                    INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL,
+                                    PRODUCTS, RANK_TYPES,
+                                    SECTORAL_CARBON_PATHWAY, START_YEAR,
+                                    TECHNOLOGY_RAMP_UP_CONSTRAINT)
 from ammonia.solver.brownfield import brownfield
 from ammonia.solver.decommission import decommission
 from ammonia.solver.greenfield import greenfield
 from mppshared.agent_logic.agent_logic_functions import (
     adjust_capacity_utilisation, create_dict_technology_rampup)
+from mppshared.config import SECTORAL_CARBON_BUDGETS
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -86,6 +89,18 @@ def simulate_pathway(
         sector=sector,
         products=PRODUCTS,
         carbon_cost_trajectory=carbon_cost_trajectory,
+    )
+
+    # Create carbon budget
+    carbon_budget = CarbonBudget(
+        start_year=START_YEAR,
+        end_year=END_YEAR,
+        sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS,
+        pathway_shape="linear",
+        sector=sector,
+        carbon_budget_sector_csv=CARBON_BUDGET_SECTOR_CSV,
+        sectoral_carbon_pathway=SECTORAL_CARBON_PATHWAY,
+        importer=importer,
     )
 
     # Create technology ramp-up trajectory for each technology in the form of a dictionary
