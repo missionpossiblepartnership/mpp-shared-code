@@ -40,10 +40,10 @@ class SimulationPathway:
         products: list,
         rank_types: list,
         initial_asset_data_level: str,
+        assumed_annual_production_capacity: float,
         carbon_budget: CarbonBudget = None,
         technology_rampup: dict = None,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
-        assumed_annual_production_capacity: float
     ):
         # Attributes describing the pathway
         self.start_year = start_year
@@ -419,7 +419,8 @@ class SimulationPathway:
         # TODO: based on distribution of typical production capacities
         # TODO: create smaller asset to meet production capacity precisely
         df_stack["number_assets"] = (
-            df_stack["annual_production_capacity"] /self.assumed_annual_production_capacity 
+            df_stack["annual_production_capacity"]
+            / self.assumed_annual_production_capacity
         ).apply(lambda x: int(x))
 
         # Merge with technology specifications to get technology lifetime
