@@ -5,8 +5,8 @@ from timeit import default_timer as timer
 
 from ammonia.config_ammonia import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                                     END_YEAR, INITIAL_ASSET_DATA_LEVEL,
-                                    LOG_LEVEL, PRODUCTS, START_YEAR,
-                                    TECHNOLOGY_RAMP_UP_CONSTRAINT)
+                                    LOG_LEVEL, PRODUCTS, RANK_TYPES,
+                                    START_YEAR, TECHNOLOGY_RAMP_UP_CONSTRAINT)
 from ammonia.solver.brownfield import brownfield
 from ammonia.solver.decommission import decommission
 from ammonia.solver.greenfield import greenfield
@@ -107,6 +107,7 @@ def simulate_pathway(
         start_year=START_YEAR,
         end_year=END_YEAR,
         pathway=pathway,
+        rank_types=RANK_TYPES,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,
