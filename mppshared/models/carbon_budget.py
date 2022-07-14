@@ -4,10 +4,14 @@ import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.config import (CARBON_BUDGET_SECTOR_CSV, END_YEAR, PRODUCTS,
-                              SECTORAL_CARBON_BUDGETS, SECTORAL_PATHWAYS,
-                              START_YEAR)
+from mppshared.config import (CARBON_BUDGET_SECTOR_CSV, END_YEAR, LOG_LEVEL,
+                              PRODUCTS, SECTORAL_CARBON_BUDGETS,
+                              SECTORAL_PATHWAYS, START_YEAR)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
+from mppshared.utility.utils import get_logger
+
+logger = get_logger(__name__)
+logger.setLevel(LOG_LEVEL)
 
 
 class CarbonBudget:
