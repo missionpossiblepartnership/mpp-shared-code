@@ -4,9 +4,10 @@ from datetime import timedelta
 from timeit import default_timer as timer
 
 from aluminium.config_aluminium import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                                        END_YEAR, INITIAL_ASSET_DATA_LEVEL,
-                                        LOG_LEVEL, PRODUCTS, RANK_TYPES,
-                                        START_YEAR,
+                                        CARBON_BUDGET_SECTOR_CSV, END_YEAR,
+                                        INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL,
+                                        PRODUCTS, RANK_TYPES,
+                                        SECTORAL_CARBON_PATHWAY, START_YEAR,
                                         TECHNOLOGY_RAMP_UP_CONSTRAINT)
 from aluminium.solver.brownfield import brownfield
 from aluminium.solver.decommission import decommission
@@ -91,6 +92,8 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS,
         pathway_shape="linear",
         sector=sector,
+        carbon_budget_sector_csv=CARBON_BUDGET_SECTOR_CSV,
+        sectoral_carbon_pathway=SECTORAL_CARBON_PATHWAY,
         importer=importer,
     )
 

@@ -4,8 +4,7 @@ import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.config import (CARBON_BUDGET_SECTOR_CSV, LOG_LEVEL,
-                              SECTORAL_PATHWAYS)
+from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.utils import get_logger
 
@@ -21,6 +20,8 @@ class CarbonBudget:
         sectoral_carbon_budgets: dict,
         pathway_shape: str,
         sector: str,
+        carbon_budget_sector_csv: bool,
+        sectoral_carbon_pathway: dict,
         importer: IntermediateDataImporter,
     ):
         logger.info("Initializing Carbon Budget")
@@ -29,6 +30,8 @@ class CarbonBudget:
         self.budgets = sectoral_carbon_budgets
         self.pathway_shape = pathway_shape
         self.importer = importer
+        self.carbon_budget_sector_csv = carbon_budget_sector_csv
+        self.sectoral_carbon_pathway = sectoral_carbon_pathway
         self.df_pathway = self.create_emissions_pathway(
             pathway_shape=pathway_shape, sector=sector
         )
@@ -48,7 +51,7 @@ class CarbonBudget:
 
     def create_emissions_pathway(self, pathway_shape: str, sector: str) -> pd.DataFrame:
         """Create emissions pathway for specified sector according to given shape"""
-        if CARBON_BUDGET_SECTOR_CSV[sector] == True:
+        if self.carbon_budget_sector_csv == True:
             df = self.importer.get_carbon_budget()
             df.set_index("year", inplace=True)
         else:
@@ -58,7 +61,7 @@ class CarbonBudget:
 
             # Annual emissions are reduced linearly
             # TODO: implement in a better way
-            trajectory = SECTORAL_PATHWAYS[sector]
+            trajectory = self.sectoral_carbon_pathway
             if pathway_shape == "linear":
                 initial_level = np.full(
                     trajectory["action_start"] - self.start_year,
@@ -82,7 +85,7 @@ class CarbonBudget:
 
     # TODO: implement
     def output_emissions_pathway(self, sector: str, importer: IntermediateDataImporter):
-        if CARBON_BUDGET_SECTOR_CSV[sector] == True:
+        if self.carbon_budget_sector_csv == True:
             df = self.importer.get_carbon_budget()
             df.set_index("year", inplace=True)
         else:

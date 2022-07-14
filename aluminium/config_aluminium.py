@@ -99,6 +99,16 @@ TRANSITION_TYPES = [
 
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 
+CARBON_BUDGET_SECTOR_CSV = True
+
+residual_share = 0.05
+emissions_2020 = 0.62  # Gt CO2 (scope 1 and 2)
+SECTORAL_CARBON_PATHWAY = {
+    "emissions_start": emissions_chemicals_2020,
+    "emissions_end": residual_share * emissions_2020,
+    "action_start": 2023,
+}
+
 # Ranking configuration depends on type of technology switch and pathway
 lc_weight_cost = 1.0
 lc_weight_emissions = 0.0
