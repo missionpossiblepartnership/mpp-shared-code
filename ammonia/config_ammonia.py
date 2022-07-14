@@ -1,5 +1,6 @@
 """Configuration of the MPP Ammonia model."""
 import logging
+
 import numpy as np
 
 SECTOR = "ammonia"
@@ -160,3 +161,9 @@ RANKING_CONFIG = {
 CUF_LOWER_THRESHOLD = 0.5
 CUF_UPPER_THRESHOLD = 0.95
 INVESTMENT_CYCLE = 20  # years
+# Technology ramp-up parameters
+TECHNOLOGY_RAMP_UP_CONSTRAINT = {
+    "maximum_asset_additions": 10,
+    "maximum_capacity_growth_rate": 0.7,
+    "years_rampup_phase": 5,
+}

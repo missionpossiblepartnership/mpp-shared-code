@@ -3,7 +3,8 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from ammonia.config_ammonia import END_YEAR, LOG_LEVEL, PRODUCTS, START_YEAR
+from ammonia.config_ammonia import (END_YEAR, LOG_LEVEL, PRODUCTS, START_YEAR,
+                                    TECHNOLOGY_RAMP_UP_CONSTRAINT)
 from ammonia.solver.brownfield import brownfield
 from ammonia.solver.decommission import decommission
 from ammonia.solver.greenfield import greenfield
