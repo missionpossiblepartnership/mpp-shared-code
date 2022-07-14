@@ -11,27 +11,18 @@ import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    END_YEAR,
-    GHGS,
-    INITIAL_ASSET_DATA_LEVEL,
-    LOG_LEVEL,
-    MODEL_SCOPE,
-    PRODUCTS,
-    RANK_TYPES,
-    SECTOR,
-    START_YEAR,
-)
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, GHGS,
+                              INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL, MODEL_SCOPE,
+                              PRODUCTS, RANK_TYPES, SECTOR)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import Asset, AssetStack, create_assets
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.models.technology_rampup import TechnologyRampup
 from mppshared.models.transition import TransitionRegistry
-from mppshared.utility.dataframe_utility import flatten_columns, get_emission_columns
+from mppshared.utility.dataframe_utility import (flatten_columns,
+                                                 get_emission_columns)
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -191,7 +182,7 @@ class SimulationPathway:
         df_roadmap = pd.DataFrame(data={"technology": technologies})
         logger.debug("Calculating annual production volume")
 
-        for year in np.arange(START_YEAR, END_YEAR + 1):
+        for year in np.arange(self.start_year, self.end_year + 1):
 
             # Group by technology and sum annual production volume
             df_stack = self.importer.get_asset_stack(year=year)
