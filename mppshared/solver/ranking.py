@@ -39,7 +39,7 @@ def rank_technology_histogram(
     rank_type: str,
     pathway: str,
     cost_metric: str,
-    n_bins: str,
+    n_bins: int,
     ranking_config: dict,
     emission_scopes_ranking: list,
     ghgs_ranking: list,
