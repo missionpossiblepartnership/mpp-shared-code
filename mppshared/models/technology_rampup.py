@@ -3,8 +3,6 @@
 import numpy as np
 import pandas as pd
 
-from mppshared.config import END_YEAR, START_YEAR
-
 
 class TechnologyRampup:
     """Describes an approximately exponential ramp-up trajectory for a technology with a maximum number of discrete asset additions per year.
@@ -12,6 +10,8 @@ class TechnologyRampup:
 
     def __init__(
         self,
+        model_start_year: int,
+        model_end_year: int,
         technology: str,
         start_year: int,
         end_year: int,
@@ -27,7 +27,8 @@ class TechnologyRampup:
             maximum_asset_additions (int): Maximum number of assets that can be added in a given year
             maximum_capacity_growth_rate (float): Maximum rate at which installed capacity can grow from one year to the next
         """
-
+        self.model_start_year = model_start_year
+        self.model_end_year = model_end_year
         self.technology = technology
         self.start_year = start_year
         self.end_year = end_year
@@ -48,7 +49,7 @@ class TechnologyRampup:
 
         # Rampup DataFrame needs to start one year before model to account for technologies that become mature in model start year
         df_rampup = pd.DataFrame(
-            index=np.arange(START_YEAR - 1, END_YEAR + 1),
+            index=np.arange(self.model_start_year - 1, self.model_end_year + 1),
             columns=[
                 "maximum_asset_additions",
                 "maximum_asset_number",
@@ -58,8 +59,12 @@ class TechnologyRampup:
         )
 
         # Zero assets before start year
-        df_rampup.loc[START_YEAR - 1 : start_year - 1, "maximum_asset_additions"] = 0
-        df_rampup.loc[START_YEAR - 1 : start_year - 1, "maximum_asset_number"] = 0
+        df_rampup.loc[
+            self.model_start_year - 1 : start_year - 1, "maximum_asset_additions"
+        ] = 0
+        df_rampup.loc[
+            self.model_start_year - 1 : start_year - 1, "maximum_asset_number"
+        ] = 0
         df_rampup.loc[
             start_year : start_year + end_year + 1, "discrete_asset_additions"
         ] = maximum_asset_additions
@@ -84,4 +89,6 @@ class TechnologyRampup:
             "maximum_asset_additions"
         ].apply(lambda x: np.floor(x))
 
-        return df_rampup.loc[START_YEAR : END_YEAR + 1, ["maximum_asset_additions"]]
+        return df_rampup.loc[
+            self.model_start_year : self.model_end_year + 1, ["maximum_asset_additions"]
+        ]
