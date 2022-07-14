@@ -11,8 +11,7 @@ import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                              INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL, RANK_TYPES)
+from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import Asset, AssetStack, create_assets
@@ -39,6 +38,7 @@ class SimulationPathway:
         sensitivity: str,
         sector: str,
         products: list,
+        rank_types: list,
         initial_asset_data_level: str,
         carbon_budget: CarbonBudget = None,
         technology_rampup: dict = None,
@@ -51,6 +51,7 @@ class SimulationPathway:
         self.sensitivity = sensitivity
         self.sector = sector
         self.products = products
+        self.rank_types = rank_types
         self.initial_asset_data_level = initial_asset_data_level
 
         # Carbon Budget (already initialized with emissions pathway)
@@ -116,7 +117,7 @@ class SimulationPathway:
     def _import_rankings(self):
         """Import ranking for all products and rank types from the CSVs"""
         rankings = defaultdict(dict)
-        for rank_type in RANK_TYPES[self.sector]:
+        for rank_type in self.rank_types:
             df_rank = self.importer.get_ranking(rank_type=rank_type)
 
             rankings[rank_type] = {}
@@ -126,7 +127,7 @@ class SimulationPathway:
 
     def save_rankings(self):
         for product in self.products:
-            for rank_type in RANK_TYPES:
+            for rank_type in self.rank_types:
                 df = pd.concat(
                     [
                         pd.concat([df_ranking])
@@ -319,11 +320,11 @@ class SimulationPathway:
 
     def get_ranking(self, year, rank_type):
         """Get ranking df for a specific year/product"""
-        if rank_type not in RANK_TYPES[self.sector]:
+        if rank_type not in self.rank_types:
             raise ValueError(
                 "Rank type %s not recognized, choose one of %s",
                 rank_type,
-                RANK_TYPES,
+                self.rank_types,
             )
 
         return self.rankings[rank_type][year]
