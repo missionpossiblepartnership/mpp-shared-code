@@ -3,7 +3,8 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from ammonia.config_ammonia import (END_YEAR, INITIAL_ASSET_DATA_LEVEL,
+from ammonia.config_ammonia import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                                    END_YEAR, INITIAL_ASSET_DATA_LEVEL,
                                     LOG_LEVEL, PRODUCTS, START_YEAR,
                                     TECHNOLOGY_RAMP_UP_CONSTRAINT)
 from ammonia.solver.brownfield import brownfield
@@ -112,6 +113,7 @@ def simulate_pathway(
         initial_asset_data_level=INITIAL_ASSET_DATA_LEVEL,
         technology_rampup=dict_technology_rampup,
         carbon_cost_trajectory=carbon_cost_trajectory,
+        assumed_annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
     )
 
     # Optimize asset stack on a yearly basis

@@ -5,7 +5,7 @@ import numpy as np
 
 SECTOR = "ammonia"
 
-INITAL_ASSET_DATA_LEVEL = "regional"
+INITIAL_ASSET_DATA_LEVEL = "regional"
 
 ### RUN CONFIRGUATION ###
 LOG_LEVEL = "DEBUG"
@@ -28,6 +28,8 @@ run_config = {
 START_YEAR = 2020
 END_YEAR = 2050
 PRODUCTS = ["Ammonia", "Ammonium nitrate", "Urea"]
+# Override asset parameters; annual production capacity in Mt/year
+ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 ### PATHWAYS, SENSITIVITIES AND CARBON COSTS ###
 PATHWAYS = [
