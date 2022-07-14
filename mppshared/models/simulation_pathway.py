@@ -13,7 +13,7 @@ from plotly.subplots import make_subplots
 
 from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, GHGS,
                               INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL, MODEL_SCOPE,
-                              PRODUCTS, RANK_TYPES, SECTOR)
+                              RANK_TYPES)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import Asset, AssetStack, create_assets
@@ -126,7 +126,7 @@ class SimulationPathway:
         return rankings
 
     def save_rankings(self):
-        for product in PRODUCTS[SECTOR]:
+        for product in self.products:
             for rank_type in RANK_TYPES:
                 df = pd.concat(
                     [
@@ -336,7 +336,7 @@ class SimulationPathway:
     def copy_availability(self, year):
         df = self.availability
 
-        for product in PRODUCTS[SECTOR]:
+        for product in self.products:
             df.loc[df.year == year + 1, f"{product}_used"] = list(
                 df.loc[df.year == year, f"{product}_used"]
             )
