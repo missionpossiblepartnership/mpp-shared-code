@@ -412,7 +412,9 @@ class AssetStack:
 
         return list(candidates)
 
-    def get_assets_eligible_for_brownfield(self, year: int, sector: str) -> list:
+    def get_assets_eligible_for_brownfield(
+        self, year: int, sector: str, investment_cycle: int
+    ) -> list:
         """Return a list of Assets from the AssetStack that are eligible for a brownfield technology transition"""
 
         # Assets can be renovated at any time unless they've been renovated already
@@ -425,7 +427,7 @@ class AssetStack:
         # Assets can be rebuild if their CUF exceeds the threshold and they are older than the investment cycle
         candidates_rebuild = filter(
             lambda asset: (asset.cuf > self.cuf_lower_threshold)
-            & (asset.get_age(year) >= INVESTMENT_CYCLES[sector]),
+            & (asset.get_age(year) >= investment_cycle),
             self.assets,
         )
 
