@@ -6,8 +6,8 @@ from xmlrpc.client import Boolean
 
 import pandas as pd
 
-from mppshared.config import (CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD, GHGS,
-                              INVESTMENT_CYCLES, LOG_LEVEL)
+from mppshared.config import (CUF_UPPER_THRESHOLD, GHGS, INVESTMENT_CYCLES,
+                              LOG_LEVEL)
 from mppshared.utility.dataframe_utility import get_emission_columns
 from mppshared.utility.utils import first, get_logger
 
@@ -29,6 +29,7 @@ class Asset:
         asset_lifetime: int,
         technology_classification: str,
         emission_scopes: list,
+        cuf_lower_threshold: float,
         retrofit=False,
         rebuild=False,
         greenfield=False,
@@ -47,6 +48,7 @@ class Asset:
         # Production capacity parameters
         self.annual_production_capacity = annual_production_capacity  # unit: Mt/year
         self.cuf = cuf  # capacity utilisation factor (decimal)
+        self.cuf_lower_threshold = cuf_lower_threshold  # lower threshold for cuf
         self.emission_scopes = emission_scopes
 
         # Asset status parameters
@@ -113,6 +115,7 @@ class AssetStack:
     def __init__(self, assets: list):
         self.assets = assets
         self.emission_scopes = assets[0].emission_scopes
+        self.cuf_lower_threshold = assets[0].cuf_lower_threshold
         # Keep track of all assets added this year
         self.new_ids = []
 
@@ -415,7 +418,7 @@ class AssetStack:
 
         # Assets can be rebuild if their CUF exceeds the threshold and they are older than the investment cycle
         candidates_rebuild = filter(
-            lambda asset: (asset.cuf > CUF_LOWER_THRESHOLD)
+            lambda asset: (asset.cuf > self.cuf_lower_threshold)
             & (asset.get_age(year) >= INVESTMENT_CYCLES[sector]),
             self.assets,
         )

@@ -44,6 +44,7 @@ class SimulationPathway:
         technology_rampup: dict,
         carbon_budget: CarbonBudget,
         emission_scopes: list,
+        cuf_lower_threshold: float,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
     ):
         # Attributes describing the pathway
@@ -56,6 +57,7 @@ class SimulationPathway:
         self.rank_types = rank_types
         self.initial_asset_data_level = initial_asset_data_level
         self.emission_scopes = emission_scopes
+        self.cuf_lower_threshold = cuf_lower_threshold
 
         # Carbon Budget (already initialized with emissions pathway)
         self.carbon_budget = carbon_budget
@@ -456,6 +458,7 @@ class SimulationPathway:
                 asset_lifetime=row["technology_lifetime"],
                 technology_classification=row["technology_classification"],
                 emission_scopes=self.emission_scopes,
+                cuf_lower_threshold=self.cuf_lower_threshold,
             ),
             axis=1,
         ).tolist()
@@ -502,6 +505,7 @@ class SimulationPathway:
                 technology_classification=row["technology_classification"],
                 ppa_allowed=row["ppa_allowed"],
                 emission_scopes=self.emission_scopes,
+                cuf_lower_threshold=self.cuf_lower_threshold,
             ),
             axis=1,
         ).tolist()

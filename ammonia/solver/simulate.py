@@ -4,7 +4,8 @@ from datetime import timedelta
 from timeit import default_timer as timer
 
 from ammonia.config_ammonia import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                                    CARBON_BUDGET_SECTOR_CSV, EMISSION_SCOPES,
+                                    CARBON_BUDGET_SECTOR_CSV,
+                                    CUF_LOWER_THRESHOLD, EMISSION_SCOPES,
                                     END_YEAR, INITIAL_ASSET_DATA_LEVEL,
                                     LOG_LEVEL, PRODUCTS, RANK_TYPES,
                                     SECTORAL_CARBON_PATHWAY, START_YEAR,
@@ -133,6 +134,7 @@ def simulate_pathway(
         carbon_budget=carbon_budget,
         carbon_cost_trajectory=carbon_cost_trajectory,
         emission_scopes=EMISSION_SCOPES,
+        cuf_lower_threshold=CUF_LOWER_THRESHOLD,
     )
 
     # Optimize asset stack on a yearly basis

@@ -5,9 +5,9 @@ from timeit import default_timer as timer
 
 from aluminium.config_aluminium import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                                         CARBON_BUDGET_SECTOR_CSV,
-                                        EMISSION_SCOPES, END_YEAR,
-                                        INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL,
-                                        PRODUCTS, RANK_TYPES,
+                                        CUF_LOWER_THRESHOLD, EMISSION_SCOPES,
+                                        END_YEAR, INITIAL_ASSET_DATA_LEVEL,
+                                        LOG_LEVEL, PRODUCTS, RANK_TYPES,
                                         SECTORAL_CARBON_PATHWAY, START_YEAR,
                                         TECHNOLOGY_RAMP_UP_CONSTRAINT)
 from aluminium.solver.brownfield import brownfield
@@ -126,6 +126,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         technology_rampup=dict_technology_rampup,
         carbon_budget=carbon_budget,
         emission_scopes=EMISSION_SCOPES,
+        cuf_lower_threshold=CUF_LOWER_THRESHOLD,
     )
 
     # Optimize asset stack on a yearly basis
