@@ -1,7 +1,7 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-from mppshared.config import END_YEAR, MODEL_YEARS, START_YEAR
+from mppshared.config import MODEL_YEARS
 
 
 class CarbonCostTrajectory:
@@ -26,6 +26,7 @@ class CarbonCostTrajectory:
         final_carbon_cost: float,
         start_year: int,
         end_year: int,
+        model_years: range,
     ):
         """Set carbon cost trajectory in the form of a DataFrame with columns "year", "carbon_cost"
         Args:
@@ -35,7 +36,7 @@ class CarbonCostTrajectory:
         """
         # Initialize DataFrame
         self.df_carbon_cost = pd.DataFrame(
-            data={"year": MODEL_YEARS, "carbon_cost": None}
+            data={"year": model_years, "carbon_cost": None}
         )
 
         # TODO: make this much nicer

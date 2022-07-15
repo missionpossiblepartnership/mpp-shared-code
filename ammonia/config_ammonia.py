@@ -27,6 +27,7 @@ run_config = {
 }
 START_YEAR = 2020
 END_YEAR = 2050
+MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 PRODUCTS = ["Ammonia", "Ammonium nitrate", "Urea"]
 # Override asset parameters; annual production capacity in Mt/year
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
