@@ -509,6 +509,7 @@ class SimulationPathway:
                 ppa_allowed=row["ppa_allowed"],
                 emission_scopes=self.emission_scopes,
                 cuf_lower_threshold=self.cuf_lower_threshold,
+                ghgs=self.ghgs,
             ),
             axis=1,
         ).tolist()
