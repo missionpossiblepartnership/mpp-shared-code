@@ -8,8 +8,8 @@ import os
 import numpy as np
 
 from ammonia.config_ammonia import (CARBON_COSTS, END_YEAR, LOG_LEVEL,
-                                    PATHWAYS, RUN_PARALLEL, SECTOR,
-                                    SENSITIVITIES, run_config)
+                                    MODEL_YEARS, PATHWAYS, RUN_PARALLEL,
+                                    SECTOR, SENSITIVITIES, run_config)
 from ammonia.solver.implicit_forcing import apply_implicit_forcing
 from ammonia.solver.ranking import make_rankings
 from ammonia.solver.simulate import simulate_pathway
