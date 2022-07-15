@@ -6,7 +6,7 @@ from timeit import default_timer as timer
 from ammonia.config_ammonia import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                                     CARBON_BUDGET_SECTOR_CSV,
                                     CUF_LOWER_THRESHOLD, EMISSION_SCOPES,
-                                    END_YEAR, INITIAL_ASSET_DATA_LEVEL,
+                                    END_YEAR, GHGS, INITIAL_ASSET_DATA_LEVEL,
                                     LOG_LEVEL, PRODUCTS, RANK_TYPES,
                                     SECTORAL_CARBON_PATHWAY, START_YEAR,
                                     TECHNOLOGY_RAMP_UP_CONSTRAINT)
@@ -135,6 +135,7 @@ def simulate_pathway(
         carbon_cost_trajectory=carbon_cost_trajectory,
         emission_scopes=EMISSION_SCOPES,
         cuf_lower_threshold=CUF_LOWER_THRESHOLD,
+        ghgs=GHGS,
     )
 
     # Optimize asset stack on a yearly basis
