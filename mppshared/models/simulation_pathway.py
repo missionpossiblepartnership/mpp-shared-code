@@ -45,6 +45,7 @@ class SimulationPathway:
         carbon_budget: CarbonBudget,
         emission_scopes: list,
         cuf_lower_threshold: float,
+        ghgs: list,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
     ):
         # Attributes describing the pathway
@@ -58,6 +59,7 @@ class SimulationPathway:
         self.initial_asset_data_level = initial_asset_data_level
         self.emission_scopes = emission_scopes
         self.cuf_lower_threshold = cuf_lower_threshold
+        self.ghgs = ghgs
 
         # Carbon Budget (already initialized with emissions pathway)
         self.carbon_budget = carbon_budget
@@ -459,6 +461,7 @@ class SimulationPathway:
                 technology_classification=row["technology_classification"],
                 emission_scopes=self.emission_scopes,
                 cuf_lower_threshold=self.cuf_lower_threshold,
+                ghgs=self.ghgs,
             ),
             axis=1,
         ).tolist()

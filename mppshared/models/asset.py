@@ -6,7 +6,7 @@ from xmlrpc.client import Boolean
 
 import pandas as pd
 
-from mppshared.config import GHGS, INVESTMENT_CYCLES, LOG_LEVEL
+from mppshared.config import INVESTMENT_CYCLES, LOG_LEVEL
 from mppshared.utility.dataframe_utility import get_emission_columns
 from mppshared.utility.utils import first, get_logger
 
