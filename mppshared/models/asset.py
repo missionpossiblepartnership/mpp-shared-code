@@ -6,7 +6,7 @@ from xmlrpc.client import Boolean
 
 import pandas as pd
 
-from mppshared.config import INVESTMENT_CYCLES, LOG_LEVEL
+from mppshared.config import LOG_LEVEL
 from mppshared.utility.dataframe_utility import get_emission_columns
 from mppshared.utility.utils import first, get_logger
 
@@ -413,7 +413,7 @@ class AssetStack:
         return list(candidates)
 
     def get_assets_eligible_for_brownfield(
-        self, year: int, sector: str, investment_cycle: int
+        self, year: int, investment_cycle: int
     ) -> list:
         """Return a list of Assets from the AssetStack that are eligible for a brownfield technology transition"""
 
