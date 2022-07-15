@@ -114,6 +114,7 @@ class AssetStack:
     def __init__(self, assets: list):
         self.assets = assets
         self.emission_scopes = assets[0].emission_scopes
+        self.ghgs = assets[0].ghgs
         self.cuf_lower_threshold = assets[0].cuf_lower_threshold
         # Keep track of all assets added this year
         self.new_ids = []
@@ -260,7 +261,9 @@ class AssetStack:
         """Calculate emissions of the current stack in MtGHG by GHG and scope, optionally filtered for technology classification and/or a specific product"""
 
         # Sum emissions by GHG and scope
-        emission_columns = get_emission_columns(ghgs=GHGS, scopes=self.emission_scopes)
+        emission_columns = get_emission_columns(
+            ghgs=self.ghgs, scopes=self.emission_scopes
+        )
         dict_emissions = dict.fromkeys(emission_columns)
 
         # Get DataFrame with annual production volume by product, region and technology (optionally filtered for technology classification and specific product)
