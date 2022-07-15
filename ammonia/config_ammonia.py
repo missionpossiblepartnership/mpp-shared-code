@@ -102,6 +102,8 @@ RANKING_COST_METRIC = "lcox"
 COST_METRIC_RELATIVE_UNCERTAINTY = 0.05
 GHGS_RANKING = ["co2"]
 EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3_upstream"]
+# Emission scopes included in data analysis
+EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
 
 TRANSITION_TYPES = [
     "decommission",

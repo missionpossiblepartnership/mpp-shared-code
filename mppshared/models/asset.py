@@ -6,9 +6,8 @@ from xmlrpc.client import Boolean
 
 import pandas as pd
 
-from mppshared.config import (CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
-                              EMISSION_SCOPES_DEFAULT, GHGS, INVESTMENT_CYCLES,
-                              LOG_LEVEL)
+from mppshared.config import (CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD, GHGS,
+                              INVESTMENT_CYCLES, LOG_LEVEL)
 from mppshared.utility.dataframe_utility import get_emission_columns
 from mppshared.utility.utils import first, get_logger
 
@@ -29,12 +28,12 @@ class Asset:
         cuf: float,
         asset_lifetime: int,
         technology_classification: str,
+        emission_scopes: list,
         retrofit=False,
         rebuild=False,
         greenfield=False,
         stay_same=False,
         ppa_allowed=True,
-        emission_scopes: list = EMISSION_SCOPES_DEFAULT,
     ):
         # Unique ID to identify and compare assets
         self.uuid = uuid4().hex
@@ -48,6 +47,7 @@ class Asset:
         # Production capacity parameters
         self.annual_production_capacity = annual_production_capacity  # unit: Mt/year
         self.cuf = cuf  # capacity utilisation factor (decimal)
+        self.emission_scopes = emission_scopes
 
         # Asset status parameters
         self.retrofit = retrofit
@@ -112,6 +112,7 @@ class AssetStack:
 
     def __init__(self, assets: list):
         self.assets = assets
+        self.emission_scopes = assets[0].emission_scopes
         # Keep track of all assets added this year
         self.new_ids = []
 
@@ -257,7 +258,7 @@ class AssetStack:
         """Calculate emissions of the current stack in MtGHG by GHG and scope, optionally filtered for technology classification and/or a specific product"""
 
         # Sum emissions by GHG and scope
-        emission_columns = get_emission_columns(ghgs=GHGS, scopes=emission_scopes)
+        emission_columns = get_emission_columns(ghgs=GHGS, scopes=self.emission_scopes)
         dict_emissions = dict.fromkeys(emission_columns)
 
         # Get DataFrame with annual production volume by product, region and technology (optionally filtered for technology classification and specific product)

@@ -79,7 +79,10 @@ TECHNOLOGY_MORATORIUM = 2030
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
 TRANSITIONAL_PERIOD_YEARS = 20
 # Emission scopes included in data analysis
-EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
+EMISSION_SCOPES = [
+    "scope1",
+    "scope2",
+]
 # Emissions
 GHGS = ["co2"]
 
@@ -88,7 +91,7 @@ RANKING_COST_METRIC = "tco"
 BIN_METHODOLOGY = "histogram"
 NUMBER_OF_BINS_RANKING = 50
 GHGS_RANKING = ["co2"]
-EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
+EMISSION_SCOPES_RANKING = ["scope1", "scope2"]
 
 TRANSITION_TYPES = [
     "decommission",

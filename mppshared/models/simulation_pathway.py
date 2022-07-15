@@ -43,6 +43,7 @@ class SimulationPathway:
         assumed_annual_production_capacity: float,
         technology_rampup: dict,
         carbon_budget: CarbonBudget,
+        emission_scopes: list,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
     ):
         # Attributes describing the pathway
@@ -54,6 +55,7 @@ class SimulationPathway:
         self.products = products
         self.rank_types = rank_types
         self.initial_asset_data_level = initial_asset_data_level
+        self.emission_scopes = emission_scopes
 
         # Carbon Budget (already initialized with emissions pathway)
         self.carbon_budget = carbon_budget
@@ -453,6 +455,7 @@ class SimulationPathway:
                 cuf=row["average_cuf"],
                 asset_lifetime=row["technology_lifetime"],
                 technology_classification=row["technology_classification"],
+                emission_scopes=self.emission_scopes,
             ),
             axis=1,
         ).tolist()
@@ -498,6 +501,7 @@ class SimulationPathway:
                 asset_lifetime=row["technology_lifetime"],
                 technology_classification=row["technology_classification"],
                 ppa_allowed=row["ppa_allowed"],
+                emission_scopes=self.emission_scopes,
             ),
             axis=1,
         ).tolist()

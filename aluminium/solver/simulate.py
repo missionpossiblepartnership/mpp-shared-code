@@ -4,7 +4,8 @@ from datetime import timedelta
 from timeit import default_timer as timer
 
 from aluminium.config_aluminium import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                                        CARBON_BUDGET_SECTOR_CSV, END_YEAR,
+                                        CARBON_BUDGET_SECTOR_CSV,
+                                        EMISSION_SCOPES, END_YEAR,
                                         INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL,
                                         PRODUCTS, RANK_TYPES,
                                         SECTORAL_CARBON_PATHWAY, START_YEAR,
@@ -124,6 +125,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         assumed_annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
         technology_rampup=dict_technology_rampup,
         carbon_budget=carbon_budget,
+        emission_scopes=EMISSION_SCOPES,
     )
 
     # Optimize asset stack on a yearly basis
