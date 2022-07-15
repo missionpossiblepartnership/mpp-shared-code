@@ -29,6 +29,7 @@ class Asset:
         technology_classification: str,
         emission_scopes: list,
         cuf_lower_threshold: float,
+        ghgs: list,
         retrofit=False,
         rebuild=False,
         greenfield=False,
@@ -48,7 +49,10 @@ class Asset:
         self.annual_production_capacity = annual_production_capacity  # unit: Mt/year
         self.cuf = cuf  # capacity utilisation factor (decimal)
         self.cuf_lower_threshold = cuf_lower_threshold  # lower threshold for cuf
+
+        # Emissions parameters
         self.emission_scopes = emission_scopes
+        self.ghgs = ghgs
 
         # Asset status parameters
         self.retrofit = retrofit
