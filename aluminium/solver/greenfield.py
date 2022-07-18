@@ -8,23 +8,16 @@ from operator import methodcaller
 import numpy as np
 import pandas as pd
 
-from mppshared.agent_logic.greenfield import (
-    get_region_rank_filter,
-    select_asset_for_greenfield,
-    enact_greenfield_transition,
-)
-from aluminium.config_aluminium import (
-    LOG_LEVEL,
-    MODEL_SCOPE,
-    CUF_UPPER_THRESHOLD,
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-)
+from aluminium.config_aluminium import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                                        CUF_UPPER_THRESHOLD, LOG_LEVEL,
+                                        MODEL_SCOPE)
+from mppshared.agent_logic.greenfield import (enact_greenfield_transition,
+                                              get_region_rank_filter,
+                                              select_asset_for_greenfield)
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
-    check_constraints,
-    get_regional_production_constraint_table,
-    hydro_constraints,
-)
+    check_constraints, get_regional_production_constraint_table,
+    hydro_constraints)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 

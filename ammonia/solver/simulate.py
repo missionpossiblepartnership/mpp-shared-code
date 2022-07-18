@@ -65,13 +65,13 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
         #     f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
         # )
 
-        # # Build new assets
-        # start = timer()
-        # pathway = greenfield(pathway=pathway, year=year)
-        # end = timer()
-        # logger.debug(
-        #     f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
-        # )
+        # Build new assets
+        start = timer()
+        pathway = greenfield(pathway=pathway, year=year)
+        end = timer()
+        logger.debug(
+            f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
+        )
 
     return pathway
 

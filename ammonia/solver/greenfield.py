@@ -14,7 +14,9 @@ from mppshared.agent_logic.agent_logic_functions import (
     select_best_transition,
     apply_regional_technology_ban,
 )
-from mppshared.config import (
+from ammonia.config_ammonia import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    MODEL_SCOPE,
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
     BUILD_CURRENT_PROJECT_PIPELINE,
     LOG_LEVEL,

@@ -4,6 +4,8 @@ import logging
 import numpy as np
 
 SECTOR = "ammonia"
+# Scope of the model run - to be specified
+MODEL_SCOPE = "Global"
 
 INITIAL_ASSET_DATA_LEVEL = "regional"
 
@@ -31,6 +33,21 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 PRODUCTS = ["Ammonia", "Ammonium nitrate", "Urea"]
 # Override asset parameters; annual production capacity in Mt/year
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
+
+# Override asset parameters; annual production capacity in Mt/year
+# Ratios for calculating electrolysis capacity
+H2_PER_AMMONIA = 0.176471
+AMMONIA_PER_UREA = 0.565724
+AMMONIA_PER_AMMONIUM_NITRATE = 0.425534
+ammonia_typical_plant_capacity_Mt = (2000 * 365) / 1e6
+
+ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT = {
+    "Ammonia": ammonia_typical_plant_capacity_Mt,
+    "Urea": ammonia_typical_plant_capacity_Mt / AMMONIA_PER_UREA,
+    "Ammonium nitrate": ammonia_typical_plant_capacity_Mt
+    / AMMONIA_PER_AMMONIUM_NITRATE,
+    "Aluminium": 1,
+}
 
 ### PATHWAYS, SENSITIVITIES AND CARBON COSTS ###
 PATHWAYS = [
