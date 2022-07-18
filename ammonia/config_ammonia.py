@@ -75,6 +75,13 @@ CARBON_COSTS = [
 ]
 
 
+MAP_LOW_COST_POWER_REGIONS = {
+    "Middle East": "Saudi Arabia",
+    "Africa": "Namibia",
+    "Oceania": "Australia",
+    "Latin America": "Brazil",
+}
+
 ### STANDARD ASSUMPTIONS FOR AMMOINA PLANTS ###
 STANDARD_CUF = 0.95
 STANDARD_LIFETIME = 30  # years
