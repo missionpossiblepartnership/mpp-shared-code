@@ -1,0 +1,171 @@
+uuid,product,region,technology,technology_classification,annual_production_capacity,annual_production_volume,cuf,year_commissioned,asset_lifetime,retrofit_status,rebuild_status,greenfield_status,stay_same_status
+a41e50346ac344578d6dc01c1681d201,Aluminium,South America,Carbon Anode + Natural Gas,initial,0.46,0.276,0.6,1971,30,False,False,False,False
+7fe6ff403beb489aa448b335a5ef01d4,Aluminium,Oceania,Carbon Anode + Grid,transition,0.358,0.0,0.0,1986,0,False,False,False,False
+72ee0cd25917499a80182800a5cee8d7,Aluminium,Oceania,Carbon Anode + PPA+Grid,transition,0.195,0.11699999999999999,0.6,1955,0,False,False,False,False
+ffc3859dcd7047a7bc90c559be5cfb43,Aluminium,Oceania,Carbon Anode + Grid,transition,0.597,0.35819999999999996,0.6,1983,0,False,False,False,False
+cce934dce3694566b6d255a022e9b6d9,Aluminium,Middle East,Carbon Anode + Grid,transition,0.055,0.033,0.6,2013,0,False,False,False,False
+43c74a278c3a47ea84ade35063914b24,Aluminium,Middle East,Carbon Anode + Natural Gas,initial,1.561,1.5410191999999998,0.9872,1971,30,False,False,False,False
+3c8c250610eb44baa80922e210c9583b,Aluminium,Rest of Europe,Carbon Anode + Grid,transition,0.35,0.0,0.0,1975,0,False,False,False,False
+118008d887af4797afd7d9cab3bf9efb,Aluminium,South America,Carbon Anode + PPA+Grid,transition,0.447,0.0,0.0,2023,0,False,False,False,False
+04b06533e3044011bd598148abd7997b,Aluminium,South America,Carbon Anode + PPA+Grid,transition,0.46,0.276,0.6,1985,0,False,False,False,False
+6f8712936d264ba5a9f96cc308dd70d2,Aluminium,South America,Carbon Anode + Hydro,transition,0.475,0.45125,0.95,1955,60,False,False,False,False
+5649ef23b0f44e1298a4c07da01461f7,Aluminium,Canada,Carbon Anode + PPA+Grid,transition,0.287,0.0,0.0,1992,0,False,False,False,False
+32160b317ddc43038f11c4c6b1c9bf5f,Aluminium,Canada,Carbon Anode + PPA+Grid,transition,0.312,0.0,0.0,1957,0,False,False,False,False
+233b7df710674b5cb9be505080fb044d,Aluminium,Canada,Carbon Anode + PPA+Grid,transition,0.622,0.3732,0.6,1992,0,False,False,False,False
+67f15b68c13f439696becfb715f4256a,Aluminium,Canada,Carbon Anode + Hydro,transition,0.473,0.47101339999999997,0.9958,2000,60,False,False,False,False
+bd306ed418ad4e068b5f13e2bd17f008,Aluminium,Canada,Carbon Anode + Hydro,transition,0.174,0.16799699999999998,0.9655,1926,60,False,False,False,False
+2a3c45ebe9c64fbcba1119be8c028ff7,Aluminium,Canada,Carbon Anode + Hydro,transition,0.06,0.05793,0.9655,1926,60,False,False,False,False
+465a45e068424d7db77854c6ac3da956,Aluminium,Canada,Carbon Anode + Hydro,transition,0.233,0.2319282,0.9954,1980,60,False,False,False,False
+47da5a49e3694c53ab8e8de96c6db317,Aluminium,Canada,Carbon Anode + Hydro,transition,0.432,0.4104,0.95,1954,60,False,False,False,False
+4b1bfe7f824d4ad28c2ba01a516fe8f6,Aluminium,Canada,Carbon Anode + Hydro,transition,0.257,0.2499839,0.9727,1989,60,False,False,False,False
+752d365829814e2a8596321864772e06,Aluminium,Canada,Carbon Anode + PPA+Grid,transition,0.462,0.2772,0.6,1986,0,False,False,False,False
+bdad567cf1af456884d177004c4bafca,Aluminium,Rest of Europe,Carbon Anode + Grid,transition,0.285,0.23369999999999996,0.82,1991,0,False,False,False,False
+154d06cddca54d3c9db4b5bc38df2a61,Aluminium,Rest of Europe,Carbon Anode + Grid,transition,0.15,0.145005,0.9667,1907,0,False,False,False,False
+264c4c903e134d81b5b95e8f51758520,Aluminium,Rest of Europe,Carbon Anode + Grid,transition,0.165,0.165,1.0,1971,0,False,False,False,False
+7b2744a8ba8c490dbe054b06adf32b15,Aluminium,Rest of Europe,Carbon Anode + Grid,transition,0.135,0.135,1.0,1970,0,False,False,False,False
+29ea535699af4c4893487ce852dca0c6,Aluminium,Rest of Europe,Carbon Anode + Grid,transition,0.095,0.095,1.0,1971,0,False,False,False,False
+2880fa2f80de4c33bef8a823a520c05a,Aluminium,Africa,Carbon Anode + PPA+Grid,transition,0.2,0.0,0.0,1967,0,False,False,False,False
+433289b0272942918970cde061ff1eff,Aluminium,Rest of Europe,Carbon Anode + Natural Gas,initial,0.19,0.11399999999999999,0.6,1960,30,False,False,False,False
+a97f24e4b172433ca7def7233d611efd,Aluminium,Scandinavia,Carbon Anode + PPA+Grid,transition,0.317,0.3130058,0.9874,1998,0,False,False,False,False
+9a4b90fcd1864cb484a78d4c9202695d,Aluminium,Scandinavia,Carbon Anode + PPA+Grid,transition,0.212,0.20299,0.9575,1969,0,False,False,False,False
+b97e75dc0d7146978a595d61e197a3a6,Aluminium,Rest of Asia,Carbon Anode + Coal,initial,0.36,0.361764,1.0049,2013,30,False,False,False,False
+d2183db3248640d5a3dca564ca095c8f,Aluminium,Rest of Asia,Carbon Anode + Coal,initial,0.216,0.2052,0.95,2013,30,False,False,False,False
+ff77c630441c4041a9f2789a9b1d9126,Aluminium,Rest of Asia,Carbon Anode + Coal,initial,0.359,0.3571332,0.9948,2015,30,False,False,False,False
+35740adecc134a57b8de55e6fd8e2872,Aluminium,Rest of Asia,Carbon Anode + Coal,initial,0.41,0.409057,0.9977,1962,30,False,False,False,False
+b34f2c051c1c44b7863023d7af6b0e37,Aluminium,Rest of Asia,Carbon Anode + Coal,initial,0.46,0.437,0.95,1987,30,False,False,False,False
+61d004b803da44cea8b94ebc735a54c9,Aluminium,Rest of Asia,Carbon Anode + Coal,initial,1.75,1.6624999999999999,0.95,2008,30,False,False,False,False
+9985a8545dd14182be473e3d6f7aa220,Aluminium,Rest of Asia,Carbon Anode + Coal,initial,0.57,0.5750159999999999,1.0088,1965,30,False,False,False,False
+e82276d21d2242de84f080afe8e07d83,Aluminium,Rest of Asia,Carbon Anode + Hydro,transition,0.26,0.247,0.95,1976,60,False,False,False,False
+be81c8ef430c43bd8140119837c99bce,Aluminium,Middle East,Carbon Anode + Natural Gas,initial,0.11,0.1045,0.95,1997,30,False,False,False,False
+a976d4da4f42474a8462284d921767a3,Aluminium,Middle East,Carbon Anode + Natural Gas,initial,0.147,0.13965,0.95,1997,30,False,False,False,False
+ddd5d04875684e88bffa92041dec1f80,Aluminium,Middle East,Carbon Anode + Grid,transition,0.23,0.138,0.6,1967,0,False,False,False,False
+6ae7a2b36880417fb5e4c4f41e162172,Aluminium,Middle East,Carbon Anode + Grid,transition,0.3,0.1788,0.596,2020,0,False,False,False,False
+fbabee0d11314075981a38bff28934f9,Aluminium,Rest of Europe,Carbon Anode + Grid,transition,0.15,0.0,0.0,2023,0,False,False,False,False
+e9c9f5127f7e4bfc87713c81e291189b,Aluminium,Rest of Asia,Carbon Anode + Grid,transition,0.25,0.15,0.6,2007,0,False,False,False,False
+7c97b4a56d3d4575842d6b93e22913e4,Aluminium,Rest of Asia,Carbon Anode + PPA+Grid,transition,0.12,0.072,0.6,2009,0,False,False,False,False
+982a0c406ac44cc3a49eab443351d3ce,Aluminium,Rest of Asia,Carbon Anode + PPA+Grid,transition,0.96,0.576,0.6,2012,0,False,False,False,False
+294c61fd7f13411882f3a568d9558189,Aluminium,Rest of Europe,Carbon Anode + Grid,transition,0.12,0.0,0.0,1969,0,False,False,False,False
+619ad046dd444afba5d1ad536c405aeb,Aluminium,Rest of Europe,Carbon Anode + Grid,transition,0.11,0.0,0.0,1966,0,False,False,False,False
+4d5605a304af4ff1b681e82bc3482e4c,Aluminium,Oceania,Carbon Anode + PPA+Grid,transition,0.373,0.2238,0.6,1971,0,False,False,False,False
+d7fa302244814f19b6f51a585c8b5cac,Aluminium,Africa,Carbon Anode + Natural Gas,initial,0.193,0.0,0.0,2023,30,False,False,False,False
+7831782809174157ad502d8777def8ea,Aluminium,Scandinavia,Carbon Anode + PPA+Grid,transition,0.2,0.0,0.0,1962,0,False,False,False,False
+f3028e7697494be586cb3d502503933d,Aluminium,Scandinavia,Carbon Anode + Hydro,transition,0.202,0.20099,0.995,1948,60,False,False,False,False
+2ff75d99e2554c5e81ba8a65e9a00d6e,Aluminium,Scandinavia,Carbon Anode + Hydro,transition,0.066,0.066,1.0,1917,60,False,False,False,False
+7e11b04c05ee48c5979eebe4322014d5,Aluminium,Scandinavia,Carbon Anode + Hydro,transition,0.195,0.18525,0.95,1965,60,False,False,False,False
+9536b291abf94a8ca93af0821a0f98e9,Aluminium,Scandinavia,Carbon Anode + Hydro,transition,0.271,0.2659865,0.9815,1967,60,False,False,False,False
+0077cf4c3e5440f181a28bc9bcd70abc,Aluminium,Scandinavia,Carbon Anode + Hydro,transition,0.425,0.42300249999999995,0.9953,1954,60,False,False,False,False
+3167095a9e8c4da783f8b855c02043de,Aluminium,Middle East,Carbon Anode + Natural Gas,initial,0.395,0.395,1.0,2004,30,False,False,False,False
+d6ac8aa2eedd4a189d9475d76f4ebdcd,Aluminium,Middle East,Carbon Anode + Natural Gas,initial,0.636,0.636,1.0,2009,30,False,False,False,False
+0071bce55e04492388f4e0ac06e8baaa,Aluminium,Rest of Europe,Carbon Anode + Grid,transition,0.265,0.271307,1.0238,1965,0,False,False,False,False
+5fd0a40a383b47ffa5076cccacc0d311,Aluminium,Russia,Carbon Anode + Hydro,transition,0.298,0.28309999999999996,0.95,2019,60,False,False,False,False
+e2a3fef4f1184ceba10dbc14ca359acb,Aluminium,Russia,Carbon Anode + Hydro,transition,1.009,1.009,1.0,1966,60,False,False,False,False
+bd54216439b94e6990c932a81a10dd9d,Aluminium,Russia,Carbon Anode + Hydro,transition,0.422,0.422,1.0,1962,60,False,False,False,False
+a454831aa77e431d9b12b440d6660751,Aluminium,Russia,Carbon Anode + Grid,transition,0.076,0.045599999999999995,0.6,1951,0,False,False,False,False
+84e4055a7ec243689a980f5397d4b8c2,Aluminium,Russia,Carbon Anode + Hydro,transition,0.297,0.30888,1.04,2006,60,False,False,False,False
+08e3c0d2259c4d4b90d815a2f2ed9387,Aluminium,Russia,Carbon Anode + Hydro,transition,1.019,1.019,1.0,1964,60,False,False,False,False
+5ec18232a93d4ac1a95400f2ceac290f,Aluminium,Russia,Carbon Anode + Grid,transition,0.215,0.129,0.6,1943,0,False,False,False,False
+15d1ffd49909460b9f7f936656e4b194,Aluminium,Russia,Carbon Anode + Hydro,transition,0.542,0.5311600000000001,0.98,1985,60,False,False,False,False
+b5baba61543e48f7a442b49b9fbe17fc,Aluminium,Russia,Carbon Anode + Hydro,transition,0.429,0.40754999999999997,0.95,2021,60,False,False,False,False
+1aaa1f15ae4f45d7919694fc7eacdac5,Aluminium,Russia,Carbon Anode + PPA+Grid,transition,0.069,0.0414,0.6,1959,0,False,False,False,False
+69b7be53930a4ead8bd9ef30d150242c,Aluminium,Middle East,Carbon Anode + Grid,transition,0.78,0.46799999999999997,0.6,2012,0,False,False,False,False
+a0191305a2e04b57b9c94a117b57ba51,Aluminium,Rest of Europe,Carbon Anode + Grid,transition,0.175,0.16399249999999999,0.9371,1993,0,False,False,False,False
+0ddbe46dc7714daeb32a5900da8af112,Aluminium,Rest of Europe,Carbon Anode + Grid,transition,0.1004,0.0502,0.5,1954,0,False,False,False,False
+79135f144f354e8cb209ca3f0c533712,Aluminium,Africa,Carbon Anode + Grid,transition,0.72,0.432,0.6,2001,0,False,False,False,False
+1c63c12dcda74c199bd1e99eb79ea8b8,Aluminium,Rest of Europe,Carbon Anode + PPA+Grid,transition,0.228,0.0,0.0,2024,0,False,False,False,False
+1375bdb6f6b44ea989bb41e5d42e6ec6,Aluminium,Scandinavia,Carbon Anode + Grid,transition,0.128,0.11648,0.91,1942,0,False,False,False,False
+f2c450f83f894a59ba5e79e91706db9f,Aluminium,Middle East,Carbon Anode + Hydro,transition,0.082,0.0779,0.95,1974,60,False,False,False,False
+ceaebbc286e546ff88f164421b67c613,Aluminium,Middle East,Carbon Anode + Natural Gas,initial,1.5,1.4249999999999998,0.95,2009,30,False,False,False,False
+7845196be2d24ad5b9a66529ae35ec55,Aluminium,Middle East,Carbon Anode + Natural Gas,initial,1.0,0.95,0.95,1979,30,False,False,False,False
+a4a7bd6c4c0747b99eaa73a4907cefd2,Aluminium,Rest of Europe,Carbon Anode + Hydro,transition,0.0475,0.045125,0.95,1929,60,False,False,False,False
+73c4aa37129b4864b630e27ba1d86d8c,Aluminium,US,Carbon Anode + Grid,transition,0.279,0.26505,0.95,1966,0,False,False,False,False
+56e09a6215a54efcaf13783138bbc3d1,Aluminium,US,Carbon Anode + PPA+Grid,transition,0.13,0.1235,0.95,1902,0,False,False,False,False
+ef9da22434c04d448ab72620f48ceccc,Aluminium,US,Carbon Anode + Grid,transition,0.25,0.2375,0.95,1969,0,False,False,False,False
+cd3e8e9360f3480cb01ca5265c8c062a,Aluminium,US,Carbon Anode + Grid,transition,0.229,0.21755,0.95,1970,0,False,False,False,False
+b4065cc758e44e9b9b585f7d4c473555,Aluminium,US,Carbon Anode + Grid,transition,0.22,0.209,0.95,1973,0,False,False,False,False
+d97bc1cf48284da1b68ca9600e6e86cc,Aluminium,US,Carbon Anode + Grid,transition,0.263,0.24985,0.95,1971,0,False,False,False,False
+aa5a6d32fa8d4813992e5bc27ab5c619,Aluminium,South America,Carbon Anode + PPA+Grid,transition,0.21,0.0,0.0,1967,0,False,False,False,False
+02859879c1974fc8a35d52e7341528bc,Aluminium,South America,Carbon Anode + PPA+Grid,transition,0.43,0.0,0.0,1978,0,False,False,False,False
+941ad32bb50341e0bf8fc6f087d2afa7,Aluminium,Rest of Asia,Carbon Anode + Grid,transition,0.65,0.39,0.6,2016,0,False,False,False,False
+65bb63f6458a4e4e80f69457e1de8687,Aluminium,China - North West,Carbon Anode + Coal,initial,0.43,0.41839,0.973,1970,30,False,False,False,False
+a94ee56158a941a496efa3f5380f0cff,Aluminium,China - North West,Carbon Anode + Coal,initial,0.57,0.56829,0.997,2009,30,False,False,False,False
+0f6dbc61638d4429b1665d4bdf66ee8e,Aluminium,China - North West,Carbon Anode + Grid,transition,0.3,0.285,0.95,2010,0,False,False,False,False
+394f5fb972c443aaa499910b0a8842dc,Aluminium,China - North West,Carbon Anode + Grid,transition,0.575,0.5606249999999999,0.975,2010,0,False,False,False,False
+e6a4c9e0189d4a6b8e50c134da6096ad,Aluminium,China - North West,Carbon Anode + Grid,transition,0.4,0.40199999999999997,1.005,1987,0,False,False,False,False
+cd0d723924354469a34f5065958fb044,Aluminium,China - North West,Carbon Anode + Grid,transition,0.3,0.29009999999999997,0.967,2004,0,False,False,False,False
+c4b9a3b4a7ae4eb78821e8eadd01a5f8,Aluminium,China - North West,Carbon Anode + Grid,transition,0.45,0.4275,0.95,2011,0,False,False,False,False
+9fa53be38bf44ad3a632b6b3415e0826,Aluminium,China - North West,Carbon Anode + Grid,transition,0.1,0.1001,1.001,2012,0,False,False,False,False
+a8821a99dcb842e1af25353ab4fd17bd,Aluminium,China - North West,Carbon Anode + Grid,transition,0.7,0.6649999999999999,0.95,2003,0,False,False,False,False
+4b7daa24c5fb46f8be9c02353cc78fa2,Aluminium,China - North West,Carbon Anode + Grid,transition,0.24,0.22799999999999998,0.95,2014,0,False,False,False,False
+69c8d82d289c45cb9dde334cfe8fc878,Aluminium,China - North West,Carbon Anode + Grid,transition,0.07,0.0665,0.95,1995,0,False,False,False,False
+f2d16256257a466a88a9165686744b1c,Aluminium,China - Central,Carbon Anode + Coal,initial,0.6,0.5873999999999999,0.979,2002,30,False,False,False,False
+535153e1c88d4ff69305831d55b4bcb7,Aluminium,China - Central,Carbon Anode + Coal,initial,0.58,0.5509999999999999,0.95,1997,30,False,False,False,False
+8c05e0a0d23241b8a121212a4fa781d0,Aluminium,China - Central,Carbon Anode + Coal,initial,0.43,0.4085,0.95,1966,30,False,False,False,False
+7632d480cca64e2191011078593ce1f9,Aluminium,China - Central,Carbon Anode + Coal,initial,0.25,0.2375,0.95,1998,30,False,False,False,False
+dbe1be8cdd3c4b558013bf82ddbbac29,Aluminium,China - Central,Carbon Anode + Coal,initial,0.25,0.2375,0.95,1997,30,False,False,False,False
+7538550af23942bd9e2deab2f736270b,Aluminium,China - Central,Carbon Anode + Coal,initial,0.04,0.0396,0.99,1993,30,False,False,False,False
+d7f53e23c14d4377ba6ace35dd0e6a37,Aluminium,China - South,Carbon Anode + Grid,transition,1.28,1.216,0.95,1972,0,False,False,False,False
+ae487cc7ec2f4ec78d041aef04bd56c7,Aluminium,China - South,Carbon Anode + Grid,transition,0.38,0.361,0.95,2006,0,False,False,False,False
+cf5faa080acc40bd895b459ce6e81fba,Aluminium,China - South,Carbon Anode + PPA+Grid,transition,0.45,0.4275,0.95,2018,0,False,False,False,False
+70d7848f85ef4b458ab7da1d8854a16d,Aluminium,China - South,Carbon Anode + PPA+Grid,transition,0.42,0.39899999999999997,0.95,2019,0,False,False,False,False
+a7c164e61d70499e9f13b9c571f82ccd,Aluminium,China - South,Carbon Anode + PPA+Grid,transition,0.6,0.57,0.95,2019,0,False,False,False,False
+f1257e31857d4f16bc224f2ab5a60175,Aluminium,China - South,Carbon Anode + PPA+Grid,transition,0.1,0.0058000000000000005,0.058,2020,0,False,False,False,False
+f5d7347a02f8482f983b79921813877f,Aluminium,China - South,Carbon Anode + PPA+Grid,transition,0.5,0.215,0.43,2020,0,False,False,False,False
+d18fb9be74384e51933ef0b17c8d740f,Aluminium,China - South,Carbon Anode + PPA+Grid,transition,0.11,0.02904,0.264,2020,0,False,False,False,False
+3873bc03411c4d05a98f6821e712c81e,Aluminium,China - South,Carbon Anode + Grid,transition,0.42,0.41075999999999996,0.978,1988,0,False,False,False,False
+6e33596f447546c8b8be4548871008d6,Aluminium,China - South,Carbon Anode + Grid,transition,0.145,0.13325499999999998,0.919,2008,0,False,False,False,False
+e22f092648654d33a30e93be4476f84f,Aluminium,China - South,Carbon Anode + Grid,transition,0.133,0.096957,0.729,2003,0,False,False,False,False
+152b6aeec7f24aca9d28b4b2f80560ed,Aluminium,China - South,Carbon Anode + Grid,transition,0.25,0.25125,1.005,2016,0,False,False,False,False
+b7fbdb1cf05a4078a187d19193e87fc8,Aluminium,China - South,Carbon Anode + Grid,transition,0.5,0.49,0.98,2017,0,False,False,False,False
+3cf4c7d790034e1fab64b0e75f15b38b,Aluminium,China - North,Carbon Anode + Coal,initial,0.84,0.83748,0.997,2003,30,False,False,False,False
+50314c50372c42f5b88a26f44d44822e,Aluminium,China - North,Carbon Anode + Coal,initial,1.58,1.6353,1.035,1999,30,False,False,False,False
+50132e79b0264159904f1775aa787f72,Aluminium,China - North,Carbon Anode + Coal,initial,5.86,5.64318,0.963,2001,30,False,False,False,False
+504bf34b96a348c2a2809aad5b47882e,Aluminium,China - South,Carbon Anode + Coal,initial,0.32,0.192,0.6,2008,30,False,False,False,False
+e4d8b35d5a784fc3886eb2bb4047bf6b,Aluminium,China - South,Carbon Anode + Grid,transition,0.22,0.21648,0.984,2002,0,False,False,False,False
+e5f86f825720431da8e1bf0f207c0932,Aluminium,China - South,Carbon Anode + Grid,transition,0.5,0.457,0.914,2009,0,False,False,False,False
+ec6521e3cfe64535a7a432cc3970dbdb,Aluminium,China - South,Carbon Anode + Grid,transition,0.075,0.036524999999999995,0.487,2011,0,False,False,False,False
+1562424b99f0408d9ec63ff02fff354f,Aluminium,China - South,Carbon Anode + Coal,initial,0.3,0.18,0.6,2016,30,False,False,False,False
+02c3d645fd8a4d2eb689f76fb6f5f3be,Aluminium,China - South,Carbon Anode + Grid,transition,0.25,0.269,1.076,2018,0,False,False,False,False
+bc94c1cdf17244608fb81d292e350e2b,Aluminium,China - South,Carbon Anode + Grid,transition,0.13,0.1274,0.98,2018,0,False,False,False,False
+a050ffb71ebc4f87b789a472afbe92df,Aluminium,China - South,Carbon Anode + Grid,transition,0.2,0.19920000000000002,0.996,2016,0,False,False,False,False
+58a3269ba9954693b5037bccc8334297,Aluminium,China - South,Carbon Anode + Coal,initial,0.4,0.24,0.6,2017,30,False,False,False,False
+8d0b0adf79104ae3b3b8c857996ecbd6,Aluminium,China - North,Carbon Anode + Coal,initial,0.42,0.39899999999999997,0.95,2006,30,False,False,False,False
+87148a0a7e144d5fad8836e0896e4ff9,Aluminium,China - North,Carbon Anode + Coal,initial,0.22,0.209,0.95,1996,30,False,False,False,False
+744e5c8d75374188929d67c0de82af96,Aluminium,China - North,Carbon Anode + Grid,transition,0.06,0.042359999999999995,0.706,2004,0,False,False,False,False
+d7d30dd4db4044fbb598f47c4b273485,Aluminium,China - North,Carbon Anode + Grid,transition,0.5,0.288,0.576,2018,0,False,False,False,False
+4f290badb1b14308ba3a849bf7ab1436,Aluminium,China - North West,Carbon Anode + Grid,transition,0.54,0.513,0.95,1974,0,False,False,False,False
+43fd67d0149248dc8da45e738ede5d19,Aluminium,China - North West,Carbon Anode + Coal,initial,0.42,0.40152,0.956,1958,30,False,False,False,False
+dffe856ca2a24a35a5dfe8f7a9742b05,Aluminium,China - North West,Carbon Anode + Grid,transition,0.39,0.3705,0.95,1967,0,False,False,False,False
+16cd8e67848c4a9b87fed6e03d01de96,Aluminium,China - North West,Carbon Anode + Coal,initial,1.35,1.3081500000000001,0.969,2011,30,False,False,False,False
+747c867ced524342b297d07585cb75b3,Aluminium,China - North West,Carbon Anode + Grid,transition,0.1,0.11170000000000001,1.117,1997,0,False,False,False,False
+e511e8f3b49646838398810cb2cb1386,Aluminium,China - North West,Carbon Anode + Grid,transition,0.07,0.0665,0.95,2018,0,False,False,False,False
+53a0a74823204a3890f9ac712324aecd,Aluminium,China - North,Carbon Anode + Coal,initial,0.56,0.5644800000000001,1.008,2003,30,False,False,False,False
+a05c557a2ba440c3ae5845fc4552df2b,Aluminium,China - North,Carbon Anode + Coal,initial,0.88,0.86064,0.978,2003,30,False,False,False,False
+e34f780206544e98bcbb7a160eaf3cb3,Aluminium,China - North,Carbon Anode + Coal,initial,0.5,0.475,0.95,2018,30,False,False,False,False
+33b6d65c7d094648b902f0eb3c8df7c2,Aluminium,China - North,Carbon Anode + Coal,initial,0.86,0.9116000000000001,1.06,2004,30,False,False,False,False
+9483b83a160f4a76b7a1686374609c07,Aluminium,China - North,Carbon Anode + Coal,initial,0.287,0.28470399999999996,0.992,2014,30,False,False,False,False
+276d353178264f488c2c44ac24298957,Aluminium,China - North,Carbon Anode + Coal,initial,1.0003,1.0003,1.0,2013,30,False,False,False,False
+66c8666e4c564a438b5cf98ea840efca,Aluminium,China - North,Carbon Anode + Coal,initial,0.75,0.73425,0.979,2017,30,False,False,False,False
+76125a760fe845f783291418d5227159,Aluminium,China - North,Carbon Anode + Coal,initial,0.77,0.7314999999999999,0.95,2018,30,False,False,False,False
+1a41c0997960457a865866ddc10c01fc,Aluminium,China - North,Carbon Anode + Grid,transition,0.5,0.499,0.998,2018,0,False,False,False,False
+7779879e440e4be68e2e942b11f41951,Aluminium,China - Central,Carbon Anode + PPA+Grid,transition,0.13,0.078,0.6,2003,0,False,False,False,False
+d074f34dded945c3a0b1e5601caf33eb,Aluminium,China - Central,Carbon Anode + PPA+Grid,transition,0.13,0.078,0.6,2003,0,False,False,False,False
+430b1aed45cf4e8e843542cb80939a6c,Aluminium,China - Central,Carbon Anode + PPA+Grid,transition,0.12,0.072,0.6,2000,0,False,False,False,False
+b372f2bf3db74e2bbdae3e71e632f567,Aluminium,China - Central,Carbon Anode + PPA+Grid,transition,0.2,0.12,0.6,1991,0,False,False,False,False
+8f643b80d84f4edcadf2503f370db8aa,Aluminium,China - Central,Carbon Anode + PPA+Grid,transition,0.42,0.24149999999999996,0.575,2019,0,False,False,False,False
+7105450877a041d084a444ed22dc34b3,Aluminium,China - North West,Carbon Anode + Coal,initial,0.63,0.59976,0.952,2012,30,False,False,False,False
+c881c4fe38244bdbbf81cfc56952b748,Aluminium,China - North West,Carbon Anode + Coal,initial,0.3,0.3066,1.022,2018,30,False,False,False,False
+7fb7e59ab0534cc68771ed660d55ddc0,Aluminium,China - North,Carbon Anode + PPA+Grid,transition,0.06,0.05502,0.917,1970,0,False,False,False,False
+b81c3b9661ad4c4184442050aedf23c6,Aluminium,China - North,Carbon Anode + Coal,initial,0.066,0.0627,0.95,1997,30,False,False,False,False
+f865708a204547dcb21977c7a07f0606,Aluminium,China - North East,Carbon Anode + Grid,transition,0.8,0.3512,0.439,2015,0,False,False,False,False
+80290e1696474086ba8e27459515d5fa,Aluminium,China - North West,Carbon Anode + Coal,initial,1.9,1.805,0.95,2010,30,False,False,False,False
+77d5f5997feb4d459521b2882ec2c090,Aluminium,China - North West,Carbon Anode + Coal,initial,1.2,1.1987999999999999,0.999,2011,30,False,False,False,False
+b23a9d4d5df44eca9b222191ad38bc11,Aluminium,China - North West,Carbon Anode + Coal,initial,0.245,0.23838499999999999,0.973,2022,30,False,False,False,False
+d51af90f8f1a42e29bae70e24cd342a9,Aluminium,China - North West,Carbon Anode + Grid,transition,0.18,0.18036,1.002,1970,0,False,False,False,False
+ead16e377c504b0a8c5401e07787c78f,Aluminium,China - North West,Carbon Anode + Coal,initial,0.8,0.8752000000000001,1.094,2012,30,False,False,False,False
+cbba5a0a46c24b218daf2f369552981f,Aluminium,China - North West,Carbon Anode + Coal,initial,0.82,0.8060599999999999,0.983,2012,30,False,False,False,False
+f0be2e094b4d459b91e31ab0084aaac2,Aluminium,China - North West,Carbon Anode + Coal,initial,0.84,0.7979999999999999,0.95,2012,30,False,False,False,False
+69214992e2ea4d4e836860447ad22eb4,Aluminium,China - North West,Carbon Anode + Coal,initial,0.45,0.44730000000000003,0.994,2013,30,False,False,False,False
+a0988e0e4d0b4a20a6611af36d2c1fb5,Aluminium,China - East,Carbon Anode + Grid,transition,0.075,0.045,0.6,1960,0,False,False,False,False
+a8aeb0bdf7a34bfc9246c668a8a0e0be,Aluminium,China - Central,Carbon Anode + Grid,transition,0.1,0.06,0.6,2013,0,False,False,False,False
+957551237e6e42689f6bf69b9289a37f,Aluminium,China - Central,Carbon Anode + Grid,transition,0.08,0.043680000000000004,0.546,1996,0,False,False,False,False
+29f66f0db6d34f9593a6fd034d99ffad,Aluminium,China - Central,Carbon Anode + Coal,initial,0.34,0.323,0.95,2013,30,False,False,False,False
