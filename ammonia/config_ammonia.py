@@ -117,6 +117,9 @@ REGIONS_SALT_CAVERN_AVAILABILITY = {
     "Rest of Asia": "yes",
 }
 
+# Maximum share of global demand that can be supplied by one region
+MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION = 0.3
+
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = 2020
 
