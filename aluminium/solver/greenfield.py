@@ -8,10 +8,14 @@ from operator import methodcaller
 import numpy as np
 import pandas as pd
 
-from mppshared.agent_logic.agent_logic_functions import (
-    remove_all_transitions_with_destination_technology,
-    remove_transition,
-    select_best_transition,
+from mppshared.agent_logic.greenfield import (
+    get_region_rank_filter,
+    select_asset_for_greenfield,
+    enact_greenfield_transition,
+)
+from aluminium.config_aluminium import (
+    CUF_UPPER_THRESHOLD,
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
 )
 from mppshared.config import (
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
@@ -117,6 +121,8 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     df_rank=df_rank,
                     product=product,
                     year=year,
+                    annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                    cuf=CUF_UPPER_THRESHOLD,
                 )
             except ValueError:
                 logger.info(

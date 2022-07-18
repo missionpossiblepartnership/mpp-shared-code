@@ -3,19 +3,28 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from aluminium.config_aluminium import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                                        CARBON_BUDGET_SECTOR_CSV,
-                                        CUF_LOWER_THRESHOLD, EMISSION_SCOPES,
-                                        END_YEAR, GHGS,
-                                        INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL,
-                                        PRODUCTS, RANK_TYPES,
-                                        SECTORAL_CARBON_PATHWAY, START_YEAR,
-                                        TECHNOLOGY_RAMP_UP_CONSTRAINT)
+from aluminium.config_aluminium import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CARBON_BUDGET_SECTOR_CSV,
+    CUF_LOWER_THRESHOLD,
+    EMISSION_SCOPES,
+    END_YEAR,
+    GHGS,
+    INITIAL_ASSET_DATA_LEVEL,
+    LOG_LEVEL,
+    PRODUCTS,
+    RANK_TYPES,
+    SECTORAL_CARBON_PATHWAY,
+    START_YEAR,
+    TECHNOLOGY_RAMP_UP_CONSTRAINT,
+)
 from aluminium.solver.brownfield import brownfield
 from aluminium.solver.decommission import decommission
 from aluminium.solver.greenfield import greenfield
 from mppshared.agent_logic.agent_logic_functions import (
-    adjust_capacity_utilisation, create_dict_technology_rampup)
+    adjust_capacity_utilisation,
+    create_dict_technology_rampup,
+)
 from mppshared.config import SECTORAL_CARBON_BUDGETS
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_budget import CarbonBudget
@@ -65,13 +74,13 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
         #     f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
         # )
 
-        # # Build new assets
-        # start = timer()
-        # pathway = greenfield(pathway=pathway, year=year)
-        # end = timer()
-        # logger.debug(
-        #     f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
-        # )
+        # Build new assets
+        start = timer()
+        pathway = greenfield(pathway=pathway, year=year)
+        end = timer()
+        logger.debug(
+            f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
+        )
 
     return pathway
 
