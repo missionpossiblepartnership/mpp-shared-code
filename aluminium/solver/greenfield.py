@@ -14,14 +14,10 @@ from mppshared.agent_logic.greenfield import (
     enact_greenfield_transition,
 )
 from aluminium.config_aluminium import (
+    LOG_LEVEL,
+    MODEL_SCOPE,
     CUF_UPPER_THRESHOLD,
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-)
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    LOG_LEVEL,
-    MAP_LOW_COST_POWER_REGIONS,
-    MODEL_SCOPE,
 )
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
