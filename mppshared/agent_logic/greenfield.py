@@ -32,7 +32,7 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
+def greenfield_default(pathway: SimulationPathway, year: int) -> SimulationPathway:
     """Apply greenfield transition and add new Assets to the AssetStack.
 
     Args:
@@ -170,6 +170,8 @@ def select_asset_for_greenfield(
     df_rank: pd.DataFrame,
     product: str,
     year: int,
+    annual_production_capacity: float,
+    cuf: float,
 ) -> Asset:
     """Select asset for newbuild (greenfield transition)
 
@@ -194,6 +196,8 @@ def select_asset_for_greenfield(
             asset_transition=asset_transition,
             df_technology_characteristics=pathway.df_technology_characteristics,
             year=year,
+            annual_production_capacity=annual_production_capacity,
+            cuf=cuf,
         )
         new_asset.greenfield = True
 
