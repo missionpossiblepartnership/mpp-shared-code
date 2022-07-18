@@ -207,12 +207,20 @@ def select_asset_for_greenfield(
         # Tentatively update the stack and check constraints
         tentative_stack = deepcopy(stack)
         tentative_stack.append(new_asset)
-        dict_constraints = check_constraints(
-            pathway=pathway,
-            stack=tentative_stack,
-            year=year,
-            transition_type="greenfield",
-        )
+
+        # TODO: Remove comment after modifying constraints to work with all the sectors/pathways
+        # TODO: Remove hardcoded dictionary to use the one from the constraints
+        dict_constraints = {
+            "emissions_constraint": True,
+            "rampup_constraint": True,
+            "flag_residual": False,
+        }
+        # dict_constraints = check_constraints(
+        #     pathway=pathway,
+        #     stack=tentative_stack,
+        #     year=year,
+        #     transition_type="greenfield",
+        # )
 
         # Asset can be created if no constraint hurt
         if (dict_constraints["emissions_constraint"] == True) & (
