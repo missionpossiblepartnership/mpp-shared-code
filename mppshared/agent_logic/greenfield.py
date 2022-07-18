@@ -198,6 +198,9 @@ def select_asset_for_greenfield(
             year=year,
             annual_production_capacity=annual_production_capacity,
             cuf=cuf,
+            emission_scopes=pathway.emission_scopes,
+            cuf_lower_threshold=pathway.cuf_lower_threshold,
+            ghgs=pathway.ghgs,
         )
         new_asset.greenfield = True
 

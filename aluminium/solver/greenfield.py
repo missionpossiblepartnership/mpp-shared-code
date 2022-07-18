@@ -95,6 +95,8 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                         df_rank=df_rank_region,
                         product=product,
                         year=year,
+                        annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                        cuf=CUF_UPPER_THRESHOLD,
                     )
                     enact_greenfield_transition(
                         pathway=pathway, stack=new_stack, new_asset=new_asset, year=year
