@@ -440,6 +440,9 @@ def make_new_asset(
     year: int,
     annual_production_capacity: float,
     cuf: float,
+    emission_scopes: list,
+    cuf_lower_threshold: float,
+    ghgs: list,
 ):
     """Make a new asset, based on asset transition from the ranking DataFrame.
 
@@ -472,6 +475,9 @@ def make_new_asset(
         year_commissioned=year,
         annual_production_capacity=annual_production_capacity,
         cuf=cuf,
+        emission_scopes=emission_scopes,
+        cuf_lower_threshold=cuf_lower_threshold,
+        ghgs=ghgs,
         asset_lifetime=technology_characteristics["technology_lifetime"].values[0],
         technology_classification=technology_characteristics[
             "technology_classification"
