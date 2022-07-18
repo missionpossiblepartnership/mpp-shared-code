@@ -8,34 +8,21 @@ from operator import methodcaller
 import numpy as np
 import pandas as pd
 
+from ammonia.config_ammonia import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                                    ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
+                                    BUILD_CURRENT_PROJECT_PIPELINE, LOG_LEVEL,
+                                    MAP_LOW_COST_POWER_REGIONS,
+                                    MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION,
+                                    MODEL_SCOPE, REGIONAL_TECHNOLOGY_BAN,
+                                    REGIONS)
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_all_transitions_with_destination_technology,
-    remove_transition,
-    select_best_transition,
     apply_regional_technology_ban,
-)
-from ammonia.config_ammonia import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    MODEL_SCOPE,
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
-    BUILD_CURRENT_PROJECT_PIPELINE,
-    LOG_LEVEL,
-    MAP_LOW_COST_POWER_REGIONS,
-    MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION,
-    MODEL_SCOPE,
-    REGIONAL_TECHNOLOGY_BAN,
-    REGIONS,
-)
-from mppshared.models.asset import (
-    Asset,
-    AssetStack,
-    make_new_asset,
-    make_new_asset_project_pipeline,
-)
+    remove_all_transitions_with_destination_technology, remove_transition,
+    select_best_transition)
+from mppshared.models.asset import (Asset, AssetStack, make_new_asset,
+                                    make_new_asset_project_pipeline)
 from mppshared.models.constraints import (
-    check_constraints,
-    get_regional_production_constraint_table,
-)
+    check_constraints, get_regional_production_constraint_table)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.solver.implicit_forcing import apply_regional_technology_ban
 from mppshared.utility.utils import get_logger
@@ -71,7 +58,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         df_rank = df_ranking.loc[df_ranking["product"] == product]
 
         # Build current project pipeline if desired
-        if BUILD_CURRENT_PROJECT_PIPELINE[pathway.sector]:
+        if BUILD_CURRENT_PROJECT_PIPELINE:
 
             #! Development only
             demand = pathway.get_demand(

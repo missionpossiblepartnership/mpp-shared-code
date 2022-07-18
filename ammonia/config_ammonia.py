@@ -27,6 +27,8 @@ run_config = {
     # "PLOT_AVAILABILITIES"
     # "MERGE_OUTPUTS"
 }
+# Integrate current project pipeline or not
+BUILD_CURRENT_PROJECT_PIPELINE = True
 START_YEAR = 2020
 END_YEAR = 2050
 MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
