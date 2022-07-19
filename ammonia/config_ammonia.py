@@ -213,3 +213,18 @@ SECTORAL_CARBON_PATHWAY = {
     "emissions_end": residual_share * emissions_2020,
     "action_start": 2023,
 }
+
+
+# Regional ban of technologies (sector-specific)
+REGIONAL_TECHNOLOGY_BAN = {
+    "China": [
+        "Natural Gas SMR + ammonia synthesis",
+        "Natural Gas ATR + CCS + ammonia synthesis",
+        "Oversized ATR + CCS",
+        "Natural Gas SMR + CCS (process emissions only) + ammonia synthesis",
+        "Natural Gas SMR + CCS + ammonia synthesis",
+        "Electrolyser + SMR + ammonia synthesis",
+        "GHR + CCS + ammonia synthesis",
+        "ESMR Gas + CCS + ammonia synthesis",
+    ]
+}
