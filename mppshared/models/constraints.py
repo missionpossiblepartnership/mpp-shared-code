@@ -217,3 +217,15 @@ def hydro_constraints(df_ranking: pd.DataFrame, sector: str) -> pd.DataFrame:
         ]
     else:
         return df_ranking
+
+
+def apply_greenfield_filters_chemicals(
+    df_rank: pd.DataFrame, pathway: SimulationPathway, year: int, product: str
+) -> pd.DataFrame:
+    """For chemicals, new ammonia demand can only be supplied by transition and end-state technologies,
+    while new urea and ammonium nitrate demand can also be supplied by initial technologies"""
+    if product == "Ammonia":
+        filter = df_rank["technology_classification"] == "initial"
+        df_rank = df_rank.loc[~filter]
+        return df_rank
+    return df_rank
