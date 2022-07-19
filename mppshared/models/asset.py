@@ -485,3 +485,47 @@ def make_new_asset(
         retrofit=False,
         rebuild=False,
     )
+
+
+def make_new_asset_project_pipeline(
+    region: str,
+    product: str,
+    annual_production_capacity_mt: float,
+    technology: str,
+    df_technology_characteristics: pd.DataFrame,
+    year: int,
+) -> Asset:
+    """Make new asset based on the current project pipeline.
+    Args:
+        region (str): _description_
+        product (str): _description_
+        annual_production_capacity_mt (float): _description_
+        technology (str): _description_
+        df_technology_characteristics (pd.DataFrame): _description_
+        year (int): _description_
+    Returns:
+        The new Asset
+    """
+    # Filter row of technology characteristics DataFrame that corresponds to the asset transition
+    technology_characteristics = df_technology_characteristics.loc[
+        (df_technology_characteristics["product"] == product)
+        & (df_technology_characteristics["region"] == region)
+        & (df_technology_characteristics["technology"] == technology)
+        & (df_technology_characteristics["year"] == year)
+    ]
+
+    return Asset(
+        product=product,
+        technology=technology,
+        region=region,
+        year_commissioned=year,
+        annual_production_capacity=annual_production_capacity_mt,
+        cuf=CUF_UPPER_THRESHOLD,
+        asset_lifetime=technology_characteristics["technology_lifetime"].values[0],
+        technology_classification=technology_characteristics[
+            "technology_classification"
+        ].values[0],
+        retrofit=False,
+        rebuild=False,
+        greenfield=True,
+    )
