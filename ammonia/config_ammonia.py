@@ -118,24 +118,23 @@ REGIONS_SALT_CAVERN_AVAILABILITY = {
 }
 
 # List of regions
-REGIONS = {
-    "chemicals": [
-        "Africa",
-        "China",
-        "Europe",
-        "India",
-        "Latin America",
-        "Middle East",
-        "North America",
-        "Oceania",
-        "Russia",
-        "Rest of Asia",
-        "Brazil",
-        "Australia",
-        "Namibia",
-        "Saudi Arabia",
-    ]
-}
+REGIONS = [
+    "Africa",
+    "China",
+    "Europe",
+    "India",
+    "Latin America",
+    "Middle East",
+    "North America",
+    "Oceania",
+    "Russia",
+    "Rest of Asia",
+    "Brazil",
+    "Australia",
+    "Namibia",
+    "Saudi Arabia",
+]
+
 
 # Maximum share of global demand that can be supplied by one region
 MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION = 0.3

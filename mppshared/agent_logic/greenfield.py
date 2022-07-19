@@ -248,3 +248,46 @@ def get_region_rank_filter(region: str, sector: str) -> list:
         if region in MAP_LOW_COST_POWER_REGIONS[sector].keys():
             return [region, MAP_LOW_COST_POWER_REGIONS[sector][region]]
     return [region]
+
+
+def create_dataframe_check_regional_share_global_demand(
+    demand: float,
+    production: float,
+    product: str,
+    pathway: SimulationPathway,
+    current_stack: AssetStack,
+    assumed_annual_production_capacity_mt: dict,
+    regions: list,
+    maximum_global_demand_share_one_region: float,
+) -> pd.DataFrame:
+    """Create DataFrame that shows maximum plant additions in each region such that the constraint that each region can supply a maximum share of new demand is fulfilled."""
+
+    global_required_plant_additions = np.ceil(
+        (demand - production) / assumed_annual_production_capacity_mt[product]
+    )
+    global_plants_newbuild = current_stack.get_number_of_assets(
+        status="greenfield_status"
+    )
+    df_region_demand = pd.DataFrame(
+        index=regions,
+        data={
+            "global_plants_newbuild_proposed": global_plants_newbuild
+            + global_required_plant_additions
+        },
+    )
+    for region in regions:
+        df_region_demand.loc[
+            region, "region_plants_newbuild"
+        ] = current_stack.get_number_of_assets(
+            region=region, status="greenfield_status"
+        )
+
+    df_region_demand["region_max_plants_newbuild"] = np.ceil(
+        MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION[pathway.sector]
+        * df_region_demand["global_plants_newbuild_proposed"]
+        - df_region_demand["region_plants_newbuild"]
+    )
+
+    df_region_demand["region_newbuild_additions"] = 0
+
+    return df_region_demand
