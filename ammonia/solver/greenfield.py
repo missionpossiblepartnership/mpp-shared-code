@@ -19,6 +19,7 @@ from mppshared.agent_logic.agent_logic_functions import (
     apply_regional_technology_ban,
     remove_all_transitions_with_destination_technology, remove_transition,
     select_best_transition)
+from mppshared.agent_logic.greenfield import enact_greenfield_transition
 from mppshared.models.asset import (Asset, AssetStack, make_new_asset,
                                     make_new_asset_project_pipeline)
 from mppshared.models.constraints import (

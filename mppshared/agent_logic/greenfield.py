@@ -6,21 +6,13 @@ import numpy as np
 import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_all_transitions_with_destination_technology,
-    remove_transition,
-    select_best_transition,
-)
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    LOG_LEVEL,
-    MAP_LOW_COST_POWER_REGIONS,
-    MODEL_SCOPE,
-)
+    remove_all_transitions_with_destination_technology, remove_transition,
+    select_best_transition)
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL,
+                              MAP_LOW_COST_POWER_REGIONS, MODEL_SCOPE)
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
-    get_regional_production_constraint_table,
-    hydro_constraints,
-)
+    get_regional_production_constraint_table, hydro_constraints)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 
@@ -145,13 +137,17 @@ def greenfield_default(pathway: SimulationPathway, year: int) -> SimulationPathw
 
 
 def enact_greenfield_transition(
-    pathway: SimulationPathway, stack: AssetStack, new_asset: Asset, year: int
+    pathway: SimulationPathway,
+    stack: AssetStack,
+    new_asset: Asset,
+    year: int,
+    project_pipeline=False,
 ):
     """Append new asset to stack and add entry to logger and TransitionRegistry."""
 
     # Enact greenfield transition and add to TransitionRegistry
     logger.debug(
-        f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}"
+        f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}. From project pipeline: {project_pipeline}"
     )
 
     stack.append(new_asset)
