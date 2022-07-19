@@ -13,14 +13,14 @@ from plotly.subplots import make_subplots
 
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import Asset, AssetStack, create_assets
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.models.technology_rampup import TechnologyRampup
 from mppshared.models.transition import TransitionRegistry
-from mppshared.utility.dataframe_utility import flatten_columns, get_emission_columns
+from mppshared.utility.dataframe_utility import (flatten_columns,
+                                                 get_emission_columns)
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -45,6 +45,7 @@ class SimulationPathway:
         carbon_budget: CarbonBudget,
         emission_scopes: list,
         cuf_lower_threshold: float,
+        cuf_upper_threshold: float,
         ghgs: list,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
     ):
@@ -59,6 +60,7 @@ class SimulationPathway:
         self.initial_asset_data_level = initial_asset_data_level
         self.emission_scopes = emission_scopes
         self.cuf_lower_threshold = cuf_lower_threshold
+        self.cuf_upper_threshold = cuf_upper_threshold
         self.ghgs = ghgs
 
         # Carbon Budget (already initialized with emissions pathway)

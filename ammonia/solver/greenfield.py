@@ -101,6 +101,10 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     technology=df_asset["technology"].item(),
                     df_technology_characteristics=pathway.df_technology_characteristics,
                     year=year,
+                    cuf=pathway.cuf_uper_threshold,
+                    emission_scopes=pathway.emission_scopes,
+                    cuf_lower_threshold=pathway.cuf_lower_threshold,
+                    ghgs=pathway.ghgs,
                 )
 
                 enact_greenfield_transition(

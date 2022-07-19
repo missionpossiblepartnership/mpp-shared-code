@@ -5,9 +5,10 @@ from timeit import default_timer as timer
 
 from ammonia.config_ammonia import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                                     CARBON_BUDGET_SECTOR_CSV,
-                                    CUF_LOWER_THRESHOLD, EMISSION_SCOPES,
-                                    END_YEAR, GHGS, INITIAL_ASSET_DATA_LEVEL,
-                                    LOG_LEVEL, PRODUCTS, RANK_TYPES,
+                                    CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
+                                    EMISSION_SCOPES, END_YEAR, GHGS,
+                                    INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL,
+                                    PRODUCTS, RANK_TYPES,
                                     SECTORAL_CARBON_PATHWAY, START_YEAR,
                                     TECHNOLOGY_RAMP_UP_CONSTRAINT)
 from ammonia.solver.brownfield import brownfield
@@ -64,7 +65,15 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
         # logger.debug(
         #     f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
         # )
-
+# Override asset parameters; annual production capacity in Mt/year
+# Ratios for calculating electrolysis capacity
+H2_PER_AMMONIA = 0.176471
+AMMONIA_PER_UREA = 0.565724
+AMMONIA_PER_AMMONIUM_NITRATE = 0.425534# Override asset parameters; annual production capacity in Mt/year
+# Ratios for calculating electrolysis capacity
+H2_PER_AMMONIA = 0.176471
+AMMONIA_PER_UREA = 0.565724
+AMMONIA_PER_AMMONIUM_NITRATE = 0.425534
         # Build new assets
         start = timer()
         pathway = greenfield(pathway=pathway, year=year)
@@ -135,6 +144,7 @@ def simulate_pathway(
         carbon_cost_trajectory=carbon_cost_trajectory,
         emission_scopes=EMISSION_SCOPES,
         cuf_lower_threshold=CUF_LOWER_THRESHOLD,
+        cuf_upper_threshold=CUF_UPPER_THRESHOLD,
         ghgs=GHGS,
     )
 
