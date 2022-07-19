@@ -65,15 +65,7 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
         # logger.debug(
         #     f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
         # )
-# Override asset parameters; annual production capacity in Mt/year
-# Ratios for calculating electrolysis capacity
-H2_PER_AMMONIA = 0.176471
-AMMONIA_PER_UREA = 0.565724
-AMMONIA_PER_AMMONIUM_NITRATE = 0.425534# Override asset parameters; annual production capacity in Mt/year
-# Ratios for calculating electrolysis capacity
-H2_PER_AMMONIA = 0.176471
-AMMONIA_PER_UREA = 0.565724
-AMMONIA_PER_AMMONIUM_NITRATE = 0.425534
+
         # Build new assets
         start = timer()
         pathway = greenfield(pathway=pathway, year=year)
