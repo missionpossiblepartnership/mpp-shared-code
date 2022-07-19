@@ -494,6 +494,10 @@ def make_new_asset_project_pipeline(
     technology: str,
     df_technology_characteristics: pd.DataFrame,
     year: int,
+    cuf: float,
+    emission_scopes: list,
+    cuf_lower_threshold: float,
+    ghgs: list,
 ) -> Asset:
     """Make new asset based on the current project pipeline.
     Args:
@@ -520,7 +524,10 @@ def make_new_asset_project_pipeline(
         region=region,
         year_commissioned=year,
         annual_production_capacity=annual_production_capacity_mt,
-        cuf=CUF_UPPER_THRESHOLD,
+        cuf=cuf,
+        emission_scopes=emission_scopes,
+        cuf_lower_threshold=cuf_lower_threshold,
+        ghgs=ghgs,
         asset_lifetime=technology_characteristics["technology_lifetime"].values[0],
         technology_classification=technology_characteristics[
             "technology_classification"
