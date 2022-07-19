@@ -23,7 +23,8 @@ from mppshared.agent_logic.greenfield import enact_greenfield_transition
 from mppshared.models.asset import (Asset, AssetStack, make_new_asset,
                                     make_new_asset_project_pipeline)
 from mppshared.models.constraints import (
-    check_constraints, get_regional_production_constraint_table)
+    apply_greenfield_filters_chemicals, check_constraints,
+    get_regional_production_constraint_table)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.solver.implicit_forcing import apply_regional_technology_ban
 from mppshared.utility.utils import get_logger
