@@ -49,9 +49,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     df_ranking = pathway.get_ranking(year=year, rank_type="greenfield")
 
     # Apply regional technology bans
-    df_ranking = apply_regional_technology_ban(
-        df_ranking, REGIONAL_TECHNOLOGY_BAN[pathway.sector]
-    )
+    df_ranking = apply_regional_technology_ban(df_ranking, REGIONAL_TECHNOLOGY_BAN)
 
     # Greenfield for each product sequentially
     for product in pathway.products:
@@ -101,7 +99,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     technology=df_asset["technology"].item(),
                     df_technology_characteristics=pathway.df_technology_characteristics,
                     year=year,
-                    cuf=pathway.cuf_uper_threshold,
+                    cuf=pathway.cuf_upper_threshold,
                     emission_scopes=pathway.emission_scopes,
                     cuf_lower_threshold=pathway.cuf_lower_threshold,
                     ghgs=pathway.ghgs,
