@@ -28,8 +28,8 @@ SENSITIVITIES = [
 # Carbon price (for sensitivity analysis): needs to be run for 1 USD/tCO2 to create carbon_cost_addition.csv, then used for subsequent runs by multiplying accordingly
 
 CARBON_COSTS = [
-    0,
-    50,
+    # 0,
+    # 50,
     100,
     150,
     200,

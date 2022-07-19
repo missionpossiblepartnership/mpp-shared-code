@@ -1,0 +1,8 @@
+Investment cycle: 20 years
+CUF: maximum=0.95, minimum=0.5, cost metric=mc
+Weights: {'cost': 0.8, 'emissions': 0.19999999999999996}
+Technology ramp-up: {'maximum_asset_additions': 6, 'maximum_capacity_growth_rate': 0.8, 'years_rampup_phase': 10}
+Year 2050 emissions constraint: 2050
+Annual renovation share: 0.05
+Regional production shares: {'Africa': 0.4, 'China': 0.4, 'Europe': 0.4, 'India': 0.4, 'Latin America': 0.4, 'Middle East': 0.4, 'North America': 0.4, 'Oceania': 0, 'Russia': 0.4, 'Rest of Asia': 0.4}Technology moratorium year: 2051
+Transitional period years: 30
