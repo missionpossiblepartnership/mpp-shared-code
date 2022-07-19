@@ -118,7 +118,11 @@ class IntermediateDataImporter:
         )
 
     def get_electrolysis_capacity_addition_constraint(self):
-        return pd.read_csv(self.intermediate_path.joinpath("electrolysis_capacity_addition_constraint.csv"))
+        return pd.read_csv(
+            self.intermediate_path.joinpath(
+                "electrolysis_capacity_addition_constraint.csv"
+            )
+        )
 
     def get_demand(self, region=None):
         df = pd.read_csv(self.intermediate_path.joinpath("demand.csv"))
@@ -176,3 +180,15 @@ class IntermediateDataImporter:
         return pd.read_csv(
             self.intermediate_path.joinpath("inputs_outputs.csv"),
         )
+
+    def get_solar_wind_shares_cfs(self):
+        return pd.read_csv(self.intermediate_path.joinpath("solar_wind_shares_cfs.csv"))
+
+    def get_wind_capex(self):
+        df = pd.read_csv(self.intermediate_path.joinpath("wind_capex.csv"))
+        df = df.melt(id_vars="region", value_name="wind_capex", var_name="year")
+        return df
+
+    def get_solar_capex(self):
+        df = pd.read_csv(self.intermediate_path.joinpath("solar_capex.csv"))
+        df = df.melt(id_vars="region", value_name="solar_capex", var_name="year")
