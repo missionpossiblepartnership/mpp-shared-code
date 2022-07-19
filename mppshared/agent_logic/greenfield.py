@@ -283,7 +283,7 @@ def create_dataframe_check_regional_share_global_demand(
         )
 
     df_region_demand["region_max_plants_newbuild"] = np.ceil(
-        MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION[pathway.sector]
+        maximum_global_demand_share_one_region
         * df_region_demand["global_plants_newbuild_proposed"]
         - df_region_demand["region_plants_newbuild"]
     )

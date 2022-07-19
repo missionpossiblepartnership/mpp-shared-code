@@ -132,6 +132,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             current_stack=current_stack,
             assumed_annual_production_capacity_mt=ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
             regions=REGIONS,
+            maximum_global_demand_share_one_region=MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION,
         )
 
         # STEP ONE: BUILD NEW CAPACITY BY REGION
