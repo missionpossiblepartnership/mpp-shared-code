@@ -47,6 +47,7 @@ class SimulationPathway:
         cuf_lower_threshold: float,
         cuf_upper_threshold: float,
         ghgs: list,
+        investment_cycle: int,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
     ):
         # Attributes describing the pathway
@@ -55,6 +56,7 @@ class SimulationPathway:
         self.pathway = pathway
         self.sensitivity = sensitivity
         self.sector = sector
+        self.investment_cycle = investment_cycle
         self.products = products
         self.rank_types = rank_types
         self.initial_asset_data_level = initial_asset_data_level

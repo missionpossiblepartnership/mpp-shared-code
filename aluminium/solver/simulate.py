@@ -8,9 +8,10 @@ from aluminium.config_aluminium import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                                         CUF_LOWER_THRESHOLD,
                                         CUF_UPPER_THRESHOLD, EMISSION_SCOPES,
                                         END_YEAR, GHGS,
-                                        INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL,
-                                        PRODUCTS, RANK_TYPES,
-                                        SECTORAL_CARBON_PATHWAY, START_YEAR,
+                                        INITIAL_ASSET_DATA_LEVEL,
+                                        INVESTMENT_CYCLE, LOG_LEVEL, PRODUCTS,
+                                        RANK_TYPES, SECTORAL_CARBON_PATHWAY,
+                                        START_YEAR,
                                         TECHNOLOGY_RAMP_UP_CONSTRAINT)
 from aluminium.solver.brownfield import brownfield
 from aluminium.solver.decommission import decommission
@@ -58,7 +59,7 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
             f"Time elapsed for decommission in year {year}: {timedelta(seconds=end-start)} seconds"
         )
 
-        Renovate and rebuild assets (brownfield transition)
+        # Renovate and rebuild assets (brownfield transition)
         start = timer()
         pathway = brownfield(pathway=pathway, year=year)
         end = timer()
@@ -131,6 +132,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         cuf_lower_threshold=CUF_LOWER_THRESHOLD,
         cuf_upper_threshold=CUF_UPPER_THRESHOLD,
         ghgs=GHGS,
+        investment_cycle=INVESTMENT_CYCLE,
     )
 
     # Optimize asset stack on a yearly basis
