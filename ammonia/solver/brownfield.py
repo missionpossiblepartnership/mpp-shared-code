@@ -143,12 +143,22 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         )
 
         # Check constraints with tentative new stack
-        dict_constraints = check_constraints(
-            pathway=pathway,
-            stack=tentative_stack,
-            year=year,
-            transition_type="brownfield",
-        )
+        # TODO: Uncoment when constraints are implemented
+        # dict_constraints = check_constraints(
+        #     pathway=pathway,
+        #     stack=tentative_stack,
+        #     year=year,
+        #     transition_type="brownfield",
+        # )
+        # TODO: Remove hardcoded dictionary that meets all constraints
+
+        dict_constraints = {
+            "emissions_constraint": True,
+            "rampup_constrraint": True,
+            "co2_storage_constraint": True,
+            "electrolysis_capacity_addition_constraint": True,
+            "demand_share_constraint": True,
+        }
 
         # If no constraint is hurt, execute the brownfield transition
         if all(constraint == True for constraint in dict_constraints.values()):
