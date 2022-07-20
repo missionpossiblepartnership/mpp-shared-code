@@ -29,7 +29,7 @@ from mppshared.models.constraints import (
     get_regional_production_constraint_table)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.solver.implicit_forcing import apply_regional_technology_ban
-from mppshared.utility.utils import get_logger
+from mppshared.utility.utils import get_logger, get_region_rank_filter
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
