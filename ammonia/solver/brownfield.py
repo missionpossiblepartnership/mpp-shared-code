@@ -15,9 +15,8 @@ from mppshared.agent_logic.agent_logic_functions import (
 from mppshared.config import (ANNUAL_RENOVATION_SHARE,
                               BROWNFIELD_REBUILD_START_YEAR,
                               BROWNFIELD_RENOVATION_START_YEAR,
-                              COST_METRIC_DECREASE_BROWNFIELD, END_YEAR,
-                              LOG_LEVEL, RANKING_COST_METRIC,
-                              REGIONAL_TECHNOLOGY_BAN)
+                              COST_METRIC_DECREASE_BROWNFIELD, LOG_LEVEL,
+                              RANKING_COST_METRIC, REGIONAL_TECHNOLOGY_BAN)
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
