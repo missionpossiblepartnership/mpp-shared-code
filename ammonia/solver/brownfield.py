@@ -8,15 +8,16 @@ import numpy as np
 import pandas as pd
 from pandera import Bool
 
+from ammonia.config_ammonia import (ANNUAL_RENOVATION_SHARE,
+                                    BROWNFIELD_REBUILD_START_YEAR,
+                                    BROWNFIELD_RENOVATION_START_YEAR,
+                                    COST_METRIC_DECREASE_BROWNFIELD, LOG_LEVEL,
+                                    RANKING_COST_METRIC,
+                                    REGIONAL_TECHNOLOGY_BAN)
 from mppshared.agent_logic.agent_logic_functions import (
     apply_regional_technology_ban,
     remove_all_transitions_with_destination_technology, remove_transition,
     select_best_transition)
-from mppshared.config import (ANNUAL_RENOVATION_SHARE,
-                              BROWNFIELD_REBUILD_START_YEAR,
-                              BROWNFIELD_RENOVATION_START_YEAR,
-                              COST_METRIC_DECREASE_BROWNFIELD, LOG_LEVEL,
-                              RANKING_COST_METRIC, REGIONAL_TECHNOLOGY_BAN)
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
@@ -193,10 +194,10 @@ def apply_start_years_brownfield_transitions(
 ):
     if pathway.pathway in ["fa", "lc"]:
 
-        if year < BROWNFIELD_RENOVATION_START_YEAR[pathway.sector]:
+        if year < BROWNFIELD_RENOVATION_START_YEAR:
             df_rank = df_rank.loc[df_rank["switch_type"] != "brownfield_renovation"]
 
-        if year < BROWNFIELD_REBUILD_START_YEAR[pathway.sector]:
+        if year < BROWNFIELD_REBUILD_START_YEAR:
             df_rank = df_rank.loc[df_rank["switch_type"] != "brownfield_newbuild"]
 
     return df_rank
@@ -211,7 +212,7 @@ def apply_brownfield_filters_chemicals(
     if pathway.pathway == "fa":
         return df_rank
 
-    cost_metric = RANKING_COST_METRIC[pathway.sector]
+    cost_metric = RANKING_COST_METRIC
 
     # Get LCOX of origin technologies for retrofit
     # TODO: check simplification that lcox of the current year is taken

@@ -29,6 +29,12 @@ run_config = {
 }
 # Integrate current project pipeline or not
 BUILD_CURRENT_PROJECT_PIPELINE = True
+
+# Delays for brownfield transitions to make the model more realistic
+BROWNFIELD_RENOVATION_START_YEAR = 2025  # means retrofit plants come online in 2026
+
+BROWNFIELD_REBUILD_START_YEAR = 2027  # means rebuild plants come online in 2028
+
 START_YEAR = 2020
 END_YEAR = 2050
 MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
@@ -236,6 +242,8 @@ SECTORAL_CARBON_PATHWAY = {
     "action_start": 2023,
 }
 
+# Increase in cost metric required to enact a brownfield renovation or brownfield rebuild transition
+COST_METRIC_DECREASE_BROWNFIELD = 0.05
 
 # Regional ban of technologies (sector-specific)
 REGIONAL_TECHNOLOGY_BAN = {
