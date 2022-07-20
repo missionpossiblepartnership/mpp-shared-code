@@ -394,7 +394,12 @@ class SimulationPathway:
     def copy_stack(self, year):
         """Copy this year's stack to next year"""
         old_stack = self.get_stack(year=year)
-        new_stack = AssetStack(assets=deepcopy(old_stack.assets))
+        new_stack = AssetStack(
+            assets=deepcopy(old_stack.assets),
+            emission_scopes=deepcopy(old_stack.emission_scopes),
+            ghgs=deepcopy(old_stack.ghgs),
+            cuf_lower_threshold=deepcopy(old_stack.cuf_lower_threshold),
+        )
         return self.add_stack(year=year + 1, stack=new_stack)
 
     def add_stack(self, year, stack):
@@ -470,7 +475,14 @@ class SimulationPathway:
         assets = [item for sublist in assets for item in sublist]
 
         # Create AssetStack for model start year
-        return {self.start_year: AssetStack(assets)}
+        return {
+            self.start_year: AssetStack(
+                assets=assets,
+                emission_scopes=self.emission_scopes,
+                ghgs=self.ghgs,
+                cuf_lower_threshold=self.cuf_lower_threshold,
+            )
+        }
 
     def make_initial_asset_stack_from_asset_data(self):
         """Make AssetStack from asset-specific data (as opposed to average regional data)."""
@@ -519,7 +531,14 @@ class SimulationPathway:
         logger.info(f"Created {len(assets)} initial assets")
 
         # Create AssetStack for model start year
-        return {self.start_year: AssetStack(assets)}
+        return {
+            self.start_year: AssetStack(
+                assets=assets,
+                emission_scopes=self.emission_scopes,
+                ghgs=self.ghgs,
+                cuf_lower_threshold=self.cuf_lower_threshold,
+            )
+        }
 
     def _get_weighted_average(
         self, df, vars, product, year, methanol_type: str = None, emissions=True

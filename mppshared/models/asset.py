@@ -115,11 +115,17 @@ def create_assets(n_assets: int, **kwargs) -> list:
 class AssetStack:
     """Define an AssetStack composed of several Assets"""
 
-    def __init__(self, assets: list):
+    def __init__(
+        self,
+        assets: list,
+        emission_scopes: list,
+        ghgs: list,
+        cuf_lower_threshold: float,
+    ):
         self.assets = assets
-        self.emission_scopes = assets[0].emission_scopes
-        self.ghgs = assets[0].ghgs
-        self.cuf_lower_threshold = assets[0].cuf_lower_threshold
+        self.emission_scopes = emission_scopes
+        self.ghgs = ghgs
+        self.cuf_lower_threshold = cuf_lower_threshold
         # Keep track of all assets added this year
         self.new_ids = []
 
