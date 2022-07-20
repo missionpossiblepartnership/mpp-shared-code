@@ -277,7 +277,7 @@ def apply_brownfield_filters_chemicals(
 
     filter = df_rank[f"{cost_metric}_destination"] < df_rank[
         f"{cost_metric}_origin"
-    ].apply(lambda x: x * (1 - COST_METRIC_DECREASE_BROWNFIELD[pathway.sector]))
+    ].apply(lambda x: x * (1 - COST_METRIC_DECREASE_BROWNFIELD))
     df_rank = df_rank.loc[filter]
 
     return df_rank
