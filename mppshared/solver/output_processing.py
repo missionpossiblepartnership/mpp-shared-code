@@ -585,7 +585,7 @@ def _calculate_annual_investments(
         ].apply(lambda row: map_parameter_group(row), axis=1)
     else:
         df_investment["parameter"] = df_investment["ammonia_type"].apply(
-            lambda x: f"{str.capitalize(x)}: total investment"
+            lambda x: f"{str.capitalize(x)}: direct investment"
         )
 
     df_investment["parameter_group"] = "Investment"
@@ -1293,6 +1293,15 @@ def _calculate_plant_numbers(
     return df_pivot
 
 
+def map_low_cost_power_regions(low_cost_power_region: str):
+    return {
+        "Australia": "Oceania",
+        "Saudi Arabia": "Middle East",
+        "Brazil": "Latin America",
+        "Namibia": "Africa",
+    }[low_cost_power_region]
+
+
 def _calculate_emissions_intensity_abatement(
     importer: IntermediateDataImporter, sector: str, agg_vars=["region"]
 ) -> pd.DataFrame:
@@ -1359,14 +1368,47 @@ def _calculate_emissions_intensity_abatement(
         .reset_index(drop=False)
     )
 
-    # Calculate abated emissions intensity by dividing with total production volume
-    def conversion_factor_to_ammonia(row: pd.Series) -> float:
-        if row["product"] == "Ammonium nitrate":
-            return AMMONIA_PER_AMMONIUM_NITRATE
-        if row["product"] == "Urea":
-            return AMMONIA_PER_UREA
-        return 1
+    # Total emissions reduced by circularity lever is demand reduced by circularity multiplied with unabated emissions intensity
+    df_unabated = calculate_unabated_emissions_intensity(
+        df_stacks, df_emissions, agg_vars
+    )
+    if CIRCULARITY_IN_DEMAND:
+        df_circularity = importer.get_circularity_driver()
+        if "region" not in agg_vars:
+            df_circularity = df_circularity.loc[df_circularity["region"] == "Global"]
+        if "region" in agg_vars:
+            df_circularity = df_circularity.loc[df_circularity["region"] != "Global"]
+        if "product" not in agg_vars:
+            df_circularity["circularity_demand"] = df_circularity.apply(
+                lambda row: conversion_factor_to_ammonia(row)
+                * row["circularity_demand"],
+                axis=1,
+            )
+            df_circularity["product"] = "All"
+            df_circularity = (
+                df_circularity.groupby(agg_vars + ["product", "year"])
+                .sum()["circularity_demand"]
+                .reset_index(drop=False)
+            )
 
+        df_abated_circularity = df_unabated.merge(
+            df_circularity, on=agg_vars + ["year"], how="left"
+        )
+        df_abated_circularity["emissions_abated"] = (
+            -df_abated_circularity["emissions_intensity_abated"]
+            * df_abated_circularity["circularity_demand"]
+        )
+        df_abated_circularity["ammonia_type"] = "circularity"
+        df = pd.concat(
+            [
+                df,
+                df_abated_circularity[
+                    agg_vars + ["year", "ammonia_type", "emissions_abated"]
+                ],
+            ]
+        )
+
+    # Calculate abated emissions intensity by dividing with total production volume
     df_production["annual_production_volume"] = df_production.apply(
         lambda row: conversion_factor_to_ammonia(row) * row["annual_production_volume"],
         axis=1,
@@ -1385,38 +1427,11 @@ def _calculate_emissions_intensity_abatement(
         df["emissions_abated"] / df["total_annual_production_volume"]
     )
 
-    # Calculate unabated emissions intensity as difference between total emissions intensity and intensity abatements
-    df_stacks["technology_destination"] = np.where(
-        df_stacks["technology_destination"].str.contains("Coal"),
-        "Coal Gasification + ammonia synthesis",
-        "Natural Gas SMR + ammonia synthesis",
-    )
-    df_stacks = df_stacks.merge(
-        df_emissions.rename({"technology": "technology_destination"}, axis=1),
-        on=["product", "region", "year", "technology_destination"],
-    )
-
-    df_stacks["total_emissions"] = (
-        df_stacks["co2_scope1"] + df_stacks["co2_scope2"]
-    ) * df_stacks["annual_production_volume"]
-    df_stacks["annual_production_volume"] = df_stacks.apply(
-        lambda row: conversion_factor_to_ammonia(row) * row["annual_production_volume"],
-        axis=1,
-    )
-    df_stacks["product"] = "All"
-    df_stacks = (
-        df_stacks.groupby(agg_vars + ["year"])
-        .sum()[["annual_production_volume", "total_emissions"]]
-        .reset_index()
-    )
-    df_stacks["emissions_intensity_abated"] = (
-        df_stacks["total_emissions"] / df_stacks["annual_production_volume"]
-    )
-    df_stacks["ammonia_type"] = "all"
+    # Add unabated emissions intensity
     df = pd.concat(
         [
             df,
-            df_stacks[
+            df_unabated[
                 agg_vars + ["year", "ammonia_type", "emissions_intensity_abated"]
             ],
         ]
@@ -1463,7 +1478,7 @@ def _calculate_emissions_intensity_abatement(
         for ammonia_type in [
             item
             for item in df_pivot.loc[df_pivot["region"] == region, "parameter"].unique()
-            if item != "All ammonia"
+            if item not in ["All ammonia", "Demand side circularity/ efficiency"]
         ]:
             df_pivot.loc[
                 (df_pivot["parameter"] == "All ammonia")
@@ -1475,14 +1490,56 @@ def _calculate_emissions_intensity_abatement(
                 START_YEAR:END_YEAR,
             ]
         df_pivot["parameter"] = df_pivot["parameter"].replace(
-            {"All ammonia": "Unabated emissions"}
+            {"All ammonia": "Unabated emissions intensity"}
         )
 
     df_pivot = df_pivot.reset_index().set_index(index)
 
-    # Add the circularity lever
-
     return df_pivot
+
+
+def calculate_unabated_emissions_intensity(
+    df_stacks: pd.DataFrame, df_emissions: pd.DataFrame, agg_vars: list
+) -> pd.DataFrame:
+
+    # Calculate unabated emissions intensity as difference between total emissions intensity and intensity abatements
+    df_stacks["technology_destination"] = np.where(
+        df_stacks["technology_destination"].str.contains("Coal"),
+        "Coal Gasification + ammonia synthesis",
+        "Natural Gas SMR + ammonia synthesis",
+    )
+    df_stacks = df_stacks.merge(
+        df_emissions.rename({"technology": "technology_destination"}, axis=1),
+        on=["product", "region", "year", "technology_destination"],
+    )
+
+    df_stacks["total_emissions"] = (
+        df_stacks["co2_scope1"] + df_stacks["co2_scope2"]
+    ) * df_stacks["annual_production_volume"]
+    df_stacks["annual_production_volume"] = df_stacks.apply(
+        lambda row: conversion_factor_to_ammonia(row) * row["annual_production_volume"],
+        axis=1,
+    )
+    df_stacks["product"] = "All"
+    df_stacks = (
+        df_stacks.groupby(agg_vars + ["year"])
+        .sum()[["annual_production_volume", "total_emissions"]]
+        .reset_index()
+    )
+    df_stacks["emissions_intensity_abated"] = (
+        df_stacks["total_emissions"] / df_stacks["annual_production_volume"]
+    )
+    df_stacks["ammonia_type"] = "all"
+
+    return df_stacks
+
+
+def conversion_factor_to_ammonia(row: pd.Series) -> float:
+    if row["product"] == "Ammonium nitrate":
+        return AMMONIA_PER_AMMONIUM_NITRATE
+    if row["product"] == "Urea":
+        return AMMONIA_PER_UREA
+    return 1
 
 
 def apply_parameter_map_ammonia_type(ammonia_type):
@@ -1495,6 +1552,7 @@ def apply_parameter_map_ammonia_type(ammonia_type):
         "transitional": "Transitional technologies",
         "grey": "Grey ammonia",
         "all": "All ammonia",
+        "circularity": "Demand side circularity/ efficiency",
     }
     return parameter_map[ammonia_type]
 
@@ -1509,6 +1567,7 @@ def calculate_outputs_interface(
     aggregations = [
         ["product", "region"],
         ["product"],
+        ["region"],
         [],
     ]
 
@@ -1569,7 +1628,7 @@ def calculate_outputs_interface(
     for year in range(START_YEAR, END_YEAR + 1):
         logger.info(f"Processing year {year}")
         yearly = create_table_all_data_year(
-            aggregations=aggregations + [["product", "region", "technology"]],
+            aggregations=aggregations.copy() + [["product", "region", "technology"]],
             year=year,
             importer=importer,
         )
@@ -1580,18 +1639,22 @@ def calculate_outputs_interface(
     df["sector"] = sector
 
     # Calculate investment into dedicated renewables
-    df_investment_renewables = calculate_investment_dedicated_renewables(importer, df)
+    df_investment_renewables = pd.DataFrame()
+    for agg_vars in aggregations:
+        temp = calculate_investment_dedicated_renewables(
+            importer, df, agg_vars=agg_vars
+        )
+        df_investment_renewables = pd.concat([df_investment_renewables, temp])
 
     # Express annual production volume in terms of ammonia
-    if SECTOR == "chemicals":
-        df_ammonia_all = calculate_annual_production_volume_as_ammonia(df=df)
-        df = pd.concat([df, df_ammonia_all])
+    df_ammonia_all = calculate_annual_production_volume_as_ammonia(df=df)
+    df = pd.concat([df, df_ammonia_all])
 
-        for agg_vars in aggregations + [["region"]]:
-            df_ammonia_type = calculate_annual_production_volume_by_ammonia_type(
-                df=df, agg_vars=agg_vars
-            )
-            df = pd.concat([df, df_ammonia_type])
+    for agg_vars in [["product", "region"], ["product"], ["region"], []]:
+        df_ammonia_type = calculate_annual_production_volume_by_ammonia_type(
+            df=df, agg_vars=agg_vars
+        )
+        df = pd.concat([df, df_ammonia_type])
 
     # Pivot the dataframe to have the years as columns
     df_pivot = df.pivot_table(
@@ -1625,6 +1688,9 @@ def calculate_outputs_interface(
 
     suffix = f"{sector}_{pathway}_{sensitivity}"
 
+    # For regions, replace All with Global
+    df_pivot["region"] = df_pivot["region"].replace({"All": "Global"})
+
     importer.export_data(
         df_pivot, f"interface_outputs_{suffix}.csv", export_dir="final", index=False
     )
@@ -1652,6 +1718,11 @@ def calculate_investment_dedicated_renewables(
         & (df_electricity["parameter"] == "Electricity - on site VREs")
     ]
 
+    # Summing by region can only be done at the end because solar and wind shares, CFs and CAPEX are region-specific#
+    agg_vars_initial = agg_vars.copy()
+    if "region" not in agg_vars:
+        agg_vars += ["region"]
+
     # Filter outputs table for the right aggregation level
     for var in ["product", "region", "technology"]:
         if var not in agg_vars:
@@ -1668,11 +1739,12 @@ def calculate_investment_dedicated_renewables(
         columns="year",
         values="value",
     ).fillna(0)
+
     for year in [y for y in np.arange(START_YEAR, END_YEAR + 1) if y not in df.columns]:
         df[year] = 0
     df = df.reindex(sorted(df.columns), axis=1)
 
-    for year in np.flip(np.arange(START_YEAR + 1, END_YEAR)):
+    for year in np.flip(np.arange(START_YEAR + 1, END_YEAR + 1)):
         df[year] = df[year] - df[year - 1]
 
     df = df.melt(
@@ -1703,20 +1775,25 @@ def calculate_investment_dedicated_renewables(
     df["solar_investment"] = 1e6 * df["solar_capex"] * df["solar_capacity_addition_GW"]
     df["wind_investment"] = 1e6 * df["wind_capex"] * df["wind_capacity_addition_GW"]
 
+    # If the investment is negative (corresponding to declining electricity demand), set to zero
+    df["solar_investment"] = np.where(
+        df["solar_investment"] < 0, 0, df["solar_investment"]
+    )
+    df["wind_investment"] = np.where(
+        df["wind_investment"] < 0, 0, df["wind_investment"]
+    )
+
     # Sum solar and wind investment and aggregate as required
     df["value"] = df["solar_investment"] + df["wind_investment"]
-    df = df.groupby(agg_vars + ["year"]).sum()["value"].reset_index(drop=False)
+    df = df.groupby(agg_vars_initial + ["year"]).sum()["value"].reset_index(drop=False)
 
     # Pivot table
     df["parameter_group"] = "Investment"
     df["parameter"] = "Dedicated renewables investment"
     df["unit"] = "USD"
-    for var in [
-        agg_var
-        for agg_var in ["product", "region", "technology"]
-        if agg_var not in agg_vars
-    ]:
-        df[var] = "All"
+    for var in ["product", "region", "technology"]:
+        if var not in agg_vars_initial:
+            df[var] = "All"
     df["sector"] = SECTOR
 
     df_pivot = df.pivot_table(

@@ -25,6 +25,9 @@ SENSITIVITIES = [
     # "ng_low",
 ]
 
+# Toggle whether circularity in demand scenario or not
+CIRCULARITY_IN_DEMAND = False
+
 # Carbon price (for sensitivity analysis): needs to be run for 1 USD/tCO2 to create carbon_cost_addition.csv, then used for subsequent runs by multiplying accordingly
 
 CARBON_COSTS = [

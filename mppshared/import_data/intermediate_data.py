@@ -195,3 +195,10 @@ class IntermediateDataImporter:
         df = df.melt(id_vars="region", value_name="solar_capex", var_name="year")
         df["year"] = df["year"].astype(int)
         return df
+
+    def get_circularity_driver(self):
+        df = pd.read_csv(self.intermediate_path.joinpath("circularity_driver.csv"))
+        df = df.melt(id_vars=["product", "region", "driver", "unit"], value_name="circularity_demand", var_name="year")
+        df["year"] = df["year"].astype(int)
+        return df
+        
