@@ -168,7 +168,12 @@ class AssetStack:
         return not self.assets
 
     def filter_assets(
-        self, product=None, region=None, technology=None, technology_classification=None
+        self,
+        product=None,
+        region=None,
+        technology=None,
+        technology_classification=None,
+        status=None,
     ) -> list:
         """Filter assets based on one or more criteria"""
         assets = self.assets
@@ -185,6 +190,12 @@ class AssetStack:
                 ),
                 assets,
             )
+        if status == "greenfield_status":
+            assets = filter(lambda asset: asset.greenfield == True, assets)
+        if status == "retrofit_status":
+            assets = filter(lambda asset: asset.retrofit == True, assets)
+        if status == "rebuild_status":
+            assets = filter(lambda asset: asset.rebuild == True, assets)
 
         return list(assets)
 
@@ -377,10 +388,12 @@ class AssetStack:
         df = df.groupby("region", as_index=False).sum()
         return df
 
-    def get_number_of_assets(self, product=None, technology=None, region=None):
+    def get_number_of_assets(
+        self, product=None, technology=None, region=None, status=None
+    ):
         "Get number of assets in the asset stack"
         assets = self.filter_assets(
-            product=product, technology=technology, region=region
+            product=product, technology=technology, region=region, status=status
         )
         return len(assets)
 
