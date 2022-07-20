@@ -524,7 +524,14 @@ class SimulationPathway:
         logger.info(f"Created {len(assets)} initial assets")
 
         # Create AssetStack for model start year
-        return {self.start_year: AssetStack(assets)}
+        return {
+            self.start_year: AssetStack(
+                assets=assets,
+                emission_scopes=self.emission_scopes,
+                ghgs=self.ghgs,
+                cuf_lower_threshold=self.cuf_lower_threshold,
+            )
+        }
 
     def _get_weighted_average(
         self, df, vars, product, year, methanol_type: str = None, emissions=True
