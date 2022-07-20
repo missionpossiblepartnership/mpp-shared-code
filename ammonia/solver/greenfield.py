@@ -21,7 +21,7 @@ from mppshared.agent_logic.agent_logic_functions import (
     select_best_transition)
 from mppshared.agent_logic.greenfield import (
     create_dataframe_check_regional_share_global_demand,
-    enact_greenfield_transition)
+    enact_greenfield_transition, select_asset_for_greenfield)
 from mppshared.models.asset import (Asset, AssetStack, make_new_asset,
                                     make_new_asset_project_pipeline)
 from mppshared.models.constraints import (
@@ -155,7 +155,8 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 np.ceil(deficit / ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT[product])
             )
             region_rank_filter = get_region_rank_filter(
-                region=row["region"], sector=pathway.sector
+                region=row["region"],
+                map_low_cost_power_regions=MAP_LOW_COST_POWER_REGIONS,
             )
             df_rank_region = df_rank.loc[df_rank["region"].isin(region_rank_filter)]
 
