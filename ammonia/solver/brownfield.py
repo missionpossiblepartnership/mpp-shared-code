@@ -180,6 +180,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 asset_to_update,
                 new_technology=new_technology,
                 new_classification=best_transition["technology_classification"],
+                switch_type=switch_type,
+                origin_technology=origin_technology,
             )
 
             # Remove asset from candidates
