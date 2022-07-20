@@ -3,7 +3,8 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from ammonia.config_ammonia import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+from ammonia.config_ammonia import (ANNUAL_RENOVATION_SHARE,
+                                    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                                     CARBON_BUDGET_SECTOR_CSV,
                                     CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
                                     EMISSION_SCOPES, END_YEAR, GHGS,
@@ -139,6 +140,7 @@ def simulate_pathway(
         cuf_upper_threshold=CUF_UPPER_THRESHOLD,
         ghgs=GHGS,
         investment_cycle=INVESTMENT_CYCLE,
+        annual_renovation_share=ANNUAL_RENOVATION_SHARE,
     )
 
     # Optimize asset stack on a yearly basis

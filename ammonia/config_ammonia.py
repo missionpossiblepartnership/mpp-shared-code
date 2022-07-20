@@ -216,6 +216,9 @@ RANKING_CONFIG = {
 CUF_LOWER_THRESHOLD = 0.5
 CUF_UPPER_THRESHOLD = 0.95
 INVESTMENT_CYCLE = 20  # years
+
+# Share of assets renovated annually (limits number of brownfield transitions)
+ANNUAL_RENOVATION_SHARE = 0.5
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "maximum_asset_additions": 10,
