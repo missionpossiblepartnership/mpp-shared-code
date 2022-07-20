@@ -164,6 +164,7 @@ def select_asset_for_greenfield(
     year: int,
     annual_production_capacity: float,
     cuf: float,
+    df_region_demand: pd.DataFrame = None,
 ) -> Asset:
     """Select asset for newbuild (greenfield transition)
 

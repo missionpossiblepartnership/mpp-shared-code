@@ -167,6 +167,11 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                         pathway=pathway,
                         stack=new_stack,
                         df_rank=df_rank_region,
+                        product=product,
+                        annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT[
+                            product
+                        ],
+                        cuf=pathway.cuf_upper_threshold,
                         year=year,
                         df_region_demand=df_region_demand,
                     )
@@ -200,6 +205,11 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     pathway=pathway,
                     stack=new_stack,
                     df_rank=df_rank,
+                    product=product,
+                    annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT[
+                        product
+                    ],
+                    cuf=pathway.cuf_upper_threshold,
                     year=year,
                     df_region_demand=df_region_demand,
                 )
