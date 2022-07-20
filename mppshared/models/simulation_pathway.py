@@ -468,7 +468,14 @@ class SimulationPathway:
         assets = [item for sublist in assets for item in sublist]
 
         # Create AssetStack for model start year
-        return {self.start_year: AssetStack(assets)}
+        return {
+            self.start_year: AssetStack(
+                assets=assets,
+                emission_scopes=self.emission_scopes,
+                ghgs=self.ghgs,
+                cuf_lower_threshold=self.cuf_lower_threshold,
+            )
+        }
 
     def make_initial_asset_stack_from_asset_data(self):
         """Make AssetStack from asset-specific data (as opposed to average regional data)."""
