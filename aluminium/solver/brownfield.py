@@ -5,10 +5,10 @@ from operator import methodcaller
 
 import numpy as np
 
+from aluminium.config_aluminium import LOG_LEVEL
 from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_destination_technology, remove_transition,
     select_best_transition)
-from mppshared.config import ANNUAL_RENOVATION_SHARE, LOG_LEVEL
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
@@ -137,12 +137,15 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         )
 
         # Check constraints with tentative new stack
-        dict_constraints = check_constraints(
-            pathway=pathway,
-            stack=tentative_stack,
-            year=year,
-            transition_type="brownfield",
-        )
+        # TODO: uncomment when constraints are implemented
+        # dict_constraints = check_constraints(
+        #     pathway=pathway,
+        #     stack=tentative_stack,
+        #     year=year,
+        #     transition_type="brownfield",
+        # )
+        # TODO: Remove dictionary when constraints are implemented
+        dict_constraints = {"emissions_constraint": True, "rampup_constraint": True}
         # If no constraint is hurt, execute the brownfield transition
         if (
             (dict_constraints["emissions_constraint"] == True)
