@@ -1566,7 +1566,7 @@ def calculate_outputs_interface(
     # Create output table for every year and concatenate
     data = []
 
-    for year in range(START_YEAR, 2026):
+    for year in range(START_YEAR, END_YEAR + 1):
         logger.info(f"Processing year {year}")
         yearly = create_table_all_data_year(
             aggregations=aggregations + [["product", "region", "technology"]],
@@ -1617,6 +1617,7 @@ def calculate_outputs_interface(
             df_annual_investments,
             df_electrolysis_capacity,
             df_plants,
+            df_investment_renewables,
         ]
     )
     df_pivot.reset_index(inplace=True)

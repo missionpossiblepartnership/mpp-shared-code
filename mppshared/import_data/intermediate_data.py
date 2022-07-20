@@ -187,8 +187,11 @@ class IntermediateDataImporter:
     def get_wind_capex(self):
         df = pd.read_csv(self.intermediate_path.joinpath("wind_capex.csv"))
         df = df.melt(id_vars="region", value_name="wind_capex", var_name="year")
+        df["year"] = df["year"].astype(int)
         return df
 
     def get_solar_capex(self):
         df = pd.read_csv(self.intermediate_path.joinpath("solar_capex.csv"))
         df = df.melt(id_vars="region", value_name="solar_capex", var_name="year")
+        df["year"] = df["year"].astype(int)
+        return df
