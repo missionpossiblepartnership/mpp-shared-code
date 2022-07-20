@@ -65,7 +65,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
     # Get assets eligible for brownfield transitions
     candidates = new_stack.get_assets_eligible_for_brownfield(
-        year=year, sector=pathway.sector
+        year=year,
+        investment_cycle=pathway.investment_cycle,
     )
 
     # Track number of assets that undergo transition
