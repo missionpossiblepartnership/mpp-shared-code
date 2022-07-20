@@ -19,7 +19,7 @@ from mppshared.models.constraints import (
     check_constraints, get_regional_production_constraint_table,
     hydro_constraints)
 from mppshared.models.simulation_pathway import SimulationPathway
-from mppshared.utility.utils import get_logger, get_region_rank_filter
+from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
