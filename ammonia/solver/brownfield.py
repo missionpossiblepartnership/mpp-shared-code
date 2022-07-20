@@ -127,6 +127,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     )
                 )
             new_technology = best_transition["technology_destination"]
+            switch_type = best_transition["switch_type"]
 
             # emove best transition from ranking table (other assets could undergo the same transition)
             df_rank = remove_transition(df_rank, best_transition)
@@ -141,6 +142,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             deepcopy(asset_to_update),
             new_technology=new_technology,
             new_classification=best_transition["technology_classification"],
+            switch_type=switch_type,
+            origin_technology=origin_technology,
         )
 
         # Check constraints with tentative new stack
