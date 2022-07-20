@@ -51,7 +51,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
     # Apply regional technology ban
     df_rank = apply_regional_technology_ban(
-        df_rank, sector_bans=REGIONAL_TECHNOLOGY_BAN[pathway.sector]
+        df_rank, sector_bans=REGIONAL_TECHNOLOGY_BAN
     )
 
     # If pathway is BAU, take out brownfield renovation to avoid retrofits to end-state technologies
