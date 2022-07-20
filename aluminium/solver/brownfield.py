@@ -53,7 +53,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     # Track number of assets that undergo transition
     n_assets_transitioned = 0
     maximum_n_assets_transitioned = np.floor(
-        ANNUAL_RENOVATION_SHARE[pathway.sector] * new_stack.get_number_of_assets()
+        pathway.annual_renovation_share * new_stack.get_number_of_assets()
     )
     logger.debug(
         f"Number of assets eligible for brownfield transition: {len(candidates)} in year {year}, of which maximum {maximum_n_assets_transitioned} can be transitioned."

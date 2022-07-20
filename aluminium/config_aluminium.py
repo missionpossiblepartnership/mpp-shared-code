@@ -66,6 +66,8 @@ COST_METRIC_CUF_ADJUSTMENT = "lcox"
 # Products produced by each sector
 PRODUCTS = ["Aluminium"]
 
+# Share of assets renovated annually (limits number of brownfield transitions)
+ANNUAL_RENOVATION_SHARE = 0.2
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
 INITIAL_ASSET_DATA_LEVEL = "individual_assets"
 # Scope of the model run - to be specified
