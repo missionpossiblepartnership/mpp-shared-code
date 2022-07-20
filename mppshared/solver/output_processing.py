@@ -256,13 +256,20 @@ def _calculate_emissions_intensity(
     # If differentiated by technology, emissions intensity is identical to the emission factors calculated previously (even if zero production)
     if agg_vars == ["product", "region", "technology"]:
         for scope in scopes:
-            df_stack = df_emissions.rename(
-                {scope: f"emissions_intensity_{scope}" for scope in scopes}, axis=1
-            ).copy()
+            regions = df_stack["region"].unique()
+            df_stack = (
+                df_emissions.loc[df_emissions["region"].isin(regions)]
+                .rename(
+                    {scope: f"emissions_intensity_{scope}" for scope in scopes}, axis=1
+                )
+                .copy()
+            )
 
     # Otherwise, Emissions are the emissions factor multiplied with the annual production volume
     else:
-        df_stack = df_stack.merge(df_emissions, on=["product", "region", "technology"])
+        df_stack = df_stack.merge(
+            df_emissions, on=["product", "region", "technology"], how="left"
+        )
         for scope in scopes:
             df_stack[scope] = df_stack[scope] * df_stack["annual_production_volume"]
 
@@ -369,6 +376,12 @@ def create_table_all_data_year(
 
     # Calculate asset numbers and production volumes for the stack in that year
     df_stack = importer.get_asset_stack(year)
+
+    # Map low-cost power regions to corresponding regions
+    df_stack["region"] = df_stack["region"].apply(
+        lambda x: map_low_cost_power_regions(x)
+    )
+
     df_total_assets = _calculate_number_of_assets(df_stack, use_standard_cuf=False)
     df_total_assets_std_cuf = _calculate_number_of_assets(
         df_stack, use_standard_cuf=True
@@ -461,7 +474,7 @@ def _calculate_annual_investments(
 ) -> pd.DataFrame:
     """Calculate annual investments."""
 
-    # Calculate invesment in newbuild, brownfield retrofit and brownfield rebuild technologies in every year
+    # Calculate investment in newbuild, brownfield retrofit and brownfield rebuild technologies in every year
     switch_types = ["greenfield", "rebuild", "retrofit"]
     df_investment = pd.DataFrame()
 
@@ -490,6 +503,14 @@ def _calculate_annual_investments(
                 },
                 axis=1,
             )
+        )
+
+        # Map low-cost power regions to corresponding regions
+        current_stack["region"] = current_stack["region"].apply(
+            lambda x: map_low_cost_power_regions(x)
+        )
+        previous_stack["region"] = previous_stack["region"].apply(
+            lambda x: map_low_cost_power_regions(x)
         )
 
         # Merge to compare retrofit, rebuild and greenfield status
@@ -925,6 +946,10 @@ def calculate_electrolysis_capacity(
     # Get annual production volume by technology in every year
     for year in np.arange(START_YEAR, END_YEAR + 1):
         stack = importer.get_asset_stack(year)
+
+        # Map low-cost power regions to corresponding regions
+        stack["region"] = stack["region"].apply(lambda x: map_low_cost_power_regions(x))
+
         stack = (
             stack.groupby(["product", "region", "technology"])[
                 "annual_production_volume"
@@ -1213,6 +1238,10 @@ def _calculate_plant_numbers(
             .drop(columns=["cuf", "asset_lifetime"])
             .rename({"technology": "technology_destination"}, axis=1)
         )
+
+        # Map low-cost power regions to corresponding regions
+        stack["region"] = stack["region"].apply(lambda x: map_low_cost_power_regions(x))
+
         stack = add_ammonia_type_to_df(stack)
 
         # Calculate number of plants for the aggregation variables
@@ -1299,6 +1328,16 @@ def map_low_cost_power_regions(low_cost_power_region: str):
         "Saudi Arabia": "Middle East",
         "Brazil": "Latin America",
         "Namibia": "Africa",
+        "Africa": "Africa",
+        "China": "China",
+        "Europe": "Europe",
+        "India": "India",
+        "Latin America": "Latin America",
+        "Middle East": "Middle East",
+        "North America": "North America",
+        "Oceania": "Oceania",
+        "Russia": "Russia",
+        "Rest of Asia": "Rest of Asia",
     }[low_cost_power_region]
 
 
@@ -1318,6 +1357,12 @@ def _calculate_emissions_intensity_abatement(
             .drop(columns=["cuf", "asset_lifetime"])
             .rename({"technology": "technology_destination"}, axis=1)
         )
+
+        # Add low-cost power regions to their corresponding regions
+        df_stack["region"] = df_stack["region"].apply(
+            lambda x: map_low_cost_power_regions(x)
+        )
+
         df_stack = add_ammonia_type_to_df(df_stack)
 
         df_stack = (
@@ -1489,9 +1534,10 @@ def _calculate_emissions_intensity_abatement(
                 & (df_pivot["parameter"] == ammonia_type),
                 START_YEAR:END_YEAR,
             ]
-        df_pivot["parameter"] = df_pivot["parameter"].replace(
-            {"All ammonia": "Unabated emissions intensity"}
-        )
+
+    df_pivot["parameter"] = df_pivot["parameter"].replace(
+        {"All ammonia": "Unabated emissions intensity"}
+    )
 
     df_pivot = df_pivot.reset_index().set_index(index)
 
