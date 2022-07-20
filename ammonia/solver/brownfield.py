@@ -73,7 +73,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     # TODO: renovation share applied to assets with initial technology?
     n_assets_transitioned = 0
     maximum_n_assets_transitioned = np.ceil(
-        ANNUAL_RENOVATION_SHARE[pathway.sector] * new_stack.get_number_of_assets()
+        ANNUAL_RENOVATION_SHARE * new_stack.get_number_of_assets()
     )
 
     # From 2045 onwards, all transition techs need to be retrofit to end-state, so apply cap based on remaining number of assets
