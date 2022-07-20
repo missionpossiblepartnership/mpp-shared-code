@@ -6,16 +6,7 @@ from xmlrpc.client import Boolean
 
 import pandas as pd
 
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    CUF_LOWER_THRESHOLD,
-    CUF_UPPER_THRESHOLD,
-    EMISSION_SCOPES_DEFAULT,
-    GHGS,
-    INVESTMENT_CYCLES,
-    LOG_LEVEL,
-    MAP_LOW_COST_POWER_REGIONS,
-)
+from mppshared.config import LOG_LEVEL
 from mppshared.utility.dataframe_utility import get_emission_columns
 from mppshared.utility.utils import first, get_logger
 
@@ -36,12 +27,14 @@ class Asset:
         cuf: float,
         asset_lifetime: int,
         technology_classification: str,
+        emission_scopes: list,
+        cuf_lower_threshold: float,
+        ghgs: list,
         retrofit=False,
         rebuild=False,
         greenfield=False,
         stay_same=False,
         ppa_allowed=True,
-        emission_scopes: list = EMISSION_SCOPES_DEFAULT,
     ):
         # Unique ID to identify and compare assets
         self.uuid = uuid4().hex
@@ -55,6 +48,11 @@ class Asset:
         # Production capacity parameters
         self.annual_production_capacity = annual_production_capacity  # unit: Mt/year
         self.cuf = cuf  # capacity utilisation factor (decimal)
+        self.cuf_lower_threshold = cuf_lower_threshold  # lower threshold for cuf
+
+        # Emissions parameters
+        self.emission_scopes = emission_scopes
+        self.ghgs = ghgs
 
         # Asset status parameters
         self.retrofit = retrofit
@@ -117,8 +115,17 @@ def create_assets(n_assets: int, **kwargs) -> list:
 class AssetStack:
     """Define an AssetStack composed of several Assets"""
 
-    def __init__(self, assets: list):
+    def __init__(
+        self,
+        assets: list,
+        emission_scopes: list,
+        ghgs: list,
+        cuf_lower_threshold: float,
+    ):
         self.assets = assets
+        self.emission_scopes = emission_scopes
+        self.ghgs = ghgs
+        self.cuf_lower_threshold = cuf_lower_threshold
         # Keep track of all assets added this year
         self.new_ids = []
 
@@ -264,7 +271,9 @@ class AssetStack:
         """Calculate emissions of the current stack in MtGHG by GHG and scope, optionally filtered for technology classification and/or a specific product"""
 
         # Sum emissions by GHG and scope
-        emission_columns = get_emission_columns(ghgs=GHGS, scopes=emission_scopes)
+        emission_columns = get_emission_columns(
+            ghgs=self.ghgs, scopes=self.emission_scopes
+        )
         dict_emissions = dict.fromkeys(emission_columns)
 
         # Get DataFrame with annual production volume by product, region and technology (optionally filtered for technology classification and specific product)
@@ -409,7 +418,9 @@ class AssetStack:
 
         return list(candidates)
 
-    def get_assets_eligible_for_brownfield(self, year: int, sector: str) -> list:
+    def get_assets_eligible_for_brownfield(
+        self, year: int, investment_cycle: int
+    ) -> list:
         """Return a list of Assets from the AssetStack that are eligible for a brownfield technology transition"""
 
         # Assets can be renovated at any time unless they've been renovated already
@@ -421,8 +432,8 @@ class AssetStack:
 
         # Assets can be rebuild if their CUF exceeds the threshold and they are older than the investment cycle
         candidates_rebuild = filter(
-            lambda asset: (asset.cuf > CUF_LOWER_THRESHOLD)
-            & (asset.get_age(year) >= INVESTMENT_CYCLES[sector]),
+            lambda asset: (asset.cuf > self.cuf_lower_threshold)
+            & (asset.get_age(year) >= investment_cycle),
             self.assets,
         )
 
@@ -430,16 +441,20 @@ class AssetStack:
 
 
 def make_new_asset(
-    asset_transition: dict, df_technology_characteristics: pd.DataFrame, year: int
+    asset_transition: dict,
+    df_technology_characteristics: pd.DataFrame,
+    year: int,
+    annual_production_capacity: float,
+    cuf: float,
 ):
-    """Make a new asset, based on asset transition from the ranking DataFrame. The asset is
-    assumed to start operating at the highest possible capacity utilisation
+    """Make a new asset, based on asset transition from the ranking DataFrame.
 
     Args:
         asset_transition: The best transition (destination is the asset to build)
         df_technology_characteristics: needed for asset lifetime and technology classification
         year: Build the asset in this year
-        retrofit: Asset is retrofitted from an old asset
+        annual_production_capacity: The annual production capacity of the asset
+        cuf: The capacity utilization factor of the asset
 
     Returns:
         The new asset
@@ -461,8 +476,8 @@ def make_new_asset(
         technology=asset_transition["technology_destination"],
         region=asset_transition["region"],
         year_commissioned=year,
-        annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-        cuf=CUF_UPPER_THRESHOLD,
+        annual_production_capacity=annual_production_capacity,
+        cuf=cuf,
         asset_lifetime=technology_characteristics["technology_lifetime"].values[0],
         technology_classification=technology_characteristics[
             "technology_classification"

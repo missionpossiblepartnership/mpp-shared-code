@@ -1,30 +1,22 @@
 """Execute the MPP Ammonia model."""
 
+import distutils
 import itertools
 import multiprocessing as mp
 import os
 
 import numpy as np
-import distutils
 
-from ammonia.config_ammonia import (
-    CARBON_COSTS,
-    END_YEAR,
-    LOG_LEVEL,
-    PATHWAYS,
-    RUN_PARALLEL,
-    SECTOR,
-    SENSITIVITIES,
-    run_config,
-)
+from ammonia.config_ammonia import (CARBON_COSTS, END_YEAR, LOG_LEVEL,
+                                    MODEL_YEARS, PATHWAYS, RUN_PARALLEL,
+                                    SECTOR, SENSITIVITIES, run_config)
 from ammonia.solver.implicit_forcing import apply_implicit_forcing
 from ammonia.solver.ranking import make_rankings
 from ammonia.solver.simulate import simulate_pathway
-
+from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.solver.debugging_outputs import create_debugging_outputs
 from mppshared.solver.output_processing import calculate_outputs
 from mppshared.utility.utils import get_logger
-from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 
 # from mppshared.solver.sensitivity_outputs import create_sensitivity_outputs
 
@@ -119,6 +111,7 @@ def main():
                 final_carbon_cost=cc,
                 start_year=2025,
                 end_year=end_year_map[cc],
+                model_years=MODEL_YEARS,
             )
         )
     runs = list(itertools.product(PATHWAYS, SENSITIVITIES, carbon_cost_trajectories))

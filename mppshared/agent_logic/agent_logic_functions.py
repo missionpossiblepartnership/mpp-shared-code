@@ -4,15 +4,10 @@ from operator import methodcaller
 
 import pandas as pd
 
-from mppshared.config import (
-    COST_METRIC_CUF_ADJUSTMENT,
-    CUF_LOWER_THRESHOLD,
-    CUF_UPPER_THRESHOLD,
-    LOG_LEVEL,
-    MODEL_SCOPE,
-)
-from mppshared.models.simulation_pathway import SimulationPathway
+from mppshared.config import (COST_METRIC_CUF_ADJUSTMENT, CUF_LOWER_THRESHOLD,
+                              CUF_UPPER_THRESHOLD, LOG_LEVEL, MODEL_SCOPE)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
+from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.technology_rampup import TechnologyRampup
 from mppshared.utility.utils import get_logger
 
@@ -203,11 +198,14 @@ def sort_assets_cost_metric(
 
 def create_dict_technology_rampup(
     importer: IntermediateDataImporter,
+    model_start_year: int,
+    model_end_year: int,
     maximum_asset_additions: int,
     maximum_capacity_growth_rate: float,
     years_rampup_phase: int,
 ) -> dict:
     """Create dictionary of TechnologyRampup objects with the technologies in that sector as keys. Set None if the technology has no ramp-up trajectory."""
+    logger.info("Creating ramp-up trajectories for technologies")
 
     technology_characteristics = importer.get_technology_characteristics()
     technologies = technology_characteristics["technology"].unique()
@@ -225,6 +223,8 @@ def create_dict_technology_rampup(
         # Only define technology ramp-up rates for transition and end-state technologies
         if classification in ["transition", "end-state"]:
             dict_technology_rampup[technology] = TechnologyRampup(
+                model_start_year=model_start_year,
+                model_end_year=model_end_year,
                 technology=technology,
                 start_year=expected_maturity,
                 end_year=expected_maturity + years_rampup_phase,

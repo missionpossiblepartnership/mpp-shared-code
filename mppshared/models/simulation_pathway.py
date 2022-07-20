@@ -11,27 +11,16 @@ import plotly.express as px
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    END_YEAR,
-    GHGS,
-    INITIAL_ASSET_DATA_LEVEL,
-    LOG_LEVEL,
-    MODEL_SCOPE,
-    PRODUCTS,
-    RANK_TYPES,
-    SECTOR,
-    START_YEAR,
-)
+from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import Asset, AssetStack, create_assets
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.models.technology_rampup import TechnologyRampup
 from mppshared.models.transition import TransitionRegistry
-from mppshared.utility.dataframe_utility import flatten_columns, get_emission_columns
+from mppshared.utility.dataframe_utility import (flatten_columns,
+                                                 get_emission_columns)
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -49,8 +38,14 @@ class SimulationPathway:
         sensitivity: str,
         sector: str,
         products: list,
-        carbon_budget: CarbonBudget = None,
-        technology_rampup: dict = None,
+        rank_types: list,
+        initial_asset_data_level: str,
+        assumed_annual_production_capacity: float,
+        technology_rampup: dict,
+        carbon_budget: CarbonBudget,
+        emission_scopes: list,
+        cuf_lower_threshold: float,
+        ghgs: list,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
     ):
         # Attributes describing the pathway
@@ -60,8 +55,11 @@ class SimulationPathway:
         self.sensitivity = sensitivity
         self.sector = sector
         self.products = products
-        self.start_year = start_year
-        self.end_year = end_year
+        self.rank_types = rank_types
+        self.initial_asset_data_level = initial_asset_data_level
+        self.emission_scopes = emission_scopes
+        self.cuf_lower_threshold = cuf_lower_threshold
+        self.ghgs = ghgs
 
         # Carbon Budget (already initialized with emissions pathway)
         self.carbon_budget = carbon_budget
@@ -79,11 +77,13 @@ class SimulationPathway:
         )
         self.carbon_cost_trajectory = carbon_cost_trajectory
 
+        self.assumed_annual_production_capacity = assumed_annual_production_capacity
+
         # Make initial asset stack from input data
         logger.debug("Making asset stack")
-        if INITIAL_ASSET_DATA_LEVEL[sector] == "regional":
+        if self.initial_asset_data_level == "regional":
             self.stacks = self.make_initial_asset_stack_from_regional_data()
-        elif INITIAL_ASSET_DATA_LEVEL[sector] == "individual_assets":
+        elif self.initial_asset_data_level == "individual_assets":
             self.stacks = self.make_initial_asset_stack_from_asset_data()
 
         # Import demand for all regions
@@ -126,7 +126,7 @@ class SimulationPathway:
     def _import_rankings(self):
         """Import ranking for all products and rank types from the CSVs"""
         rankings = defaultdict(dict)
-        for rank_type in RANK_TYPES[self.sector]:
+        for rank_type in self.rank_types:
             df_rank = self.importer.get_ranking(rank_type=rank_type)
 
             rankings[rank_type] = {}
@@ -135,8 +135,8 @@ class SimulationPathway:
         return rankings
 
     def save_rankings(self):
-        for product in PRODUCTS[SECTOR]:
-            for rank_type in RANK_TYPES:
+        for product in self.products:
+            for rank_type in self.rank_types:
                 df = pd.concat(
                     [
                         pd.concat([df_ranking])
@@ -191,7 +191,7 @@ class SimulationPathway:
         df_roadmap = pd.DataFrame(data={"technology": technologies})
         logger.debug("Calculating annual production volume")
 
-        for year in np.arange(START_YEAR, END_YEAR + 1):
+        for year in np.arange(self.start_year, self.end_year + 1):
 
             # Group by technology and sum annual production volume
             df_stack = self.importer.get_asset_stack(year=year)
@@ -329,11 +329,11 @@ class SimulationPathway:
 
     def get_ranking(self, year, rank_type):
         """Get ranking df for a specific year/product"""
-        if rank_type not in RANK_TYPES[self.sector]:
+        if rank_type not in self.rank_types:
             raise ValueError(
                 "Rank type %s not recognized, choose one of %s",
                 rank_type,
-                RANK_TYPES,
+                self.rank_types,
             )
 
         return self.rankings[rank_type][year]
@@ -345,7 +345,7 @@ class SimulationPathway:
     def copy_availability(self, year):
         df = self.availability
 
-        for product in PRODUCTS[SECTOR]:
+        for product in self.products:
             df.loc[df.year == year + 1, f"{product}_used"] = list(
                 df.loc[df.year == year, f"{product}_used"]
             )
@@ -425,7 +425,8 @@ class SimulationPathway:
         # TODO: based on distribution of typical production capacities
         # TODO: create smaller asset to meet production capacity precisely
         df_stack["number_assets"] = (
-            df_stack["annual_production_capacity"] / ASSUMED_ANNUAL_PRODUCTION_CAPACITY
+            df_stack["annual_production_capacity"]
+            / self.assumed_annual_production_capacity
         ).apply(lambda x: int(x))
 
         # Merge with technology specifications to get technology lifetime
@@ -454,17 +455,27 @@ class SimulationPathway:
                 technology=row["technology"],
                 region=row["region"],
                 year_commissioned=row["year"] - row["average_age"],
-                annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                annual_production_capacity=self.assumed_annual_production_capacity,
                 cuf=row["average_cuf"],
                 asset_lifetime=row["technology_lifetime"],
                 technology_classification=row["technology_classification"],
+                emission_scopes=self.emission_scopes,
+                cuf_lower_threshold=self.cuf_lower_threshold,
+                ghgs=self.ghgs,
             ),
             axis=1,
         ).tolist()
         assets = [item for sublist in assets for item in sublist]
 
         # Create AssetStack for model start year
-        return {self.start_year: AssetStack(assets)}
+        return {
+            self.start_year: AssetStack(
+                assets=assets,
+                emission_scopes=self.emission_scopes,
+                ghgs=self.ghgs,
+                cuf_lower_threshold=self.cuf_lower_threshold,
+            )
+        }
 
     def make_initial_asset_stack_from_asset_data(self):
         """Make AssetStack from asset-specific data (as opposed to average regional data)."""
@@ -503,6 +514,9 @@ class SimulationPathway:
                 asset_lifetime=row["technology_lifetime"],
                 technology_classification=row["technology_classification"],
                 ppa_allowed=row["ppa_allowed"],
+                emission_scopes=self.emission_scopes,
+                cuf_lower_threshold=self.cuf_lower_threshold,
+                ghgs=self.ghgs,
             ),
             axis=1,
         ).tolist()
@@ -510,7 +524,14 @@ class SimulationPathway:
         logger.info(f"Created {len(assets)} initial assets")
 
         # Create AssetStack for model start year
-        return {self.start_year: AssetStack(assets)}
+        return {
+            self.start_year: AssetStack(
+                assets=assets,
+                emission_scopes=self.emission_scopes,
+                ghgs=self.ghgs,
+                cuf_lower_threshold=self.cuf_lower_threshold,
+            )
+        }
 
     def _get_weighted_average(
         self, df, vars, product, year, methanol_type: str = None, emissions=True

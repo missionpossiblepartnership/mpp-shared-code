@@ -1,18 +1,23 @@
-import pandas as pd
 import numpy as np
-
-from mppshared.config import END_YEAR, MODEL_YEARS, START_YEAR
+import pandas as pd
 
 
 class CarbonCostTrajectory:
     """Class to define a yearly carbon cost trajectory."""
 
     def __init__(
-        self, trajectory, initial_carbon_cost, final_carbon_cost, start_year, end_year
+        self,
+        trajectory,
+        initial_carbon_cost,
+        final_carbon_cost,
+        start_year,
+        end_year,
+        model_years: range,
     ):
 
         # Initialize attributes
         self.trajectory = trajectory
+        self.model_years = model_years
 
         # Initialize DataFrame with carbon cost trajectory
         self.set_carbon_cost(
@@ -35,7 +40,7 @@ class CarbonCostTrajectory:
         """
         # Initialize DataFrame
         self.df_carbon_cost = pd.DataFrame(
-            data={"year": MODEL_YEARS, "carbon_cost": None}
+            data={"year": self.model_years, "carbon_cost": None}
         )
 
         # TODO: make this much nicer

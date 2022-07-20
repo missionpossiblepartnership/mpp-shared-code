@@ -1,8 +1,11 @@
 """Configuration of the MPP Ammonia model."""
 import logging
+
 import numpy as np
 
 SECTOR = "ammonia"
+
+INITIAL_ASSET_DATA_LEVEL = "regional"
 
 ### RUN CONFIRGUATION ###
 LOG_LEVEL = "DEBUG"
@@ -24,7 +27,10 @@ run_config = {
 }
 START_YEAR = 2020
 END_YEAR = 2050
+MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 PRODUCTS = ["Ammonia", "Ammonium nitrate", "Urea"]
+# Override asset parameters; annual production capacity in Mt/year
+ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 
 ### PATHWAYS, SENSITIVITIES AND CARBON COSTS ###
 PATHWAYS = [
@@ -96,6 +102,8 @@ RANKING_COST_METRIC = "lcox"
 COST_METRIC_RELATIVE_UNCERTAINTY = 0.05
 GHGS_RANKING = ["co2"]
 EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3_upstream"]
+# Emission scopes included in data analysis
+EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
 
 TRANSITION_TYPES = [
     "decommission",
@@ -160,3 +168,19 @@ RANKING_CONFIG = {
 CUF_LOWER_THRESHOLD = 0.5
 CUF_UPPER_THRESHOLD = 0.95
 INVESTMENT_CYCLE = 20  # years
+# Technology ramp-up parameters
+TECHNOLOGY_RAMP_UP_CONSTRAINT = {
+    "maximum_asset_additions": 10,
+    "maximum_capacity_growth_rate": 0.7,
+    "years_rampup_phase": 5,
+}
+
+CARBON_BUDGET_SECTOR_CSV = False
+residual_share = 0.05
+emissions_2020 = 0.62  # Gt CO2 (scope 1 and 2)
+
+SECTORAL_CARBON_PATHWAY = {
+    "emissions_start": emissions_2020,
+    "emissions_end": residual_share * emissions_2020,
+    "action_start": 2023,
+}

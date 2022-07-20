@@ -11,6 +11,7 @@ PATHWAYS = [
     "cc",
 ]
 
+PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = ["lc", "cc"]
 SCOPES_CO2_COST = [
     "scope1",
     "scope2",
@@ -53,10 +54,10 @@ ALL_SENSITIVITIES = [
     "Natural Gas Price_-0.2",
 ]
 SENSITIVITIES = {
-    "bau": ["def"],  # ALL_SENSITIVITIES,
+    # "bau": ["def"],  # ALL_SENSITIVITIES,
     # "cc": ["def"],  # ALL_SENSITIVITIES,
     # "fa": ["def"],
-    # "lc": ALL_SENSITIVITIES,
+    "lc": ["def"]  # ALL_SENSITIVITIES,
 }
 INVESTMENT_CYCLE = 10  # years
 CUF_LOWER_THRESHOLD = 0.6
@@ -65,6 +66,8 @@ COST_METRIC_CUF_ADJUSTMENT = "lcox"
 # Products produced by each sector
 PRODUCTS = ["Aluminium"]
 
+# Specify whether sector uses region-specific or asset-specific data for initial asset stack
+INITIAL_ASSET_DATA_LEVEL = "individual_assets"
 # Scope of the model run - to be specified
 MODEL_SCOPE = "Global"
 
@@ -76,7 +79,10 @@ TECHNOLOGY_MORATORIUM = 2030
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
 TRANSITIONAL_PERIOD_YEARS = 20
 # Emission scopes included in data analysis
-EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
+EMISSION_SCOPES = [
+    "scope1",
+    "scope2",
+]
 # Emissions
 GHGS = ["co2"]
 
@@ -85,7 +91,7 @@ RANKING_COST_METRIC = "tco"
 BIN_METHODOLOGY = "histogram"
 NUMBER_OF_BINS_RANKING = 50
 GHGS_RANKING = ["co2"]
-EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
+EMISSION_SCOPES_RANKING = ["scope1", "scope2"]
 
 TRANSITION_TYPES = [
     "decommission",
@@ -95,6 +101,16 @@ TRANSITION_TYPES = [
 ]
 
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
+
+CARBON_BUDGET_SECTOR_CSV = True
+
+residual_share = 0.05
+emissions_2020 = 0.62  # Gt CO2 (scope 1 and 2)
+SECTORAL_CARBON_PATHWAY = {
+    "emissions_start": emissions_2020,
+    "emissions_end": residual_share * emissions_2020,
+    "action_start": 2023,
+}
 
 # Ranking configuration depends on type of technology switch and pathway
 lc_weight_cost = 1.0
