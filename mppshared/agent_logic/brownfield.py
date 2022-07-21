@@ -4,6 +4,7 @@ from copy import deepcopy
 from operator import methodcaller
 
 import numpy as np
+import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_destination_technology, remove_transition,
@@ -182,3 +183,21 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     )
 
     return pathway
+
+
+def apply_start_years_brownfield_transitions(
+    df_rank: pd.DataFrame,
+    pathway: SimulationPathway,
+    year: int,
+    brownfield_renovation_start_year: int,
+    brownfield_rebuild_start_year: int,
+):
+    if pathway.pathway in ["fa", "lc"]:
+
+        if year < brownfield_renovation_start_year:
+            df_rank = df_rank.loc[df_rank["switch_type"] != "brownfield_renovation"]
+
+        if year < brownfield_rebuild_start_year:
+            df_rank = df_rank.loc[df_rank["switch_type"] != "brownfield_newbuild"]
+
+    return df_rank
