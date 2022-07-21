@@ -201,3 +201,87 @@ def apply_start_years_brownfield_transitions(
             df_rank = df_rank.loc[df_rank["switch_type"] != "brownfield_newbuild"]
 
     return df_rank
+
+
+def apply_brownfield_filters_chemicals(
+    df_rank: pd.DataFrame,
+    pathway: SimulationPathway,
+    year: int,
+    ranking_cost_metric: str,
+    cost_metric_decrease_brownfield: float,
+) -> pd.DataFrame:
+    """For chemicals, the LC pathway is driven by a carbon price. Hence, brownfield transitions only happen
+    when they decrease LCOX. For the FA pathway, this is not the case."""
+
+    if pathway.pathway == "fa":
+        return df_rank
+
+    cost_metric = ranking_cost_metric
+
+    # Get LCOX of origin technologies for retrofit
+    # TODO: check simplification that lcox of the current year is taken
+    #! Compare LCOX of newbuild technologies
+    df_greenfield = pathway.get_ranking(year=year, rank_type="greenfield")
+    df_lcox = df_greenfield.loc[df_greenfield["technology_origin"] == "New-build"]
+    df_lcox = df_lcox[
+        [
+            "product",
+            "region",
+            "technology_destination",
+            "year",
+            cost_metric,
+        ]
+    ]
+
+    df_destination_techs = df_lcox.rename(
+        {cost_metric: f"{cost_metric}_destination"}, axis=1
+    )
+
+    df_origin_techs = df_lcox.rename(
+        {
+            "technology_destination": "technology_origin",
+            cost_metric: f"{cost_metric}_origin",
+        },
+        axis=1,
+    )
+
+    # Add to ranking table and filter out brownfield transitions which would not decrease LCOX "substantially"
+    df_rank = df_rank.merge(
+        df_origin_techs,
+        on=["product", "region", "technology_origin", "year"],
+        how="left",
+    ).fillna(0)
+
+    df_rank = df_rank.merge(
+        df_destination_techs,
+        on=["product", "region", "technology_destination", "year"],
+        how="left",
+    ).fillna(0)
+
+    # Enforce retrofit of CCS with process emissions only
+    # TODO: remove this workaround
+    # df_cc = pathway.carbon_cost.df_carbon_cost
+    # flag_transition_forced_retrofit = False
+    # if df_cc.loc[df_cc["year"] == END_YEAR, "carbon_cost"].item() == 75:
+    #     flag_transition_forced_retrofit = True
+
+    # if flag_transition_forced_retrofit & (pathway.pathway == "def") & (year >= 2045):
+    #     # if year > 2050:
+    #     df_rank.loc[
+    #         (
+    #             df_rank["technology_origin"]
+    #             == "Natural Gas SMR + CCS (process emissions only) + ammonia synthesis"
+    #         )
+    #         & (
+    #             df_rank["technology_destination"]
+    #             == "Natural Gas SMR + CCS + ammonia synthesis"
+    #         ),
+    #         f"{cost_metric}_destination",
+    #     ] = 0
+
+    filter = df_rank[f"{cost_metric}_destination"] < df_rank[
+        f"{cost_metric}_origin"
+    ].apply(lambda x: x * (1 - cost_metric_decrease_brownfield))
+    df_rank = df_rank.loc[filter]
+
+    return df_rank
