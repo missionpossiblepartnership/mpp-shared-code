@@ -18,6 +18,8 @@ from mppshared.agent_logic.agent_logic_functions import (
     apply_regional_technology_ban,
     remove_all_transitions_with_destination_technology, remove_transition,
     select_best_transition)
+from mppshared.agent_logic.brownfield import \
+    apply_start_years_brownfield_transitions
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
@@ -60,7 +62,11 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
     # Apply start years of brownfield transitions
     df_rank = apply_start_years_brownfield_transitions(
-        df_rank=df_rank, pathway=pathway, year=year
+        df_rank=df_rank,
+        pathway=pathway,
+        year=year,
+        brownfield_renovation_start_year=BROWNFIELD_RENOVATION_START_YEAR,
+        brownfield_rebuild_start_year=BROWNFIELD_REBUILD_START_YEAR,
     )
 
     # Get assets eligible for brownfield transitions
@@ -203,20 +209,6 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     logger.debug(f"{n_assets_transitioned} assets transitioned in year {year}.")
 
     return pathway
-
-
-def apply_start_years_brownfield_transitions(
-    df_rank: pd.DataFrame, pathway: SimulationPathway, year: int
-):
-    if pathway.pathway in ["fa", "lc"]:
-
-        if year < BROWNFIELD_RENOVATION_START_YEAR:
-            df_rank = df_rank.loc[df_rank["switch_type"] != "brownfield_renovation"]
-
-        if year < BROWNFIELD_REBUILD_START_YEAR:
-            df_rank = df_rank.loc[df_rank["switch_type"] != "brownfield_newbuild"]
-
-    return df_rank
 
 
 def apply_brownfield_filters_chemicals(
