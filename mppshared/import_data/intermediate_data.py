@@ -3,7 +3,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL, END_YEAR
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, END_YEAR,
+                              LOG_LEVEL)
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -19,6 +20,7 @@ class IntermediateDataImporter:
         sensitivity: str,
         sector: str,
         products: list,
+        # todo: None should be replaced by a config parameter I suppose?
         carbon_cost_trajectory=None,
     ):
         parent_path = Path(__file__).resolve().parents[2]
@@ -39,6 +41,8 @@ class IntermediateDataImporter:
             self.export_dir = parent_path.joinpath(
                 f"{sector}/data/{pathway}/{sensitivity}"
             )
+        self.raw_path = self.export_dir.joinpath("raw")
+        self.import_path = self.export_dir.joinpath("import")
         self.intermediate_path = self.export_dir.joinpath("intermediate")
         self.stack_tracker_path = self.export_dir.joinpath("stack_tracker")
         self.final_path = self.export_dir.joinpath("final")
@@ -75,6 +79,14 @@ class IntermediateDataImporter:
 
         df.to_csv(export_path, index=index)
 
+    # imports & preprocessing
+    def get_raw_input_data(self):
+        pass
+
+    def get_preprocessed_input_data(self):
+        pass
+
+    # intermediate
     def get_emissions(self):
         return pd.read_csv(self.intermediate_path.joinpath("emissions.csv"))
 

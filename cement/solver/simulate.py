@@ -1,4 +1,6 @@
-"""Year-by-year optimisation logic of plant investment decisions to simulate a pathway for the cement supply technology mix."""
+"""Year-by-year optimisation logic of plant investment decisions to simulate a pathway for the cement supply technology
+    mix.
+"""
 
 from datetime import timedelta
 from timeit import default_timer as timer
@@ -6,12 +8,12 @@ from timeit import default_timer as timer
 from cement.config_cement import (ANNUAL_RENOVATION_SHARE,
                                   ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                                   CARBON_BUDGET_SECTOR_CSV,
-                                  CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
-                                  EMISSION_SCOPES, END_YEAR, GHGS,
-                                  INITIAL_ASSET_DATA_LEVEL, INVESTMENT_CYCLE,
-                                  LOG_LEVEL, PRODUCTS, RANK_TYPES,
-                                  SECTORAL_CARBON_PATHWAY, START_YEAR,
-                                  TECHNOLOGY_RAMP_UP_CONSTRAINT)
+                                  CARBON_BUDGET_SHAPE, CUF_LOWER_THRESHOLD,
+                                  CUF_UPPER_THRESHOLD, EMISSION_SCOPES,
+                                  END_YEAR, GHGS, INITIAL_ASSET_DATA_LEVEL,
+                                  INVESTMENT_CYCLE, LOG_LEVEL, PRODUCTS,
+                                  RANK_TYPES, SECTORAL_CARBON_PATHWAY,
+                                  START_YEAR, TECHNOLOGY_RAMP_UP_CONSTRAINT)
 from cement.solver.brownfield import brownfield
 from cement.solver.decommission import decommission
 from cement.solver.greenfield import greenfield
@@ -27,7 +29,7 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def simulate(pathway: SimulationPathway) -> SimulationPathway:
+def _simulate(pathway: SimulationPathway) -> SimulationPathway:
     """
     Run the pathway simulation over the years
     Args:
@@ -42,6 +44,7 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
         logger.info("Optimizing for %s", year)
 
         # Adjust capacity utilisation of each asset
+        # todo: remove CUF adjustment phase
         pathway = adjust_capacity_utilisation(pathway=pathway, year=year)
 
         # Copy over last year's stack to this year
@@ -81,6 +84,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
     """
     Get data per technology, ranking data and then run the pathway simulation
     """
+
     importer = IntermediateDataImporter(
         pathway=pathway,
         sensitivity=sensitivity,
@@ -93,7 +97,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         start_year=START_YEAR,
         end_year=END_YEAR,
         sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS,
-        pathway_shape="linear",
+        pathway_shape=CARBON_BUDGET_SHAPE,
         sector=sector,
         carbon_budget_sector_csv=CARBON_BUDGET_SECTOR_CSV,
         sectoral_carbon_pathway=SECTORAL_CARBON_PATHWAY,
@@ -136,7 +140,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
     )
 
     # Optimize asset stack on a yearly basis
-    pathway = simulate(
+    pathway = _simulate(
         pathway=pathway,
     )
     pathway.output_technology_roadmap()

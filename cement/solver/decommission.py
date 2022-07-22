@@ -14,11 +14,13 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
     """Apply decommission transition to eligible Assets in the AssetStack.
 
     Args:
-        pathway: decarbonization pathway that describes the composition of the AssetStack in every year of the model horizon
+        pathway: decarbonization pathway that describes the composition of the AssetStack in every year of the model
+            horizon
         year: current year in which technology transitions are enacted
 
     Returns:
-        Updated decarbonization pathway with the updated AssetStack in the subsequent year according to the decommission transitions enacted
+        Updated decarbonization pathway with the updated AssetStack in the subsequent year according to the decommission
+            transitions enacted
     """
 
     for product in PRODUCTS:
@@ -62,7 +64,8 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 break
 
             logger.debug(
-                f"--Removing asset with technology {asset_to_remove.technology} in region {asset_to_remove.region}, annual production {asset_to_remove.get_annual_production_volume()} and UUID {asset_to_remove.uuid}"
+                f"--Removing asset with technology {asset_to_remove.technology} in region {asset_to_remove.region}, "
+                f"annual production {asset_to_remove.get_annual_production_volume()} and UUID {asset_to_remove.uuid}"
             )
 
             new_stack.remove(asset_to_remove)

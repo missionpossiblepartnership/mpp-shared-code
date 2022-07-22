@@ -17,20 +17,7 @@ SCOPES_CO2_COST = [
 ]
 
 ### RUN CONFIGURATION ###
-
-run_config = {
-    "IMPORT_DATA",
-    "CALCULATE_VARIABLES",
-    "APPLY_IMPLICIT_FORCING",
-    "MAKE_RANKINGS",
-    "SIMULATE_PATHWAY",
-    "CALCULATE_OUTPUTS",
-    "CREATE_DEBUGGING_OUTPUTS",
-    # "EXPORT_OUTPUTS",
-    # "PLOT_AVAILABILITIES"
-    # "MERGE_OUTPUTS"
-}
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 APPLY_CARBON_COST = True
 
 ### MODEL DECISION PARAMETERS ###
@@ -80,7 +67,7 @@ GHGS = ["co2", "ch4"]
 
 ### RANKING OF TECHNOLOGY SWITCHES ###
 RANKING_COST_METRIC = "lcox"
-BIN_METHODOLOGY = "uncertainty"     # must be either "histogram" or "uncertainty"
+BIN_METHODOLOGY = "uncertainty"     # options: "histogram" or "uncertainty"
 COST_METRIC_RELATIVE_UNCERTAINTY = 0.05
 NUMBER_OF_BINS_RANKING = 50
 GHGS_RANKING = ["co2"]
@@ -96,6 +83,7 @@ TRANSITION_TYPES = [
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 
 CARBON_BUDGET_SECTOR_CSV = True
+CARBON_BUDGET_SHAPE = "linear"      # options: todo
 
 residual_share = 0.05
 emissions_2020 = 0.62  # Gt CO2 (scope 1 and 2)
