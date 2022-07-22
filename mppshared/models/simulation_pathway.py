@@ -49,6 +49,7 @@ class SimulationPathway:
         ghgs: list,
         investment_cycle: int,
         annual_renovation_share: float,
+        regional_production_shares: dict,
         constraints_to_apply: list,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
     ):
@@ -67,6 +68,7 @@ class SimulationPathway:
         self.cuf_upper_threshold = cuf_upper_threshold
         self.annual_renovation_share = annual_renovation_share
         self.ghgs = ghgs
+        self.regional_production_shares = regional_production_shares
         self.constraints_to_apply = constraints_to_apply
 
         # Carbon Budget (already initialized with emissions pathway)

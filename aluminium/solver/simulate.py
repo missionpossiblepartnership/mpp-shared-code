@@ -12,8 +12,8 @@ from aluminium.config_aluminium import (ANNUAL_RENOVATION_SHARE,
                                         END_YEAR, GHGS,
                                         INITIAL_ASSET_DATA_LEVEL,
                                         INVESTMENT_CYCLE, LOG_LEVEL, PRODUCTS,
-                                        RANK_TYPES, SECTORAL_CARBON_PATHWAY,
-                                        START_YEAR,
+                                        RANK_TYPES, REGIONAL_PRODUCTION_SHARES,
+                                        SECTORAL_CARBON_PATHWAY, START_YEAR,
                                         TECHNOLOGY_RAMP_UP_CONSTRAINT)
 from aluminium.solver.brownfield import brownfield
 from aluminium.solver.decommission import decommission
@@ -134,6 +134,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         cuf_lower_threshold=CUF_LOWER_THRESHOLD,
         cuf_upper_threshold=CUF_UPPER_THRESHOLD,
         ghgs=GHGS,
+        regional_production_shares=REGIONAL_PRODUCTION_SHARES,
         investment_cycle=INVESTMENT_CYCLE,
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,
         constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway],

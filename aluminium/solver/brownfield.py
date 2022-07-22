@@ -167,7 +167,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
         # If the emissions constraint and/or the technology ramp-up constraint is hurt, remove remove that destination technology from the ranking table and try again
         elif dict_constraints["emissions_constraint"] == False:
-            logger.debug(
+            logger.info(
                 f"Emissions constraint hurt for {origin_technology} -> {new_technology}"
             )
             if origin_technology != new_technology:

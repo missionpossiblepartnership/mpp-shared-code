@@ -39,6 +39,27 @@ START_YEAR = 2020
 END_YEAR = 2050
 MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
+
+REGIONAL_PRODUCTION_SHARES = {
+    "China - North": 0.3,
+    "China - North West": 0.3,
+    "China - North East": 0.3,
+    "China - Central": 0.3,
+    "China - South": 0.3,
+    "China - East": 0.3,
+    "Rest of Asia": 0.3,
+    "North America": 0.3,
+    "Russia": 0.3,
+    "Rest of Europe": 0.3,
+    "Middle East": 0.3,
+    "Africa": 0.3,
+    "South America": 0.3,
+    "Oceania": 0.3,
+    "Canada": 0.3,
+    "Scandinavia": 0.3,
+    "US": 0.3,
+}
+
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
 ALL_SENSITIVITIES = [
     "def",
