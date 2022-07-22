@@ -178,7 +178,12 @@ RANKING_CONFIG = {
 
 ### CONSTRAINTS ###
 
-CONSTRAINTS_TO_APPLY = {"bau": [None], "cc": [None], "lc": [None], "fa": [None]}
+CONSTRAINTS_TO_APPLY = {
+    "bau": [None],
+    "cc": [None],
+    "lc": ["emissions_constraint", "rampup_constraint"],
+    "fa": [None],
+}
 
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {

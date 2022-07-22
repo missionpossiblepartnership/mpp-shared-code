@@ -77,7 +77,10 @@ def check_constraints(
 
 
 def check_technology_rampup_constraint(
-    pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
+    pathway: SimulationPathway,
+    stack: AssetStack,
+    year: int,
+    transition_type: str,
 ) -> Bool:
     """Check if the technology rampup between the stacked passed and the previous year's stack complies with the technology ramp-up trajectory
 
@@ -176,7 +179,6 @@ def get_regional_production_constraint_table(
 def check_annual_carbon_budget_constraint(
     pathway: SimulationPathway,
     stack: AssetStack,
-    product: str,
     year: int,
     transition_type: str,
 ) -> Bool:
@@ -221,7 +223,6 @@ def hydro_constraints(df_ranking: pd.DataFrame, sector: str) -> pd.DataFrame:
     # TODO: refactor to not check for sector
     # check if the product is aluminium:
     if HYDRO_TECHNOLOGY_BAN[sector]:
-        # if "Aluminium" in df_ranking["product"].to_list():
         logger.debug("Removing new builds Hydro")
         return df_ranking[
             ~(
