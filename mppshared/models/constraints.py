@@ -43,39 +43,41 @@ def check_constraints(
     #     pathway=pathway, stack=stack, product=product, year=year
     # )
 
-    # If pathway not bau, then check for constraints, else return true
-    # if pathway.pathway != "bau":
-    if pathway.pathway in ["fa", "lc"]:
-        # Check constraint for annual emissions limit from carbon budget
-        emissions_constraint, flag_residual = check_annual_carbon_budget_constraint(
-            pathway=pathway, stack=stack, year=year, transition_type=transition_type
-        )
-        # Check technology ramp-up constraint
-        rampup_constraint = check_technology_rampup_constraint(
-            pathway=pathway, stack=stack, year=year
-        )
-
-        # TODO: Check resource availability constraint
-        return {
-            "emissions_constraint": emissions_constraint,
-            "flag_residual": flag_residual,
-            "rampup_constraint": rampup_constraint,
-        }
-    elif pathway.pathway in ["cc"]:
-        rampup_constraint = check_technology_rampup_constraint(
-            pathway=pathway, stack=stack, year=year
-        )
+    dict_constraints = {
+        "emissions_constraint": check_annual_carbon_budget_constraint,
+        "rampup_constraint": check_technology_rampup_constraint,
+        "regional_constraint": check_constraint_regional_production,
+    }
+    constraints_checked = {}
+    if pathway.constraints_to_apply:
+        logger.info(f"Pathway {pathway.pathway} has constraints to apply")
+        for constraint in pathway.constraints_to_apply:
+            logger.info(f"Checking constraint {constraint}")
+            if constraint == "emissions_constraint":
+                emissions_constraint, flag_residual = dict_constraints[constraint](
+                    pathway=pathway,
+                    stack=stack,
+                    year=year,
+                    transition_type=transition_type,
+                )
+                constraints_checked[constraint] = emissions_constraint
+                constraints_checked["flag_residual"] = flag_residual
+            else:
+                constraints_checked[constraint] = dict_constraints[constraint](
+                    pathwaw=pathway, stack=stack, year=year
+                )
+        return constraints_checked
+    else:
+        logger.info(f"Pathway {pathway.pathway} has no constraints to apply")
         return {
             "emissions_constraint": True,
             "flag_residual": False,
-            "rampup_constraint": True,  # rampup_constraint,
+            "rampup_constraint": True,
         }
-    else:
-        return {"emissions_constraint": True, "rampup_constraint": True}
 
 
 def check_technology_rampup_constraint(
-    pathway: SimulationPathway, stack: AssetStack, year: int
+    pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
 ) -> Bool:
     """Check if the technology rampup between the stacked passed and the previous year's stack complies with the technology ramp-up trajectory
 
@@ -121,7 +123,11 @@ def check_technology_rampup_constraint(
 
 
 def check_constraint_regional_production(
-    pathway: SimulationPathway, stack: AssetStack, product: str, year: int
+    pathway: SimulationPathway,
+    stack: AssetStack,
+    product: str,
+    year: int,
+    transition_type: str,
 ) -> Bool:
     """Check constraints that regional production is at least a specified share of regional demand
 
@@ -138,7 +144,10 @@ def check_constraint_regional_production(
 
 
 def get_regional_production_constraint_table(
-    pathway: SimulationPathway, stack: AssetStack, product: str, year: int
+    pathway: SimulationPathway,
+    stack: AssetStack,
+    product: str,
+    year: int,
 ) -> pd.DataFrame:
     """Get table that compares regional production with regional demand for a given year"""
     # Get regional production and demand
@@ -165,7 +174,11 @@ def get_regional_production_constraint_table(
 
 
 def check_annual_carbon_budget_constraint(
-    pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
+    pathway: SimulationPathway,
+    stack: AssetStack,
+    product: str,
+    year: int,
+    transition_type: str,
 ) -> Bool:
     """Check if the stack exceeds the Carbon Budget defined in the pathway for the given product and year"""
 
@@ -205,6 +218,7 @@ def check_annual_carbon_budget_constraint(
 
 
 def hydro_constraints(df_ranking: pd.DataFrame, sector: str) -> pd.DataFrame:
+    # TODO: refactor to not check for sector
     # check if the product is aluminium:
     if HYDRO_TECHNOLOGY_BAN[sector]:
         # if "Aluminium" in df_ranking["product"].to_list():
