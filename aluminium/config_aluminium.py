@@ -177,6 +177,9 @@ RANKING_CONFIG = {
 }
 
 ### CONSTRAINTS ###
+
+CONSTRAINTS_TO_APPLY = {"bau": [None], "cc": [None], "lc": [None], "fa": [None]}
+
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "maximum_asset_additions": 6,  # 10

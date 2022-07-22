@@ -49,6 +49,7 @@ class SimulationPathway:
         ghgs: list,
         investment_cycle: int,
         annual_renovation_share: float,
+        constraints_to_apply: list,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
     ):
         # Attributes describing the pathway
@@ -66,6 +67,7 @@ class SimulationPathway:
         self.cuf_upper_threshold = cuf_upper_threshold
         self.annual_renovation_share = annual_renovation_share
         self.ghgs = ghgs
+        self.constraints_to_apply = constraints_to_apply
 
         # Carbon Budget (already initialized with emissions pathway)
         self.carbon_budget = carbon_budget

@@ -6,6 +6,7 @@ from timeit import default_timer as timer
 from aluminium.config_aluminium import (ANNUAL_RENOVATION_SHARE,
                                         ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                                         CARBON_BUDGET_SECTOR_CSV,
+                                        CONSTRAINTS_TO_APPLY,
                                         CUF_LOWER_THRESHOLD,
                                         CUF_UPPER_THRESHOLD, EMISSION_SCOPES,
                                         END_YEAR, GHGS,
@@ -135,6 +136,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         ghgs=GHGS,
         investment_cycle=INVESTMENT_CYCLE,
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,
+        constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway],
     )
 
     # Optimize asset stack on a yearly basis
