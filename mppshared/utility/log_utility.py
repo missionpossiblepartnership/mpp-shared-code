@@ -16,7 +16,7 @@ LOG_FORMATTER = logging.Formatter(
 )
 
 
-def get_console_handler() -> logging.StreamHandler:
+def get_console_handler() -> RichHandler:
     """Formats the log for console output.
 
     Returns:
