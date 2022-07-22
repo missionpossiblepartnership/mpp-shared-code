@@ -6,8 +6,7 @@ import pandas as pd
 from pandera import Bool
 from pyparsing import col
 
-from mppshared.config import (END_YEAR, HYDRO_TECHNOLOGY_BAN, LOG_LEVEL,
-                              REGIONAL_PRODUCTION_SHARES,
+from mppshared.config import (HYDRO_TECHNOLOGY_BAN, LOG_LEVEL,
                               YEAR_2050_EMISSIONS_CONSTRAINT)
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -165,7 +164,7 @@ def get_regional_production_constraint_table(
     # Check for every region in DataFrame
     df = df_regional_production.merge(df_demand, on=["region"], how="left")
     df["share_regional_production"] = df["region"].map(
-        REGIONAL_PRODUCTION_SHARES[pathway.sector]
+        pathway.regional_production_shares
     )
 
     # Add required regional production column
@@ -197,7 +196,7 @@ def check_annual_carbon_budget_constraint(
         year >= YEAR_2050_EMISSIONS_CONSTRAINT[pathway.sector]
     ):
         limit = pathway.carbon_budget.get_annual_emissions_limit(
-            END_YEAR, pathway.sector
+            pathway.end_year, pathway.sector
         )
 
         dict_stack_emissions = stack.calculate_emissions_stack(

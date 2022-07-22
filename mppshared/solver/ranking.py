@@ -107,6 +107,7 @@ def rank_technology_histogram(
             f"{cost_metric}_adjusted_by_emissions_normalized"
         ]
         df_rank = df
+        df_rank["rank"] = df_rank[f"{rank_type}_{pathway}_score"].rank(ascending=True)
 
     else:
         df[f"{rank_type}_{pathway}_score"] = (
