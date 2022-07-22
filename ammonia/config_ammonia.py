@@ -80,6 +80,18 @@ CARBON_COSTS = [
     250,
 ]
 
+REGIONAL_PRODUCTION_SHARES = {
+    "Africa": 0.4,
+    "China": 0.4,
+    "Europe": 0.4,
+    "India": 0.4,
+    "Latin America": 0.4,
+    "Middle East": 0.4,
+    "North America": 0.4,
+    "Oceania": 0.4,
+    "Russia": 0.4,
+    "Rest of Asia": 0.4,
+}
 
 MAP_LOW_COST_POWER_REGIONS = {
     "Middle East": "Saudi Arabia",
