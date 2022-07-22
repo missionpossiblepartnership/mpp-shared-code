@@ -80,7 +80,8 @@ GHGS = ["co2", "ch4"]
 
 ### RANKING OF TECHNOLOGY SWITCHES ###
 RANKING_COST_METRIC = "lcox"
-BIN_METHODOLOGY = "uncertainty"
+BIN_METHODOLOGY = "uncertainty"     # must be either "histogram" or "uncertainty"
+COST_METRIC_RELATIVE_UNCERTAINTY = 0.05
 NUMBER_OF_BINS_RANKING = 50
 GHGS_RANKING = ["co2"]
 EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3up"]

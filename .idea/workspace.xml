@@ -2,24 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="02329e65-324f-4e04-a306-ec660e0198a3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/cement/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cement/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cement/config_cement.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cement/main_cement.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cement/solver/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cement/solver/brownfield.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cement/solver/decommission.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cement/solver/greenfield.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cement/solver/implicit_forcing.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cement/solver/ranking.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/cement/solver/simulate.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/mpp-shared-code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/mpp-shared-code.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mppshared/utility/file_handling_utility.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/utility/file_handling_utility.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mppshared/utility/log_utility.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/utility/log_utility.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cement/config_cement.py" beforeDir="false" afterPath="$PROJECT_DIR$/cement/config_cement.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cement/solver/brownfield.py" beforeDir="false" afterPath="$PROJECT_DIR$/cement/solver/brownfield.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cement/solver/decommission.py" beforeDir="false" afterPath="$PROJECT_DIR$/cement/solver/decommission.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cement/solver/greenfield.py" beforeDir="false" afterPath="$PROJECT_DIR$/cement/solver/greenfield.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cement/solver/implicit_forcing.py" beforeDir="false" afterPath="$PROJECT_DIR$/cement/solver/implicit_forcing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cement/solver/ranking.py" beforeDir="false" afterPath="$PROJECT_DIR$/cement/solver/ranking.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cement/solver/simulate.py" beforeDir="false" afterPath="$PROJECT_DIR$/cement/solver/simulate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mppshared/solver/ranking.py" beforeDir="false" afterPath="$PROJECT_DIR$/mppshared/solver/ranking.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,10 +44,11 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="NewWatcherDialog.advanced.open" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="last_opened_file_path" value="$USER_HOME$/anaconda3/envs/mpp-dev/Scripts/black.exe" />
+    <property name="settings.editor.selected.configurable" value="actions.on.save" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -145,6 +137,13 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/aluminium/solver/ranking.py</url>
+          <line>2</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">

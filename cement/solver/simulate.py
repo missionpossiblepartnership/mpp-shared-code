@@ -1,22 +1,20 @@
-"""Year-by-year optimisation logic of plant investment decisions to simulate a pathway for the aluminium supply technology mix."""
+"""Year-by-year optimisation logic of plant investment decisions to simulate a pathway for the cement supply technology mix."""
 
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from aluminium.config_aluminium import (ANNUAL_RENOVATION_SHARE,
-                                        ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                                        CARBON_BUDGET_SECTOR_CSV,
-                                        CUF_LOWER_THRESHOLD,
-                                        CUF_UPPER_THRESHOLD, EMISSION_SCOPES,
-                                        END_YEAR, GHGS,
-                                        INITIAL_ASSET_DATA_LEVEL,
-                                        INVESTMENT_CYCLE, LOG_LEVEL, PRODUCTS,
-                                        RANK_TYPES, SECTORAL_CARBON_PATHWAY,
-                                        START_YEAR,
-                                        TECHNOLOGY_RAMP_UP_CONSTRAINT)
-from aluminium.solver.brownfield import brownfield
-from aluminium.solver.decommission import decommission
-from aluminium.solver.greenfield import greenfield
+from cement.config_cement import (ANNUAL_RENOVATION_SHARE,
+                                  ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                                  CARBON_BUDGET_SECTOR_CSV,
+                                  CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
+                                  EMISSION_SCOPES, END_YEAR, GHGS,
+                                  INITIAL_ASSET_DATA_LEVEL, INVESTMENT_CYCLE,
+                                  LOG_LEVEL, PRODUCTS, RANK_TYPES,
+                                  SECTORAL_CARBON_PATHWAY, START_YEAR,
+                                  TECHNOLOGY_RAMP_UP_CONSTRAINT)
+from cement.solver.brownfield import brownfield
+from cement.solver.decommission import decommission
+from cement.solver.greenfield import greenfield
 from mppshared.agent_logic.agent_logic_functions import (
     adjust_capacity_utilisation, create_dict_technology_rampup)
 from mppshared.config import SECTORAL_CARBON_BUDGETS
