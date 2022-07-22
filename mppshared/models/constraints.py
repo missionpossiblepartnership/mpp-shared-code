@@ -50,9 +50,7 @@ def check_constraints(
     }
     constraints_checked = {}
     if pathway.constraints_to_apply:
-        logger.info(f"Pathway {pathway.pathway} has constraints to apply")
         for constraint in pathway.constraints_to_apply:
-            logger.info(f"Checking constraint {constraint}")
             if constraint == "emissions_constraint":
                 emissions_constraint, flag_residual = dict_constraints[constraint](
                     pathway=pathway,
@@ -92,6 +90,9 @@ def check_technology_rampup_constraint(
         stack: new stack for which the ramp-up constraint is to be checked
         year: year corresponding to the stack passed
     """
+    logger.info(
+        f"Checking ramp-up constraint for year {year}, transition type {transition_type}"
+    )
     # Get asset numbers of new and old stack for each technology
     df_old_stack = (
         pathway.stacks[year]
@@ -121,10 +122,11 @@ def check_technology_rampup_constraint(
     ) | (df_rampup["maximum_asset_additions"].isna())
 
     if df_rampup["check"].all():
+        logger.info("Ramp-up constraint is satisfied")
         return True
 
     technology_affected = list(df_rampup[df_rampup["check"] == False].index)
-    logger.debug(f"Technology ramp-up constraint hurt for {technology_affected}.")
+    logger.info(f"Technology ramp-up constraint hurt for {technology_affected}.")
     return False
 
 
@@ -186,6 +188,9 @@ def check_annual_carbon_budget_constraint(
     transition_type: str,
 ) -> Bool:
     """Check if the stack exceeds the Carbon Budget defined in the pathway for the given product and year"""
+    logger.info(
+        f"Checking annual carbon budget constraint for year {year}, transition type {transition_type}"
+    )
 
     # After a sector-specific year, all end-state newbuild capacity has to fulfill the 2050 emissions limit with a stack composed of only end-state technologies
     if (transition_type == "greenfield") & (
@@ -217,8 +222,9 @@ def check_annual_carbon_budget_constraint(
     ) / 1e3  # Gt CO2
 
     if np.round(co2_scope1_2, 2) <= np.round(limit, 2):
+        logger.info(f"Annual carbon budget constraint is satisfied")
         return True, flag_residual
-
+    logger.info(f"Annual carbon budget constraint is hurt")
     return False, flag_residual
 
 
