@@ -64,7 +64,10 @@ def check_constraints(
                 constraints_checked["flag_residual"] = flag_residual
             else:
                 constraints_checked[constraint] = dict_constraints[constraint](
-                    pathway=pathway, stack=stack, year=year
+                    pathway=pathway,
+                    stack=stack,
+                    year=year,
+                    transition_type=transition_type,
                 )
         return constraints_checked
     else:
