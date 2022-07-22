@@ -1,4 +1,4 @@
-SECTOR = "aluminium"
+SECTOR = "ammonia"
 if SECTOR == "aluminium":
     from aluminium.main_aluminium import main
 

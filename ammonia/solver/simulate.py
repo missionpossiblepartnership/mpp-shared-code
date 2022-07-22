@@ -3,12 +3,13 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from ammonia.config_ammonia import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+from ammonia.config_ammonia import (ANNUAL_RENOVATION_SHARE,
+                                    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                                     CARBON_BUDGET_SECTOR_CSV,
                                     CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
                                     EMISSION_SCOPES, END_YEAR, GHGS,
-                                    INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL,
-                                    PRODUCTS, RANK_TYPES,
+                                    INITIAL_ASSET_DATA_LEVEL, INVESTMENT_CYCLE,
+                                    LOG_LEVEL, PRODUCTS, RANK_TYPES,
                                     SECTORAL_CARBON_PATHWAY, START_YEAR,
                                     TECHNOLOGY_RAMP_UP_CONSTRAINT)
 from ammonia.solver.brownfield import brownfield
@@ -59,12 +60,12 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
         )
 
         # Renovate and rebuild assets (brownfield transition)
-        # start = timer()
-        # pathway = brownfield(pathway=pathway, year=year)
-        # end = timer()
-        # logger.debug(
-        #     f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
-        # )
+        start = timer()
+        pathway = brownfield(pathway=pathway, year=year)
+        end = timer()
+        logger.debug(
+            f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
+        )
 
         # Build new assets
         start = timer()
@@ -138,6 +139,8 @@ def simulate_pathway(
         cuf_lower_threshold=CUF_LOWER_THRESHOLD,
         cuf_upper_threshold=CUF_UPPER_THRESHOLD,
         ghgs=GHGS,
+        investment_cycle=INVESTMENT_CYCLE,
+        annual_renovation_share=ANNUAL_RENOVATION_SHARE,
     )
 
     # Optimize asset stack on a yearly basis
