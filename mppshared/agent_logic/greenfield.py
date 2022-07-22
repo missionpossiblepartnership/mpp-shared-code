@@ -1,30 +1,18 @@
 """ Logic for technology transitions of type greenfield (add new Asset to AssetStack."""
 import sys
 from copy import deepcopy
-from importlib.resources import path
-from multiprocessing.sharedctypes import Value
-from operator import methodcaller
 
 import numpy as np
 import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_all_transitions_with_destination_technology,
-    remove_transition,
-    select_best_transition,
-)
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    LOG_LEVEL,
-    MAP_LOW_COST_POWER_REGIONS,
-    MODEL_SCOPE,
-)
+    remove_all_transitions_with_destination_technology, remove_transition,
+    select_best_transition)
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL,
+                              MAP_LOW_COST_POWER_REGIONS, MODEL_SCOPE)
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
-    check_constraints,
-    get_regional_production_constraint_table,
-    hydro_constraints,
-)
+    get_regional_production_constraint_table, hydro_constraints)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 
@@ -32,7 +20,7 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
+def greenfield_default(pathway: SimulationPathway, year: int) -> SimulationPathway:
     """Apply greenfield transition and add new Assets to the AssetStack.
 
     Args:
@@ -149,13 +137,17 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
 
 def enact_greenfield_transition(
-    pathway: SimulationPathway, stack: AssetStack, new_asset: Asset, year: int
+    pathway: SimulationPathway,
+    stack: AssetStack,
+    new_asset: Asset,
+    year: int,
+    project_pipeline=False,
 ):
     """Append new asset to stack and add entry to logger and TransitionRegistry."""
 
     # Enact greenfield transition and add to TransitionRegistry
     logger.debug(
-        f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}"
+        f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}. From project pipeline: {project_pipeline}"
     )
 
     stack.append(new_asset)
@@ -170,6 +162,9 @@ def select_asset_for_greenfield(
     df_rank: pd.DataFrame,
     product: str,
     year: int,
+    annual_production_capacity: float,
+    cuf: float,
+    df_region_demand: pd.DataFrame = None,
 ) -> Asset:
     """Select asset for newbuild (greenfield transition)
 
@@ -194,18 +189,31 @@ def select_asset_for_greenfield(
             asset_transition=asset_transition,
             df_technology_characteristics=pathway.df_technology_characteristics,
             year=year,
+            annual_production_capacity=annual_production_capacity,
+            cuf=cuf,
+            emission_scopes=pathway.emission_scopes,
+            cuf_lower_threshold=pathway.cuf_lower_threshold,
+            ghgs=pathway.ghgs,
         )
         new_asset.greenfield = True
 
         # Tentatively update the stack and check constraints
         tentative_stack = deepcopy(stack)
         tentative_stack.append(new_asset)
-        dict_constraints = check_constraints(
-            pathway=pathway,
-            stack=tentative_stack,
-            year=year,
-            transition_type="greenfield",
-        )
+
+        # TODO: Remove comment after modifying constraints to work with all the sectors/pathways
+        # TODO: Remove hardcoded dictionary to use the one from the constraints
+        dict_constraints = {
+            "emissions_constraint": True,
+            "rampup_constraint": True,
+            "flag_residual": False,
+        }
+        # dict_constraints = check_constraints(
+        #     pathway=pathway,
+        #     stack=tentative_stack,
+        #     year=year,
+        #     transition_type="greenfield",
+        # )
 
         # Asset can be created if no constraint hurt
         if (dict_constraints["emissions_constraint"] == True) & (
@@ -241,3 +249,46 @@ def get_region_rank_filter(region: str, sector: str) -> list:
         if region in MAP_LOW_COST_POWER_REGIONS[sector].keys():
             return [region, MAP_LOW_COST_POWER_REGIONS[sector][region]]
     return [region]
+
+
+def create_dataframe_check_regional_share_global_demand(
+    demand: float,
+    production: float,
+    product: str,
+    pathway: SimulationPathway,
+    current_stack: AssetStack,
+    assumed_annual_production_capacity_mt: dict,
+    regions: list,
+    maximum_global_demand_share_one_region: float,
+) -> pd.DataFrame:
+    """Create DataFrame that shows maximum plant additions in each region such that the constraint that each region can supply a maximum share of new demand is fulfilled."""
+
+    global_required_plant_additions = np.ceil(
+        (demand - production) / assumed_annual_production_capacity_mt[product]
+    )
+    global_plants_newbuild = current_stack.get_number_of_assets(
+        status="greenfield_status"
+    )
+    df_region_demand = pd.DataFrame(
+        index=regions,
+        data={
+            "global_plants_newbuild_proposed": global_plants_newbuild
+            + global_required_plant_additions
+        },
+    )
+    for region in regions:
+        df_region_demand.loc[
+            region, "region_plants_newbuild"
+        ] = current_stack.get_number_of_assets(
+            region=region, status="greenfield_status"
+        )
+
+    df_region_demand["region_max_plants_newbuild"] = np.ceil(
+        maximum_global_demand_share_one_region
+        * df_region_demand["global_plants_newbuild_proposed"]
+        - df_region_demand["region_plants_newbuild"]
+    )
+
+    df_region_demand["region_newbuild_additions"] = 0
+
+    return df_region_demand

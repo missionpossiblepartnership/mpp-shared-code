@@ -5,7 +5,8 @@ from timeit import default_timer as timer
 
 from aluminium.config_aluminium import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                                         CARBON_BUDGET_SECTOR_CSV,
-                                        CUF_LOWER_THRESHOLD, EMISSION_SCOPES,
+                                        CUF_LOWER_THRESHOLD,
+                                        CUF_UPPER_THRESHOLD, EMISSION_SCOPES,
                                         END_YEAR, GHGS,
                                         INITIAL_ASSET_DATA_LEVEL, LOG_LEVEL,
                                         PRODUCTS, RANK_TYPES,
@@ -65,13 +66,13 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
         #     f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
         # )
 
-        # # Build new assets
-        # start = timer()
-        # pathway = greenfield(pathway=pathway, year=year)
-        # end = timer()
-        # logger.debug(
-        #     f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
-        # )
+        # Build new assets
+        start = timer()
+        pathway = greenfield(pathway=pathway, year=year)
+        end = timer()
+        logger.debug(
+            f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
+        )
 
     return pathway
 
@@ -128,6 +129,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         carbon_budget=carbon_budget,
         emission_scopes=EMISSION_SCOPES,
         cuf_lower_threshold=CUF_LOWER_THRESHOLD,
+        cuf_upper_threshold=CUF_UPPER_THRESHOLD,
         ghgs=GHGS,
     )
 

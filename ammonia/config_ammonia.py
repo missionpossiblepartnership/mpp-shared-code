@@ -4,6 +4,8 @@ import logging
 import numpy as np
 
 SECTOR = "ammonia"
+# Scope of the model run - to be specified
+MODEL_SCOPE = "Global"
 
 INITIAL_ASSET_DATA_LEVEL = "regional"
 
@@ -25,12 +27,29 @@ run_config = {
     # "PLOT_AVAILABILITIES"
     # "MERGE_OUTPUTS"
 }
+# Integrate current project pipeline or not
+BUILD_CURRENT_PROJECT_PIPELINE = True
 START_YEAR = 2020
 END_YEAR = 2050
 MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 PRODUCTS = ["Ammonia", "Ammonium nitrate", "Urea"]
 # Override asset parameters; annual production capacity in Mt/year
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
+
+# Override asset parameters; annual production capacity in Mt/year
+# Ratios for calculating electrolysis capacity
+H2_PER_AMMONIA = 0.176471
+AMMONIA_PER_UREA = 0.565724
+AMMONIA_PER_AMMONIUM_NITRATE = 0.425534
+ammonia_typical_plant_capacity_Mt = (2000 * 365) / 1e6
+
+ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT = {
+    "Ammonia": ammonia_typical_plant_capacity_Mt,
+    "Urea": ammonia_typical_plant_capacity_Mt / AMMONIA_PER_UREA,
+    "Ammonium nitrate": ammonia_typical_plant_capacity_Mt
+    / AMMONIA_PER_AMMONIUM_NITRATE,
+    "Aluminium": 1,
+}
 
 ### PATHWAYS, SENSITIVITIES AND CARBON COSTS ###
 PATHWAYS = [
@@ -55,6 +74,13 @@ CARBON_COSTS = [
     250,
 ]
 
+
+MAP_LOW_COST_POWER_REGIONS = {
+    "Middle East": "Saudi Arabia",
+    "Africa": "Namibia",
+    "Oceania": "Australia",
+    "Latin America": "Brazil",
+}
 
 ### STANDARD ASSUMPTIONS FOR AMMOINA PLANTS ###
 STANDARD_CUF = 0.95
@@ -90,6 +116,28 @@ REGIONS_SALT_CAVERN_AVAILABILITY = {
     "Russia": "yes",
     "Rest of Asia": "yes",
 }
+
+# List of regions
+REGIONS = [
+    "Africa",
+    "China",
+    "Europe",
+    "India",
+    "Latin America",
+    "Middle East",
+    "North America",
+    "Oceania",
+    "Russia",
+    "Rest of Asia",
+    "Brazil",
+    "Australia",
+    "Namibia",
+    "Saudi Arabia",
+]
+
+
+# Maximum share of global demand that can be supplied by one region
+MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION = 0.3
 
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = 2020
@@ -183,4 +231,19 @@ SECTORAL_CARBON_PATHWAY = {
     "emissions_start": emissions_2020,
     "emissions_end": residual_share * emissions_2020,
     "action_start": 2023,
+}
+
+
+# Regional ban of technologies (sector-specific)
+REGIONAL_TECHNOLOGY_BAN = {
+    "China": [
+        "Natural Gas SMR + ammonia synthesis",
+        "Natural Gas ATR + CCS + ammonia synthesis",
+        "Oversized ATR + CCS",
+        "Natural Gas SMR + CCS (process emissions only) + ammonia synthesis",
+        "Natural Gas SMR + CCS + ammonia synthesis",
+        "Electrolyser + SMR + ammonia synthesis",
+        "GHR + CCS + ammonia synthesis",
+        "ESMR Gas + CCS + ammonia synthesis",
+    ]
 }

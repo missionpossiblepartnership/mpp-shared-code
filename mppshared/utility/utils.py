@@ -119,3 +119,10 @@ def cast_to_float(val: Union[float, int, Iterable]) -> float:
 def first(series: pd.Series):
     """Return first element in a series"""
     return series.values[0]
+
+
+def get_region_rank_filter(region: str, map_low_cost_power_regions) -> list:
+    """Return list of (sub)regions if the sector has low-cost power regions mapped to the overall regions"""
+    if region in map_low_cost_power_regions.keys():
+        return [region, map_low_cost_power_regions[region]]
+    return [region]

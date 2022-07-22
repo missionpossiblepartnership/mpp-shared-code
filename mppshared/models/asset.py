@@ -174,7 +174,12 @@ class AssetStack:
         return not self.assets
 
     def filter_assets(
-        self, product=None, region=None, technology=None, technology_classification=None
+        self,
+        product=None,
+        region=None,
+        technology=None,
+        technology_classification=None,
+        status=None,
     ) -> list:
         """Filter assets based on one or more criteria"""
         assets = self.assets
@@ -191,6 +196,12 @@ class AssetStack:
                 ),
                 assets,
             )
+        if status == "greenfield_status":
+            assets = filter(lambda asset: asset.greenfield == True, assets)
+        if status == "retrofit_status":
+            assets = filter(lambda asset: asset.retrofit == True, assets)
+        if status == "rebuild_status":
+            assets = filter(lambda asset: asset.rebuild == True, assets)
 
         return list(assets)
 
@@ -383,10 +394,12 @@ class AssetStack:
         df = df.groupby("region", as_index=False).sum()
         return df
 
-    def get_number_of_assets(self, product=None, technology=None, region=None):
+    def get_number_of_assets(
+        self, product=None, technology=None, region=None, status=None
+    ):
         "Get number of assets in the asset stack"
         assets = self.filter_assets(
-            product=product, technology=technology, region=region
+            product=product, technology=technology, region=region, status=status
         )
         return len(assets)
 
@@ -446,6 +459,9 @@ def make_new_asset(
     year: int,
     annual_production_capacity: float,
     cuf: float,
+    emission_scopes: list,
+    cuf_lower_threshold: float,
+    ghgs: list,
 ):
     """Make a new asset, based on asset transition from the ranking DataFrame.
 
@@ -478,10 +494,64 @@ def make_new_asset(
         year_commissioned=year,
         annual_production_capacity=annual_production_capacity,
         cuf=cuf,
+        emission_scopes=emission_scopes,
+        cuf_lower_threshold=cuf_lower_threshold,
+        ghgs=ghgs,
         asset_lifetime=technology_characteristics["technology_lifetime"].values[0],
         technology_classification=technology_characteristics[
             "technology_classification"
         ].values[0],
         retrofit=False,
         rebuild=False,
+    )
+
+
+def make_new_asset_project_pipeline(
+    region: str,
+    product: str,
+    annual_production_capacity_mt: float,
+    technology: str,
+    df_technology_characteristics: pd.DataFrame,
+    year: int,
+    cuf: float,
+    emission_scopes: list,
+    cuf_lower_threshold: float,
+    ghgs: list,
+) -> Asset:
+    """Make new asset based on the current project pipeline.
+    Args:
+        region (str): _description_
+        product (str): _description_
+        annual_production_capacity_mt (float): _description_
+        technology (str): _description_
+        df_technology_characteristics (pd.DataFrame): _description_
+        year (int): _description_
+    Returns:
+        The new Asset
+    """
+    # Filter row of technology characteristics DataFrame that corresponds to the asset transition
+    technology_characteristics = df_technology_characteristics.loc[
+        (df_technology_characteristics["product"] == product)
+        & (df_technology_characteristics["region"] == region)
+        & (df_technology_characteristics["technology"] == technology)
+        & (df_technology_characteristics["year"] == year)
+    ]
+
+    return Asset(
+        product=product,
+        technology=technology,
+        region=region,
+        year_commissioned=year,
+        annual_production_capacity=annual_production_capacity_mt,
+        cuf=cuf,
+        emission_scopes=emission_scopes,
+        cuf_lower_threshold=cuf_lower_threshold,
+        ghgs=ghgs,
+        asset_lifetime=technology_characteristics["technology_lifetime"].values[0],
+        technology_classification=technology_characteristics[
+            "technology_classification"
+        ].values[0],
+        retrofit=False,
+        rebuild=False,
+        greenfield=True,
     )
