@@ -52,6 +52,7 @@ class SimulationPathway:
         regional_production_shares: dict,
         constraints_to_apply: list,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
+        technologies_maximum_global_demand_share: list = None,
     ):
         # Attributes describing the pathway
         self.start_year = start_year
@@ -70,6 +71,9 @@ class SimulationPathway:
         self.ghgs = ghgs
         self.regional_production_shares = regional_production_shares
         self.constraints_to_apply = constraints_to_apply
+        self.technologies_maximum_global_demand_share = (
+            technologies_maximum_global_demand_share
+        )
 
         # Carbon Budget (already initialized with emissions pathway)
         self.carbon_budget = carbon_budget

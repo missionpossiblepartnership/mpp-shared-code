@@ -274,7 +274,7 @@ def check_global_demand_share_constraint(
     ).reset_index()
     constraint = True
 
-    for technology in TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE:
+    for technology in pathway.technologies_maximum_global_demand_share:
 
         # Calculate annual production volume based on CUF upper threshold
         df = (
