@@ -50,7 +50,7 @@ class SimulationPathway:
         investment_cycle: int,
         annual_renovation_share: float,
         regional_production_shares: dict,
-        constraints_to_apply: list,
+        constraints_to_apply: list[str],
         year_2050_emissions_constraint: int,
         set_co2_storage_constraint: bool = False,
         co2_storage_constraint_cumulative: bool = False,

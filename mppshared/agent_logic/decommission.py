@@ -1,16 +1,14 @@
 """ Logic for technology transitions of type decommission (remove Asset from AssetStack)."""
 
+import random
 from copy import deepcopy
 from operator import methodcaller
 
 import numpy as np
 import pandas as pd
-import random
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_transition,
-    select_best_transition,
-)
+    remove_transition, select_best_transition)
 from mppshared.config import LOG_LEVEL, MODEL_SCOPE
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.constraints import check_constraints
@@ -55,12 +53,13 @@ def decommission_default(pathway: SimulationPathway, year: int) -> SimulationPat
 
             # Identify asset to be decommissioned
             try:
-                asset_to_remove = select_asset_to_decommission(
-                    pathway=pathway,
+                asset_to_remove = get_best_asset_to_decommission(
                     stack=new_stack,
                     df_rank=df_rank,
                     product=product,
                     year=year,
+                    cuf_lower_threshold=pathway.cuf_lower_threshold,
+                    minimum_decommission_age=pathway.investment_cycle,
                 )
 
             except ValueError:
