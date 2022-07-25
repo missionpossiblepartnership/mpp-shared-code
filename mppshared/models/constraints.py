@@ -427,7 +427,7 @@ def convert_production_volume_to_electrolysis_capacity(
 
 
 def check_co2_storage_constraint(
-    pathway: SimulationPathway, stack: AssetStack, year: int
+    pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
 ) -> Bool:
     """Check if the constraint on total CO2 storage (globally) is met"""
 
@@ -436,7 +436,7 @@ def check_co2_storage_constraint(
     limit = df_co2_storage.loc[df_co2_storage["year"] == year + 1, "value"].item()
 
     # Constraint based on total CO2 storage available in that year
-    if CO2_STORAGE_CONSTRAINT_CUMULATIVE:
+    if pathway.co2_storage_constraint_cumulative:
         # Calculate CO2 captured annually by the stack (Mt CO2)
         co2_captured = stack.calculate_co2_captured_stack(
             year=year, df_emissions=pathway.emissions
