@@ -24,7 +24,7 @@ def make_rankings(pathway_name: str, sensitivity: str, sector: str):
         df_rank = rank_technology_histogram(
             df_ranking=df_ranking,
             rank_type=rank_type,
-            pathway=pathway_name,
+            pathway_name=pathway_name,
             cost_metric=RANKING_COST_METRIC,
             n_bins=NUMBER_OF_BINS_RANKING,
             ranking_config=RANKING_CONFIG[rank_type][pathway_name],

@@ -23,12 +23,12 @@ def bin_ranking(rank_array: np.array, n_bins: int) -> np.array:
 
 
 def _add_binned_rankings(
-    df_rank: pd.DataFrame, rank_type: str, pathway: str, n_bins: int
+    df_rank: pd.DataFrame, rank_type: str, pathway_name: str, n_bins: int
 ) -> pd.DataFrame:
     """Add binned values for the possible ranking columns"""
     logger.debug("Adding binned values")
-    df_rank[f"{rank_type}_{pathway}_score_binned"] = bin_ranking(
-        df_rank[f"{rank_type}_{pathway}_score"], n_bins=n_bins
+    df_rank[f"{rank_type}_{pathway_name}_score_binned"] = bin_ranking(
+        df_rank[f"{rank_type}_{pathway_name}_score"], n_bins=n_bins
     )
 
     return df_rank
@@ -37,7 +37,7 @@ def _add_binned_rankings(
 def rank_technology_histogram(
     df_ranking: pd.DataFrame,
     rank_type: str,
-    pathway: str,
+    pathway_name: str,
     cost_metric: str,
     n_bins: int,
     ranking_config: dict,
@@ -49,7 +49,7 @@ def rank_technology_histogram(
     Args:
         df_ranking: DataFrame with cost and emissions data used to rank each technology switch
         rank_type: either of "decommission", "brownfield" or "greenfield"
-        pathway: pathway for which to create the ranking
+        pathway_name: name of the pathway for which to create the ranking
         cost_metric: use this cost metric for the cost part of the ranking
         n_bins: number of bins for binning the rank scores using a histogram
         ranking_config: weights of cost and emissions for the ranking, keys are "cost" and "emissions"
@@ -91,7 +91,7 @@ def rank_technology_histogram(
 
     # Calculate rank scores
     logger.debug("Calculating rank scores")
-    if pathway == "lc":
+    if pathway_name == "lc":
         df[f"{cost_metric}_adjusted_by_emissions"] = (
             df[f"{cost_metric}"] / df["sum_emissions_delta"]
         )
@@ -103,27 +103,31 @@ def rank_technology_histogram(
             - df[f"{cost_metric}_adjusted_by_emissions"].min()
         )
         df.fillna(0, inplace=True)
-        df[f"{rank_type}_{pathway}_score"] = df[
+        df[f"{rank_type}_{pathway_name}_score"] = df[
             f"{cost_metric}_adjusted_by_emissions_normalized"
         ]
         df_rank = df
         logger.debug("Calculating final rank")
-        df_rank["rank"] = df_rank[f"{rank_type}_{pathway}_score"].rank(ascending=True)
+        df_rank["rank"] = df_rank[f"{rank_type}_{pathway_name}_score"].rank(
+            ascending=True
+        )
 
     else:
-        df[f"{rank_type}_{pathway}_score"] = (
+        df[f"{rank_type}_{pathway_name}_score"] = (
             df["sum_emissions_delta_normalized"] * ranking_config["emissions"]
         ) + (df[f"{cost_metric}_normalized"] * ranking_config["cost"])
         logger.debug("Adding binned rankings")
 
         # Bin the rank scores
         df_rank = df.groupby(["year"]).apply(
-            _add_binned_rankings, rank_type, pathway, n_bins
+            _add_binned_rankings, rank_type, pathway_name, n_bins
         )
 
         # Calculate final rank for the transition type
         logger.debug("Calculating final rank")
-        df_rank["rank"] = df_rank[f"{rank_type}_{pathway}_score"].rank(ascending=False)
+        df_rank["rank"] = df_rank[f"{rank_type}_{pathway_name}_score"].rank(
+            ascending=False
+        )
 
     return df_rank
 
@@ -131,7 +135,7 @@ def rank_technology_histogram(
 def rank_technology_uncertainty_bins(
     df_ranking: pd.DataFrame,
     rank_type: str,
-    pathway: str,
+    pathway_name: str,
     cost_metric: str,
     cost_metric_relative_uncertainty: float,
     ranking_config: dict,
@@ -143,7 +147,7 @@ def rank_technology_uncertainty_bins(
     Args:
         df_ranking (pd.DataFrame): table with technology switches
         rank_type (str): either of "decommission", "brownfield", "greenfield"
-        pathway (str): pathway for which to create the ranking, either of "lc", "bau", "fa"
+        pathway_name (str): pathway for which to create the ranking, either of "lc", "bau", "fa"
         cost_metric (str): cost metric used for the ranking
         ranking_config (dict): weights for cost and emissions, keys are "cost" and "emissions"
         emission_scopes_ranking: use these emission scopes for the emission part of the ranking
@@ -164,7 +168,7 @@ def rank_technology_uncertainty_bins(
         cost_metric,
         cost_metric_relative_uncertainty,
         ranking_config,
-        pathway,
+        pathway_name,
         emission_scopes_ranking,
         ghgs_ranking,
     )
@@ -177,7 +181,7 @@ def _create_ranking_uncertainty_bins(
     cost_metric: str,
     cost_uncertainty: float,
     ranking_config: dict,
-    pathway: str,
+    pathway_name: str,
     emission_scopes_ranking: list,
     ghgs_ranking: list,
 ):
@@ -212,7 +216,7 @@ def _create_ranking_uncertainty_bins(
         + df["emissions_delta_normalized"] * ranking_config["emissions"]
     )
 
-    if pathway in ["lc", "bau"]:
+    if pathway_name in ["lc", "bau"]:
         # Calculate number of bins
         bin_interval = cost_uncertainty * df[cost_metric].min()
         bin_range = df[cost_metric].max() - df[cost_metric].min()
@@ -226,7 +230,7 @@ def _create_ranking_uncertainty_bins(
         else:
             # All rank scores are 0, so all ranks are 0
             df["rank"] = df["rank_raw"]
-    elif pathway == "fa":
+    elif pathway_name == "fa":
         n_bins = int(len(df))
         _, bins = np.histogram(df["rank_raw"], bins=n_bins)
         df["rank"] = np.digitize(df["rank_raw"], bins=sorted(df["rank_raw"]))
