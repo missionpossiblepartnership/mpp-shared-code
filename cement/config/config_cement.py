@@ -73,12 +73,12 @@ NUMBER_OF_BINS_RANKING = 50
 GHGS_RANKING = ["co2"]
 EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3up"]
 
-TRANSITION_TYPES = [
-    "decommission",
-    "greenfield",
-    "brownfield_renovation",
-    "brownfield_newbuild",
-]
+TRANSITION_TYPES = {
+    "greenfield": "Greenfield",
+    "brownfield_rebuild": "Brownfield rebuild",
+    "brownfield_renovation": "Brownfield renovation",
+    "decommission": "Decommission",
+}
 
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 

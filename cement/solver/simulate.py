@@ -5,15 +5,18 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from cement.config_cement import (ANNUAL_RENOVATION_SHARE,
-                                  ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                                  CARBON_BUDGET_SECTOR_CSV,
-                                  CARBON_BUDGET_SHAPE, CUF_LOWER_THRESHOLD,
-                                  CUF_UPPER_THRESHOLD, EMISSION_SCOPES,
-                                  END_YEAR, GHGS, INITIAL_ASSET_DATA_LEVEL,
-                                  INVESTMENT_CYCLE, LOG_LEVEL, PRODUCTS,
-                                  RANK_TYPES, SECTORAL_CARBON_PATHWAY,
-                                  START_YEAR, TECHNOLOGY_RAMP_UP_CONSTRAINT)
+from cement.config.config_cement import (ANNUAL_RENOVATION_SHARE,
+                                         ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                                         CARBON_BUDGET_SECTOR_CSV,
+                                         CARBON_BUDGET_SHAPE,
+                                         CUF_LOWER_THRESHOLD,
+                                         CUF_UPPER_THRESHOLD, EMISSION_SCOPES,
+                                         END_YEAR, GHGS,
+                                         INITIAL_ASSET_DATA_LEVEL,
+                                         INVESTMENT_CYCLE, LOG_LEVEL, PRODUCTS,
+                                         RANK_TYPES, SECTORAL_CARBON_PATHWAY,
+                                         START_YEAR,
+                                         TECHNOLOGY_RAMP_UP_CONSTRAINT)
 from cement.solver.brownfield import brownfield
 from cement.solver.decommission import decommission
 from cement.solver.greenfield import greenfield

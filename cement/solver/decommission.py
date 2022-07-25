@@ -1,7 +1,12 @@
 """Decommission plants."""
 
-from cement.config_cement import (CUF_LOWER_THRESHOLD, INVESTMENT_CYCLE,
-                                  LOG_LEVEL, MODEL_SCOPE, PRODUCTS)
+from cement.config.config_cement import (
+    CUF_LOWER_THRESHOLD,
+    INVESTMENT_CYCLE,
+    LOG_LEVEL,
+    MODEL_SCOPE,
+    PRODUCTS,
+)
 from mppshared.agent_logic.decommission import get_best_asset_to_decommission
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger

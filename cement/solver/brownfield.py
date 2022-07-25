@@ -1,15 +1,13 @@
 """ Logic for technology transitions of type brownfield rebuild and brownfield renovation."""
 import random
 from copy import deepcopy
-from operator import methodcaller
 
 import numpy as np
 
-from cement.config_cement import LOG_LEVEL
+from cement.config.config_cement import LOG_LEVEL
 from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_destination_technology, remove_transition,
     select_best_transition)
-from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
 

@@ -5,7 +5,8 @@ from typing import List
 import numpy as np
 import pandas as pd
 
-from mppshared.config import PKL_DATA_INTERMEDIATE
+from mppshared.config import PKL_DATA_INTERMEDIATE, PRODUCTS, SECTOR
+from mppshared.dataframe_config import DF_DATATYPES_PER_COLUMN
 from mppshared.utility.file_handling_utility import read_pickle_folder
 from mppshared.utility.location_utility import get_region_from_country_code
 from mppshared.utility.log_utility import get_logger
@@ -339,3 +340,37 @@ def make_multi_df(df: pd.DataFrame, name: str) -> pd.DataFrame:
 def get_emission_columns(ghgs: list, scopes: list) -> list:
     """Get list of emissions columns for specified GHGs and emission scopes"""
     return [f"{ghg}_{scope}" for scope in scopes for ghg in ghgs]
+
+
+def explode_rows_for_all_products(df: pd.DataFrame) -> pd.DataFrame:
+    """Explode rows with entry "All products" in column "product" to all products.
+
+    Args:
+        df (pd.DataFrame): contains column "product"
+
+    Returns:
+        pd.DataFrame: contains column "product" where entries are only in PRODUCTS
+    """
+
+    df["product"] = df["product"].astype(object)
+    df = df.reset_index(drop=True)
+
+    # TODO: improve with a more elegant solution
+    for i in df.loc[df["product"] == "All products"].index:
+        df.at[i, "product"] = PRODUCTS[SECTOR]
+
+    df = df.explode("product")
+
+    return df
+
+
+def set_datatypes(df: pd.DataFrame) -> pd.DataFrame:
+    # get relevant columns and their types
+    datatypes = {k: v for k, v in DF_DATATYPES_PER_COLUMN.items() if k in list(df)}
+    # set datatypes
+    df = df.astype(
+        dtype=datatypes,
+        errors="ignore",
+    )
+
+    return df

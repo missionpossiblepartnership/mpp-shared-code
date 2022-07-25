@@ -1,10 +1,10 @@
-import sys
 from pathlib import Path
 
 import pandas as pd
 
-from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, END_YEAR,
-                              LOG_LEVEL)
+from mppshared.config import END_YEAR, LOG_LEVEL, SECTOR
+from mppshared.import_config import (EXCEL_COLUMN_RANGES,
+                                     HEADER_BUSINESS_CASE_EXCEL)
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -53,18 +53,18 @@ class IntermediateDataImporter:
         df: pd.DataFrame,
         filename: str,
         export_dir: str,
-        index=True,
-        aggregate=False,
+        index: bool = True,
+        aggregate: bool = False,
     ):
         """
         Export output data into the output directory
 
         Args:
-            aggregate:
             df: Data to export
             filename: Filename to export to
             export_dir: Additional directory to create
             index: index is exported if True (default)
+            aggregate:
         """
         output_dir = self.aggregate_export_dir if aggregate else self.export_dir
         if export_dir is not None:
@@ -80,8 +80,26 @@ class IntermediateDataImporter:
         df.to_csv(export_path, index=index)
 
     # imports & preprocessing
-    def get_raw_input_data(self):
-        pass
+    def get_raw_input_data(self, sheet_name: str):
+        """Return specified sheet of Business Cases_{sensitivity}.xlsx as DataFrame.
+
+        Args:
+            sheet_name (str): Name of the sheet in Business Cases.xlsx
+
+        Returns:
+            pd.DataFrame: Full data of sheet with correct header
+        """
+
+        filename = f"Business Cases_{self.sensitivity}.xlsx"
+        full_path = self.raw_path.joinpath(filename)
+        df = pd.read_excel(
+            full_path,
+            sheet_name=sheet_name,
+            header=HEADER_BUSINESS_CASE_EXCEL[SECTOR],
+            usecols=EXCEL_COLUMN_RANGES[SECTOR][sheet_name],
+        )
+
+        return df
 
     def get_preprocessed_input_data(self):
         pass
