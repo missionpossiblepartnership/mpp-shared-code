@@ -57,12 +57,11 @@ def apply_hydro_constraint(
         from technologies that previously had Hydro.
 
     Args:
-        df_technology_transitions (pd.DataFrame): df_technology_transitions
-        sector (str): sector
-        products (list): products
+        df_technology_transitions (pd.DataFrame): technology switching input table to the solver
+        sector (str): sector to which the hydro constraint should be applied
 
     Returns:
-        pd.DataFrame:
+        pd.DataFrame: technology switching table without the switches that are not allowed by the hydro constraint
     """
     logger.debug(f"{sector}: Filtering Hydro banned transitions")
     return df_technology_transitions[
@@ -347,7 +346,15 @@ def apply_technology_availability_constraint(
 def apply_regional_technology_ban(
     df_technology_switches: pd.DataFrame, sector_bans: dict
 ) -> pd.DataFrame:
-    """Remove certain technologies from the technology switching table that are banned in certain regions (defined in config.py)"""
+    """Filter out the technology switches to remove technologies that are banned in certain regions
+
+    Args:
+        df_technology_switches (pd.DataFrame): technology switches table with all the possible transitions
+        sector_bans (dict): dictionary with the bans for each sector
+
+    Returns:
+        pd.DataFrame: technology switches table with the banned technologies removed
+    """
     logger.info("Applying regional technology ban")
     if not sector_bans:
         logger.info("No regional technology ban applied")
