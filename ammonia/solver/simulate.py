@@ -12,7 +12,8 @@ from ammonia.config_ammonia import (ANNUAL_RENOVATION_SHARE,
                                     INVESTMENT_CYCLE, LOG_LEVEL,
                                     MAXIMUM_GLOBAL_DEMAND_SHARE, PRODUCTS,
                                     RANK_TYPES, REGIONAL_PRODUCTION_SHARES,
-                                    SECTORAL_CARBON_PATHWAY, START_YEAR,
+                                    SECTORAL_CARBON_PATHWAY,
+                                    SET_CO2_STORAGE_CONSTRAINT, START_YEAR,
                                     TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE,
                                     TECHNOLOGY_RAMP_UP_CONSTRAINT,
                                     YEAR_2050_EMISSIONS_CONSTRAINT)
@@ -150,6 +151,7 @@ def simulate_pathway(
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,
         technologies_maximum_global_demand_share=TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE,
         maximum_global_demand_share=MAXIMUM_GLOBAL_DEMAND_SHARE,
+        set_co2_storage_constraint=SET_CO2_STORAGE_CONSTRAINT,
     )
 
     # Optimize asset stack on a yearly basis
