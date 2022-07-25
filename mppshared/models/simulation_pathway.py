@@ -52,6 +52,7 @@ class SimulationPathway:
         regional_production_shares: dict,
         constraints_to_apply: list,
         year_2050_emissions_constraint: int,
+        set_co2_storage_constraint: bool = False,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
         technologies_maximum_global_demand_share: list = None,
         maximum_global_demand_share: dict = None,
@@ -94,6 +95,10 @@ class SimulationPathway:
             carbon_cost_trajectory=carbon_cost_trajectory,
         )
         self.carbon_cost_trajectory = carbon_cost_trajectory
+
+        if set_co2_storage_constraint:
+            # Import CO2 storage constraint data
+            self.co2_storage_constraint = self.importer.get_co2_storage_constraint()
 
         self.assumed_annual_production_capacity = assumed_annual_production_capacity
 
