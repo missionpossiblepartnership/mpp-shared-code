@@ -146,6 +146,7 @@ def simulate_pathway(
         investment_cycle=INVESTMENT_CYCLE,
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,
         technologies_maximum_global_demand_share=TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE,
+        maximum_global_demand_share=MAXIMUM_GLOBAL_DEMAND_SHARE,
     )
 
     # Optimize asset stack on a yearly basis
