@@ -63,9 +63,17 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         if BUILD_CURRENT_PROJECT_PIPELINE:
 
             #! Development only
-            demand = pathway.get_demand(
-                product=product, year=year + 1, region=MODEL_SCOPE
-            )
+            # TODO: if we use the +1 in the year then we are looking for the demand in the next
+            # year and there's a bug in 2050 as it looks for demand in 2051.
+            # to fix it I implemented the following control flow
+            if year == 2050:
+                demand = pathway.get_demand(
+                    product=product, year=year, region=MODEL_SCOPE
+                )
+            else:
+                demand = pathway.get_demand(
+                    product=product, year=year + 1, region=MODEL_SCOPE
+                )
             production = new_stack.get_annual_production_volume(product)
             # Format current project pipeline for this year
             df_pipeline = pathway.importer.get_project_pipeline()
