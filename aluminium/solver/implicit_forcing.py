@@ -7,7 +7,8 @@ import pandas as pd
 # Shared code imports
 from aluminium.config_aluminium import (EMISSION_SCOPES, GHGS,
                                         PATHWAYS_WITH_TECHNOLOGY_MORATORIUM,
-                                        PRODUCTS, TECHNOLOGY_MORATORIUM,
+                                        PRODUCTS, START_YEAR,
+                                        TECHNOLOGY_MORATORIUM,
                                         TRANSITIONAL_PERIOD_YEARS)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.solver.implicit_forcing import (
@@ -47,7 +48,7 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
 
     # Take out technology switches that downgrade technology classification and to immature technologeies
     df_technology_switches = apply_technology_availability_constraint(
-        df_technology_switches, df_technology_characteristics
+        df_technology_switches, df_technology_characteristics, start_year=START_YEAR
     )
 
     # Eliminate disallowed technology switches with hydro technologies

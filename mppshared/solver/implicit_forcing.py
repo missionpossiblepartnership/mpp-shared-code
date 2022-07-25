@@ -1,25 +1,13 @@
 """ Functions to apply implicit forcing mechanisms to the solver input tables."""
 
 # Library imports
-from datetime import timedelta
-from timeit import default_timer as timer
 import numpy as np
 import pandas as pd
 
 # Shared code imports
 from mppshared.calculate.calculate_cost import discount_costs
-from mppshared.config import (
-    HYDRO_TECHNOLOGY_BAN,
-    SCOPES_CO2_COST,
-    START_YEAR,
-)
-from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
-from mppshared.utility.dataframe_utility import (
-    add_column_header_suffix,
-    get_grouping_columns_for_npv_calculation,
-)
-
+from mppshared.config import HYDRO_TECHNOLOGY_BAN, START_YEAR
+from mppshared.utility.dataframe_utility import add_column_header_suffix
 # Initialize logger
 from mppshared.utility.log_utility import get_logger
 
@@ -270,7 +258,9 @@ def add_carbon_cost_addition_to_technology_switches(
 
 
 def apply_technology_availability_constraint(
-    df_technology_switches: pd.DataFrame, df_technology_characteristics: pd.DataFrame
+    df_technology_switches: pd.DataFrame,
+    df_technology_characteristics: pd.DataFrame,
+    start_year: int,
 ) -> pd.DataFrame:
     """Filter out all technology switches that downgrade the technology classification and to destination technologies that have not reached maturity yet.
 
@@ -346,7 +336,7 @@ def apply_technology_availability_constraint(
         ].rename({"technology": "technology_destination"}, axis=1),
         on=["product", "year", "region", "technology_destination"],
         how="left",
-    ).fillna(START_YEAR)
+    ).fillna(start_year)
     df = df.loc[df["year"] >= df["expected_maturity"]]
 
     logger.info("Technology availability constraint applied")
