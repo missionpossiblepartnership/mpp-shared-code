@@ -51,6 +51,7 @@ class SimulationPathway:
         annual_renovation_share: float,
         regional_production_shares: dict,
         constraints_to_apply: list,
+        year_2050_emissions_constraint: bool,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
         technologies_maximum_global_demand_share: list = None,
         maximum_global_demand_share: dict = None,
@@ -72,6 +73,7 @@ class SimulationPathway:
         self.ghgs = ghgs
         self.regional_production_shares = regional_production_shares
         self.constraints_to_apply = constraints_to_apply
+        self.year_2050_emissions_constraint = year_2050_emissions_constraint
         self.technologies_maximum_global_demand_share = (
             technologies_maximum_global_demand_share
         )

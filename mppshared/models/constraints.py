@@ -6,7 +6,8 @@ import pandas as pd
 from pandera import Bool
 from pyparsing import col
 
-from mppshared.config import (HYDRO_TECHNOLOGY_BAN, LOG_LEVEL,
+from mppshared.config import (AMMONIA_PER_AMMONIUM_NITRATE, AMMONIA_PER_UREA,
+                              H2_PER_AMMONIA, HYDRO_TECHNOLOGY_BAN, LOG_LEVEL,
                               YEAR_2050_EMISSIONS_CONSTRAINT)
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -398,7 +399,7 @@ def convert_production_volume_to_electrolysis_capacity(
     )
     # Production volume needs to be based on standard CUF (user upper threshold)
     df_stack["annual_production_volume"] = (
-        df_stack["annual_production_capacity"] * CUF_UPPER_THRESHOLD
+        df_stack["annual_production_capacity"] * pathway.cuf_upper_threshold
     )
 
     # Electrolysis capacity  = Ammonia production * Proportion of H2 produced via electrolysis * Ratio of ammonia to H2 * Electrolyser efficiency / (365 * 24 * CUF)
