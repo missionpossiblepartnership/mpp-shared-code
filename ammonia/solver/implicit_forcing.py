@@ -50,7 +50,7 @@ def apply_implicit_forcing(
 
     # Import input tables (folder paths include the carbon cost)
     importer = IntermediateDataImporter(
-        pathway=pathway_name,
+        pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,

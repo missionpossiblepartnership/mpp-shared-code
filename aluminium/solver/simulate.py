@@ -86,7 +86,7 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str):
     Get data per technology, ranking data and then run the pathway simulation
     """
     importer = IntermediateDataImporter(
-        pathway=pathway_name,
+        pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,
