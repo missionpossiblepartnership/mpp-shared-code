@@ -81,7 +81,7 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
     return pathway
 
 
-def simulate_pathway(sector: str, pathway: str, sensitivity: str):
+def simulate_pathway(sector: str, pathway_name: str, sensitivity: str):
     """
     Get data per technology, ranking data and then run the pathway simulation
     """
@@ -122,7 +122,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
     pathway = SimulationPathway(
         start_year=START_YEAR,
         end_year=END_YEAR,
-        pathway=pathway,
+        pathway=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,
@@ -138,7 +138,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         regional_production_shares=REGIONAL_PRODUCTION_SHARES,
         investment_cycle=INVESTMENT_CYCLE,
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,
-        constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway],
+        constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],
         year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
     )
 
