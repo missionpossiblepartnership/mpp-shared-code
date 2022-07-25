@@ -53,6 +53,7 @@ def check_constraints(
     constraints_checked = {}
     if pathway.constraints_to_apply:
         for constraint in pathway.constraints_to_apply:
+            logger.debug(f"Checking constraint {constraint}")
             if constraint == "emissions_constraint":
                 emissions_constraint, flag_residual = dict_constraints[constraint](
                     pathway=pathway,
