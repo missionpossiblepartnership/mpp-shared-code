@@ -89,7 +89,7 @@ class SimulationPathway:
 
         # Use importer to get all data required for simulating the pathway
         self.importer = IntermediateDataImporter(
-            pathway=pathway,
+            pathway_name=pathway,
             sensitivity=sensitivity,
             sector=sector,
             products=products,
