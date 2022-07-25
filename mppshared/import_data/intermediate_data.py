@@ -3,7 +3,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from mppshared.config import ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL, END_YEAR
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, END_YEAR,
+                              LOG_LEVEL)
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -15,7 +16,7 @@ class IntermediateDataImporter:
 
     def __init__(
         self,
-        pathway: str,
+        pathway_name: str,
         sensitivity: str,
         sector: str,
         products: list,
@@ -24,7 +25,7 @@ class IntermediateDataImporter:
         parent_path = Path(__file__).resolve().parents[2]
         self.sector = sector
         self.products = products
-        self.pathway = pathway
+        self.pathway_name = pathway_name
         self.sensitivity = sensitivity
 
         # Export directory depends on whether a CarbonCostTrajectory is passed or not
@@ -33,11 +34,11 @@ class IntermediateDataImporter:
                 carbon_cost_trajectory.df_carbon_cost["year"] == END_YEAR, "carbon_cost"
             ].item()
             self.export_dir = parent_path.joinpath(
-                f"{sector}/data/{pathway}/{sensitivity}/carbon_cost_{final_carbon_cost}"
+                f"{sector}/data/{pathway_name}/{sensitivity}/carbon_cost_{final_carbon_cost}"
             )
         else:
             self.export_dir = parent_path.joinpath(
-                f"{sector}/data/{pathway}/{sensitivity}"
+                f"{sector}/data/{pathway_name}/{sensitivity}"
             )
         self.intermediate_path = self.export_dir.joinpath("intermediate")
         self.stack_tracker_path = self.export_dir.joinpath("stack_tracker")
