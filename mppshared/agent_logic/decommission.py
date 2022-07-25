@@ -115,7 +115,7 @@ def get_best_asset_to_decommission(
     # Select best asset to decommission from the list of candidates
     logger.debug(f"Candidates for decommissioning: {len(candidates)}")
 
-    best_candidates = []
+    best_candidates: list[Asset] = []
     while not best_candidates:
 
         best_transition = select_best_transition(df_rank)
