@@ -6,6 +6,7 @@ from timeit import default_timer as timer
 from ammonia.config_ammonia import (ANNUAL_RENOVATION_SHARE,
                                     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                                     CARBON_BUDGET_SECTOR_CSV,
+                                    CO2_STORAGE_CONSTRAINT_CUMULATIVE,
                                     CONSTRAINTS_TO_APPLY, CUF_LOWER_THRESHOLD,
                                     CUF_UPPER_THRESHOLD, EMISSION_SCOPES,
                                     END_YEAR, GHGS, INITIAL_ASSET_DATA_LEVEL,
@@ -152,6 +153,7 @@ def simulate_pathway(
         technologies_maximum_global_demand_share=TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE,
         maximum_global_demand_share=MAXIMUM_GLOBAL_DEMAND_SHARE,
         set_co2_storage_constraint=SET_CO2_STORAGE_CONSTRAINT,
+        co2_storage_constraint_cumulative=CO2_STORAGE_CONSTRAINT_CUMULATIVE,
     )
 
     # Optimize asset stack on a yearly basis
