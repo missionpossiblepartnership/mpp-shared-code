@@ -201,9 +201,9 @@ RANKING_CONFIG = {
 
 CONSTRAINTS_TO_APPLY = {
     "bau": [None],
-    "cc": [None],
+    "cc": ["rampup_constraint"],
     "lc": ["emissions_constraint", "rampup_constraint"],
-    "fa": [None],
+    "fa": ["emissions_constraint", "rampup_constraint"],
 }
 
 YEAR_2050_EMISSIONS_CONSTRAINT = 2050
