@@ -206,6 +206,8 @@ CONSTRAINTS_TO_APPLY = {
     "fa": [None],
 }
 
+YEAR_2050_EMISSIONS_CONSTRAINT = 2050
+
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "maximum_asset_additions": 6,  # 10

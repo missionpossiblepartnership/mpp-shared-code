@@ -276,6 +276,15 @@ CUF_LOWER_THRESHOLD = 0.5
 CUF_UPPER_THRESHOLD = 0.95
 INVESTMENT_CYCLE = 20  # years
 
+CONSTRAINTS_TO_APPLY = {
+    "bau": [None],
+    "cc": [None],
+    "lc": ["emissions_constraint", "rampup_constraint"],
+    "fa": [None],
+}
+
+YEAR_2050_EMISSIONS_CONSTRAINT = 2050
+
 # Share of assets renovated annually (limits number of brownfield transitions)
 ANNUAL_RENOVATION_SHARE = 0.5
 # Technology ramp-up parameters
