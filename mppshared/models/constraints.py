@@ -290,7 +290,7 @@ def check_global_demand_share_constraint(
         df["demand"] = df["product"].apply(
             lambda x: pathway.get_demand(product=x, year=year, region="Global")
         )
-        df["demand_maximum"] = MAXIMUM_GLOBAL_DEMAND_SHARE[year] * df["demand"]
+        df["demand_maximum"] = pathway.maximum_global_demand_share[year] * df["demand"]
 
         # Compare
         df["check"] = np.where(
