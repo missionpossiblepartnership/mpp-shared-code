@@ -5,7 +5,7 @@
 
 import pandas as pd
 
-from mppshared.config import LOG_LEVEL, MODEL_YEARS, SECTOR
+from mppshared.config import LOG_LEVEL, SECTOR
 from mppshared.import_config import (COLUMN_SINGLE_INPUT, IDX_PER_INPUT_METRIC,
                                      INPUT_METRICS, INPUT_SHEETS,
                                      MAP_COLUMN_NAMES, MAP_EXCEL_NAMES,
@@ -19,12 +19,13 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def import_all(importer: IntermediateDataImporter):
+def import_all(importer: IntermediateDataImporter, model_years: list):
     """
     Load all input data, reformat to long format and save to .csv files (if debug mode) for subsequent use.
 
     Args:
         importer ():
+        model_years ():
 
     Returns:
 
@@ -45,7 +46,7 @@ def import_all(importer: IntermediateDataImporter):
 
             # Import and extract corresponding sheet
             df = importer.get_raw_input_data(sheet_name=sheet_name)
-            df = extract_business_case_data(df=df, metric=metric)
+            df = extract_business_case_data(df=df, metric=metric, model_years=model_years)
 
             # Add regions where needed
             df = add_regions_and_filter_cost_classification(
@@ -56,7 +57,7 @@ def import_all(importer: IntermediateDataImporter):
             df = explode_rows_for_all_products(df)
 
             # Reformat to long
-            df = reformat_df_to_long(df=df, value_name="value")
+            df = reformat_df_to_long(df=df, value_name="value", model_years=model_years)
 
             # Ensure years are int
             df["year"] = df["year"].astype(int)
@@ -76,13 +77,14 @@ def import_all(importer: IntermediateDataImporter):
 
 
 def extract_business_case_data(
-    df: pd.DataFrame, metric: str
+    df: pd.DataFrame, metric: str, model_years: list
 ) -> pd.DataFrame:
     """Extract data for the specified metric from the DataFrame passed and rename columns to standard column names.
 
     Args:
         df: DataFrame containing the business cases data
         metric (str): Name of the dataseries to be loaded.
+        model_years ():
 
     Returns:
         pd.DataFrame: Loaded data
@@ -92,7 +94,7 @@ def extract_business_case_data(
     if COLUMN_SINGLE_INPUT[SECTOR] in df.columns:
         mask = df[COLUMN_SINGLE_INPUT[SECTOR]] == 1
         if mask.any():
-            df.loc[mask, MODEL_YEARS] = df.loc[mask, "Single input"]
+            df.loc[mask, model_years] = df.loc[mask, "Single input"]
 
     # Remove \u200b space characters
     df = df.replace("\u200b", "", regex=True)
@@ -119,7 +121,7 @@ def extract_business_case_data(
     df.rename(columns=MAP_COLUMN_NAMES, inplace=True)
 
     # extract relevant columns
-    usecols = [x for x in IDX_PER_INPUT_METRIC[SECTOR][metric] if x != "year"] + MODEL_YEARS
+    usecols = [x for x in IDX_PER_INPUT_METRIC[SECTOR][metric] if x != "year"] + model_years
     df = df[usecols]
 
     return df
@@ -248,7 +250,7 @@ def add_regions_and_filter_cost_classification(
 
 
 def reformat_df_to_long(
-    df: pd.DataFrame, value_name: str
+    df: pd.DataFrame, value_name: str, model_years: list
 ) -> pd.DataFrame:
     """
     Pivot inputs data to long format, using MODEL_YEARS as value variables.
@@ -256,13 +258,14 @@ def reformat_df_to_long(
     Args:
         df (pd.DataFrame): Dataframe with year columns in wide format
         value_name (str): Name of the value column that's unpivoted to long format
+        model_years ():
 
     Returns:
         Dataframe in long format with columns "year", "value_name"
     """
 
     # All columns except for MODEL_YEARS are id variables
-    id_vars = set(df.columns) - {x for x in MODEL_YEARS}
+    id_vars = set(df.columns) - {x for x in model_years}
     df_long = pd.melt(df, id_vars=id_vars, var_name="year", value_name=value_name)
 
     return df_long

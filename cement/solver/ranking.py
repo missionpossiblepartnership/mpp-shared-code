@@ -1,21 +1,27 @@
 """Create ranking of technology switches (decommission, brownfield, greenfield)."""
 
-from cement.config.config_cement import (
-    BIN_METHODOLOGY,
-    COST_METRIC_RELATIVE_UNCERTAINTY,
-    EMISSION_SCOPES_RANKING,
-    GHGS_RANKING,
-    NUMBER_OF_BINS_RANKING,
-    PRODUCTS,
-    RANK_TYPES,
-    RANKING_CONFIG,
-    RANKING_COST_METRIC,
-)
+from cement.config.config_cement import (BIN_METHODOLOGY,
+                                         COST_METRIC_RELATIVE_UNCERTAINTY,
+                                         EMISSION_SCOPES_RANKING, GHGS_RANKING,
+                                         NUMBER_OF_BINS_RANKING, PRODUCTS,
+                                         RANK_TYPES, RANKING_CONFIG,
+                                         RANKING_COST_METRIC)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.solver.ranking import (
-    rank_technology_histogram,
-    rank_technology_uncertainty_bins,
-)
+from mppshared.solver.ranking import (rank_technology_histogram,
+                                      rank_technology_uncertainty_bins)
+
+
+def get_ranking_inputs(pathway: str, sensitivity: str, sector: str):
+    """Create the input files for the ranking for the three types of technology switches"""
+
+    importer = IntermediateDataImporter(
+        pathway=pathway,
+        sensitivity=sensitivity,
+        sector=sector,
+        products=PRODUCTS,
+    )
+
+    pass
 
 
 def make_rankings(pathway: str, sensitivity: str, sector: str):

@@ -169,7 +169,7 @@ EU_COUNTRIES = [
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
 END_YEAR = 2050
-MODEL_YEARS = list(range(START_YEAR, END_YEAR + 1))
+MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 # (Artificial) investment cycles after which plants can be rebuilt and decommissioned
 INVESTMENT_CYCLES = {

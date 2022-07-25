@@ -23,7 +23,7 @@ APPLY_CARBON_COST = True
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
 END_YEAR = 2050
-MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
+MODEL_YEARS = list(range(START_YEAR, END_YEAR + 1))
 
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
 ALL_SENSITIVITIES = [

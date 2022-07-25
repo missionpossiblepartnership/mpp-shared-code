@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 
+# todo: adjust config structure
 from mppshared.config import END_YEAR, LOG_LEVEL, SECTOR
 from mppshared.import_config import (EXCEL_COLUMN_RANGES,
                                      HEADER_BUSINESS_CASE_EXCEL)
