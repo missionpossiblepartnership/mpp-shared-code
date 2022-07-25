@@ -47,6 +47,8 @@ def check_constraints(
         "rampup_constraint": check_technology_rampup_constraint,
         "regional_constraint": check_constraint_regional_production,
         "demand_share_constraint": check_global_demand_share_constraint,
+        "electrolysis_capacity_addition_constraint": check_electrolysis_capacity_addition_constraint,
+        "co2_storage_constraint": check_co2_storage_constraint,
     }
     constraints_checked = {}
     if pathway.constraints_to_apply:
@@ -74,6 +76,8 @@ def check_constraints(
             "emissions_constraint": True,
             "flag_residual": False,
             "rampup_constraint": True,
+            "regional_constraint": True,
+            "demand_share_constraint": True,
         }
 
 
