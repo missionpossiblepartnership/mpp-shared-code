@@ -262,3 +262,46 @@ def apply_greenfield_filters_chemicals(
         df_rank = df_rank.loc[~filter]
         return df_rank
     return df_rank
+
+
+def check_global_demand_share_constraint(
+    pathway: SimulationPathway, stack: AssetStack, year: int
+) -> Bool:
+    "Check for specified technologies whether they fulfill the constraint of supplying a maximum share of global demand"
+
+    df_stack = stack.aggregate_stack(
+        aggregation_vars=["product", "technology"]
+    ).reset_index()
+    constraint = True
+
+    for technology in TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE:
+
+        # Calculate annual production volume based on CUF upper threshold
+        df = (
+            df_stack.loc[df_stack["technology"] == technology]
+            .groupby("product", as_index=False)
+            .sum()
+        )
+        df["annual_production_volume"] = (
+            df["annual_production_capacity"] * pathway.cuf_upper_threshold
+        )
+
+        # Add global demand and corresponding constraint
+        df["demand"] = df["product"].apply(
+            lambda x: pathway.get_demand(product=x, year=year, region="Global")
+        )
+        df["demand_maximum"] = MAXIMUM_GLOBAL_DEMAND_SHARE[year] * df["demand"]
+
+        # Compare
+        df["check"] = np.where(
+            df["annual_production_volume"] <= df["demand_maximum"], True, False
+        )
+
+        if df["check"].all():
+            constraint = constraint & True
+
+        else:
+            logger.debug(f"Maximum demand share hurt for technology {technology}.")
+            return False
+
+    return constraint
