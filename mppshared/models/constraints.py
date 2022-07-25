@@ -7,8 +7,7 @@ from pandera import Bool
 from pyparsing import col
 
 from mppshared.config import (AMMONIA_PER_AMMONIUM_NITRATE, AMMONIA_PER_UREA,
-                              H2_PER_AMMONIA, HYDRO_TECHNOLOGY_BAN, LOG_LEVEL,
-                              YEAR_2050_EMISSIONS_CONSTRAINT)
+                              H2_PER_AMMONIA, HYDRO_TECHNOLOGY_BAN, LOG_LEVEL)
 from mppshared.models.asset import Asset, AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
@@ -195,7 +194,7 @@ def check_annual_carbon_budget_constraint(
 
     # After a sector-specific year, all end-state newbuild capacity has to fulfill the 2050 emissions limit with a stack composed of only end-state technologies
     if (transition_type == "greenfield") & (
-        year >= YEAR_2050_EMISSIONS_CONSTRAINT[pathway.sector]
+        year >= pathway.year_2050_emissions_constraint
     ):
         limit = pathway.carbon_budget.get_annual_emissions_limit(
             pathway.end_year, pathway.sector
@@ -425,3 +424,46 @@ def convert_production_volume_to_electrolysis_capacity(
     )
 
     return df_stack
+
+
+def check_co2_storage_constraint(
+    pathway: SimulationPathway, stack: AssetStack, year: int
+) -> Bool:
+    """Check if the constraint on total CO2 storage (globally) is met"""
+
+    # Get constraint value
+    df_co2_storage = pathway.co2_storage_constraint
+    limit = df_co2_storage.loc[df_co2_storage["year"] == year + 1, "value"].item()
+
+    # Constraint based on total CO2 storage available in that year
+    if CO2_STORAGE_CONSTRAINT_CUMULATIVE:
+        # Calculate CO2 captured annually by the stack (Mt CO2)
+        co2_captured = stack.calculate_co2_captured_stack(
+            year=year, df_emissions=pathway.emissions
+        )
+
+        # Compare with the limit on annual CO2 storage addition (MtCO2)
+        if limit >= co2_captured:
+            return True
+
+        logger.debug("CO2 storage constraint hurt.")
+        return False
+
+    # Constraint based on addition of storage capacity for additional captured CO2 in that year
+    else:
+        # Calculate new CO2 captured
+        co2_captured_old_stack = pathway.stacks[year].calculate_co2_captured_stack(
+            year=year, df_emissions=pathway.emissions
+        )
+        co2_captured_new_stack = stack.calculate_co2_captured_stack(
+            year=year + 1, df_emissions=pathway.emissions
+        )
+
+        additional_co2_captured = co2_captured_new_stack - co2_captured_old_stack
+
+        # Compare with the limit on additional storage capacity
+        if limit >= additional_co2_captured:
+            return True
+
+        logger.debug("CO2 storage constraint hurt.")
+        return False
