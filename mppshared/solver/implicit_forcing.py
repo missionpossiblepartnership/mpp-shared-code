@@ -6,7 +6,7 @@ import pandas as pd
 
 # Shared code imports
 from mppshared.calculate.calculate_cost import discount_costs
-from mppshared.config import HYDRO_TECHNOLOGY_BAN, START_YEAR
+from mppshared.config import HYDRO_TECHNOLOGY_BAN
 from mppshared.utility.dataframe_utility import add_column_header_suffix
 # Initialize logger
 from mppshared.utility.log_utility import get_logger
@@ -56,51 +56,37 @@ def apply_salt_cavern_availability_constraint(
 def apply_hydro_constraint(
     df_technology_transitions: pd.DataFrame, sector: str, products: list
 ) -> pd.DataFrame:
-    logger.info("Applying hydro constraint")
-    if HYDRO_TECHNOLOGY_BAN[sector]:
-        # if sector == "aluminium" and "Aluminium" in products:
-        logger.debug(f"{sector}: Filtering Hydro banned transitions")
-        return df_technology_transitions[
+    logger.debug(f"{sector}: Filtering Hydro banned transitions")
+    return df_technology_transitions[
+        (
+            (df_technology_transitions["technology_destination"].str.contains("Hydro"))
+            & (df_technology_transitions["technology_origin"].str.contains("Hydro"))
+        )
+        | (
             (
-                (
-                    df_technology_transitions["technology_destination"].str.contains(
-                        "Hydro"
-                    )
-                )
-                & (df_technology_transitions["technology_origin"].str.contains("Hydro"))
-            )
-            | (
-                (
-                    df_technology_transitions["technology_destination"].str.contains(
-                        "decommission"
-                    )
-                )
-                & (df_technology_transitions["technology_origin"].str.contains("Hydro"))
-            )
-            | (
-                (
-                    df_technology_transitions["technology_origin"].str.contains(
-                        "New-build"
-                    )
-                )
-                & (
-                    df_technology_transitions["technology_destination"].str.contains(
-                        "Hydro"
-                    )
+                df_technology_transitions["technology_destination"].str.contains(
+                    "decommission"
                 )
             )
-            | (
-                ~(df_technology_transitions["technology_origin"].str.contains("Hydro"))
-                & ~(
-                    df_technology_transitions["technology_destination"].str.contains(
-                        "Hydro"
-                    )
+            & (df_technology_transitions["technology_origin"].str.contains("Hydro"))
+        )
+        | (
+            (df_technology_transitions["technology_origin"].str.contains("New-build"))
+            & (
+                df_technology_transitions["technology_destination"].str.contains(
+                    "Hydro"
                 )
             )
-        ]
-    else:
-        logger.debug(f"{sector}: No hydro band transitions")
-        return df_technology_transitions
+        )
+        | (
+            ~(df_technology_transitions["technology_origin"].str.contains("Hydro"))
+            & ~(
+                df_technology_transitions["technology_destination"].str.contains(
+                    "Hydro"
+                )
+            )
+        )
+    ]
 
 
 def calculate_carbon_cost_addition_to_cost_metric(
