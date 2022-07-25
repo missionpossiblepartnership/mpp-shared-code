@@ -46,6 +46,7 @@ def check_constraints(
         "emissions_constraint": check_annual_carbon_budget_constraint,
         "rampup_constraint": check_technology_rampup_constraint,
         "regional_constraint": check_constraint_regional_production,
+        "demand_share_constraint": check_global_demand_share_constraint,
     }
     constraints_checked = {}
     if pathway.constraints_to_apply:
@@ -265,7 +266,7 @@ def apply_greenfield_filters_chemicals(
 
 
 def check_global_demand_share_constraint(
-    pathway: SimulationPathway, stack: AssetStack, year: int
+    pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
 ) -> Bool:
     "Check for specified technologies whether they fulfill the constraint of supplying a maximum share of global demand"
 
