@@ -6,7 +6,6 @@ import pandas as pd
 
 # Shared code imports
 from mppshared.calculate.calculate_cost import discount_costs
-from mppshared.config import HYDRO_TECHNOLOGY_BAN
 from mppshared.utility.dataframe_utility import add_column_header_suffix
 # Initialize logger
 from mppshared.utility.log_utility import get_logger
