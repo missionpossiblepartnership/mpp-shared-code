@@ -51,7 +51,7 @@ class SimulationPathway:
         annual_renovation_share: float,
         regional_production_shares: dict,
         constraints_to_apply: list,
-        year_2050_emissions_constraint: bool,
+        year_2050_emissions_constraint: int,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
         technologies_maximum_global_demand_share: list = None,
         maximum_global_demand_share: dict = None,
