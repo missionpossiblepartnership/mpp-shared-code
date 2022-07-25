@@ -34,7 +34,7 @@ class SimulationPathway:
         self,
         start_year: int,
         end_year: int,
-        pathway: str,
+        pathway_name: str,
         sensitivity: str,
         sector: str,
         products: list,
@@ -61,7 +61,7 @@ class SimulationPathway:
         # Attributes describing the pathway
         self.start_year = start_year
         self.end_year = end_year
-        self.pathway = pathway
+        self.pathway_name = pathway_name
         self.sensitivity = sensitivity
         self.sector = sector
         self.investment_cycle = investment_cycle
@@ -89,7 +89,7 @@ class SimulationPathway:
 
         # Use importer to get all data required for simulating the pathway
         self.importer = IntermediateDataImporter(
-            pathway_name=pathway,
+            pathway_name=pathway_name,
             sensitivity=sensitivity,
             sector=sector,
             products=products,
