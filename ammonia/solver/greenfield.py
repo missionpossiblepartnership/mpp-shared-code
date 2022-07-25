@@ -128,7 +128,13 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         df_rank = apply_greenfield_filters_chemicals(df_rank, pathway, year, product)
 
         # Get demand (for next year) and production (in current year)
-        demand = pathway.get_demand(product=product, year=year + 1, region=MODEL_SCOPE)
+        # demand = pathway.get_demand(product=product, year=year + 1, region=MODEL_SCOPE)
+        if year == 2050:
+            demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
+        else:
+            demand = pathway.get_demand(
+                product=product, year=year + 1, region=MODEL_SCOPE
+            )
         production = new_stack.get_annual_production_volume(
             product
         )  #! Development only
