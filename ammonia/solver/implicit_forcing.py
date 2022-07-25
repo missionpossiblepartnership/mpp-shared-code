@@ -33,14 +33,14 @@ logger = get_logger(__name__)
 
 
 def apply_implicit_forcing(
-    pathway: str,
+    pathway_name: str,
     sensitivity: str,
     sector: str,
     carbon_cost_trajectory: CarbonCostTrajectory,
 ):
     """Apply the implicit forcing mechanisms to the input tables.
     Args:
-        pathway:
+        pathway_name:
         sensitivity:
         sector:
     Returns:
@@ -50,7 +50,7 @@ def apply_implicit_forcing(
 
     # Import input tables (folder paths include the carbon cost)
     importer = IntermediateDataImporter(
-        pathway=pathway,
+        pathway=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,
@@ -72,7 +72,7 @@ def apply_implicit_forcing(
     )
 
     # Apply technology moratorium (year after which newbuild capacity must be transition or end-state technologies)
-    if pathway != "bau":
+    if pathway_name != "bau":
         df_technology_switches = apply_technology_moratorium(
             df_technology_switches=df_technology_switches,
             df_technology_characteristics=df_technology_characteristics,

@@ -21,7 +21,9 @@ from mppshared.utility.log_utility import get_logger
 logger = get_logger(__name__)
 
 
-def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.DataFrame:
+def apply_implicit_forcing(
+    pathway_name: str, sensitivity: str, sector: str
+) -> pd.DataFrame:
     """Apply the implicit forcing mechanisms to the input tables.
 
     Args:
@@ -36,7 +38,7 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
 
     # Import input tables
     importer = IntermediateDataImporter(
-        pathway=pathway,
+        pathway=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,
@@ -55,7 +57,7 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str) -> pd.Da
     df_technology_switches = apply_hydro_constraint(df_technology_switches, sector)
 
     # Apply technology moratorium (year after which newbuild capacity must be transition or end-state technologies)
-    if pathway in PATHWAYS_WITH_TECHNOLOGY_MORATORIUM:
+    if pathway_name in PATHWAYS_WITH_TECHNOLOGY_MORATORIUM:
         df_technology_switches = apply_technology_moratorium(
             df_technology_switches=df_technology_switches,
             df_technology_characteristics=df_technology_characteristics,
