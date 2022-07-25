@@ -12,6 +12,7 @@ from ammonia.config_ammonia import (ANNUAL_RENOVATION_SHARE,
                                     LOG_LEVEL, PRODUCTS, RANK_TYPES,
                                     REGIONAL_PRODUCTION_SHARES,
                                     SECTORAL_CARBON_PATHWAY, START_YEAR,
+                                    TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE,
                                     TECHNOLOGY_RAMP_UP_CONSTRAINT)
 from ammonia.solver.brownfield import brownfield
 from ammonia.solver.decommission import decommission
@@ -143,6 +144,7 @@ def simulate_pathway(
         regional_production_shares=REGIONAL_PRODUCTION_SHARES,
         investment_cycle=INVESTMENT_CYCLE,
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,
+        technologies_maximum_global_demand_share=TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE,
     )
 
     # Optimize asset stack on a yearly basis
