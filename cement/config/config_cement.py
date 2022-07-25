@@ -23,7 +23,7 @@ APPLY_CARBON_COST = True
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
 END_YEAR = 2050
-MODEL_YEARS = list(range(START_YEAR, END_YEAR + 1))
+MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
 ALL_SENSITIVITIES = [
@@ -46,8 +46,6 @@ PRODUCTS = ["Clinker"]
 ANNUAL_RENOVATION_SHARE = 0.2
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
 INITIAL_ASSET_DATA_LEVEL = "individual_assets"
-# Scope of the model run - to be specified
-MODEL_SCOPE = "Global"
 
 # Override asset parameters; annual production capacity in Mt/year
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
@@ -65,6 +63,44 @@ EMISSION_SCOPES = [
 # Emissions
 GHGS = ["co2", "ch4"]
 
+REGIONS = [
+    "China",
+    "Rest of Asia",
+    "North America",
+    "Russia",
+    "Europe",
+    "India",
+    "Middle East",
+    "Africa",
+    "Latin America",
+    "Oceania",
+]
+
+# list of technologies
+LIST_TECHNOLOGIES = [
+    "Dry kiln coal",
+    "Dry kiln natural gas",
+    "Dry kiln alternative fuels",
+    "Dry kiln coal + post combustion + storage",
+    "Dry kiln natural gas + post combustion + storage",
+    "Dry kiln alternative fuels + post combustion + storage",
+    "Dry kiln coal + oxyfuel + storage",
+    "Dry kiln natural gas + oxyfuel + storage",
+    "Dry kiln alternative fuels + oxyfuel + storage",
+    "Dry kiln coal + direct separation + storage",
+    "Dry kiln natural gas + direct separation + storage",
+    "Dry kiln alternative fuels + direct separation + storage",
+    "Dry kiln coal + post combustion + usage",
+    "Dry kiln natural gas + post combustion + usage",
+    "Dry kiln alternative fuels + post combustion + usage",
+    "Dry kiln coal + oxyfuel + usage",
+    "Dry kiln natural gas + oxyfuel + usage",
+    "Dry kiln alternative fuels + oxyfuel + usage",
+    "Dry kiln coal + direct separation + usage",
+    "Dry kiln natural gas + direct separation + usage",
+    "Dry kiln alternative fuels + direct separation + usage",
+]
+
 ### RANKING OF TECHNOLOGY SWITCHES ###
 RANKING_COST_METRIC = "lcox"
 BIN_METHODOLOGY = "uncertainty"     # options: "histogram" or "uncertainty"
@@ -81,6 +117,13 @@ TRANSITION_TYPES = {
 }
 
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
+
+# set of cost classifications
+COST_CLASSIFICATIONS = {
+    "low": "Low",
+    "standard": "Standard",
+    "high": "High",
+}
 
 CARBON_BUDGET_SECTOR_CSV = True
 CARBON_BUDGET_SHAPE = "linear"      # options: todo

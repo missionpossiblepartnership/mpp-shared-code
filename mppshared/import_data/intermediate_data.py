@@ -3,9 +3,7 @@ from pathlib import Path
 import pandas as pd
 
 # todo: adjust config structure
-from mppshared.config import END_YEAR, LOG_LEVEL, SECTOR
-from mppshared.import_config import (EXCEL_COLUMN_RANGES,
-                                     HEADER_BUSINESS_CASE_EXCEL)
+from mppshared.config import END_YEAR, LOG_LEVEL
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -81,11 +79,18 @@ class IntermediateDataImporter:
         df.to_csv(export_path, index=index)
 
     # imports & preprocessing
-    def get_raw_input_data(self, sheet_name: str):
+    def get_raw_input_data(
+        self,
+        sheet_name: str,
+        header_business_case_excel: int,
+        excel_column_ranges: dict,
+    ):
         """Return specified sheet of Business Cases_{sensitivity}.xlsx as DataFrame.
 
         Args:
             sheet_name (str): Name of the sheet in Business Cases.xlsx
+            header_business_case_excel ():
+            excel_column_ranges ():
 
         Returns:
             pd.DataFrame: Full data of sheet with correct header
@@ -96,14 +101,24 @@ class IntermediateDataImporter:
         df = pd.read_excel(
             full_path,
             sheet_name=sheet_name,
-            header=HEADER_BUSINESS_CASE_EXCEL[SECTOR],
-            usecols=EXCEL_COLUMN_RANGES[SECTOR][sheet_name],
+            header=header_business_case_excel,
+            usecols=excel_column_ranges[sheet_name],
         )
 
         return df
 
-    def get_preprocessed_input_data(self):
-        pass
+    def get_imported_input_data(self, input_metrics: dict, index: bool = False, idx_per_input_metric: dict = None):
+        """imports all files that are declared as metrics in INPUT_METRICS"""
+        imported_input_data = {}
+        for input_sheet in input_metrics.keys():
+            for metric in input_metrics[input_sheet]:
+                imported_input_data[metric] = pd.read_csv(
+                    self.import_path.joinpath(f"{metric}.csv")
+                )
+                if index:
+                    assert idx_per_input_metric is not None, "No index passed"
+                    imported_input_data[metric].set_index(keys=idx_per_input_metric[metric], inplace=True)
+        return imported_input_data
 
     # intermediate
     def get_emissions(self):

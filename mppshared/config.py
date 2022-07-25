@@ -543,3 +543,46 @@ GWP = {
     "GWP-20": {"co2": 1, "ch4": 82.5, "n2o": 273},
     "GWP-100": {"co2": 1, "ch4": 29.8, "n2o": 273},
 }
+
+# the below is needed after code refactoring!
+IDX_TECH_RANKING_COLUMNS = [
+    "product",
+    "year",
+    "region",
+    "technology_origin",
+    "technology_destination",
+    "switch_type",
+]
+
+# index for emissivity data
+IDX_EMISSIVITY = ["product", "year", "region", "technology_destination"]
+
+# index for technology characteristics
+IDX_TECH_CHARACTERISTICS = ["product", "year", "region", "technology_destination"]
+
+# Renaming of columns to follow naming convention
+MAP_COLUMN_NAMES = {
+    "Unit": "unit",
+    "Product": "product",
+    "Technology": "technology_destination",
+    "Technology origin": "technology_origin",
+    "Renovation from": "technology_origin",
+    "Region": "region",
+    "Metric": "metric",
+    "Scope": "scope",
+    "Cost classification": "cost_classification",
+    "Emissivity type": "emissivity_type",
+}
+
+# GHG conversion factors from any GHG to CO2e (structure required for conversion to dataframe!)
+GHG_CONVERSION = {
+    "emissivity_co2": 1.0,
+    "emissivity_ch4": 29.8,
+}
+
+# technology classifications
+TECH_CLASSIFICATIONS = {
+    "initial": "Initial",
+    "transition": "Transition",
+    "end-state": "End-state",
+}

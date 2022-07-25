@@ -6,7 +6,6 @@ import numpy as np
 import pandas as pd
 
 from mppshared.config import PKL_DATA_INTERMEDIATE, PRODUCTS, SECTOR
-from mppshared.dataframe_config import DF_DATATYPES_PER_COLUMN
 from mppshared.utility.file_handling_utility import read_pickle_folder
 from mppshared.utility.location_utility import get_region_from_country_code
 from mppshared.utility.log_utility import get_logger
@@ -364,13 +363,49 @@ def explode_rows_for_all_products(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def set_datatypes(df: pd.DataFrame) -> pd.DataFrame:
+def set_datatypes(df: pd.DataFrame, datatypes_per_column: dict) -> pd.DataFrame:
+    """
+
+    Args:
+        df ():
+        datatypes_per_column (): dict with df's column names as keys and their datatypes as values
+
+    Returns:
+
+    """
     # get relevant columns and their types
-    datatypes = {k: v for k, v in DF_DATATYPES_PER_COLUMN.items() if k in list(df)}
+    datatypes = {k: v for k, v in datatypes_per_column.items() if k in list(df)}
     # set datatypes
     df = df.astype(
         dtype=datatypes,
         errors="ignore",
     )
+
+    return df
+
+
+def df_dict_to_df(df_dict: dict) -> pd.DataFrame:
+    """
+    Converts a dict of dataframes with the same index to one dataframe with a distinct value column for all dataframes
+        in the dict
+
+    Args:
+        df_dict (): dict of dataframes with the same index and one "value" column
+
+    Returns:
+        df (pd.DataFrame): df with all the dfs in df_dict as columns
+    """
+
+    df_list = []
+    for key in df_dict.keys():
+        # make sure that df only includes one value column
+        assert (
+            df_dict[key].shape[1] == 1
+        ), f"df_dict{key} has more than one value column. Cannot convert to dataframe."
+        # convert
+        df_append = df_dict[key].rename(columns={"value": f"value_{key}"})
+        df_list.append(df_append)
+
+    df = pd.concat(objs=df_list, axis=1)
 
     return df
