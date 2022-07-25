@@ -306,3 +306,52 @@ def check_global_demand_share_constraint(
             return False
 
     return constraint
+
+
+def check_electrolysis_capacity_addition_constraint(
+    pathway: SimulationPathway, stack: AssetStack, year: int
+) -> Bool:
+    """Check if the annual addition of electrolysis capacity fulfills the constraint"""
+
+    # Get annual production capacities per technology of current and tentative new stack
+    df_old_stack = (
+        pathway.stacks[year]
+        .aggregate_stack(
+            aggregation_vars=["product", "region", "technology"],
+        )
+        .reset_index()
+    )
+    df_new_stack = stack.aggregate_stack(
+        aggregation_vars=["product", "region", "technology"]
+    ).reset_index()
+
+    # Calculate required electrolysis capacity
+    df_old_stack = convert_production_volume_to_electrolysis_capacity(
+        df_old_stack.loc[df_old_stack["technology"].str.contains("Electrolyser")],
+        year,
+        pathway,
+    )
+    df_new_stack = convert_production_volume_to_electrolysis_capacity(
+        df_new_stack.loc[df_new_stack["technology"].str.contains("Electrolyser")],
+        year,
+        pathway,
+    )
+
+    # Sum to total required electrolysis capacity
+    capacity_old_stack = df_old_stack.sum()["electrolysis_capacity"]
+    capacity_new_stack = df_new_stack.sum()["electrolysis_capacity"]
+
+    # Compare to electrolysis capacity addition constraint in that year
+    capacity_addition = capacity_new_stack - capacity_old_stack
+    df_constr = (
+        pathway.importer.get_electrolysis_capacity_addition_constraint().set_index(
+            "year"
+        )
+    )
+    capacity_addition_constraint = df_constr.loc[year, "value"]
+
+    if capacity_addition <= capacity_addition_constraint:
+        return True
+
+    logger.debug("Annual electrolysis capacity addition constraint hurt.")
+    return False
