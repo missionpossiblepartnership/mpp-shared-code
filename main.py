@@ -1,3 +1,4 @@
+"""Main script for the MPP solver, to run a sector chnge the SECTOR parameter to the appropiate one."""
 SECTOR = "aluminium"
 if SECTOR == "aluminium":
     from aluminium.main_aluminium import main
