@@ -1,13 +1,10 @@
 """ Functions to apply implicit forcing mechanisms to the solver input tables."""
 
-# Library imports
 import numpy as np
 import pandas as pd
 
-# Shared code imports
 from mppshared.calculate.calculate_cost import discount_costs
 from mppshared.utility.dataframe_utility import add_column_header_suffix
-# Initialize logger
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -53,8 +50,20 @@ def apply_salt_cavern_availability_constraint(
 
 
 def apply_hydro_constraint(
-    df_technology_transitions: pd.DataFrame, sector: str, products: list
+    df_technology_transitions: pd.DataFrame,
+    sector: str,
 ) -> pd.DataFrame:
+    """Apply hydro constraints to the technology switches, thus only allowing switches to Hydro
+        from technologies that previously had Hydro.
+
+    Args:
+        df_technology_transitions (pd.DataFrame): df_technology_transitions
+        sector (str): sector
+        products (list): products
+
+    Returns:
+        pd.DataFrame:
+    """
     logger.debug(f"{sector}: Filtering Hydro banned transitions")
     return df_technology_transitions[
         (
