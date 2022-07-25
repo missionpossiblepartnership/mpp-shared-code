@@ -309,7 +309,7 @@ def check_global_demand_share_constraint(
 
 
 def check_electrolysis_capacity_addition_constraint(
-    pathway: SimulationPathway, stack: AssetStack, year: int
+    pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
 ) -> Bool:
     """Check if the annual addition of electrolysis capacity fulfills the constraint"""
 
