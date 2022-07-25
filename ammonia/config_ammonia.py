@@ -280,9 +280,14 @@ INVESTMENT_CYCLE = 20  # years
 
 CONSTRAINTS_TO_APPLY = {
     "bau": [None],
-    "cc": [None],
-    "lc": ["emissions_constraint", "rampup_constraint"],
-    "fa": [None],
+    "lc": [
+        "emissions_constraint",
+        "rampup_constraint",
+        "co2_storage_constraint",
+        "electrolysis_capacity_addition_constraint",
+        "demand_share_constraint",
+    ],
+    "fa": ["co2_storage_constraint"],
 }
 
 YEAR_2050_EMISSIONS_CONSTRAINT = 2050
