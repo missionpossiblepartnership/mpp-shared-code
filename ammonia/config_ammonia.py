@@ -80,6 +80,18 @@ CARBON_COSTS = [
     250,
 ]
 
+REGIONAL_PRODUCTION_SHARES = {
+    "Africa": 0.4,
+    "China": 0.4,
+    "Europe": 0.4,
+    "India": 0.4,
+    "Latin America": 0.4,
+    "Middle East": 0.4,
+    "North America": 0.4,
+    "Oceania": 0.4,
+    "Russia": 0.4,
+    "Rest of Asia": 0.4,
+}
 
 MAP_LOW_COST_POWER_REGIONS = {
     "Middle East": "Saudi Arabia",
@@ -144,6 +156,47 @@ REGIONS = [
 
 # Maximum share of global demand that can be supplied by one region
 MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION = 0.3
+
+TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE = [
+    "Biomass Gasification + ammonia synthesis",
+    "Biomass Digestion + ammonia synthesis",
+    "Methane Pyrolysis + ammonia synthesis",
+]
+
+# TODO: transfer this to input file
+MAXIMUM_GLOBAL_DEMAND_SHARE = {
+    2020: 0.02,
+    2021: 0.02,
+    2022: 0.02,
+    2023: 0.02,
+    2024: 0.02,
+    2025: 0.02,
+    2026: 0.02,
+    2027: 0.02,
+    2028: 0.02,
+    2029: 0.02,
+    2030: 0.02,
+    2031: 0.02,
+    2032: 0.02,
+    2033: 0.02,
+    2034: 0.02,
+    2035: 0.02,
+    2036: 0.02,
+    2037: 0.02,
+    2038: 0.02,
+    2039: 0.02,
+    2040: 0.02,
+    2041: 1,
+    2042: 1,
+    2043: 1,
+    2044: 1,
+    2045: 1,
+    2046: 1,
+    2047: 1,
+    2048: 1,
+    2049: 1,
+    2050: 1,
+}
 
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = 2020
@@ -219,9 +272,25 @@ RANKING_CONFIG = {
 }
 
 ### CONSTRAINTS ###
+SET_CO2_STORAGE_CONSTRAINT = True
+CO2_STORAGE_CONSTRAINT_CUMULATIVE = False
 CUF_LOWER_THRESHOLD = 0.5
 CUF_UPPER_THRESHOLD = 0.95
 INVESTMENT_CYCLE = 20  # years
+
+CONSTRAINTS_TO_APPLY = {
+    "bau": [None],
+    "lc": [
+        "emissions_constraint",
+        "rampup_constraint",
+        "co2_storage_constraint",
+        "electrolysis_capacity_addition_constraint",
+        "demand_share_constraint",
+    ],
+    "fa": ["co2_storage_constraint"],
+}
+
+YEAR_2050_EMISSIONS_CONSTRAINT = 2050
 
 # Share of assets renovated annually (limits number of brownfield transitions)
 ANNUAL_RENOVATION_SHARE = 0.5
