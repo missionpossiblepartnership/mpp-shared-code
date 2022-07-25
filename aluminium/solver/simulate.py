@@ -14,7 +14,8 @@ from aluminium.config_aluminium import (ANNUAL_RENOVATION_SHARE,
                                         INVESTMENT_CYCLE, LOG_LEVEL, PRODUCTS,
                                         RANK_TYPES, REGIONAL_PRODUCTION_SHARES,
                                         SECTORAL_CARBON_PATHWAY, START_YEAR,
-                                        TECHNOLOGY_RAMP_UP_CONSTRAINT)
+                                        TECHNOLOGY_RAMP_UP_CONSTRAINT,
+                                        YEAR_2050_EMISSIONS_CONSTRAINT)
 from aluminium.solver.brownfield import brownfield
 from aluminium.solver.decommission import decommission
 from aluminium.solver.greenfield import greenfield
@@ -138,6 +139,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         investment_cycle=INVESTMENT_CYCLE,
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,
         constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway],
+        year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
     )
 
     # Optimize asset stack on a yearly basis
