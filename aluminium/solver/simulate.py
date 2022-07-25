@@ -122,7 +122,7 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str):
     pathway = SimulationPathway(
         start_year=START_YEAR,
         end_year=END_YEAR,
-        pathway=pathway_name,
+        pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,
