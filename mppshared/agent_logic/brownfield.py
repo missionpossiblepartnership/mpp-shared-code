@@ -192,7 +192,7 @@ def apply_start_years_brownfield_transitions(
     brownfield_renovation_start_year: int,
     brownfield_rebuild_start_year: int,
 ):
-    if pathway.pathway in ["fa", "lc"]:
+    if pathway.pathway_name in ["fa", "lc"]:
 
         if year < brownfield_renovation_start_year:
             df_rank = df_rank.loc[df_rank["switch_type"] != "brownfield_renovation"]
