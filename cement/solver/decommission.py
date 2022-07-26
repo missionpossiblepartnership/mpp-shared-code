@@ -1,6 +1,6 @@
 """Decommission plants."""
 
-from cement.config.config_cement import LOG_LEVEL, MODEL_SCOPE, PRODUCTS
+from cement.config.config_cement import LOG_LEVEL, MODEL_SCOPE
 from mppshared.agent_logic.decommission import get_best_asset_to_decommission
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
@@ -22,7 +22,7 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
             transitions enacted
     """
 
-    for product in PRODUCTS:
+    for product in pathway.products:
 
         logger.info(f"Running decommission logic for {product}")
 

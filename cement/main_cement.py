@@ -7,7 +7,9 @@ from cement.config.config_cement import (PRODUCTS, RUN_PARALLEL, SECTOR,
                                          SENSITIVITIES, run_config)
 from cement.solver.implicit_forcing import apply_implicit_forcing
 from cement.solver.import_data import import_and_preprocess
+from cement.solver.ranking import make_rankings
 from cement.solver.ranking_inputs import get_ranking_inputs
+from cement.solver.simulate import simulate_pathway
 # Shared imports
 from mppshared.config import LOG_LEVEL
 # Initialize logger
@@ -17,11 +19,11 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 funcs = {
-    "IMPORT_DATA": import_and_preprocess,
-    "CALCULATE_VARIABLES": get_ranking_inputs,
+    # "IMPORT_DATA": import_and_preprocess,
+    # "CALCULATE_VARIABLES": get_ranking_inputs,
     "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    # "MAKE_RANKINGS": make_rankings,
-    # "SIMULATE_PATHWAY": simulate_pathway,
+    "MAKE_RANKINGS": make_rankings,
+    "SIMULATE_PATHWAY": simulate_pathway,
     # "CALCULATE_OUTPUTS": calculate_outputs,
     # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
 }

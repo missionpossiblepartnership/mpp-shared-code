@@ -65,20 +65,20 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         )
 
         # Renovate and rebuild assets (brownfield transition)
-        start = timer()
-        pathway = brownfield(pathway=pathway, year=year)
-        end = timer()
-        logger.debug(
-            f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
-        )
+        # start = timer()
+        # pathway = brownfield(pathway=pathway, year=year)
+        # end = timer()
+        # logger.debug(
+        #     f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
+        # )
 
         # Build new assets
-        start = timer()
-        pathway = greenfield(pathway=pathway, year=year)
-        end = timer()
-        logger.debug(
-            f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
-        )
+        # start = timer()
+        # pathway = greenfield(pathway=pathway, year=year)
+        # end = timer()
+        # logger.debug(
+        #     f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
+        # )
 
     return pathway
 

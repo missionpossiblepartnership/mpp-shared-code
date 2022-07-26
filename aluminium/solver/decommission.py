@@ -1,6 +1,5 @@
 """Decommission plants."""
-from aluminium.config_aluminium import (CUF_LOWER_THRESHOLD, INVESTMENT_CYCLE,
-                                        LOG_LEVEL, MODEL_SCOPE, PRODUCTS)
+from aluminium.config_aluminium import LOG_LEVEL, MODEL_SCOPE
 from mppshared.agent_logic.decommission import get_best_asset_to_decommission
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
@@ -20,7 +19,7 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
         Updated decarbonization pathway with the updated AssetStack in the subsequent year according to the decommission transitions enacted
     """
 
-    for product in PRODUCTS:
+    for product in pathway.products:
 
         logger.info(f"Running decommission logic for {product}")
 
