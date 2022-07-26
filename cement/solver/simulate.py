@@ -86,7 +86,9 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
     return pathway
 
 
-def simulate_pathway(sector: str, pathway_name: str, sensitivity: str):
+def simulate_pathway(
+    sector: str, pathway_name: str, sensitivity: str, products: list
+) -> SimulationPathway:
     """
     Get data per technology, ranking data and then run the pathway simulation
     """
@@ -95,7 +97,7 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str):
         pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
-        products=PRODUCTS,
+        products=products,
     )
 
     # Create carbon budget
@@ -131,7 +133,7 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str):
         pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
-        products=PRODUCTS,
+        products=products,
         rank_types=RANK_TYPES,
         initial_asset_data_level=INITIAL_ASSET_DATA_LEVEL,
         assumed_annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
