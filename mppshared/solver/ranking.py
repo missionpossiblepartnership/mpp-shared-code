@@ -145,6 +145,7 @@ def rank_technology_uncertainty_bins(
         rank_type (str): either of "decommission", "brownfield", "greenfield"
         pathway (str): pathway for which to create the ranking, either of "lc", "bau", "fa"
         cost_metric (str): cost metric used for the ranking
+        cost_metric_relative_uncertainty (str):
         ranking_config (dict): weights for cost and emissions, keys are "cost" and "emissions"
         emission_scopes_ranking: use these emission scopes for the emission part of the ranking
         ghgs_ranking: use these GHGS for the emission part of the ranking
@@ -175,13 +176,14 @@ def rank_technology_uncertainty_bins(
 def _create_ranking_uncertainty_bins(
     df: pd.DataFrame,
     cost_metric: str,
-    cost_uncertainty: float,
+    cost_metric_relative_uncertainty: float,
     ranking_config: dict,
     pathway: str,
     emission_scopes_ranking: list,
     ghgs_ranking: list,
 ):
-    """Calculate rank scores using a histogram-based binning methodology where the number of bins is derived from the relative uncertainty of the cost metric."""
+    """Calculate rank scores using a histogram-based binning methodology where the number of bins is derived from the
+        relative uncertainty of the cost metric."""
 
     # Normalize cost metric
     logger.debug(f"Normalizing {cost_metric}")
@@ -198,7 +200,8 @@ def _create_ranking_uncertainty_bins(
     logger.debug("Summing emissions delta")
     df["sum_emissions_delta"] = df[col_list].sum(axis=1)
 
-    # Normalize the sum of emission reductions (assumes that emissions have no uncertainty): 1 corresponds to lowest reduction, 0 to highest reduction
+    # Normalize the sum of emission reductions (assumes that emissions have no uncertainty): 1 corresponds to lowest
+    #   reduction, 0 to highest reduction
     # Reverse sign so that emissions reduction is destination - origin technology (smallest value is best)
     df["sum_emissions_delta"] = -df["sum_emissions_delta"]
     df["emissions_delta_normalized"] = (
@@ -214,7 +217,7 @@ def _create_ranking_uncertainty_bins(
 
     if pathway in ["lc", "bau"]:
         # Calculate number of bins
-        bin_interval = cost_uncertainty * df[cost_metric].min()
+        bin_interval = cost_metric_relative_uncertainty * df[cost_metric].min()
         bin_range = df[cost_metric].max() - df[cost_metric].min()
 
         if (bin_range != 0) & (bin_interval != 0):

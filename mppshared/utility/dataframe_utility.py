@@ -5,12 +5,13 @@ from typing import List
 import numpy as np
 import pandas as pd
 
-from mppshared.config import PKL_DATA_INTERMEDIATE
+from mppshared.config import LOG_LEVEL, PKL_DATA_INTERMEDIATE
 from mppshared.utility.file_handling_utility import read_pickle_folder
 from mppshared.utility.location_utility import get_region_from_country_code
 from mppshared.utility.log_utility import get_logger
 
-logger = get_logger("DataFrame Utility")
+logger = get_logger(__name__)
+logger.setLevel(LOG_LEVEL)
 
 
 def create_line_through_points(
@@ -339,3 +340,73 @@ def make_multi_df(df: pd.DataFrame, name: str) -> pd.DataFrame:
 def get_emission_columns(ghgs: list, scopes: list) -> list:
     """Get list of emissions columns for specified GHGs and emission scopes"""
     return [f"{ghg}_{scope}" for scope in scopes for ghg in ghgs]
+
+
+def explode_rows_for_all_products(df: pd.DataFrame) -> pd.DataFrame:
+    """Explode rows with entry "All products" in column "product" to all products.
+
+    Args:
+        df (pd.DataFrame): contains column "product"
+
+    Returns:
+        pd.DataFrame: contains column "product" where entries are only in PRODUCTS
+    """
+
+    df["product"] = df["product"].astype(object)
+    df = df.reset_index(drop=True)
+
+    # TODO: improve with a more elegant solution
+    for i in df.loc[df["product"] == "All products"].index:
+        df.at[i, "product"] = PRODUCTS[SECTOR]
+
+    df = df.explode("product")
+
+    return df
+
+
+def set_datatypes(df: pd.DataFrame, datatypes_per_column: dict) -> pd.DataFrame:
+    """
+
+    Args:
+        df ():
+        datatypes_per_column (): dict with df's column names as keys and their datatypes as values
+
+    Returns:
+
+    """
+    # get relevant columns and their types
+    datatypes = {k: v for k, v in datatypes_per_column.items() if k in list(df)}
+    # set datatypes
+    df = df.astype(
+        dtype=datatypes,
+        errors="ignore",
+    )
+
+    return df
+
+
+def df_dict_to_df(df_dict: dict) -> pd.DataFrame:
+    """
+    Converts a dict of dataframes with the same index to one dataframe with a distinct value column for all dataframes
+        in the dict
+
+    Args:
+        df_dict (): dict of dataframes with the same index and one "value" column
+
+    Returns:
+        df (pd.DataFrame): df with all the dfs in df_dict as columns
+    """
+
+    df_list = []
+    for key in df_dict.keys():
+        # make sure that df only includes one value column
+        assert (
+            df_dict[key].shape[1] == 1
+        ), f"df_dict{key} has more than one value column. Cannot convert to dataframe."
+        # convert
+        df_append = df_dict[key].rename(columns={"value": f"value_{key}"})
+        df_list.append(df_append)
+
+    df = pd.concat(objs=df_list, axis=1)
+
+    return df

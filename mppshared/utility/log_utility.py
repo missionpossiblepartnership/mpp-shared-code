@@ -2,7 +2,6 @@
 
 import logging
 import os
-import sys
 from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
@@ -16,7 +15,7 @@ LOG_FORMATTER = logging.Formatter(
 )
 
 
-def get_console_handler() -> logging.StreamHandler:
+def get_console_handler() -> RichHandler:
     """Formats the log for console output.
 
     Returns:
