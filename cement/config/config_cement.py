@@ -66,11 +66,7 @@ TECHNOLOGY_MORATORIUM = 2030
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
 TRANSITIONAL_PERIOD_YEARS = 20
 # Emission scopes included in data analysis
-EMISSION_SCOPES = [
-    "scope_1",
-    "scope_2",
-    "scope_3_upstream"
-]
+EMISSION_SCOPES = ["scope_1", "scope_2", "scope_3_upstream"]
 # Emissions
 GHGS = ["co2e"]
 
@@ -114,7 +110,7 @@ LIST_TECHNOLOGIES = [
 
 ### RANKING OF TECHNOLOGY SWITCHES ###
 RANKING_COST_METRIC = "lcox"
-BIN_METHODOLOGY = "uncertainty"     # options: "histogram" or "uncertainty"
+BIN_METHODOLOGY = "uncertainty"  # options: "histogram" or "uncertainty"
 COST_METRIC_RELATIVE_UNCERTAINTY = 0.05
 NUMBER_OF_BINS_RANKING = 50
 GHGS_RANKING = ["co2e"]
@@ -130,14 +126,10 @@ TRANSITION_TYPES = {
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 
 # set of cost classifications
-COST_CLASSIFICATIONS = {
-    "low": "Low",
-    "standard": "Standard",
-    "high": "High"
-}
+COST_CLASSIFICATIONS = {"low": "Low", "standard": "Standard", "high": "High"}
 
 CARBON_BUDGET_SECTOR_CSV = True
-CARBON_BUDGET_SHAPE = "linear"      # options: todo
+CARBON_BUDGET_SHAPE = "linear"  # options: todo
 
 residual_share = 0.05
 emissions_2020 = 0.62  # Gt CO2 (scope 1 and 2)
@@ -203,4 +195,10 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "maximum_asset_additions": 6,  # 10
     "maximum_capacity_growth_rate": 0.5,  # 0.25
     "years_rampup_phase": 8,  # 5
+}
+CONSTRAINTS_TO_APPLY = {
+    "bau": [None],
+    "cc": [None],
+    "lc": [None],
+    "fa": [None],
 }
