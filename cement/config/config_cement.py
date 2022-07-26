@@ -117,8 +117,8 @@ RANKING_COST_METRIC = "lcox"
 BIN_METHODOLOGY = "uncertainty"     # options: "histogram" or "uncertainty"
 COST_METRIC_RELATIVE_UNCERTAINTY = 0.05
 NUMBER_OF_BINS_RANKING = 50
-GHGS_RANKING = ["co2"]
-EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3up"]
+GHGS_RANKING = ["co2e"]
+EMISSION_SCOPES_RANKING = ["scope_1", "scope_2", "scope_3_upstream"]
 
 TRANSITION_TYPES = {
     "greenfield": "Greenfield",
@@ -166,10 +166,6 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
-        "cc": {
-            "cost": 1.0,
-            "emissions": 0.0,
-        },
     },
     "brownfield": {
         "bau": {
@@ -184,10 +180,6 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
-        "cc": {
-            "cost": 1.0,
-            "emissions": 0.0,
-        },
     },
     "decommission": {
         "bau": {
@@ -201,10 +193,6 @@ RANKING_CONFIG = {
         "lc": {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
-        },
-        "cc": {
-            "cost": 1.0,
-            "emissions": 0.0,
         },
     },
 }
