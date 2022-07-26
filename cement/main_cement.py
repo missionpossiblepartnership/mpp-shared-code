@@ -3,9 +3,11 @@
 # Library imports
 import multiprocessing as mp
 
-from aluminium.config_aluminium import (RUN_PARALLEL, SECTOR, SENSITIVITIES,
-                                        run_config)
-from aluminium.solver.implicit_forcing import apply_implicit_forcing
+from cement.config.config_cement import (PRODUCTS, RUN_PARALLEL, SECTOR,
+                                         SENSITIVITIES, run_config)
+from cement.solver.implicit_forcing import apply_implicit_forcing
+from cement.solver.import_data import import_and_preprocess
+from cement.solver.ranking_inputs import get_ranking_inputs
 # Shared imports
 from mppshared.config import LOG_LEVEL
 # Initialize logger
@@ -15,6 +17,8 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 funcs = {
+    "IMPORT_DATA": import_and_preprocess,
+    "CALCULATE_VARIABLES": get_ranking_inputs,
     "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     # "MAKE_RANKINGS": make_rankings,
     # "SIMULATE_PATHWAY": simulate_pathway,
@@ -33,6 +37,7 @@ def _run_model(pathway, sensitivity):
                 pathway=pathway,
                 sensitivity=sensitivity,
                 sector=SECTOR,
+                products=PRODUCTS,
             )
 
 

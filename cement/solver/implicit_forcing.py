@@ -6,8 +6,9 @@ import pandas as pd
 # Shared code imports
 from cement.config.config_cement import (EMISSION_SCOPES, GHGS,
                                          PATHWAYS_WITH_TECHNOLOGY_MORATORIUM,
-                                         PRODUCTS, TECHNOLOGY_MORATORIUM,
+                                         TECHNOLOGY_MORATORIUM,
                                          TRANSITIONAL_PERIOD_YEARS)
+from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.solver.implicit_forcing import (
     add_technology_classification_to_switching_table,
@@ -17,15 +18,17 @@ from mppshared.solver.implicit_forcing import (
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
+logger.setLevel(LOG_LEVEL)
 
 
-def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str):
+def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str, products: list):
     """Apply the implicit forcing mechanisms to the input tables.
 
     Args:
         pathway: either of "bau", "fa", "lc", "cc"
         sensitivity: in ALL_SENSITIVITIES
         sector:
+        products:
 
     Returns:
         pd.DataFrame: DataFrame ready for ranking the technology switches
@@ -37,7 +40,7 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str):
         pathway=pathway,
         sensitivity=sensitivity,
         sector=sector,
-        products=PRODUCTS,
+        products=products,
     )
 
     df_technology_switches = importer.get_technology_transitions_and_cost()

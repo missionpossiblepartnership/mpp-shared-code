@@ -17,7 +17,19 @@ SCOPES_CO2_COST = [
 ]
 
 ### RUN CONFIGURATION ###
-RUN_PARALLEL = True
+run_config = {
+    "IMPORT_DATA",
+    "CALCULATE_VARIABLES",
+    "APPLY_IMPLICIT_FORCING",
+    "MAKE_RANKINGS",
+    "SIMULATE_PATHWAY",
+    "CALCULATE_OUTPUTS",
+    "CREATE_DEBUGGING_OUTPUTS",
+    # "EXPORT_OUTPUTS",
+    # "PLOT_AVAILABILITIES"
+    # "MERGE_OUTPUTS"
+}
+RUN_PARALLEL = False
 APPLY_CARBON_COST = True
 
 ### MODEL DECISION PARAMETERS ###
@@ -30,10 +42,10 @@ ALL_SENSITIVITIES = [
     "def",
 ]
 SENSITIVITIES = {
-    # "bau": ["def"],  # ALL_SENSITIVITIES,
+    "bau": ["def"],  # ALL_SENSITIVITIES,
     # "cc": ["def"],  # ALL_SENSITIVITIES,
     # "fa": ["def"],
-    "lc": ["def"]  # ALL_SENSITIVITIES,
+    # "lc": ["def"]  # ALL_SENSITIVITIES,
 }
 INVESTMENT_CYCLE = 10  # years
 CUF_LOWER_THRESHOLD = 0.6
