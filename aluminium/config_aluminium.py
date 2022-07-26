@@ -39,6 +39,27 @@ START_YEAR = 2020
 END_YEAR = 2050
 MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
+
+REGIONAL_PRODUCTION_SHARES = {
+    "China - North": 0.3,
+    "China - North West": 0.3,
+    "China - North East": 0.3,
+    "China - Central": 0.3,
+    "China - South": 0.3,
+    "China - East": 0.3,
+    "Rest of Asia": 0.75,
+    "North America": 0.75,
+    "Russia": 0.75,
+    "Rest of Europe": 0.75,
+    "Middle East": 0.75,
+    "Africa": 0.75,
+    "South America": 0.75,
+    "Oceania": 0.75,
+    "Canada": 0.75,
+    "Scandinavia": 0.75,
+    "US": 0.75,
+}
+
 # Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
 ALL_SENSITIVITIES = [
     "def",
@@ -177,6 +198,16 @@ RANKING_CONFIG = {
 }
 
 ### CONSTRAINTS ###
+
+CONSTRAINTS_TO_APPLY = {
+    "bau": [None],
+    "cc": ["rampup_constraint"],
+    "lc": ["emissions_constraint", "rampup_constraint"],
+    "fa": ["emissions_constraint", "rampup_constraint"],
+}
+
+YEAR_2050_EMISSIONS_CONSTRAINT = 2050
+
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "maximum_asset_additions": 6,  # 10

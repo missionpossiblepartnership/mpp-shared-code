@@ -137,15 +137,12 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         )
 
         # Check constraints with tentative new stack
-        # TODO: uncomment when constraints are implemented
-        # dict_constraints = check_constraints(
-        #     pathway=pathway,
-        #     stack=tentative_stack,
-        #     year=year,
-        #     transition_type="brownfield",
-        # )
-        # TODO: Remove dictionary when constraints are implemented
-        dict_constraints = {"emissions_constraint": True, "rampup_constraint": True}
+        dict_constraints = check_constraints(
+            pathway=pathway,
+            stack=tentative_stack,
+            year=year,
+            transition_type="brownfield",
+        )
         # If no constraint is hurt, execute the brownfield transition
         if (
             (dict_constraints["emissions_constraint"] == True)
@@ -170,7 +167,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
         # If the emissions constraint and/or the technology ramp-up constraint is hurt, remove remove that destination technology from the ranking table and try again
         elif dict_constraints["emissions_constraint"] == False:
-            logger.debug(
+            logger.info(
                 f"Emissions constraint hurt for {origin_technology} -> {new_technology}"
             )
             if origin_technology != new_technology:

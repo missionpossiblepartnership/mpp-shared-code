@@ -6,12 +6,18 @@ from timeit import default_timer as timer
 from ammonia.config_ammonia import (ANNUAL_RENOVATION_SHARE,
                                     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                                     CARBON_BUDGET_SECTOR_CSV,
-                                    CUF_LOWER_THRESHOLD, CUF_UPPER_THRESHOLD,
-                                    EMISSION_SCOPES, END_YEAR, GHGS,
-                                    INITIAL_ASSET_DATA_LEVEL, INVESTMENT_CYCLE,
-                                    LOG_LEVEL, PRODUCTS, RANK_TYPES,
-                                    SECTORAL_CARBON_PATHWAY, START_YEAR,
-                                    TECHNOLOGY_RAMP_UP_CONSTRAINT)
+                                    CO2_STORAGE_CONSTRAINT_CUMULATIVE,
+                                    CONSTRAINTS_TO_APPLY, CUF_LOWER_THRESHOLD,
+                                    CUF_UPPER_THRESHOLD, EMISSION_SCOPES,
+                                    END_YEAR, GHGS, INITIAL_ASSET_DATA_LEVEL,
+                                    INVESTMENT_CYCLE, LOG_LEVEL,
+                                    MAXIMUM_GLOBAL_DEMAND_SHARE, PRODUCTS,
+                                    RANK_TYPES, REGIONAL_PRODUCTION_SHARES,
+                                    SECTORAL_CARBON_PATHWAY,
+                                    SET_CO2_STORAGE_CONSTRAINT, START_YEAR,
+                                    TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE,
+                                    TECHNOLOGY_RAMP_UP_CONSTRAINT,
+                                    YEAR_2050_EMISSIONS_CONSTRAINT)
 from ammonia.solver.brownfield import brownfield
 from ammonia.solver.decommission import decommission
 from ammonia.solver.greenfield import greenfield
@@ -139,8 +145,15 @@ def simulate_pathway(
         cuf_lower_threshold=CUF_LOWER_THRESHOLD,
         cuf_upper_threshold=CUF_UPPER_THRESHOLD,
         ghgs=GHGS,
+        regional_production_shares=REGIONAL_PRODUCTION_SHARES,
+        constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway],
+        year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
         investment_cycle=INVESTMENT_CYCLE,
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,
+        technologies_maximum_global_demand_share=TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE,
+        maximum_global_demand_share=MAXIMUM_GLOBAL_DEMAND_SHARE,
+        set_co2_storage_constraint=SET_CO2_STORAGE_CONSTRAINT,
+        co2_storage_constraint_cumulative=CO2_STORAGE_CONSTRAINT_CUMULATIVE,
     )
 
     # Optimize asset stack on a yearly basis

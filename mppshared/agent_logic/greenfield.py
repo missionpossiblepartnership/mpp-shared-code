@@ -12,7 +12,8 @@ from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY, LOG_LEVEL,
                               MAP_LOW_COST_POWER_REGIONS, MODEL_SCOPE)
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
-    get_regional_production_constraint_table, hydro_constraints)
+    check_constraints, get_regional_production_constraint_table,
+    hydro_constraints)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 
@@ -201,19 +202,12 @@ def select_asset_for_greenfield(
         tentative_stack = deepcopy(stack)
         tentative_stack.append(new_asset)
 
-        # TODO: Remove comment after modifying constraints to work with all the sectors/pathways
-        # TODO: Remove hardcoded dictionary to use the one from the constraints
-        dict_constraints = {
-            "emissions_constraint": True,
-            "rampup_constraint": True,
-            "flag_residual": False,
-        }
-        # dict_constraints = check_constraints(
-        #     pathway=pathway,
-        #     stack=tentative_stack,
-        #     year=year,
-        #     transition_type="greenfield",
-        # )
+        dict_constraints = check_constraints(
+            pathway=pathway,
+            stack=tentative_stack,
+            year=year,
+            transition_type="greenfield",
+        )
 
         # Asset can be created if no constraint hurt
         if (dict_constraints["emissions_constraint"] == True) & (

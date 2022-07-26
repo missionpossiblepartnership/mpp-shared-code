@@ -49,7 +49,14 @@ class SimulationPathway:
         ghgs: list,
         investment_cycle: int,
         annual_renovation_share: float,
+        regional_production_shares: dict,
+        constraints_to_apply: list,
+        year_2050_emissions_constraint: int,
+        set_co2_storage_constraint: bool = False,
+        co2_storage_constraint_cumulative: bool = False,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
+        technologies_maximum_global_demand_share: list = None,
+        maximum_global_demand_share: dict = None,
     ):
         # Attributes describing the pathway
         self.start_year = start_year
@@ -66,6 +73,13 @@ class SimulationPathway:
         self.cuf_upper_threshold = cuf_upper_threshold
         self.annual_renovation_share = annual_renovation_share
         self.ghgs = ghgs
+        self.regional_production_shares = regional_production_shares
+        self.constraints_to_apply = constraints_to_apply
+        self.year_2050_emissions_constraint = year_2050_emissions_constraint
+        self.technologies_maximum_global_demand_share = (
+            technologies_maximum_global_demand_share
+        )
+        self.maximum_global_demand_share = maximum_global_demand_share
 
         # Carbon Budget (already initialized with emissions pathway)
         self.carbon_budget = carbon_budget
@@ -82,6 +96,11 @@ class SimulationPathway:
             carbon_cost_trajectory=carbon_cost_trajectory,
         )
         self.carbon_cost_trajectory = carbon_cost_trajectory
+
+        if set_co2_storage_constraint:
+            # Import CO2 storage constraint data
+            self.co2_storage_constraint = self.importer.get_co2_storage_constraint()
+            self.co2_storage_constraint_cumulative = co2_storage_constraint_cumulative
 
         self.assumed_annual_production_capacity = assumed_annual_production_capacity
 
@@ -305,6 +324,7 @@ class SimulationPathway:
 
         """
         df = self.demand
+        logger.debug(f"Getting demand for {product} in {year} in {region}")
         return df.loc[
             (df["product"] == product)
             & (df["year"] == year)
