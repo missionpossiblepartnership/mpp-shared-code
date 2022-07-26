@@ -15,7 +15,7 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def calculate_cost_metrics(
+def calculate_tech_transitions(
     # parameters
     sector: str,
     model_years: np.ndarray,
@@ -43,7 +43,7 @@ def calculate_cost_metrics(
     df_lifetime: pd.DataFrame,
     df_capture_rate: pd.DataFrame,
     list_technologies: list,
-) -> dict:
+) -> pd.DataFrame:
     """
     Calculate all cost metrics for each technology switch for use in the technology ranking.
     Calculated variables:
@@ -125,7 +125,8 @@ def calculate_cost_metrics(
 
     # LCOX
     logger.info("Calculate LCOX")
-    if sector == "cement":
+    # todo: uncomment (this takes some minutes, therefore the workaround with the csv import below)
+    """if sector == "cement":
         dict_lcox = _get_lcox(
             df_switch_capex=df_switch_capex,
             df_opex_fixed=df_opex_fixed,
@@ -139,12 +140,17 @@ def calculate_cost_metrics(
             dict_lcox[key].rename(columns={"lcox": "value"}, inplace=True)
     else:
         # placeholder
-        df_lcox = pd.DataFrame()
+        df_lcox = pd.DataFrame()"""
 
     if sector == "cement":
         # convert dicts to dfs
         df_opex_variable = df_dict_to_df(df_dict=dict_opex_variable)
-        df_lcox = df_dict_to_df(df_dict=dict_lcox)
+        # todo: dev
+        # df_lcox = df_dict_to_df(df_dict=dict_lcox)
+        df_lcox = pd.read_csv(
+            "C:/Users/TimonRueckel/PycharmProjects/mpp-shared-code/cement/data/bau/def/intermediate/lcox.csv"
+        ).set_index(IDX_TECH_RANKING_COLUMNS)
+        # todo: dev
 
     # add all outputs to dict
     # todo: add missing dataframes
@@ -157,7 +163,37 @@ def calculate_cost_metrics(
         "marginal_cost": None,
     }
 
-    return dict_cost_metrics
+    # compose technology_transitions dataframe
+    df_list = []
+    column_name_opex_context = "opex_context"
+    for cost_metric in [
+        x for x in dict_cost_metrics.keys() if x not in ["opex_fixed", "opex_variable"]
+    ]:
+        if dict_cost_metrics[cost_metric] is not None:
+            if len(list(dict_cost_metrics[cost_metric])) > 1:
+                # wide to long by adding opex_context column if there are different, opex_context-dependent cost values
+                df_temp = pd.melt(
+                    frame=dict_cost_metrics[cost_metric].reset_index(),
+                    id_vars=IDX_TECH_RANKING_COLUMNS,
+                    value_vars=list(dict_cost_metrics[cost_metric]),
+                    var_name=column_name_opex_context,
+                    value_name=cost_metric,
+                )
+                df_temp = df_temp.set_index(keys=IDX_TECH_RANKING_COLUMNS).sort_index()
+                df_list.append(df_temp)
+            else:
+                df_temp = dict_cost_metrics[cost_metric].copy()
+                df_temp.rename(columns={list(df_temp)[0]: cost_metric}, inplace=True)
+                df_list.append(df_temp)
+    df_tech_transitions = pd.concat(df_list, axis=1)
+    if column_name_opex_context in list(df_tech_transitions):
+        df_tech_transitions = (
+            df_tech_transitions.reset_index()
+            .set_index(keys=IDX_TECH_RANKING_COLUMNS + [column_name_opex_context])
+            .sort_index()
+        )
+
+    return df_tech_transitions
 
 
 # private functions (main)

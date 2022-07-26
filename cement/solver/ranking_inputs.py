@@ -1,37 +1,23 @@
 """Create inputs for ranking of technology switches (cost metrics, emissions, and technology characteristics)."""
 
-from cement.config.config_cement import (
-    COST_CLASSIFICATIONS,
-    LIST_TECHNOLOGIES,
-    MODEL_YEARS,
-    REGIONS,
-    TRANSITION_TYPES,
-)
-from cement.config.dataframe_config_cement import (
-    DF_DATATYPES_PER_COLUMN,
-    IDX_PER_INPUT_METRIC,
-)
+from cement.config.config_cement import (COST_CLASSIFICATIONS,
+                                         LIST_TECHNOLOGIES, MODEL_YEARS,
+                                         REGIONS, TRANSITION_TYPES)
+from cement.config.dataframe_config_cement import (DF_DATATYPES_PER_COLUMN,
+                                                   IDX_PER_INPUT_METRIC)
 from cement.config.import_config_cement import (
-    EXCEL_COLUMN_RANGES,
-    HEADER_BUSINESS_CASE_EXCEL,
-    INPUT_METRICS,
-    INPUT_SHEETS,
-    MAP_SWITCH_TYPES_TO_CAPEX_TYPE,
-    OPEX_CCUS_CONTEXT_METRICS,
-    OPEX_CCUS_EMISSIVITY_METRIC_TYPES,
-    OPEX_CCUS_EMISSIVITY_METRICS,
-    OPEX_CCUS_PROCESS_METRICS,
-    OPEX_ENERGY_METRICS,
-    OPEX_MATERIALS_METRICS,
-)
+    EXCEL_COLUMN_RANGES, HEADER_BUSINESS_CASE_EXCEL, INPUT_METRICS,
+    INPUT_SHEETS, MAP_SWITCH_TYPES_TO_CAPEX_TYPE, OPEX_CCUS_CONTEXT_METRICS,
+    OPEX_CCUS_EMISSIVITY_METRIC_TYPES, OPEX_CCUS_EMISSIVITY_METRICS,
+    OPEX_CCUS_PROCESS_METRICS, OPEX_ENERGY_METRICS, OPEX_MATERIALS_METRICS)
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.import_data import get_tech_switches
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.import_data.preprocess_cost_metrics import calculate_cost_metrics
+from mppshared.import_data.preprocess_cost_metrics import \
+    calculate_tech_transitions
 from mppshared.import_data.preprocess_emissions import calculate_emissions
-from mppshared.import_data.preprocess_tech_characteristics import (
-    get_tech_characteristics,
-)
+from mppshared.import_data.preprocess_tech_characteristics import \
+    get_tech_characteristics
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -56,7 +42,7 @@ def get_ranking_inputs(pathway: str, sensitivity: str, sector: str, products: li
     )
 
     # get cost metrics
-    dict_cost_metrics = calculate_cost_metrics(
+    df_tech_transitions = calculate_tech_transitions(
         # parameters
         sector=sector,
         model_years=MODEL_YEARS,
@@ -96,13 +82,11 @@ def get_ranking_inputs(pathway: str, sensitivity: str, sector: str, products: li
         df_capture_rate=imported_input_data["capture_rate"],
     )
     # export
-    for cost_metric in dict_cost_metrics.keys():
-        if dict_cost_metrics[cost_metric] is not None:
-            importer.export_data(
-                df=dict_cost_metrics[cost_metric],
-                filename=f"{cost_metric}.csv",
-                export_dir="intermediate",
-            )
+    importer.export_data(
+        df=df_tech_transitions,
+        filename="technology_transitions.csv",
+        export_dir="intermediate",
+    )
 
     # get emissions
     df_emissions = calculate_emissions(
