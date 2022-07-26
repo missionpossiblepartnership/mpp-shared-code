@@ -128,7 +128,7 @@ RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 # set of cost classifications
 COST_CLASSIFICATIONS = {"low": "Low", "standard": "Standard", "high": "High"}
 
-CARBON_BUDGET_SECTOR_CSV = True
+CARBON_BUDGET_SECTOR_CSV = False
 CARBON_BUDGET_SHAPE = "linear"  # options: todo
 
 residual_share = 0.05
