@@ -170,6 +170,7 @@ def rank_technology_uncertainty_bins(
         emission_scopes_ranking,
         ghgs_ranking,
     )
+    logger.info(f"Ranking for {rank_type} done")
 
     return df
 
@@ -218,11 +219,22 @@ def _create_ranking_uncertainty_bins(
 
     if pathway in ["lc", "bau"]:
         # Calculate number of bins
-        bin_interval = cost_metric_relative_uncertainty * df[cost_metric].min()
+        # get the minimum value of the cost metric and add the requiered positive value to move all the values to positive numbers
+        # This is a hack to make the code work if we have negative values
+        if df[cost_metric].min() < 0:
+            df[f"{cost_metric}_positive"] = df[cost_metric] + abs(df[cost_metric].min())
+            bin_interval = (
+                cost_metric_relative_uncertainty * df[f"{cost_metric}_positive"].min()
+            )
+        else:
+            bin_interval = cost_metric_relative_uncertainty * df[cost_metric].min()
         bin_range = df[cost_metric].max() - df[cost_metric].min()
+        logger.debug(f"Bin interval: {bin_interval}")
+        logger.debug(f"Bin range: {bin_range}")
 
         if (bin_range != 0) & (bin_interval != 0):
             n_bins = int(bin_range / bin_interval)
+            logger.debug(f"Number of bins: {n_bins}")
 
             # Bin the rank scores
             _, bins = np.histogram(df["rank_raw"], bins=n_bins)
