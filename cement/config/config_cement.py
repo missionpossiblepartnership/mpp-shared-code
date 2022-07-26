@@ -190,6 +190,7 @@ RANKING_CONFIG = {
 }
 
 ### CONSTRAINTS ###
+YEAR_2050_EMISSIONS_CONSTRAINT = False
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "maximum_asset_additions": 6,  # 10
