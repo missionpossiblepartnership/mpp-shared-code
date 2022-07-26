@@ -29,14 +29,14 @@ funcs = {
 }
 
 
-def _run_model(pathway, sensitivity):
+def _run_model(pathway_name, sensitivity):
     for name, func in funcs.items():
         if name in run_config:
             logger.info(
-                f"Running pathway {pathway} sensitivity {sensitivity} section {name}"
+                f"Running pathway {pathway_name} sensitivity {sensitivity} section {name}"
             )
             func(
-                pathway=pathway,
+                pathway_name=pathway_name,
                 sensitivity=sensitivity,
                 sector=SECTOR,
                 products=PRODUCTS,
@@ -45,8 +45,8 @@ def _run_model(pathway, sensitivity):
 
 def run_model_sequential(runs):
     """Run model sequentially, slower but better for debugging"""
-    for pathway, sensitivity in runs:
-        _run_model(pathway=pathway, sensitivity=sensitivity)
+    for pathway_name, sensitivity in runs:
+        _run_model(pathway_name=pathway_name, sensitivity=sensitivity)
 
 
 def run_model_parallel(runs):
