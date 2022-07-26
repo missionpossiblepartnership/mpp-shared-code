@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 from mppshared.calculate.calculate_cost import discount_costs
+from mppshared.utility.dataframe_utility import add_column_header_suffix
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
