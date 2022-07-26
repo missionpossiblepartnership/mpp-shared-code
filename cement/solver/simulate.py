@@ -9,14 +9,17 @@ from cement.config.config_cement import (ANNUAL_RENOVATION_SHARE,
                                          ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                                          CARBON_BUDGET_SECTOR_CSV,
                                          CARBON_BUDGET_SHAPE,
+                                         CONSTRAINTS_TO_APPLY,
                                          CUF_LOWER_THRESHOLD,
                                          CUF_UPPER_THRESHOLD, EMISSION_SCOPES,
                                          END_YEAR, GHGS,
                                          INITIAL_ASSET_DATA_LEVEL,
                                          INVESTMENT_CYCLE, LOG_LEVEL, PRODUCTS,
-                                         RANK_TYPES, SECTORAL_CARBON_PATHWAY,
-                                         START_YEAR,
-                                         TECHNOLOGY_RAMP_UP_CONSTRAINT)
+                                         RANK_TYPES,
+                                         REGIONAL_PRODUCTION_SHARES,
+                                         SECTORAL_CARBON_PATHWAY, START_YEAR,
+                                         TECHNOLOGY_RAMP_UP_CONSTRAINT,
+                                         YEAR_2050_EMISSIONS_CONSTRAINT)
 from cement.solver.brownfield import brownfield
 from cement.solver.decommission import decommission
 from cement.solver.greenfield import greenfield
@@ -83,13 +86,13 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
     return pathway
 
 
-def simulate_pathway(sector: str, pathway: str, sensitivity: str):
+def simulate_pathway(sector: str, pathway_name: str, sensitivity: str):
     """
     Get data per technology, ranking data and then run the pathway simulation
     """
 
     importer = IntermediateDataImporter(
-        pathway=pathway,
+        pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,
@@ -125,7 +128,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
     pathway = SimulationPathway(
         start_year=START_YEAR,
         end_year=END_YEAR,
-        pathway=pathway,
+        pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,
@@ -138,8 +141,11 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         cuf_lower_threshold=CUF_LOWER_THRESHOLD,
         cuf_upper_threshold=CUF_UPPER_THRESHOLD,
         ghgs=GHGS,
+        regional_production_shares=REGIONAL_PRODUCTION_SHARES,
         investment_cycle=INVESTMENT_CYCLE,
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,
+        constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],
+        year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
     )
 
     # Optimize asset stack on a yearly basis
