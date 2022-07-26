@@ -233,12 +233,9 @@ def _create_ranking_uncertainty_bins(
         else:
             bin_interval = cost_metric_relative_uncertainty * df[cost_metric].min()
         bin_range = df[cost_metric].max() - df[cost_metric].min()
-        logger.debug(f"Bin interval: {bin_interval}")
-        logger.debug(f"Bin range: {bin_range}")
 
         if (bin_range != 0) & (bin_interval != 0):
             n_bins = int(bin_range / bin_interval)
-            logger.debug(f"Number of bins: {n_bins}")
 
             # Bin the rank scores
             _, bins = np.histogram(df["rank_raw"], bins=n_bins)
