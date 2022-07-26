@@ -50,8 +50,8 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     df_rank=df_rank,
                     product=product,
                     year=year,
-                    cuf_lower_threshold=CUF_LOWER_THRESHOLD,
-                    minimum_decommission_age=INVESTMENT_CYCLE,
+                    cuf_lower_threshold=pathway.cuf_lower_threshold,
+                    minimum_decommission_age=pathway.investment_cycle,
                 )
 
                 # TODO: check if removing this asset violates any constraints
