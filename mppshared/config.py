@@ -555,10 +555,10 @@ IDX_TECH_RANKING_COLUMNS = [
 ]
 
 # index for emissivity data
-IDX_EMISSIVITY = ["product", "year", "region", "technology_destination"]
+IDX_EMISSIVITY = ["product", "year", "region", "technology"]
 
 # index for technology characteristics
-IDX_TECH_CHARACTERISTICS = ["product", "year", "region", "technology_destination"]
+IDX_TECH_CHARACTERISTICS = ["product", "year", "region", "technology"]
 
 # Renaming of columns to follow naming convention
 MAP_COLUMN_NAMES = {

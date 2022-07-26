@@ -34,9 +34,14 @@ def calculate_emissions(
     """
 
     dict_emissivity = dict_emissivity.copy()
-    idx_emissivity_precursor = [
-        x for x in IDX_EMISSIVITY if x != "technology_destination"
-    ] + ["metric", "ghg"]
+    idx_emissivity_precursor_raw = [x for x in IDX_EMISSIVITY if x != "technology"] + [
+        "metric",
+        "ghg",
+    ]
+    idx_emissivity_precursor = IDX_EMISSIVITY.copy()
+    idx_emissivity_precursor[
+        idx_emissivity_precursor.index("technology")
+    ] = "technology_destination"
 
     df_inputs_energy = df_inputs_energy.copy().droplevel("unit")
     df_capture_rate = df_capture_rate.copy().droplevel(["metric", "unit"])
@@ -46,7 +51,7 @@ def calculate_emissions(
     df_scope_1 = _filter_emissivity_data_by_scope(
         dict_emissivity=dict_emissivity,
         scope="1",
-        idx_emissivity=idx_emissivity_precursor,
+        idx_emissivity=idx_emissivity_precursor_raw,
     )
 
     if sector == "cement":
@@ -55,11 +60,11 @@ def calculate_emissions(
         df_scope_1.reset_index(inplace=True)
         df_scope_1_process = df_scope_1.loc[
             df_scope_1["metric"] == "Calcination process emissions", :
-        ].set_index(idx_emissivity_precursor)
+        ].set_index(idx_emissivity_precursor_raw)
         # unit df_scope_1_process: [t CO2 / t Clk]
         df_scope_1_energy = df_scope_1.loc[
             df_scope_1["metric"] != "Calcination process emissions", :
-        ].set_index(idx_emissivity_precursor)
+        ].set_index(idx_emissivity_precursor_raw)
         # unit df_scope_1_energy: [t CO2 / GJ]
 
         # extend df_scope_1_process to all regions
@@ -72,7 +77,7 @@ def calculate_emissions(
         # unit df_scope_1_process: [t CO2 / t Clk]
 
         df_scope_1 = pd.concat([df_scope_1_energy, df_scope_1_process]).sort_index()
-        df_scope_1 = df_scope_1.groupby(IDX_EMISSIVITY + ["ghg"]).sum()
+        df_scope_1 = df_scope_1.groupby(idx_emissivity_precursor + ["ghg"]).sum()
 
         # get captured emissions (WARNING: only for CO2!)
         df_scope_1_captured = df_scope_1.copy().mul(df_capture_rate)
@@ -90,12 +95,14 @@ def calculate_emissions(
     df_scope_2 = _filter_emissivity_data_by_scope(
         dict_emissivity=dict_emissivity,
         scope="2",
-        idx_emissivity=idx_emissivity_precursor,
+        idx_emissivity=idx_emissivity_precursor_raw,
     )
 
     # multiply energy emissivity with energy intensity
     df_scope_2 = df_scope_2.mul(df_inputs_energy).dropna(how="all").droplevel("metric")
-    df_scope_2 = df_scope_2.reorder_levels(IDX_EMISSIVITY + ["ghg"]).sort_index()
+    df_scope_2 = df_scope_2.reorder_levels(
+        idx_emissivity_precursor + ["ghg"]
+    ).sort_index()
     df_scope_2.rename(columns={"value": "scope_2"}, inplace=True)
     # unit df_scope_2: [t GHG / t production_output]
 
@@ -104,7 +111,7 @@ def calculate_emissions(
     df_scope_3_upstream = _filter_emissivity_data_by_scope(
         dict_emissivity=dict_emissivity,
         scope="3_upstream",
-        idx_emissivity=idx_emissivity_precursor,
+        idx_emissivity=idx_emissivity_precursor_raw,
     )
 
     # multiply energy emissivity with energy intensity
@@ -112,7 +119,7 @@ def calculate_emissions(
         df_scope_3_upstream.mul(df_inputs_energy).dropna(how="all").droplevel("metric")
     )
     df_scope_3_upstream = df_scope_3_upstream.reorder_levels(
-        IDX_EMISSIVITY + ["ghg"]
+        idx_emissivity_precursor + ["ghg"]
     ).sort_index()
     df_scope_3_upstream.rename(columns={"value": "scope_3_upstream"}, inplace=True)
     # unit df_scope_3_upstream: [t GHG / t production_output]
@@ -160,7 +167,17 @@ def calculate_emissions(
     ).sum()
     # long to wide
     df_emissivity = df_emissivity.reset_index().pivot(
-        index=IDX_EMISSIVITY, columns="scope", values="value"
+        index=idx_emissivity_precursor, columns="scope", values="value"
+    )
+    # rename columns
+    # add "co2e" to all scopes
+    dict_rename = {k: f"co2e_{k}" for k in list(df_emissivity)}
+    df_emissivity.rename(columns=dict_rename, inplace=True)
+    # rename technology_destination to technology_origin
+    df_emissivity = (
+        df_emissivity.reset_index()
+        .rename(columns={"technology_destination": "technology"})
+        .set_index(IDX_EMISSIVITY)
     )
 
     return df_emissivity

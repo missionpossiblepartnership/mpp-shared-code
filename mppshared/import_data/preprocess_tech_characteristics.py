@@ -58,6 +58,13 @@ def get_tech_characteristics(
         axis=1,
     )
 
+    # rename column
+    df_tech_characteristics = (
+        df_tech_characteristics.reset_index()
+        .rename(columns={"technology_destination": "technology"})
+        .set_index(IDX_TECH_CHARACTERISTICS)
+    )
+
     return df_tech_characteristics
 
 
@@ -67,9 +74,11 @@ def get_tech_characteristics(
 def _prepare_tech_classification_data(
     df: pd.DataFrame, column_name: str
 ) -> pd.DataFrame:
+    idx_precursor = IDX_TECH_CHARACTERISTICS.copy()
+    idx_precursor[idx_precursor.index("technology")] = "technology_destination"
     df = (
-        df.reset_index()[IDX_TECH_CHARACTERISTICS + ["value"]]
-        .set_index(IDX_TECH_CHARACTERISTICS)
+        df.reset_index()[idx_precursor + ["value"]]
+        .set_index(idx_precursor)
         .sort_index()
     )
     if column_name == "technology_classification":

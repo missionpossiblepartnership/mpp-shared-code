@@ -47,7 +47,7 @@ def apply_implicit_forcing(pathway: str, sensitivity: str, sector: str, products
     df_emissions = importer.get_emissions()
     df_technology_characteristics = importer.get_technology_characteristics()
 
-    # Take out technology switches that downgrade technology classification and to immature technologeies
+    # Take out technology switches that downgrade technology classification and to immature technologies
     df_technology_switches = apply_technology_availability_constraint(
         df_technology_switches, df_technology_characteristics
     )

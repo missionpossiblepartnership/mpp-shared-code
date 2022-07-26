@@ -13,11 +13,11 @@ from cement.config.import_config_cement import (
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.import_data import get_tech_switches
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.import_data.preprocess_cost_metrics import \
-    calculate_tech_transitions
 from mppshared.import_data.preprocess_emissions import calculate_emissions
 from mppshared.import_data.preprocess_tech_characteristics import \
     get_tech_characteristics
+from mppshared.import_data.preprocess_tech_transitions import \
+    calculate_tech_transitions
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
