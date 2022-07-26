@@ -10,7 +10,7 @@ PATHWAYS = [
     "lc",
 ]
 
-PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = ["lc", "cc"]
+PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = ["lc"]
 SCOPES_CO2_COST = [
     "scope1",
     "scope2",
@@ -42,10 +42,9 @@ ALL_SENSITIVITIES = [
     "def",
 ]
 SENSITIVITIES = {
-    "bau": ["def"],  # ALL_SENSITIVITIES,
-    # "cc": ["def"],  # ALL_SENSITIVITIES,
+    # "bau": ["def"],  # ALL_SENSITIVITIES,
     # "fa": ["def"],
-    # "lc": ["def"]  # ALL_SENSITIVITIES,
+    "lc": ["def"]  # ALL_SENSITIVITIES,
 }
 INVESTMENT_CYCLE = 10  # years
 CUF_LOWER_THRESHOLD = 0.6
@@ -68,12 +67,12 @@ TECHNOLOGY_MORATORIUM = 2030
 TRANSITIONAL_PERIOD_YEARS = 20
 # Emission scopes included in data analysis
 EMISSION_SCOPES = [
-    "scope1",
-    "scope2",
-    "scope3up"
+    "scope_1",
+    "scope_2",
+    "scope_3_upstream"
 ]
 # Emissions
-GHGS = ["co2", "ch4"]
+GHGS = ["co2e"]
 
 REGIONS = [
     "China",
@@ -118,8 +117,8 @@ RANKING_COST_METRIC = "lcox"
 BIN_METHODOLOGY = "uncertainty"     # options: "histogram" or "uncertainty"
 COST_METRIC_RELATIVE_UNCERTAINTY = 0.05
 NUMBER_OF_BINS_RANKING = 50
-GHGS_RANKING = ["co2"]
-EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3up"]
+GHGS_RANKING = ["co2e"]
+EMISSION_SCOPES_RANKING = ["scope_1", "scope_2", "scope_3_upstream"]
 
 TRANSITION_TYPES = {
     "greenfield": "Greenfield",
@@ -134,7 +133,7 @@ RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 COST_CLASSIFICATIONS = {
     "low": "Low",
     "standard": "Standard",
-    "high": "High",
+    "high": "High"
 }
 
 CARBON_BUDGET_SECTOR_CSV = True
@@ -167,10 +166,6 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
-        "cc": {
-            "cost": 1.0,
-            "emissions": 0.0,
-        },
     },
     "brownfield": {
         "bau": {
@@ -185,10 +180,6 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
-        "cc": {
-            "cost": 1.0,
-            "emissions": 0.0,
-        },
     },
     "decommission": {
         "bau": {
@@ -202,10 +193,6 @@ RANKING_CONFIG = {
         "lc": {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
-        },
-        "cc": {
-            "cost": 1.0,
-            "emissions": 0.0,
         },
     },
 }

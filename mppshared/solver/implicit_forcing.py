@@ -3,23 +3,17 @@
 # Library imports
 from datetime import timedelta
 from timeit import default_timer as timer
+
 import numpy as np
 import pandas as pd
 
 # Shared code imports
 from mppshared.calculate.calculate_cost import discount_costs
-from mppshared.config import (
-    HYDRO_TECHNOLOGY_BAN,
-    SCOPES_CO2_COST,
-    START_YEAR,
-)
+from mppshared.config import HYDRO_TECHNOLOGY_BAN, SCOPES_CO2_COST, START_YEAR
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.utility.dataframe_utility import (
-    add_column_header_suffix,
-    get_grouping_columns_for_npv_calculation,
-)
-
+    add_column_header_suffix, get_grouping_columns_for_npv_calculation)
 # Initialize logger
 from mppshared.utility.log_utility import get_logger
 
@@ -433,7 +427,8 @@ def calculate_emission_reduction(
     emission_scopes: list,
     ghgs: list,
 ) -> pd.DataFrame:
-    """Calculate emission reduction (origin technology emissions - destination technolgoy emissions) when switching from origin to destination technology by scope.
+    """Calculate emission reduction (origin technology emissions - destination technology emissions) when switching from
+        origin to destination technology by scope.
 
     Args:
         df_technology_switches (pd.DataFrame): cost data for every technology switch (regional)
@@ -461,7 +456,8 @@ def calculate_emission_reduction(
         "destination",
     )
 
-    # Merge to insert origin and destination technology emissions into technology switching table (fill with zero to account for new-build and decommission)
+    # Merge to insert origin and destination technology emissions into technology switching table (fill with zero to
+    #   account for new-build and decommission)
     df = df_technology_switches.merge(
         df_emissions_origin.rename(columns={"technology": "technology_origin"}),
         on=["product", "region", "year", "technology_origin"],

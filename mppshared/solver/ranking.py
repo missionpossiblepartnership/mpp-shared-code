@@ -151,7 +151,8 @@ def rank_technology_uncertainty_bins(
         ghgs_ranking: use these GHGS for the emission part of the ranking
 
     Returns:
-        pd.DataFrame: table with technology switches where minimum value in column "rank" corresponds to highest ranked technology switch
+        pd.DataFrame: table with technology switches where minimum value in column "rank" corresponds to highest ranked
+            technology switch
     """
 
     logger.info(f"Making ranking for {rank_type}")
@@ -183,7 +184,7 @@ def _create_ranking_uncertainty_bins(
     ghgs_ranking: list,
 ):
     """Calculate rank scores using a histogram-based binning methodology where the number of bins is derived from the
-        relative uncertainty of the cost metric."""
+    relative uncertainty of the cost metric."""
 
     # Normalize cost metric
     logger.debug(f"Normalizing {cost_metric}")
