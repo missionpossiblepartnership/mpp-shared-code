@@ -3,12 +3,11 @@ from copy import deepcopy
 
 import numpy as np
 import pandas as pd
-from pandera import Bool
 from pyparsing import col
 
 from mppshared.config import (AMMONIA_PER_AMMONIUM_NITRATE, AMMONIA_PER_UREA,
                               H2_PER_AMMONIA, HYDRO_TECHNOLOGY_BAN, LOG_LEVEL)
-from mppshared.models.asset import Asset, AssetStack
+from mppshared.models.asset import AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 
@@ -86,7 +85,7 @@ def check_technology_rampup_constraint(
     stack: AssetStack,
     year: int,
     transition_type: str,
-) -> Bool:
+) -> bool:
     """Check if the technology rampup between the stacked passed and the previous year's stack complies with the technology ramp-up trajectory
 
     Args:
@@ -140,7 +139,7 @@ def check_constraint_regional_production(
     product: str,
     year: int,
     transition_type: str,
-) -> Bool:
+) -> bool:
     """Check constraints that regional production is at least a specified share of regional demand
 
     Args:
@@ -190,7 +189,7 @@ def check_annual_carbon_budget_constraint(
     stack: AssetStack,
     year: int,
     transition_type: str,
-) -> Bool:
+) -> bool:
     """Check if the stack exceeds the Carbon Budget defined in the pathway for the given product and year"""
     logger.info(
         f"Checking annual carbon budget constraint for year {year}, transition type {transition_type}"
@@ -271,7 +270,7 @@ def apply_greenfield_filters_chemicals(
 
 def check_global_demand_share_constraint(
     pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
-) -> Bool:
+) -> bool:
     "Check for specified technologies whether they fulfill the constraint of supplying a maximum share of global demand"
 
     df_stack = stack.aggregate_stack(
@@ -314,7 +313,7 @@ def check_global_demand_share_constraint(
 
 def check_electrolysis_capacity_addition_constraint(
     pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
-) -> Bool:
+) -> bool:
     """Check if the annual addition of electrolysis capacity fulfills the constraint"""
 
     # Get annual production capacities per technology of current and tentative new stack
@@ -432,7 +431,7 @@ def convert_production_volume_to_electrolysis_capacity(
 
 def check_co2_storage_constraint(
     pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
-) -> Bool:
+) -> bool:
     """Check if the constraint on total CO2 storage (globally) is met"""
 
     # Get constraint value

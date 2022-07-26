@@ -1,20 +1,9 @@
 """ Functions to apply implicit forcing mechanisms to the solver input tables."""
 
-# Library imports
-from datetime import timedelta
-from timeit import default_timer as timer
-
 import numpy as np
 import pandas as pd
 
-# Shared code imports
 from mppshared.calculate.calculate_cost import discount_costs
-from mppshared.config import HYDRO_TECHNOLOGY_BAN, SCOPES_CO2_COST, START_YEAR
-from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
-from mppshared.utility.dataframe_utility import (
-    add_column_header_suffix, get_grouping_columns_for_npv_calculation)
-# Initialize logger
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -60,53 +49,50 @@ def apply_salt_cavern_availability_constraint(
 
 
 def apply_hydro_constraint(
-    df_technology_transitions: pd.DataFrame, sector: str, products: list
+    df_technology_transitions: pd.DataFrame,
+    sector: str,
 ) -> pd.DataFrame:
-    logger.info("Applying hydro constraint")
-    if HYDRO_TECHNOLOGY_BAN[sector]:
-        # if sector == "aluminium" and "Aluminium" in products:
-        logger.debug(f"{sector}: Filtering Hydro banned transitions")
-        return df_technology_transitions[
+    """Apply hydro constraints to the technology switches, thus only allowing switches to Hydro
+        from technologies that previously had Hydro.
+
+    Args:
+        df_technology_transitions (pd.DataFrame): technology switching input table to the solver
+        sector (str): sector to which the hydro constraint should be applied
+
+    Returns:
+        pd.DataFrame: technology switching table without the switches that are not allowed by the hydro constraint
+    """
+    logger.debug(f"{sector}: Filtering Hydro banned transitions")
+    return df_technology_transitions[
+        (
+            (df_technology_transitions["technology_destination"].str.contains("Hydro"))
+            & (df_technology_transitions["technology_origin"].str.contains("Hydro"))
+        )
+        | (
             (
-                (
-                    df_technology_transitions["technology_destination"].str.contains(
-                        "Hydro"
-                    )
-                )
-                & (df_technology_transitions["technology_origin"].str.contains("Hydro"))
-            )
-            | (
-                (
-                    df_technology_transitions["technology_destination"].str.contains(
-                        "decommission"
-                    )
-                )
-                & (df_technology_transitions["technology_origin"].str.contains("Hydro"))
-            )
-            | (
-                (
-                    df_technology_transitions["technology_origin"].str.contains(
-                        "New-build"
-                    )
-                )
-                & (
-                    df_technology_transitions["technology_destination"].str.contains(
-                        "Hydro"
-                    )
+                df_technology_transitions["technology_destination"].str.contains(
+                    "decommission"
                 )
             )
-            | (
-                ~(df_technology_transitions["technology_origin"].str.contains("Hydro"))
-                & ~(
-                    df_technology_transitions["technology_destination"].str.contains(
-                        "Hydro"
-                    )
+            & (df_technology_transitions["technology_origin"].str.contains("Hydro"))
+        )
+        | (
+            (df_technology_transitions["technology_origin"].str.contains("New-build"))
+            & (
+                df_technology_transitions["technology_destination"].str.contains(
+                    "Hydro"
                 )
             )
-        ]
-    else:
-        logger.debug(f"{sector}: No hydro band transitions")
-        return df_technology_transitions
+        )
+        | (
+            ~(df_technology_transitions["technology_origin"].str.contains("Hydro"))
+            & ~(
+                df_technology_transitions["technology_destination"].str.contains(
+                    "Hydro"
+                )
+            )
+        )
+    ]
 
 
 def calculate_carbon_cost_addition_to_cost_metric(
@@ -264,7 +250,9 @@ def add_carbon_cost_addition_to_technology_switches(
 
 
 def apply_technology_availability_constraint(
-    df_technology_switches: pd.DataFrame, df_technology_characteristics: pd.DataFrame
+    df_technology_switches: pd.DataFrame,
+    df_technology_characteristics: pd.DataFrame,
+    start_year: int,
 ) -> pd.DataFrame:
     """Filter out all technology switches that downgrade the technology classification and to destination technologies that have not reached maturity yet.
 
@@ -340,7 +328,7 @@ def apply_technology_availability_constraint(
         ].rename({"technology": "technology_destination"}, axis=1),
         on=["product", "year", "region", "technology_destination"],
         how="left",
-    ).fillna(START_YEAR)
+    ).fillna(start_year)
     df = df.loc[df["year"] >= df["expected_maturity"]]
 
     logger.info("Technology availability constraint applied")
@@ -357,7 +345,15 @@ def apply_technology_availability_constraint(
 def apply_regional_technology_ban(
     df_technology_switches: pd.DataFrame, sector_bans: dict
 ) -> pd.DataFrame:
-    """Remove certain technologies from the technology switching table that are banned in certain regions (defined in config.py)"""
+    """Filter out the technology switches to remove technologies that are banned in certain regions
+
+    Args:
+        df_technology_switches (pd.DataFrame): technology switches table with all the possible transitions
+        sector_bans (dict): dictionary with the bans for each sector
+
+    Returns:
+        pd.DataFrame: technology switches table with the banned technologies removed
+    """
     logger.info("Applying regional technology ban")
     if not sector_bans:
         logger.info("No regional technology ban applied")

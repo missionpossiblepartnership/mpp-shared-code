@@ -133,7 +133,6 @@ NEW_COUNTRY_COL_LIST = [
     "rmi_region",
 ]
 
-FILES_TO_REFRESH = []
 
 EU_COUNTRIES = [
     "AUT",

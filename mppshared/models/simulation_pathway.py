@@ -34,7 +34,7 @@ class SimulationPathway:
         self,
         start_year: int,
         end_year: int,
-        pathway: str,
+        pathway_name: str,
         sensitivity: str,
         sector: str,
         products: list,
@@ -50,7 +50,7 @@ class SimulationPathway:
         investment_cycle: int,
         annual_renovation_share: float,
         regional_production_shares: dict,
-        constraints_to_apply: list,
+        constraints_to_apply: list[str],
         year_2050_emissions_constraint: int,
         set_co2_storage_constraint: bool = False,
         co2_storage_constraint_cumulative: bool = False,
@@ -61,7 +61,7 @@ class SimulationPathway:
         # Attributes describing the pathway
         self.start_year = start_year
         self.end_year = end_year
-        self.pathway = pathway
+        self.pathway_name = pathway_name
         self.sensitivity = sensitivity
         self.sector = sector
         self.investment_cycle = investment_cycle
@@ -89,7 +89,7 @@ class SimulationPathway:
 
         # Use importer to get all data required for simulating the pathway
         self.importer = IntermediateDataImporter(
-            pathway=pathway,
+            pathway_name=pathway_name,
             sensitivity=sensitivity,
             sector=sector,
             products=products,

@@ -42,7 +42,7 @@ def _run_model(pathway, sensitivity, carbon_cost):
                 f"Running pathway {pathway} sensitivity {sensitivity} section {name}"
             )
             func(
-                pathway=pathway,
+                pathway_name=pathway,
                 sensitivity=sensitivity,
                 sector=SECTOR,
                 carbon_cost_trajectory=carbon_cost,
