@@ -7,9 +7,11 @@ from typing import Union
 
 import pandas as pd
 
+from mppshared.config import LOG_LEVEL
 from mppshared.utility.log_utility import get_logger
 
-logger = get_logger("File Handling")
+logger = get_logger(__name__)
+logger.setLevel(LOG_LEVEL)
 
 
 def read_pickle_folder(

@@ -5,12 +5,13 @@ from typing import List
 import numpy as np
 import pandas as pd
 
-from mppshared.config import PKL_DATA_INTERMEDIATE, PRODUCTS, SECTOR
+from mppshared.config import LOG_LEVEL, PKL_DATA_INTERMEDIATE
 from mppshared.utility.file_handling_utility import read_pickle_folder
 from mppshared.utility.location_utility import get_region_from_country_code
 from mppshared.utility.log_utility import get_logger
 
-logger = get_logger("DataFrame Utility")
+logger = get_logger(__name__)
+logger.setLevel(LOG_LEVEL)
 
 
 def create_line_through_points(
