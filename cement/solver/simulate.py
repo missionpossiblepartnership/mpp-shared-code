@@ -14,9 +14,10 @@ from cement.config.config_cement import (ANNUAL_RENOVATION_SHARE,
                                          CUF_UPPER_THRESHOLD, EMISSION_SCOPES,
                                          END_YEAR, GHGS,
                                          INITIAL_ASSET_DATA_LEVEL,
-                                         INVESTMENT_CYCLE, LOG_LEVEL, PRODUCTS,
+                                         INVESTMENT_CYCLE, LOG_LEVEL,
                                          RANK_TYPES,
                                          REGIONAL_PRODUCTION_SHARES,
+                                         SECTORAL_CARBON_BUDGETS,
                                          SECTORAL_CARBON_PATHWAY, START_YEAR,
                                          TECHNOLOGY_RAMP_UP_CONSTRAINT,
                                          YEAR_2050_EMISSIONS_CONSTRAINT)
@@ -25,7 +26,6 @@ from cement.solver.decommission import decommission
 from cement.solver.greenfield import greenfield
 from mppshared.agent_logic.agent_logic_functions import (
     adjust_capacity_utilisation, create_dict_technology_rampup)
-from mppshared.config import SECTORAL_CARBON_BUDGETS
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.simulation_pathway import SimulationPathway

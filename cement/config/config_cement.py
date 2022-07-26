@@ -130,6 +130,9 @@ COST_CLASSIFICATIONS = {"low": "Low", "standard": "Standard", "high": "High"}
 
 CARBON_BUDGET_SECTOR_CSV = False
 CARBON_BUDGET_SHAPE = "linear"  # options: todo
+SECTORAL_CARBON_BUDGETS = {
+    "cement": 42,
+}
 
 residual_share = 0.05
 emissions_2020 = 0.62  # Gt CO2 (scope 1 and 2)
