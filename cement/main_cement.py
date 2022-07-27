@@ -47,6 +47,7 @@ def _run_model(pathway_name, sensitivity):
 
 def run_model_sequential(runs):
     """Run model sequentially, slower but better for debugging"""
+    # TODO: Pass carbon cost trajectories into the model
     for pathway_name, sensitivity in runs:
         _run_model(pathway_name=pathway_name, sensitivity=sensitivity)
 
@@ -83,6 +84,8 @@ def main():
             )
         )
     runs = []
+    # Add the carbon cost into the runs
+
     for pathway, sensitivities in SENSITIVITIES.items():
         for sensitivity in sensitivities:
             runs.append((pathway, sensitivity))
