@@ -30,7 +30,6 @@ run_config = {
     # "MERGE_OUTPUTS"
 }
 RUN_PARALLEL = False
-APPLY_CARBON_COST = True
 
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
@@ -46,6 +45,14 @@ SENSITIVITIES = {
     # "fa": ["def"],
     "lc": ["def"]  # ALL_SENSITIVITIES,
 }
+CARBON_COSTS = [
+    0,
+    50,
+    100,
+    150,
+    200,
+    250,
+]
 INVESTMENT_CYCLE = 10  # years
 CUF_LOWER_THRESHOLD = 0.6
 CUF_UPPER_THRESHOLD = 0.95
