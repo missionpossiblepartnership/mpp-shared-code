@@ -449,7 +449,8 @@ class SimulationPathway:
         )
 
     def make_initial_asset_stack_from_regional_data(self):
-        """Make AssetStack from input data organised by region on total production volume and capacity, average capacity utilisation factor and average age in the initial year."""
+        """Make AssetStack from input data organised by region on total production volume and capacity, average capacity
+            utilisation factor and average age in the initial year."""
         df_stack = self.importer.get_initial_asset_stack()
 
         # Get the number assets required

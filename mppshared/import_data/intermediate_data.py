@@ -40,7 +40,9 @@ class IntermediateDataImporter:
             self.export_dir = parent_path.joinpath(
                 f"{sector}/data/{pathway_name}/{sensitivity}"
             )
-        self.raw_path = self.export_dir.joinpath("raw")
+        self.raw_path = parent_path.joinpath(
+                f"{sector}/data/01_business_case_raw"
+            )
         self.import_path = self.export_dir.joinpath("import")
         self.intermediate_path = self.export_dir.joinpath("intermediate")
         self.stack_tracker_path = self.export_dir.joinpath("stack_tracker")
