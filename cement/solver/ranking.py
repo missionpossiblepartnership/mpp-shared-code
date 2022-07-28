@@ -4,7 +4,8 @@ from cement.config.config_cement import (BIN_METHODOLOGY,
                                          COST_METRIC_RELATIVE_UNCERTAINTY,
                                          EMISSION_SCOPES_RANKING, GHGS_RANKING,
                                          NUMBER_OF_BINS_RANKING, RANK_TYPES,
-                                         RANKING_CONFIG, RANKING_COST_METRIC)
+                                         RANKING_CONFIG, RANKING_COST_METRIC,
+                                         UNCERTAINTY_RANKING_GROUPS)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.solver.ranking import (rank_technology_histogram,
                                       rank_technology_uncertainty_bins)
@@ -44,6 +45,7 @@ def make_rankings(pathway_name: str, sensitivity: str, sector: str, products: li
                 ranking_config=RANKING_CONFIG[rank_type][pathway_name],
                 emission_scopes_ranking=EMISSION_SCOPES_RANKING,
                 ghgs_ranking=GHGS_RANKING,
+                ranking_groups=UNCERTAINTY_RANKING_GROUPS
             )
 
         # Save ranking table as csv

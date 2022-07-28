@@ -125,6 +125,8 @@ COST_METRIC_RELATIVE_UNCERTAINTY = 0.05
 NUMBER_OF_BINS_RANKING = 50
 GHGS_RANKING = ["co2e"]
 EMISSION_SCOPES_RANKING = ["scope_1", "scope_2", "scope_3_upstream"]
+# list to define the columns that the ranking will groupby and create a separate ranking for
+UNCERTAINTY_RANKING_GROUPS = ["year", "region", "opex_context"]
 
 TRANSITION_TYPES = {
     "greenfield": "Greenfield",
