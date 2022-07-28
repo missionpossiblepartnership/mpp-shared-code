@@ -24,11 +24,11 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def get_ranking_inputs(pathway: str, sensitivity: str, sector: str, products: list):
+def get_ranking_inputs(pathway_name: str, sensitivity: str, sector: str, products: list):
     """Create the input files for the ranking for the three types of technology switches"""
 
     importer = IntermediateDataImporter(
-        pathway=pathway,
+        pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
         products=products,

@@ -23,6 +23,9 @@ EXCEL_COLUMN_RANGES = {
     "Region CAPEX mapping": "B:W",
     "Shared inputs - Prices": "B:AS",
     "Shared inputs - Emissivity": "B:AS",
+    "Start technologies": "B:E",
+    "Region OPEX mapping": "B:F",
+    "demand": "B:AI",
 }
 
 # name of column that determines whether metric has single value (rather than annual values)

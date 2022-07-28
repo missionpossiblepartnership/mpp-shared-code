@@ -43,8 +43,8 @@ ALL_SENSITIVITIES = [
 ]
 SENSITIVITIES = {
     # "bau": ["def"],  # ALL_SENSITIVITIES,
-    # "fa": ["def"],
-    "lc": ["def"]  # ALL_SENSITIVITIES,
+    "fa": ["def"],
+    # "lc": ["def"]  # ALL_SENSITIVITIES,
 }
 INVESTMENT_CYCLE = 10  # years
 CUF_LOWER_THRESHOLD = 0.6
@@ -55,6 +55,9 @@ PRODUCTS = ["Clinker"]
 
 # Share of assets renovated annually (limits number of brownfield transitions)
 ANNUAL_RENOVATION_SHARE = 0.2
+
+
+### initial asset stack ###
 # Specify whether sector uses region-specific or asset-specific data for initial asset stack
 INITIAL_ASSET_DATA_LEVEL = "individual_assets"
 
@@ -194,7 +197,7 @@ RANKING_CONFIG = {
 
 ### CONSTRAINTS ###
 YEAR_2050_EMISSIONS_CONSTRAINT = False
-# Technology ramp-up parameters
+# Technology ramp-up parameters (on technology-level)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "maximum_asset_additions": 6,  # 10
     "maximum_capacity_growth_rate": 0.5,  # 0.25
@@ -207,14 +210,14 @@ CONSTRAINTS_TO_APPLY = {
     "fa": [None],
 }
 REGIONAL_PRODUCTION_SHARES = {
-    "Africa": 0.3,
-    "China": 0.3,
-    "India": 0.3,
-    "Europe": 0.3,
-    "Latin America": 0.3,
-    "Middle East": 0.3,
-    "North America": 0.3,
-    "Oceania": 0.3,
-    "Rest of Asia": 0.3,
-    "Russia": 0.3,
+    "Africa": 1.0,
+    "China": 1.0,
+    "India": 1.0,
+    "Europe": 1.0,
+    "Latin America": 1.0,
+    "Middle East": 1.0,
+    "North America": 1.0,
+    "Oceania": 1.0,
+    "Rest of Asia": 1.0,
+    "Russia": 1.0,
 }
