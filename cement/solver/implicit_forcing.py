@@ -73,6 +73,11 @@ def apply_implicit_forcing(
         df_technology_switches, df_emissions, EMISSION_SCOPES, GHGS
     )
 
+    # For future Luis, Timon or any other developer, this line was added to filter the technologies and only
+    # keep the ones with the rigth context for the first run of the code
+    # Only get the rows with value value_high_low in column opex_context
+    df_ranking = df_ranking[df_ranking["opex_context"] == "value_high_low"]
+
     # Export technology switching table to be used for ranking
     importer.export_data(
         df=df_ranking,
