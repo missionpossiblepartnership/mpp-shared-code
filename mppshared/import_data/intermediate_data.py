@@ -231,3 +231,8 @@ class IntermediateDataImporter:
         return pd.read_csv(
             self.intermediate_path.joinpath("inputs_outputs.csv"),
         )
+
+    def get_start_technologies(self):
+        return pd.read_csv(
+            self.intermediate_path.joinpath("start_technologies.csv"),
+        )

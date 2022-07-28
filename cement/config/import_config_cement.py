@@ -150,3 +150,6 @@ OPEX_CCUS_PROCESS_METRICS = [
         "inputs_material": ("CC - Cooling water",),
     },
 ]
+
+### initial asset stack ###
+AVERAGE_PLANT_COMMISSION_YEAR = 2005
