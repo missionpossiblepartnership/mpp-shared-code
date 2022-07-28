@@ -141,6 +141,7 @@ def rank_technology_uncertainty_bins(
     ranking_config: dict,
     emission_scopes_ranking: list,
     ghgs_ranking: list,
+    ranking_groups: list,
 ) -> pd.DataFrame:
     """Create technology binned according to histogram methodology with number of bins from cost metric uncertainty.
 
@@ -153,6 +154,7 @@ def rank_technology_uncertainty_bins(
         ranking_config (dict): weights for cost and emissions, keys are "cost" and "emissions"
         emission_scopes_ranking: use these emission scopes for the emission part of the ranking
         ghgs_ranking: use these GHGS for the emission part of the ranking
+        ranking_groups: this list defines the columns that will be grouped and get their own ranking
 
     Returns:
         pd.DataFrame: table with technology switches where minimum value in column "rank" corresponds to highest ranked
@@ -165,7 +167,7 @@ def rank_technology_uncertainty_bins(
     df = get_ranking_table(df_ranking=df_ranking, rank_type=rank_type)
 
     # Apply ranking year-by-year
-    df = df.groupby(["year"]).apply(
+    df = df.groupby(ranking_groups).apply(
         _create_ranking_uncertainty_bins,
         cost_metric,
         cost_metric_relative_uncertainty,

@@ -211,6 +211,8 @@ GHGS_RANKING = ["co2"]
 EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3_upstream"]
 # Emission scopes included in data analysis
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
+# list to define the columns that the ranking will groupby and create a separate ranking for
+UNCERTAINTY_RANKING_GROUPS = ["year"]
 
 TRANSITION_TYPES = [
     "decommission",
