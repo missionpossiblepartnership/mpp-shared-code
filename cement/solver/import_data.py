@@ -60,8 +60,9 @@ def import_and_preprocess(pathway_name: str, sensitivity: str, sector: str, prod
     # export
     importer.export_data(
         df=df_start_technologies,
-        filename="start_technologies",
-        export_dir="intermediate"
+        filename="start_technologies.csv",
+        export_dir="intermediate",
+        index=False,
     )
 
     # import and preprocess OPEX context mapping
@@ -73,8 +74,9 @@ def import_and_preprocess(pathway_name: str, sensitivity: str, sector: str, prod
     # export
     importer.export_data(
         df=df_opex_context_mapping,
-        filename="opex_context_mapping",
-        export_dir="intermediate"
+        filename="opex_context_mapping.csv",
+        export_dir="intermediate",
+        index=False,
     )
 
     # import and preprocess demand
@@ -93,8 +95,9 @@ def import_and_preprocess(pathway_name: str, sensitivity: str, sector: str, prod
     # export
     importer.export_data(
         df=df_demand,
-        filename="demand",
-        export_dir="intermediate"
+        filename="demand.csv",
+        export_dir="intermediate",
+        index=False,
     )
 
     stop = 1
