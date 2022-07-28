@@ -18,7 +18,7 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
+def brownfield_def(pathway: SimulationPathway, year: int) -> SimulationPathway:
     """Apply brownfield rebuild or brownfield renovation transition to eligible Assets in the AssetStack.
 
     Args:
@@ -48,7 +48,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
     # Get assets eligible for brownfield transitions
     candidates = new_stack.get_assets_eligible_for_brownfield(
-        year=year, sector=pathway.sector
+        year=year, investment_cycle=pathway.investment_cycle
     )
 
     # Track number of assets that undergo transition
@@ -74,7 +74,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
             # Check if LC pathway and check emissions to exit after being lower than the constraint
             # This check minimizes the investment as it only requieres some switches and not all of them
-            if pathway.pathway == "lc":
+            if pathway.pathway_name == "lc":
                 dict_stack_emissions = new_stack.calculate_emissions_stack(
                     year=year,
                     df_emissions=pathway.emissions,
@@ -192,7 +192,7 @@ def apply_start_years_brownfield_transitions(
     brownfield_renovation_start_year: int,
     brownfield_rebuild_start_year: int,
 ):
-    if pathway.pathway in ["fa", "lc"]:
+    if pathway.pathway_name in ["fa", "lc"]:
 
         if year < brownfield_renovation_start_year:
             df_rank = df_rank.loc[df_rank["switch_type"] != "brownfield_renovation"]

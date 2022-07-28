@@ -81,12 +81,12 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
     return pathway
 
 
-def simulate_pathway(sector: str, pathway: str, sensitivity: str):
+def simulate_pathway(sector: str, pathway_name: str, sensitivity: str):
     """
     Get data per technology, ranking data and then run the pathway simulation
     """
     importer = IntermediateDataImporter(
-        pathway=pathway,
+        pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,
@@ -109,20 +109,20 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         importer=importer,
         model_start_year=START_YEAR,
         model_end_year=END_YEAR,
-        maximum_asset_additions=TECHNOLOGY_RAMP_UP_CONSTRAINT[
-            "maximum_asset_additions"
-        ],
+        maximum_asset_additions=int(
+            TECHNOLOGY_RAMP_UP_CONSTRAINT["maximum_asset_additions"]
+        ),
         maximum_capacity_growth_rate=TECHNOLOGY_RAMP_UP_CONSTRAINT[
             "maximum_capacity_growth_rate"
         ],
-        years_rampup_phase=TECHNOLOGY_RAMP_UP_CONSTRAINT["years_rampup_phase"],
+        years_rampup_phase=int(TECHNOLOGY_RAMP_UP_CONSTRAINT["years_rampup_phase"]),
     )
 
     # Make pathway
     pathway = SimulationPathway(
         start_year=START_YEAR,
         end_year=END_YEAR,
-        pathway=pathway,
+        pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,
@@ -138,7 +138,7 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         regional_production_shares=REGIONAL_PRODUCTION_SHARES,
         investment_cycle=INVESTMENT_CYCLE,
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,
-        constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway],
+        constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],
         year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
     )
 

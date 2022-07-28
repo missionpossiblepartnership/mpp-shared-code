@@ -5,20 +5,16 @@ import multiprocessing as mp
 
 import numpy as np
 
-from aluminium.config_aluminium import RUN_PARALLEL, SECTOR, SENSITIVITIES, run_config
+from aluminium.config_aluminium import (RUN_PARALLEL, SECTOR, SENSITIVITIES,
+                                        run_config)
 from aluminium.solver.implicit_forcing import apply_implicit_forcing
 from aluminium.solver.ranking import make_rankings
 from aluminium.solver.simulate import simulate_pathway
-
 # Shared imports
 from mppshared.config import LOG_LEVEL
-
 from mppshared.solver.debugging_outputs import create_debugging_outputs
-from mppshared.solver.output_processing import (
-    calculate_outputs,
-    save_consolidated_outputs,
-)
-
+from mppshared.solver.output_processing import (calculate_outputs,
+                                                save_consolidated_outputs)
 # Initialize logger
 from mppshared.utility.utils import get_logger
 
@@ -41,7 +37,7 @@ def _run_model(pathway, sensitivity):
                 f"Running pathway {pathway} sensitivity {sensitivity} section {name}"
             )
             func(
-                pathway=pathway,
+                pathway_name=pathway,
                 sensitivity=sensitivity,
                 sector=SECTOR,
             )

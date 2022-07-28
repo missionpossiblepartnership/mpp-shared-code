@@ -86,7 +86,7 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
 
 def simulate_pathway(
     sector: str,
-    pathway: str,
+    pathway_name: str,
     sensitivity: str,
     carbon_cost_trajectory: CarbonCostTrajectory,
 ):
@@ -94,7 +94,7 @@ def simulate_pathway(
     Get data per technology, ranking data and then run the pathway simulation
     """
     importer = IntermediateDataImporter(
-        pathway=pathway,
+        pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,
@@ -131,7 +131,7 @@ def simulate_pathway(
     pathway = SimulationPathway(
         start_year=START_YEAR,
         end_year=END_YEAR,
-        pathway=pathway,
+        pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,
@@ -146,7 +146,7 @@ def simulate_pathway(
         cuf_upper_threshold=CUF_UPPER_THRESHOLD,
         ghgs=GHGS,
         regional_production_shares=REGIONAL_PRODUCTION_SHARES,
-        constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway],
+        constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],
         year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
         investment_cycle=INVESTMENT_CYCLE,
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,

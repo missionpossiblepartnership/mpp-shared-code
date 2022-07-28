@@ -15,7 +15,7 @@ class IntermediateDataImporter:
 
     def __init__(
         self,
-        pathway: str,
+        pathway_name: str,
         sensitivity: str,
         sector: str,
         products: list,
@@ -25,7 +25,7 @@ class IntermediateDataImporter:
         parent_path = Path(__file__).resolve().parents[2]
         self.sector = sector
         self.products = products
-        self.pathway = pathway
+        self.pathway_name = pathway_name
         self.sensitivity = sensitivity
 
         # Export directory depends on whether a CarbonCostTrajectory is passed or not
@@ -34,11 +34,11 @@ class IntermediateDataImporter:
                 carbon_cost_trajectory.df_carbon_cost["year"] == END_YEAR, "carbon_cost"
             ].item()
             self.export_dir = parent_path.joinpath(
-                f"{sector}/data/{pathway}/{sensitivity}/carbon_cost_{final_carbon_cost}"
+                f"{sector}/data/{pathway_name}/{sensitivity}/carbon_cost_{final_carbon_cost}"
             )
         else:
             self.export_dir = parent_path.joinpath(
-                f"{sector}/data/{pathway}/{sensitivity}"
+                f"{sector}/data/{pathway_name}/{sensitivity}"
             )
         self.raw_path = self.export_dir.joinpath("raw")
         self.import_path = self.export_dir.joinpath("import")
@@ -107,7 +107,12 @@ class IntermediateDataImporter:
 
         return df
 
-    def get_imported_input_data(self, input_metrics: dict, index: bool = False, idx_per_input_metric: dict = None):
+    def get_imported_input_data(
+        self,
+        input_metrics: dict,
+        index: bool = False,
+        idx_per_input_metric: dict = None,
+    ):
         """imports all files that are declared as metrics in INPUT_METRICS"""
         imported_input_data = {}
         for input_sheet in input_metrics.keys():
@@ -117,7 +122,9 @@ class IntermediateDataImporter:
                 )
                 if index:
                     assert idx_per_input_metric is not None, "No index passed"
-                    imported_input_data[metric].set_index(keys=idx_per_input_metric[metric], inplace=True)
+                    imported_input_data[metric].set_index(
+                        keys=idx_per_input_metric[metric], inplace=True
+                    )
         return imported_input_data
 
     # intermediate

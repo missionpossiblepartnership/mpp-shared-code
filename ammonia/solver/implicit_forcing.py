@@ -5,35 +5,27 @@ from datetime import timedelta
 from pathlib import Path
 from re import M
 from timeit import default_timer as timer
+
 import numpy as np
 import pandas as pd
 
 # Shared imports
-from ammonia.config_ammonia import (
-    GHGS,
-    GROUPING_COLS_FOR_NPV,
-    REGIONS_SALT_CAVERN_AVAILABILITY,
-    TECHNOLOGY_MORATORIUM,
-    TRANSITIONAL_PERIOD_YEARS,
-    PRODUCTS,
-    SCOPES_CO2_COST,
-    STANDARD_LIFETIME,
-    STANDARD_CUF,
-    STANDARD_WACC,
-)
+from ammonia.config_ammonia import (GHGS, GROUPING_COLS_FOR_NPV, PRODUCTS,
+                                    REGIONS_SALT_CAVERN_AVAILABILITY,
+                                    SCOPES_CO2_COST, STANDARD_CUF,
+                                    STANDARD_LIFETIME, STANDARD_WACC,
+                                    START_YEAR, TECHNOLOGY_MORATORIUM,
+                                    TRANSITIONAL_PERIOD_YEARS)
 from mppshared.config import EMISSION_SCOPES, END_YEAR
+from mppshared.import_data.intermediate_data import IntermediateDataImporter
+from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.solver.implicit_forcing import (
     add_carbon_cost_addition_to_technology_switches,
     add_technology_classification_to_switching_table,
-    apply_technology_availability_constraint,
     apply_salt_cavern_availability_constraint,
-    apply_technology_moratorium,
+    apply_technology_availability_constraint, apply_technology_moratorium,
     calculate_carbon_cost_addition_to_cost_metric,
-    calculate_emission_reduction,
-)
-from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
-
+    calculate_emission_reduction)
 # Initialize logger
 from mppshared.utility.log_utility import get_logger
 
@@ -41,14 +33,14 @@ logger = get_logger(__name__)
 
 
 def apply_implicit_forcing(
-    pathway: str,
+    pathway_name: str,
     sensitivity: str,
     sector: str,
     carbon_cost_trajectory: CarbonCostTrajectory,
 ):
     """Apply the implicit forcing mechanisms to the input tables.
     Args:
-        pathway:
+        pathway_name:
         sensitivity:
         sector:
     Returns:
@@ -58,7 +50,7 @@ def apply_implicit_forcing(
 
     # Import input tables (folder paths include the carbon cost)
     importer = IntermediateDataImporter(
-        pathway=pathway,
+        pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS,
@@ -71,7 +63,7 @@ def apply_implicit_forcing(
 
     # Eliminate technology switches that downgrade technology classification and to an immature technology
     df_technology_switches = apply_technology_availability_constraint(
-        df_technology_switches, df_technology_characteristics
+        df_technology_switches, df_technology_characteristics, start_year=START_YEAR
     )
 
     # Eliminate technologies with geological H2 storage in regions without salt caverns
@@ -80,7 +72,7 @@ def apply_implicit_forcing(
     )
 
     # Apply technology moratorium (year after which newbuild capacity must be transition or end-state technologies)
-    if pathway != "bau":
+    if pathway_name != "bau":
         df_technology_switches = apply_technology_moratorium(
             df_technology_switches=df_technology_switches,
             df_technology_characteristics=df_technology_characteristics,

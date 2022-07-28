@@ -9,20 +9,23 @@ from cement.config.config_cement import (ANNUAL_RENOVATION_SHARE,
                                          ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                                          CARBON_BUDGET_SECTOR_CSV,
                                          CARBON_BUDGET_SHAPE,
+                                         CONSTRAINTS_TO_APPLY,
                                          CUF_LOWER_THRESHOLD,
                                          CUF_UPPER_THRESHOLD, EMISSION_SCOPES,
                                          END_YEAR, GHGS,
                                          INITIAL_ASSET_DATA_LEVEL,
-                                         INVESTMENT_CYCLE, LOG_LEVEL, PRODUCTS,
-                                         RANK_TYPES, SECTORAL_CARBON_PATHWAY,
-                                         START_YEAR,
-                                         TECHNOLOGY_RAMP_UP_CONSTRAINT)
+                                         INVESTMENT_CYCLE, LOG_LEVEL,
+                                         RANK_TYPES,
+                                         REGIONAL_PRODUCTION_SHARES,
+                                         SECTORAL_CARBON_BUDGETS,
+                                         SECTORAL_CARBON_PATHWAY, START_YEAR,
+                                         TECHNOLOGY_RAMP_UP_CONSTRAINT,
+                                         YEAR_2050_EMISSIONS_CONSTRAINT)
 from cement.solver.brownfield import brownfield
 from cement.solver.decommission import decommission
 from cement.solver.greenfield import greenfield
 from mppshared.agent_logic.agent_logic_functions import (
     adjust_capacity_utilisation, create_dict_technology_rampup)
-from mppshared.config import SECTORAL_CARBON_BUDGETS
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -65,34 +68,36 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         )
 
         # Renovate and rebuild assets (brownfield transition)
-        start = timer()
-        pathway = brownfield(pathway=pathway, year=year)
-        end = timer()
-        logger.debug(
-            f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
-        )
+        # start = timer()
+        # pathway = brownfield(pathway=pathway, year=year)
+        # end = timer()
+        # logger.debug(
+        #     f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
+        # )
 
         # Build new assets
-        start = timer()
-        pathway = greenfield(pathway=pathway, year=year)
-        end = timer()
-        logger.debug(
-            f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
-        )
+        # start = timer()
+        # pathway = greenfield(pathway=pathway, year=year)
+        # end = timer()
+        # logger.debug(
+        #     f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
+        # )
 
     return pathway
 
 
-def simulate_pathway(sector: str, pathway: str, sensitivity: str):
+def simulate_pathway(
+    sector: str, pathway_name: str, sensitivity: str, products: list
+) -> SimulationPathway:
     """
     Get data per technology, ranking data and then run the pathway simulation
     """
 
     importer = IntermediateDataImporter(
-        pathway=pathway,
+        pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
-        products=PRODUCTS,
+        products=products,
     )
 
     # Create carbon budget
@@ -125,10 +130,10 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
     pathway = SimulationPathway(
         start_year=START_YEAR,
         end_year=END_YEAR,
-        pathway=pathway,
+        pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
-        products=PRODUCTS,
+        products=products,
         rank_types=RANK_TYPES,
         initial_asset_data_level=INITIAL_ASSET_DATA_LEVEL,
         assumed_annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
@@ -138,8 +143,11 @@ def simulate_pathway(sector: str, pathway: str, sensitivity: str):
         cuf_lower_threshold=CUF_LOWER_THRESHOLD,
         cuf_upper_threshold=CUF_UPPER_THRESHOLD,
         ghgs=GHGS,
+        regional_production_shares=REGIONAL_PRODUCTION_SHARES,
         investment_cycle=INVESTMENT_CYCLE,
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,
+        constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],
+        year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
     )
 
     # Optimize asset stack on a yearly basis

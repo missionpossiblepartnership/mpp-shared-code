@@ -10,7 +10,7 @@ PATHWAYS = [
     "lc",
 ]
 
-PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = ["lc", "cc"]
+PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = ["lc"]
 SCOPES_CO2_COST = [
     "scope1",
     "scope2",
@@ -30,7 +30,6 @@ run_config = {
     # "MERGE_OUTPUTS"
 }
 RUN_PARALLEL = False
-APPLY_CARBON_COST = True
 
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
@@ -42,11 +41,18 @@ ALL_SENSITIVITIES = [
     "def",
 ]
 SENSITIVITIES = {
-    "bau": ["def"],  # ALL_SENSITIVITIES,
-    # "cc": ["def"],  # ALL_SENSITIVITIES,
+    # "bau": ["def"],  # ALL_SENSITIVITIES,
     # "fa": ["def"],
-    # "lc": ["def"]  # ALL_SENSITIVITIES,
+    "lc": ["def"]  # ALL_SENSITIVITIES,
 }
+CARBON_COSTS = [
+    0,
+    50,
+    100,
+    150,
+    200,
+    250,
+]
 INVESTMENT_CYCLE = 10  # years
 CUF_LOWER_THRESHOLD = 0.6
 CUF_UPPER_THRESHOLD = 0.95
@@ -67,13 +73,9 @@ TECHNOLOGY_MORATORIUM = 2030
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
 TRANSITIONAL_PERIOD_YEARS = 20
 # Emission scopes included in data analysis
-EMISSION_SCOPES = [
-    "scope1",
-    "scope2",
-    "scope3up"
-]
+EMISSION_SCOPES = ["scope_1", "scope_2", "scope_3_upstream"]
 # Emissions
-GHGS = ["co2", "ch4"]
+GHGS = ["co2e"]
 
 REGIONS = [
     "China",
@@ -115,11 +117,11 @@ LIST_TECHNOLOGIES = [
 
 ### RANKING OF TECHNOLOGY SWITCHES ###
 RANKING_COST_METRIC = "lcox"
-BIN_METHODOLOGY = "uncertainty"     # options: "histogram" or "uncertainty"
+BIN_METHODOLOGY = "uncertainty"  # options: "histogram" or "uncertainty"
 COST_METRIC_RELATIVE_UNCERTAINTY = 0.05
 NUMBER_OF_BINS_RANKING = 50
-GHGS_RANKING = ["co2"]
-EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3up"]
+GHGS_RANKING = ["co2e"]
+EMISSION_SCOPES_RANKING = ["scope_1", "scope_2", "scope_3_upstream"]
 
 TRANSITION_TYPES = {
     "greenfield": "Greenfield",
@@ -131,14 +133,13 @@ TRANSITION_TYPES = {
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 
 # set of cost classifications
-COST_CLASSIFICATIONS = {
-    "low": "Low",
-    "standard": "Standard",
-    "high": "High",
-}
+COST_CLASSIFICATIONS = {"low": "Low", "standard": "Standard", "high": "High"}
 
-CARBON_BUDGET_SECTOR_CSV = True
-CARBON_BUDGET_SHAPE = "linear"      # options: todo
+CARBON_BUDGET_SECTOR_CSV = False
+CARBON_BUDGET_SHAPE = "linear"  # options: todo
+SECTORAL_CARBON_BUDGETS = {
+    "cement": 42,
+}
 
 residual_share = 0.05
 emissions_2020 = 0.62  # Gt CO2 (scope 1 and 2)
@@ -167,10 +168,6 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
-        "cc": {
-            "cost": 1.0,
-            "emissions": 0.0,
-        },
     },
     "brownfield": {
         "bau": {
@@ -184,10 +181,6 @@ RANKING_CONFIG = {
         "lc": {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
-        },
-        "cc": {
-            "cost": 1.0,
-            "emissions": 0.0,
         },
     },
     "decommission": {
@@ -203,17 +196,32 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
-        "cc": {
-            "cost": 1.0,
-            "emissions": 0.0,
-        },
     },
 }
 
 ### CONSTRAINTS ###
+YEAR_2050_EMISSIONS_CONSTRAINT = False
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "maximum_asset_additions": 6,  # 10
     "maximum_capacity_growth_rate": 0.5,  # 0.25
     "years_rampup_phase": 8,  # 5
+}
+CONSTRAINTS_TO_APPLY = {
+    "bau": [None],
+    "cc": [None],
+    "lc": [None],
+    "fa": [None],
+}
+REGIONAL_PRODUCTION_SHARES = {
+    "Africa": 0.3,
+    "China": 0.3,
+    "India": 0.3,
+    "Europe": 0.3,
+    "Latin America": 0.3,
+    "Middle East": 0.3,
+    "North America": 0.3,
+    "Oceania": 0.3,
+    "Rest of Asia": 0.3,
+    "Russia": 0.3,
 }
