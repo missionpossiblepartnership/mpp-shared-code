@@ -225,10 +225,11 @@ def _create_ranking_uncertainty_bins(
 
     if pathway_name in ["lc", "bau"]:
         # Calculate number of bins
-        # get the minimum value of the cost metric and add the requiered positive value to move all the values to positive numbers
-        # This is a hack to make the code work if we have negative values
+        # get the minimum value of the cost metric and add the required positive value to move all the values to
+        #   positive numbers
+        # This is a hack to make the code work if we have negative values (multiplied by 2 to avoid a bin_interval of 0)
         if df[cost_metric].min() < 0:
-            df[f"{cost_metric}_positive"] = df[cost_metric] + abs(df[cost_metric].min())
+            df[f"{cost_metric}_positive"] = df[cost_metric] + 2 * abs(df[cost_metric].min())
             bin_interval = (
                 cost_metric_relative_uncertainty * df[f"{cost_metric}_positive"].min()
             )
