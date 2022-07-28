@@ -5,8 +5,8 @@ LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
 
 PATHWAYS = [
-    "bau",
-    "fa",
+    # "bau",
+    # "fa",
     "lc",
 ]
 
@@ -18,13 +18,13 @@ SCOPES_CO2_COST = [
 
 ### RUN CONFIGURATION ###
 run_config = {
-    "IMPORT_DATA",
-    "CALCULATE_VARIABLES",
+    # "IMPORT_DATA",
+    # "CALCULATE_VARIABLES",
     "APPLY_IMPLICIT_FORCING",
     "MAKE_RANKINGS",
     "SIMULATE_PATHWAY",
-    "CALCULATE_OUTPUTS",
-    "CREATE_DEBUGGING_OUTPUTS",
+    # "CALCULATE_OUTPUTS",
+    # "CREATE_DEBUGGING_OUTPUTS",
     # "EXPORT_OUTPUTS",
     # "PLOT_AVAILABILITIES"
     # "MERGE_OUTPUTS"
@@ -42,8 +42,8 @@ ALL_SENSITIVITIES = [
 ]
 SENSITIVITIES = {
     # "bau": ["def"],  # ALL_SENSITIVITIES,
-    "fa": ["def"],
-    # "lc": ["def"]  # ALL_SENSITIVITIES,
+    # "fa": ["def"],
+    "lc": ["def"]  # ALL_SENSITIVITIES,
 }
 CARBON_COSTS = [
     0,
