@@ -119,7 +119,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             switch_type = best_transition["switch_type"]
             # Remove best transition from ranking table
             if len(best_candidates) == 0:
-                logger.debug(f"No assets found for best transition {best_transition}")
+                # logger.debug(f"No assets found for best transition {best_transition}")
+                logger.debug(f"Lenght of ranking table: {len(df_rank)}")
                 df_rank = remove_transition(df_rank, best_transition)
                 logger.debug(f"Candidates in ranking table: {len(df_rank)}")
 
