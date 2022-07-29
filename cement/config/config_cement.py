@@ -41,8 +41,8 @@ ALL_SENSITIVITIES = [
     "def",
 ]
 SENSITIVITIES = {
-    # "bau": ["def"],  # ALL_SENSITIVITIES,
-    # "fa": ["def"],
+    "bau": ["def"],  # ALL_SENSITIVITIES,
+    "fa": ["def"],
     "lc": ["def"]  # ALL_SENSITIVITIES,
 }
 CARBON_COSTS = [
@@ -122,6 +122,7 @@ LIST_TECHNOLOGIES = [
 RANKING_COST_METRIC = "lcox"
 BIN_METHODOLOGY = "uncertainty"  # options: "histogram" or "uncertainty"
 COST_METRIC_RELATIVE_UNCERTAINTY = 0.5
+# number of bins (only for histogram ranking)
 NUMBER_OF_BINS_RANKING = 50
 # GHGs considered in the ranking
 GHGS_RANKING = ["co2e"]
