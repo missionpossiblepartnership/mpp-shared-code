@@ -43,7 +43,7 @@ ALL_SENSITIVITIES = [
 SENSITIVITIES = {
     "bau": ["def"],  # ALL_SENSITIVITIES,
     "fa": ["def"],
-    "lc": ["def"]  # ALL_SENSITIVITIES,
+    "lc": ["def"],  # ALL_SENSITIVITIES,
 }
 CARBON_COSTS = [
     0,
@@ -216,7 +216,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "years_rampup_phase": 8,  # 5
 }
 CONSTRAINTS_TO_APPLY = {
-    "bau": [None],
+    "bau": None,
     "cc": [None],
     "lc": [None],
     "fa": [None],
