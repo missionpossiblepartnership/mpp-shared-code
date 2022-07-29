@@ -1,2 +1,3 @@
 from . import (brownfield, decommission, greenfield, implicit_forcing,
-               import_data, ranking, ranking_inputs, simulate)
+               import_data, output_processing, ranking, ranking_inputs,
+               simulate)
