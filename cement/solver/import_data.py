@@ -2,10 +2,12 @@
 
 import pandas as pd
 
-from cement.config.config_cement import MODEL_YEARS, REGIONS
+from cement.config.config_cement import (LIST_TECHNOLOGIES, MODEL_YEARS,
+                                         REGIONS, START_YEAR)
 from cement.config.dataframe_config_cement import (DF_DATATYPES_PER_COLUMN,
                                                    IDX_PER_INPUT_METRIC)
-from cement.config.import_config_cement import (COLUMN_SINGLE_INPUT,
+from cement.config.import_config_cement import (AVERAGE_PLANT_COMMISSION_YEAR,
+                                                COLUMN_SINGLE_INPUT,
                                                 EXCEL_COLUMN_RANGES,
                                                 HEADER_BUSINESS_CASE_EXCEL,
                                                 INPUT_METRICS, INPUT_SHEETS,
@@ -20,7 +22,9 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def import_and_preprocess(pathway_name: str, sensitivity: str, sector: str, products: list):
+def import_and_preprocess(
+    pathway_name: str, sensitivity: str, sector: str, products: list
+):
 
     importer = IntermediateDataImporter(
         pathway_name=pathway_name,
@@ -60,8 +64,9 @@ def import_and_preprocess(pathway_name: str, sensitivity: str, sector: str, prod
     # export
     importer.export_data(
         df=df_start_technologies,
-        filename="start_technologies",
-        export_dir="intermediate"
+        filename="start_technologies.csv",
+        export_dir="intermediate",
+        index=False,
     )
 
     # import and preprocess OPEX context mapping
@@ -73,8 +78,9 @@ def import_and_preprocess(pathway_name: str, sensitivity: str, sector: str, prod
     # export
     importer.export_data(
         df=df_opex_context_mapping,
-        filename="opex_context_mapping",
-        export_dir="intermediate"
+        filename="opex_context_mapping.csv",
+        export_dir="intermediate",
+        index=False,
     )
 
     # import and preprocess demand
@@ -93,8 +99,102 @@ def import_and_preprocess(pathway_name: str, sensitivity: str, sector: str, prod
     # export
     importer.export_data(
         df=df_demand,
-        filename="demand",
-        export_dir="intermediate"
+        filename="demand.csv",
+        export_dir="intermediate",
+        index=False,
     )
 
-    stop = 1
+    # import and preprocess initial_asset_stack
+    df_initial_asset_stack = _get_initial_asset_stack(importer=importer, product=products)
+    # export
+    importer.export_data(
+        df=df_initial_asset_stack,
+        filename="initial_asset_stack.csv",
+        export_dir="intermediate",
+        index=False,
+    )
+
+
+def _get_initial_asset_stack(importer: IntermediateDataImporter, product: list) -> pd.DataFrame():
+    """
+    Creates the initial_asset_stack dataframe
+    Args:
+        importer (): Unit per relevant dataframe:
+            plant_capacity: [t Clk / day]
+
+    Returns:
+        df_initial_asset_stack (): Unit per column:
+            annual_production_capacity: [t Clk / year]
+            capacity_utilisation_factor: [%]
+    """
+
+    imported_input_data = importer.get_imported_input_data(
+        input_metrics=INPUT_METRICS,
+        index=True,
+        idx_per_input_metric=IDX_PER_INPUT_METRIC,
+    )
+
+    assert len(product) == 1, "More than one product for Clinker!"
+    product = product[0]
+
+    # import required data
+    df_plant_capacity = imported_input_data["plant_capacity"]
+    df_capacity_factor = imported_input_data["capacity_factor"]
+    df_start_technologies = importer.get_start_technologies()
+    df_demand = importer.get_demand()
+
+    # filter for model start year
+    df_plant_capacity = df_plant_capacity.xs(key=START_YEAR, level="year")
+    df_capacity_factor = df_capacity_factor.xs(key=START_YEAR, level="year")
+    df_demand = df_demand.loc[df_demand["year"] == START_YEAR, :]
+
+    # transform df_plant_capacity's unit from [t Clk / day] to [t Clk / year]
+    df_plant_capacity *= 365
+
+    df_initial_asset_stack = pd.DataFrame(
+        columns=[
+            "region",
+            "country",
+            "coordinates",
+            "product",
+            "technology_origin",
+            "annual_production_capacity",
+            "year_commissioned",
+            "capacity_utilisation_factor",
+        ]
+    )
+
+    df_list = []
+    for region in REGIONS:
+        for technology in [
+            x for x in list(df_start_technologies) if x in LIST_TECHNOLOGIES
+        ]:
+            init_tech_share = df_start_technologies.loc[
+                df_start_technologies["region"] == region, technology
+            ].squeeze()
+            demand = (
+                df_demand.loc[df_demand["region"] == region, "value"].squeeze()
+                * (init_tech_share / 100)
+            )
+            plant_capacity = df_plant_capacity.xs(
+                key=(region, technology), level=("region", "technology_destination")
+            ).squeeze()
+            n_plants = demand / plant_capacity
+            n_plants = int(round(number=n_plants, ndigits=0))
+
+            # create plants
+            df_append = df_initial_asset_stack.copy()
+            df_append["technology_origin"] = n_plants * [technology]
+            df_append["annual_production_capacity"] = plant_capacity
+            df_append["capacity_utilisation_factor"] = df_capacity_factor.xs(
+                key=(region, technology), level=("region", "technology_destination")
+            ).squeeze()
+
+            df_append["region"] = region
+            df_list.append(df_append)
+
+    df_initial_asset_stack = pd.concat(df_list)
+    df_initial_asset_stack["product"] = product
+    df_initial_asset_stack["year_commissioned"] = AVERAGE_PLANT_COMMISSION_YEAR
+
+    return df_initial_asset_stack
