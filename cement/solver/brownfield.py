@@ -8,6 +8,7 @@ from cement.config.config_cement import LOG_LEVEL
 from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_destination_technology, remove_transition,
     select_best_transition)
+from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
 
@@ -118,7 +119,9 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             switch_type = best_transition["switch_type"]
             # Remove best transition from ranking table
             if len(best_candidates) == 0:
+                logger.debug(f"No assets found for best transition {best_transition}")
                 df_rank = remove_transition(df_rank, best_transition)
+                logger.debug(f"Candidates in ranking table: {len(df_rank)}")
 
         # If several candidates for best transition, choose asset for transition randomly
         asset_to_update = random.choice(best_candidates)
@@ -136,12 +139,12 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
         # Check constraints with tentative new stack
         # TODO: uncomment when constraints are implemented
-        # dict_constraints = check_constraints(
-        #     pathway=pathway,
-        #     stack=tentative_stack,
-        #     year=year,
-        #     transition_type="brownfield",
-        # )
+        dict_constraints = check_constraints(
+            pathway=pathway,
+            stack=tentative_stack,
+            year=year,
+            transition_type="brownfield",
+        )
         # TODO: Remove dictionary when constraints are implemented
         dict_constraints = {"emissions_constraint": True, "rampup_constraint": True}
         # If no constraint is hurt, execute the brownfield transition
