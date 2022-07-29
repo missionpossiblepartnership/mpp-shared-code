@@ -279,6 +279,7 @@ MAP_LOW_COST_POWER_REGIONS = {
         "Latin America": "Brazil",
     },
     "aluminium": None,
+    "cement": None,
 }
 
 
