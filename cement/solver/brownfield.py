@@ -71,7 +71,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
             # Check if LC pathway and check emissions to exit after being lower than the constraint
             # This check minimizes the investment as it only requieres some switches and not all of them
-            if pathway.pathway == "lc":
+            if pathway.pathway_name == "lc":
                 dict_stack_emissions = new_stack.calculate_emissions_stack(
                     year=year,
                     df_emissions=pathway.emissions,
