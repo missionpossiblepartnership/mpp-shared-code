@@ -35,9 +35,6 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     # Get ranking table for greenfield transitions
     df_ranking = pathway.get_ranking(year=year, rank_type="greenfield")
 
-    # Hydro constrain for new-builds in aluminium
-    df_ranking = hydro_constraints(df_ranking, pathway.sector)
-
     # Greenfield for each product sequentially
     for product in pathway.products:
         df_rank = df_ranking.loc[df_ranking["product"] == product]

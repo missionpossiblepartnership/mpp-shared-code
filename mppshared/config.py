@@ -189,6 +189,7 @@ CUF_UPPER_THRESHOLD = 0.95
 COST_METRIC_CUF_ADJUSTMENT = {
     "ammonia": "mc",  # marginal cost of production
     "aluminium": "lcox",  # levelized cost of production
+    "cement": "lcox",  # levelized cost of production
 }
 
 # TODO: Add more decomissioning rates
@@ -278,6 +279,7 @@ MAP_LOW_COST_POWER_REGIONS = {
         "Latin America": "Brazil",
     },
     "aluminium": None,
+    "cement": None,
 }
 
 

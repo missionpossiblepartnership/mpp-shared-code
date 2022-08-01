@@ -229,10 +229,13 @@ def _create_ranking_uncertainty_bins(
         #   positive numbers
         # This is a hack to make the code work if we have negative values (multiplied by 2 to avoid a bin_interval of 0)
         if df[cost_metric].min() < 0:
-            df[f"{cost_metric}_positive"] = df[cost_metric] + 2 * abs(df[cost_metric].min())
+            df[f"{cost_metric}_positive"] = df[cost_metric] + 2 * abs(
+                df[cost_metric].min()
+            )
             bin_interval = (
                 cost_metric_relative_uncertainty * df[f"{cost_metric}_positive"].min()
             )
+            df.drop(columns=[f"{cost_metric}_positive"], inplace=True)
         else:
             bin_interval = cost_metric_relative_uncertainty * df[cost_metric].min()
         bin_range = df[cost_metric].max() - df[cost_metric].min()

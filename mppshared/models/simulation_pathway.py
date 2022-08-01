@@ -450,7 +450,7 @@ class SimulationPathway:
 
     def make_initial_asset_stack_from_regional_data(self):
         """Make AssetStack from input data organised by region on total production volume and capacity, average capacity
-            utilisation factor and average age in the initial year."""
+        utilisation factor and average age in the initial year."""
         df_stack = self.importer.get_initial_asset_stack()
 
         # Get the number assets required
@@ -534,6 +534,8 @@ class SimulationPathway:
             on=["product", "year", "region", "technology"],
             how="left",
         )
+        if "ppa_allowed" not in df_stack.columns:
+            df_stack["ppa_allowed"] = True
         assets = df_stack.apply(
             lambda row: create_assets(
                 n_assets=row["number_assets"],

@@ -70,7 +70,7 @@ def check_constraints(
                 )
         return constraints_checked
     else:
-        logger.info(f"Pathway {pathway.pathway} has no constraints to apply")
+        logger.info(f"Pathway {pathway.pathway_name} has no constraints to apply")
         return {
             "emissions_constraint": True,
             "flag_residual": False,
