@@ -90,6 +90,7 @@ def import_and_preprocess(
         header_business_case_excel=HEADER_BUSINESS_CASE_EXCEL,
         excel_column_ranges=EXCEL_COLUMN_RANGES,
     )
+    df_demand.rename(columns={"Product": "product"}, inplace=True)
     df_demand = pd.melt(
         frame=df_demand,
         id_vars=["product", "region"],

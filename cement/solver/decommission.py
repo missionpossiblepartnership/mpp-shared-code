@@ -1,7 +1,8 @@
 """Decommission plants."""
 
 from cement.config.config_cement import LOG_LEVEL, MODEL_SCOPE
-from mppshared.agent_logic.decommission import get_best_asset_to_decommission
+from mppshared.agent_logic.decommission import \
+    get_best_asset_to_decommission_cement
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 
@@ -47,13 +48,10 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
             # Identify asset to be decommissioned
             try:
-                asset_to_remove = get_best_asset_to_decommission(
+                asset_to_remove = get_best_asset_to_decommission_cement(
                     stack=new_stack,
                     df_rank=df_rank,
                     product=product,
-                    year=year,
-                    cuf_lower_threshold=pathway.cuf_lower_threshold,
-                    minimum_decommission_age=pathway.investment_cycle,
                 )
 
                 # TODO: check if removing this asset violates any constraints

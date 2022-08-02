@@ -145,8 +145,9 @@ COST_CLASSIFICATIONS = {"low": "Low", "standard": "Standard", "high": "High"}
 
 CARBON_BUDGET_SECTOR_CSV = False
 CARBON_BUDGET_SHAPE = "linear"  # options: todo
+# carbon budget 2020 - 2050 in Gt
 SECTORAL_CARBON_BUDGETS = {
-    "cement": 42e9,
+    "cement": 42,
 }
 
 residual_share = 0.05
@@ -218,7 +219,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
 CONSTRAINTS_TO_APPLY = {
     "bau": ["rampup_constraint", "regional_constraint"],
     "lc": ["emissions_constraint", "rampup_constraint", "regional_constraint"],
-    "fa": ["emissions_constraint"],
+    "fa": ["emissions_constraint", "regional_constraint"],
 }
 REGIONAL_PRODUCTION_SHARES = {
     "Africa": 1.0,

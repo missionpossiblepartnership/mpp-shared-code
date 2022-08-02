@@ -25,7 +25,7 @@ EXCEL_COLUMN_RANGES = {
     "Shared inputs - Emissivity": "B:AS",
     "Start technologies": "B:E",
     "Region OPEX mapping": "B:F",
-    "demand": "B:AI",
+    "demand": "B:AS",
 }
 
 # name of column that determines whether metric has single value (rather than annual values)

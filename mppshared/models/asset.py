@@ -468,6 +468,22 @@ class AssetStack:
 
         return list(candidates)
 
+    def get_assets_eligible_for_decommission_cement(
+        self,
+        product: str,
+    ) -> list:
+        """Return a list of Assets from the AssetStack that are eligible for decommissioning"""
+
+        # Filter for assets with the specified product
+        assets = self.filter_assets(product=product)
+
+        # assets can be decommissioned if they have not undergone a renovation or rebuild
+        candidates = filter(
+            lambda asset: asset.retrofit, assets
+        )
+
+        return list(candidates)
+
     def get_assets_eligible_for_brownfield(
         self, year: int, investment_cycle: int
     ) -> list:
@@ -488,6 +504,12 @@ class AssetStack:
         )
 
         return list(candidates_renovation) + list(candidates_rebuild)
+
+    def get_assets_eligible_for_brownfield_cement(self) -> list:
+        """Return a list of Assets from the AssetStack that are eligible for a brownfield technology transition"""
+
+        # cement: all assets are eligible for a brownfield transition
+        return self.assets
 
 
 def make_new_asset(

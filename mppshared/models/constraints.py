@@ -235,7 +235,8 @@ def check_annual_carbon_budget_constraint(
     # Compare scope 1 and 2 CO2 emissions to the allowed limit in that year
     co2_scope1_2 = (
         dict_stack_emissions["co2_scope1"] + dict_stack_emissions["co2_scope2"]
-    ) / 1e3  # Gt CO2
+    ) / 1e3
+    # Unit co2_scope1_2: [Gt CO2]
 
     if np.round(co2_scope1_2, 2) <= np.round(limit, 2):
         logger.info(f"Annual carbon budget constraint is satisfied")

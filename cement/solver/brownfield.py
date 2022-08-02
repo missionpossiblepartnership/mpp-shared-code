@@ -46,9 +46,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     df_rank = pathway.get_ranking(year=year, rank_type="brownfield")
 
     # Get assets eligible for brownfield transitions
-    candidates = new_stack.get_assets_eligible_for_brownfield(
-        year=year, investment_cycle=pathway.investment_cycle
-    )
+    candidates = new_stack.get_assets_eligible_for_brownfield_cement()
 
     # Track number of assets that undergo transition
     n_assets_transitioned = 0
@@ -173,7 +171,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             if origin_technology != new_technology:
                 n_assets_transitioned += 1
 
-        # If the emissions constraint and/or the technology ramp-up constraint is hurt, remove remove that destination
+        # If the emissions constraint and/or the technology ramp-up constraint is hurt, remove that destination
         #   technology from the ranking table and try again
         elif not dict_constraints["emissions_constraint"]:
             logger.debug(

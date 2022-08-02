@@ -51,7 +51,7 @@ class CarbonBudget:
 
     def create_emissions_pathway(self, pathway_shape: str, sector: str) -> pd.DataFrame:
         """Create emissions pathway for specified sector according to given shape"""
-        if self.carbon_budget_sector_csv == True:
+        if self.carbon_budget_sector_csv:
             df = self.importer.get_carbon_budget()
             df.set_index("year", inplace=True)
         else:

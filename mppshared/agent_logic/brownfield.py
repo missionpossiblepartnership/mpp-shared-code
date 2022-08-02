@@ -213,7 +213,7 @@ def apply_brownfield_filters_chemicals(
     """For chemicals, the LC pathway is driven by a carbon price. Hence, brownfield transitions only happen
     when they decrease LCOX. For the FA pathway, this is not the case."""
 
-    if pathway.pathway == "fa":
+    if pathway.pathway_name == "fa":
         return df_rank
 
     cost_metric = ranking_cost_metric
