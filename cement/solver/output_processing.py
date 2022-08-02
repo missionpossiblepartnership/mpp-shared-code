@@ -599,7 +599,7 @@ def calculate_weighted_average_lcox(
 
 def calculate_outputs(
     pathway_name: str, sensitivity: str, sector: str, products: list
-) -> pd.DataFrame:
+):
     importer = IntermediateDataImporter(
         pathway_name=pathway_name,
         sensitivity=sensitivity,

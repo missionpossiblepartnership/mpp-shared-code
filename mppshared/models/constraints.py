@@ -1,9 +1,7 @@
 """ Enforce constraints in the yearly optimization of technology switches."""
-from copy import deepcopy
 
 import numpy as np
 import pandas as pd
-from pyparsing import col
 
 from mppshared.config import (AMMONIA_PER_AMMONIUM_NITRATE, AMMONIA_PER_UREA,
                               H2_PER_AMMONIA, HYDRO_TECHNOLOGY_BAN, LOG_LEVEL)
@@ -20,6 +18,7 @@ def check_constraints(
     stack: AssetStack,
     year: int,
     transition_type: str,
+    product: str,
 ) -> dict:
     """Check all constraints for a given asset stack and return dictionary of Booleans with constraint types as keys.
 
@@ -34,12 +33,6 @@ def check_constraints(
         Returns True if no constraint hurt
     """
     # TODO: Map constraint application to the three transition types
-
-    # Check regional production constraint
-    # TODO: is this still needed for any of the transition types?
-    # regional_constraint = check_constraint_regional_production(
-    #     pathway=pathway, stack=stack, product=product, year=year
-    # )
 
     dict_constraints = {
         "emissions_constraint": check_annual_carbon_budget_constraint,
@@ -65,6 +58,7 @@ def check_constraints(
                 constraints_checked[constraint] = dict_constraints[constraint](
                     pathway=pathway,
                     stack=stack,
+                    product=product,
                     year=year,
                     transition_type=transition_type,
                 )
@@ -83,6 +77,7 @@ def check_constraints(
 def check_technology_rampup_constraint(
     pathway: SimulationPathway,
     stack: AssetStack,
+    product: str,
     year: int,
     transition_type: str,
 ) -> bool:
@@ -91,7 +86,9 @@ def check_technology_rampup_constraint(
     Args:
         pathway: contains the stack of the previous year
         stack: new stack for which the ramp-up constraint is to be checked
+        product: dummy for this function; standardisation required as constraint functions are called from dictionary
         year: year corresponding to the stack passed
+        transition_type:
     """
     logger.info(
         f"Checking ramp-up constraint for year {year}, transition type {transition_type}"
@@ -143,8 +140,12 @@ def check_constraint_regional_production(
     """Check constraints that regional production is at least a specified share of regional demand
 
     Args:
+        pathway
         stack (_type_): _description_
         product (_type_): _description_
+        year
+        transition_type: dummy for this function; standardisation required as constraint functions are called from
+            dictionary
     """
     df = get_regional_production_constraint_table(pathway, stack, product, year)
     # The constraint is hurt if any region does not meet its required regional production share
@@ -189,13 +190,25 @@ def check_annual_carbon_budget_constraint(
     stack: AssetStack,
     year: int,
     transition_type: str,
-) -> bool:
-    """Check if the stack exceeds the Carbon Budget defined in the pathway for the given product and year"""
+) -> tuple[bool, bool]:
+    """Check if the stack exceeds the Carbon Budget defined in the pathway for the given product and year
+
+    Args:
+        pathway ():
+        stack ():
+        year ():
+        transition_type ():
+
+    Returns:
+
+    """
+
     logger.info(
         f"Checking annual carbon budget constraint for year {year}, transition type {transition_type}"
     )
 
-    # After a sector-specific year, all end-state newbuild capacity has to fulfill the 2050 emissions limit with a stack composed of only end-state technologies
+    # After a sector-specific year, all end-state newbuild capacity has to fulfill the 2050 emissions limit with a stack
+    #   composed of only end-state technologies
     if (transition_type == "greenfield") & (
         year >= pathway.year_2050_emissions_constraint
     ):
@@ -269,9 +282,25 @@ def apply_greenfield_filters_chemicals(
 
 
 def check_global_demand_share_constraint(
-    pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
+    pathway: SimulationPathway,
+    product: str,
+    stack: AssetStack,
+    year: int,
+    transition_type: str,
 ) -> bool:
-    "Check for specified technologies whether they fulfill the constraint of supplying a maximum share of global demand"
+    """
+    Check for specified technologies whether they fulfill the constraint of supplying a maximum share of global demand
+
+    Args:
+        pathway ():
+        product (): dummy for this function; standardisation required as constraint functions are called from dictionary
+        stack ():
+        year ():
+        transition_type ():
+
+    Returns:
+
+    """
 
     df_stack = stack.aggregate_stack(
         aggregation_vars=["product", "technology"]
@@ -312,9 +341,20 @@ def check_global_demand_share_constraint(
 
 
 def check_electrolysis_capacity_addition_constraint(
-    pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
+    pathway: SimulationPathway, stack: AssetStack, product: str, year: int, transition_type: str
 ) -> bool:
-    """Check if the annual addition of electrolysis capacity fulfills the constraint"""
+    """Check if the annual addition of electrolysis capacity fulfills the constraint
+
+    Args:
+        pathway ():
+        stack ():
+        product (): dummy for this function; standardisation required as constraint functions are called from dictionary
+        year ():
+        transition_type ():
+
+    Returns:
+
+    """
 
     # Get annual production capacities per technology of current and tentative new stack
     df_old_stack = (

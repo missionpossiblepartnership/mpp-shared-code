@@ -2,7 +2,8 @@
 
 import pandas as pd
 
-from cement.config.config_cement import (LIST_TECHNOLOGIES, MODEL_YEARS,
+from cement.config.config_cement import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                                         LIST_TECHNOLOGIES, MODEL_YEARS,
                                          REGIONS, START_YEAR)
 from cement.config.dataframe_config_cement import (DF_DATATYPES_PER_COLUMN,
                                                    IDX_PER_INPUT_METRIC)
@@ -91,11 +92,13 @@ def import_and_preprocess(
     )
     df_demand = pd.melt(
         frame=df_demand,
-        id_vars="region",
+        id_vars=["product", "region"],
         value_vars=MODEL_YEARS,
         var_name="year",
         value_name="value",
     )
+    # convert from [t Clk / year] to [Mt Clk / year]
+    df_demand["value"] *= 1e-6
     # export
     importer.export_data(
         df=df_demand,
@@ -157,11 +160,22 @@ def _get_initial_asset_stack(importer: IntermediateDataImporter, product: list) 
             "country",
             "coordinates",
             "product",
-            "technology_origin",
+            "technology",
             "annual_production_capacity",
             "year_commissioned",
-            "capacity_utilisation_factor",
+            "capacity_factor",
         ]
+    )
+    df_initial_asset_stack = df_initial_asset_stack.astype(dtype={
+            "region": str,
+            "country": str,
+            "coordinates": str,
+            "product": str,
+            "technology": str,
+            "annual_production_capacity": float,
+            "year_commissioned": int,
+            "capacity_factor": float
+        }
     )
 
     df_list = []
@@ -176,20 +190,24 @@ def _get_initial_asset_stack(importer: IntermediateDataImporter, product: list) 
                 df_demand.loc[df_demand["region"] == region, "value"].squeeze()
                 * (init_tech_share / 100)
             )
-            plant_capacity = df_plant_capacity.xs(
+            """plant_capacity = df_plant_capacity.xs(
                 key=(region, technology), level=("region", "technology_destination")
-            ).squeeze()
+            ).squeeze()"""
+            plant_capacity = ASSUMED_ANNUAL_PRODUCTION_CAPACITY
             n_plants = demand / plant_capacity
-            n_plants = int(round(number=n_plants, ndigits=0))
+            n_full_plants = int(n_plants)
+            n_partial_plants = n_plants - float(n_full_plants)
 
-            # create plants
+            # create "full" and "partial" plants
             df_append = df_initial_asset_stack.copy()
-            df_append["technology_origin"] = n_plants * [technology]
-            df_append["annual_production_capacity"] = plant_capacity
-            df_append["capacity_utilisation_factor"] = df_capacity_factor.xs(
+            if n_partial_plants != float(0):
+                df_append["annual_production_capacity"] = n_full_plants * [plant_capacity] + [n_partial_plants * plant_capacity]
+            else:
+                df_append["annual_production_capacity"] = n_full_plants * [plant_capacity]
+            df_append["technology"] = technology
+            df_append["capacity_factor"] = df_capacity_factor.xs(
                 key=(region, technology), level=("region", "technology_destination")
             ).squeeze()
-
             df_append["region"] = region
             df_list.append(df_append)
 

@@ -95,7 +95,10 @@ def get_best_asset_to_decommission(
     Args:
         stack:
         df_rank:
-        df_tech:
+        product:
+        year:
+        cuf_lower_threshold:
+        minimum_decommission_age:
 
     Returns:
         Asset to be decommissioned

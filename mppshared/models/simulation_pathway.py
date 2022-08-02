@@ -203,7 +203,7 @@ class SimulationPathway:
         df_roadmap = self.create_technology_roadmap()
         logger.debug("Exporting technology roadmap")
         self.importer.export_data(df_roadmap, "technology_roadmap.csv", "final")
-        self.plot_technology_roadmap(df_roadmap=df_roadmap)
+        # self.plot_technology_roadmap(df_roadmap=df_roadmap)
 
     def create_technology_roadmap(self) -> pd.DataFrame:
         """Create technology roadmap that shows evolution of stack (supply mix) over model horizon."""

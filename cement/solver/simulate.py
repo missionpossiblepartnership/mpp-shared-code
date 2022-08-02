@@ -49,10 +49,6 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
     for year in range(START_YEAR, END_YEAR + 1):
         logger.info("Optimizing for %s", year)
 
-        # Adjust capacity utilisation of each asset
-        # todo: remove CUF adjustment phase
-        pathway = adjust_capacity_utilisation(pathway=pathway, year=year)
-
         # Copy over last year's stack to this year
         pathway = pathway.copy_stack(year=year)
 
@@ -88,7 +84,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
 
 def simulate_pathway(
     sector: str, pathway_name: str, sensitivity: str, products: list
-) -> SimulationPathway:
+):
     """
     Get data per technology, ranking data and then run the pathway simulation
     """
