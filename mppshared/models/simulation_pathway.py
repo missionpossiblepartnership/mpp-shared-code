@@ -199,11 +199,11 @@ class SimulationPathway:
         self.importer.export_data(df, f"stack_{year}.csv", "stack_tracker", index=False)
 
     def output_technology_roadmap(self):
-        logger.debug("Creatting technology roadmap")
+        logger.debug("Creating technology roadmap")
         df_roadmap = self.create_technology_roadmap()
         logger.debug("Exporting technology roadmap")
         self.importer.export_data(df_roadmap, "technology_roadmap.csv", "final")
-        # self.plot_technology_roadmap(df_roadmap=df_roadmap)
+        self.plot_technology_roadmap(df_roadmap=df_roadmap)
 
     def create_technology_roadmap(self) -> pd.DataFrame:
         """Create technology roadmap that shows evolution of stack (supply mix) over model horizon."""
@@ -257,7 +257,7 @@ class SimulationPathway:
             auto_open=False,
         )
         logger.debug("Exporting technology roadmap PNG")
-        fig.write_image(self.importer.final_path.joinpath("technology_roadmap.png"))
+        # fig.write_image(self.importer.final_path.joinpath("technology_roadmap.png"))
 
     def output_emission_trajectory(self):
         """Output emission trajectory as csv and figure"""

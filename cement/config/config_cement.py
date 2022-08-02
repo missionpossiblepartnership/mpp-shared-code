@@ -78,7 +78,7 @@ TRANSITIONAL_PERIOD_YEARS = 20
 # Emission scopes included in data analysis
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream"]
 # Emissions
-GHGS = ["co2e"]
+GHGS = ["co2", "co2e"]
 
 REGIONS = [
     "China",
