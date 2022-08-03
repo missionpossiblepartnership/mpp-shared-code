@@ -41,7 +41,6 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         df_rank = df_rank.loc[df_rank["product"] == product]
         # Get demand and production
         demand = pathway.get_demand(product=product, year=year + 1, region=MODEL_SCOPE)
-        production = new_stack.get_annual_production_volume(product)
 
         # STEP ONE: BUILD NEW CAPACITY BY REGION
         # First, build new capacity in each region to make sure that the regional production constraint is met even if

@@ -216,7 +216,7 @@ def select_asset_for_greenfield(
             [
                 dict_constraints[k]
                 for k in dict_constraints.keys()
-                if k in pathway.constraints_to_apply and k != "regional_production"
+                if k in pathway.constraints_to_apply and k != "regional_constraint"
             ]
         ):
             return new_asset

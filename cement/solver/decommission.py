@@ -23,6 +23,8 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
             transitions enacted
     """
 
+    # todo: decommission per region!
+
     for product in pathway.products:
 
         logger.info(f"Running decommission logic for {product}")
@@ -32,7 +34,7 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
         new_stack = pathway.get_stack(year=year + 1)
 
         # Get demand balance (demand - production)
-        demand = pathway.get_demand(product, year + 1, MODEL_SCOPE)
+        demand = pathway.get_demand(product=product, year=year + 1, region=MODEL_SCOPE)
         production = old_stack.get_annual_production_volume(product)
 
         # Get ranking table for decommissioning

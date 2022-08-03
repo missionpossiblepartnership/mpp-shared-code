@@ -94,7 +94,7 @@ def check_technology_rampup_constraint(
         transition_type:
     """
     logger.info(
-        f"Checking ramp-up constraint for year {year}, transition type {transition_type}"
+        f"Checking ramp-up constraint for year {year} and transition type {transition_type}"
     )
     # Get asset numbers of new and old stack for each technology
     df_old_stack = (
@@ -128,7 +128,7 @@ def check_technology_rampup_constraint(
         logger.info("Ramp-up constraint is satisfied")
         return True
 
-    technology_affected = list(df_rampup[df_rampup["check"] == False].index)
+    technology_affected = list(df_rampup[df_rampup["check"] is False].index)
     logger.info(f"Technology ramp-up constraint hurt for {technology_affected}.")
     return False
 
@@ -150,9 +150,13 @@ def check_constraint_regional_production(
         transition_type: dummy for this function; standardisation required as constraint functions are called from
             dictionary
     """
+    logger.info(
+        f"Checking regional production constraint for year {year} and transition type {transition_type}"
+    )
     df = get_regional_production_constraint_table(pathway, stack, product, year)
     # The constraint is hurt if any region does not meet its required regional production share
     if df["check"].all():
+        logger.info("Regional production constraint satisfied")
         return True
 
     return False
@@ -207,7 +211,7 @@ def check_annual_carbon_budget_constraint(
     """
 
     logger.info(
-        f"Checking annual carbon budget constraint for year {year}, transition type {transition_type}"
+        f"Checking annual carbon budget constraint for year {year} and transition type {transition_type}"
     )
 
     # After a sector-specific year, all end-state newbuild capacity has to fulfill the 2050 emissions limit with a stack
@@ -528,6 +532,11 @@ def check_natural_gas_constraint(
 ):
     """Check if the constraint on annual natural gas capacity (regionally) is fulfilled"""
 
+    if not return_dict:
+        logger.info(
+            f"Checking natural gas constraint for year {year} and transition type {transition_type}"
+        )
+
     # Get constraint value
     df_ng_limit = pathway.natural_gas_constraint
 
@@ -550,6 +559,10 @@ def check_natural_gas_constraint(
     if return_dict:
         return dict_regional_fulfilment
     else:
+        if all(dict_regional_fulfilment.values()):
+            logger.info("Natural gas constraint satisfied")
+        else:
+            logger.info("Natural gas constraint hurt")
         return all(dict_regional_fulfilment.values())
 
 
@@ -562,6 +575,11 @@ def check_alternative_fuel_constraint(
     return_dict: bool = False,
 ):
     """Check if the constraint on annual alternative fuel capacity (regionally) is fulfilled"""
+
+    if not return_dict:
+        logger.info(
+            f"Checking alternative fuel constraint for year {year} and transition type {transition_type}"
+        )
 
     # Get constraint value
     df_af_limit = pathway.alternative_fuel_constraint
@@ -585,6 +603,10 @@ def check_alternative_fuel_constraint(
     if return_dict:
         return dict_regional_fulfilment
     else:
+        if all(dict_regional_fulfilment.values()):
+            logger.info("Alternative fuel constraint satisfied")
+        else:
+            logger.info("Alternative fuel constraint hurt")
         return all(dict_regional_fulfilment.values())
 
 

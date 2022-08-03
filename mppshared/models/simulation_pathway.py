@@ -332,7 +332,7 @@ class SimulationPathway:
 
         """
         df = self.demand
-        logger.debug(f"Getting demand for {product} in {year} in {region}")
+        # logger.debug(f"Getting demand for {product} in {year} in {region}")
         return df.loc[
             (df["product"] == product)
             & (df["year"] == year)
