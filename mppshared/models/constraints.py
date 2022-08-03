@@ -42,6 +42,7 @@ def check_constraints(
         "electrolysis_capacity_addition_constraint": check_electrolysis_capacity_addition_constraint,
         "co2_storage_constraint": check_co2_storage_constraint,
         "natural_gas_constraint": check_natural_gas_constraint,
+        "alternative_fuel_constraint": check_alternative_fuel_constraint,
     }
     constraints_checked = {}
     if pathway.constraints_to_apply:
@@ -66,6 +67,7 @@ def check_constraints(
         return constraints_checked
     else:
         logger.info(f"Pathway {pathway.pathway_name} has no constraints to apply")
+        # todo: rather return empty dict?
         return {
             "emissions_constraint": True,
             "flag_residual": False,
@@ -528,18 +530,55 @@ def check_natural_gas_constraint(
     df_ng_limit = pathway.natural_gas_constraint
 
     dict_regional_fulfilment = {}
-    for region in list(df_ng_limit["region"].unique()):
+    regions = list(df_ng_limit["region"].unique())
+    for region in regions:
         limit_region = df_ng_limit.loc[
-            (df_ng_limit["year"] == year + 1 & df_ng_limit["region"] == region), "value"
-        ]
+            ((df_ng_limit["year"] == (year + 1)) & (df_ng_limit["region"] == region)),
+            "value",
+        ].squeeze()
 
         # calculate natural gas-based production capacity
-        # todo: write function in stack class
-        ng_capacity = stack.get_annual_production_volume_by_region_and_technology(product=product)
-        # todo: get sum of techs in current region
+        ng_capacity = stack.get_ng_af_production_volume(
+            product=product, region=region, tech_substr="natural gas"
+        )
 
         # add to dict
         dict_regional_fulfilment[region] = limit_region >= ng_capacity
+
+    if return_dict:
+        return dict_regional_fulfilment
+    else:
+        return all(dict_regional_fulfilment.values())
+
+
+def check_alternative_fuel_constraint(
+    pathway: SimulationPathway,
+    product: str,
+    stack: AssetStack,
+    year: int,
+    transition_type: str,
+    return_dict: bool = False,
+):
+    """Check if the constraint on annual alternative fuel capacity (regionally) is fulfilled"""
+
+    # Get constraint value
+    df_af_limit = pathway.alternative_fuel_constraint
+
+    dict_regional_fulfilment = {}
+    regions = list(df_af_limit["region"].unique())
+    for region in regions:
+        limit_region = df_af_limit.loc[
+            ((df_af_limit["year"] == (year + 1)) & (df_af_limit["region"] == region)),
+            "value",
+        ].squeeze()
+
+        # calculate natural gas-based production capacity
+        af_capacity = stack.get_ng_af_production_volume(
+            product=product, region=region, tech_substr="alternative fuels"
+        )
+
+        # add to dict
+        dict_regional_fulfilment[region] = limit_region >= af_capacity
 
     if return_dict:
         return dict_regional_fulfilment

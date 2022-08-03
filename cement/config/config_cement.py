@@ -41,8 +41,8 @@ ALL_SENSITIVITIES = [
     "def",
 ]
 SENSITIVITIES = {
-    # "bau": ["def"],  # ALL_SENSITIVITIES,
-    "fa": ["def"],
+    "bau": ["def"],  # ALL_SENSITIVITIES,
+    # "fa": ["def"],
     # "lc": ["def"],  # ALL_SENSITIVITIES,
 }
 CARBON_COSTS = [
@@ -146,12 +146,14 @@ COST_CLASSIFICATIONS = {"low": "Low", "standard": "Standard", "high": "High"}
 CARBON_BUDGET_SECTOR_CSV = False
 CARBON_BUDGET_SHAPE = "linear"  # options: todo
 # carbon budget 2020 - 2050 in Gt
+# todo: why is this not being used?
 SECTORAL_CARBON_BUDGETS = {
     "cement": 42,
 }
 
 residual_share = 0.05
-emissions_2020 = 0.62  # Gt CO2 (scope 1 and 2)
+# todo: change approach or research 2020 emissions
+emissions_2020 = 2.373  # Gt CO2 (scopes 1 and 2)
 SECTORAL_CARBON_PATHWAY = {
     "emissions_start": emissions_2020,
     "emissions_end": residual_share * emissions_2020,
@@ -217,9 +219,25 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "years_rampup_phase": 5,
 }
 CONSTRAINTS_TO_APPLY = {
-    "bau": ["rampup_constraint", "regional_constraint"],
-    "lc": ["emissions_constraint", "rampup_constraint", "regional_constraint"],
-    "fa": ["emissions_constraint", "regional_constraint"],
+    "bau": [
+        "rampup_constraint",
+        "regional_constraint",
+        "natural_gas_constraint",
+        "alternative_fuel_constraint",
+    ],
+    "lc": [
+        "emissions_constraint",
+        "rampup_constraint",
+        "regional_constraint",
+        "natural_gas_constraint",
+        "alternative_fuel_constraint",
+    ],
+    "fa": [
+        "emissions_constraint",
+        "regional_constraint",
+        "natural_gas_constraint",
+        "alternative_fuel_constraint",
+    ],
 }
 REGIONAL_PRODUCTION_SHARES = {
     "Africa": 1.0,

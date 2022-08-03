@@ -48,7 +48,7 @@ def import_and_preprocess(
         excel_column_ranges=EXCEL_COLUMN_RANGES,
     )
 
-    # import and preprocess average start technologies
+    # START TECHNOLOGIES
     df_start_technologies = importer.get_raw_input_data(
         sheet_name="Start technologies",
         header_business_case_excel=HEADER_BUSINESS_CASE_EXCEL,
@@ -70,7 +70,7 @@ def import_and_preprocess(
         index=False,
     )
 
-    # import and preprocess OPEX context mapping
+    # OPEX CONTEXT MAPPING
     df_opex_context_mapping = importer.get_raw_input_data(
         sheet_name="Region OPEX mapping",
         header_business_case_excel=HEADER_BUSINESS_CASE_EXCEL,
@@ -84,7 +84,7 @@ def import_and_preprocess(
         index=False,
     )
 
-    # import and preprocess demand
+    # DEMAND
     df_demand = importer.get_raw_input_data(
         sheet_name="demand",
         header_business_case_excel=HEADER_BUSINESS_CASE_EXCEL,
@@ -108,7 +108,7 @@ def import_and_preprocess(
         index=False,
     )
 
-    # import and preprocess initial_asset_stack
+    # INITIAL ASSET STACK
     df_initial_asset_stack = _get_initial_asset_stack(importer=importer, product=products)
     # export
     importer.export_data(
@@ -118,8 +118,61 @@ def import_and_preprocess(
         index=False,
     )
 
+    # NATURAL GAS AND ALTERNATIVE FUEL CONSTRAINTS
+    df_ng_af_constraint = importer.get_raw_input_data(
+        sheet_name="Alternative fuels and NG",
+        header_business_case_excel=HEADER_BUSINESS_CASE_EXCEL,
+        excel_column_ranges=EXCEL_COLUMN_RANGES,
+    ).rename(columns={"Region": "region"})
 
-def _get_initial_asset_stack(importer: IntermediateDataImporter, product: list) -> pd.DataFrame():
+    # natural gas
+    df_ng_constraint = df_ng_af_constraint.copy().loc[
+        df_ng_af_constraint["Metric"] == "Maximum demand from natural gas", :
+    ]
+    df_ng_constraint = pd.melt(
+        frame=df_ng_constraint,
+        id_vars="region",
+        value_vars=MODEL_YEARS,
+        var_name="year",
+        value_name="value",
+    )
+    df_ng_constraint = set_datatypes(
+        df=df_ng_constraint, datatypes_per_column=DF_DATATYPES_PER_COLUMN
+    )
+    importer.export_data(
+        df=df_ng_constraint,
+        filename="natural_gas_constraint.csv",
+        export_dir="intermediate",
+        index=False,
+    )
+    # Unit df_ng_constraint: [Mt Clk / year]
+
+    # alternative fuel
+    df_af_constraint = df_ng_af_constraint.copy().loc[
+        df_ng_af_constraint["Metric"] == "Maximum demand from alternative fuels", :
+    ]
+    df_af_constraint = pd.melt(
+        frame=df_af_constraint,
+        id_vars="region",
+        value_vars=MODEL_YEARS,
+        var_name="year",
+        value_name="value",
+    )
+    df_af_constraint = set_datatypes(
+        df=df_af_constraint, datatypes_per_column=DF_DATATYPES_PER_COLUMN
+    )
+    importer.export_data(
+        df=df_af_constraint,
+        filename="alternative_fuel_constraint.csv",
+        export_dir="intermediate",
+        index=False,
+    )
+    # Unit df_af_constraint: [Mt Clk / year]
+
+
+def _get_initial_asset_stack(
+    importer: IntermediateDataImporter, product: list
+) -> pd.DataFrame():
     """
     Creates the initial_asset_stack dataframe
     Args:
@@ -167,7 +220,8 @@ def _get_initial_asset_stack(importer: IntermediateDataImporter, product: list) 
             "capacity_factor",
         ]
     )
-    df_initial_asset_stack = df_initial_asset_stack.astype(dtype={
+    df_initial_asset_stack = df_initial_asset_stack.astype(
+        dtype={
             "region": str,
             "country": str,
             "coordinates": str,
@@ -175,7 +229,7 @@ def _get_initial_asset_stack(importer: IntermediateDataImporter, product: list) 
             "technology": str,
             "annual_production_capacity": float,
             "year_commissioned": int,
-            "capacity_factor": float
+            "capacity_factor": float,
         }
     )
 
@@ -187,9 +241,8 @@ def _get_initial_asset_stack(importer: IntermediateDataImporter, product: list) 
             init_tech_share = df_start_technologies.loc[
                 df_start_technologies["region"] == region, technology
             ].squeeze()
-            demand = (
-                df_demand.loc[df_demand["region"] == region, "value"].squeeze()
-                * (init_tech_share / 100)
+            demand = df_demand.loc[df_demand["region"] == region, "value"].squeeze() * (
+                init_tech_share / 100
             )
             """plant_capacity = df_plant_capacity.xs(
                 key=(region, technology), level=("region", "technology_destination")
@@ -202,9 +255,13 @@ def _get_initial_asset_stack(importer: IntermediateDataImporter, product: list) 
             # create "full" and "partial" plants
             df_append = df_initial_asset_stack.copy()
             if n_partial_plants != float(0):
-                df_append["annual_production_capacity"] = n_full_plants * [plant_capacity] + [n_partial_plants * plant_capacity]
+                df_append["annual_production_capacity"] = n_full_plants * [
+                    plant_capacity
+                ] + [n_partial_plants * plant_capacity]
             else:
-                df_append["annual_production_capacity"] = n_full_plants * [plant_capacity]
+                df_append["annual_production_capacity"] = n_full_plants * [
+                    plant_capacity
+                ]
             df_append["technology"] = technology
             df_append["capacity_factor"] = df_capacity_factor.xs(
                 key=(region, technology), level=("region", "technology_destination")

@@ -105,10 +105,10 @@ class SimulationPathway:
             self.co2_storage_constraint_cumulative = co2_storage_constraint_cumulative
 
         if set_natural_gas_constraint:
-            self.natural_gas_constraint = self.importer.get_natural_gas_constraint
+            self.natural_gas_constraint = self.importer.get_natural_gas_constraint()
 
         if set_alternative_fuel_constraint:
-            self.alternative_fuel_constraint = self.importer.get_alternative_fuel_constraint
+            self.alternative_fuel_constraint = self.importer.get_alternative_fuel_constraint()
 
         self.assumed_annual_production_capacity = assumed_annual_production_capacity
 

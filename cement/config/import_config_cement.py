@@ -26,6 +26,7 @@ EXCEL_COLUMN_RANGES = {
     "Start technologies": "B:E",
     "Region OPEX mapping": "B:F",
     "demand": "B:AS",
+    "Alternative fuels and NG": "B:AK",
 }
 
 # name of column that determines whether metric has single value (rather than annual values)

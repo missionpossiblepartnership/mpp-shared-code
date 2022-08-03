@@ -144,6 +144,8 @@ def simulate_pathway(
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,
         constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],
         year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
+        set_natural_gas_constraint=("natural_gas_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]),
+        set_alternative_fuel_constraint=("alternative_fuel_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]),
     )
 
     # Optimize asset stack on a yearly basis
