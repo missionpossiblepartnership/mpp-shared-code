@@ -96,6 +96,9 @@ def simulate_pathway(
         products=products,
     )
 
+    # copy config file to output folder
+    importer.export_sector_config()
+
     # Create carbon budget
     carbon_budget = CarbonBudget(
         start_year=START_YEAR,
