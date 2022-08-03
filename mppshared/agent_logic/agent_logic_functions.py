@@ -4,8 +4,13 @@ from operator import methodcaller
 
 import pandas as pd
 
-from mppshared.config import (COST_METRIC_CUF_ADJUSTMENT, CUF_LOWER_THRESHOLD,
-                              CUF_UPPER_THRESHOLD, LOG_LEVEL, MODEL_SCOPE)
+from mppshared.config import (
+    COST_METRIC_CUF_ADJUSTMENT,
+    CUF_LOWER_THRESHOLD,
+    CUF_UPPER_THRESHOLD,
+    LOG_LEVEL,
+    MODEL_SCOPE,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.technology_rampup import TechnologyRampup
@@ -56,6 +61,22 @@ def remove_all_transitions_with_destination_technology(
     df_rank = df_rank.loc[
         ~(df_rank["technology_destination"] == technology_destination)
     ]
+    return df_rank
+
+
+def remove_transition_in_region_by_tech_substr(
+    df_rank: pd.DataFrame, transition: dict, tech_substr: str
+) -> pd.DataFrame:
+
+    df_rank = df_rank.loc[
+        ~(
+            df_rank["region"]
+            == transition["region"]
+            & df_rank["technology_destination"].str.contains(tech_substr)
+        ),
+        :,
+    ]
+
     return df_rank
 
 

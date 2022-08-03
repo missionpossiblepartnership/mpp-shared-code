@@ -8,7 +8,7 @@ import pandas as pd
 
 from mppshared.config import LOG_LEVEL
 from mppshared.utility.dataframe_utility import get_emission_columns
-from mppshared.utility.utils import first, get_logger
+from mppshared.utility.utils import first, get_logger, get_unique_list_values
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -225,6 +225,45 @@ class AssetStack:
             product=product, region=region, technology=technology
         )
         return sum(asset.get_annual_production_volume() for asset in assets)
+
+    def get_ng_af_production_volume(
+        self, product: str, region: str, tech_substr: str,
+    ) -> float:
+        """Get the yearly production volumes of all natural gas (ng) or alternative fuels (af) the AssetStack per region
+            and technology for a specific product
+
+        Args:
+            product ():
+            region ():
+            tech_substr ():
+
+        Returns:
+
+        """
+
+        technologies = get_unique_list_values(
+            [
+                x
+                for x in [
+                    asset.technology for asset in self.filter_assets(product=product, region=region)
+                ]
+                if tech_substr in x
+            ]
+        )
+
+        if len(technologies) == 0:
+            return float(0)
+
+        production_volume = float(0)
+        for technology in technologies:
+            assets = self.filter_assets(
+                product=product, region=region, technology=technology
+            )
+            production_volume += sum(
+                (asset.annual_production_capacity * asset.cuf) for asset in assets
+            )
+
+        return production_volume
 
     def get_products(self) -> list:
         """Get list of unique products produced by the AssetStack"""
@@ -468,6 +507,20 @@ class AssetStack:
 
         return list(candidates)
 
+    def get_assets_eligible_for_decommission_cement(
+        self,
+        product: str,
+    ) -> list:
+        """Return a list of Assets from the AssetStack that are eligible for decommissioning"""
+
+        # Filter for assets with the specified product
+        assets = self.filter_assets(product=product)
+
+        # assets can be decommissioned if they have not undergone a renovation or rebuild
+        candidates = filter(lambda asset: not asset.retrofit, assets)
+
+        return list(candidates)
+
     def get_assets_eligible_for_brownfield(
         self, year: int, investment_cycle: int
     ) -> list:
@@ -488,6 +541,12 @@ class AssetStack:
         )
 
         return list(candidates_renovation) + list(candidates_rebuild)
+
+    def get_assets_eligible_for_brownfield_cement(self) -> list:
+        """Return a list of Assets from the AssetStack that are eligible for a brownfield technology transition"""
+
+        # cement: all assets are eligible for a brownfield transition
+        return self.assets
 
 
 def make_new_asset(

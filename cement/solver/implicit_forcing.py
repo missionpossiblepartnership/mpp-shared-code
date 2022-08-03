@@ -27,7 +27,7 @@ def apply_implicit_forcing(
     """Apply the implicit forcing mechanisms to the input tables.
 
     Args:
-        pathway: either of "bau", "fa", "lc", "cc"
+        pathway_name: either of "bau", "fa", "lc", "cc"
         sensitivity: in ALL_SENSITIVITIES
         sector:
         products:
@@ -70,13 +70,25 @@ def apply_implicit_forcing(
 
     # Calculate emission deltas between origin and destination technology
     df_ranking = calculate_emission_reduction(
-        df_technology_switches, df_emissions, EMISSION_SCOPES, GHGS
+        df_technology_switches=df_technology_switches,
+        df_emissions=df_emissions,
+        emission_scopes=EMISSION_SCOPES,
+        ghgs=GHGS,
     )
 
-    # For future Luis, Timon or any other developer, this line was added to filter the technologies and only
-    # keep the ones with the rigth context for the first run of the code
+    # todo: For future Luis, Timon or any other developer, this line was added to filter the technologies and only
+    # keep the ones with the right context for the first run of the code
     # Only get the rows with value value_high_low in column opex_context
     df_ranking = df_ranking[df_ranking["opex_context"] == "value_high_low"]
+
+    # todo dev: remove this workaround of excluding all usage techs
+    df_ranking = df_ranking.loc[
+              ~(
+                      df_ranking["technology_origin"].str.contains("usage")
+                      | df_ranking["technology_destination"].str.contains("usage")
+              ), :
+              ]
+    # todo dev
 
     # Export technology switching table to be used for ranking
     importer.export_data(

@@ -27,12 +27,12 @@ funcs = {
     "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     "MAKE_RANKINGS": make_rankings,
     "SIMULATE_PATHWAY": simulate_pathway,
-    "CALCULATE_OUTPUTS": calculate_outputs,
+    # "CALCULATE_OUTPUTS": calculate_outputs,
     # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
 }
 
 
-def _run_model(pathway_name, sensitivity):
+def _run_model(pathway_name: str, sensitivity: str):
     for name, func in funcs.items():
         if name in run_config:
             logger.info(
@@ -46,14 +46,14 @@ def _run_model(pathway_name, sensitivity):
             )
 
 
-def run_model_sequential(runs):
+def run_model_sequential(runs: list):
     """Run model sequentially, slower but better for debugging"""
     # TODO: Pass carbon cost trajectories into the model
     for pathway_name, sensitivity in runs:
         _run_model(pathway_name=pathway_name, sensitivity=sensitivity)
 
 
-def run_model_parallel(runs):
+def run_model_parallel(runs: list):
     """Run model in parallel, faster but harder to debug"""
     n_cores = mp.cpu_count()
     logger.info(f"{n_cores} cores detected")

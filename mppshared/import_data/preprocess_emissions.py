@@ -86,8 +86,8 @@ def calculate_emissions(
         )
 
     # rename and concat
-    df_scope_1.rename(columns={"value": "scope_1"}, inplace=True)
-    df_scope_1_captured.rename(columns={"value": "scope_1_captured"}, inplace=True)
+    df_scope_1.rename(columns={"value": "scope1"}, inplace=True)
+    df_scope_1_captured.rename(columns={"value": "scope1_captured"}, inplace=True)
     # unit df_scope_1: [t GHG / t production_output]
 
     """scope 2"""
@@ -103,7 +103,7 @@ def calculate_emissions(
     df_scope_2 = df_scope_2.reorder_levels(
         idx_emissivity_precursor + ["ghg"]
     ).sort_index()
-    df_scope_2.rename(columns={"value": "scope_2"}, inplace=True)
+    df_scope_2.rename(columns={"value": "scope2"}, inplace=True)
     # unit df_scope_2: [t GHG / t production_output]
 
     """scope 3 upstream"""
@@ -115,13 +115,15 @@ def calculate_emissions(
     )
 
     # multiply energy emissivity with energy intensity
-    df_scope_3_upstream = (
-        df_scope_3_upstream.mul(df_inputs_energy).dropna(how="all").droplevel("metric")
-    )
+    df_scope_3_upstream = df_scope_3_upstream.mul(df_inputs_energy).dropna(how="all")
+    # group by metric
+    df_scope_3_upstream = df_scope_3_upstream.groupby(
+        [x for x in df_scope_3_upstream.index.names if x != "metric"]
+    ).sum()
     df_scope_3_upstream = df_scope_3_upstream.reorder_levels(
         idx_emissivity_precursor + ["ghg"]
     ).sort_index()
-    df_scope_3_upstream.rename(columns={"value": "scope_3_upstream"}, inplace=True)
+    df_scope_3_upstream.rename(columns={"value": "scope3_upstream"}, inplace=True)
     # unit df_scope_3_upstream: [t GHG / t production_output]
 
     """scope 3 downstream"""
@@ -161,18 +163,41 @@ def calculate_emissions(
     idx_emissivity_long = [x for x in list(df_emissivity) if x != "value"]
     df_emissivity.set_index(keys=idx_emissivity_long, inplace=True)
     # convert and sum
-    df_emissivity = df_emissivity.mul(df_conversion)
-    df_emissivity = df_emissivity.groupby(
+    df_emissivity_co2e = df_emissivity.copy().mul(df_conversion)
+    df_emissivity_co2e = df_emissivity_co2e.groupby(
         [x for x in idx_emissivity_long if x != "ghg"]
     ).sum()
     # long to wide
-    df_emissivity = df_emissivity.reset_index().pivot(
+    df_emissivity_co2e = df_emissivity_co2e.reset_index().pivot(
         index=idx_emissivity_precursor, columns="scope", values="value"
     )
     # rename columns
     # add "co2e" to all scopes
-    dict_rename = {k: f"co2e_{k}" for k in list(df_emissivity)}
-    df_emissivity.rename(columns=dict_rename, inplace=True)
+    dict_rename = {k: f"co2e_{k}" for k in list(df_emissivity_co2e)}
+    df_emissivity_co2e.rename(columns=dict_rename, inplace=True)
+    # pivot and rename columns in df_emissivity
+    df_emissivity = df_emissivity.reset_index().pivot(
+        index=idx_emissivity_precursor, columns=["ghg", "scope"], values="value"
+    )
+    # reduce multiindex columns
+    df_emissivity.columns = ['_'.join(col) for col in df_emissivity.columns.values]
+    df_emissivity.rename(
+        columns={
+            # CO2
+            "emissivity_co2_scope1": "co2_scope1",
+            "emissivity_co2_scope1_captured": "co2_scope1_captured",
+            "emissivity_co2_scope2": "co2_scope2",
+            "emissivity_co2_scope3_upstream": "co2_scope3_upstream",
+            # CH4
+            "emissivity_ch4_scope1": "ch4_scope1",
+            "emissivity_ch4_scope1_captured": "ch4_scope1_captured",
+            "emissivity_ch4_scope2": "ch4_scope2",
+            "emissivity_ch4_scope3_upstream": "ch4_scope3_upstream",
+        },
+        inplace=True
+    )
+    # concat
+    df_emissivity = pd.concat(objs=[df_emissivity, df_emissivity_co2e], axis=1)
     # rename technology_destination to technology_origin
     df_emissivity = (
         df_emissivity.reset_index()

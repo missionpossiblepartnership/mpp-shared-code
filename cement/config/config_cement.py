@@ -5,8 +5,8 @@ LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
 
 PATHWAYS = [
-    # "bau",
-    # "fa",
+    "bau",
+    "fa",
     "lc",
 ]
 
@@ -18,11 +18,11 @@ SCOPES_CO2_COST = [
 
 ### RUN CONFIGURATION ###
 run_config = {
-    # "IMPORT_DATA",
-    # "CALCULATE_VARIABLES",
-    # "APPLY_IMPLICIT_FORCING",
-    # "MAKE_RANKINGS",
-    # "SIMULATE_PATHWAY",
+    "IMPORT_DATA",
+    "CALCULATE_VARIABLES",
+    "APPLY_IMPLICIT_FORCING",
+    "MAKE_RANKINGS",
+    "SIMULATE_PATHWAY",
     "CALCULATE_OUTPUTS",
     # "CREATE_DEBUGGING_OUTPUTS",
     # "EXPORT_OUTPUTS",
@@ -41,9 +41,9 @@ ALL_SENSITIVITIES = [
     "def",
 ]
 SENSITIVITIES = {
-    "bau": ["def"],  # ALL_SENSITIVITIES,
+    # "bau": ["def"],  # ALL_SENSITIVITIES,
     "fa": ["def"],
-    "lc": ["def"],  # ALL_SENSITIVITIES,
+    # "lc": ["def"],  # ALL_SENSITIVITIES,
 }
 CARBON_COSTS = [
     0,
@@ -54,8 +54,8 @@ CARBON_COSTS = [
     250,
 ]
 INVESTMENT_CYCLE = 10  # years
-CUF_LOWER_THRESHOLD = 0.6
-CUF_UPPER_THRESHOLD = 0.95
+CUF_LOWER_THRESHOLD = 0.913
+CUF_UPPER_THRESHOLD = 0.913
 COST_METRIC_CUF_ADJUSTMENT = None
 # Products produced by each sector
 PRODUCTS = ["Clinker"]
@@ -69,16 +69,16 @@ ANNUAL_RENOVATION_SHARE = 0.2
 INITIAL_ASSET_DATA_LEVEL = "individual_assets"
 
 # Override asset parameters; annual production capacity in Mt/year
-ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
+ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 6000 * 365 * 1e-6
 
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = 2030
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
 TRANSITIONAL_PERIOD_YEARS = 20
 # Emission scopes included in data analysis
-EMISSION_SCOPES = ["scope_1", "scope_2", "scope_3_upstream"]
+EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream"]
 # Emissions
-GHGS = ["co2e"]
+GHGS = ["co2", "ch4", "co2e"]
 
 REGIONS = [
     "China",
@@ -121,13 +121,13 @@ LIST_TECHNOLOGIES = [
 ### RANKING OF TECHNOLOGY SWITCHES ###
 RANKING_COST_METRIC = "lcox"
 BIN_METHODOLOGY = "uncertainty"  # options: "histogram" or "uncertainty"
-COST_METRIC_RELATIVE_UNCERTAINTY = 0.5
+COST_METRIC_RELATIVE_UNCERTAINTY = 0.2
 # number of bins (only for histogram ranking)
 NUMBER_OF_BINS_RANKING = 50
 # GHGs considered in the ranking
 GHGS_RANKING = ["co2e"]
 # emission scopes considered in the ranking
-EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3_upstream"]
+EMISSION_SCOPES_RANKING = EMISSION_SCOPES
 # list to define the columns that the ranking will groupby and create a separate ranking for
 UNCERTAINTY_RANKING_GROUPS = ["year", "region", "opex_context"]
 
@@ -145,12 +145,15 @@ COST_CLASSIFICATIONS = {"low": "Low", "standard": "Standard", "high": "High"}
 
 CARBON_BUDGET_SECTOR_CSV = False
 CARBON_BUDGET_SHAPE = "linear"  # options: todo
+# carbon budget 2020 - 2050 in Gt
+# todo: why is this not being used?
 SECTORAL_CARBON_BUDGETS = {
     "cement": 42,
 }
 
 residual_share = 0.05
-emissions_2020 = 0.62  # Gt CO2 (scope 1 and 2)
+# todo: change approach or research 2020 emissions
+emissions_2020 = 2.373  # Gt CO2 (scopes 1 and 2)
 SECTORAL_CARBON_PATHWAY = {
     "emissions_start": emissions_2020,
     "emissions_end": residual_share * emissions_2020,
@@ -209,17 +212,32 @@ RANKING_CONFIG = {
 
 ### CONSTRAINTS ###
 YEAR_2050_EMISSIONS_CONSTRAINT = False
-# Technology ramp-up parameters (on technology-level)
+# Technology ramp-up parameters (on technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
-    "maximum_asset_additions": 6,  # 10
-    "maximum_capacity_growth_rate": 0.5,  # 0.25
-    "years_rampup_phase": 8,  # 5
+    "maximum_asset_additions": 50,
+    "maximum_capacity_growth_rate": 0.2,
+    "years_rampup_phase": 5,
 }
 CONSTRAINTS_TO_APPLY = {
-    "bau": None,
-    "cc": [None],
-    "lc": [None],
-    "fa": [None],
+    "bau": [
+        "rampup_constraint",
+        "regional_constraint",
+        "natural_gas_constraint",
+        "alternative_fuel_constraint",
+    ],
+    "lc": [
+        "emissions_constraint",
+        "rampup_constraint",
+        "regional_constraint",
+        "natural_gas_constraint",
+        "alternative_fuel_constraint",
+    ],
+    "fa": [
+        "emissions_constraint",
+        "regional_constraint",
+        "natural_gas_constraint",
+        "alternative_fuel_constraint",
+    ],
 }
 REGIONAL_PRODUCTION_SHARES = {
     "Africa": 1.0,
