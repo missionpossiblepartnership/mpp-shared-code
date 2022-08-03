@@ -46,7 +46,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
     """
 
     # Run pathway simulation in each year for all products simultaneously
-    for year in range(START_YEAR, END_YEAR + 1):
+    for year in range(START_YEAR, END_YEAR):
         logger.info("Optimizing for %s", year)
 
         # Copy over last year's stack to this year

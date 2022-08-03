@@ -167,7 +167,7 @@ def get_regional_production_constraint_table(
     """Get table that compares regional production with regional demand for a given year"""
     # Get regional production and demand
     df_regional_production = stack.get_regional_production_volume(product)
-    df_demand = pathway.get_regional_demand(product, year)
+    df_demand = pathway.get_regional_demand(product=product, year=year)
 
     # Check for every region in DataFrame
     df = df_regional_production.merge(df_demand, on=["region"], how="left")
@@ -480,6 +480,7 @@ def check_co2_storage_constraint(
 
     # Get constraint value
     df_co2_storage = pathway.co2_storage_constraint
+    # todo: Johannes, I suppose the +1 must now be removed as we corrected the year logic
     limit = df_co2_storage.loc[df_co2_storage["year"] == year + 1, "value"].item()
 
     # Constraint based on total CO2 storage available in that year
@@ -502,6 +503,7 @@ def check_co2_storage_constraint(
         co2_captured_old_stack = pathway.stacks[year].calculate_co2_captured_stack(
             year=year, df_emissions=pathway.emissions
         )
+        # todo: Johannes, I suppose the +1 must now be removed as we corrected the year logic
         co2_captured_new_stack = stack.calculate_co2_captured_stack(
             year=year + 1, df_emissions=pathway.emissions
         )
@@ -533,7 +535,7 @@ def check_natural_gas_constraint(
     regions = list(df_ng_limit["region"].unique())
     for region in regions:
         limit_region = df_ng_limit.loc[
-            ((df_ng_limit["year"] == (year + 1)) & (df_ng_limit["region"] == region)),
+            ((df_ng_limit["year"] == year) & (df_ng_limit["region"] == region)),
             "value",
         ].squeeze()
 
@@ -568,7 +570,7 @@ def check_alternative_fuel_constraint(
     regions = list(df_af_limit["region"].unique())
     for region in regions:
         limit_region = df_af_limit.loc[
-            ((df_af_limit["year"] == (year + 1)) & (df_af_limit["region"] == region)),
+            ((df_af_limit["year"] == year) & (df_af_limit["region"] == region)),
             "value",
         ].squeeze()
 

@@ -216,7 +216,7 @@ def select_asset_for_greenfield(
             [
                 dict_constraints[k]
                 for k in dict_constraints.keys()
-                if k in pathway.constraints_to_apply
+                if k in pathway.constraints_to_apply and k != "regional_production"
             ]
         ):
             return new_asset
@@ -249,7 +249,7 @@ def select_asset_for_greenfield(
             if "regional_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["regional_constraint"]:
                     logger.critical(
-                        f"WARNING: Regional production constraint not fulfilled in {year + 1}."
+                        f"WARNING: Regional production constraint not fulfilled in {year}."
                     )
             # NATURAL GAS
             if "natural_gas_constraint" in pathway.constraints_to_apply:

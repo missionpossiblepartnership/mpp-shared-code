@@ -43,9 +43,10 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(
             year + 1, pathway.sector
         )
+        # unit emissions_limit: [Gt CO2]
 
     # Get ranking table for brownfield transitions
-    df_rank = pathway.get_ranking(year=year, rank_type="brownfield")
+    df_rank = pathway.get_ranking(year=year + 1, rank_type="brownfield")
 
     # Get assets eligible for brownfield transitions
     candidates = new_stack.get_assets_eligible_for_brownfield_cement()
@@ -120,7 +121,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 )
             new_technology = best_transition["technology_destination"]
             switch_type = best_transition["switch_type"]
-            # Remove best transition from ranking table
+            # Remove best transition from ranking table if there are no candidates left for it
             if len(best_candidates) == 0:
                 # logger.debug(f"No assets found for best transition {best_transition}")
                 logger.debug(f"Length of ranking table: {len(df_rank)}")
@@ -134,7 +135,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         tentative_stack = deepcopy(new_stack)
         origin_technology = asset_to_update.technology
         tentative_stack.update_asset(
-            asset_to_update,
+            asset_to_update=asset_to_update,
             new_technology=new_technology,
             new_classification=best_transition["technology_classification"],
             switch_type=switch_type,
@@ -157,7 +158,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             [
                 dict_constraints[k]
                 for k in dict_constraints.keys()
-                if k in pathway.constraints_to_apply
+                if k in pathway.constraints_to_apply and k != "regional_constraint"
             ]
         ) | (origin_technology == new_technology):
             logger.debug(
@@ -175,12 +176,13 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             )
             # Remove asset from candidates
             candidates.remove(asset_to_update)
-            # Only count the transition if the technology is the same
+            # Only count the transition if the technology is not the same
             if origin_technology != new_technology:
                 n_assets_transitioned += 1
 
         # if not all constraints are fulfilled
         else:
+            # todo: make sure that all constraints are being handled here!
             # EMISSIONS
             if "emissions_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["emissions_constraint"]:

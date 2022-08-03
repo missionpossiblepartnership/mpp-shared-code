@@ -32,17 +32,17 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
         new_stack = pathway.get_stack(year=year + 1)
 
         # Get demand balance (demand - production)
-        demand = pathway.get_demand(product, year, MODEL_SCOPE)
+        demand = pathway.get_demand(product, year + 1, MODEL_SCOPE)
         production = old_stack.get_annual_production_volume(product)
 
         # Get ranking table for decommissioning
-        df_rank = pathway.get_ranking(year=year, rank_type="decommission")
+        df_rank = pathway.get_ranking(year=year + 1, rank_type="decommission")
         df_rank = df_rank.loc[df_rank["product"] == product]
 
         # Decommission while production exceeds demand
         surplus = production - demand
         logger.debug(
-            f"Year: {year} Production: {production}, Demand: {demand}, Surplus: {surplus}"
+            f"Year: {year + 1} Production: {production}, Demand: {demand}, Surplus: {surplus}"
         )
         while surplus > 0:
 
@@ -70,7 +70,7 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
             surplus -= asset_to_remove.get_annual_production_volume()
 
             pathway.transitions.add(
-                transition_type="decommission", year=year, origin=asset_to_remove
+                transition_type="decommission", year=year + 1, origin=asset_to_remove
             )
 
     return pathway
