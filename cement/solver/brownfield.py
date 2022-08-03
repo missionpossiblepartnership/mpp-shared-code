@@ -19,31 +19,26 @@ logger.setLevel(LOG_LEVEL)
 
 
 def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
-    """Apply brownfield rebuild or brownfield renovation transition to eligible Assets in the AssetStack.
+    """Apply brownfield rebuild or brownfield renovation transition to eligible Assets in the AssetStack for year + 1.
 
     Args:
         pathway: decarbonization pathway that describes the composition of the AssetStack in every year of the model
             horizon
-        year: current year in which technology transitions are enacted
+        year: last year (technology transitions are enacted for year + 1)
 
     Returns:
         Updated decarbonization pathway with the updated AssetStack in the subsequent year according to the brownfield
             transitions enacted
     """
-    logger.debug(f"Starting brownfield transition logic for year {year}")
+    logger.debug(f"Starting brownfield transition logic for year {year + 1}")
 
     # Next year's asset stack is changed by the brownfield transitions
     new_stack = pathway.get_stack(year=year + 1)
     # Get the emissions, used for the LC scenario
-    if year == 2050:
-        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(
-            year, pathway.sector
-        )
-    else:
-        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(
-            year + 1, pathway.sector
-        )
-        # unit emissions_limit: [Gt CO2]
+    emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(
+        year + 1, pathway.sector
+    )
+    # unit emissions_limit: [Gt CO2]
 
     # Get ranking table for brownfield transitions
     df_rank = pathway.get_ranking(year=year + 1, rank_type="brownfield")
@@ -57,7 +52,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         pathway.annual_renovation_share * new_stack.get_number_of_assets()
     )
     logger.debug(
-        f"Number of assets eligible for brownfield transition: {len(candidates)} in year {year}, of which maximum "
+        f"Number of assets eligible for brownfield transition: {len(candidates)} in year {year + 1}, of which maximum "
         f"{maximum_n_assets_transitioned} can be transitioned."
     )
 
@@ -78,7 +73,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             # This check minimizes the investment as it only requires some switches and not all of them
             if pathway.pathway_name == "lc":
                 dict_stack_emissions = new_stack.calculate_emissions_stack(
-                    year=year,
+                    year=year + 1,
                     df_emissions=pathway.emissions,
                     technology_classification=None,
                 )
@@ -149,7 +144,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         dict_constraints = check_constraints(
             pathway=pathway,
             stack=tentative_stack,
-            year=year,
+            year=year + 1,
             transition_type="brownfield",
             product=PRODUCTS[0],
         )
@@ -162,7 +157,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             ]
         ) | (origin_technology == new_technology):
             logger.debug(
-                f"Year {year} Updating {asset_to_update.product} asset from technology {origin_technology} to "
+                f"Year {year + 1} Updating {asset_to_update.product} asset from technology {origin_technology} to "
                 f"technology {new_technology} in region {asset_to_update.region}, annual production "
                 f"{asset_to_update.get_annual_production_volume()} and UUID {asset_to_update.uuid}"
             )
@@ -209,7 +204,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                         pathway=pathway,
                         product=PRODUCTS[0],
                         stack=tentative_stack,
-                        year=year,
+                        year=year + 1,
                         transition_type="brownfield",
                         return_dict=True,
                     )
@@ -241,7 +236,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                         pathway=pathway,
                         product=PRODUCTS[0],
                         stack=tentative_stack,
-                        year=year,
+                        year=year + 1,
                         transition_type="brownfield",
                         return_dict=True,
                     )
@@ -267,7 +262,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                         )
 
     logger.debug(
-        f"{n_assets_transitioned} assets transitioned of maximum {maximum_n_assets_transitioned} in year {year}."
+        f"{n_assets_transitioned} assets transitioned of maximum {maximum_n_assets_transitioned} in year {year + 1}."
     )
 
     return pathway

@@ -23,7 +23,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     Args:
         pathway: decarbonization pathway that describes the composition of the AssetStack in every year of the model
             horizon
-        year: current year in which technology transitions are enacted
+        year: last year (technology transitions are enacted for year + 1)
 
     Returns:
         Updated decarbonization pathway with the updated AssetStack in the subsequent year according to the greenfield
@@ -76,7 +76,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                         cuf=CUF_UPPER_THRESHOLD,
                     )
                     enact_greenfield_transition(
-                        pathway=pathway, stack=new_stack, new_asset=new_asset, year=year
+                        pathway=pathway, stack=new_stack, new_asset=new_asset, year=year + 1
                     )
                     number_new_assets -= 1
                 except ValueError:

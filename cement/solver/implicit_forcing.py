@@ -27,7 +27,7 @@ def apply_implicit_forcing(
     """Apply the implicit forcing mechanisms to the input tables.
 
     Args:
-        pathway: either of "bau", "fa", "lc", "cc"
+        pathway_name: either of "bau", "fa", "lc", "cc"
         sensitivity: in ALL_SENSITIVITIES
         sector:
         products:
@@ -80,6 +80,15 @@ def apply_implicit_forcing(
     # keep the ones with the right context for the first run of the code
     # Only get the rows with value value_high_low in column opex_context
     df_ranking = df_ranking[df_ranking["opex_context"] == "value_high_low"]
+
+    # todo dev: remove this workaround of excluding all usage techs
+    df_ranking = df_ranking.loc[
+              ~(
+                      df_ranking["technology_origin"].str.contains("usage")
+                      | df_ranking["technology_destination"].str.contains("usage")
+              ), :
+              ]
+    # todo dev
 
     # Export technology switching table to be used for ranking
     importer.export_data(
