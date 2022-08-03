@@ -54,6 +54,8 @@ class SimulationPathway:
         year_2050_emissions_constraint: int,
         set_co2_storage_constraint: bool = False,
         co2_storage_constraint_cumulative: bool = False,
+        set_natural_gas_constraint: bool = False,
+        set_alternative_fuel_constraint: bool = False,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
         technologies_maximum_global_demand_share: list = None,
         maximum_global_demand_share: dict = None,
@@ -101,6 +103,12 @@ class SimulationPathway:
             # Import CO2 storage constraint data
             self.co2_storage_constraint = self.importer.get_co2_storage_constraint()
             self.co2_storage_constraint_cumulative = co2_storage_constraint_cumulative
+
+        if set_natural_gas_constraint:
+            self.natural_gas_constraint = self.importer.get_natural_gas_constraint
+
+        if set_alternative_fuel_constraint:
+            self.alternative_fuel_constraint = self.importer.get_alternative_fuel_constraint
 
         self.assumed_annual_production_capacity = assumed_annual_production_capacity
 

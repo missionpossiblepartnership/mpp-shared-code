@@ -212,12 +212,12 @@ RANKING_CONFIG = {
 YEAR_2050_EMISSIONS_CONSTRAINT = False
 # Technology ramp-up parameters (on technology-level)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
-    "maximum_asset_additions": 100,
-    "maximum_capacity_growth_rate": 0.5,
+    "maximum_asset_additions": 50,
+    "maximum_capacity_growth_rate": 0.2,
     "years_rampup_phase": 5,
 }
 CONSTRAINTS_TO_APPLY = {
-    "bau": ["rampup_constraint", "regional_constraint"],
+    "bau": ["rampup_constraint", "regional_constraint", "natural_gas_constraint"],
     "lc": ["emissions_constraint", "rampup_constraint", "regional_constraint"],
     "fa": ["emissions_constraint", "regional_constraint"],
 }

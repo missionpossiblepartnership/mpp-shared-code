@@ -126,7 +126,7 @@ def calculate_tech_transitions(
     # LCOX
     logger.info("Calculate LCOX")
     # todo: uncomment (this takes some minutes, therefore the workaround with the csv import below)
-    if sector == "cement":
+    """if sector == "cement":
         dict_lcox = _get_lcox(
             df_switch_capex=df_switch_capex,
             df_opex_fixed=df_opex_fixed,
@@ -140,17 +140,17 @@ def calculate_tech_transitions(
             dict_lcox[key].rename(columns={"lcox": "value"}, inplace=True)
     else:
         # placeholder
-        df_lcox = pd.DataFrame()
+        df_lcox = pd.DataFrame()"""
 
     if sector == "cement":
         # convert dicts to dfs
         df_opex_variable = df_dict_to_df(df_dict=dict_opex_variable)
         # todo: dev
-        df_lcox = df_dict_to_df(df_dict=dict_lcox)
-        df_lcox.to_csv("C:/Users/TimonRueckel/PycharmProjects/mpp-shared-code/cement/data/bau/def/intermediate/lcox.csv")
-        """df_lcox = pd.read_csv(
+        # df_lcox = df_dict_to_df(df_dict=dict_lcox)
+        # df_lcox.to_csv("C:/Users/TimonRueckel/PycharmProjects/mpp-shared-code/cement/data/bau/def/intermediate/lcox.csv")
+        df_lcox = pd.read_csv(
             "C:/Users/TimonRueckel/PycharmProjects/mpp-shared-code/cement/data/bau/def/intermediate/lcox.csv"
-        ).set_index(IDX_TECH_RANKING_COLUMNS)"""
+        ).set_index(IDX_TECH_RANKING_COLUMNS)
         # todo: dev
 
     # add all outputs to dict

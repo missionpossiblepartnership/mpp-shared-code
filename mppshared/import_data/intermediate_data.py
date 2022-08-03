@@ -168,6 +168,16 @@ class IntermediateDataImporter:
             self.intermediate_path.joinpath("co2_storage_constraint.csv")
         )
 
+    def get_natural_gas_constraint(self):
+        return pd.read_csv(
+            self.intermediate_path.joinpath("natural_gas_constraint.csv")
+        )
+
+    def get_alternative_fuel_constraint(self):
+        return pd.read_csv(
+            self.intermediate_path.joinpath("alternative_fuel_constraint.csv")
+        )
+
     def get_electrolysis_capacity_addition_constraint(self):
         return pd.read_csv(
             self.intermediate_path.joinpath(

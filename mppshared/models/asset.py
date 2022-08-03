@@ -226,6 +226,13 @@ class AssetStack:
         )
         return sum(asset.get_annual_production_volume() for asset in assets)
 
+    def get_annual_production_volume_by_region_and_technology(
+        self, product
+    ) -> pd.DataFrame:
+        """Get the yearly production volumes of the AssetStack per region and technology for a specific product"""
+
+        pass
+
     def get_products(self) -> list:
         """Get list of unique products produced by the AssetStack"""
         return list({asset.product for asset in self.assets})

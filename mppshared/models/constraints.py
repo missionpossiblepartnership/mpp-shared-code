@@ -41,6 +41,7 @@ def check_constraints(
         "demand_share_constraint": check_global_demand_share_constraint,
         "electrolysis_capacity_addition_constraint": check_electrolysis_capacity_addition_constraint,
         "co2_storage_constraint": check_co2_storage_constraint,
+        "natural_gas_constraint": check_natural_gas_constraint,
     }
     constraints_checked = {}
     if pathway.constraints_to_apply:
@@ -342,7 +343,11 @@ def check_global_demand_share_constraint(
 
 
 def check_electrolysis_capacity_addition_constraint(
-    pathway: SimulationPathway, stack: AssetStack, product: str, year: int, transition_type: str
+    pathway: SimulationPathway,
+    stack: AssetStack,
+    product: str,
+    year: int,
+    transition_type: str,
 ) -> bool:
     """Check if the annual addition of electrolysis capacity fulfills the constraint
 
@@ -511,6 +516,39 @@ def check_co2_storage_constraint(
 
         logger.debug("CO2 storage constraint hurt.")
         return False
+
+
+def check_natural_gas_constraint(
+    pathway: SimulationPathway,
+    product: str,
+    stack: AssetStack,
+    year: int,
+    transition_type: str,
+    return_dict: bool = False,
+):
+    """Check if the constraint on annual natural gas capacity (regionally) is fulfilled"""
+
+    # Get constraint value
+    df_ng_limit = pathway.natural_gas_constraint
+
+    dict_regional_fulfilment = {}
+    for region in list(df_ng_limit["region"].unique()):
+        limit_region = df_ng_limit.loc[
+            (df_ng_limit["year"] == year + 1 & df_ng_limit["region"] == region), "value"
+        ]
+
+        # calculate natural gas-based production capacity
+        # todo: write function in stack class
+        ng_capacity = stack.get_annual_production_volume_by_region_and_technology(product=product)
+        # todo: get sum of techs in current region
+
+        # add to dict
+        dict_regional_fulfilment[region] = limit_region >= ng_capacity
+
+    if return_dict:
+        return dict_regional_fulfilment
+    else:
+        return all(dict_regional_fulfilment.values())
 
 
 def check_regional_context_mix(
