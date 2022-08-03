@@ -169,6 +169,7 @@ def select_asset_for_greenfield(
     Args:
         pathway:
         stack:
+        product:
         df_rank:
         year:
         annual_production_capacity:
@@ -213,25 +214,29 @@ def select_asset_for_greenfield(
             [dict_constraints[k] for k in dict_constraints.keys() if k in pathway.constraints_to_apply]
         ):
             return new_asset
-
-        # If annual emissions constraint hurt, remove best transition from ranking table and try again
-        if not dict_constraints["emissions_constraint"]:
-            df_rank = remove_transition(df_rank, asset_transition)
-
-        # If residual emissions constraint hurt, remove all transitions with CCS (i.e. with residual emissions)
-        elif (not dict_constraints["emissions_constraint"]) & (
-            dict_constraints["flag_residual"]
-        ):
-            df_rank = df_rank.loc[
-                ~(df_rank["technology_destination"].str.contains("CCS"))
-            ]
-
-        # If only technology ramp-up constraint hurt, remove all transitions with that destination technology from the
-        #   ranking table
-        elif not dict_constraints["rampup_constraint"]:
-            df_rank = remove_all_transitions_with_destination_technology(
-                df_rank, asset_transition["technology_destination"]
-            )
+        else:
+            # EMISSIONS
+            if "emissions_constraint" in pathway.constraints_to_apply:
+                if not dict_constraints["emissions_constraint"]:
+                    # remove best transition from ranking table and try again
+                    df_rank = remove_transition(df_rank, asset_transition)
+            if ["emissions_constraint", "flag_residual"] in pathway.constraints_to_apply:
+                if not dict_constraints["emissions_constraint"] & dict_constraints["flag_residual"]:
+                    # remove all transitions with CCS (i.e. with residual emissions)
+                    df_rank = df_rank.loc[
+                        ~(df_rank["technology_destination"].str.contains("CCS"))
+                    ]
+            # RAMPUP
+            if "rampup_constraint" in pathway.constraints_to_apply:
+                if not dict_constraints["rampup_constraint"]:
+                    # remove all transitions with that destination technology from the ranking table
+                    df_rank = remove_all_transitions_with_destination_technology(
+                        df_rank, asset_transition["technology_destination"]
+                    )
+            # REGIONAL PRODUCTION
+            if "regional_constraint" in pathway.constraints_to_apply:
+                if not dict_constraints["regional_constraint"]:
+                    logger.critical(f"WARNING: Regional production constraint not fulfilled in {year + 1}.")
 
     # If ranking table empty, no greenfield construction possible
     raise ValueError

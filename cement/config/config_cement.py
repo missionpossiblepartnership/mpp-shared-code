@@ -41,8 +41,8 @@ ALL_SENSITIVITIES = [
     "def",
 ]
 SENSITIVITIES = {
-    "bau": ["def"],  # ALL_SENSITIVITIES,
-    # "fa": ["def"],
+    # "bau": ["def"],  # ALL_SENSITIVITIES,
+    "fa": ["def"],
     # "lc": ["def"],  # ALL_SENSITIVITIES,
 }
 CARBON_COSTS = [

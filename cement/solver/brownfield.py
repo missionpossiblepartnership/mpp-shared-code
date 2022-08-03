@@ -171,18 +171,24 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             if origin_technology != new_technology:
                 n_assets_transitioned += 1
 
-        # If the emissions constraint and/or the technology ramp-up constraint is hurt, remove that destination
-        #   technology from the ranking table and try again
-        elif not dict_constraints["emissions_constraint"]:
-            logger.debug(
-                f"Emissions constraint hurt for {origin_technology} -> {new_technology}"
-            )
-            if origin_technology != new_technology:
-                df_rank = remove_transition(df_rank, best_transition)
-        elif not dict_constraints["rampup_constraint"]:
-            df_rank = remove_all_transitions_with_destination_technology(
-                df_rank, best_transition["technology_destination"]
-            )
+        # if not all constraints are fulfilled
+        else:
+            # EMISSIONS
+            if "emissions_constraint" in pathway.constraints_to_apply:
+                if not dict_constraints["emissions_constraint"]:
+                    # remove destination technology from the ranking table and try again
+                    logger.debug(
+                        f"Emissions constraint hurt for {origin_technology} -> {new_technology}"
+                    )
+                    if origin_technology != new_technology:
+                        df_rank = remove_transition(df_rank, best_transition)
+            # RAMPUP
+            if "rampup_constraint" in pathway.constraints_to_apply:
+                if not dict_constraints["rampup_constraint"]:
+                    # remove destination technology from the ranking table and try again
+                    df_rank = remove_all_transitions_with_destination_technology(
+                        df_rank, best_transition["technology_destination"]
+                    )
 
     logger.debug(
         f"{n_assets_transitioned} assets transitioned of maximum {maximum_n_assets_transitioned} in year {year}."
