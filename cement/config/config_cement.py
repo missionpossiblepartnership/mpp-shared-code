@@ -78,7 +78,7 @@ TRANSITIONAL_PERIOD_YEARS = 20
 # Emission scopes included in data analysis
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream"]
 # Emissions
-GHGS = ["co2", "co2e"]
+GHGS = ["co2", "ch4", "co2e"]
 
 REGIONS = [
     "China",
@@ -121,7 +121,7 @@ LIST_TECHNOLOGIES = [
 ### RANKING OF TECHNOLOGY SWITCHES ###
 RANKING_COST_METRIC = "lcox"
 BIN_METHODOLOGY = "uncertainty"  # options: "histogram" or "uncertainty"
-COST_METRIC_RELATIVE_UNCERTAINTY = 0.5
+COST_METRIC_RELATIVE_UNCERTAINTY = 0.2
 # number of bins (only for histogram ranking)
 NUMBER_OF_BINS_RANKING = 50
 # GHGs considered in the ranking
@@ -210,14 +210,14 @@ RANKING_CONFIG = {
 
 ### CONSTRAINTS ###
 YEAR_2050_EMISSIONS_CONSTRAINT = False
-# Technology ramp-up parameters (on technology-level)
+# Technology ramp-up parameters (on technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "maximum_asset_additions": 50,
     "maximum_capacity_growth_rate": 0.2,
     "years_rampup_phase": 5,
 }
 CONSTRAINTS_TO_APPLY = {
-    "bau": ["rampup_constraint", "regional_constraint", "natural_gas_constraint"],
+    "bau": ["rampup_constraint", "regional_constraint"],
     "lc": ["emissions_constraint", "rampup_constraint", "regional_constraint"],
     "fa": ["emissions_constraint", "regional_constraint"],
 }

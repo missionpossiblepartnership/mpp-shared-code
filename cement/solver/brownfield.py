@@ -150,7 +150,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         )
         # If no constraint is hurt, execute the brownfield transition
         if all(
-            [k for k in dict_constraints.keys() if k in pathway.constraints_to_apply]
+            [dict_constraints[k] for k in dict_constraints.keys() if k in pathway.constraints_to_apply]
         ) | (origin_technology == new_technology):
             logger.debug(
                 f"Year {year} Updating {asset_to_update.product} asset from technology {origin_technology} to "

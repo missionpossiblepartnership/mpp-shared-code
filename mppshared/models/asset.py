@@ -486,7 +486,7 @@ class AssetStack:
 
         # assets can be decommissioned if they have not undergone a renovation or rebuild
         candidates = filter(
-            lambda asset: asset.retrofit, assets
+            lambda asset: not asset.retrofit, assets
         )
 
         return list(candidates)

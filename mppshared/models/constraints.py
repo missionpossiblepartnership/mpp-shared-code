@@ -285,7 +285,6 @@ def apply_greenfield_filters_chemicals(
 
 def check_global_demand_share_constraint(
     pathway: SimulationPathway,
-    product: str,
     stack: AssetStack,
     year: int,
     transition_type: str,
@@ -295,7 +294,6 @@ def check_global_demand_share_constraint(
 
     Args:
         pathway ():
-        product (): dummy for this function; standardisation required as constraint functions are called from dictionary
         stack ():
         year ():
         transition_type ():
@@ -345,7 +343,6 @@ def check_global_demand_share_constraint(
 def check_electrolysis_capacity_addition_constraint(
     pathway: SimulationPathway,
     stack: AssetStack,
-    product: str,
     year: int,
     transition_type: str,
 ) -> bool:
@@ -354,7 +351,6 @@ def check_electrolysis_capacity_addition_constraint(
     Args:
         pathway ():
         stack ():
-        product (): dummy for this function; standardisation required as constraint functions are called from dictionary
         year ():
         transition_type ():
 

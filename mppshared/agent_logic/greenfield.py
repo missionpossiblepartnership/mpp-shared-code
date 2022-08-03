@@ -210,7 +210,7 @@ def select_asset_for_greenfield(
 
         # Asset can be created if no constraint hurt
         if all(
-            [k for k in dict_constraints.keys() if k in pathway.constraints_to_apply]
+            [dict_constraints[k] for k in dict_constraints.keys() if k in pathway.constraints_to_apply]
         ):
             return new_asset
 

@@ -45,8 +45,17 @@ def make_rankings(pathway_name: str, sensitivity: str, sector: str, products: li
                 ranking_config=RANKING_CONFIG[rank_type][pathway_name],
                 emission_scopes_ranking=EMISSION_SCOPES_RANKING,
                 ghgs_ranking=GHGS_RANKING,
-                ranking_groups=UNCERTAINTY_RANKING_GROUPS
+                ranking_groups=UNCERTAINTY_RANKING_GROUPS,
             )
+
+        # todo dev: remove this workaround of excluding all usage techs
+        df_rank = df_rank.loc[
+            ~(
+                df_rank["technology_origin"].str.contains("usage")
+                | df_rank["technology_destination"].str.contains("usage")
+            ), :
+        ]
+        # todo dev
 
         # Save ranking table as csv
         importer.export_data(
