@@ -111,6 +111,9 @@ def apply_implicit_forcing(
             how="left",
         )
 
+    # For iron ore corridors, filter out all switches apart from newbuild of green ammonia in Oceania
+    df_technology_switches = apply_iron_ore_corridor_filter(df_technology_switches)
+
     # Apply carbon cost
     df_cc = carbon_cost.df_carbon_cost
     if df_cc["carbon_cost"].sum() == 0:
@@ -535,3 +538,22 @@ def calculate_emission_reduction(
     # df = df.drop(columns=drop_cols)
 
     return df
+
+
+def apply_iron_ore_corridor_filter(
+    df_technology_switches: pd.DataFrame,
+) -> pd.DataFrame:
+    """Filter out all technology switches that are not green ammonia newbuild in region Oceania"""
+
+    filter1 = df_technology_switches["region"] == "Australia"
+    filter2 = df_technology_switches["switch_type"] == "greenfield"
+    filter3 = df_technology_switches["technology_destination"].str.contains(
+        "Electrolyser -"
+    )
+    filter4 = df_technology_switches["product"] == "Ammonia"
+    df_technology_switches = df_technology_switches.loc[
+        filter1 & filter2 & filter3 & filter4
+    ]
+    df_technology_switches["region"] = "Oceania"
+
+    return df_technology_switches

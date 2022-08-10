@@ -405,15 +405,11 @@ def create_technology_roadmap(importer: IntermediateDataImporter) -> pd.DataFram
             ]
         )
         df_sum = df_sum.unstack(level=-1, fill_value=0).reset_index()
-        col_names = ["technology", "ammonia", "ammonium nitrate", "urea"]
+        col_names = ["technology", "ammonia"]
         df_sum.columns = col_names
 
-        df_sum["annual_production_volume"] = (
-            df_sum["ammonia"]
-            + AMMONIA_PER_AMMONIUM_NITRATE * df_sum["ammonium nitrate"]
-            + AMMONIA_PER_UREA * df_sum["urea"]
-        )
-        df_sum = df_sum.drop(columns=["ammonia", "ammonium nitrate", "urea"])
+        df_sum["annual_production_volume"] = df_sum["ammonia"]
+        df_sum = df_sum.drop(columns=["ammonia"])
         df_sum = df_sum[["technology", "annual_production_volume"]].rename(
             {"annual_production_volume": year}, axis=1
         )

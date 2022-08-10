@@ -1171,8 +1171,8 @@ def calculate_outputs(
         "final",
     )
 
-    calculate_outputs_interface(pathway, sensitivity, sector, carbon_cost, importer)
-    # calculate_outputs_report(pathway, sensitivity, sector, carbon_cost, importer)
+    # calculate_outputs_interface(pathway, sensitivity, sector, carbon_cost, importer)
+    calculate_outputs_report(pathway, sensitivity, sector, carbon_cost, importer)
 
 
 def _merge_current_and_previous_stack(
@@ -1693,8 +1693,8 @@ def calculate_outputs_interface(
         df_investment_renewables = pd.concat([df_investment_renewables, temp])
 
     # Express annual production volume in terms of ammonia
-    df_ammonia_all = calculate_annual_production_volume_as_ammonia(df=df)
-    df = pd.concat([df, df_ammonia_all])
+    # df_ammonia_all = calculate_annual_production_volume_as_ammonia(df=df)
+    # df = pd.concat([df, df_ammonia_all])
 
     for agg_vars in [["product", "region"], ["product"], ["region"], []]:
         df_ammonia_type = calculate_annual_production_volume_by_ammonia_type(
@@ -1954,11 +1954,7 @@ def calculate_outputs_report(
     df_annual_investments = pd.DataFrame()
     for agg_vars in aggregations:
         df = _calculate_annual_investments(
-            df_cost=df_cost,
-            importer=importer,
-            sector=sector,
-            agg_vars=agg_vars,
-            ammonia_type=True,
+            df_cost=df_cost, importer=importer, sector=sector, agg_vars=agg_vars
         )
         df_annual_investments = pd.concat([df, df_annual_investments])
 
@@ -1966,9 +1962,15 @@ def calculate_outputs_report(
     data = []
     data_stacks = []
 
+    aggregations = [
+        ["product", "region"],
+        ["product"],
+        ["region"],
+        [],
+    ]
     for year in range(START_YEAR, END_YEAR + 1):
         logger.info(f"Processing year {year}")
-        yearly = create_table_all_data_year(year, importer)
+        yearly = create_table_all_data_year(year, aggregations, importer)
         yearly["year"] = year
         data.append(yearly)
         df_stack = importer.get_asset_stack(year)
@@ -1980,9 +1982,9 @@ def calculate_outputs_report(
     df["sector"] = sector
 
     # Express annual production volume in terms of ammonia
-    if SECTOR == "chemicals":
-        df_ammonia_all = calculate_annual_production_volume_as_ammonia(df=df)
-        df = pd.concat([df, df_ammonia_all])
+    # if SECTOR == "chemicals":
+    #     df_ammonia_all = calculate_annual_production_volume_as_ammonia(df=df)
+    #     df = pd.concat([df, df_ammonia_all])
 
     # Pivot the dataframe to have the years as columns
     df_pivot = df.pivot_table(
@@ -2014,6 +2016,10 @@ def calculate_outputs_report(
     df_pivot.fillna(0, inplace=True)
 
     suffix = f"{sector}_{pathway}_{sensitivity}"
+
+    importer.export_data(
+        df_pivot, f"simulation_outputs_{suffix}.csv", export_dir="final", index=False
+    )
 
     cc = carbon_cost.df_carbon_cost.loc[
         carbon_cost.df_carbon_cost["year"] == 2050, "carbon_cost"

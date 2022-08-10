@@ -3,7 +3,7 @@ import logging
 import numpy as np
 
 ### LOGGER ###
-LOG_LEVEL = "INFO"
+LOG_LEVEL = "DEBUG"
 LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
 )
@@ -12,9 +12,9 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
-    # "lc",
+    "lc",
     # "fa",
-    "bau",
+    # "bau",
 ]
 
 # Sensitivities
@@ -25,14 +25,18 @@ SENSITIVITIES = [
     # "ng_low",
 ]
 
+# Decide how to map low-cost power regions
+LCPRS_TO_LCPR_CATEGORY = True
+DEFAULT_OUTPUTS_PROCESSING = True
+
 # Toggle whether circularity in demand scenario or not
 CIRCULARITY_IN_DEMAND = False
 
 # Carbon price (for sensitivity analysis): needs to be run for 1 USD/tCO2 to create carbon_cost_addition.csv, then used for subsequent runs by multiplying accordingly
 
 CARBON_COSTS = [
-    # 0,
-    # 50,
+    0,
+    50,
     100,
     150,
     200,
@@ -53,7 +57,7 @@ SCOPES_CO2_COST = [
 RUN_PARALLEL = False
 
 # Integrate current project pipeline or not
-BUILD_CURRENT_PROJECT_PIPELINE = {"chemicals": True, "aluminium": False}
+BUILD_CURRENT_PROJECT_PIPELINE = {"chemicals": False, "aluminium": False}
 
 # Delays for brownfield transitions to make the model more realistic
 BROWNFIELD_RENOVATION_START_YEAR = {
@@ -67,11 +71,11 @@ BROWNFIELD_REBUILD_START_YEAR = {
 }
 
 ### TECHNOLOGY CONSTRAINTS ###
-CO2_STORAGE_CONSTRAINT = {"bau": False, "fa": True, "lc": True}
+CO2_STORAGE_CONSTRAINT = {"bau": False, "fa": True, "lc": False}
 CO2_STORAGE_CONSTRAINT_CUMULATIVE = False
 
-ELECTROLYSER_CAPACITY_ADDITION_CONSTRAINT = {"bau": False, "fa": False, "lc": True}
-GLOBAL_DEMAND_SHARE_CONSTRAINT = {"bau": False, "fa": False, "lc": True}
+ELECTROLYSER_CAPACITY_ADDITION_CONSTRAINT = {"bau": False, "fa": False, "lc": False}
+GLOBAL_DEMAND_SHARE_CONSTRAINT = {"bau": False, "fa": False, "lc": False}
 
 TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE = [
     "Biomass Gasification + ammonia synthesis",
@@ -287,7 +291,7 @@ MODEL_SCOPE = "Global"
 H2_PER_AMMONIA = 0.176471
 AMMONIA_PER_UREA = 0.565724
 AMMONIA_PER_AMMONIUM_NITRATE = 0.425534
-ammonia_typical_plant_capacity_Mt = (2000 * 365) / 1e6
+ammonia_typical_plant_capacity_Mt = 0.1
 
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT = {
     "Ammonia": ammonia_typical_plant_capacity_Mt,
@@ -301,7 +305,7 @@ ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT = {
 
 # Products produced by each sector
 PRODUCTS = {
-    "chemicals": ["Ammonia", "Ammonium nitrate", "Urea"],
+    "chemicals": ["Ammonia"],
     "aluminium": ["Aluminium"],
 }
 
@@ -326,15 +330,12 @@ RANKING_COST_METRIC = {"chemicals": "lcox", "aluminium": "tco"}
 BIN_METHODOLOGY = {"chemicals": "uncertainty_bins", "aluminium": "histogram"}
 
 TRANSITION_TYPES = [
-    "decommission",
     "greenfield",
-    "brownfield_renovation",
-    "brownfield_newbuild",
 ]
 
 # TODO: add decommission for chemicals
 RANK_TYPES = {
-    "chemicals": ["decommission", "greenfield", "brownfield"],
+    "chemicals": ["greenfield"],
     "aluminium": ["decommission", "greenfield", "brownfield"],
 }
 
@@ -596,7 +597,7 @@ SECTORAL_PATHWAYS = {
 }
 
 # Maximum share of global demand that can be supplied by one region
-MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION = {"chemicals": 0.3, "aluminium": 1}
+MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION = {"chemicals": 1, "aluminium": 1}
 
 # Increase in cost metric required to enact a brownfield renovation or brownfield rebuild transition
 COST_METRIC_DECREASE_BROWNFIELD = {"chemicals": 0.05, "aluminium": 0}

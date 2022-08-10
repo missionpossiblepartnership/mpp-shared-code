@@ -59,14 +59,6 @@ def check_constraints(
 
     # If pathway not bau, then check for constraints, else return true
     if pathway.pathway != "bau":
-        # Check constraint for annual emissions limit from carbon budget
-        emissions_constraint, flag_residual = check_annual_carbon_budget_constraint(
-            pathway=pathway, stack=stack, year=year, transition_type=transition_type
-        )
-        # Check technology ramp-up constraint
-        rampup_constraint = check_technology_rampup_constraint(
-            pathway=pathway, stack=stack, year=year
-        )
 
         # Check CO2 storage constraint
         if CO2_STORAGE_CONSTRAINT[pathway.pathway]:
@@ -98,8 +90,8 @@ def check_constraints(
         emissions_constraint = True
         # TODO: Check resource availability constraint
         return {
-            "emissions_constraint": emissions_constraint,
-            "rampup_constraint": rampup_constraint,
+            "emissions_constraint": True,
+            "rampup_constraint": True,
             "co2_storage_constraint": co2_storage_constraint,
             "electrolysis_capacity_addition_constraint": electrolysis_capacity_addition_constraint,
             "demand_share_constraint": demand_share_constraint,

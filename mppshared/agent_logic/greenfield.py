@@ -144,57 +144,6 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             current_stack=current_stack,
         )
 
-        # STEP ONE: BUILD NEW CAPACITY BY REGION
-        # First, build new capacity in each region to make sure that the regional production constraint is met even if regional demand increases
-        df_regional_production = get_regional_production_constraint_table(
-            pathway=pathway, stack=new_stack, product=product, year=year
-        )
-
-        # For each region with a production deficit, build new capacity until production meets required minimum
-        for (_, row) in df_regional_production.loc[
-            df_regional_production["check"] == False
-        ].iterrows():
-            deficit = (
-                row["annual_production_volume_minimum"]
-                - row["annual_production_volume"]
-            )
-            number_new_assets = int(
-                np.ceil(deficit / ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT[product])
-            )
-            region_rank_filter = get_region_rank_filter(
-                region=row["region"], sector=pathway.sector
-            )
-            df_rank_region = df_rank.loc[df_rank["region"].isin(region_rank_filter)]
-
-            # Build the required number of assets to meet the minimum production volume
-            while number_new_assets >= 1:
-                try:
-                    new_asset = select_asset_for_greenfield(
-                        pathway=pathway,
-                        stack=new_stack,
-                        df_rank=df_rank_region,
-                        year=year,
-                        df_region_demand=df_region_demand,
-                    )
-                    enact_greenfield_transition(
-                        pathway=pathway,
-                        stack=new_stack,
-                        new_asset=new_asset,
-                        year=year,
-                    )
-                    number_new_assets -= 1
-
-                    # Add one plant to regional supply constraint DataFrame
-                    df_region_demand.loc[
-                        new_asset.region, "region_newbuild_additions"
-                    ] += 1
-                except ValueError:
-                    logger.info(
-                        "No more assets for greenfield transition within constraints"
-                    )
-                    break
-
-        # STEP TWO: BUILD NEW CAPACITY GLOBALLY
         # Build new assets while demand exceeds production
         production = new_stack.get_annual_production_volume(product)
 

@@ -54,22 +54,6 @@ def simulate(pathway: SimulationPathway) -> SimulationPathway:
         # Write stack to csv
         pathway.export_stack_to_csv(year)
 
-        # Decommission assets
-        start = timer()
-        pathway = decommission(pathway=pathway, year=year)
-        end = timer()
-        logger.debug(
-            f"Time elapsed for decommission in year {year}: {timedelta(seconds=end-start)} seconds"
-        )
-
-        # Renovate and rebuild assets (brownfield transition)
-        start = timer()
-        pathway = brownfield(pathway=pathway, year=year)
-        end = timer()
-        logger.debug(
-            f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
-        )
-
         # Build new assets
         start = timer()
         pathway = greenfield(pathway=pathway, year=year)
@@ -95,26 +79,6 @@ def simulate_pathway(
         carbon_cost=carbon_cost,
     )
 
-    # Create carbon budget
-    carbon_budget = CarbonBudget(
-        sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS,
-        pathway_shape="linear",
-        sector=sector,
-        importer=importer,
-    )
-    carbon_budget.output_emissions_pathway(sector=sector, importer=importer)
-
-    # Create technology ramp-up trajectory for each technology in the form of a dictionary
-    dict_technology_rampup = create_dict_technology_rampup(
-        sector=sector, importer=importer
-    )
-
-    # Ammonia sector: tech ramp-up constraints only for CCS
-    if sector == "chemicals":
-        #  for key in [key for key in dict_technology_rampup.keys() if "CCS" not in key]:
-        for key in dict_technology_rampup.keys():
-            dict_technology_rampup[key] = None
-
     # Make pathway
     pathway = SimulationPathway(
         start_year=START_YEAR,
@@ -123,8 +87,8 @@ def simulate_pathway(
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS[sector],
-        carbon_budget=carbon_budget,
-        technology_rampup=dict_technology_rampup,
+        carbon_budget=None,
+        technology_rampup=None,
         carbon_cost=carbon_cost,
     )
 
