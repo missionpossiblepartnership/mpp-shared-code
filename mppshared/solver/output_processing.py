@@ -715,11 +715,6 @@ def create_table_all_data_year(
     # Calculate asset numbers and production volumes for the stack in that year
     df_stack = importer.get_asset_stack(year)
 
-    # Map low-cost power regions to corresponding regions
-    df_stack["region"] = df_stack["region"].apply(
-        lambda x: map_low_cost_power_regions(x)
-    )
-
     df_total_assets = _calculate_number_of_assets(df_stack, use_standard_cuf=False)
     df_total_assets_std_cuf = _calculate_number_of_assets(
         df_stack, use_standard_cuf=True
@@ -1640,23 +1635,62 @@ def _calculate_plant_numbers(
     return df_pivot
 
 
-def map_low_cost_power_regions(low_cost_power_region: str):
-    return {
-        "Australia": "Oceania",
-        "Saudi Arabia": "Middle East",
-        "Brazil": "Latin America",
-        "Namibia": "Africa",
-        "Africa": "Africa",
-        "China": "China",
-        "Europe": "Europe",
-        "India": "India",
-        "Latin America": "Latin America",
-        "Middle East": "Middle East",
-        "North America": "North America",
-        "Oceania": "Oceania",
-        "Russia": "Russia",
-        "Rest of Asia": "Rest of Asia",
-    }[low_cost_power_region]
+def map_low_cost_power_regions(low_cost_power_region: str, map_type):
+
+    if map_type == "to_region":
+        return {
+            "Australia": "Oceania",
+            "Saudi Arabia": "Middle East",
+            "Brazil": "Latin America",
+            "Namibia": "Africa",
+            "Africa": "Africa",
+            "China": "China",
+            "Europe": "Europe",
+            "India": "India",
+            "Latin America": "Latin America",
+            "Middle East": "Middle East",
+            "North America": "North America",
+            "Oceania": "Oceania",
+            "Russia": "Russia",
+            "Rest of Asia": "Rest of Asia",
+        }[low_cost_power_region]
+
+    if map_type == "to_category":
+        category = "Low-cost power regions"
+        return {
+            "Australia": category,
+            "Saudi Arabia": category,
+            "Brazil": category,
+            "Namibia": category,
+            "Africa": "Africa",
+            "China": "China",
+            "Europe": "Europe",
+            "India": "India",
+            "Latin America": "Latin America",
+            "Middle East": "Middle East",
+            "North America": "North America",
+            "Oceania": "Oceania",
+            "Russia": "Russia",
+            "Rest of Asia": "Rest of Asia",
+        }[low_cost_power_region]
+
+    if map_type == "to_same":
+        return {
+            "Australia": "Australia",
+            "Saudi Arabia": "Saudi Arabia",
+            "Brazil": "Brazil",
+            "Namibia": "Namibia",
+            "Africa": "Africa",
+            "China": "China",
+            "Europe": "Europe",
+            "India": "India",
+            "Latin America": "Latin America",
+            "Middle East": "Middle East",
+            "North America": "North America",
+            "Oceania": "Oceania",
+            "Russia": "Russia",
+            "Rest of Asia": "Rest of Asia",
+        }[low_cost_power_region]
 
 
 def _calculate_emissions_intensity_abatement(
