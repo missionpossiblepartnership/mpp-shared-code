@@ -51,17 +51,14 @@ def calculate_outputs_interface(
         [],
     ]
 
-    # Calculate the emissions intensity abatement by supply technology type
-    df_abatement = pd.DataFrame()
-    for agg_vars in aggregations.copy():
-        df = _calculate_emissions_intensity_abatement(
-            importer=importer,
-            sector=sector,
-            agg_vars=agg_vars,
-        )
-        df_abatement = pd.concat([df, df_abatement])
+    # Calculate the emissions intensity abatement by supply technology type - CHECKED
+    df_abatement = _calculate_emissions_intensity_abatement(
+        importer=importer,
+        sector=sector,
+        agg_vars=[],
+    )
 
-    # Calculate scope 3 downstream emissions for fertilizer end-use
+    # Calculate scope 3 downstream emissions for fertilizer end-use - CHECKING
     df_scope3 = pd.DataFrame()
 
     for agg_vars in aggregations.copy():
@@ -73,18 +70,7 @@ def calculate_outputs_interface(
         )
         df_scope3 = pd.concat([df, df_scope3])
 
-    # Calculate plant numbers by retrofit, newbuild, rebuild, unchanged
-    df_plants = pd.DataFrame()
-    for agg_vars in aggregations.copy():
-        df = _calculate_plant_numbers(
-            importer=importer,
-            sector=sector,
-            agg_vars=agg_vars + ["ammonia_type"],
-            use_standard_CUF=True,
-        )
-        df_plants = pd.concat([df, df_plants])
-
-    # Calculate electrolysis capacity
+    # Calculate electrolysis capacity - CHECKED
     df_electrolysis_capacity = pd.DataFrame()
     for agg_vars in aggregations.copy():
         df = calculate_electrolysis_capacity(
@@ -92,7 +78,7 @@ def calculate_outputs_interface(
         )
         df_electrolysis_capacity = pd.concat([df, df_electrolysis_capacity])
 
-    # Calculate annual investments
+    # Calculate annual investments / CHECKING
     df_cost = importer.get_technology_transitions_and_cost()
 
     df_annual_investments = pd.DataFrame()
@@ -159,7 +145,6 @@ def calculate_outputs_interface(
             df_scope3,
             df_annual_investments,
             df_electrolysis_capacity,
-            df_plants,
             df_investment_renewables,
         ]
     )
@@ -838,14 +823,6 @@ def _calculate_annual_investments(
             )
         )
 
-        # Map low-cost power regions to corresponding regions
-        current_stack["region"] = current_stack["region"].apply(
-            lambda x: map_low_cost_power_regions(x)
-        )
-        previous_stack["region"] = previous_stack["region"].apply(
-            lambda x: map_low_cost_power_regions(x)
-        )
-
         # Merge to compare retrofit, rebuild and greenfield status
         previous_stack = previous_stack.rename(
             {
@@ -901,6 +878,11 @@ def _calculate_annual_investments(
         )
         # Add ammonia type classification
         df = add_ammonia_type_to_df(df)
+
+        # Map low-cost power regions to individual category
+        df["region"] = df["region"].apply(
+            lambda x: map_low_cost_power_regions(x, "to_category")
+        )
 
         df = (
             df.groupby(agg_vars + ["ammonia_type"])["investment"]
@@ -1694,10 +1676,10 @@ def map_low_cost_power_regions(low_cost_power_region: str, map_type):
 
 
 def _calculate_emissions_intensity_abatement(
-    importer: IntermediateDataImporter, sector: str, agg_vars=["region"]
+    importer: IntermediateDataImporter, sector: str, agg_vars=[]
 ) -> pd.DataFrame:
     """Calculate the abatement of emissions intensity contributed by each type of supply technology, including circularity.
-    Expressed in terms of ammonia."""
+    Expressed in terms of ammonia. Regional breakdown non-sensical because of trade flows."""
 
     df = pd.DataFrame()
 
@@ -1710,9 +1692,9 @@ def _calculate_emissions_intensity_abatement(
             .rename({"technology": "technology_destination"}, axis=1)
         )
 
-        # Add low-cost power regions to their corresponding regions
+        # Map low-cost power regions to their corresponding regions
         df_stack["region"] = df_stack["region"].apply(
-            lambda x: map_low_cost_power_regions(x)
+            lambda x: map_low_cost_power_regions(x, "to_region")
         )
 
         df_stack = add_ammonia_type_to_df(df_stack)
