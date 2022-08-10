@@ -1,6 +1,4 @@
 """ Process outputs to standardised output table."""
-from ast import Index
-from collections import defaultdict
 import pandas as pd
 import numpy as np
 
@@ -55,7 +53,7 @@ def calculate_outputs_interface(
 
     # Calculate the emissions intensity abatement by supply technology type
     df_abatement = pd.DataFrame()
-    for agg_vars in aggregations:
+    for agg_vars in aggregations.copy():
         df = _calculate_emissions_intensity_abatement(
             importer=importer,
             sector=sector,
@@ -66,7 +64,7 @@ def calculate_outputs_interface(
     # Calculate scope 3 downstream emissions for fertilizer end-use
     df_scope3 = pd.DataFrame()
 
-    for agg_vars in aggregations:
+    for agg_vars in aggregations.copy():
         df = calculate_scope3_downstream_emissions(
             importer=importer,
             sector=sector,
@@ -77,7 +75,7 @@ def calculate_outputs_interface(
 
     # Calculate plant numbers by retrofit, newbuild, rebuild, unchanged
     df_plants = pd.DataFrame()
-    for agg_vars in aggregations:
+    for agg_vars in aggregations.copy():
         df = _calculate_plant_numbers(
             importer=importer,
             sector=sector,
@@ -88,7 +86,7 @@ def calculate_outputs_interface(
 
     # Calculate electrolysis capacity
     df_electrolysis_capacity = pd.DataFrame()
-    for agg_vars in aggregations:
+    for agg_vars in aggregations.copy():
         df = calculate_electrolysis_capacity(
             importer=importer, sector=sector, agg_vars=agg_vars
         )
@@ -98,7 +96,7 @@ def calculate_outputs_interface(
     df_cost = importer.get_technology_transitions_and_cost()
 
     df_annual_investments = pd.DataFrame()
-    for agg_vars in aggregations:
+    for agg_vars in aggregations.copy():
         df = _calculate_annual_investments(
             df_cost=df_cost, importer=importer, sector=sector, agg_vars=agg_vars
         )
@@ -122,7 +120,7 @@ def calculate_outputs_interface(
 
     # Calculate investment into dedicated renewables
     df_investment_renewables = pd.DataFrame()
-    for agg_vars in aggregations:
+    for agg_vars in aggregations.copy():
         temp = calculate_investment_dedicated_renewables(
             importer, df, agg_vars=agg_vars
         )
@@ -132,7 +130,7 @@ def calculate_outputs_interface(
     df_ammonia_all = calculate_annual_production_volume_as_ammonia(df=df)
     df = pd.concat([df, df_ammonia_all])
 
-    for agg_vars in aggregations:
+    for agg_vars in [["region"], []]:
         df_ammonia_type = calculate_annual_production_volume_by_ammonia_type(
             df=df, agg_vars=agg_vars
         )
@@ -1287,9 +1285,6 @@ def calculate_electrolysis_capacity(
     for year in np.arange(START_YEAR, END_YEAR + 1):
         stack = importer.get_asset_stack(year)
 
-        # Map low-cost power regions to corresponding regions
-        stack["region"] = stack["region"].apply(lambda x: map_low_cost_power_regions(x))
-
         stack = (
             stack.groupby(["product", "region", "technology"])[
                 "annual_production_volume"
@@ -1352,6 +1347,9 @@ def calculate_electrolysis_capacity(
         lambda row: row["electrolysis_capacity"] * choose_ratio(row), axis=1
     )
 
+    # Group low-cost power regions into one category
+    df_stack = replace_lcprs_with_one_category(df_stack)
+
     df = (
         df_stack.groupby(agg_vars + ["year"])[["electrolysis_capacity"]]
         .sum()
@@ -1387,6 +1385,13 @@ def calculate_electrolysis_capacity(
         values="value",
     ).fillna(0)
 
+    return df
+
+
+def replace_lcprs_with_one_category(df: pd.DataFrame):
+
+    lcprs = ["Brazil", "Australia", "Namibia", "Saudi Arabia"]
+    df.loc[df["region"].isin(lcprs), "region"] = "Low-cost power regions"
     return df
 
 
