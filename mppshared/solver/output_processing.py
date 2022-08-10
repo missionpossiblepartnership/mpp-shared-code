@@ -14,6 +14,346 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
+def calculate_outputs(
+    pathway: str, sensitivity: str, sector: str, carbon_cost: CarbonCostTrajectory
+):
+    importer = IntermediateDataImporter(
+        pathway=pathway,
+        sensitivity=sensitivity,
+        sector=sector,
+        products=PRODUCTS[sector],
+        carbon_cost=carbon_cost,
+    )
+
+    # Write key assumptions to txt file
+    write_key_assumptions_to_txt(pathway=pathway, sector=sector, importer=importer)
+
+    # Create summary table of asset transitions
+    logger.info("Creating table with asset transition sequences.")
+    df_transitions = create_table_asset_transition_sequences(importer)
+    importer.export_data(
+        df_transitions,
+        f"asset_transition_sequences_sensitivity_{sensitivity}.csv",
+        "final",
+    )
+
+    calculate_outputs_interface(pathway, sensitivity, sector, carbon_cost, importer)
+    # calculate_outputs_report(pathway, sensitivity, sector, carbon_cost, importer)
+
+
+def calculate_outputs_interface(
+    pathway: str,
+    sensitivity: str,
+    sector: str,
+    carbon_cost: CarbonCostTrajectory,
+    importer: IntermediateDataImporter,
+):
+    aggregations = [
+        ["region"],
+        [],
+    ]
+
+    # Calculate the emissions intensity abatement by supply technology type
+    df_abatement = pd.DataFrame()
+    for agg_vars in aggregations:
+        df = _calculate_emissions_intensity_abatement(
+            importer=importer,
+            sector=sector,
+            agg_vars=agg_vars,
+        )
+        df_abatement = pd.concat([df, df_abatement])
+
+    # Calculate scope 3 downstream emissions for fertilizer end-use
+    df_scope3 = pd.DataFrame()
+
+    for agg_vars in aggregations:
+        df = calculate_scope3_downstream_emissions(
+            importer=importer,
+            sector=sector,
+            pathway=pathway,
+            agg_vars=agg_vars,
+        )
+        df_scope3 = pd.concat([df, df_scope3])
+
+    # Calculate plant numbers by retrofit, newbuild, rebuild, unchanged
+    df_plants = pd.DataFrame()
+    for agg_vars in aggregations:
+        df = _calculate_plant_numbers(
+            importer=importer,
+            sector=sector,
+            agg_vars=agg_vars + ["ammonia_type"],
+            use_standard_CUF=True,
+        )
+        df_plants = pd.concat([df, df_plants])
+
+    # Calculate electrolysis capacity
+    df_electrolysis_capacity = pd.DataFrame()
+    for agg_vars in aggregations:
+        df = calculate_electrolysis_capacity(
+            importer=importer, sector=sector, agg_vars=agg_vars
+        )
+        df_electrolysis_capacity = pd.concat([df, df_electrolysis_capacity])
+
+    # Calculate annual investments
+    df_cost = importer.get_technology_transitions_and_cost()
+
+    df_annual_investments = pd.DataFrame()
+    for agg_vars in aggregations:
+        df = _calculate_annual_investments(
+            df_cost=df_cost, importer=importer, sector=sector, agg_vars=agg_vars
+        )
+        df_annual_investments = pd.concat([df, df_annual_investments])
+
+    # Create output table for every year and concatenate
+    data = []
+
+    for year in range(START_YEAR, END_YEAR + 1):
+        logger.info(f"Processing year {year}")
+        yearly = create_table_all_data_year(
+            aggregations=aggregations.copy(),
+            year=year,
+            importer=importer,
+        )
+        yearly["year"] = year
+        data.append(yearly)
+
+    df = pd.concat(data)
+    df["sector"] = sector
+
+    # Calculate investment into dedicated renewables
+    df_investment_renewables = pd.DataFrame()
+    for agg_vars in aggregations:
+        temp = calculate_investment_dedicated_renewables(
+            importer, df, agg_vars=agg_vars
+        )
+        df_investment_renewables = pd.concat([df_investment_renewables, temp])
+
+    # Express annual production volume in terms of ammonia
+    df_ammonia_all = calculate_annual_production_volume_as_ammonia(df=df)
+    df = pd.concat([df, df_ammonia_all])
+
+    for agg_vars in aggregations:
+        df_ammonia_type = calculate_annual_production_volume_by_ammonia_type(
+            df=df, agg_vars=agg_vars
+        )
+        df = pd.concat([df, df_ammonia_type])
+
+    # Pivot the dataframe to have the years as columns
+    df_pivot = df.pivot_table(
+        index=[
+            "sector",
+            "product",
+            "region",
+            "technology",
+            "parameter_group",
+            "parameter",
+            "unit",
+        ],
+        columns="year",
+        values="value",
+    )
+
+    # Export as required
+    df_pivot = pd.concat(
+        [
+            df_pivot,
+            df_abatement,
+            df_scope3,
+            df_annual_investments,
+            df_electrolysis_capacity,
+            df_plants,
+            df_investment_renewables,
+        ]
+    )
+    df_pivot.reset_index(inplace=True)
+    df_pivot.fillna(0, inplace=True)
+
+    suffix = f"{sector}_{pathway}_{sensitivity}"
+
+    # For regions, replace All with Global
+    df_pivot["region"] = df_pivot["region"].replace({"All": "Global"})
+
+    importer.export_data(
+        df_pivot, f"interface_outputs_{suffix}.csv", export_dir="final", index=False
+    )
+    cc = carbon_cost.df_carbon_cost.loc[
+        carbon_cost.df_carbon_cost["year"] == 2050, "carbon_cost"
+    ].item()
+    df_pivot.to_csv(
+        f"{OUTPUT_WRITE_PATH[sector]}/{pathway}/{sensitivity}/carbon_cost_{cc}/interface_outputs_{suffix}.csv",
+        index=False,
+    )
+
+    logger.info("All data for all years processed.")
+
+
+def calculate_outputs_report(
+    pathway: str,
+    sensitivity: str,
+    sector: str,
+    carbon_cost: CarbonCostTrajectory,
+    importer: IntermediateDataImporter,
+):
+
+    # Calculate scope 3 downstream emissions for fertilizer end-use
+    df_scope3 = pd.DataFrame()
+    aggregations = [
+        ["product", "region"],
+        ["product"],
+        [],
+    ]
+    for agg_vars in aggregations:
+        df = calculate_scope3_downstream_emissions(
+            importer=importer,
+            sector=sector,
+            pathway=pathway,
+            agg_vars=agg_vars,
+        )
+        df_scope3 = pd.concat([df, df_scope3])
+
+    # Calculate plant numbers by retrofit, newbuild, rebuild, unchanged
+    aggregations = [
+        ["product", "region", "switch_type", "technology_destination"],
+        ["switch_type", "technology_destination"],
+        ["product", "region", "switch_type"],
+        ["product", "switch_type", "technology_destination"],
+        ["product", "switch_type"],
+    ]
+    df_plants = pd.DataFrame()
+    for use_standard_cuf in [True, False]:
+        for agg_vars in aggregations:
+            df = _calculate_plant_numbers_by_type(
+                importer=importer,
+                sector=sector,
+                agg_vars=agg_vars,
+                use_standard_CUF=use_standard_cuf,
+            )
+            df_plants = pd.concat([df, df_plants])
+
+    # Calculate electrolysis capacity
+    aggregations = [
+        ["product", "region", "technology"],
+        ["product", "region"],
+        ["product"],
+        ["product", "technology"],
+    ]
+    df_electrolysis_capacity = pd.DataFrame()
+    for agg_vars in aggregations:
+        df = calculate_electrolysis_capacity(
+            importer=importer, sector=sector, agg_vars=agg_vars
+        )
+        df_electrolysis_capacity = pd.concat([df, df_electrolysis_capacity])
+
+    # Add annualized cost to cost DataFrame
+    df_cost = importer.get_technology_transitions_and_cost()
+    df_tech_characteristics = importer.get_technology_characteristics()
+    df_cost = calculate_annualized_cost(
+        df_cost=df_cost, df_tech_characteristics=df_tech_characteristics
+    )
+
+    # Calculate cost metrics with different aggregation variables
+    aggregations = [
+        ["product", "region", "technology"],
+        ["product", "region"],
+        ["product", "technology"],
+        ["product"],
+    ]
+    df_cost_metrics = pd.DataFrame()
+    for cost_metric in ["annualized_cost", "lcox", "marginal_cost"]:
+        for agg_vars in aggregations:
+            df = calculate_weighted_average_cost_metric(
+                df_cost=df_cost,
+                carbon_cost=carbon_cost,
+                importer=importer,
+                sector=sector,
+                cost_metric=cost_metric,
+                agg_vars=agg_vars,
+            )
+            df_cost_metrics = pd.concat([df, df_cost_metrics])
+
+    # Calculate annual investments
+    aggregations = [
+        ["product", "region", "switch_type", "technology_destination"],
+        ["product", "region", "switch_type"],
+        ["product", "region", "technology_destination"],
+        ["product", "region"],
+        ["product"],
+    ]
+    df_annual_investments = pd.DataFrame()
+    for agg_vars in aggregations:
+        df = _calculate_annual_investments(
+            df_cost=df_cost,
+            importer=importer,
+            sector=sector,
+            agg_vars=agg_vars,
+            ammonia_type=True,
+        )
+        df_annual_investments = pd.concat([df, df_annual_investments])
+
+    # Create output table for every year and concatenate
+    data = []
+    data_stacks = []
+
+    for year in range(START_YEAR, END_YEAR + 1):
+        logger.info(f"Processing year {year}")
+        yearly = create_table_all_data_year(year, importer)
+        yearly["year"] = year
+        data.append(yearly)
+        df_stack = importer.get_asset_stack(year)
+        df_stack["year"] = year
+        data_stacks.append(df_stack)
+
+    df_stacks = pd.concat(data_stacks)
+    df = pd.concat(data)
+    df["sector"] = sector
+
+    # Express annual production volume in terms of ammonia
+    if SECTOR == "chemicals":
+        df_ammonia_all = calculate_annual_production_volume_as_ammonia(df=df)
+        df = pd.concat([df, df_ammonia_all])
+
+    # Pivot the dataframe to have the years as columns
+    df_pivot = df.pivot_table(
+        index=[
+            "sector",
+            "product",
+            "region",
+            "technology",
+            "parameter_group",
+            "parameter",
+            "unit",
+        ],
+        columns="year",
+        values="value",
+    )
+
+    # Export as required
+    df_pivot = pd.concat(
+        [
+            df_pivot,
+            df_scope3,
+            df_cost_metrics,
+            df_annual_investments,
+            df_electrolysis_capacity,
+            df_plants,
+        ]
+    )
+    df_pivot.reset_index(inplace=True)
+    df_pivot.fillna(0, inplace=True)
+
+    suffix = f"{sector}_{pathway}_{sensitivity}"
+
+    cc = carbon_cost.df_carbon_cost.loc[
+        carbon_cost.df_carbon_cost["year"] == 2050, "carbon_cost"
+    ].item()
+    df_pivot.to_csv(
+        f"{OUTPUT_WRITE_PATH[sector]}/{pathway}/{sensitivity}/carbon_cost_{cc}/simulation_outputs_{suffix}.csv",
+        index=False,
+    )
+
+    logger.info("All data for all years processed.")
+
+
 def _calculate_number_of_assets(
     df_stack: pd.DataFrame, use_standard_cuf=False
 ) -> pd.DataFrame:
@@ -1148,33 +1488,6 @@ def calculate_scope3_downstream_emissions(
     return df
 
 
-def calculate_outputs(
-    pathway: str, sensitivity: str, sector: str, carbon_cost: CarbonCostTrajectory
-):
-    importer = IntermediateDataImporter(
-        pathway=pathway,
-        sensitivity=sensitivity,
-        sector=sector,
-        products=PRODUCTS[sector],
-        carbon_cost=carbon_cost,
-    )
-
-    # Write key assumptions to txt file
-    write_key_assumptions_to_txt(pathway=pathway, sector=sector, importer=importer)
-
-    # Create summary table of asset transitions
-    logger.info("Creating table with asset transition sequences.")
-    df_transitions = create_table_asset_transition_sequences(importer)
-    importer.export_data(
-        df_transitions,
-        f"asset_transition_sequences_sensitivity_{sensitivity}.csv",
-        "final",
-    )
-
-    calculate_outputs_interface(pathway, sensitivity, sector, carbon_cost, importer)
-    # calculate_outputs_report(pathway, sensitivity, sector, carbon_cost, importer)
-
-
 def _merge_current_and_previous_stack(
     year: int, importer: IntermediateDataImporter
 ) -> pd.DataFrame:
@@ -1603,154 +1916,6 @@ def apply_parameter_map_ammonia_type(ammonia_type):
     return parameter_map[ammonia_type]
 
 
-def calculate_outputs_interface(
-    pathway: str,
-    sensitivity: str,
-    sector: str,
-    carbon_cost: CarbonCostTrajectory,
-    importer: IntermediateDataImporter,
-):
-    aggregations = [
-        ["product", "region"],
-        ["product"],
-        ["region"],
-        [],
-    ]
-
-    # Calculate the emissions intensity abatement by supply technology type
-    df_abatement = pd.DataFrame()
-    for agg_vars in [[], ["region"]]:
-        df = _calculate_emissions_intensity_abatement(
-            importer=importer,
-            sector=sector,
-            agg_vars=agg_vars,
-        )
-        df_abatement = pd.concat([df, df_abatement])
-
-    # Calculate scope 3 downstream emissions for fertilizer end-use
-    df_scope3 = pd.DataFrame()
-
-    for agg_vars in aggregations:
-        df = calculate_scope3_downstream_emissions(
-            importer=importer,
-            sector=sector,
-            pathway=pathway,
-            agg_vars=agg_vars,
-        )
-        df_scope3 = pd.concat([df, df_scope3])
-
-    # Calculate plant numbers by retrofit, newbuild, rebuild, unchanged
-    df_plants = pd.DataFrame()
-    for agg_vars in aggregations:
-        df = _calculate_plant_numbers(
-            importer=importer,
-            sector=sector,
-            agg_vars=agg_vars + ["ammonia_type"],
-            use_standard_CUF=True,
-        )
-        df_plants = pd.concat([df, df_plants])
-
-    # Calculate electrolysis capacity
-    df_electrolysis_capacity = pd.DataFrame()
-    for agg_vars in aggregations:
-        df = calculate_electrolysis_capacity(
-            importer=importer, sector=sector, agg_vars=agg_vars
-        )
-        df_electrolysis_capacity = pd.concat([df, df_electrolysis_capacity])
-
-    # Calculate annual investments
-    df_cost = importer.get_technology_transitions_and_cost()
-
-    df_annual_investments = pd.DataFrame()
-    for agg_vars in aggregations:
-        df = _calculate_annual_investments(
-            df_cost=df_cost, importer=importer, sector=sector, agg_vars=agg_vars
-        )
-        df_annual_investments = pd.concat([df, df_annual_investments])
-
-    # Create output table for every year and concatenate
-    data = []
-
-    for year in range(START_YEAR, END_YEAR + 1):
-        logger.info(f"Processing year {year}")
-        yearly = create_table_all_data_year(
-            aggregations=aggregations.copy() + [["product", "region", "technology"]],
-            year=year,
-            importer=importer,
-        )
-        yearly["year"] = year
-        data.append(yearly)
-
-    df = pd.concat(data)
-    df["sector"] = sector
-
-    # Calculate investment into dedicated renewables
-    df_investment_renewables = pd.DataFrame()
-    for agg_vars in aggregations:
-        temp = calculate_investment_dedicated_renewables(
-            importer, df, agg_vars=agg_vars
-        )
-        df_investment_renewables = pd.concat([df_investment_renewables, temp])
-
-    # Express annual production volume in terms of ammonia
-    df_ammonia_all = calculate_annual_production_volume_as_ammonia(df=df)
-    df = pd.concat([df, df_ammonia_all])
-
-    for agg_vars in [["product", "region"], ["product"], ["region"], []]:
-        df_ammonia_type = calculate_annual_production_volume_by_ammonia_type(
-            df=df, agg_vars=agg_vars
-        )
-        df = pd.concat([df, df_ammonia_type])
-
-    # Pivot the dataframe to have the years as columns
-    df_pivot = df.pivot_table(
-        index=[
-            "sector",
-            "product",
-            "region",
-            "technology",
-            "parameter_group",
-            "parameter",
-            "unit",
-        ],
-        columns="year",
-        values="value",
-    )
-
-    # Export as required
-    df_pivot = pd.concat(
-        [
-            df_pivot,
-            df_abatement,
-            df_scope3,
-            df_annual_investments,
-            df_electrolysis_capacity,
-            df_plants,
-            df_investment_renewables,
-        ]
-    )
-    df_pivot.reset_index(inplace=True)
-    df_pivot.fillna(0, inplace=True)
-
-    suffix = f"{sector}_{pathway}_{sensitivity}"
-
-    # For regions, replace All with Global
-    df_pivot["region"] = df_pivot["region"].replace({"All": "Global"})
-
-    importer.export_data(
-        df_pivot, f"interface_outputs_{suffix}.csv", export_dir="final", index=False
-    )
-    cc = carbon_cost.df_carbon_cost.loc[
-        carbon_cost.df_carbon_cost["year"] == 2050, "carbon_cost"
-    ].item()
-    df_pivot.to_csv(
-        f"{OUTPUT_WRITE_PATH[sector]}/{pathway}/{sensitivity}/carbon_cost_{cc}/interface_outputs_{suffix}.csv",
-        index=False,
-    )
-
-    logger.info("All data for all years processed.")
-
-
 def calculate_investment_dedicated_renewables(
     importer: IntermediateDataImporter,
     df_electricity: pd.DataFrame,
@@ -1857,173 +2022,6 @@ def calculate_investment_dedicated_renewables(
     ).fillna(0)
 
     return df_pivot
-
-
-def calculate_outputs_report(
-    pathway: str,
-    sensitivity: str,
-    sector: str,
-    carbon_cost: CarbonCostTrajectory,
-    importer: IntermediateDataImporter,
-):
-
-    # Calculate scope 3 downstream emissions for fertilizer end-use
-    df_scope3 = pd.DataFrame()
-    aggregations = [
-        ["product", "region"],
-        ["product"],
-        [],
-    ]
-    for agg_vars in aggregations:
-        df = calculate_scope3_downstream_emissions(
-            importer=importer,
-            sector=sector,
-            pathway=pathway,
-            agg_vars=agg_vars,
-        )
-        df_scope3 = pd.concat([df, df_scope3])
-
-    # Calculate plant numbers by retrofit, newbuild, rebuild, unchanged
-    aggregations = [
-        ["product", "region", "switch_type", "technology_destination"],
-        ["switch_type", "technology_destination"],
-        ["product", "region", "switch_type"],
-        ["product", "switch_type", "technology_destination"],
-        ["product", "switch_type"],
-    ]
-    df_plants = pd.DataFrame()
-    for use_standard_cuf in [True, False]:
-        for agg_vars in aggregations:
-            df = _calculate_plant_numbers_by_type(
-                importer=importer,
-                sector=sector,
-                agg_vars=agg_vars,
-                use_standard_CUF=use_standard_cuf,
-            )
-            df_plants = pd.concat([df, df_plants])
-
-    # Calculate electrolysis capacity
-    aggregations = [
-        ["product", "region", "technology"],
-        ["product", "region"],
-        ["product"],
-        ["product", "technology"],
-    ]
-    df_electrolysis_capacity = pd.DataFrame()
-    for agg_vars in aggregations:
-        df = calculate_electrolysis_capacity(
-            importer=importer, sector=sector, agg_vars=agg_vars
-        )
-        df_electrolysis_capacity = pd.concat([df, df_electrolysis_capacity])
-
-    # Add annualized cost to cost DataFrame
-    df_cost = importer.get_technology_transitions_and_cost()
-    df_tech_characteristics = importer.get_technology_characteristics()
-    df_cost = calculate_annualized_cost(
-        df_cost=df_cost, df_tech_characteristics=df_tech_characteristics
-    )
-
-    # Calculate cost metrics with different aggregation variables
-    aggregations = [
-        ["product", "region", "technology"],
-        ["product", "region"],
-        ["product", "technology"],
-        ["product"],
-    ]
-    df_cost_metrics = pd.DataFrame()
-    for cost_metric in ["annualized_cost", "lcox", "marginal_cost"]:
-        for agg_vars in aggregations:
-            df = calculate_weighted_average_cost_metric(
-                df_cost=df_cost,
-                carbon_cost=carbon_cost,
-                importer=importer,
-                sector=sector,
-                cost_metric=cost_metric,
-                agg_vars=agg_vars,
-            )
-            df_cost_metrics = pd.concat([df, df_cost_metrics])
-
-    # Calculate annual investments
-    aggregations = [
-        ["product", "region", "switch_type", "technology_destination"],
-        ["product", "region", "switch_type"],
-        ["product", "region", "technology_destination"],
-        ["product", "region"],
-        ["product"],
-    ]
-    df_annual_investments = pd.DataFrame()
-    for agg_vars in aggregations:
-        df = _calculate_annual_investments(
-            df_cost=df_cost,
-            importer=importer,
-            sector=sector,
-            agg_vars=agg_vars,
-            ammonia_type=True,
-        )
-        df_annual_investments = pd.concat([df, df_annual_investments])
-
-    # Create output table for every year and concatenate
-    data = []
-    data_stacks = []
-
-    for year in range(START_YEAR, END_YEAR + 1):
-        logger.info(f"Processing year {year}")
-        yearly = create_table_all_data_year(year, importer)
-        yearly["year"] = year
-        data.append(yearly)
-        df_stack = importer.get_asset_stack(year)
-        df_stack["year"] = year
-        data_stacks.append(df_stack)
-
-    df_stacks = pd.concat(data_stacks)
-    df = pd.concat(data)
-    df["sector"] = sector
-
-    # Express annual production volume in terms of ammonia
-    if SECTOR == "chemicals":
-        df_ammonia_all = calculate_annual_production_volume_as_ammonia(df=df)
-        df = pd.concat([df, df_ammonia_all])
-
-    # Pivot the dataframe to have the years as columns
-    df_pivot = df.pivot_table(
-        index=[
-            "sector",
-            "product",
-            "region",
-            "technology",
-            "parameter_group",
-            "parameter",
-            "unit",
-        ],
-        columns="year",
-        values="value",
-    )
-
-    # Export as required
-    df_pivot = pd.concat(
-        [
-            df_pivot,
-            df_scope3,
-            df_cost_metrics,
-            df_annual_investments,
-            df_electrolysis_capacity,
-            df_plants,
-        ]
-    )
-    df_pivot.reset_index(inplace=True)
-    df_pivot.fillna(0, inplace=True)
-
-    suffix = f"{sector}_{pathway}_{sensitivity}"
-
-    cc = carbon_cost.df_carbon_cost.loc[
-        carbon_cost.df_carbon_cost["year"] == 2050, "carbon_cost"
-    ].item()
-    df_pivot.to_csv(
-        f"{OUTPUT_WRITE_PATH[sector]}/{pathway}/{sensitivity}/carbon_cost_{cc}/simulation_outputs_{suffix}.csv",
-        index=False,
-    )
-
-    logger.info("All data for all years processed.")
 
 
 def write_key_assumptions_to_txt(
