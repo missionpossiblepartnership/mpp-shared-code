@@ -1,4 +1,5 @@
 """ Process outputs to standardised output table."""
+from distutils import dep_util
 import pandas as pd
 import numpy as np
 
@@ -78,7 +79,7 @@ def calculate_outputs_interface(
         )
         df_electrolysis_capacity = pd.concat([df, df_electrolysis_capacity])
 
-    # Calculate annual investments / CHECKING
+    # Calculate annual investments - CHECKED
     df_cost = importer.get_technology_transitions_and_cost()
 
     df_annual_investments = pd.DataFrame()
@@ -104,7 +105,7 @@ def calculate_outputs_interface(
     df = pd.concat(data)
     df["sector"] = sector
 
-    # Calculate investment into dedicated renewables
+    # Calculate investment into dedicated renewables - CHECKED
     df_investment_renewables = pd.DataFrame()
     for agg_vars in aggregations.copy():
         temp = calculate_investment_dedicated_renewables(
@@ -112,7 +113,7 @@ def calculate_outputs_interface(
         )
         df_investment_renewables = pd.concat([df_investment_renewables, temp])
 
-    # Express annual production volume in terms of ammonia
+    # Express annual production volume in terms of ammonia - CHECKED
     df_ammonia_all = calculate_annual_production_volume_as_ammonia(df=df)
     df = pd.concat([df, df_ammonia_all])
 
@@ -121,6 +122,9 @@ def calculate_outputs_interface(
             df=df, agg_vars=agg_vars
         )
         df = pd.concat([df, df_ammonia_type])
+
+    # Convert resource consumption to base unit, aggregate low-cost power regions and energy & materials category
+    df = convert_and_aggregate_resource_consumption(df)
 
     # Pivot the dataframe to have the years as columns
     df_pivot = df.pivot_table(
@@ -168,6 +172,43 @@ def calculate_outputs_interface(
     )
 
     logger.info("All data for all years processed.")
+
+
+def convert_and_aggregate_resource_consumption(df: pd.DataFrame) -> pd.DataFrame:
+    """For each resource, convert to base unit, sum energy & materials category, and aggregate low-cost power regions"""
+
+    resources = df.loc[
+        df["parameter_group"].isin(["Energy", "Materials", "H2 storage"]), "parameter"
+    ].unique()
+
+    map_desired_units = {
+        "Coal": "Mt",
+        "Natural gas": "MMBtu",
+        "Electricity - grid": "TWh",
+        "Electricity - PPA": "TWh",
+        "Electricity - on site VREs": "TWh",
+        "CO2": "Mt",
+        "Steam": "PJ",
+        "Biomass": "PJ",
+        "H2 storage - geological": "Mt",
+        "H2 storage - pipeline": "Mt",
+    }
+
+    map_conversion_factors_from_PJ = {
+        "Coal": 34120.842375357,
+        "Natural gas": 9.478171 * 1e05,
+        "Electricity - grid": 1 / 3.6,
+        "Electricity - PPA": 1 / 3.6,
+        "Electricity - on site VREs": 1 / 3.6,
+        "CO2": 1,
+        "Steam": 1,
+        "Biomass": 1,
+        "H2 storage - geological": 1 / 119.988,
+        "H2 storage - pipeline": 1 / 119.988,
+    }
+
+    for resource in resources:
+        pass
 
 
 def calculate_outputs_report(
@@ -344,6 +385,11 @@ def _calculate_number_of_assets(
 
     logger.info("-- Calculating number of assets")
 
+    # Map low-cost power regions to individual category
+    df_stack["region"] = df_stack["region"].apply(
+        lambda x: map_low_cost_power_regions(x, "to_category")
+    )
+
     if use_standard_cuf:
         df_stack = (
             df_stack.groupby(["product", "region", "technology"])
@@ -384,6 +430,11 @@ def _calculate_production_volume(df_stack: pd.DataFrame) -> pd.DataFrame:
 
     logger.info("-- Calculating production volume")
 
+    # Map low-cost power regions to individual category
+    df_stack["region"] = df_stack["region"].apply(
+        lambda x: map_low_cost_power_regions(x, "to_category")
+    )
+
     # Sum the annual production volume
     df_stack = (
         df_stack.groupby(["product", "region", "technology"])
@@ -415,6 +466,11 @@ def _calculate_emissions(
     # Emissions are the emissions factor multiplied with the annual production volume
     df_stack = df_stack.merge(df_emissions, on=["product", "region", "technology"])
     scopes = [f"{ghg}_{scope}" for scope in emission_scopes for ghg in GHGS]
+
+    # Map low-cost power regions to individual category
+    df_stack["region"] = df_stack["region"].apply(
+        lambda x: map_low_cost_power_regions(x, "to_category")
+    )
 
     for scope in scopes:
         df_stack[scope] = df_stack[scope] * df_stack["annual_production_volume"]
@@ -483,6 +539,11 @@ def _calculate_emissions_co2e(
     for scope in scopes:
         df_stack[scope] = df_stack[scope] * df_stack["annual_production_volume"]
 
+    # Map low-cost power regions to individual category
+    df_stack["region"] = df_stack["region"].apply(
+        lambda x: map_low_cost_power_regions(x, "to_category")
+    )
+
     if agg_vars:
         df_stack = (
             df_stack.groupby(agg_vars)[scopes + ["annual_production_volume"]]
@@ -536,6 +597,11 @@ def _calculate_co2_captured(
     df_stack = df_stack.merge(df_emissions, on=["product", "region", "technology"])
     df_stack["co2_scope1_captured"] = (
         df_stack["co2_scope1_captured"] * df_stack["annual_production_volume"]
+    )
+
+    # Map low-cost power regions to individual category
+    df_stack["region"] = df_stack["region"].apply(
+        lambda x: map_low_cost_power_regions(x, "to_category")
     )
 
     if agg_vars:
@@ -596,6 +662,11 @@ def _calculate_emissions_intensity(
         for scope in scopes:
             df_stack[scope] = df_stack[scope] * df_stack["annual_production_volume"]
 
+        # Map low-cost power regions to individual category
+        df_stack["region"] = df_stack["region"].apply(
+            lambda x: map_low_cost_power_regions(x, "to_category")
+        )
+
         if agg_vars:
             df_stack = (
                 df_stack.groupby(agg_vars)[scopes + ["annual_production_volume"]]
@@ -655,11 +726,12 @@ def _calculate_resource_consumption(
     year: int,
     agg_vars=["product", "region", "technology"],
 ) -> pd.DataFrame:
-    """Calculate the consumption of a given resource in a given year, optionally grouped by specific variables."""
+    """Calculate the consumption of a given resource in a given year, optionally grouped by specific variables. Leave cost-power regions as they are because granularity
+    needed for calculating direct investment into dedicated renewables."""
 
     logger.info(f"-- Calculating consumption of {resource}")
 
-    # Get inputs of that resource required for each technology in GJ/t
+    # Get inputs of that resource required for each technology in GJ/t (for CO2: tCO2/t)
     df_variable = df_inputs_outputs.loc[
         (df_inputs_outputs["parameter"] == resource)
         & (df_inputs_outputs["year"] == year)
@@ -667,8 +739,9 @@ def _calculate_resource_consumption(
 
     df_stack = df_stack.merge(df_variable, on=["product", "region", "technology"])
 
-    # Calculate resource consumption in GJ by multiplying the input with the annual production volume of that technology
+    # Calculate resource consumption by multiplying the input with the annual production volume of that technology
     df_stack["value"] = df_stack["value"] * df_stack["annual_production_volume"]
+
     df_stack = (
         df_stack.groupby(agg_vars + ["parameter_group", "parameter"])["value"].sum()
     ).reset_index()
@@ -681,6 +754,7 @@ def _calculate_resource_consumption(
         "Cost": "USD",
     }  # GJ/t * Mt = 10^9 * 10^6 J = 10^15 J = PJ
     df_stack["unit"] = df_stack["parameter_group"].apply(lambda x: unit_map[x])
+    df_stack["unit"] = np.where(df_stack["parameter"] == "CO2", "Mt", df_stack["unit"])
 
     for var in [
         agg_var
@@ -700,11 +774,13 @@ def create_table_all_data_year(
     # Calculate asset numbers and production volumes for the stack in that year
     df_stack = importer.get_asset_stack(year)
 
-    df_total_assets = _calculate_number_of_assets(df_stack, use_standard_cuf=False)
-    df_total_assets_std_cuf = _calculate_number_of_assets(
-        df_stack, use_standard_cuf=True
+    df_total_assets = _calculate_number_of_assets(
+        df_stack.copy(deep=True), use_standard_cuf=False
     )
-    df_production_capacity = _calculate_production_volume(df_stack)
+    df_total_assets_std_cuf = _calculate_number_of_assets(
+        df_stack.copy(deep=True), use_standard_cuf=True
+    )
+    df_production_capacity = _calculate_production_volume(df_stack.copy(deep=True))
 
     # Calculate emissions, CO2 captured and emissions intensity
     df_emissions = importer.get_emissions()
@@ -713,18 +789,24 @@ def create_table_all_data_year(
     df_stack_emissions_co2e = pd.DataFrame()
     df_emissions_intensity = pd.DataFrame()
     df_co2_captured = pd.DataFrame()
+
     for agg_vars in aggregations:
         df_stack_emissions = pd.concat(
             [
                 df_stack_emissions,
-                _calculate_emissions(df_stack, df_emissions, agg_vars=agg_vars),
+                _calculate_emissions(
+                    df_stack.copy(deep=True), df_emissions, agg_vars=agg_vars
+                ),
             ]
         )
         df_stack_emissions_co2e = pd.concat(
             [
                 df_stack_emissions_co2e,
                 _calculate_emissions_co2e(
-                    df_stack, df_emissions, gwp="GWP-100", agg_vars=agg_vars
+                    df_stack.copy(deep=True),
+                    df_emissions,
+                    gwp="GWP-100",
+                    agg_vars=agg_vars,
                 ),
             ]
         )
@@ -732,7 +814,7 @@ def create_table_all_data_year(
             [
                 df_emissions_intensity,
                 _calculate_emissions_intensity(
-                    df_stack, df_emissions, agg_vars=agg_vars
+                    df_stack.copy(deep=True), df_emissions, agg_vars=agg_vars
                 ),
             ]
         )
@@ -740,7 +822,9 @@ def create_table_all_data_year(
         df_co2_captured = pd.concat(
             [
                 df_co2_captured,
-                _calculate_co2_captured(df_stack, df_emissions, agg_vars=agg_vars),
+                _calculate_co2_captured(
+                    df_stack.copy(deep=True), df_emissions, agg_vars=agg_vars
+                ),
             ]
         )
 
@@ -757,7 +841,7 @@ def create_table_all_data_year(
     for agg_vars in aggregations:
         for resource in resources:
             df_stack_variable = _calculate_resource_consumption(
-                df_stack,
+                df_stack.copy(deep=True),
                 df_inputs_outputs,
                 resource,
                 year,
@@ -2017,6 +2101,13 @@ def calculate_investment_dedicated_renewables(
 
     # Sum solar and wind investment and aggregate as required
     df["value"] = df["solar_investment"] + df["wind_investment"]
+
+    # Map low-cost power regions to individual category
+    df["region"] = df["region"].apply(
+        lambda x: map_low_cost_power_regions(x, "to_category")
+    )
+
+    # Sum to total investment according to aggregation
     df = df.groupby(agg_vars_initial + ["year"]).sum()["value"].reset_index(drop=False)
 
     # Pivot table
