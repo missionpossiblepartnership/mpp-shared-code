@@ -12,8 +12,8 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
-    "lc",
-    # "fa",
+    # "lc",
+    "fa",
     # "bau",
 ]
 
@@ -26,7 +26,7 @@ SENSITIVITIES = [
 ]
 
 # Toggle whether circularity in demand scenario or not
-CIRCULARITY_IN_DEMAND = False
+CIRCULARITY_IN_DEMAND = True
 
 # Carbon price (for sensitivity analysis): needs to be run for 1 USD/tCO2 to create carbon_cost_addition.csv, then used for subsequent runs by multiplying accordingly
 
@@ -38,7 +38,7 @@ CARBON_COSTS = [
     200,
     250,
 ]
-CARBON_COSTS = [100]
+CARBON_COSTS = [0]
 CARBON_COST_ADDITION_FROM_CSV = False
 
 # Scopes in CO2 price optimization

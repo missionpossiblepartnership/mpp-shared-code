@@ -62,7 +62,7 @@ def calculate_outputs_interface(
     # Calculate scope 3 downstream emissions for fertilizer end-use - CHECKING
     df_scope3 = pd.DataFrame()
 
-    for agg_vars in aggregations.copy():
+    for agg_vars in [["product"]] + aggregations.copy():
         df = calculate_scope3_downstream_emissions(
             importer=importer,
             sector=sector,
@@ -113,6 +113,11 @@ def calculate_outputs_interface(
         )
         df_investment_renewables = pd.concat([df_investment_renewables, temp])
 
+    # Calculate total annual investments
+    df_total_investments = _calculate_total_annual_investments(
+        df_annual_investments, df_investment_renewables, aggregations=[["region"], []]
+    )
+
     # Express annual production volume in terms of ammonia - CHECKED
     df_ammonia_all = calculate_annual_production_volume_as_ammonia(df=df)
     df = pd.concat([df, df_ammonia_all])
@@ -148,6 +153,7 @@ def calculate_outputs_interface(
             df_abatement,
             df_scope3,
             df_annual_investments,
+            df_total_investments,
             df_electrolysis_capacity,
             df_investment_renewables,
         ]
@@ -163,40 +169,118 @@ def calculate_outputs_interface(
     importer.export_data(
         df_pivot, f"interface_outputs_{suffix}.csv", export_dir="final", index=False
     )
-    cc = carbon_cost.df_carbon_cost.loc[
-        carbon_cost.df_carbon_cost["year"] == 2050, "carbon_cost"
-    ].item()
-    df_pivot.to_csv(
-        f"{OUTPUT_WRITE_PATH[sector]}/{pathway}/{sensitivity}/carbon_cost_{cc}/interface_outputs_{suffix}.csv",
-        index=False,
-    )
+    # cc = carbon_cost.df_carbon_cost.loc[
+    #     carbon_cost.df_carbon_cost["year"] == 2050, "carbon_cost"
+    # ].item()
+    # df_pivot.to_csv(
+    #     f"{OUTPUT_WRITE_PATH[sector]}/{pathway}/{sensitivity}/carbon_cost_{cc}/interface_outputs_{suffix}.csv",
+    #     index=False,
+    # )
 
     logger.info("All data for all years processed.")
+
+
+def _calculate_total_annual_investments(
+    df_annual_investments: pd.DataFrame,
+    df_investment_renewables: pd.DataFrame,
+    aggregations: list,
+) -> pd.DataFrame:
+    """Sum direct investments into plants and dedicated renewables investment for each year"""
+    melt_vars = [
+        "sector",
+        "product",
+        "region",
+        "technology",
+        "parameter_group",
+        "parameter",
+        "unit",
+    ]
+
+    group_vars = [
+        "sector",
+        "product",
+        "region",
+        "technology",
+        "parameter_group",
+        "unit",
+    ]
+
+    df_annual_investments = df_annual_investments.reset_index()
+    df_investment_renewables = df_investment_renewables.reset_index()
+
+    # Sum all types of direct investment
+    df_annual_investments = (
+        df_annual_investments.groupby(by=group_vars).sum().reset_index()
+    )
+
+    df_annual_investments["parameter"] = "Plant investment"
+
+    # Melt tables into long format and merge
+    df_annual_investments = df_annual_investments.melt(
+        id_vars=melt_vars,
+        var_name="year",
+        value_name="plant_investment",
+    ).drop(columns="parameter")
+
+    df_investment_renewables = df_investment_renewables.melt(
+        id_vars=melt_vars,
+        var_name="year",
+        value_name="renewable_investment",
+    ).drop(columns="parameter")
+
+    df = df_annual_investments.merge(
+        df_investment_renewables,
+        on=[
+            "sector",
+            "product",
+            "region",
+            "technology",
+            "parameter_group",
+            "unit",
+            "year",
+        ],
+        how="outer",
+    ).fillna(0)
+
+    # Total investment is sum of plant investment and investment into direct renewables
+    df["total_investment"] = df["plant_investment"] + df["renewable_investment"]
+    df = df.drop(columns=["plant_investment", "renewable_investment"])
+    df["parameter"] = "Total direct investment"
+
+    # Pivot table back to wide format
+    df["year"] = df["year"].astype(int)
+    df = df.pivot_table(
+        index=melt_vars,
+        columns="year",
+        values="total_investment",
+    ).fillna(0)
+
+    return df
 
 
 def convert_and_aggregate_resource_consumption(df: pd.DataFrame) -> pd.DataFrame:
     """For each resource, convert to base unit, sum energy & materials category, and aggregate low-cost power regions"""
 
     resources = df.loc[
-        df["parameter_group"].isin(["Energy", "Materials", "H2 storage"]), "parameter"
+        df["parameter_group"] == "Resource consumption", "parameter"
     ].unique()
 
     map_desired_units = {
         "Coal": "Mt",
-        "Natural gas": "MMBtu",
+        "Natural gas": "bcm",  # "MMBtu",
         "Electricity - grid": "TWh",
         "Electricity - PPA": "TWh",
         "Electricity - on site VREs": "TWh",
-        "CO2": "Mt",
+        "CO2": "Mt CO2",
         "Steam": "PJ",
         "Biomass": "PJ",
-        "H2 storage - geological": "Mt",
-        "H2 storage - pipeline": "Mt",
+        "H2 storage - geological": "Mt H2",
+        "H2 storage - pipeline": "Mt H2",
     }
 
     map_conversion_factors_from_PJ = {
-        "Coal": 34120.842375357,
-        "Natural gas": 9.478171 * 1e05,
+        "Coal": 34120.842375357 * 1e-6,
+        "Natural gas": 1 / 38.2,  # 9.4781712031 * 1e5,
         "Electricity - grid": 1 / 3.6,
         "Electricity - PPA": 1 / 3.6,
         "Electricity - on site VREs": 1 / 3.6,
@@ -208,7 +292,12 @@ def convert_and_aggregate_resource_consumption(df: pd.DataFrame) -> pd.DataFrame
     }
 
     for resource in resources:
-        pass
+        df.loc[df["parameter"] == resource, "value"] *= map_conversion_factors_from_PJ[
+            resource
+        ]
+        df.loc[df["parameter"] == resource, "unit"] = map_desired_units[resource]
+
+    return df
 
 
 def calculate_outputs_report(
@@ -742,19 +831,11 @@ def _calculate_resource_consumption(
     # Calculate resource consumption by multiplying the input with the annual production volume of that technology
     df_stack["value"] = df_stack["value"] * df_stack["annual_production_volume"]
 
-    df_stack = (
-        df_stack.groupby(agg_vars + ["parameter_group", "parameter"])["value"].sum()
-    ).reset_index()
+    df_stack = (df_stack.groupby(agg_vars + ["parameter"])["value"].sum()).reset_index()
 
-    # Add unit
-    unit_map = {
-        "Energy": "PJ",
-        "Raw material": "PJ",
-        "H2 storage": "PJ",
-        "Cost": "USD",
-    }  # GJ/t * Mt = 10^9 * 10^6 J = 10^15 J = PJ
-    df_stack["unit"] = df_stack["parameter_group"].apply(lambda x: unit_map[x])
-    df_stack["unit"] = np.where(df_stack["parameter"] == "CO2", "Mt", df_stack["unit"])
+    # Unit is Mt for CO2 (Mt NH3 * tCO2/tNH3) and PJ for other resources (Mt NH3 * GJ/tNH3)
+    df_stack["unit"] = np.where(df_stack["parameter"] == "CO2", "Mt", "PJ")
+    df_stack["parameter_group"] = "Resource consumption"
 
     for var in [
         agg_var
@@ -830,13 +911,20 @@ def create_table_all_data_year(
 
     # Calculate feedstock and energy consumption
     df_inputs_outputs = importer.get_inputs_outputs()
+    df_inputs_outputs.loc[
+        df_inputs_outputs["parameter"].isin(["Wet biomass", "Dry biomass"]), "parameter"
+    ] = "Biomass"
     data_variables = []
 
     resources = [
-        resource
-        for resource in df_inputs_outputs["parameter"].unique()
-        if resource
-        not in ["Variable OPEX", "Fixed OPEX", "Total OPEX", "Greenfield CAPEX"]
+        "Coal",
+        "Natural gas",
+        "Electricity - grid",
+        "Electricity - PPA",
+        "Electricity - on site VREs",
+        "H2 storage - geological",
+        "H2 storage - pipeline",
+        "Biomass",
     ]
     for agg_vars in aggregations:
         for resource in resources:
@@ -2030,7 +2118,7 @@ def calculate_investment_dedicated_renewables(
 
     # Filter outputs table for electricity consumption from on site VREs
     df = df_electricity.loc[
-        (df_electricity["parameter_group"] == "Energy")
+        (df_electricity["parameter_group"] == "Resource consumption")
         & (df_electricity["parameter"] == "Electricity - on site VREs")
     ]
 
