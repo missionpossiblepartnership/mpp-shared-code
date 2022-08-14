@@ -12,8 +12,8 @@ LOG_FORMATTER = logging.Formatter(
 SECTOR = "chemicals"
 # SECTOR = "aluminium"
 PATHWAYS = [
-    # "lc",
-    "fa",
+    "lc",
+    # "fa",
     # "bau",
 ]
 
@@ -21,24 +21,24 @@ PATHWAYS = [
 SENSITIVITIES = [
     "def",
     # "ng_partial",
-    # "ng_high",
-    # "ng_low",
+    "ng_high",
+    "ng_low",
 ]
 
 # Toggle whether circularity in demand scenario or not
-CIRCULARITY_IN_DEMAND = True
+CIRCULARITY_IN_DEMAND = False
 
 # Carbon price (for sensitivity analysis): needs to be run for 1 USD/tCO2 to create carbon_cost_addition.csv, then used for subsequent runs by multiplying accordingly
 
 CARBON_COSTS = [
-    # 0,
-    # 50,
+    0,
+    50,
     100,
     150,
     200,
     250,
 ]
-CARBON_COSTS = [0]
+# CARBON_COSTS = [0]
 CARBON_COST_ADDITION_FROM_CSV = False
 
 # Scopes in CO2 price optimization
@@ -50,7 +50,7 @@ SCOPES_CO2_COST = [
 ]
 
 # Run parallel/sequential
-RUN_PARALLEL = False
+RUN_PARALLEL = True
 
 # Integrate current project pipeline or not
 BUILD_CURRENT_PROJECT_PIPELINE = {"chemicals": True, "aluminium": False}
