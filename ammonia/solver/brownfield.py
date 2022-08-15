@@ -8,19 +8,25 @@ import numpy as np
 import pandas as pd
 from pandera import Bool
 
-from ammonia.config_ammonia import (ANNUAL_RENOVATION_SHARE,
-                                    BROWNFIELD_REBUILD_START_YEAR,
-                                    BROWNFIELD_RENOVATION_START_YEAR,
-                                    COST_METRIC_DECREASE_BROWNFIELD, LOG_LEVEL,
-                                    RANKING_COST_METRIC,
-                                    REGIONAL_TECHNOLOGY_BAN)
+from ammonia.config_ammonia import (
+    ANNUAL_RENOVATION_SHARE,
+    BROWNFIELD_REBUILD_START_YEAR,
+    BROWNFIELD_RENOVATION_START_YEAR,
+    COST_METRIC_DECREASE_BROWNFIELD,
+    LOG_LEVEL,
+    RANKING_COST_METRIC,
+    REGIONAL_TECHNOLOGY_BAN,
+)
 from mppshared.agent_logic.agent_logic_functions import (
     apply_regional_technology_ban,
-    remove_all_transitions_with_destination_technology, remove_transition,
-    select_best_transition)
+    remove_all_transitions_with_destination_technology,
+    remove_transition,
+    select_best_transition,
+)
 from mppshared.agent_logic.brownfield import (
     apply_brownfield_filters_chemicals,
-    apply_start_years_brownfield_transitions)
+    apply_start_years_brownfield_transitions,
+)
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger

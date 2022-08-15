@@ -1,8 +1,7 @@
 """Decommission plants."""
 
 from cement.config.config_cement import LOG_LEVEL, MODEL_SCOPE
-from mppshared.agent_logic.decommission import \
-    get_best_asset_to_decommission_cement
+from mppshared.agent_logic.decommission import get_best_asset_to_decommission_cement
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 

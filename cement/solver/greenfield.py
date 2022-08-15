@@ -2,14 +2,18 @@
 
 import numpy as np
 
-from cement.config.config_cement import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                                         CUF_UPPER_THRESHOLD, LOG_LEVEL,
-                                         MODEL_SCOPE)
-from mppshared.agent_logic.greenfield import (enact_greenfield_transition,
-                                              get_region_rank_filter,
-                                              select_asset_for_greenfield)
-from mppshared.models.constraints import \
-    get_regional_production_constraint_table
+from cement.config.config_cement import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CUF_UPPER_THRESHOLD,
+    LOG_LEVEL,
+    MODEL_SCOPE,
+)
+from mppshared.agent_logic.greenfield import (
+    enact_greenfield_transition,
+    get_region_rank_filter,
+    select_asset_for_greenfield,
+)
+from mppshared.models.constraints import get_regional_production_constraint_table
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 
@@ -76,7 +80,10 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                         cuf=CUF_UPPER_THRESHOLD,
                     )
                     enact_greenfield_transition(
-                        pathway=pathway, stack=new_stack, new_asset=new_asset, year=year + 1
+                        pathway=pathway,
+                        stack=new_stack,
+                        new_asset=new_asset,
+                        year=year + 1,
                     )
                     number_new_assets -= 1
                 except ValueError:

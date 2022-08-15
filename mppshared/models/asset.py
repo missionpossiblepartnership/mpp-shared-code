@@ -227,7 +227,10 @@ class AssetStack:
         return sum(asset.get_annual_production_volume() for asset in assets)
 
     def get_ng_af_production_volume(
-        self, product: str, region: str, tech_substr: str,
+        self,
+        product: str,
+        region: str,
+        tech_substr: str,
     ) -> float:
         """Get the yearly production volumes of all natural gas (ng) or alternative fuels (af) the AssetStack per region
             and technology for a specific product
@@ -245,7 +248,8 @@ class AssetStack:
             [
                 x
                 for x in [
-                    asset.technology for asset in self.filter_assets(product=product, region=region)
+                    asset.technology
+                    for asset in self.filter_assets(product=product, region=region)
                 ]
                 if tech_substr in x
             ]

@@ -1,10 +1,13 @@
 """Decommission plants."""
-from ammonia.config_ammonia import LOG_LEVEL
+from ammonia.config_ammonia import (
+    CUF_LOWER_THRESHOLD,
+    INVESTMENT_CYCLE,
+    LOG_LEVEL,
+    PRODUCTS,
+)
 from mppshared.agent_logic.decommission import get_best_asset_to_decommission
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
-
-from ammonia.config_ammonia import CUF_LOWER_THRESHOLD, INVESTMENT_CYCLE, PRODUCTS
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)

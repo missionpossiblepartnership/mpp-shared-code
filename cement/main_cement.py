@@ -3,18 +3,26 @@
 # Library imports
 import multiprocessing as mp
 
-from cement.config.config_cement import (CARBON_COSTS, MODEL_YEARS, PRODUCTS,
-                                         RUN_PARALLEL, SECTOR, SENSITIVITIES,
-                                         run_config)
+from cement.config.config_cement import (
+    CARBON_COSTS,
+    MODEL_YEARS,
+    PRODUCTS,
+    RUN_PARALLEL,
+    SECTOR,
+    SENSITIVITIES,
+    run_config,
+)
 from cement.solver.implicit_forcing import apply_implicit_forcing
 from cement.solver.import_data import import_and_preprocess
 from cement.solver.output_processing import calculate_outputs
 from cement.solver.ranking import make_rankings
 from cement.solver.ranking_inputs import get_ranking_inputs
 from cement.solver.simulate import simulate_pathway
+
 # Shared imports
 from mppshared.config import LOG_LEVEL
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
+
 # Initialize logger
 from mppshared.utility.utils import get_logger
 

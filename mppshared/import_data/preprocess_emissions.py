@@ -180,7 +180,7 @@ def calculate_emissions(
         index=idx_emissivity_precursor, columns=["ghg", "scope"], values="value"
     )
     # reduce multiindex columns
-    df_emissivity.columns = ['_'.join(col) for col in df_emissivity.columns.values]
+    df_emissivity.columns = ["_".join(col) for col in df_emissivity.columns.values]
     df_emissivity.rename(
         columns={
             # CO2
@@ -194,7 +194,7 @@ def calculate_emissions(
             "emissivity_ch4_scope2": "ch4_scope2",
             "emissivity_ch4_scope3_upstream": "ch4_scope3_upstream",
         },
-        inplace=True
+        inplace=True,
     )
     # concat
     df_emissivity = pd.concat(objs=[df_emissivity, df_emissivity_co2e], axis=1)

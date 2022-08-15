@@ -5,27 +5,35 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from cement.config.config_cement import (ANNUAL_RENOVATION_SHARE,
-                                         ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                                         CARBON_BUDGET_SECTOR_CSV,
-                                         CARBON_BUDGET_SHAPE,
-                                         CONSTRAINTS_TO_APPLY,
-                                         CUF_LOWER_THRESHOLD,
-                                         CUF_UPPER_THRESHOLD, EMISSION_SCOPES,
-                                         END_YEAR, GHGS,
-                                         INITIAL_ASSET_DATA_LEVEL,
-                                         INVESTMENT_CYCLE, LOG_LEVEL,
-                                         RANK_TYPES,
-                                         REGIONAL_PRODUCTION_SHARES,
-                                         SECTORAL_CARBON_BUDGETS,
-                                         SECTORAL_CARBON_PATHWAY, START_YEAR,
-                                         TECHNOLOGY_RAMP_UP_CONSTRAINT,
-                                         YEAR_2050_EMISSIONS_CONSTRAINT)
+from cement.config.config_cement import (
+    ANNUAL_RENOVATION_SHARE,
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CARBON_BUDGET_SECTOR_CSV,
+    CARBON_BUDGET_SHAPE,
+    CONSTRAINTS_TO_APPLY,
+    CUF_LOWER_THRESHOLD,
+    CUF_UPPER_THRESHOLD,
+    EMISSION_SCOPES,
+    END_YEAR,
+    GHGS,
+    INITIAL_ASSET_DATA_LEVEL,
+    INVESTMENT_CYCLE,
+    LOG_LEVEL,
+    RANK_TYPES,
+    REGIONAL_PRODUCTION_SHARES,
+    SECTORAL_CARBON_BUDGETS,
+    SECTORAL_CARBON_PATHWAY,
+    START_YEAR,
+    TECHNOLOGY_RAMP_UP_CONSTRAINT,
+    YEAR_2050_EMISSIONS_CONSTRAINT,
+)
 from cement.solver.brownfield import brownfield
 from cement.solver.decommission import decommission
 from cement.solver.greenfield import greenfield
 from mppshared.agent_logic.agent_logic_functions import (
-    adjust_capacity_utilisation, create_dict_technology_rampup)
+    adjust_capacity_utilisation,
+    create_dict_technology_rampup,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -82,9 +90,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
     return pathway
 
 
-def simulate_pathway(
-    sector: str, pathway_name: str, sensitivity: str, products: list
-):
+def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products: list):
     """
     Get data per technology, ranking data and then run the pathway simulation
     """
@@ -144,8 +150,12 @@ def simulate_pathway(
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,
         constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],
         year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
-        set_natural_gas_constraint=("natural_gas_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]),
-        set_alternative_fuel_constraint=("alternative_fuel_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]),
+        set_natural_gas_constraint=(
+            "natural_gas_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]
+        ),
+        set_alternative_fuel_constraint=(
+            "alternative_fuel_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]
+        ),
     )
 
     # Optimize asset stack on a yearly basis

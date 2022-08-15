@@ -1,30 +1,46 @@
 """Create inputs for ranking of technology switches (cost metrics, emissions, and technology characteristics)."""
 
-from cement.config.config_cement import (COST_CLASSIFICATIONS,
-                                         LIST_TECHNOLOGIES, MODEL_YEARS,
-                                         REGIONS, TRANSITION_TYPES)
-from cement.config.dataframe_config_cement import (DF_DATATYPES_PER_COLUMN,
-                                                   IDX_PER_INPUT_METRIC)
+from cement.config.config_cement import (
+    COST_CLASSIFICATIONS,
+    LIST_TECHNOLOGIES,
+    MODEL_YEARS,
+    REGIONS,
+    TRANSITION_TYPES,
+)
+from cement.config.dataframe_config_cement import (
+    DF_DATATYPES_PER_COLUMN,
+    IDX_PER_INPUT_METRIC,
+)
 from cement.config.import_config_cement import (
-    EXCEL_COLUMN_RANGES, HEADER_BUSINESS_CASE_EXCEL, INPUT_METRICS,
-    INPUT_SHEETS, MAP_SWITCH_TYPES_TO_CAPEX_TYPE, OPEX_CCUS_CONTEXT_METRICS,
-    OPEX_CCUS_EMISSIVITY_METRIC_TYPES, OPEX_CCUS_EMISSIVITY_METRICS,
-    OPEX_CCUS_PROCESS_METRICS, OPEX_ENERGY_METRICS, OPEX_MATERIALS_METRICS)
+    EXCEL_COLUMN_RANGES,
+    HEADER_BUSINESS_CASE_EXCEL,
+    INPUT_METRICS,
+    INPUT_SHEETS,
+    MAP_SWITCH_TYPES_TO_CAPEX_TYPE,
+    OPEX_CCUS_CONTEXT_METRICS,
+    OPEX_CCUS_EMISSIVITY_METRIC_TYPES,
+    OPEX_CCUS_EMISSIVITY_METRICS,
+    OPEX_CCUS_PROCESS_METRICS,
+    OPEX_ENERGY_METRICS,
+    OPEX_MATERIALS_METRICS,
+)
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.import_data import get_tech_switches
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.import_data.preprocess_emissions import calculate_emissions
-from mppshared.import_data.preprocess_tech_characteristics import \
-    get_tech_characteristics
-from mppshared.import_data.preprocess_tech_transitions import \
-    calculate_tech_transitions
+from mppshared.import_data.preprocess_tech_characteristics import (
+    get_tech_characteristics,
+)
+from mppshared.import_data.preprocess_tech_transitions import calculate_tech_transitions
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def get_ranking_inputs(pathway_name: str, sensitivity: str, sector: str, products: list):
+def get_ranking_inputs(
+    pathway_name: str, sensitivity: str, sector: str, products: list
+):
     """Create the input files for the ranking for the three types of technology switches"""
 
     importer = IntermediateDataImporter(

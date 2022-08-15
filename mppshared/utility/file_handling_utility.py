@@ -33,7 +33,7 @@ def read_pickle_folder(
     if mode == "df":
         if log:
             logger.info(f"||| Loading pickle file {pkl_file} from path {data_path}")
-        with open(fr"{data_path}/{pkl_file}.pickle", "rb") as f:
+        with open(rf"{data_path}/{pkl_file}.pickle", "rb") as f:
             return pickle.load(f)
 
     elif mode == "dict":
@@ -43,7 +43,7 @@ def read_pickle_folder(
         for pkl_file in os.listdir(data_path):
             if log:
                 logger.info(f"|||| Loading {pkl_file}")
-            with open(fr"{data_path}/{pkl_file}", "rb") as f:
+            with open(rf"{data_path}/{pkl_file}", "rb") as f:
                 new_data_dict[pkl_file.split(".")[0]] = pickle.load(f)
         return new_data_dict
 
@@ -70,13 +70,17 @@ def extract_data(
         DataFrame: A dataframe of the data file
     """
     # Full path of the file
-    full_filename = fr"{data_path}/{filename}.{ext}"
+    full_filename = rf"{data_path}/{filename}.{ext}"
     # If else logic that determines which pandas function to call based on the extension
     logger.info(f"|| Extracting file {filename}.{ext}")
     if ext == "xlsx":
-        return pd.read_excel(io=full_filename, sheet_name=sheet, dtype=dtype, header=first_row)
+        return pd.read_excel(
+            io=full_filename, sheet_name=sheet, dtype=dtype, header=first_row
+        )
     elif ext == "csv":
-        return pd.read_csv(filepath_or_buffer=full_filename, dtype=dtype, header=first_row)
+        return pd.read_csv(
+            filepath_or_buffer=full_filename, dtype=dtype, header=first_row
+        )
 
 
 def serialize_file(obj, pkl_folder: str, filename: str) -> None:

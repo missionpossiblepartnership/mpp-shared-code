@@ -3,24 +3,34 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from aluminium.config_aluminium import (ANNUAL_RENOVATION_SHARE,
-                                        ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                                        CARBON_BUDGET_SECTOR_CSV,
-                                        CONSTRAINTS_TO_APPLY,
-                                        CUF_LOWER_THRESHOLD,
-                                        CUF_UPPER_THRESHOLD, EMISSION_SCOPES,
-                                        END_YEAR, GHGS,
-                                        INITIAL_ASSET_DATA_LEVEL,
-                                        INVESTMENT_CYCLE, LOG_LEVEL, PRODUCTS,
-                                        RANK_TYPES, REGIONAL_PRODUCTION_SHARES,
-                                        SECTORAL_CARBON_PATHWAY, START_YEAR,
-                                        TECHNOLOGY_RAMP_UP_CONSTRAINT,
-                                        YEAR_2050_EMISSIONS_CONSTRAINT)
+from aluminium.config_aluminium import (
+    ANNUAL_RENOVATION_SHARE,
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CARBON_BUDGET_SECTOR_CSV,
+    CONSTRAINTS_TO_APPLY,
+    CUF_LOWER_THRESHOLD,
+    CUF_UPPER_THRESHOLD,
+    EMISSION_SCOPES,
+    END_YEAR,
+    GHGS,
+    INITIAL_ASSET_DATA_LEVEL,
+    INVESTMENT_CYCLE,
+    LOG_LEVEL,
+    PRODUCTS,
+    RANK_TYPES,
+    REGIONAL_PRODUCTION_SHARES,
+    SECTORAL_CARBON_PATHWAY,
+    START_YEAR,
+    TECHNOLOGY_RAMP_UP_CONSTRAINT,
+    YEAR_2050_EMISSIONS_CONSTRAINT,
+)
 from aluminium.solver.brownfield import brownfield
 from aluminium.solver.decommission import decommission
 from aluminium.solver.greenfield import greenfield
 from mppshared.agent_logic.agent_logic_functions import (
-    adjust_capacity_utilisation, create_dict_technology_rampup)
+    adjust_capacity_utilisation,
+    create_dict_technology_rampup,
+)
 from mppshared.config import SECTORAL_CARBON_BUDGETS
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_budget import CarbonBudget
