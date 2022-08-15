@@ -1,13 +1,12 @@
 """ Enforce constraints in the yearly optimization of technology switches."""
-from copy import deepcopy
-from lib2to3.pytree import convert
 
 import numpy as np
 import pandas as pd
 from pandera import Bool
-from pyparsing import col
+import math
 
 from mppshared.config import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
     CO2_STORAGE_CONSTRAINT,
     CO2_STORAGE_CONSTRAINT_CUMULATIVE,
     CUF_UPPER_THRESHOLD,
@@ -116,7 +115,6 @@ def check_global_demand_share_constraint(
     df_stack = stack.aggregate_stack(
         aggregation_vars=["product", "technology"]
     ).reset_index()
-    constraint = True
 
     for technology in TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE:
 
@@ -137,18 +135,22 @@ def check_global_demand_share_constraint(
         df["demand_maximum"] = MAXIMUM_GLOBAL_DEMAND_SHARE[year] * df["demand"]
 
         # Compare
-        df["check"] = np.where(
-            df["annual_production_volume"] <= df["demand_maximum"], True, False
-        )
+        if df.empty:
+            df["check"] = True
+        else:
+            df["check"] = np.where(
+                df["annual_production_volume"]
+                <= df["demand_maximum"].apply(lambda x: math.ceil(x)),
+                True,
+                False,
+            )
 
         if df["check"].all():
-            constraint = constraint & True
+            return True
 
         else:
             logger.debug(f"Maximum demand share hurt for technology {technology}.")
             return False
-
-    return constraint
 
 
 def check_electrolysis_capacity_addition_constraint(
@@ -276,7 +278,12 @@ def check_co2_storage_constraint(
 
     # Get constraint value
     df_co2_storage = pathway.co2_storage_constraint
-    limit = df_co2_storage.loc[df_co2_storage["year"] == year + 1, "value"].item()
+    if year < END_YEAR:
+        limit_year = year
+    else:
+        limit_year = END_YEAR
+
+    limit = df_co2_storage.loc[df_co2_storage["year"] == limit_year, "value"].item()
 
     # Constraint based on total CO2 storage available in that year
     if CO2_STORAGE_CONSTRAINT_CUMULATIVE:
