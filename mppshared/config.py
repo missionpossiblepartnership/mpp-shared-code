@@ -19,10 +19,10 @@ PATHWAYS = [
 
 # Sensitivities
 SENSITIVITIES = [
-    "def",
+    # "def",
     # "ng_partial",
     "ng_high",
-    "ng_low",
+    # "ng_low",
 ]
 
 # Toggle whether circularity in demand scenario or not
@@ -70,7 +70,7 @@ BROWNFIELD_REBUILD_START_YEAR = {
 CO2_STORAGE_CONSTRAINT = {"bau": False, "fa": True, "lc": True}
 CO2_STORAGE_CONSTRAINT_CUMULATIVE = False
 
-ELECTROLYSER_CAPACITY_ADDITION_CONSTRAINT = {"bau": False, "fa": False, "lc": True}
+ELECTROLYSER_CAPACITY_ADDITION_CONSTRAINT = {"bau": False, "fa": False, "lc": False}
 GLOBAL_DEMAND_SHARE_CONSTRAINT = {"bau": False, "fa": False, "lc": True}
 
 TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE = [
