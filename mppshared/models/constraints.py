@@ -3,8 +3,13 @@
 import numpy as np
 import pandas as pd
 
-from mppshared.config import (AMMONIA_PER_AMMONIUM_NITRATE, AMMONIA_PER_UREA,
-                              H2_PER_AMMONIA, HYDRO_TECHNOLOGY_BAN, LOG_LEVEL)
+from mppshared.config import (
+    AMMONIA_PER_AMMONIUM_NITRATE,
+    AMMONIA_PER_UREA,
+    H2_PER_AMMONIA,
+    HYDRO_TECHNOLOGY_BAN,
+    LOG_LEVEL,
+)
 from mppshared.models.asset import AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger

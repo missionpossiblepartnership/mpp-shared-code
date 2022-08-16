@@ -7,8 +7,10 @@ import pandas as pd
 
 from mppshared.config import LOG_LEVEL, MAP_COLUMN_NAMES
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.utility.dataframe_utility import (explode_rows_for_all_products,
-                                                 set_datatypes)
+from mppshared.utility.dataframe_utility import (
+    explode_rows_for_all_products,
+    set_datatypes,
+)
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -57,7 +59,7 @@ def import_all(
         input_sheets=input_sheets,
         model_regions=model_regions,
         header_business_case_excel=header_business_case_excel,
-        excel_column_ranges=excel_column_ranges
+        excel_column_ranges=excel_column_ranges,
     )
 
     # Load input data from business cases, prices and emissions

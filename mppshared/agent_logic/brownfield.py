@@ -7,8 +7,10 @@ import numpy as np
 import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_all_transitions_with_destination_technology, remove_transition,
-    select_best_transition)
+    remove_all_transitions_with_destination_technology,
+    remove_transition,
+    select_best_transition,
+)
 from mppshared.config import ANNUAL_RENOVATION_SHARE, LOG_LEVEL
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway

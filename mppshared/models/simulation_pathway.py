@@ -13,14 +13,14 @@ from plotly.subplots import make_subplots
 
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
+
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import Asset, AssetStack, create_assets
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.models.technology_rampup import TechnologyRampup
 from mppshared.models.transition import TransitionRegistry
-from mppshared.utility.dataframe_utility import (flatten_columns,
-                                                 get_emission_columns)
+from mppshared.utility.dataframe_utility import flatten_columns, get_emission_columns
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -108,7 +108,9 @@ class SimulationPathway:
             self.natural_gas_constraint = self.importer.get_natural_gas_constraint()
 
         if set_alternative_fuel_constraint:
-            self.alternative_fuel_constraint = self.importer.get_alternative_fuel_constraint()
+            self.alternative_fuel_constraint = (
+                self.importer.get_alternative_fuel_constraint()
+            )
 
         self.assumed_annual_production_capacity = assumed_annual_production_capacity
 

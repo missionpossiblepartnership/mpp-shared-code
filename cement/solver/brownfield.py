@@ -6,11 +6,16 @@ import numpy as np
 
 from cement.config.config_cement import LOG_LEVEL, PRODUCTS
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_all_transitions_with_destination_technology, remove_transition,
-    remove_transition_in_region_by_tech_substr, select_best_transition)
-from mppshared.models.constraints import (check_alternative_fuel_constraint,
-                                          check_constraints,
-                                          check_natural_gas_constraint)
+    remove_all_transitions_with_destination_technology,
+    remove_transition,
+    remove_transition_in_region_by_tech_substr,
+    select_best_transition,
+)
+from mppshared.models.constraints import (
+    check_alternative_fuel_constraint,
+    check_constraints,
+    check_natural_gas_constraint,
+)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
 
@@ -232,13 +237,15 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             if "alternative_fuel_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["alternative_fuel_constraint"]:
                     # get regions where alternative fuel is exceeded
-                    dict_alternative_fuel_exceedance = check_alternative_fuel_constraint(
-                        pathway=pathway,
-                        product=PRODUCTS[0],
-                        stack=tentative_stack,
-                        year=year + 1,
-                        transition_type="brownfield",
-                        return_dict=True,
+                    dict_alternative_fuel_exceedance = (
+                        check_alternative_fuel_constraint(
+                            pathway=pathway,
+                            product=PRODUCTS[0],
+                            stack=tentative_stack,
+                            year=year + 1,
+                            transition_type="brownfield",
+                            return_dict=True,
+                        )
                     )
                     # check whether region of current transition is affected
                     if dict_alternative_fuel_exceedance[best_transition["region"]]:
@@ -252,8 +259,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                             k
                             for k in dict_alternative_fuel_exceedance.keys()
                             if (
-                                    dict_alternative_fuel_exceedance[k] & k
-                                    != best_transition["region"]
+                                dict_alternative_fuel_exceedance[k] & k
+                                != best_transition["region"]
                             )
                         ]
                         logger.critical(

@@ -1,17 +1,18 @@
 """ Create outputs for debugging."""
 from collections import defaultdict
-import pandas as pd
-from pandas import CategoricalDtype
+
 import numpy as np
+import pandas as pd
 import plotly.express as px
+from pandas import CategoricalDtype
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
 from mppshared.config import (
+    EMISSION_SCOPES_DEFAULT,
     END_YEAR,
     LOG_LEVEL,
     PRODUCTS,
-    EMISSION_SCOPES_DEFAULT,
     START_YEAR,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
