@@ -252,8 +252,11 @@ def _get_initial_asset_stack(
             """plant_capacity = df_plant_capacity.xs(
                 key=(region, technology), level=("region", "technology_destination")
             ).squeeze()"""
+            capacity_factor = df_capacity_factor.xs(
+                key=(region, technology), level=("region", "technology_destination")
+            ).squeeze()
             plant_capacity = ASSUMED_ANNUAL_PRODUCTION_CAPACITY
-            n_plants = demand / plant_capacity
+            n_plants = demand / (plant_capacity * capacity_factor)
             n_full_plants = int(n_plants)
             n_partial_plants = n_plants - float(n_full_plants)
 
@@ -268,9 +271,7 @@ def _get_initial_asset_stack(
                     plant_capacity
                 ]
             df_append["technology"] = technology
-            df_append["capacity_factor"] = df_capacity_factor.xs(
-                key=(region, technology), level=("region", "technology_destination")
-            ).squeeze()
+            df_append["capacity_factor"] = capacity_factor
             df_append["region"] = region
             df_list.append(df_append)
 
