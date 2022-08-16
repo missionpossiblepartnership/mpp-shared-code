@@ -45,15 +45,18 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         The updated pathway with the asset stack in each year of the model horizon
     """
 
+    # Write initial stack to csv
+    pathway.export_stack_to_csv(year=START_YEAR)
+
     # Run pathway simulation in each year for all products simultaneously
-    for year in range(START_YEAR, END_YEAR):
+    for year in range(START_YEAR + 1, END_YEAR + 1):
         logger.info("Optimizing for %s", year)
 
         # Copy over last year's stack to this year
-        pathway = pathway.copy_stack(year=year)
+        pathway = pathway.copy_stack(year=year - 1)
 
         # Write stack to csv
-        pathway.export_stack_to_csv(year)
+        pathway.export_stack_to_csv(year=year)
 
         # Decommission assets
         start = timer()
@@ -82,9 +85,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
     return pathway
 
 
-def simulate_pathway(
-    sector: str, pathway_name: str, sensitivity: str, products: list
-):
+def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products: list):
     """
     Get data per technology, ranking data and then run the pathway simulation
     """
@@ -147,8 +148,12 @@ def simulate_pathway(
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,
         constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],
         year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
-        set_natural_gas_constraint=("natural_gas_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]),
-        set_alternative_fuel_constraint=("alternative_fuel_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]),
+        set_natural_gas_constraint=(
+            "natural_gas_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]
+        ),
+        set_alternative_fuel_constraint=(
+            "alternative_fuel_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]
+        ),
     )
 
     # Optimize asset stack on a yearly basis

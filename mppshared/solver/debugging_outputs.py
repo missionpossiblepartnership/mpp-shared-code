@@ -1,19 +1,15 @@
 """ Create outputs for debugging."""
 from collections import defaultdict
-import pandas as pd
-from pandas import CategoricalDtype
+
 import numpy as np
+import pandas as pd
 import plotly.express as px
+from pandas import CategoricalDtype
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.config import (
-    END_YEAR,
-    LOG_LEVEL,
-    PRODUCTS,
-    EMISSION_SCOPES_DEFAULT,
-    START_YEAR,
-)
+from mppshared.config import (EMISSION_SCOPES_DEFAULT, END_YEAR, LOG_LEVEL,
+                              PRODUCTS, START_YEAR)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.log_utility import get_logger
 
@@ -278,12 +274,12 @@ def create_newbuild_capacity_outputs_by_technology(
 
 
 def create_table_asset_transition_sequences(
-    importer: IntermediateDataImporter,
+    importer: IntermediateDataImporter, start_year: int, end_year: int,
 ) -> pd.DataFrame:
 
     # Get initial stack and melt to long for that year
     multiindex = ["uuid", "product", "region", "parameter"]
-    df = importer.get_asset_stack(START_YEAR)
+    df = importer.get_asset_stack(start_year)
     df = df[
         [
             "uuid",
@@ -298,11 +294,11 @@ def create_table_asset_transition_sequences(
         ]
     ]
     df = df.set_index(["product", "region", "uuid"])
-    df = df.melt(var_name="parameter", value_name=START_YEAR, ignore_index=False)
+    df = df.melt(var_name="parameter", value_name=start_year, ignore_index=False)
     df = df.sort_index()
     df = df.reset_index(drop=False).set_index(multiindex)
 
-    for year in np.arange(START_YEAR + 1, END_YEAR + 1):
+    for year in np.arange(start_year + 1, end_year + 1):
 
         # Get asset stack for that year
         df_stack = importer.get_asset_stack(year=year)

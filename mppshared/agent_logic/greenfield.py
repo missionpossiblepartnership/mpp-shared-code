@@ -225,7 +225,9 @@ def select_asset_for_greenfield(
             if "emissions_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["emissions_constraint"]:
                     # remove best transition from ranking table and try again
-                    df_rank = remove_transition(df_rank, asset_transition)
+                    df_rank = remove_transition(
+                        df_rank=df_rank, transition=asset_transition
+                    )
             if [
                 "emissions_constraint",
                 "flag_residual",
@@ -255,7 +257,7 @@ def select_asset_for_greenfield(
             if "natural_gas_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["natural_gas_constraint"]:
                     # get regions where natural gas is exceeded
-                    dict_alternative_fuel_exceedance = check_natural_gas_constraint(
+                    dict_natural_gas_exceedance = check_natural_gas_constraint(
                         pathway=pathway,
                         product=product,
                         stack=tentative_stack,
@@ -263,57 +265,43 @@ def select_asset_for_greenfield(
                         transition_type="greenfield",
                         return_dict=True,
                     )
-                    # check whether region of current transition is affected
-                    if dict_alternative_fuel_exceedance[asset_transition["region"]]:
+                    # remove all exceeding regions from ranking
+                    exceeding_regions = [
+                        k
+                        for k in dict_natural_gas_exceedance.keys()
+                        if not dict_natural_gas_exceedance[k]
+                    ]
+                    for region in exceeding_regions:
                         df_rank = remove_transition_in_region_by_tech_substr(
                             df_rank=df_rank,
-                            transition=asset_transition,
+                            region=region,
                             tech_substr="natural gas",
-                        )
-                    else:
-                        exceeding_regions = [
-                            k
-                            for k in dict_alternative_fuel_exceedance.keys()
-                            if (
-                                    dict_alternative_fuel_exceedance[k] & k
-                                    != asset_transition["region"]
-                            )
-                        ]
-                        logger.critical(
-                            f"Following regions (excl. the current transition's region) exceed the Natural "
-                            f"gas constraint: {exceeding_regions}"
                         )
             # ALTERNATIVE FUEL
             if "alternative_fuel_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["alternative_fuel_constraint"]:
                     # get regions where alternative fuel is exceeded
-                    dict_alternative_fuel_exceedance = check_alternative_fuel_constraint(
-                        pathway=pathway,
-                        product=product,
-                        stack=tentative_stack,
-                        year=year,
-                        transition_type="greenfield",
-                        return_dict=True,
+                    dict_alternative_fuel_exceedance = (
+                        check_alternative_fuel_constraint(
+                            pathway=pathway,
+                            product=product,
+                            stack=tentative_stack,
+                            year=year,
+                            transition_type="greenfield",
+                            return_dict=True,
+                        )
                     )
-                    # check whether region of current transition is affected
-                    if dict_alternative_fuel_exceedance[asset_transition["region"]]:
+                    # remove all exceeding regions from ranking
+                    exceeding_regions = [
+                        k
+                        for k in dict_alternative_fuel_exceedance.keys()
+                        if not dict_alternative_fuel_exceedance[k]
+                    ]
+                    for region in exceeding_regions:
                         df_rank = remove_transition_in_region_by_tech_substr(
                             df_rank=df_rank,
-                            transition=asset_transition,
+                            region=region,
                             tech_substr="alternative fuels",
-                        )
-                    else:
-                        exceeding_regions = [
-                            k
-                            for k in dict_alternative_fuel_exceedance.keys()
-                            if (
-                                    dict_alternative_fuel_exceedance[k] & k
-                                    != asset_transition["region"]
-                            )
-                        ]
-                        logger.critical(
-                            f"Following regions (excl. the current transition's region) exceed the alternative fuel "
-                            f"constraint: {exceeding_regions}"
                         )
 
     # If ranking table empty, no greenfield construction possible

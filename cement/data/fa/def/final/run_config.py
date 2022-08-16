@@ -211,7 +211,8 @@ RANKING_CONFIG = {
 }
 
 ### CONSTRAINTS ###
-YEAR_2050_EMISSIONS_CONSTRAINT = False
+# todo: when this is set to None, it causes troubles...
+YEAR_2050_EMISSIONS_CONSTRAINT = 2060
 # Technology ramp-up parameters (on technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "maximum_asset_additions": 50,
@@ -220,10 +221,10 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
 }
 CONSTRAINTS_TO_APPLY = {
     "bau": [
-        "rampup_constraint",
-        "regional_constraint",
-        "natural_gas_constraint",
-        "alternative_fuel_constraint",
+        # "rampup_constraint",
+        # "regional_constraint",
+        # "natural_gas_constraint",
+        # "alternative_fuel_constraint",
     ],
     "lc": [
         "emissions_constraint",
@@ -234,9 +235,9 @@ CONSTRAINTS_TO_APPLY = {
     ],
     "fa": [
         "emissions_constraint",
-        "regional_constraint",
-        "natural_gas_constraint",
-        "alternative_fuel_constraint",
+        # "regional_constraint",
+        # "natural_gas_constraint",
+        # "alternative_fuel_constraint",
     ],
 }
 REGIONAL_PRODUCTION_SHARES = {

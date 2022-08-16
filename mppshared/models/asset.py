@@ -278,6 +278,8 @@ class AssetStack:
 
         Args:
             aggregation_vars: aggregate by these variables
+            technology_classification:
+            product:
 
         Returns:
             Dataframe with technologies

@@ -18,35 +18,34 @@ logger.setLevel(LOG_LEVEL)
 
 
 def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
-    """Apply greenfield transition and add new Assets to the AssetStack for year + 1.
+    """Apply greenfield transition and add new Assets to the AssetStack.
 
     Args:
         pathway: decarbonization pathway that describes the composition of the AssetStack in every year of the model
             horizon
-        year: last year (technology transitions are enacted for year + 1)
+        year: current year in which technology transitions are enacted
 
     Returns:
         Updated decarbonization pathway with the updated AssetStack in the subsequent year according to the greenfield
             transitions enacted
     """
-    logger.info(f"Starting greenfield transition logic for year {year + 1}")
-    # Next year's stack is updated with each decommissioning
-    new_stack = pathway.get_stack(year=year + 1)
+    logger.info(f"Starting greenfield transition logic for year {year}")
+    stack = pathway.get_stack(year=year)
 
     # Get ranking table for greenfield transitions
-    df_rank = pathway.get_ranking(year=year + 1, rank_type="greenfield")
+    df_rank = pathway.get_ranking(year=year, rank_type="greenfield")
 
     # Greenfield for each product sequentially
     for product in pathway.products:
         df_rank = df_rank.loc[df_rank["product"] == product]
         # Get demand and production
-        demand = pathway.get_demand(product=product, year=year + 1, region=MODEL_SCOPE)
+        demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
 
         # STEP ONE: BUILD NEW CAPACITY BY REGION
         # First, build new capacity in each region to make sure that the regional production constraint is met even if
         #   regional demand increases
         df_regional_production = get_regional_production_constraint_table(
-            pathway=pathway, stack=new_stack, product=product, year=year + 1
+            pathway=pathway, stack=stack, product=product, year=year
         )
 
         # For each region with a production deficit, build new capacity until production meets required minimum
@@ -68,15 +67,15 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 try:
                     new_asset = select_asset_for_greenfield(
                         pathway=pathway,
-                        stack=new_stack,
+                        stack=stack,
                         product=product,
                         df_rank=df_rank_region,
-                        year=year + 1,
+                        year=year,
                         annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                         cuf=CUF_UPPER_THRESHOLD,
                     )
                     enact_greenfield_transition(
-                        pathway=pathway, stack=new_stack, new_asset=new_asset, year=year + 1
+                        pathway=pathway, stack=stack, new_asset=new_asset, year=year
                     )
                     number_new_assets -= 1
                 except ValueError:
@@ -87,16 +86,16 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
         # STEP TWO: BUILD NEW CAPACITY GLOBALLY
         # Build new assets while demand exceeds production
-        while demand > new_stack.get_annual_production_volume(product):
+        while demand > stack.get_annual_production_volume(product):
 
             # Identify asset for greenfield transition
             try:
                 new_asset = select_asset_for_greenfield(
                     pathway=pathway,
-                    stack=new_stack,
+                    stack=stack,
                     product=product,
                     df_rank=df_rank,
-                    year=year + 1,
+                    year=year,
                     annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                     cuf=CUF_UPPER_THRESHOLD,
                 )
@@ -112,6 +111,6 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 f"annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}"
             )
             enact_greenfield_transition(
-                pathway=pathway, stack=new_stack, new_asset=new_asset, year=year + 1
+                pathway=pathway, stack=stack, new_asset=new_asset, year=year
             )
     return pathway

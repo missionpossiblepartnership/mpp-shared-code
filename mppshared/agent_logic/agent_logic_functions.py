@@ -4,13 +4,8 @@ from operator import methodcaller
 
 import pandas as pd
 
-from mppshared.config import (
-    COST_METRIC_CUF_ADJUSTMENT,
-    CUF_LOWER_THRESHOLD,
-    CUF_UPPER_THRESHOLD,
-    LOG_LEVEL,
-    MODEL_SCOPE,
-)
+from mppshared.config import (COST_METRIC_CUF_ADJUSTMENT, CUF_LOWER_THRESHOLD,
+                              CUF_UPPER_THRESHOLD, LOG_LEVEL, MODEL_SCOPE)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.technology_rampup import TechnologyRampup
@@ -65,14 +60,13 @@ def remove_all_transitions_with_destination_technology(
 
 
 def remove_transition_in_region_by_tech_substr(
-    df_rank: pd.DataFrame, transition: dict, tech_substr: str
+    df_rank: pd.DataFrame, region: str, tech_substr: str
 ) -> pd.DataFrame:
 
     df_rank = df_rank.loc[
         ~(
-            df_rank["region"]
-            == transition["region"]
-            & df_rank["technology_destination"].str.contains(tech_substr)
+            (df_rank["region"] == region)
+            & (df_rank["technology_destination"].str.contains(tech_substr))
         ),
         :,
     ]
@@ -225,7 +219,8 @@ def create_dict_technology_rampup(
     maximum_capacity_growth_rate: float,
     years_rampup_phase: int,
 ) -> dict:
-    """Create dictionary of TechnologyRampup objects with the technologies in that sector as keys. Set None if the technology has no ramp-up trajectory."""
+    """Create dictionary of TechnologyRampup objects with the technologies in that sector as keys. Set None if the
+        technology has no ramp-up trajectory."""
     logger.info("Creating ramp-up trajectories for technologies")
 
     technology_characteristics = importer.get_technology_characteristics()
@@ -234,7 +229,8 @@ def create_dict_technology_rampup(
 
     for technology in technologies:
 
-        # Expected maturity and classification are constant across regions, products and years, hence take the first row for that technology
+        # Expected maturity and classification are constant across regions, products and years, hence take the first row
+        #   for that technology
         df_characteristics = technology_characteristics.loc[
             technology_characteristics["technology"] == technology
         ].iloc[0]

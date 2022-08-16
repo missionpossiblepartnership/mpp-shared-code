@@ -59,7 +59,8 @@ def import_and_preprocess(
         "region": str,
         "Dry kiln coal": float,
         "Dry kiln natural gas": float,
-        "Dry kiln alternative fuels": float,
+        "Dry kiln alternative fuels 43%": float,
+        "Dry kiln alternative fuels 90%": float,
     }
     df_start_technologies = set_datatypes(df=df_start_technologies, datatypes_per_column=datatypes)
     # export
@@ -139,6 +140,8 @@ def import_and_preprocess(
     df_ng_constraint = set_datatypes(
         df=df_ng_constraint, datatypes_per_column=DF_DATATYPES_PER_COLUMN
     )
+    # convert from [t Clk / year] to [Mt Clk / year]
+    df_ng_constraint["value"] *= 1e-6
     importer.export_data(
         df=df_ng_constraint,
         filename="natural_gas_constraint.csv",
@@ -161,6 +164,8 @@ def import_and_preprocess(
     df_af_constraint = set_datatypes(
         df=df_af_constraint, datatypes_per_column=DF_DATATYPES_PER_COLUMN
     )
+    # convert from [t Clk / year] to [Mt Clk / year]
+    df_af_constraint["value"] *= 1e-6
     importer.export_data(
         df=df_af_constraint,
         filename="alternative_fuel_constraint.csv",

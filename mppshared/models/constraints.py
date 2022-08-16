@@ -216,11 +216,12 @@ def check_annual_carbon_budget_constraint(
 
     # After a sector-specific year, all end-state newbuild capacity has to fulfill the 2050 emissions limit with a stack
     #   composed of only end-state technologies
+    # todo: change this such that YEAR_2050_EMISSIONS_CONSTRAINT can be set to None
     if (transition_type == "greenfield") & (
         year >= pathway.year_2050_emissions_constraint
     ):
         limit = pathway.carbon_budget.get_annual_emissions_limit(
-            pathway.end_year, pathway.sector
+            pathway.end_year
         )
 
         dict_stack_emissions = stack.calculate_emissions_stack(
@@ -232,7 +233,7 @@ def check_annual_carbon_budget_constraint(
 
     # In other cases, the limit is equivalent to that year's emission limit
     else:
-        limit = pathway.carbon_budget.get_annual_emissions_limit(year, pathway.sector)
+        limit = pathway.carbon_budget.get_annual_emissions_limit(year=year)
 
         dict_stack_emissions = stack.calculate_emissions_stack(
             year=year, df_emissions=pathway.emissions, technology_classification=None
