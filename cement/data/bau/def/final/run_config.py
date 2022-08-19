@@ -60,7 +60,7 @@ COST_METRIC_CUF_ADJUSTMENT = None
 PRODUCTS = ["Clinker"]
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-ANNUAL_RENOVATION_SHARE = 0.2
+ANNUAL_RENOVATION_SHARE = 0.05
 
 
 ### initial asset stack ###
@@ -71,8 +71,8 @@ INITIAL_ASSET_DATA_LEVEL = "individual_assets"
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 6000 * 365 * 1e-6
 
 # Year from which newbuild capacity must have transition or end-state technology
-TECHNOLOGY_MORATORIUM = 2030
-# Control for how many years is allowed to use transition technologies once the moratorium is enable
+TECHNOLOGY_MORATORIUM = 2035
+# Control for how many years is allowed to use transition technologies once the moratorium is enabled
 TRANSITIONAL_PERIOD_YEARS = 20
 # Emission scopes included in data analysis
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream"]

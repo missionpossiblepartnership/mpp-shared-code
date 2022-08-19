@@ -20,6 +20,7 @@ from cement.config.config_cement import (ANNUAL_RENOVATION_SHARE,
                                          SECTORAL_CARBON_PATHWAY, START_YEAR,
                                          TECHNOLOGY_RAMP_UP_CONSTRAINT,
                                          YEAR_2050_EMISSIONS_CONSTRAINT)
+from cement.config.plot_config_cement import TECHNOLOGY_LAYOUT
 from cement.solver.brownfield import brownfield
 from cement.solver.decommission import decommission
 from cement.solver.greenfield import greenfield
@@ -172,5 +173,5 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
     pathway = _simulate(
         pathway=pathway,
     )
-    pathway.output_technology_roadmap()
+    pathway.output_technology_roadmap(technology_layout=TECHNOLOGY_LAYOUT)
     logger.info("Pathway simulation complete")

@@ -108,7 +108,9 @@ class SimulationPathway:
             self.natural_gas_constraint = self.importer.get_natural_gas_constraint()
 
         if set_alternative_fuel_constraint:
-            self.alternative_fuel_constraint = self.importer.get_alternative_fuel_constraint()
+            self.alternative_fuel_constraint = (
+                self.importer.get_alternative_fuel_constraint()
+            )
 
         self.assumed_annual_production_capacity = assumed_annual_production_capacity
 
@@ -206,12 +208,14 @@ class SimulationPathway:
         df = self.get_stack(year).export_stack_to_df()
         self.importer.export_data(df, f"stack_{year}.csv", "stack_tracker", index=False)
 
-    def output_technology_roadmap(self):
+    def output_technology_roadmap(self, technology_layout: dict = None):
         logger.debug("Creating technology roadmap")
         df_roadmap = self.create_technology_roadmap()
         logger.debug("Exporting technology roadmap")
         self.importer.export_data(df_roadmap, "technology_roadmap.csv", "final")
-        self.plot_technology_roadmap(df_roadmap=df_roadmap)
+        self.plot_technology_roadmap(
+            df_roadmap=df_roadmap, technology_order=technology_layout
+        )
 
     def create_technology_roadmap(self) -> pd.DataFrame:
         """Create technology roadmap that shows evolution of stack (supply mix) over model horizon."""
@@ -240,22 +244,47 @@ class SimulationPathway:
 
         return df_roadmap
 
-    def plot_technology_roadmap(self, df_roadmap: pd.DataFrame):
-        """Plot the technology roadmap and save as .html"""
+    def plot_technology_roadmap(
+        self, df_roadmap: pd.DataFrame, technology_order: dict = None
+    ):
+        """
+        Plot the technology roadmap and save as .html
 
-        # Melt roadmap DataFrame for easy plotting
-        logger.debug("Melting roadmap DataFrame")
+        Args:
+            df_roadmap ():
+            technology_order (): Order in which technologies will be plotted
+
+        Returns:
+
+        """
+
+        # remove technologies without production volume
+        df_roadmap = df_roadmap.set_index("technology")
+        df_roadmap = df_roadmap.loc[(df_roadmap.sum(axis=1) != 0), :]
+        df_roadmap.reset_index(inplace=True)
+
+        # Prepare DataFrame for plotting
         df_roadmap = df_roadmap.melt(
             id_vars="technology", var_name="year", value_name="annual_volume"
         )
         logger.debug("Plotting technology roadmap")
         fig = make_subplots()
-        wedge_fig = px.area(df_roadmap, color="technology", x="year", y="annual_volume")
+        wedge_fig = px.area(
+            data_frame=df_roadmap,
+            color="technology",
+            x="year",
+            y="annual_volume",
+            category_orders={"technology": list(technology_order)},
+            color_discrete_map=technology_order,
+        )
 
         fig.add_traces(wedge_fig.data)
+        fig.for_each_trace(lambda trace: trace.update(fillcolor=trace.line.color))
 
         fig.layout.xaxis.title = "Year"
-        fig.layout.yaxis.title = "Annual production volume (MtNH3/year)"
+        fig.layout.yaxis.title = (
+            f"Annual production volume (Mt production_output / year)"
+        )
         fig.layout.title = "Technology roadmap"
         logger.debug("Exporting technology roadmap HTML")
 
@@ -264,7 +293,7 @@ class SimulationPathway:
             filename=str(self.importer.final_path.joinpath("technology_roadmap.html")),
             auto_open=False,
         )
-        logger.debug("Exporting technology roadmap PNG")
+        # logger.debug("Exporting technology roadmap PNG")
         # fig.write_image(self.importer.final_path.joinpath("technology_roadmap.png"))
 
     def output_emission_trajectory(self):
