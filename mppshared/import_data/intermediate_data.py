@@ -176,11 +176,19 @@ class IntermediateDataImporter:
         )
 
     def get_natural_gas_constraint(self):
+        """
+        Returns: natural_gas_constraint (Unit: Mt production_output)
+        """
+
         return pd.read_csv(
             self.intermediate_path.joinpath("natural_gas_constraint.csv")
         )
 
     def get_alternative_fuel_constraint(self):
+        """
+        Returns: alternative_fuel_constraint (Unit: Mt production_output)
+        """
+
         return pd.read_csv(
             self.intermediate_path.joinpath("alternative_fuel_constraint.csv")
         )

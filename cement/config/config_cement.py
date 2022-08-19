@@ -54,8 +54,7 @@ CARBON_COSTS = [
     250,
 ]
 INVESTMENT_CYCLE = 10  # years
-CUF_LOWER_THRESHOLD = 0.913
-CUF_UPPER_THRESHOLD = 0.913
+CAPACITY_UTILISATION_FACTOR = 0.913
 COST_METRIC_CUF_ADJUSTMENT = None
 # Products produced by each sector
 PRODUCTS = ["Clinker"]
@@ -222,10 +221,10 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
 }
 CONSTRAINTS_TO_APPLY = {
     "bau": [
-        # "rampup_constraint",
+        "rampup_constraint",
         # "regional_constraint",
-        # "natural_gas_constraint",
-        # "alternative_fuel_constraint",
+        "natural_gas_constraint",
+        "alternative_fuel_constraint",
     ],
     "lc": [
         "emissions_constraint",

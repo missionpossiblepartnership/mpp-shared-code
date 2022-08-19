@@ -35,14 +35,14 @@ def select_best_transition(df_rank: pd.DataFrame) -> dict:
 
 
 def remove_transition(df_rank: pd.DataFrame, transition: dict) -> pd.DataFrame:
-    """Filter transition from ranking table.
+    """Remove specific transition from ranking table.
 
     Args:
         df_rank: table with ranking of technology switches
         transition: row from the ranking table
 
     Returns:
-        ranking table with the row corresponding to the transition removed
+        ranking table without the row corresponding to the transition removed
     """
     return df_rank.loc[
         ~(df_rank[list(transition)] == pd.Series(transition)).all(axis=1)
@@ -59,7 +59,7 @@ def remove_all_transitions_with_destination_technology(
     return df_rank
 
 
-def remove_transition_in_region_by_tech_substr(
+def remove_techs_in_region_by_tech_substr(
     df_rank: pd.DataFrame, region: str, tech_substr: str
 ) -> pd.DataFrame:
 

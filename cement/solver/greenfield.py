@@ -3,8 +3,8 @@
 import numpy as np
 
 from cement.config.config_cement import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                                         CUF_UPPER_THRESHOLD, LOG_LEVEL,
-                                         MODEL_SCOPE)
+                                         CAPACITY_UTILISATION_FACTOR,
+                                         LOG_LEVEL, MODEL_SCOPE)
 from mppshared.agent_logic.greenfield import (enact_greenfield_transition,
                                               get_region_rank_filter,
                                               select_asset_for_greenfield)
@@ -29,88 +29,59 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         Updated decarbonization pathway with the updated AssetStack in the subsequent year according to the greenfield
             transitions enacted
     """
-    logger.info(f"Starting greenfield transition logic for year {year}")
+    logger.info(f"{year}: Starting greenfield transition logic")
     stack = pathway.get_stack(year=year)
 
     # Get ranking table for greenfield transitions
     df_rank = pathway.get_ranking(year=year, rank_type="greenfield")
 
-    # Greenfield for each product sequentially
-    for product in pathway.products:
-        df_rank = df_rank.loc[df_rank["product"] == product]
-        # Get demand and production
-        demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
+    product = pathway.products[0]
 
-        # STEP ONE: BUILD NEW CAPACITY BY REGION
-        # First, build new capacity in each region to make sure that the regional production constraint is met even if
-        #   regional demand increases
-        df_regional_production = get_regional_production_constraint_table(
-            pathway=pathway, stack=stack, product=product, year=year
+    # Build new capacity in each region to make sure that the regional production fulfills the regional demand
+    df_regional_production = get_regional_production_constraint_table(
+        pathway=pathway, stack=stack, product=product, year=year
+    )
+
+    # For each region with a production deficit, build new capacity until production meets required minimum
+    for (index, row) in df_regional_production.loc[
+        ~df_regional_production["check"]
+    ].iterrows():
+        deficit = (
+            row["annual_production_volume_minimum"]
+            - row["annual_production_volume"]
         )
+        region = row["region"]
+        number_new_assets = np.ceil(deficit / (ASSUMED_ANNUAL_PRODUCTION_CAPACITY * CAPACITY_UTILISATION_FACTOR))
+        logger.info(
+            f"{year}: Building {number_new_assets} new assets in {region} to fulfil production deficit "
+            f"of {deficit} Mt {product}"
+        )
+        region_rank_filter = get_region_rank_filter(
+            region=region, sector=pathway.sector
+        )
+        df_rank_region = df_rank.loc[df_rank["region"].isin(region_rank_filter)]
 
-        # For each region with a production deficit, build new capacity until production meets required minimum
-        for (index, row) in df_regional_production.loc[
-            ~df_regional_production["check"]
-        ].iterrows():
-            deficit = (
-                row["annual_production_volume_minimum"]
-                - row["annual_production_volume"]
-            )
-            number_new_assets = np.ceil(deficit / ASSUMED_ANNUAL_PRODUCTION_CAPACITY)
-            region_rank_filter = get_region_rank_filter(
-                region=row["region"], sector=pathway.sector
-            )
-            df_rank_region = df_rank.loc[df_rank["region"].isin(region_rank_filter)]
-
-            # Build the required number of assets to meet the minimum production volume
-            while number_new_assets >= 1:
-                try:
-                    new_asset = select_asset_for_greenfield(
-                        pathway=pathway,
-                        stack=stack,
-                        product=product,
-                        df_rank=df_rank_region,
-                        year=year,
-                        annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                        cuf=CUF_UPPER_THRESHOLD,
-                    )
-                    enact_greenfield_transition(
-                        pathway=pathway, stack=stack, new_asset=new_asset, year=year
-                    )
-                    number_new_assets -= 1
-                except ValueError:
-                    logger.info(
-                        "No more assets for greenfield transition within constraints"
-                    )
-                    break
-
-        # STEP TWO: BUILD NEW CAPACITY GLOBALLY
-        # Build new assets while demand exceeds production
-        while demand > stack.get_annual_production_volume(product):
-
-            # Identify asset for greenfield transition
+        # Build the required number of assets to meet the minimum production volume
+        while number_new_assets >= 1:
             try:
-                new_asset = select_asset_for_greenfield(
+                new_asset, df_rank_region = select_asset_for_greenfield(
                     pathway=pathway,
                     stack=stack,
                     product=product,
-                    df_rank=df_rank,
+                    df_rank=df_rank_region,
                     year=year,
                     annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                    cuf=CUF_UPPER_THRESHOLD,
+                    cuf=CAPACITY_UTILISATION_FACTOR,
+                    return_df_rank=True,
                 )
+                enact_greenfield_transition(
+                    pathway=pathway, stack=stack, new_asset=new_asset, year=year
+                )
+                number_new_assets -= 1
             except ValueError:
                 logger.info(
                     "No more assets for greenfield transition within constraints"
                 )
                 break
 
-            # Enact greenfield transition
-            logger.debug(
-                f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, "
-                f"annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}"
-            )
-            enact_greenfield_transition(
-                pathway=pathway, stack=stack, new_asset=new_asset, year=year
-            )
     return pathway

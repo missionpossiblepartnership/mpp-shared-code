@@ -419,11 +419,11 @@ class SimulationPathway:
     def get_stack(self, year: int) -> AssetStack:
         return self.stacks[year]
 
-    def update_stack(self, year, stack):
+    def update_stack(self, year: int, stack):
         self.stacks[year] = stack
         return self
 
-    def copy_stack(self, year):
+    def copy_stack(self, year: int):
         """Copy this year's stack to next year"""
         old_stack = self.get_stack(year=year)
         new_stack = AssetStack(

@@ -6,8 +6,9 @@ import numpy as np
 
 from cement.config.config_cement import LOG_LEVEL, PRODUCTS
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_all_transitions_with_destination_technology, remove_transition,
-    remove_transition_in_region_by_tech_substr, select_best_transition)
+    remove_all_transitions_with_destination_technology,
+    remove_techs_in_region_by_tech_substr, remove_transition,
+    select_best_transition)
 from mppshared.models.constraints import (check_alternative_fuel_constraint,
                                           check_constraints,
                                           check_natural_gas_constraint)
@@ -30,7 +31,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         Updated decarbonization pathway with the updated AssetStack in the subsequent year according to the brownfield
             transitions enacted
     """
-    logger.debug(f"Starting brownfield transition logic for year {year}")
+    logger.debug(f"{year}: Starting brownfield transition logic")
 
     # asset stack is changed by the brownfield transitions
     stack = pathway.get_stack(year=year)
@@ -50,25 +51,23 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         pathway.annual_renovation_share * stack.get_number_of_assets()
     )
     logger.debug(
-        f"Number of assets eligible for brownfield transition: {len(candidates)} in year {year}, of which maximum "
-        f"{maximum_n_assets_transitioned} can be transitioned."
+        f"{year}: {len(candidates)} eligible assets (max. transitions: {maximum_n_assets_transitioned})"
     )
 
     # Enact brownfield transitions while there are still candidates
     while (candidates != []) & (n_assets_transitioned <= maximum_n_assets_transitioned):
-        # TODO: how do we avoid that all assets are retrofit at once in the beginning?
-        # TODO: implement foresight with brownfield rebuild
 
-        # Find assets can undergo the best transition. If there are no assets for the best transition, continue
-        #   searching with the next-best transition
-        best_candidates = []
-        while not best_candidates:
+        # Find the best transition and assets candidates, that can undergo this transition. If there are no assets that
+        #   can undergo the best transition, go for the next best transition
+        candidates_best_transition = []
+        while len(candidates_best_transition) == 0:
             # If no more transitions available, break and return pathway
             if df_rank.empty:
+                logger.debug("No more brownfield transitions available")
                 return pathway
 
-            # Check if LC pathway and check emissions to exit after being lower than the constraint
-            # This check minimizes the investment as it only requires some switches and not all of them
+            # If LC pathway, check carbon budget and exit if brownfield transitions already fulfil the constraint (this
+            #   minimises the investment by reducing the number of switches)
             if pathway.pathway_name == "lc":
                 dict_stack_emissions = stack.calculate_emissions_stack(
                     year=year,
@@ -86,47 +85,40 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     )
                     return pathway
 
-            # Choose the best transition, i.e. highest decommission rank
+            # Find the best transition (i.e., highest brownfield rank)
             best_transition = select_best_transition(df_rank)
-            # Check it the transition has PPA on it, if so only get plants that allow transition to ppa
-            if "PPA" in best_transition["technology_destination"]:
-                best_candidates = list(
-                    filter(
-                        lambda asset: (
-                            asset.technology == best_transition["technology_origin"]
-                        )
-                        & (asset.region == best_transition["region"])
-                        & (asset.product == best_transition["product"])
-                        & asset.ppa_allowed,
-                        candidates,
+            candidates_best_transition = list(
+                filter(
+                    lambda asset: (
+                        asset.technology == best_transition["technology_origin"]
                     )
+                    & (asset.region == best_transition["region"])
+                    & (asset.product == best_transition["product"]),
+                    candidates,
                 )
-            else:
-                best_candidates = list(
-                    filter(
-                        lambda asset: (
-                            asset.technology == best_transition["technology_origin"]
-                        )
-                        & (asset.region == best_transition["region"])
-                        & (asset.product == best_transition["product"]),
-                        candidates,
-                    )
-                )
+            )
             new_technology = best_transition["technology_destination"]
             switch_type = best_transition["switch_type"]
+            best_transition_region = best_transition["region"]
+            origin_technology = best_transition["technology_origin"]
             # Remove best transition from ranking table if there are no candidates left for it
-            if len(best_candidates) == 0:
-                # logger.debug(f"No assets found for best transition {best_transition}")
-                logger.debug(f"Length of ranking table: {len(df_rank)}")
+            if len(candidates_best_transition) == 0:
+                logger.debug(
+                    f"No assets available for best transition ({best_transition_region}; {switch_type}; "
+                    f"{origin_technology} -> {new_technology})"
+                )
                 df_rank = remove_transition(df_rank, best_transition)
-                logger.debug(f"Candidates in ranking table: {len(df_rank)}")
 
         # If several candidates for best transition, choose asset for transition randomly
-        asset_to_update = random.choice(best_candidates)
+        asset_to_update = random.choice(candidates_best_transition)
 
         # Update asset tentatively (needs deepcopy to provide changes to original stack)
         tentative_stack = deepcopy(stack)
-        origin_technology = asset_to_update.technology
+        assert origin_technology == asset_to_update.technology
+        logger.debug(
+            f"{year}: Tentatively transitioning asset in {asset_to_update.region} "
+            f"from {origin_technology} to {new_technology}."
+        )
         tentative_stack.update_asset(
             asset_to_update=asset_to_update,
             new_technology=new_technology,
@@ -136,9 +128,6 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         )
 
         # Check constraints with tentative new stack
-        assert (
-            len(PRODUCTS) == 1
-        ), "Adjust cement brownfield logic if more than one product!"
         dict_constraints = check_constraints(
             pathway=pathway,
             stack=tentative_stack,
@@ -155,9 +144,9 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             ]
         ) | (origin_technology == new_technology):
             logger.debug(
-                f"Year {year} Updating {asset_to_update.product} asset from technology {origin_technology} to "
-                f"technology {new_technology} in region {asset_to_update.region}, annual production "
-                f"{asset_to_update.get_annual_production_volume()} and UUID {asset_to_update.uuid}"
+                f"{year}: All constraints fulfilled. "
+                f"Updating asset in {asset_to_update.region} from {origin_technology} to {new_technology}. "
+                f"(annual production: {asset_to_update.get_annual_production_volume()}, UUID: {asset_to_update.uuid}"
             )
             # Update asset stack
             stack.update_asset(
@@ -179,10 +168,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             # EMISSIONS
             if "emissions_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["emissions_constraint"]:
-                    # remove destination technology from the ranking table and try again
-                    logger.debug(
-                        f"Emissions constraint hurt for {origin_technology} -> {new_technology}"
-                    )
+                    # remove transition from ranking
+                    logger.debug(f"Handle emissions constraint: removing transition")
                     if origin_technology != new_technology:
                         df_rank = remove_transition(
                             df_rank=df_rank, transition=best_transition
@@ -190,9 +177,13 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             # RAMPUP
             if "rampup_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["rampup_constraint"]:
-                    # remove destination technology from the ranking table and try again
+                    # remove destination technology from ranking
+                    logger.debug(f"Handle ramp up constraint: removing destination technology")
                     df_rank = remove_all_transitions_with_destination_technology(
-                        df_rank, best_transition["technology_destination"]
+                        df_rank=df_rank,
+                        technology_destination=best_transition[
+                            "technology_destination"
+                        ],
                     )
             # NATURAL GAS
             if "natural_gas_constraint" in pathway.constraints_to_apply:
@@ -206,16 +197,26 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                         transition_type="brownfield",
                         return_dict=True,
                     )
-                    # remove all exceeding regions from ranking
                     exceeding_regions = [
                         k
                         for k in dict_natural_gas_exceedance.keys()
                         if not dict_natural_gas_exceedance[k]
                     ]
-                    for region in exceeding_regions:
-                        df_rank = remove_transition_in_region_by_tech_substr(
+                    # check if regions other than the tentatively updated asset's region exceed the constraint
+                    if exceeding_regions != [asset_to_update.region]:
+                        logger.critical(
+                            f"{year}: Regions other than the tentatively updated asset's region exceed the natural gas "
+                            f"constraint!"
+                        )
+                    else:
+                        # remove exceeding region from ranking
+                        logger.debug(
+                            f"Handle natural gas constraint: removing all natural gas technologies "
+                            f"in {asset_to_update.region}"
+                        )
+                        df_rank = remove_techs_in_region_by_tech_substr(
                             df_rank=df_rank,
-                            region=region,
+                            region=asset_to_update.region,
                             tech_substr="natural gas",
                         )
             # ALTERNATIVE FUEL
@@ -232,21 +233,31 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                             return_dict=True,
                         )
                     )
-                    # remove all exceeding regions from ranking
                     exceeding_regions = [
                         k
                         for k in dict_alternative_fuel_exceedance.keys()
                         if not dict_alternative_fuel_exceedance[k]
                     ]
-                    for region in exceeding_regions:
-                        df_rank = remove_transition_in_region_by_tech_substr(
+                    # check if regions other than the tentatively updated asset's region exceed the constraint
+                    if exceeding_regions != [asset_to_update.region]:
+                        logger.critical(
+                            f"{year}: Regions other than the tentatively updated asset's region exceed the alternative "
+                            "fuel constraint!"
+                        )
+                    else:
+                        # remove exceeding region from ranking
+                        logger.debug(
+                            f"Handle alternative fuels constraint: removing all alternative fuels technologies "
+                            f"in {asset_to_update.region}"
+                        )
+                        df_rank = remove_techs_in_region_by_tech_substr(
                             df_rank=df_rank,
-                            region=region,
+                            region=asset_to_update.region,
                             tech_substr="alternative fuels",
                         )
 
     logger.debug(
-        f"{n_assets_transitioned} assets transitioned of maximum {maximum_n_assets_transitioned} in year {year}."
+        f"{year}: {n_assets_transitioned} assets transitioned of maximum {maximum_n_assets_transitioned}."
     )
 
     return pathway

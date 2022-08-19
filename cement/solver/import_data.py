@@ -1,5 +1,6 @@
 """import and pre-process all input files"""
 
+import numpy as np
 import pandas as pd
 
 from cement.config.config_cement import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
@@ -256,20 +257,11 @@ def _get_initial_asset_stack(
                 key=(region, technology), level=("region", "technology_destination")
             ).squeeze()
             plant_capacity = ASSUMED_ANNUAL_PRODUCTION_CAPACITY
-            n_plants = demand / (plant_capacity * capacity_factor)
-            n_full_plants = int(n_plants)
-            n_partial_plants = n_plants - float(n_full_plants)
-
-            # create "full" and "partial" plants
+            # round up to have a small overshoot in production volume rather than not fulfilling demand
+            n_plants = int(np.ceil((demand / (plant_capacity * capacity_factor))))
+            # create plants
             df_append = df_initial_asset_stack.copy()
-            if n_partial_plants != float(0):
-                df_append["annual_production_capacity"] = n_full_plants * [
-                    plant_capacity
-                ] + [n_partial_plants * plant_capacity]
-            else:
-                df_append["annual_production_capacity"] = n_full_plants * [
-                    plant_capacity
-                ]
+            df_append["annual_production_capacity"] = n_plants * [plant_capacity]
             df_append["technology"] = technology
             df_append["capacity_factor"] = capacity_factor
             df_append["region"] = region

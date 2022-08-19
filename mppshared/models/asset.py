@@ -1,6 +1,7 @@
 """Asset and asset stack classes, code adapted from MCC"""
 import sys
 from calendar import c
+from copy import deepcopy
 from uuid import uuid4
 from xmlrpc.client import Boolean
 
@@ -226,8 +227,25 @@ class AssetStack:
         )
         return sum(asset.get_annual_production_volume() for asset in assets)
 
-    def get_ng_af_production_volume(
-        self, product: str, region: str, tech_substr: str,
+    def log_annual_production_volume_by_region_and_tech(self, product: str):
+        """Only in debug logger mode: logs production volumes per region and technology"""
+        regions = get_unique_list_values(
+            [x for x in [asset.region for asset in self.filter_assets(product=product)]]
+        )
+
+        for region in regions:
+            technologies = get_unique_list_values(
+                [x for x in [asset.technology for asset in self.filter_assets(product=product, region=region)]]
+            )
+            for technology in technologies:
+                prod_vol = self.get_annual_production_volume(product=product, region=region, technology=technology)
+                logger.debug(f"{region} | {technology}: {prod_vol} Mt {product}")
+
+    def get_annual_ng_af_production_volume(
+        self,
+        product: str,
+        region: str,
+        tech_substr: str,
     ) -> float:
         """Get the yearly production volumes of all natural gas (ng) or alternative fuels (af) the AssetStack per region
             and technology for a specific product
@@ -245,23 +263,19 @@ class AssetStack:
             [
                 x
                 for x in [
-                    asset.technology for asset in self.filter_assets(product=product, region=region)
+                    asset.technology
+                    for asset in self.filter_assets(product=product, region=region)
                 ]
                 if tech_substr in x
             ]
         )
 
-        if len(technologies) == 0:
-            return float(0)
-
         production_volume = float(0)
-        for technology in technologies:
-            assets = self.filter_assets(
-                product=product, region=region, technology=technology
-            )
-            production_volume += sum(
-                (asset.annual_production_capacity * asset.cuf) for asset in assets
-            )
+        if len(technologies) != 0:
+            for technology in technologies:
+                production_volume += self.get_annual_production_volume(
+                    product=product, region=region, technology=technology
+                )
 
         return production_volume
 
@@ -516,7 +530,7 @@ class AssetStack:
         """Return a list of Assets from the AssetStack that are eligible for decommissioning"""
 
         # Filter for assets with the specified product
-        assets = self.filter_assets(product=product)
+        assets = deepcopy(self.filter_assets(product=product))
 
         # assets can be decommissioned if they have not undergone a renovation or rebuild
         candidates = filter(lambda asset: not asset.retrofit, assets)
@@ -548,7 +562,7 @@ class AssetStack:
         """Return a list of Assets from the AssetStack that are eligible for a brownfield technology transition"""
 
         # cement: all assets are eligible for a brownfield transition
-        return self.assets
+        return deepcopy(self.assets)
 
 
 def make_new_asset(

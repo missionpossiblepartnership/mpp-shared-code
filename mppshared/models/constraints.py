@@ -34,7 +34,7 @@ def check_constraints(
     """
     # TODO: Map constraint application to the three transition types
 
-    dict_constraints = {
+    funcs_constraints = {
         "emissions_constraint": check_annual_carbon_budget_constraint,
         "rampup_constraint": check_technology_rampup_constraint,
         "regional_constraint": check_constraint_regional_production,
@@ -48,7 +48,7 @@ def check_constraints(
     if pathway.constraints_to_apply:
         for constraint in pathway.constraints_to_apply:
             if constraint == "emissions_constraint":
-                emissions_constraint, flag_residual = dict_constraints[constraint](
+                emissions_constraint, flag_residual = funcs_constraints[constraint](
                     pathway=pathway,
                     stack=stack,
                     year=year,
@@ -57,24 +57,17 @@ def check_constraints(
                 constraints_checked[constraint] = emissions_constraint
                 constraints_checked["flag_residual"] = flag_residual
             else:
-                constraints_checked[constraint] = dict_constraints[constraint](
+                constraints_checked[constraint] = funcs_constraints[constraint](
                     pathway=pathway,
                     stack=stack,
                     product=product,
                     year=year,
                     transition_type=transition_type,
                 )
-        return constraints_checked
     else:
         logger.info(f"Pathway {pathway.pathway_name} has no constraints to apply")
-        # todo: rather return empty dict?
-        return {
-            "emissions_constraint": True,
-            "flag_residual": False,
-            "rampup_constraint": True,
-            "regional_constraint": True,
-            "demand_share_constraint": True,
-        }
+
+    return constraints_checked
 
 
 def check_technology_rampup_constraint(
@@ -535,7 +528,7 @@ def check_natural_gas_constraint(
 
     if not return_dict:
         logger.info(
-            f"Checking natural gas constraint for year {year} and transition type {transition_type}"
+            f"{year}: Checking natural gas constraint (asset stack: {hex(id(stack))})"
         )
 
     # Get constraint value
@@ -550,12 +543,17 @@ def check_natural_gas_constraint(
         ].squeeze()
 
         # calculate natural gas-based production capacity
-        ng_capacity = stack.get_ng_af_production_volume(
+        ng_prod_volume = stack.get_annual_ng_af_production_volume(
             product=product, region=region, tech_substr="natural gas"
         )
 
         # add to dict
-        dict_regional_fulfilment[region] = limit_region >= ng_capacity
+        dict_regional_fulfilment[region] = limit_region >= ng_prod_volume
+
+        if not return_dict:
+            logger.debug(
+                f"{region}: {dict_regional_fulfilment[region]} (limit: {limit_region}, prod. vol.: {ng_prod_volume})"
+            )
 
     if return_dict:
         return dict_regional_fulfilment
@@ -579,7 +577,7 @@ def check_alternative_fuel_constraint(
 
     if not return_dict:
         logger.info(
-            f"Checking alternative fuel constraint for year {year} and transition type {transition_type}"
+            f"{year}: Checking alternative fuel constraint (asset stack: {hex(id(stack))})"
         )
 
     # Get constraint value
@@ -594,12 +592,17 @@ def check_alternative_fuel_constraint(
         ].squeeze()
 
         # calculate natural gas-based production capacity
-        af_capacity = stack.get_ng_af_production_volume(
+        af_prod_volume = stack.get_annual_ng_af_production_volume(
             product=product, region=region, tech_substr="alternative fuels"
         )
 
         # add to dict
-        dict_regional_fulfilment[region] = limit_region >= af_capacity
+        dict_regional_fulfilment[region] = limit_region >= af_prod_volume
+
+        if not return_dict:
+            logger.debug(
+                f"{region}: {dict_regional_fulfilment[region]} (limit: {limit_region}, prod. vol.: {af_prod_volume})"
+            )
 
     if return_dict:
         return dict_regional_fulfilment

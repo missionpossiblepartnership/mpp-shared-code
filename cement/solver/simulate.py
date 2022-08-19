@@ -7,14 +7,13 @@ from timeit import default_timer as timer
 
 from cement.config.config_cement import (ANNUAL_RENOVATION_SHARE,
                                          ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                                         CAPACITY_UTILISATION_FACTOR,
                                          CARBON_BUDGET_SECTOR_CSV,
                                          CARBON_BUDGET_SHAPE,
-                                         CONSTRAINTS_TO_APPLY,
-                                         CUF_LOWER_THRESHOLD,
-                                         CUF_UPPER_THRESHOLD, EMISSION_SCOPES,
+                                         CONSTRAINTS_TO_APPLY, EMISSION_SCOPES,
                                          END_YEAR, GHGS,
                                          INITIAL_ASSET_DATA_LEVEL,
-                                         INVESTMENT_CYCLE, LOG_LEVEL,
+                                         INVESTMENT_CYCLE, LOG_LEVEL, PRODUCTS,
                                          RANK_TYPES,
                                          REGIONAL_PRODUCTION_SHARES,
                                          SECTORAL_CARBON_BUDGETS,
@@ -45,42 +44,55 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         The updated pathway with the asset stack in each year of the model horizon
     """
 
+    assert (
+            len(PRODUCTS) == 1
+    ), "Adjust cement brownfield logic if more than one product!"
+    product = PRODUCTS[0]
+
     # Write initial stack to csv
     pathway.export_stack_to_csv(year=START_YEAR)
 
     # Run pathway simulation in each year for all products simultaneously
     for year in range(START_YEAR + 1, END_YEAR + 1):
-        logger.info("Optimizing for %s", year)
+        logger.info(f"{year}: Start pathway simulation")
 
         # Copy over last year's stack to this year
         pathway = pathway.copy_stack(year=year - 1)
 
-        # Write stack to csv
-        pathway.export_stack_to_csv(year=year)
-
         # Decommission assets
+        logger.info(f"{year}: Production volumes pre decommission: {hex(id(pathway.stacks[year]))}")
+        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(product=product)
         start = timer()
         pathway = decommission(pathway=pathway, year=year)
         end = timer()
         logger.debug(
-            f"Time elapsed for decommission in year {year}: {timedelta(seconds=end-start)} seconds"
+            f"{year}: Time elapsed for decommission: {timedelta(seconds=end-start)} seconds"
         )
 
         # Renovate and rebuild assets (brownfield transition)
+        logger.info(f"{year}: Production volumes pre brownfield: {hex(id(pathway.stacks[year]))}")
+        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(product=product)
         start = timer()
         pathway = brownfield(pathway=pathway, year=year)
         end = timer()
         logger.debug(
-            f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
+            f"{year}: Time elapsed for brownfield: {timedelta(seconds=end-start)} seconds"
         )
 
         # Build new assets
+        logger.info(f"{year}: Production volumes pre greenfield: {hex(id(pathway.stacks[year]))}")
+        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(product=product)
         start = timer()
         pathway = greenfield(pathway=pathway, year=year)
         end = timer()
         logger.debug(
-            f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
+            f"{year}: Time elapsed for greenfield: {timedelta(seconds=end-start)} seconds"
         )
+        logger.info(f"{year}: Production volumes post greenfield: {hex(id(pathway.stacks[year]))}")
+        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(product=product)
+
+        # Write stack to csv
+        pathway.export_stack_to_csv(year=year)
 
     return pathway
 
@@ -140,8 +152,8 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         technology_rampup=dict_technology_rampup,
         carbon_budget=carbon_budget,
         emission_scopes=EMISSION_SCOPES,
-        cuf_lower_threshold=CUF_LOWER_THRESHOLD,
-        cuf_upper_threshold=CUF_UPPER_THRESHOLD,
+        cuf_lower_threshold=CAPACITY_UTILISATION_FACTOR,
+        cuf_upper_threshold=CAPACITY_UTILISATION_FACTOR,
         ghgs=GHGS,
         regional_production_shares=REGIONAL_PRODUCTION_SHARES,
         investment_cycle=INVESTMENT_CYCLE,
