@@ -10,12 +10,19 @@ import numpy as np
 import pandas as pd
 
 # Shared imports
-from ammonia.config_ammonia import (GHGS, GROUPING_COLS_FOR_NPV, PRODUCTS,
-                                    REGIONS_SALT_CAVERN_AVAILABILITY,
-                                    SCOPES_CO2_COST, STANDARD_CUF,
-                                    STANDARD_LIFETIME, STANDARD_WACC,
-                                    START_YEAR, TECHNOLOGY_MORATORIUM,
-                                    TRANSITIONAL_PERIOD_YEARS)
+from ammonia.config_ammonia import (
+    GHGS,
+    GROUPING_COLS_FOR_NPV,
+    PRODUCTS,
+    REGIONS_SALT_CAVERN_AVAILABILITY,
+    SCOPES_CO2_COST,
+    STANDARD_CUF,
+    STANDARD_LIFETIME,
+    STANDARD_WACC,
+    START_YEAR,
+    TECHNOLOGY_MORATORIUM,
+    TRANSITIONAL_PERIOD_YEARS,
+)
 from mppshared.config import EMISSION_SCOPES, END_YEAR
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
@@ -23,9 +30,12 @@ from mppshared.solver.implicit_forcing import (
     add_carbon_cost_addition_to_technology_switches,
     add_technology_classification_to_switching_table,
     apply_salt_cavern_availability_constraint,
-    apply_technology_availability_constraint, apply_technology_moratorium,
+    apply_technology_availability_constraint,
+    apply_technology_moratorium,
     calculate_carbon_cost_addition_to_cost_metric,
-    calculate_emission_reduction)
+    calculate_emission_reduction,
+)
+
 # Initialize logger
 from mppshared.utility.log_utility import get_logger
 

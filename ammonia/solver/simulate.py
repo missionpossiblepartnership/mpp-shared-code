@@ -3,26 +3,38 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from ammonia.config_ammonia import (ANNUAL_RENOVATION_SHARE,
-                                    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                                    CARBON_BUDGET_SECTOR_CSV,
-                                    CO2_STORAGE_CONSTRAINT_CUMULATIVE,
-                                    CONSTRAINTS_TO_APPLY, CUF_LOWER_THRESHOLD,
-                                    CUF_UPPER_THRESHOLD, EMISSION_SCOPES,
-                                    END_YEAR, GHGS, INITIAL_ASSET_DATA_LEVEL,
-                                    INVESTMENT_CYCLE, LOG_LEVEL,
-                                    MAXIMUM_GLOBAL_DEMAND_SHARE, PRODUCTS,
-                                    RANK_TYPES, REGIONAL_PRODUCTION_SHARES,
-                                    SECTORAL_CARBON_PATHWAY,
-                                    SET_CO2_STORAGE_CONSTRAINT, START_YEAR,
-                                    TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE,
-                                    TECHNOLOGY_RAMP_UP_CONSTRAINT,
-                                    YEAR_2050_EMISSIONS_CONSTRAINT)
+from ammonia.config_ammonia import (
+    ANNUAL_RENOVATION_SHARE,
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CARBON_BUDGET_SECTOR_CSV,
+    CO2_STORAGE_CONSTRAINT_CUMULATIVE,
+    CONSTRAINTS_TO_APPLY,
+    CUF_LOWER_THRESHOLD,
+    CUF_UPPER_THRESHOLD,
+    EMISSION_SCOPES,
+    END_YEAR,
+    GHGS,
+    INITIAL_ASSET_DATA_LEVEL,
+    INVESTMENT_CYCLE,
+    LOG_LEVEL,
+    MAXIMUM_GLOBAL_DEMAND_SHARE,
+    PRODUCTS,
+    RANK_TYPES,
+    REGIONAL_PRODUCTION_SHARES,
+    SECTORAL_CARBON_PATHWAY,
+    SET_CO2_STORAGE_CONSTRAINT,
+    START_YEAR,
+    TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE,
+    TECHNOLOGY_RAMP_UP_CONSTRAINT,
+    YEAR_2050_EMISSIONS_CONSTRAINT,
+)
 from ammonia.solver.brownfield import brownfield
 from ammonia.solver.decommission import decommission
 from ammonia.solver.greenfield import greenfield
 from mppshared.agent_logic.agent_logic_functions import (
-    adjust_capacity_utilisation, create_dict_technology_rampup)
+    adjust_capacity_utilisation,
+    create_dict_technology_rampup,
+)
 from mppshared.config import SECTORAL_CARBON_BUDGETS
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_budget import CarbonBudget

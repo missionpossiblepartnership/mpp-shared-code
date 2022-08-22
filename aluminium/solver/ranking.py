@@ -1,9 +1,14 @@
 """Create ranking of technology switches (decommission, brownfield, greenfield)."""
 
-from aluminium.config_aluminium import (EMISSION_SCOPES_RANKING, GHGS_RANKING,
-                                        NUMBER_OF_BINS_RANKING, PRODUCTS,
-                                        RANK_TYPES, RANKING_CONFIG,
-                                        RANKING_COST_METRIC)
+from aluminium.config_aluminium import (
+    EMISSION_SCOPES_RANKING,
+    GHGS_RANKING,
+    NUMBER_OF_BINS_RANKING,
+    PRODUCTS,
+    RANK_TYPES,
+    RANKING_CONFIG,
+    RANKING_COST_METRIC,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.solver.ranking import rank_technology_histogram
 

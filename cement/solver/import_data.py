@@ -3,17 +3,26 @@
 import numpy as np
 import pandas as pd
 
-from cement.config.config_cement import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                                         LIST_TECHNOLOGIES, MODEL_YEARS,
-                                         REGIONS, START_YEAR)
-from cement.config.dataframe_config_cement import (DF_DATATYPES_PER_COLUMN,
-                                                   IDX_PER_INPUT_METRIC)
-from cement.config.import_config_cement import (AVERAGE_PLANT_COMMISSION_YEAR,
-                                                COLUMN_SINGLE_INPUT,
-                                                EXCEL_COLUMN_RANGES,
-                                                HEADER_BUSINESS_CASE_EXCEL,
-                                                INPUT_METRICS, INPUT_SHEETS,
-                                                MAP_EXCEL_NAMES)
+from cement.config.config_cement import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    LIST_TECHNOLOGIES,
+    MODEL_YEARS,
+    REGIONS,
+    START_YEAR,
+)
+from cement.config.dataframe_config_cement import (
+    DF_DATATYPES_PER_COLUMN,
+    IDX_PER_INPUT_METRIC,
+)
+from cement.config.import_config_cement import (
+    AVERAGE_PLANT_COMMISSION_YEAR,
+    COLUMN_SINGLE_INPUT,
+    EXCEL_COLUMN_RANGES,
+    HEADER_BUSINESS_CASE_EXCEL,
+    INPUT_METRICS,
+    INPUT_SHEETS,
+    MAP_EXCEL_NAMES,
+)
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.import_data import import_all
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
@@ -63,7 +72,9 @@ def import_and_preprocess(
         "Dry kiln alternative fuels 43%": float,
         "Dry kiln alternative fuels 90%": float,
     }
-    df_start_technologies = set_datatypes(df=df_start_technologies, datatypes_per_column=datatypes)
+    df_start_technologies = set_datatypes(
+        df=df_start_technologies, datatypes_per_column=datatypes
+    )
     # export
     importer.export_data(
         df=df_start_technologies,
@@ -111,7 +122,9 @@ def import_and_preprocess(
     )
 
     # INITIAL ASSET STACK
-    df_initial_asset_stack = _get_initial_asset_stack(importer=importer, product=products)
+    df_initial_asset_stack = _get_initial_asset_stack(
+        importer=importer, product=products
+    )
     # export
     importer.export_data(
         df=df_initial_asset_stack,

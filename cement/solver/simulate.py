@@ -5,27 +5,36 @@
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from cement.config.config_cement import (ANNUAL_RENOVATION_SHARE,
-                                         ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                                         CAPACITY_UTILISATION_FACTOR,
-                                         CARBON_BUDGET_SECTOR_CSV,
-                                         CARBON_BUDGET_SHAPE,
-                                         CONSTRAINTS_TO_APPLY, EMISSION_SCOPES,
-                                         END_YEAR, GHGS,
-                                         INITIAL_ASSET_DATA_LEVEL,
-                                         INVESTMENT_CYCLE, LOG_LEVEL, PRODUCTS,
-                                         RANK_TYPES,
-                                         REGIONAL_PRODUCTION_SHARES,
-                                         SECTORAL_CARBON_BUDGETS,
-                                         SECTORAL_CARBON_PATHWAY, START_YEAR,
-                                         TECHNOLOGY_RAMP_UP_CONSTRAINT,
-                                         YEAR_2050_EMISSIONS_CONSTRAINT)
+from cement.config.config_cement import (
+    ANNUAL_RENOVATION_SHARE,
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CAPACITY_UTILISATION_FACTOR,
+    CARBON_BUDGET_SECTOR_CSV,
+    CARBON_BUDGET_SHAPE,
+    CONSTRAINTS_TO_APPLY,
+    EMISSION_SCOPES,
+    END_YEAR,
+    GHGS,
+    INITIAL_ASSET_DATA_LEVEL,
+    INVESTMENT_CYCLE,
+    LOG_LEVEL,
+    PRODUCTS,
+    RANK_TYPES,
+    REGIONAL_PRODUCTION_SHARES,
+    SECTORAL_CARBON_BUDGETS,
+    SECTORAL_CARBON_PATHWAY,
+    START_YEAR,
+    TECHNOLOGY_RAMP_UP_CONSTRAINT,
+    YEAR_2050_EMISSIONS_CONSTRAINT,
+)
 from cement.config.plot_config_cement import TECHNOLOGY_LAYOUT
 from cement.solver.brownfield import brownfield
 from cement.solver.decommission import decommission
 from cement.solver.greenfield import greenfield
 from mppshared.agent_logic.agent_logic_functions import (
-    adjust_capacity_utilisation, create_dict_technology_rampup)
+    adjust_capacity_utilisation,
+    create_dict_technology_rampup,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.simulation_pathway import SimulationPathway

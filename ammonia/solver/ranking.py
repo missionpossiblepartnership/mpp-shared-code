@@ -1,10 +1,15 @@
 """Create ranking of technology switches (decommission, brownfield, greenfield)."""
 
-from ammonia.config_ammonia import (COST_METRIC_RELATIVE_UNCERTAINTY,
-                                    EMISSION_SCOPES_RANKING, GHGS_RANKING,
-                                    PRODUCTS, RANK_TYPES, RANKING_CONFIG,
-                                    RANKING_COST_METRIC,
-                                    UNCERTAINTY_RANKING_GROUPS)
+from ammonia.config_ammonia import (
+    COST_METRIC_RELATIVE_UNCERTAINTY,
+    EMISSION_SCOPES_RANKING,
+    GHGS_RANKING,
+    PRODUCTS,
+    RANK_TYPES,
+    RANKING_CONFIG,
+    RANKING_COST_METRIC,
+    UNCERTAINTY_RANKING_GROUPS,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.solver.ranking import rank_technology_uncertainty_bins

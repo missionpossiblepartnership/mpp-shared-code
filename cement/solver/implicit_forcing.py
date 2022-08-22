@@ -4,16 +4,23 @@
 import pandas as pd
 
 # Shared code imports
-from cement.config.config_cement import (EMISSION_SCOPES, GHGS,
-                                         PATHWAYS_WITH_TECHNOLOGY_MORATORIUM,
-                                         START_YEAR, TECHNOLOGY_MORATORIUM,
-                                         TRANSITIONAL_PERIOD_YEARS)
+from cement.config.config_cement import (
+    EMISSION_SCOPES,
+    GHGS,
+    PATHWAYS_WITH_TECHNOLOGY_MORATORIUM,
+    START_YEAR,
+    TECHNOLOGY_MORATORIUM,
+    TRANSITIONAL_PERIOD_YEARS,
+)
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.solver.implicit_forcing import (
     add_technology_classification_to_switching_table,
-    apply_technology_availability_constraint, apply_technology_moratorium,
-    calculate_emission_reduction)
+    apply_technology_availability_constraint,
+    apply_technology_moratorium,
+    calculate_emission_reduction,
+)
+
 # Initialize logger
 from mppshared.utility.log_utility import get_logger
 

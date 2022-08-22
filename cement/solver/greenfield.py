@@ -2,14 +2,17 @@
 
 import numpy as np
 
-from cement.config.config_cement import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                                         CAPACITY_UTILISATION_FACTOR,
-                                         LOG_LEVEL, MODEL_SCOPE)
-from mppshared.agent_logic.greenfield import (enact_greenfield_transition,
-                                              get_region_rank_filter,
-                                              select_asset_for_greenfield)
-from mppshared.models.constraints import \
-    get_regional_production_constraint_table
+from cement.config.config_cement import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CAPACITY_UTILISATION_FACTOR,
+    LOG_LEVEL,
+)
+from mppshared.agent_logic.greenfield import (
+    enact_greenfield_transition,
+    get_region_rank_filter,
+    select_asset_for_greenfield,
+)
+from mppshared.models.constraints import get_regional_production_constraint_table
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 
@@ -47,11 +50,12 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         ~df_regional_production["check"]
     ].iterrows():
         deficit = (
-            row["annual_production_volume_minimum"]
-            - row["annual_production_volume"]
+            row["annual_production_volume_minimum"] - row["annual_production_volume"]
         )
         region = row["region"]
-        number_new_assets = np.ceil(deficit / (ASSUMED_ANNUAL_PRODUCTION_CAPACITY * CAPACITY_UTILISATION_FACTOR))
+        number_new_assets = np.ceil(
+            deficit / (ASSUMED_ANNUAL_PRODUCTION_CAPACITY * CAPACITY_UTILISATION_FACTOR)
+        )
         logger.info(
             f"{year}: Building {number_new_assets} new assets in {region} to fulfil production deficit "
             f"of {deficit} Mt {product}"

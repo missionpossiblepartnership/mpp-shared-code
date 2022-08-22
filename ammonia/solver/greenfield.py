@@ -8,25 +8,39 @@ from operator import methodcaller
 import numpy as np
 import pandas as pd
 
-from ammonia.config_ammonia import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                                    ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
-                                    BUILD_CURRENT_PROJECT_PIPELINE, LOG_LEVEL,
-                                    MAP_LOW_COST_POWER_REGIONS,
-                                    MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION,
-                                    MODEL_SCOPE, REGIONAL_TECHNOLOGY_BAN,
-                                    REGIONS)
+from ammonia.config_ammonia import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
+    BUILD_CURRENT_PROJECT_PIPELINE,
+    LOG_LEVEL,
+    MAP_LOW_COST_POWER_REGIONS,
+    MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION,
+    MODEL_SCOPE,
+    REGIONAL_TECHNOLOGY_BAN,
+    REGIONS,
+)
 from mppshared.agent_logic.agent_logic_functions import (
     apply_regional_technology_ban,
-    remove_all_transitions_with_destination_technology, remove_transition,
-    select_best_transition)
+    remove_all_transitions_with_destination_technology,
+    remove_transition,
+    select_best_transition,
+)
 from mppshared.agent_logic.greenfield import (
     create_dataframe_check_regional_share_global_demand,
-    enact_greenfield_transition, select_asset_for_greenfield)
-from mppshared.models.asset import (Asset, AssetStack, make_new_asset,
-                                    make_new_asset_project_pipeline)
+    enact_greenfield_transition,
+    select_asset_for_greenfield,
+)
+from mppshared.models.asset import (
+    Asset,
+    AssetStack,
+    make_new_asset,
+    make_new_asset_project_pipeline,
+)
 from mppshared.models.constraints import (
-    apply_greenfield_filters_chemicals, check_constraints,
-    get_regional_production_constraint_table)
+    apply_greenfield_filters_chemicals,
+    check_constraints,
+    get_regional_production_constraint_table,
+)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.solver.implicit_forcing import apply_regional_technology_ban
 from mppshared.utility.utils import get_logger, get_region_rank_filter

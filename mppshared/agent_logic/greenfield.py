@@ -7,13 +7,17 @@ import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_destination_technology,
-    remove_techs_in_region_by_tech_substr, remove_transition,
-    select_best_transition)
+    remove_transition,
+    remove_transition_in_region_by_tech_substr,
+    select_best_transition,
+)
 from mppshared.config import LOG_LEVEL, MAP_LOW_COST_POWER_REGIONS
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
-from mppshared.models.constraints import (check_alternative_fuel_constraint,
-                                          check_constraints,
-                                          check_natural_gas_constraint)
+from mppshared.models.constraints import (
+    check_alternative_fuel_constraint,
+    check_constraints,
+    check_natural_gas_constraint,
+)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 

@@ -8,8 +8,13 @@ from pandas import CategoricalDtype
 from plotly.offline import plot
 from plotly.subplots import make_subplots
 
-from mppshared.config import (EMISSION_SCOPES_DEFAULT, END_YEAR, LOG_LEVEL,
-                              PRODUCTS, START_YEAR)
+from mppshared.config import (
+    EMISSION_SCOPES_DEFAULT,
+    END_YEAR,
+    LOG_LEVEL,
+    PRODUCTS,
+    START_YEAR,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.log_utility import get_logger
 

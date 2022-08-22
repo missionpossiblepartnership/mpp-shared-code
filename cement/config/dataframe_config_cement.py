@@ -40,9 +40,7 @@ IDX_PER_INPUT_METRIC = {
     "capacity_factor": standard_idx_prefix
     + ["technology_destination"]
     + standard_idx_suffix,
-    "lifetime": standard_idx_prefix
-    + ["technology_destination"]
-    + standard_idx_suffix,
+    "lifetime": standard_idx_prefix + ["technology_destination"] + standard_idx_suffix,
     "trl_current": standard_idx_prefix
     + ["technology_destination"]
     + standard_idx_suffix,
