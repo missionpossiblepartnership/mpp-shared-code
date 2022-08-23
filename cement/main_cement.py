@@ -11,12 +11,11 @@ from cement.config.config_cement import (
     PRODUCTS,
     RUN_PARALLEL,
     SECTOR,
-    SENSITIVITIES,
+    PATHWAYS_SENSITIVITIES,
     run_config,
-    PATHWAYS,
 )
 from cement.solver.implicit_forcing import apply_implicit_forcing
-from cement.solver.import_data import import_and_preprocess
+from cement.solver.preprocess import import_and_preprocess
 from cement.solver.output_processing import calculate_outputs
 from cement.solver.ranking import make_rankings
 from cement.solver.ranking_inputs import get_ranking_inputs
@@ -33,12 +32,12 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 funcs = {
-    # "IMPORT_DATA": import_and_preprocess,
-    # "CALCULATE_VARIABLES": get_ranking_inputs,
-    # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    # "MAKE_RANKINGS": make_rankings,
+    "IMPORT_DATA": import_and_preprocess,
+    "CALCULATE_VARIABLES": get_ranking_inputs,
+    "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
+    "MAKE_RANKINGS": make_rankings,
     # "SIMULATE_PATHWAY": simulate_pathway,
-    "CALCULATE_OUTPUTS": calculate_outputs,
+    # "CALCULATE_OUTPUTS": calculate_outputs,
     # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
 }
 
@@ -95,7 +94,7 @@ def main():
         )
     # runs = list(itertools.product(PATHWAYS, SENSITIVITIES, carbon_cost_trajectories))
     runs = []
-    for pathway, sensitivities in SENSITIVITIES.items():
+    for pathway, sensitivities in PATHWAYS_SENSITIVITIES.items():
         for sensitivity in sensitivities:
             runs.append((pathway, sensitivity))
     if RUN_PARALLEL:

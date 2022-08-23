@@ -6,6 +6,7 @@ from cement.config.config_cement import (
     MODEL_YEARS,
     REGIONS,
     TRANSITION_TYPES,
+    COMPUTE_LCOX,
 )
 from cement.config.dataframe_config_cement import (
     DF_DATATYPES_PER_COLUMN,
@@ -25,13 +26,13 @@ from cement.config.import_config_cement import (
     OPEX_MATERIALS_METRICS,
 )
 from mppshared.config import LOG_LEVEL
-from mppshared.import_data.import_data import get_tech_switches
+from cement.preprocess.import_data import get_tech_switches
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.import_data.preprocess_emissions import calculate_emissions
-from mppshared.import_data.preprocess_tech_characteristics import (
+from cement.preprocess.preprocess_emissions import calculate_emissions
+from cement.preprocess.preprocess_tech_characteristics import (
     get_tech_characteristics,
 )
-from mppshared.import_data.preprocess_tech_transitions import calculate_tech_transitions
+from cement.preprocess.preprocess_tech_transitions import calculate_tech_transitions
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -59,11 +60,13 @@ def get_ranking_inputs(
 
     # get cost metrics
     df_tech_transitions = calculate_tech_transitions(
+        importer=importer,
         # parameters
         sector=sector,
         model_years=MODEL_YEARS,
         products=products,
         model_regions=REGIONS,
+        compute_lcox=COMPUTE_LCOX,
         list_technologies=LIST_TECHNOLOGIES,
         cost_classifications=COST_CLASSIFICATIONS,
         idx_per_input_metric=IDX_PER_INPUT_METRIC,

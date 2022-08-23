@@ -24,7 +24,7 @@ from cement.config.import_config_cement import (
     MAP_EXCEL_NAMES,
 )
 from mppshared.config import LOG_LEVEL
-from mppshared.import_data.import_data import import_all
+from cement.preprocess.import_data import import_all
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.dataframe_utility import set_datatypes
 from mppshared.utility.log_utility import get_logger

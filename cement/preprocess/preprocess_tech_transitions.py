@@ -1,10 +1,12 @@
 """Calculates all cost metrics required for technology ranking"""
 
+import sys
 from itertools import chain
 
 import numpy as np
 import pandas as pd
 
+from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.config import IDX_TECH_RANKING_COLUMNS, LOG_LEVEL
 from mppshared.utility.dataframe_utility import df_dict_to_df
 from mppshared.utility.log_utility import get_logger
@@ -16,11 +18,13 @@ logger.setLevel(LOG_LEVEL)
 
 
 def calculate_tech_transitions(
+    importer: IntermediateDataImporter,
     # parameters
     sector: str,
     model_years: np.ndarray,
     products: list,
     model_regions: list,
+    compute_lcox: bool,
     cost_classifications: dict,
     map_switch_types_to_capex_type: dict,
     idx_per_input_metric: dict,
@@ -55,10 +59,12 @@ def calculate_tech_transitions(
         6) Marginal cost (not yet implemented)
 
     Args:
+        importer ():
         sector ():
         model_years ():
         products ():
         model_regions ():
+        compute_lcox (): function will compute LCOX data if True
         cost_classifications ():
         map_switch_types_to_capex_type
         idx_per_input_metric ():
@@ -119,39 +125,41 @@ def calculate_tech_transitions(
             opex_ccus_process_metrics=opex_ccus_process_metrics,
             opex_ccus_context_metrics=opex_ccus_context_metrics,
         )
+        # convert dict to df
+        df_opex_variable = df_dict_to_df(df_dict=dict_opex_variable)
     else:
         # placeholder
         df_opex_variable = pd.DataFrame()
 
     # LCOX
-    logger.info("Calculate LCOX")
-    # todo: uncomment (this takes some minutes, therefore the workaround with the csv import below)
-    """if sector == "cement":
-        dict_lcox = _get_lcox(
-            df_switch_capex=df_switch_capex,
-            df_opex_fixed=df_opex_fixed,
-            dict_opex_variable=dict_opex_variable,
-            df_wacc=df_wacc,
-            df_capacity_factor=df_capacity_factor,
-            df_lifetime=df_lifetime,
-        )
-        for key in dict_lcox.keys():
-            dict_lcox[key] = dict_lcox[key][["lcox"]]
-            dict_lcox[key].rename(columns={"lcox": "value"}, inplace=True)
+    if compute_lcox:
+        logger.info("Calculate LCOX")
+        if sector == "cement":
+            dict_lcox = _get_lcox(
+                df_switch_capex=df_switch_capex,
+                df_opex_fixed=df_opex_fixed,
+                dict_opex_variable=dict_opex_variable,
+                df_wacc=df_wacc,
+                df_capacity_factor=df_capacity_factor,
+                df_lifetime=df_lifetime,
+            )
+            for key in dict_lcox.keys():
+                dict_lcox[key] = dict_lcox[key][["lcox"]]
+                dict_lcox[key].rename(columns={"lcox": "value"}, inplace=True)
+            # convert dict to df
+            df_lcox = df_dict_to_df(df_dict=dict_lcox)
+            # export lcox
+            importer.export_data(
+                df=df_lcox,
+                filename="lcox.csv",
+                export_dir="intermediate",
+            )
     else:
-        # placeholder
-        df_lcox = pd.DataFrame()"""
-
-    if sector == "cement":
-        # convert dicts to dfs
-        df_opex_variable = df_dict_to_df(df_dict=dict_opex_variable)
-        # todo: dev
-        # df_lcox = df_dict_to_df(df_dict=dict_lcox)
-        # df_lcox.to_csv("C:/Users/TimonRueckel/PycharmProjects/mpp-shared-code/cement/data/bau/def/intermediate/lcox.csv")
-        df_lcox = pd.read_csv(
-            "C:/Users/TimonRueckel/PycharmProjects/mpp-shared-code/cement/data/bau/def/intermediate/lcox.csv"
-        ).set_index(IDX_TECH_RANKING_COLUMNS)
-        # todo: dev
+        try:
+            logger.info("Import LCOX")
+            df_lcox = importer.get_lcox().set_index(IDX_TECH_RANKING_COLUMNS)
+        except FileNotFoundError:
+            sys.exit("No LCOX data found. Set config parameter COMPUTE_LCOX to True to generate LCOX data.")
 
     # add all outputs to dict
     # todo: add missing dataframes
