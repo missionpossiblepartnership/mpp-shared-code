@@ -116,6 +116,8 @@ def check_global_demand_share_constraint(
         aggregation_vars=["product", "technology"]
     ).reset_index()
 
+    df_check = pd.DataFrame()
+
     for technology in TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE:
 
         # Calculate annual production volume based on CUF upper threshold
@@ -145,12 +147,14 @@ def check_global_demand_share_constraint(
                 False,
             )
 
-        if df["check"].all():
-            return True
+        df_check = pd.concat([df, df_check])
 
-        else:
-            logger.debug(f"Maximum demand share hurt for technology {technology}.")
-            return False
+    if df_check["check"].all():
+        return True
+
+    else:
+        logger.debug(f"Maximum demand share hurt for technology {technology}.")
+        return False
 
 
 def check_electrolysis_capacity_addition_constraint(

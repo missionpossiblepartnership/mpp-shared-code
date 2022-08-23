@@ -19,7 +19,7 @@ PATHWAYS = [
 
 # Sensitivities
 SENSITIVITIES = [
-    # "def",
+    "def",
     # "ng_partial",
     "ng_high",
     # "ng_low",
@@ -29,7 +29,6 @@ SENSITIVITIES = [
 CIRCULARITY_IN_DEMAND = False
 
 # Carbon price (for sensitivity analysis): needs to be run for 1 USD/tCO2 to create carbon_cost_addition.csv, then used for subsequent runs by multiplying accordingly
-
 CARBON_COSTS = [
     0,
     50,
@@ -96,22 +95,22 @@ MAXIMUM_GLOBAL_DEMAND_SHARE = {
     2032: 0.02,
     2033: 0.02,
     2034: 0.02,
-    2035: 0.02,
-    2036: 0.02,
-    2037: 0.02,
-    2038: 0.02,
-    2039: 0.02,
-    2040: 0.02,
-    2041: 1,
-    2042: 1,
-    2043: 1,
-    2044: 1,
-    2045: 1,
-    2046: 1,
-    2047: 1,
-    2048: 1,
-    2049: 1,
-    2050: 1,
+    2035: 0.03,
+    2036: 0.03,
+    2037: 0.03,
+    2038: 0.04,
+    2039: 0.04,
+    2040: 0.04,
+    2041: 0.05,
+    2042: 0.05,
+    2043: 0.05,
+    2044: 0.05,
+    2045: 0.05,
+    2046: 0.05,
+    2047: 0.05,
+    2048: 0.05,
+    2049: 0.05,
+    2050: 0.05,
 }
 
 ### RUN CONFIGURATION ###

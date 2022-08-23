@@ -53,13 +53,17 @@ def calculate_outputs_interface(
     ]
 
     # Calculate the emissions intensity abatement by supply technology type - CHECKED
-    df_abatement = _calculate_emissions_intensity_abatement(
-        importer=importer,
-        sector=sector,
-        agg_vars=[],
-    )
+    df_abatement = pd.DataFrame()
 
-    # Calculate scope 3 downstream emissions for fertilizer end-use - CHECKING
+    for agg_vars in aggregations.copy():
+        df = _calculate_emissions_intensity_abatement(
+            importer=importer,
+            sector=sector,
+            agg_vars=agg_vars,
+        )
+        df_abatement = pd.concat([df_abatement, df])
+
+    # Calculate scope 3 downstream emissions for fertilizer end-use - CHECKE
     df_scope3 = pd.DataFrame()
 
     for agg_vars in [["product"]] + aggregations.copy():
@@ -292,11 +296,23 @@ def convert_and_aggregate_resource_consumption(df: pd.DataFrame) -> pd.DataFrame
         "H2 storage - pipeline": 1 / 119.988,
     }
 
+    # Convert figures to desired units
     for resource in resources:
         df.loc[df["parameter"] == resource, "value"] *= map_conversion_factors_from_PJ[
             resource
         ]
         df.loc[df["parameter"] == resource, "unit"] = map_desired_units[resource]
+
+    # Aggregate electricity consumption and H2 storage
+    df.loc[df["parameter"].str.contains("Electricity"), "parameter"] = "Electricity"
+    df.loc[df["parameter"].str.contains("H2 storage"), "parameter"] = "H2 storage"
+
+    # Aggregate the low-cost power regions
+    df["region"] = df["region"].apply(
+        lambda x: map_low_cost_power_regions(x, map_type="to_category")
+    )
+    group_cols = [col for col in df.columns.to_list() if col != "value"]
+    df = df.groupby(by=group_cols, as_index=False).sum()
 
     return df
 
@@ -843,6 +859,18 @@ def _calculate_resource_consumption(
 
     df_stack = (df_stack.groupby(agg_vars + ["parameter"])["value"].sum()).reset_index()
 
+    # Fill with zeros for regions that do not consume this resource
+    if agg_vars == ["region"]:
+        for region in get_regions_with_lcprs():
+            if region not in df_stack["region"].unique():
+                df_zero_line = pd.DataFrame(
+                    {"region": [region], "parameter": [resource], "value": [0.0]}
+                )
+                df_stack = pd.concat([df_stack, df_zero_line])
+
+    elif (agg_vars == []) & df_stack.empty:
+        df_stack = pd.DataFrame({"parameter": [resource], "value": [0.0]})
+
     # Unit is Mt for CO2 (Mt NH3 * tCO2/tNH3) and PJ for other resources (Mt NH3 * GJ/tNH3)
     df_stack["unit"] = np.where(df_stack["parameter"] == "CO2", "Mt", "PJ")
     df_stack["parameter_group"] = "Resource consumption"
@@ -1105,6 +1133,44 @@ def _calculate_annual_investments(
         df_investment["parameter"] = df_investment["ammonia_type"].apply(
             lambda x: f"{str.capitalize(x)}: direct investment"
         )
+
+    # Fill non-existent investment types with zeros for suitable aggregation
+    if [
+        agg_var
+        for agg_var in agg_vars
+        if agg_var in ["switch_type", "product", "technology_destination"]
+    ] == []:
+
+        ammonia_types = [
+            "grey",
+            "blue",
+            "green",
+            "bio-based",
+            "methane pyrolysis",
+            "transitional",
+        ]
+
+        for region in df_investment["region"].unique():
+            for ammonia_type in ammonia_types:
+                types_in_df = df_investment.loc[
+                    df_investment["region"] == region, "ammonia_type"
+                ].unique()
+                if ammonia_type not in types_in_df:
+                    df_zero_line = pd.DataFrame(
+                        {
+                            "region": [region],
+                            "ammonia_type": [ammonia_type],
+                            "parameter": [
+                                f"{str.capitalize(ammonia_type)}: direct investment"
+                            ],
+                            "value": [0.0],
+                            "year": [2050],
+                            "product": ["All"],
+                            "switch_type": ["All"],
+                            "technology_destination": ["All"],
+                        }
+                    )
+                    df_investment = pd.concat([df_investment, df_zero_line])
 
     df_investment["parameter_group"] = "Investment"
     df_investment["unit"] = "USD"
@@ -1455,7 +1521,26 @@ def calculate_electrolysis_capacity(
         df_stack = pd.concat([df_stack, stack])
 
     # Filter for electrolysis technologies and group
+    regions = df_stack["region"].unique()
     df_stack = df_stack.loc[df_stack["technology"].str.contains("Electrolyser")]
+
+    # Ensure that regions without electrolyser technologies are filled with zeros
+    regions_not_in_df = [
+        region for region in regions if region not in df_stack["region"].unique()
+    ]
+    for region in regions_not_in_df:
+        df_zero_line = pd.DataFrame(
+            {
+                "product": ["Ammonia"],
+                "region": [region],
+                "technology": [
+                    "Electrolyser - dedicated VRES + H2 storage - geological + ammonia synthesis"
+                ],
+                "annual_production_volume": [0.0],
+                "year": [2050],
+            }
+        )
+        df_stack = pd.concat([df_stack, df_zero_line])
 
     # Add capacity factors, efficiencies and hydrogen proportions
     electrolyser_cfs = importer.get_electrolyser_cfs().rename(
@@ -1836,6 +1921,8 @@ def map_low_cost_power_regions(low_cost_power_region: str, map_type):
             "Oceania": "Oceania",
             "Russia": "Russia",
             "Rest of Asia": "Rest of Asia",
+            "All": "All",
+            "Low-cost power regions": "Low-cost power regions",
         }[low_cost_power_region]
 
     if map_type == "to_same":
@@ -1855,6 +1942,25 @@ def map_low_cost_power_regions(low_cost_power_region: str, map_type):
             "Russia": "Russia",
             "Rest of Asia": "Rest of Asia",
         }[low_cost_power_region]
+
+
+def get_regions_with_lcprs():
+    return [
+        "Africa",
+        "China",
+        "Europe",
+        "India",
+        "Latin America",
+        "Middle East",
+        "North America",
+        "Oceania",
+        "Russia",
+        "Rest of Asia",
+        "Australia",
+        "Namibia",
+        "Brazil",
+        "Saudi Arabia",
+    ]
 
 
 def _calculate_emissions_intensity_abatement(
@@ -1933,6 +2039,7 @@ def _calculate_emissions_intensity_abatement(
     df_unabated = calculate_unabated_emissions_intensity(
         df_stacks, df_emissions, agg_vars
     )
+
     if CIRCULARITY_IN_DEMAND:
         df_circularity = importer.get_circularity_driver()
         if "region" not in agg_vars:
@@ -1998,6 +2105,36 @@ def _calculate_emissions_intensity_abatement(
         ]
     ).fillna(0)
 
+    # Add a dummy for non-existent ammonia types
+    ammonia_types = [
+        "transitional",
+        "green",
+        "blue",
+        "bio-based",
+        "methane pyrolysis",
+    ]
+    if "region" not in agg_vars:
+        df["region"] = "All"
+
+    for region in df["region"].unique():
+        for ammonia_type in ammonia_types:
+            if (
+                ammonia_type
+                not in df.loc[df["region"] == region, "ammonia_type"].unique()
+            ):
+                df_zero_line = pd.DataFrame(
+                    {
+                        "region": [region],
+                        "year": [2050],
+                        "ammonia_type": [ammonia_type],
+                        "emissions_abated": [0.0],
+                        "total_annual_production_volume": [0.0],
+                        "product": ["All"],
+                        "emissions_intensity_abated": [0.0],
+                    }
+                )
+                df = pd.concat([df, df_zero_line])
+
     # Pivot table
     df["sector"] = sector
     df["product"] = "All"
@@ -2055,7 +2192,10 @@ def _calculate_emissions_intensity_abatement(
         {"All ammonia": "Unabated emissions intensity"}
     )
 
-    df_pivot = df_pivot.reset_index().set_index(index)
+    # Drop grey ammonia (zero abated emissions intensity)
+    df_pivot = df_pivot.reset_index()
+    df_pivot = df_pivot.loc[df_pivot["parameter"] != "Grey ammonia"]
+    df_pivot = df_pivot.set_index(index)
 
     return df_pivot
 
@@ -2391,6 +2531,35 @@ def calculate_annual_production_volume_by_ammonia_type(
     )
     df = df.groupby(agg_vars + ["year", "ammonia_type"]).sum().reset_index(drop=False)
 
+    # Fill missing types with zeros for every region
+    ammonia_types = [
+        "grey",
+        "transitional",
+        "blue",
+        "green",
+        "bio-based",
+        "methane pyrolysis",
+    ]
+    if "region" not in agg_vars:
+        df["region"] = "All"
+
+    for region in df["region"].unique():
+        for ammonia_type in ammonia_types:
+            if (
+                ammonia_type
+                not in df.loc[df["region"] == region, "ammonia_type"].unique()
+            ):
+                df_zero_line = pd.DataFrame(
+                    {
+                        "region": [region],
+                        "year": [2050],
+                        "ammonia_type": [ammonia_type],
+                        "value": [0.0],
+                    }
+                )
+
+                df = pd.concat([df, df_zero_line])
+
     df["parameter_group"] = "Production volume by ammonia type"
     df["parameter"] = df["ammonia_type"].apply(
         lambda x: apply_parameter_map_ammonia_type(x)
@@ -2398,9 +2567,6 @@ def calculate_annual_production_volume_by_ammonia_type(
     df["sector"] = SECTOR
     df["technology"] = "All"
     df["unit"] = "Mt"
-
-    if "region" not in agg_vars:
-        df["region"] = "All"
 
     if "product" not in agg_vars:
         df["product"] = "All"
