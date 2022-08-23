@@ -27,7 +27,6 @@ from cement.config.config_cement import (
     TECHNOLOGY_RAMP_UP_CONSTRAINT,
     YEAR_2050_EMISSIONS_CONSTRAINT,
 )
-from cement.config.plot_config_cement import TECHNOLOGY_LAYOUT
 from cement.solver.brownfield import brownfield
 from cement.solver.decommission import decommission
 from cement.solver.greenfield import greenfield
@@ -52,7 +51,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
     """
 
     assert (
-            len(PRODUCTS) == 1
+        len(PRODUCTS) == 1
     ), "Adjust cement brownfield logic if more than one product!"
     product = PRODUCTS[0]
 
@@ -67,8 +66,12 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         pathway = pathway.copy_stack(year=year - 1)
 
         # Decommission assets
-        logger.info(f"{year}: Production volumes pre decommission: {hex(id(pathway.stacks[year]))}")
-        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(product=product)
+        logger.info(
+            f"{year}: Production volumes pre decommission: {hex(id(pathway.stacks[year]))}"
+        )
+        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
+            product=product
+        )
         start = timer()
         pathway = decommission(pathway=pathway, year=year)
         end = timer()
@@ -77,8 +80,12 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         )
 
         # Renovate and rebuild assets (brownfield transition)
-        logger.info(f"{year}: Production volumes pre brownfield: {hex(id(pathway.stacks[year]))}")
-        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(product=product)
+        logger.info(
+            f"{year}: Production volumes pre brownfield: {hex(id(pathway.stacks[year]))}"
+        )
+        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
+            product=product
+        )
         start = timer()
         pathway = brownfield(pathway=pathway, year=year)
         end = timer()
@@ -87,16 +94,24 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         )
 
         # Build new assets
-        logger.info(f"{year}: Production volumes pre greenfield: {hex(id(pathway.stacks[year]))}")
-        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(product=product)
+        logger.info(
+            f"{year}: Production volumes pre greenfield: {hex(id(pathway.stacks[year]))}"
+        )
+        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
+            product=product
+        )
         start = timer()
         pathway = greenfield(pathway=pathway, year=year)
         end = timer()
         logger.debug(
             f"{year}: Time elapsed for greenfield: {timedelta(seconds=end-start)} seconds"
         )
-        logger.info(f"{year}: Production volumes post greenfield: {hex(id(pathway.stacks[year]))}")
-        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(product=product)
+        logger.info(
+            f"{year}: Production volumes post greenfield: {hex(id(pathway.stacks[year]))}"
+        )
+        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
+            product=product
+        )
 
         # Write stack to csv
         pathway.export_stack_to_csv(year=year)
@@ -176,8 +191,6 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
     )
 
     # Optimize asset stack on a yearly basis
-    pathway = _simulate(
-        pathway=pathway,
-    )
+    _simulate(pathway=pathway)
     
     logger.info("Pathway simulation complete")
