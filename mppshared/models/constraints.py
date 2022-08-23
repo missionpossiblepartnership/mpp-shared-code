@@ -126,7 +126,7 @@ def check_technology_rampup_constraint(
         logger.info("Ramp-up constraint is satisfied")
         return True
 
-    technology_affected = list(df_rampup[df_rampup["check"] is False].index)
+    technology_affected = list(df_rampup[~df_rampup["check"]].index)
     logger.info(f"Technology ramp-up constraint hurt for {technology_affected}.")
     return False
 

@@ -52,7 +52,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
 
     assert (
         len(PRODUCTS) == 1
-    ), "Adjust cement brownfield logic if more than one product!"
+    ), "Adjust cement model logic if more than one product!"
     product = PRODUCTS[0]
 
     # Write initial stack to csv

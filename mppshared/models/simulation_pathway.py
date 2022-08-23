@@ -274,8 +274,8 @@ class SimulationPathway:
             color="technology",
             x="year",
             y="annual_volume",
-            category_orders={"technology": list(technology_layout)},
-            color_discrete_map=technology_layout,
+            category_orders={"technology": list(technology_layout)} if technology_layout is not None else {},
+            color_discrete_map=technology_layout if technology_layout is not None else {},
         )
 
         fig.add_traces(wedge_fig.data)
