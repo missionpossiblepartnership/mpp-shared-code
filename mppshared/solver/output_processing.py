@@ -246,6 +246,7 @@ def _calculate_total_annual_investments(
     df["total_investment"] = df["plant_investment"] + df["renewable_investment"]
     df = df.drop(columns=["plant_investment", "renewable_investment"])
     df["parameter"] = "Total direct investment"
+    df["parameter_group"] = "Total direct investment"
 
     # Pivot table back to wide format
     df["year"] = df["year"].astype(int)
@@ -856,7 +857,7 @@ def _calculate_resource_consumption(
     return df_stack
 
 
-def fcreate_table_all_data_year(
+def create_table_all_data_year(
     year: int, aggregations: list, importer: IntermediateDataImporter
 ) -> pd.DataFrame:
     """Create DataFrame with all outputs for a given year."""
