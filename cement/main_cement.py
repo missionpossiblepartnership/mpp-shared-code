@@ -1,16 +1,19 @@
 """Execute the MPP Cement model."""
 
+import itertools
+
 # Library imports
 import multiprocessing as mp
 
 from cement.config.config_cement import (
-    CARBON_COSTS,
+    CARBON_COST_SCENARIOS,
     MODEL_YEARS,
     PRODUCTS,
     RUN_PARALLEL,
     SECTOR,
     SENSITIVITIES,
     run_config,
+    PATHWAYS,
 )
 from cement.solver.implicit_forcing import apply_implicit_forcing
 from cement.solver.import_data import import_and_preprocess
@@ -30,12 +33,12 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 funcs = {
-    "IMPORT_DATA": import_and_preprocess,
-    "CALCULATE_VARIABLES": get_ranking_inputs,
-    "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    "MAKE_RANKINGS": make_rankings,
-    "SIMULATE_PATHWAY": simulate_pathway,
-    # "CALCULATE_OUTPUTS": calculate_outputs,
+    # "IMPORT_DATA": import_and_preprocess,
+    # "CALCULATE_VARIABLES": get_ranking_inputs,
+    # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
+    # "MAKE_RANKINGS": make_rankings,
+    # "SIMULATE_PATHWAY": simulate_pathway,
+    "CALCULATE_OUTPUTS": calculate_outputs,
     # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
 }
 
@@ -76,25 +79,22 @@ def run_model_parallel(runs: list):
 def main():
     logger.info(f"Running model for {SECTOR}")
 
-    # Create a list of carbon cost trajectories that each start in 2025 and have a constant carbon cost
-    carbon_costs = CARBON_COSTS
-    # carbon_costs = [1]  # for creating carbon cost addition DataFrame
+    # Create a list of carbon cost trajectories that each start in 2025 and have a constant carbon cost growth until
+    #   end_year (then constant until YEAR_END)
     carbon_cost_trajectories = []
-    end_year_map = {0: 2025, 50: 2030, 100: 2035, 150: 2040, 200: 2045, 250: 2050}
-    for cc in carbon_costs:
+    for cc in CARBON_COST_SCENARIOS.keys():
         carbon_cost_trajectories.append(
             CarbonCostTrajectory(
                 trajectory="linear",
                 initial_carbon_cost=0,
                 final_carbon_cost=cc,
                 start_year=2025,
-                end_year=end_year_map[cc],
+                end_year=CARBON_COST_SCENARIOS[cc],
                 model_years=MODEL_YEARS,
             )
         )
+    # runs = list(itertools.product(PATHWAYS, SENSITIVITIES, carbon_cost_trajectories))
     runs = []
-    # Add the carbon cost into the runs
-
     for pathway, sensitivities in SENSITIVITIES.items():
         for sensitivity in sensitivities:
             runs.append((pathway, sensitivity))

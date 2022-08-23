@@ -111,12 +111,12 @@ def apply_implicit_forcing(
     # todo dev
 
     # todo dev: discuss whether or not and if so, how to include renovations from and to same tech / rebuilds.
-    df_tech_to_rank = df_tech_to_rank.loc[
+    """df_tech_to_rank = df_tech_to_rank.loc[
         ~(
             (df_tech_to_rank["technology_origin"] == df_tech_to_rank["technology_destination"])
             & (df_tech_to_rank["switch_type"] == "brownfield_renovation")
         )
-    ]
+    ]"""
     # todo dev
 
     # Export technology switching table to be used for ranking

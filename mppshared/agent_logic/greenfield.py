@@ -8,7 +8,7 @@ import pandas as pd
 from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_destination_technology,
     remove_transition,
-    remove_transition_in_region_by_tech_substr,
+    remove_techs_in_region_by_tech_substr,
     select_best_transition,
 )
 from mppshared.config import LOG_LEVEL, MAP_LOW_COST_POWER_REGIONS
@@ -299,7 +299,8 @@ def select_asset_for_greenfield(
                     else:
                         # remove exceeding region from ranking
                         logger.debug(
-                            f"Handle natural gas constraint: removing all natural gas technologies in {new_asset.region}"
+                            f"Handle natural gas constraint: removing all natural gas technologies "
+                            f"in {new_asset.region}"
                         )
                         df_rank = remove_techs_in_region_by_tech_substr(
                             df_rank=df_rank,

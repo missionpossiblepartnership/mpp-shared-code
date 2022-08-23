@@ -10,8 +10,14 @@ import pandas as pd
 import plotly.express as px
 from plotly.offline import plot
 
-from cement.config.config_cement import (EMISSION_SCOPES_RANKING, END_YEAR,
-                                         GHGS, PRODUCTS, START_YEAR)
+from cement.config.config_cement import (
+    EMISSION_SCOPES_RANKING,
+    END_YEAR,
+    GHGS,
+    PRODUCTS,
+    START_YEAR,
+)
+from cement.config.plot_config_cement import TECHNOLOGY_LAYOUT
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -22,9 +28,7 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def calculate_outputs(
-    pathway_name: str, sensitivity: str, sector: str, products: list
-):
+def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products: list):
     importer = IntermediateDataImporter(
         pathway_name=pathway_name,
         sensitivity=sensitivity,
@@ -33,9 +37,12 @@ def calculate_outputs(
     )
 
     # export technology roadmap
-    df_tech_roadmap = _create_technology_roadmaps_by_region(importer=importer, start_year=START_YEAR, end_year=END_YEAR)
-    _export_technology_roadmaps_by_region(importer=importer, df_roadmap=df_tech_roadmap, unit="Mt Clk")
-
+    df_tech_roadmap = _create_tech_roadmaps_by_region(
+        importer=importer, start_year=START_YEAR, end_year=END_YEAR
+    )
+    _export_and_plot_tech_roadmaps_by_region(
+        importer=importer, df_roadmap=df_tech_roadmap, unit="Mt Clk", technology_layout=TECHNOLOGY_LAYOUT
+    )
 
     # Create summary table of asset transitions
     """logger.info("Creating table with asset transition sequences.")
@@ -177,7 +184,7 @@ def calculate_outputs(
     logger.info("All data for all years processed.")
 
 
-def _create_technology_roadmaps_by_region(
+def _create_tech_roadmaps_by_region(
     importer: IntermediateDataImporter, start_year: int, end_year: int
 ) -> pd.DataFrame:
     # Annual production volume in Mt production_output by technology and region
@@ -198,14 +205,21 @@ def _create_technology_roadmaps_by_region(
     # global
     df_stack_global = df_stack.groupby(["year", "technology"]).sum()
     df_stack_global["region"] = "Global"
-    df_stack_global = df_stack_global.reset_index().set_index(["year", "region", "technology"])
+    df_stack_global = df_stack_global.reset_index().set_index(
+        ["year", "region", "technology"]
+    )
 
     df_stack = pd.concat([df_stack, df_stack_global]).sort_index()
 
     return df_stack
 
 
-def _export_technology_roadmaps_by_region(importer: IntermediateDataImporter, df_roadmap: pd.DataFrame, unit: str):
+def _export_and_plot_tech_roadmaps_by_region(
+    importer: IntermediateDataImporter,
+    df_roadmap: pd.DataFrame,
+    unit: str,
+    technology_layout: dict,
+):
 
     regions = df_roadmap.reset_index()["region"].unique()
 
@@ -216,7 +230,7 @@ def _export_technology_roadmaps_by_region(importer: IntermediateDataImporter, df
             df=df_roadmap_region,
             filename=f"technology_roadmap_{region}.csv",
             export_dir="final",
-            index=True
+            index=True,
         )
 
         fig = px.area(
@@ -228,8 +242,12 @@ def _export_technology_roadmaps_by_region(importer: IntermediateDataImporter, df
                 "year": "Year",
                 "annual_production_volume": f"Annual production volume in {unit}",
             },
-            title=f"Technology roadmap {region}",
+            title=f"{region}: Technology roadmap",
+            category_orders={"technology": list(technology_layout)},
+            color_discrete_map=technology_layout,
         )
+
+        fig.for_each_trace(lambda trace: trace.update(fillcolor=trace.line.color))
 
         plot(
             figure_or_data=fig,

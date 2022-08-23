@@ -214,7 +214,7 @@ class SimulationPathway:
         logger.debug("Exporting technology roadmap")
         self.importer.export_data(df_roadmap, "technology_roadmap.csv", "final")
         self.plot_technology_roadmap(
-            df_roadmap=df_roadmap, technology_order=technology_layout
+            df_roadmap=df_roadmap, technology_layout=technology_layout
         )
 
     def create_technology_roadmap(self) -> pd.DataFrame:
@@ -245,14 +245,14 @@ class SimulationPathway:
         return df_roadmap
 
     def plot_technology_roadmap(
-        self, df_roadmap: pd.DataFrame, technology_order: dict = None
+        self, df_roadmap: pd.DataFrame, technology_layout: dict = None
     ):
         """
         Plot the technology roadmap and save as .html
 
         Args:
             df_roadmap ():
-            technology_order (): Order in which technologies will be plotted
+            technology_layout (): Order in which technologies will be plotted
 
         Returns:
 
@@ -274,8 +274,8 @@ class SimulationPathway:
             color="technology",
             x="year",
             y="annual_volume",
-            category_orders={"technology": list(technology_order)},
-            color_discrete_map=technology_order,
+            category_orders={"technology": list(technology_layout)},
+            color_discrete_map=technology_layout,
         )
 
         fig.add_traces(wedge_fig.data)

@@ -47,6 +47,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
     # Track number of assets that undergo transition
     n_assets_transitioned = 0
+    n_assets_transitioned_w_same_tech = 0
     maximum_n_assets_transitioned = np.floor(
         pathway.annual_renovation_share * stack.get_number_of_assets()
     )
@@ -161,6 +162,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             # Only count the transition if the technology is not the same
             if origin_technology != new_technology:
                 n_assets_transitioned += 1
+            n_assets_transitioned_w_same_tech += 1
 
         # if not all constraints are fulfilled
         else:
@@ -257,7 +259,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                         )
 
     logger.debug(
-        f"{year}: {n_assets_transitioned} assets transitioned of maximum {maximum_n_assets_transitioned}."
+        f"{year}: assets transitioned: {n_assets_transitioned}; maximum: {maximum_n_assets_transitioned}; "
+        f"assets transitioned incl. switches without tech switch: {n_assets_transitioned_w_same_tech}"
     )
 
     return pathway

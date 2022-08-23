@@ -6,7 +6,7 @@ from datetime import timedelta
 from timeit import default_timer as timer
 
 from cement.config.config_cement import (
-    ANNUAL_RENOVATION_SHARE,
+    MAX_ANNUAL_RENOVATION_SHARE,
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
     CAPACITY_UTILISATION_FACTOR,
     CARBON_BUDGET_SECTOR_CSV,
@@ -31,10 +31,7 @@ from cement.config.plot_config_cement import TECHNOLOGY_LAYOUT
 from cement.solver.brownfield import brownfield
 from cement.solver.decommission import decommission
 from cement.solver.greenfield import greenfield
-from mppshared.agent_logic.agent_logic_functions import (
-    adjust_capacity_utilisation,
-    create_dict_technology_rampup,
-)
+from mppshared.agent_logic.agent_logic_functions import create_dict_technology_rampup
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -167,7 +164,7 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         ghgs=GHGS,
         regional_production_shares=REGIONAL_PRODUCTION_SHARES,
         investment_cycle=INVESTMENT_CYCLE,
-        annual_renovation_share=ANNUAL_RENOVATION_SHARE,
+        annual_renovation_share=MAX_ANNUAL_RENOVATION_SHARE,
         constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],
         year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
         set_natural_gas_constraint=(
@@ -182,5 +179,5 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
     pathway = _simulate(
         pathway=pathway,
     )
-    pathway.output_technology_roadmap(technology_layout=TECHNOLOGY_LAYOUT)
+    
     logger.info("Pathway simulation complete")

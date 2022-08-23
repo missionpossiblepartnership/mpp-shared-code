@@ -45,23 +45,16 @@ SENSITIVITIES = {
     "fa": ["def"],
     # "lc": ["def"],  # ALL_SENSITIVITIES,
 }
-CARBON_COSTS = [
-    0,
-    50,
-    100,
-    150,
-    200,
-    250,
-]
+# carbon cost scenarios: carbon cost in USD as key and the year in which the carbon cost stops growing as value
+CARBON_COST_SCENARIOS = {0: 2025, 50: 2030, 100: 2035, 150: 2040, 200: 2045, 250: 2050}
 INVESTMENT_CYCLE = 10  # years
-CUF_LOWER_THRESHOLD = 0.913
-CUF_UPPER_THRESHOLD = 0.913
+CAPACITY_UTILISATION_FACTOR = 0.913
 COST_METRIC_CUF_ADJUSTMENT = None
 # Products produced by each sector
 PRODUCTS = ["Clinker"]
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-ANNUAL_RENOVATION_SHARE = 0.2
+MAX_ANNUAL_RENOVATION_SHARE = 0.2
 
 
 ### initial asset stack ###
@@ -72,8 +65,8 @@ INITIAL_ASSET_DATA_LEVEL = "individual_assets"
 ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 6000 * 365 * 1e-6
 
 # Year from which newbuild capacity must have transition or end-state technology
-TECHNOLOGY_MORATORIUM = 2030
-# Control for how many years is allowed to use transition technologies once the moratorium is enable
+TECHNOLOGY_MORATORIUM = 2035
+# Control for how many years is allowed to use transition technologies once the moratorium is enabled
 TRANSITIONAL_PERIOD_YEARS = 20
 # Emission scopes included in data analysis
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream"]
@@ -95,9 +88,11 @@ REGIONS = [
 
 # list of technologies
 LIST_TECHNOLOGIES = [
+    "Dry kiln reference plant",
     "Dry kiln coal",
     "Dry kiln natural gas",
-    "Dry kiln alternative fuels",
+    "Dry kiln alternative fuels 43%",
+    "Dry kiln alternative fuels 90%",
     "Dry kiln coal + post combustion + storage",
     "Dry kiln natural gas + post combustion + storage",
     "Dry kiln alternative fuels + post combustion + storage",
@@ -152,8 +147,7 @@ SECTORAL_CARBON_BUDGETS = {
 }
 
 residual_share = 0.05
-# todo: change approach or research 2020 emissions
-emissions_2020 = 2.373  # Gt CO2 (scopes 1 and 2)
+emissions_2020 = 2.4  # Gt CO2 (scopes 1 and 2)
 SECTORAL_CARBON_PATHWAY = {
     "emissions_start": emissions_2020,
     "emissions_end": residual_share * emissions_2020,
@@ -215,29 +209,29 @@ RANKING_CONFIG = {
 YEAR_2050_EMISSIONS_CONSTRAINT = 2060
 # Technology ramp-up parameters (on technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
-    "maximum_asset_additions": 50,
-    "maximum_capacity_growth_rate": 0.2,
-    "years_rampup_phase": 5,
+    "maximum_asset_additions": 1000,  # set high such that is deactivated
+    "maximum_capacity_growth_rate": 0.05,
+    "years_rampup_phase": 10,
 }
 CONSTRAINTS_TO_APPLY = {
     "bau": [
-        # "rampup_constraint",
+        "rampup_constraint",
         # "regional_constraint",
-        # "natural_gas_constraint",
-        # "alternative_fuel_constraint",
+        "natural_gas_constraint",
+        "alternative_fuel_constraint",
     ],
     "lc": [
-        "emissions_constraint",
+        # "emissions_constraint",
         "rampup_constraint",
         "regional_constraint",
         "natural_gas_constraint",
         "alternative_fuel_constraint",
     ],
     "fa": [
-        "emissions_constraint",
+        # "emissions_constraint",
         # "regional_constraint",
-        # "natural_gas_constraint",
-        # "alternative_fuel_constraint",
+        "natural_gas_constraint",
+        "alternative_fuel_constraint",
     ],
 }
 REGIONAL_PRODUCTION_SHARES = {
