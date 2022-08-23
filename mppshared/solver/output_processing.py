@@ -756,6 +756,15 @@ def _calculate_emissions_intensity(
             lambda x: map_low_cost_power_regions(x, "to_category")
         )
 
+        # If product is not in the aggregation variables, convert all annual production volumes to ammonia
+        if "product" not in agg_vars:
+            df_stack["annual_production_volume"] = df_stack.apply(
+                lambda row: conversion_factor_to_ammonia(row)
+                * row["annual_production_volume"],
+                axis=1,
+            )
+            df_stack["product"] = "All"
+
         if agg_vars:
             df_stack = (
                 df_stack.groupby(agg_vars)[scopes + ["annual_production_volume"]]
@@ -847,7 +856,7 @@ def _calculate_resource_consumption(
     return df_stack
 
 
-def create_table_all_data_year(
+def fcreate_table_all_data_year(
     year: int, aggregations: list, importer: IntermediateDataImporter
 ) -> pd.DataFrame:
     """Create DataFrame with all outputs for a given year."""
