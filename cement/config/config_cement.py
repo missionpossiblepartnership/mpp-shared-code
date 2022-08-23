@@ -1,16 +1,8 @@
 import numpy as np
 
 SECTOR = "cement"
-LOG_LEVEL = "DEBUG"
-MODEL_SCOPE = "Global"
+PRODUCTS = ["Clinker"]
 
-PATHWAYS = [
-    "bau",
-    "fa",
-    "lc",
-]
-
-PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = ["lc"]
 SCOPES_CO2_COST = [
     "scope1",
     "scope2",
@@ -30,28 +22,28 @@ run_config = {
     # "MERGE_OUTPUTS"
 }
 RUN_PARALLEL = False
+LOG_LEVEL = "DEBUG"
+MODEL_SCOPE = "Global"
+COMPUTE_LCOX = False
 
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
 END_YEAR = 2050
 MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
-# Sensitivities: low fossil prices, constrained CCS, BAU demand, low demand
-ALL_SENSITIVITIES = [
-    "def",
-]
-SENSITIVITIES = {
+PATHWAYS_SENSITIVITIES = {
     # "bau": ["def"],  # ALL_SENSITIVITIES,
     "fa": ["def"],
     # "lc": ["def"],  # ALL_SENSITIVITIES,
 }
+
+PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = ["lc"]
+
 # carbon cost scenarios: carbon cost in USD as key and the year in which the carbon cost stops growing as value
 CARBON_COST_SCENARIOS = {0: 2025, 50: 2030, 100: 2035, 150: 2040, 200: 2045, 250: 2050}
 INVESTMENT_CYCLE = 10  # years
 CAPACITY_UTILISATION_FACTOR = 0.913
 COST_METRIC_CUF_ADJUSTMENT = None
-# Products produced by each sector
-PRODUCTS = ["Clinker"]
 
 # Share of assets renovated annually (limits number of brownfield transitions)
 MAX_ANNUAL_RENOVATION_SHARE = 0.2

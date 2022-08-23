@@ -135,6 +135,9 @@ class IntermediateDataImporter:
         return imported_input_data
 
     # intermediate
+    def get_lcox(self):
+        return pd.read_csv(self.intermediate_path.joinpath("lcox.csv"))
+
     def get_emissions(self):
         return pd.read_csv(self.intermediate_path.joinpath("emissions.csv"))
 
