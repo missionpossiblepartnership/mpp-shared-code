@@ -33,7 +33,7 @@ class CarbonBudget:
         self.carbon_budget_sector_csv = carbon_budget_sector_csv
         self.sectoral_carbon_pathway = sectoral_carbon_pathway
         self.df_pathway = self.create_emissions_pathway(
-            pathway_shape=pathway_shape, sector=sector
+            pathway_shape=pathway_shape
         )
         logger.info("Carbon Budget initialized")
 
@@ -49,7 +49,7 @@ class CarbonBudget:
     def total_budget_all_sectors(self):
         return sum(list(self.budgets.values()))
 
-    def create_emissions_pathway(self, pathway_shape: str, sector: str) -> pd.DataFrame:
+    def create_emissions_pathway(self, pathway_shape: str) -> pd.DataFrame:
         """Create emissions pathway for specified sector according to given shape"""
         if self.carbon_budget_sector_csv:
             df = self.importer.get_carbon_budget()
@@ -79,7 +79,7 @@ class CarbonBudget:
             )
         return df
 
-    def get_annual_emissions_limit(self, year: int, sector: str) -> float:
+    def get_annual_emissions_limit(self, year: int) -> float:
         """Get scope 1 and 2 CO2 emissions limit for a specific year for the given sector"""
         return self.df_pathway.loc[year, "annual_limit"]
 

@@ -1,5 +1,6 @@
 """import and pre-process all input files"""
 
+import numpy as np
 import pandas as pd
 
 from cement.config.config_cement import (
@@ -68,7 +69,8 @@ def import_and_preprocess(
         "region": str,
         "Dry kiln coal": float,
         "Dry kiln natural gas": float,
-        "Dry kiln alternative fuels": float,
+        "Dry kiln alternative fuels 43%": float,
+        "Dry kiln alternative fuels 90%": float,
     }
     df_start_technologies = set_datatypes(
         df=df_start_technologies, datatypes_per_column=datatypes
@@ -152,6 +154,8 @@ def import_and_preprocess(
     df_ng_constraint = set_datatypes(
         df=df_ng_constraint, datatypes_per_column=DF_DATATYPES_PER_COLUMN
     )
+    # convert from [t Clk / year] to [Mt Clk / year]
+    df_ng_constraint["value"] *= 1e-6
     importer.export_data(
         df=df_ng_constraint,
         filename="natural_gas_constraint.csv",
@@ -174,6 +178,8 @@ def import_and_preprocess(
     df_af_constraint = set_datatypes(
         df=df_af_constraint, datatypes_per_column=DF_DATATYPES_PER_COLUMN
     )
+    # convert from [t Clk / year] to [Mt Clk / year]
+    df_af_constraint["value"] *= 1e-6
     importer.export_data(
         df=df_af_constraint,
         filename="alternative_fuel_constraint.csv",
@@ -260,25 +266,17 @@ def _get_initial_asset_stack(
             """plant_capacity = df_plant_capacity.xs(
                 key=(region, technology), level=("region", "technology_destination")
             ).squeeze()"""
-            plant_capacity = ASSUMED_ANNUAL_PRODUCTION_CAPACITY
-            n_plants = demand / plant_capacity
-            n_full_plants = int(n_plants)
-            n_partial_plants = n_plants - float(n_full_plants)
-
-            # create "full" and "partial" plants
-            df_append = df_initial_asset_stack.copy()
-            if n_partial_plants != float(0):
-                df_append["annual_production_capacity"] = n_full_plants * [
-                    plant_capacity
-                ] + [n_partial_plants * plant_capacity]
-            else:
-                df_append["annual_production_capacity"] = n_full_plants * [
-                    plant_capacity
-                ]
-            df_append["technology"] = technology
-            df_append["capacity_factor"] = df_capacity_factor.xs(
+            capacity_factor = df_capacity_factor.xs(
                 key=(region, technology), level=("region", "technology_destination")
             ).squeeze()
+            plant_capacity = ASSUMED_ANNUAL_PRODUCTION_CAPACITY
+            # round up to have a small overshoot in production volume rather than not fulfilling demand
+            n_plants = int(np.ceil((demand / (plant_capacity * capacity_factor))))
+            # create plants
+            df_append = df_initial_asset_stack.copy()
+            df_append["annual_production_capacity"] = n_plants * [plant_capacity]
+            df_append["technology"] = technology
+            df_append["capacity_factor"] = capacity_factor
             df_append["region"] = region
             df_list.append(df_append)
 

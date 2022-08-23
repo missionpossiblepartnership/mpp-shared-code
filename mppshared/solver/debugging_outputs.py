@@ -279,12 +279,12 @@ def create_newbuild_capacity_outputs_by_technology(
 
 
 def create_table_asset_transition_sequences(
-    importer: IntermediateDataImporter,
+    importer: IntermediateDataImporter, start_year: int, end_year: int,
 ) -> pd.DataFrame:
 
     # Get initial stack and melt to long for that year
     multiindex = ["uuid", "product", "region", "parameter"]
-    df = importer.get_asset_stack(START_YEAR)
+    df = importer.get_asset_stack(start_year)
     df = df[
         [
             "uuid",
@@ -299,11 +299,11 @@ def create_table_asset_transition_sequences(
         ]
     ]
     df = df.set_index(["product", "region", "uuid"])
-    df = df.melt(var_name="parameter", value_name=START_YEAR, ignore_index=False)
+    df = df.melt(var_name="parameter", value_name=start_year, ignore_index=False)
     df = df.sort_index()
     df = df.reset_index(drop=False).set_index(multiindex)
 
-    for year in np.arange(START_YEAR + 1, END_YEAR + 1):
+    for year in np.arange(start_year + 1, end_year + 1):
 
         # Get asset stack for that year
         df_stack = importer.get_asset_stack(year=year)

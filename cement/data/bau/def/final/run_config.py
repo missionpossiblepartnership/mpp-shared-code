@@ -41,8 +41,8 @@ ALL_SENSITIVITIES = [
     "def",
 ]
 SENSITIVITIES = {
-    # "bau": ["def"],  # ALL_SENSITIVITIES,
-    "fa": ["def"],
+    "bau": ["def"],  # ALL_SENSITIVITIES,
+    # "fa": ["def"],
     # "lc": ["def"],  # ALL_SENSITIVITIES,
 }
 # carbon cost scenarios: carbon cost in USD as key and the year in which the carbon cost stops growing as value
@@ -230,8 +230,8 @@ CONSTRAINTS_TO_APPLY = {
     "fa": [
         # "emissions_constraint",
         # "regional_constraint",
-        "natural_gas_constraint",
-        "alternative_fuel_constraint",
+        # "natural_gas_constraint",
+        # "alternative_fuel_constraint",
     ],
 }
 REGIONAL_PRODUCTION_SHARES = {

@@ -6,19 +6,19 @@ from datetime import timedelta
 from timeit import default_timer as timer
 
 from cement.config.config_cement import (
-    ANNUAL_RENOVATION_SHARE,
+    MAX_ANNUAL_RENOVATION_SHARE,
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CAPACITY_UTILISATION_FACTOR,
     CARBON_BUDGET_SECTOR_CSV,
     CARBON_BUDGET_SHAPE,
     CONSTRAINTS_TO_APPLY,
-    CUF_LOWER_THRESHOLD,
-    CUF_UPPER_THRESHOLD,
     EMISSION_SCOPES,
     END_YEAR,
     GHGS,
     INITIAL_ASSET_DATA_LEVEL,
     INVESTMENT_CYCLE,
     LOG_LEVEL,
+    PRODUCTS,
     RANK_TYPES,
     REGIONAL_PRODUCTION_SHARES,
     SECTORAL_CARBON_BUDGETS,
@@ -30,10 +30,7 @@ from cement.config.config_cement import (
 from cement.solver.brownfield import brownfield
 from cement.solver.decommission import decommission
 from cement.solver.greenfield import greenfield
-from mppshared.agent_logic.agent_logic_functions import (
-    adjust_capacity_utilisation,
-    create_dict_technology_rampup,
-)
+from mppshared.agent_logic.agent_logic_functions import create_dict_technology_rampup
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -53,39 +50,71 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         The updated pathway with the asset stack in each year of the model horizon
     """
 
+    assert (
+        len(PRODUCTS) == 1
+    ), "Adjust cement brownfield logic if more than one product!"
+    product = PRODUCTS[0]
+
+    # Write initial stack to csv
+    pathway.export_stack_to_csv(year=START_YEAR)
+
     # Run pathway simulation in each year for all products simultaneously
-    for year in range(START_YEAR, END_YEAR):
-        logger.info("Optimizing for %s", year)
+    for year in range(START_YEAR + 1, END_YEAR + 1):
+        logger.info(f"{year}: Start pathway simulation")
 
         # Copy over last year's stack to this year
-        pathway = pathway.copy_stack(year=year)
-
-        # Write stack to csv
-        pathway.export_stack_to_csv(year)
+        pathway = pathway.copy_stack(year=year - 1)
 
         # Decommission assets
+        logger.info(
+            f"{year}: Production volumes pre decommission: {hex(id(pathway.stacks[year]))}"
+        )
+        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
+            product=product
+        )
         start = timer()
         pathway = decommission(pathway=pathway, year=year)
         end = timer()
         logger.debug(
-            f"Time elapsed for decommission in year {year}: {timedelta(seconds=end-start)} seconds"
+            f"{year}: Time elapsed for decommission: {timedelta(seconds=end-start)} seconds"
         )
 
         # Renovate and rebuild assets (brownfield transition)
+        logger.info(
+            f"{year}: Production volumes pre brownfield: {hex(id(pathway.stacks[year]))}"
+        )
+        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
+            product=product
+        )
         start = timer()
         pathway = brownfield(pathway=pathway, year=year)
         end = timer()
         logger.debug(
-            f"Time elapsed for brownfield in year {year}: {timedelta(seconds=end-start)} seconds"
+            f"{year}: Time elapsed for brownfield: {timedelta(seconds=end-start)} seconds"
         )
 
         # Build new assets
+        logger.info(
+            f"{year}: Production volumes pre greenfield: {hex(id(pathway.stacks[year]))}"
+        )
+        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
+            product=product
+        )
         start = timer()
         pathway = greenfield(pathway=pathway, year=year)
         end = timer()
         logger.debug(
-            f"Time elapsed for greenfield in year {year}: {timedelta(seconds=end-start)} seconds"
+            f"{year}: Time elapsed for greenfield: {timedelta(seconds=end-start)} seconds"
         )
+        logger.info(
+            f"{year}: Production volumes post greenfield: {hex(id(pathway.stacks[year]))}"
+        )
+        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
+            product=product
+        )
+
+        # Write stack to csv
+        pathway.export_stack_to_csv(year=year)
 
     return pathway
 
@@ -101,6 +130,9 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         sector=sector,
         products=products,
     )
+
+    # copy config file to output folder
+    importer.export_sector_config()
 
     # Create carbon budget
     carbon_budget = CarbonBudget(
@@ -142,12 +174,12 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         technology_rampup=dict_technology_rampup,
         carbon_budget=carbon_budget,
         emission_scopes=EMISSION_SCOPES,
-        cuf_lower_threshold=CUF_LOWER_THRESHOLD,
-        cuf_upper_threshold=CUF_UPPER_THRESHOLD,
+        cuf_lower_threshold=CAPACITY_UTILISATION_FACTOR,
+        cuf_upper_threshold=CAPACITY_UTILISATION_FACTOR,
         ghgs=GHGS,
         regional_production_shares=REGIONAL_PRODUCTION_SHARES,
         investment_cycle=INVESTMENT_CYCLE,
-        annual_renovation_share=ANNUAL_RENOVATION_SHARE,
+        annual_renovation_share=MAX_ANNUAL_RENOVATION_SHARE,
         constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],
         year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
         set_natural_gas_constraint=(
@@ -159,8 +191,6 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
     )
 
     # Optimize asset stack on a yearly basis
-    pathway = _simulate(
-        pathway=pathway,
-    )
-    pathway.output_technology_roadmap()
+    _simulate(pathway=pathway)
+    
     logger.info("Pathway simulation complete")

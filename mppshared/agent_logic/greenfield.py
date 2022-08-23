@@ -8,7 +8,7 @@ import pandas as pd
 from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_destination_technology,
     remove_transition,
-    remove_transition_in_region_by_tech_substr,
+    remove_techs_in_region_by_tech_substr,
     select_best_transition,
 )
 from mppshared.config import LOG_LEVEL, MAP_LOW_COST_POWER_REGIONS
@@ -151,8 +151,8 @@ def enact_greenfield_transition(
 
     # Enact greenfield transition and add to TransitionRegistry
     logger.debug(
-        f"Building new asset with technology {new_asset.technology} in region {new_asset.region}, annual production "
-        f"{new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}. "
+        f"{year}: Building new asset in {new_asset.region} (technology: {new_asset.technology}, annual production: "
+        f"{new_asset.get_annual_production_volume()}, UUID: {new_asset.uuid}). "
         f"From project pipeline: {project_pipeline}"
     )
 
@@ -170,7 +170,8 @@ def select_asset_for_greenfield(
     year: int,
     annual_production_capacity: float,
     cuf: float,
-) -> Asset:
+    return_df_rank: bool = False,
+):
     """Select asset for newbuild (greenfield transition)
 
     Args:
@@ -181,6 +182,7 @@ def select_asset_for_greenfield(
         year:
         annual_production_capacity:
         cuf:
+        return_df_rank: function returns updated df_rank if True
 
     Returns:
         Asset for greenfield transition
@@ -205,6 +207,9 @@ def select_asset_for_greenfield(
         new_asset.greenfield = True
 
         # Tentatively update the stack and check constraints
+        logger.debug(
+            f"{year}: Attempting to build asset in {new_asset.region} (technology: {new_asset.technology})"
+        )
         tentative_stack = deepcopy(stack)
         tentative_stack.append(new_asset)
 
@@ -224,13 +229,20 @@ def select_asset_for_greenfield(
                 if k in pathway.constraints_to_apply and k != "regional_constraint"
             ]
         ):
-            return new_asset
+            logger.debug(f"{year}: All constraints fulfilled.")
+            if return_df_rank:
+                return new_asset, df_rank
+            else:
+                return new_asset
         else:
             # EMISSIONS
             if "emissions_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["emissions_constraint"]:
                     # remove best transition from ranking table and try again
-                    df_rank = remove_transition(df_rank, asset_transition)
+                    logger.debug(f"Handle emissions constraint: removing transition")
+                    df_rank = remove_transition(
+                        df_rank=df_rank, transition=asset_transition
+                    )
             if [
                 "emissions_constraint",
                 "flag_residual",
@@ -239,6 +251,9 @@ def select_asset_for_greenfield(
                     not dict_constraints["emissions_constraint"]
                     & dict_constraints["flag_residual"]
                 ):
+                    logger.debug(
+                        f"Handle (residual) emissions constraint: removing all transitions with CCS"
+                    )
                     # remove all transitions with CCS (i.e. with residual emissions)
                     df_rank = df_rank.loc[
                         ~(df_rank["technology_destination"].str.contains("CCS"))
@@ -247,12 +262,14 @@ def select_asset_for_greenfield(
             if "rampup_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["rampup_constraint"]:
                     # remove all transitions with that destination technology from the ranking table
+                    logger.debug(f"Handle ramp up constraint: removing destination technology")
                     df_rank = remove_all_transitions_with_destination_technology(
                         df_rank, asset_transition["technology_destination"]
                     )
             # REGIONAL PRODUCTION
             if "regional_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["regional_constraint"]:
+                    # todo
                     logger.critical(
                         f"WARNING: Regional production constraint not fulfilled in {year}."
                     )
@@ -260,7 +277,7 @@ def select_asset_for_greenfield(
             if "natural_gas_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["natural_gas_constraint"]:
                     # get regions where natural gas is exceeded
-                    dict_alternative_fuel_exceedance = check_natural_gas_constraint(
+                    dict_natural_gas_exceedance = check_natural_gas_constraint(
                         pathway=pathway,
                         product=product,
                         stack=tentative_stack,
@@ -268,25 +285,27 @@ def select_asset_for_greenfield(
                         transition_type="greenfield",
                         return_dict=True,
                     )
-                    # check whether region of current transition is affected
-                    if dict_alternative_fuel_exceedance[asset_transition["region"]]:
-                        df_rank = remove_transition_in_region_by_tech_substr(
-                            df_rank=df_rank,
-                            transition=asset_transition,
-                            tech_substr="natural gas",
+                    exceeding_regions = [
+                        k
+                        for k in dict_natural_gas_exceedance.keys()
+                        if not dict_natural_gas_exceedance[k]
+                    ]
+                    # check if regions other than the tentatively updated asset's region exceed the constraint
+                    if exceeding_regions != [new_asset.region]:
+                        logger.critical(
+                            f"{year}: Regions other than the tentatively updated asset's region exceed the natural gas "
+                            f"constraint!"
                         )
                     else:
-                        exceeding_regions = [
-                            k
-                            for k in dict_alternative_fuel_exceedance.keys()
-                            if (
-                                dict_alternative_fuel_exceedance[k] & k
-                                != asset_transition["region"]
-                            )
-                        ]
-                        logger.critical(
-                            f"Following regions (excl. the current transition's region) exceed the Natural "
-                            f"gas constraint: {exceeding_regions}"
+                        # remove exceeding region from ranking
+                        logger.debug(
+                            f"Handle natural gas constraint: removing all natural gas technologies "
+                            f"in {new_asset.region}"
+                        )
+                        df_rank = remove_techs_in_region_by_tech_substr(
+                            df_rank=df_rank,
+                            region=new_asset.region,
+                            tech_substr="natural gas",
                         )
             # ALTERNATIVE FUEL
             if "alternative_fuel_constraint" in pathway.constraints_to_apply:
@@ -302,25 +321,27 @@ def select_asset_for_greenfield(
                             return_dict=True,
                         )
                     )
-                    # check whether region of current transition is affected
-                    if dict_alternative_fuel_exceedance[asset_transition["region"]]:
-                        df_rank = remove_transition_in_region_by_tech_substr(
-                            df_rank=df_rank,
-                            transition=asset_transition,
-                            tech_substr="alternative fuels",
+                    exceeding_regions = [
+                        k
+                        for k in dict_alternative_fuel_exceedance.keys()
+                        if not dict_alternative_fuel_exceedance[k]
+                    ]
+                    # check if regions other than the tentatively updated asset's region exceed the constraint
+                    if exceeding_regions != [new_asset.region]:
+                        logger.critical(
+                            f"{year}: Regions other than the tentatively updated asset's region exceed the alternative "
+                            "fuel constraint!"
                         )
                     else:
-                        exceeding_regions = [
-                            k
-                            for k in dict_alternative_fuel_exceedance.keys()
-                            if (
-                                dict_alternative_fuel_exceedance[k] & k
-                                != asset_transition["region"]
-                            )
-                        ]
-                        logger.critical(
-                            f"Following regions (excl. the current transition's region) exceed the alternative fuel "
-                            f"constraint: {exceeding_regions}"
+                        # remove exceeding region from ranking
+                        logger.debug(
+                            f"Handle alternative fuels constraint: removing all alternative fuels technologies "
+                            f"in {new_asset.region}"
+                        )
+                        df_rank = remove_techs_in_region_by_tech_substr(
+                            df_rank=df_rank,
+                            region=new_asset.region,
+                            tech_substr="alternative fuels",
                         )
 
     # If ranking table empty, no greenfield construction possible
