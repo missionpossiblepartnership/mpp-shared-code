@@ -354,6 +354,37 @@ def _get_switch_capex(
         df_brownfield_renovation["value_destination"]
         - df_brownfield_renovation["value_origin"]
     )
+    # brownfield switch CAPEX for switches from one CCU/S tech to another CCU/S tech are set to the renovation CAPEX of
+    #   the destination tech
+    df_brownfield_renovation.loc[
+        (
+            df_brownfield_renovation["technology_origin"].str.contains("post combustion")
+            & (
+                df_brownfield_renovation["technology_destination"].str.contains("oxyfuel")
+                ^ df_brownfield_renovation["technology_destination"].str.contains("direct separation")
+            )
+        ), "value"
+    ] = df_brownfield_renovation["value_destination"]
+    df_brownfield_renovation.loc[
+        (
+            df_brownfield_renovation["technology_origin"].str.contains("oxyfuel")
+            & (
+                    df_brownfield_renovation["technology_destination"].str.contains("post combustion")
+                    ^ df_brownfield_renovation["technology_destination"].str.contains("direct separation")
+            )
+        ), "value"
+    ] = df_brownfield_renovation["value_destination"]
+    df_brownfield_renovation.loc[
+        (
+            df_brownfield_renovation["technology_origin"].str.contains("direct separation")
+            & (
+                    df_brownfield_renovation["technology_destination"].str.contains("post combustion")
+                    ^ df_brownfield_renovation["technology_destination"].str.contains("oxyfuel")
+            )
+        ), "value"
+    ] = df_brownfield_renovation["value_destination"]
+
+    # filter relevent columns
     df_brownfield_renovation = df_brownfield_renovation[
         IDX_TECH_RANKING_COLUMNS + ["value"]
     ]
@@ -371,11 +402,8 @@ def _get_switch_capex(
     df_switch_capex = df_switch_capex.set_index(IDX_TECH_RANKING_COLUMNS).sort_index()
 
     # check for negative values
-    # todo: uncomment as soon as all renovation CAPEX values are available
-    """assert not any(
-        df_switch_capex["value"] < 0
-    ), "Warning: Negative switch CAPEX values exist!"
-    """
+    if any(df_switch_capex["value"] < 0):
+        logger.critical("Warning: Negative switch CAPEX values exist!")
 
     return df_switch_capex
 

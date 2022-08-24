@@ -32,8 +32,8 @@ END_YEAR = 2050
 MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 PATHWAYS_SENSITIVITIES = {
-    "bau": ["def"],  # ALL_SENSITIVITIES,
-    # "fa": ["def"],
+    # "bau": ["def"],  # ALL_SENSITIVITIES,
+    "fa": ["def"],
     # "lc": ["def"],  # ALL_SENSITIVITIES,
 }
 
@@ -212,15 +212,16 @@ CONSTRAINTS_TO_APPLY = {
         # "natural_gas_constraint",
         "alternative_fuel_constraint",
     ],
-    "lc": [
+    "fa": [
         # "emissions_constraint",
         "rampup_constraint",
-        "regional_constraint",
+        # "regional_constraint",
         # "natural_gas_constraint",
         "alternative_fuel_constraint",
     ],
-    "fa": [
+    "lc": [
         # "emissions_constraint",
+        "rampup_constraint",
         # "regional_constraint",
         # "natural_gas_constraint",
         "alternative_fuel_constraint",
