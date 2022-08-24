@@ -205,6 +205,15 @@ def calculate_emissions(
         .set_index(IDX_EMISSIVITY)
     )
 
+    # make captured emissions negative
+    capture_cols = [x for x in list(df_emissivity) if "captured" in x]
+    df_emissivity.loc[:, capture_cols] *= -1
+    df_emissivity.fillna(value=float(0), inplace=True)
+    # compute scope 1 emissions after capturing
+    df_emissivity["co2_scope1"] += df_emissivity["co2_scope1_captured"]
+    df_emissivity["ch4_scope1"] += df_emissivity["ch4_scope1_captured"]
+    df_emissivity["co2e_scope1"] += df_emissivity["co2e_scope1_captured"]
+
     return df_emissivity
 
 

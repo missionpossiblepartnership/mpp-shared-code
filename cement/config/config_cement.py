@@ -24,7 +24,7 @@ run_config = {
 RUN_PARALLEL = False
 LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
-COMPUTE_LCOX = True
+COMPUTE_LCOX = False
 
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
@@ -32,8 +32,8 @@ END_YEAR = 2050
 MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 PATHWAYS_SENSITIVITIES = {
-    # "bau": ["def"],  # ALL_SENSITIVITIES,
-    "fa": ["def"],
+    "bau": ["def"],  # ALL_SENSITIVITIES,
+    # "fa": ["def"],
     # "lc": ["def"],  # ALL_SENSITIVITIES,
 }
 
@@ -60,7 +60,7 @@ ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 6000 * 365 * 1e-6
 TECHNOLOGY_MORATORIUM = 2035
 # Control for how many years is allowed to use transition technologies once the moratorium is enabled
 TRANSITIONAL_PERIOD_YEARS = 20
-# Emission scopes included in data analysis
+# Emission scopes included in ranking
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream"]
 # Emissions
 GHGS = ["co2", "ch4", "co2e"]
@@ -209,20 +209,20 @@ CONSTRAINTS_TO_APPLY = {
     "bau": [
         "rampup_constraint",
         # "regional_constraint",
-        "natural_gas_constraint",
+        # "natural_gas_constraint",
         "alternative_fuel_constraint",
     ],
     "lc": [
         # "emissions_constraint",
         "rampup_constraint",
         "regional_constraint",
-        "natural_gas_constraint",
+        # "natural_gas_constraint",
         "alternative_fuel_constraint",
     ],
     "fa": [
         # "emissions_constraint",
         # "regional_constraint",
-        "natural_gas_constraint",
+        # "natural_gas_constraint",
         "alternative_fuel_constraint",
     ],
 }
