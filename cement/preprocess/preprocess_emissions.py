@@ -30,7 +30,7 @@ def calculate_emissions(
         list_technologies ():
 
     Returns:
-
+        Unit: [t GHG / t production_output]
     """
 
     dict_emissivity = dict_emissivity.copy()

@@ -3,11 +3,6 @@ import numpy as np
 SECTOR = "cement"
 PRODUCTS = ["Clinker"]
 
-SCOPES_CO2_COST = [
-    "scope1",
-    "scope2",
-]
-
 ### RUN CONFIGURATION ###
 run_config = {
     "IMPORT_DATA",
@@ -24,7 +19,7 @@ run_config = {
 RUN_PARALLEL = False
 LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
-COMPUTE_LCOX = False
+COMPUTE_LCOX = True
 
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
@@ -33,14 +28,25 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 PATHWAYS_SENSITIVITIES = {
     # "bau": ["def"],  # ALL_SENSITIVITIES,
-    "fa": ["def"],
-    # "lc": ["def"],  # ALL_SENSITIVITIES,
+    # "fa": ["def"],
+    "lc": ["def"],  # ALL_SENSITIVITIES,
 }
 
+PATHWAYS_WITH_CARBON_COST = ["lc"]
 PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = ["lc"]
 
-# carbon cost scenarios: carbon cost in USD as key and the year in which the carbon cost stops growing as value
-CARBON_COST_SCENARIOS = {0: 2025, 50: 2030, 100: 2035, 150: 2040, 200: 2045, 250: 2050}
+# carbon cost sensitivities: define carbon cost in USD/t CO2 for different sensitivities
+CARBON_COST_SENSITIVITIES = {
+    "def": {
+        "trajectory": "linear",
+        "initial_carbon_cost": 0,
+        "final_carbon_cost": 250,
+        "start_year": 2025,
+        "end_year": 2050,
+    }
+}
+CARBON_COST_SCOPES = ["scope1", "scope2"]
+
 INVESTMENT_CYCLE = 10  # years
 CAPACITY_UTILISATION_FACTOR = 0.913
 COST_METRIC_CUF_ADJUSTMENT = None
@@ -209,21 +215,21 @@ CONSTRAINTS_TO_APPLY = {
     "bau": [
         "rampup_constraint",
         # "regional_constraint",
-        # "natural_gas_constraint",
+        "natural_gas_constraint",
         "alternative_fuel_constraint",
     ],
     "fa": [
         # "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",
-        # "natural_gas_constraint",
+        "natural_gas_constraint",
         "alternative_fuel_constraint",
     ],
     "lc": [
-        # "emissions_constraint",
+        "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",
-        # "natural_gas_constraint",
+        "natural_gas_constraint",
         "alternative_fuel_constraint",
     ],
 }
