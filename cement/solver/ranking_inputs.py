@@ -7,6 +7,9 @@ from cement.config.config_cement import (
     REGIONS,
     TRANSITION_TYPES,
     COMPUTE_LCOX,
+    PATHWAYS_WITH_CARBON_COST,
+    CARBON_COST_SENSITIVITIES,
+    CARBON_COST_SCOPES,
 )
 from cement.config.dataframe_config_cement import (
     DF_DATATYPES_PER_COLUMN,
@@ -33,6 +36,7 @@ from cement.preprocess.preprocess_tech_characteristics import (
     get_tech_characteristics,
 )
 from cement.preprocess.preprocess_tech_transitions import calculate_tech_transitions
+from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -58,7 +62,37 @@ def get_ranking_inputs(
         idx_per_input_metric=IDX_PER_INPUT_METRIC,
     )
 
+    # get emissions
+    df_emissions = calculate_emissions(
+        sector=sector,
+        dict_emissivity={
+            x: imported_input_data[x]
+            for x in INPUT_METRICS["Shared inputs - Emissivity"]
+        },
+        df_inputs_energy=imported_input_data["inputs_energy"],
+        df_capture_rate=imported_input_data["capture_rate"],
+        list_technologies=LIST_TECHNOLOGIES,
+    )
+    # export
+    importer.export_data(
+        df=df_emissions,
+        filename="emissions.csv",
+        export_dir="intermediate",
+    )
+
     # get cost metrics
+    # calculate carbon cost
+    if pathway_name in PATHWAYS_WITH_CARBON_COST:
+        carbon_cost_trajectory = CarbonCostTrajectory(
+            trajectory=CARBON_COST_SENSITIVITIES[sensitivity]["trajectory"],
+            initial_carbon_cost=CARBON_COST_SENSITIVITIES[sensitivity]["initial_carbon_cost"],
+            final_carbon_cost=CARBON_COST_SENSITIVITIES[sensitivity]["final_carbon_cost"],
+            start_year=CARBON_COST_SENSITIVITIES[sensitivity]["start_year"],
+            end_year=CARBON_COST_SENSITIVITIES[sensitivity]["end_year"],
+            model_years=MODEL_YEARS,
+        )
+    else:
+        carbon_cost_trajectory = None
     df_tech_transitions = calculate_tech_transitions(
         importer=importer,
         # parameters
@@ -77,6 +111,7 @@ def get_ranking_inputs(
         opex_materials_metrics=OPEX_MATERIALS_METRICS,
         opex_ccus_emissivity_metrics=OPEX_CCUS_EMISSIVITY_METRICS,
         opex_ccus_emissivity_metric_types=OPEX_CCUS_EMISSIVITY_METRIC_TYPES,
+        carbon_cost_scopes=CARBON_COST_SCOPES,
         # data
         df_tech_switches=get_tech_switches(
             importer=importer,
@@ -90,6 +125,7 @@ def get_ranking_inputs(
             x: imported_input_data[x]
             for x in INPUT_METRICS["Shared inputs - Emissivity"]
         },
+        df_emissions=df_emissions,
         df_capex=imported_input_data["capex"],
         df_opex=imported_input_data["opex"],
         df_inputs_material=imported_input_data["inputs_material"],
@@ -99,29 +135,12 @@ def get_ranking_inputs(
         df_capacity_factor=imported_input_data["capacity_factor"],
         df_lifetime=imported_input_data["lifetime"],
         df_capture_rate=imported_input_data["capture_rate"],
+        carbon_cost_trajectory=carbon_cost_trajectory,
     )
     # export
     importer.export_data(
         df=df_tech_transitions,
         filename="technology_transitions.csv",
-        export_dir="intermediate",
-    )
-
-    # get emissions
-    df_emissions = calculate_emissions(
-        sector=sector,
-        dict_emissivity={
-            x: imported_input_data[x]
-            for x in INPUT_METRICS["Shared inputs - Emissivity"]
-        },
-        df_inputs_energy=imported_input_data["inputs_energy"],
-        df_capture_rate=imported_input_data["capture_rate"],
-        list_technologies=LIST_TECHNOLOGIES,
-    )
-    # export
-    importer.export_data(
-        df=df_emissions,
-        filename="emissions.csv",
         export_dir="intermediate",
     )
 

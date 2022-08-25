@@ -6,8 +6,6 @@ import itertools
 import multiprocessing as mp
 
 from cement.config.config_cement import (
-    CARBON_COST_SCENARIOS,
-    MODEL_YEARS,
     PRODUCTS,
     RUN_PARALLEL,
     SECTOR,
@@ -23,7 +21,6 @@ from cement.solver.simulate import simulate_pathway
 
 # Shared imports
 from mppshared.config import LOG_LEVEL
-from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 
 # Initialize logger
 from mppshared.utility.utils import get_logger
@@ -78,21 +75,6 @@ def run_model_parallel(runs: list):
 def main():
     logger.info(f"Running model for {SECTOR}")
 
-    # Create a list of carbon cost trajectories that each start in 2025 and have a constant carbon cost growth until
-    #   end_year (then constant until YEAR_END)
-    carbon_cost_trajectories = []
-    for cc in CARBON_COST_SCENARIOS.keys():
-        carbon_cost_trajectories.append(
-            CarbonCostTrajectory(
-                trajectory="linear",
-                initial_carbon_cost=0,
-                final_carbon_cost=cc,
-                start_year=2025,
-                end_year=CARBON_COST_SCENARIOS[cc],
-                model_years=MODEL_YEARS,
-            )
-        )
-    # runs = list(itertools.product(PATHWAYS, SENSITIVITIES, carbon_cost_trajectories))
     runs = []
     for pathway, sensitivities in PATHWAYS_SENSITIVITIES.items():
         for sensitivity in sensitivities:
@@ -101,7 +83,6 @@ def main():
         run_model_parallel(runs)
     else:
         run_model_sequential(runs)
-    # save_consolidated_outputs(SECTOR)
 
 
 if __name__ == "__main__":

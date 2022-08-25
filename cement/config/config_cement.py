@@ -3,11 +3,6 @@ import numpy as np
 SECTOR = "cement"
 PRODUCTS = ["Clinker"]
 
-SCOPES_CO2_COST = [
-    "scope1",
-    "scope2",
-]
-
 ### RUN CONFIGURATION ###
 run_config = {
     "IMPORT_DATA",
@@ -33,14 +28,39 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 PATHWAYS_SENSITIVITIES = {
     # "bau": ["def"],  # ALL_SENSITIVITIES,
-    "fa": ["def"],
-    # "lc": ["def"],  # ALL_SENSITIVITIES,
+    # "fa": ["def"],
+    "lc": ["def"],  # ALL_SENSITIVITIES,
 }
 
+PATHWAYS_WITH_CARBON_COST = ["lc"]
 PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = ["lc"]
 
-# carbon cost scenarios: carbon cost in USD as key and the year in which the carbon cost stops growing as value
-CARBON_COST_SCENARIOS = {0: 2025, 50: 2030, 100: 2035, 150: 2040, 200: 2045, 250: 2050}
+# carbon cost sensitivities: define carbon cost in USD/t CO2 for different sensitivities
+CARBON_COST_SENSITIVITIES = {
+    "low": {
+        "trajectory": "linear",
+        "initial_carbon_cost": 0,
+        "final_carbon_cost": 30,
+        "start_year": 2023,
+        "end_year": 2050,
+    },
+    "def": {
+        "trajectory": "linear",
+        "initial_carbon_cost": 0,
+        "final_carbon_cost": 100,
+        "start_year": 2023,
+        "end_year": 2050,
+    },
+    "high": {
+        "trajectory": "linear",
+        "initial_carbon_cost": 0,
+        "final_carbon_cost": 210,
+        "start_year": 2023,
+        "end_year": 2050,
+    }
+}
+CARBON_COST_SCOPES = ["scope1", "scope2"]
+
 INVESTMENT_CYCLE = 10  # years
 CAPACITY_UTILISATION_FACTOR = 0.913
 COST_METRIC_CUF_ADJUSTMENT = None
@@ -60,7 +80,7 @@ ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 6000 * 365 * 1e-6
 TECHNOLOGY_MORATORIUM = 2035
 # Control for how many years is allowed to use transition technologies once the moratorium is enabled
 TRANSITIONAL_PERIOD_YEARS = 20
-# Emission scopes included in data analysis
+# Emission scopes included in ranking
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream"]
 # Emissions
 GHGS = ["co2", "ch4", "co2e"]
@@ -212,15 +232,16 @@ CONSTRAINTS_TO_APPLY = {
         "natural_gas_constraint",
         "alternative_fuel_constraint",
     ],
-    "lc": [
+    "fa": [
         # "emissions_constraint",
         "rampup_constraint",
-        "regional_constraint",
+        # "regional_constraint",
         "natural_gas_constraint",
         "alternative_fuel_constraint",
     ],
-    "fa": [
-        # "emissions_constraint",
+    "lc": [
+        "emissions_constraint",
+        "rampup_constraint",
         # "regional_constraint",
         "natural_gas_constraint",
         "alternative_fuel_constraint",

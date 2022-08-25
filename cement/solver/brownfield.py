@@ -90,6 +90,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             best_transition = select_best_transition(df_rank)
             candidates_best_transition = list(
                 filter(
+                    # todo: add filter for OPEX context
                     lambda asset: (
                         asset.technology == best_transition["technology_origin"]
                     )

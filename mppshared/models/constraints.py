@@ -208,9 +208,7 @@ def check_annual_carbon_budget_constraint(
 
     """
 
-    logger.info(
-        f"Checking annual carbon budget constraint for year {year} and transition type {transition_type}"
-    )
+    logger.info(f"{year}: Checking annual carbon budget constraint")
 
     # After a sector-specific year, all end-state newbuild capacity has to fulfill the 2050 emissions limit with a stack
     #   composed of only end-state technologies

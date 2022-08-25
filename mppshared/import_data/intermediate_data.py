@@ -80,6 +80,10 @@ class IntermediateDataImporter:
         df.to_csv(export_path, index=index)
 
     def export_sector_config(self):
+        # Make export directory if it doesn't exist yet
+        self.final_path.mkdir(exist_ok=True, parents=True)
+
+        # export config script
         shutil.copyfile(
             src=f"{Path(__file__).resolve().parents[2]}/{self.sector}/config/config_{self.sector}.py",
             dst=f"{self.final_path}/run_config.py"

@@ -334,7 +334,8 @@ class AssetStack:
         technology_classification=None,
         product=None,
     ) -> dict:
-        """Calculate emissions of the current stack in MtGHG by GHG and scope, optionally filtered for technology classification and/or a specific product"""
+        """Calculate emissions of the current stack in MtGHG by GHG and scope, optionally filtered for technology
+        classification and/or a specific product"""
 
         # Sum emissions by GHG and scope
         emission_columns = get_emission_columns(
@@ -342,7 +343,8 @@ class AssetStack:
         )
         dict_emissions = dict.fromkeys(emission_columns)
 
-        # Get DataFrame with annual production volume by product, region and technology (optionally filtered for technology classification and specific product)
+        # Get DataFrame with annual production volume by product, region and technology (optionally filtered for
+        #   technology classification and specific product)
         df_stack = self.aggregate_stack(
             aggregation_vars=["technology", "product", "region"],
             technology_classification=technology_classification,
