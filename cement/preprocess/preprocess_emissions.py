@@ -206,7 +206,7 @@ def calculate_emissions(
     )
 
     # make captured emissions negative
-    capture_cols = [x for x in list(df_emissivity) if "captured" in x]
+    capture_cols = [x for x in df_emissivity.columns if "captured" in x]
     df_emissivity.loc[:, capture_cols] *= -1
     df_emissivity.fillna(value=float(0), inplace=True)
     # compute scope 1 emissions after capturing

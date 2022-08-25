@@ -37,11 +37,25 @@ PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = ["lc"]
 
 # carbon cost sensitivities: define carbon cost in USD/t CO2 for different sensitivities
 CARBON_COST_SENSITIVITIES = {
+    "low": {
+        "trajectory": "linear",
+        "initial_carbon_cost": 0,
+        "final_carbon_cost": 30,
+        "start_year": 2023,
+        "end_year": 2050,
+    },
     "def": {
         "trajectory": "linear",
         "initial_carbon_cost": 0,
-        "final_carbon_cost": 250,
-        "start_year": 2025,
+        "final_carbon_cost": 100,
+        "start_year": 2023,
+        "end_year": 2050,
+    },
+    "high": {
+        "trajectory": "linear",
+        "initial_carbon_cost": 0,
+        "final_carbon_cost": 210,
+        "start_year": 2023,
         "end_year": 2050,
     }
 }

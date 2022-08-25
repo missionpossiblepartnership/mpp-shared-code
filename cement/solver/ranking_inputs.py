@@ -7,7 +7,7 @@ from cement.config.config_cement import (
     REGIONS,
     TRANSITION_TYPES,
     COMPUTE_LCOX,
-    PATHWAYS_WITH_TECHNOLOGY_MORATORIUM,
+    PATHWAYS_WITH_CARBON_COST,
     CARBON_COST_SENSITIVITIES,
     CARBON_COST_SCOPES,
 )
@@ -82,7 +82,7 @@ def get_ranking_inputs(
 
     # get cost metrics
     # calculate carbon cost
-    if pathway_name in PATHWAYS_WITH_TECHNOLOGY_MORATORIUM:
+    if pathway_name in PATHWAYS_WITH_CARBON_COST:
         carbon_cost_trajectory = CarbonCostTrajectory(
             trajectory=CARBON_COST_SENSITIVITIES[sensitivity]["trajectory"],
             initial_carbon_cost=CARBON_COST_SENSITIVITIES[sensitivity]["initial_carbon_cost"],
