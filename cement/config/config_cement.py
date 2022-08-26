@@ -19,7 +19,7 @@ run_config = {
 RUN_PARALLEL = False
 LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
-COMPUTE_LCOX = True
+COMPUTE_LCOX = False
 
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
@@ -147,6 +147,9 @@ TRANSITION_TYPES = {
 
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 
+# define which regions can have switches to natural gas
+REGIONS_NATURAL_GAS = ["North America", "Russia", "Middle East"]
+
 # set of cost classifications
 COST_CLASSIFICATIONS = {"low": "Low", "standard": "Standard", "high": "High"}
 
@@ -229,21 +232,21 @@ CONSTRAINTS_TO_APPLY = {
     "bau": [
         "rampup_constraint",
         # "regional_constraint",
-        "natural_gas_constraint",
+        # "natural_gas_constraint",
         "alternative_fuel_constraint",
     ],
     "fa": [
         # "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",
-        "natural_gas_constraint",
+        # "natural_gas_constraint",
         "alternative_fuel_constraint",
     ],
     "lc": [
         "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",
-        "natural_gas_constraint",
+        # "natural_gas_constraint",
         "alternative_fuel_constraint",
     ],
 }
