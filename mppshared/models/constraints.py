@@ -216,9 +216,7 @@ def check_annual_carbon_budget_constraint(
     if (transition_type == "greenfield") & (
         year >= pathway.year_2050_emissions_constraint
     ):
-        limit = pathway.carbon_budget.get_annual_emissions_limit(
-            pathway.end_year
-        )
+        limit = pathway.carbon_budget.get_annual_emissions_limit(pathway.end_year)
 
         dict_stack_emissions = stack.calculate_emissions_stack(
             year=year,
@@ -291,6 +289,7 @@ def check_global_demand_share_constraint(
     stack: AssetStack,
     year: int,
     transition_type: str,
+    product: str
 ) -> bool:
     """
     Check for specified technologies whether they fulfill the constraint of supplying a maximum share of global demand
@@ -348,6 +347,7 @@ def check_electrolysis_capacity_addition_constraint(
     stack: AssetStack,
     year: int,
     transition_type: str,
+    product: str,
 ) -> bool:
     """Check if the annual addition of electrolysis capacity fulfills the constraint
 
@@ -475,7 +475,11 @@ def convert_production_volume_to_electrolysis_capacity(
 
 
 def check_co2_storage_constraint(
-    pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
+    pathway: SimulationPathway,
+    stack: AssetStack,
+    year: int,
+    transition_type: str,
+    product: str,
 ) -> bool:
     """Check if the constraint on total CO2 storage (globally) is met"""
 

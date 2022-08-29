@@ -8,6 +8,7 @@ from ammonia.config_ammonia import (
     CORE_DATA_PATH,
     MAP_COLUMN_NAMES,
     COST_DF_INDEX,
+    PREPROCESS_DATA_PATH,
     PRODUCTS,
 )
 
@@ -45,7 +46,7 @@ def load_cost_data_from_csv(sensitivity: str) -> pd.DataFrame:
 
     folder = CALCULATE_FOLDER
     filename = "tco"
-    full_path = f"{CORE_DATA_PATH}/{sensitivity}/{folder}/{filename}.csv"
+    full_path = f"{PREPROCESS_DATA_PATH}/{sensitivity}/{folder}/{filename}.csv"
 
     # Read multi-index
     header = [0, 1]
@@ -92,7 +93,6 @@ def explode_rows_for_all_products(df: pd.DataFrame) -> pd.DataFrame:
     df["product"] = df["product"].astype(object)
     df = df.reset_index(drop=True)
 
-    # TODO: improve with a more elegant solution
     for i in df.loc[df["product"] == "All products"].index:
         df.at[i, "product"] = PRODUCTS
 

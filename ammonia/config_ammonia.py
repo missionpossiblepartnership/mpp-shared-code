@@ -9,7 +9,8 @@ MODEL_SCOPE = "Global"
 
 INITIAL_ASSET_DATA_LEVEL = "regional"
 
-### RUN CONFIRGUATION ###
+
+### RUN CONFIGURATION ###
 LOG_LEVEL = "DEBUG"
 LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"
@@ -18,20 +19,18 @@ RUN_PARALLEL = False
 run_config = {
     "IMPORT_DATA",
     "CALCULATE_VARIABLES",
+    "SOLVER_INPUT",
     "APPLY_IMPLICIT_FORCING",
     "MAKE_RANKINGS",
     "SIMULATE_PATHWAY",
     "CALCULATE_OUTPUTS",
-    "CREATE_DEBUGGING_OUTPUTS",
-    # "EXPORT_OUTPUTS",
-    # "PLOT_AVAILABILITIES"
-    # "MERGE_OUTPUTS"
 }
 
 ### DATA IMPORT AND PREPROCESSING ###
 
 # Data paths
-CORE_DATA_PATH = "ammonia/data/preprocess"
+CORE_DATA_PATH = "ammonia/data/"
+PREPROCESS_DATA_PATH = f"{CORE_DATA_PATH}/preprocess"
 LOG_PATH = "logs/"
 IMPORT_DATA_PATH = CORE_DATA_PATH
 INTERMEDIATE_DATA_PATH = f"{CORE_DATA_PATH}/intermediate_data"
@@ -510,8 +509,6 @@ INVESTMENT_CYCLE = 20  # years
 CONSTRAINTS_TO_APPLY = {
     "bau": [None],
     "lc": [
-        "emissions_constraint",
-        "rampup_constraint",
         "co2_storage_constraint",
         "electrolysis_capacity_addition_constraint",
         "demand_share_constraint",

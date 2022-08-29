@@ -20,6 +20,7 @@ from ammonia.config_ammonia import (
 )
 from ammonia.preprocess.import_data import import_all
 from ammonia.preprocess.calculate import calculate_variables
+from ammonia.preprocess.create_solver_input import create_solver_input_tables
 from ammonia.solver.implicit_forcing import apply_implicit_forcing
 from ammonia.solver.ranking import make_rankings
 from ammonia.solver.simulate import simulate_pathway
@@ -37,12 +38,12 @@ logger.setLevel(LOG_LEVEL)
 
 funcs = {
     # "IMPORT_DATA": import_all,
-    "CALCULATE_VARIABLES": calculate_variables,
+    # "CALCULATE_VARIABLES": calculate_variables,
     # "SOLVER_INPUT": create_solver_input_tables,
-    "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
+    # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     # "MAKE_RANKINGS": make_rankings,
-    # "SIMULATE_PATHWAY": simulate_pathway,
-    # "CALCULATE_OUTPUTS": calculate_outputs,
+    "SIMULATE_PATHWAY": simulate_pathway,
+    "CALCULATE_OUTPUTS": calculate_outputs,
 }
 
 

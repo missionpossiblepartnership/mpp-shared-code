@@ -58,7 +58,9 @@ def import_all(
                 df = expand_to_low_cost_power_regions(df)
 
             # Write raw imports data to .csv
-            write_intermediate_data_to_csv(f"{CORE_DATA_PATH}/imports_raw", metric, df)
+            write_intermediate_data_to_csv(
+                f"{PREPROCESS_DATA_PATH}/imports_raw", metric, df
+            )
 
             # Reformat to long
             df = reformat_df_to_long(df, METRIC_NAMES[metric])
@@ -71,7 +73,7 @@ def import_all(
 
             # Write to .csv
             write_intermediate_data_to_csv(
-                f"{CORE_DATA_PATH}/{sensitivity}/imports_processed", metric, df
+                f"{PREPROCESS_DATA_PATH}/{sensitivity}/imports_processed", metric, df
             )
 
 

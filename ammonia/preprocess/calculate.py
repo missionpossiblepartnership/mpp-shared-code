@@ -3,7 +3,7 @@
 import pandas as pd
 
 from ammonia.config_ammonia import (
-    CORE_DATA_PATH,
+    PREPROCESS_DATA_PATH,
     INPUT_METRICS,
     LOG_LEVEL,
 )
@@ -39,7 +39,7 @@ def calculate_variables(
 
     Args:
         pathway_name: for compatibility with other model step functions
-        sensitivity: Business Cases.xlsx needs to have a suffix "_{sensivity}"
+        sensitivity: the desired sensitivity (usually "def")"
         sector: for compatibility
         carbon_cost_trajectory: for compatibility
     """
@@ -50,7 +50,7 @@ def calculate_variables(
     input_data = dict.fromkeys(keys_list)
     for key in input_data.keys():
         input_data[key] = load_intermediate_data_from_csv(
-            f"{CORE_DATA_PATH}/{sensitivity}/imports_processed", key
+            f"{PREPROCESS_DATA_PATH}/{sensitivity}/imports_processed", key
         )
 
     # Concatenate material and energy inputs
@@ -60,7 +60,9 @@ def calculate_variables(
         input_data["h2_storage"],
     )
     write_intermediate_data_to_csv(
-        f"{CORE_DATA_PATH}/{sensitivity}/imports_processed", "inputs_all", df_inputs
+        f"{PREPROCESS_DATA_PATH}/{sensitivity}/imports_processed",
+        "inputs_all",
+        df_inputs,
     )
 
     # Concatenate all emission factors
@@ -79,7 +81,7 @@ def calculate_variables(
     )
 
     # Save as .csv
-    calculate_folder = f"{CORE_DATA_PATH}/{sensitivity}/calculate_variables"
+    calculate_folder = f"{PREPROCESS_DATA_PATH}/{sensitivity}/calculate_variables"
     write_intermediate_data_to_csv(calculate_folder, "emissions", df_emissions)
 
     # CALCULATE TCO
