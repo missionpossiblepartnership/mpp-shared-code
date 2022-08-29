@@ -237,19 +237,21 @@ def select_asset_for_greenfield(
         else:
             # EMISSIONS
             if "emissions_constraint" in pathway.constraints_to_apply:
-                if not dict_constraints["emissions_constraint"]:
-                    # remove best transition from ranking table and try again
-                    logger.debug(f"Handle emissions constraint: removing transition")
-                    df_rank = remove_transition(
-                        df_rank=df_rank, transition=asset_transition
-                    )
-            if [
-                "emissions_constraint",
-                "flag_residual",
-            ] in pathway.constraints_to_apply:
                 if (
                     not dict_constraints["emissions_constraint"]
-                    & dict_constraints["flag_residual"]
+                    and not dict_constraints["flag_residual"]
+                ):
+                    # remove best transition from ranking table and try again
+                    logger.debug(f"Handle emissions constraint: removing destination technology")
+                    df_rank = remove_all_transitions_with_destination_technology(
+                        df_rank=df_rank,
+                        technology_destination=asset_transition[
+                            "technology_destination"
+                        ],
+                    )
+                if (
+                    not dict_constraints["emissions_constraint"]
+                    and dict_constraints["flag_residual"]
                 ):
                     logger.debug(
                         f"Handle (residual) emissions constraint: removing all transitions with CCS"
@@ -262,9 +264,14 @@ def select_asset_for_greenfield(
             if "rampup_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["rampup_constraint"]:
                     # remove all transitions with that destination technology from the ranking table
-                    logger.debug(f"Handle ramp up constraint: removing destination technology")
+                    logger.debug(
+                        f"Handle ramp up constraint: removing destination technology"
+                    )
                     df_rank = remove_all_transitions_with_destination_technology(
-                        df_rank, asset_transition["technology_destination"]
+                        df_rank=df_rank,
+                        technology_destination=asset_transition[
+                            "technology_destination"
+                        ],
                     )
             # REGIONAL PRODUCTION
             if "regional_constraint" in pathway.constraints_to_apply:

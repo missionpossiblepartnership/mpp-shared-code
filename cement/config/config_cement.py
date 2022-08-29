@@ -61,12 +61,16 @@ CARBON_COST_SENSITIVITIES = {
 }
 CARBON_COST_SCOPES = ["scope1", "scope2"]
 
-INVESTMENT_CYCLE = 10  # years
+INVESTMENT_CYCLE = None  # years
 CAPACITY_UTILISATION_FACTOR = 0.913
 COST_METRIC_CUF_ADJUSTMENT = None
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-MAX_ANNUAL_RENOVATION_SHARE = 0.2
+MAX_ANNUAL_RENOVATION_SHARE = {
+    "bau": 0.2,
+    "fa": 0.2,
+    "lc": 1.0
+}
 
 
 ### initial asset stack ###
@@ -147,7 +151,7 @@ TRANSITION_TYPES = {
 
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 
-# define which regions can have switches to natural gas
+# define regions that can have switches to natural gas
 REGIONS_NATURAL_GAS = ["North America", "Russia", "Middle East"]
 
 # set of cost classifications
@@ -161,11 +165,10 @@ SECTORAL_CARBON_BUDGETS = {
     "cement": 42,
 }
 
-residual_share = 0.05
 emissions_2020 = 2.4  # Gt CO2 (scopes 1 and 2)
 SECTORAL_CARBON_PATHWAY = {
     "emissions_start": emissions_2020,
-    "emissions_end": residual_share * emissions_2020,
+    "emissions_end": 0.06 * 3.85,   # recarbonation share in 2050 according to GCCA roadmap
     "action_start": 2023,
 }
 
