@@ -226,6 +226,33 @@ COST_DF_INDEX = [
     "type",
 ]
 
+### CALCULATION OF COST AND EMISSION METRICS ###
+
+# Decide whether CO2 emission from urea production are allocated to scope 1 or scope 3 downstream
+UREA_CO2_EMISSIONS_TO_SCOPE1 = True
+
+# Year from which DAC is mandatory for fossil-based urea production
+UREA_YEAR_MANDATORY_DAC = 2050
+
+# Set whether DAC should be priced or not
+INCLUDE_DAC_IN_COST = True
+
+# Naming of CCS cost components
+CCS_COST_COMPONENTS = ["CCS - Transport", "CCS - Storage"]
+
+# Cost components for showing LCOX and TCO composition
+COST_COMPONENTS = [
+    "energy_electricity",
+    "energy_non_electricity",
+    "raw_material_total",
+    "h2_storage_total",
+    "ccs",
+    "opex_fixed",
+    "switch_capex",
+    "total",
+]
+
+
 ### CONSTRAINTS ###
 # Integrate current project pipeline or not
 BUILD_CURRENT_PROJECT_PIPELINE = True
