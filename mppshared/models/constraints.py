@@ -92,7 +92,7 @@ def check_technology_rampup_constraint(
         transition_type:
     """
     logger.info(
-        f"Checking ramp-up constraint for year {year} and transition type {transition_type}"
+        f"{year}: Checking ramp-up constraint (transition type: {transition_type})"
     )
     # Get asset numbers of new and old stack for each technology
     df_old_stack = (
@@ -149,7 +149,7 @@ def check_constraint_regional_production(
             dictionary
     """
     logger.info(
-        f"Checking regional production constraint for year {year} and transition type {transition_type}"
+        f"{year}: Checking regional production constraint (transition type: {transition_type})"
     )
     df = get_regional_production_constraint_table(pathway, stack, product, year)
     # The constraint is hurt if any region does not meet its required regional production share
@@ -208,7 +208,7 @@ def check_annual_carbon_budget_constraint(
 
     """
 
-    logger.info(f"{year}: Checking annual carbon budget constraint")
+    logger.info(f"{year}: Checking annual carbon budget constraint (transition type: {transition_type})")
 
     # After a sector-specific year, all end-state newbuild capacity has to fulfill the 2050 emissions limit with a stack
     #   composed of only end-state technologies
@@ -264,6 +264,7 @@ def hydro_constraints(df_ranking: pd.DataFrame, sector: str) -> pd.DataFrame:
         return df_ranking
 
 
+# todo: is this a dead function? Can't find any usage of it
 def regional_supply_constraint(df_region_demand, asset_transition):
     # Check if regional supply constraint is met
     return (
@@ -531,7 +532,7 @@ def check_natural_gas_constraint(
 
     if not return_dict:
         logger.info(
-            f"{year}: Checking natural gas constraint (asset stack: {hex(id(stack))})"
+            f"{year}: Checking natural gas constraint  (transition type: {transition_type})"
         )
 
     # Get constraint value
@@ -580,7 +581,7 @@ def check_alternative_fuel_constraint(
 
     if not return_dict:
         logger.info(
-            f"{year}: Checking alternative fuel constraint (asset stack: {hex(id(stack))})"
+            f"{year}: Checking alternative fuel constraint  (transition type: {transition_type})"
         )
 
     # Get constraint value
