@@ -1,6 +1,7 @@
 """ Logic for technology transitions of type brownfield rebuild and brownfield renovation."""
 import random
 from copy import deepcopy
+import sys
 
 import numpy as np
 
@@ -125,7 +126,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         assert origin_technology == asset_to_update.technology
         logger.debug(
             f"{year}: Tentatively transitioning asset in {asset_to_update.region} "
-            f"from {origin_technology} to {new_technology}."
+            f"from {origin_technology} to {new_technology} "
+            f"(annual production: {asset_to_update.get_annual_production_volume()}, UUID: {asset_to_update.uuid})"
         )
         tentative_stack.update_asset(
             asset_to_update=asset_to_update,
@@ -153,8 +155,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         ) | (origin_technology == new_technology):
             logger.debug(
                 f"{year}: All constraints fulfilled. "
-                f"Updating asset in {asset_to_update.region} from {origin_technology} to {new_technology}. "
-                f"(annual production: {asset_to_update.get_annual_production_volume()}, UUID: {asset_to_update.uuid}"
+                f"Updating asset in {asset_to_update.region} from {origin_technology} to {new_technology} "
+                f"(annual production: {asset_to_update.get_annual_production_volume()}, UUID: {asset_to_update.uuid})"
             )
             # Update asset stack
             stack.update_asset(
@@ -279,7 +281,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     ]
                     # check if regions other than the tentatively updated asset's region exceed the constraint
                     if exceeding_regions != [asset_to_update.region]:
-                        logger.critical(
+                        sys.exit(
                             f"{year}: Regions other than the tentatively updated asset's region exceed the natural gas "
                             f"constraint!"
                         )
@@ -315,7 +317,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     ]
                     # check if regions other than the tentatively updated asset's region exceed the constraint
                     if exceeding_regions != [asset_to_update.region]:
-                        logger.critical(
+                        sys.exit(
                             f"{year}: Regions other than the tentatively updated asset's region exceed the alternative "
                             "fuel constraint!"
                         )

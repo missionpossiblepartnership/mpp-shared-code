@@ -153,6 +153,10 @@ class AssetStack:
         origin_technology: str,
     ):
         """Update an asset in AssetStack. This is done using the UUID to ensure correct updating."""
+
+        # check to make sure that number of assets does not change
+        len_pre = len(self.assets)
+
         uuid_update = asset_to_update.uuid
         asset_to_update.technology = new_technology
         asset_to_update.technology_classification = new_classification
@@ -167,8 +171,11 @@ class AssetStack:
                 asset_to_update.stay_same = False
         if origin_technology == new_technology:
             asset_to_update.stay_same = True
-        self.assets = [asset for asset in self.assets if asset.uuid is not uuid_update]
+        self.assets = [asset for asset in self.assets if asset.uuid != uuid_update]
         self.assets.append(asset_to_update)
+
+        # check to make sure that number of assets does not change
+        assert len_pre == len(self.assets), "Function update_asset has changed the number of assets in the stack!"
 
     def empty(self) -> Boolean:
         """Return True if no asset in stack"""
@@ -537,7 +544,7 @@ class AssetStack:
         # assets can be decommissioned if they have not undergone a renovation or rebuild
         candidates = filter(lambda asset: not asset.retrofit, assets)
 
-        return list(candidates)
+        return deepcopy(list(candidates))
 
     def get_assets_eligible_for_brownfield(
         self, year: int, investment_cycle: int
@@ -585,6 +592,9 @@ def make_new_asset(
         year: Build the asset in this year
         annual_production_capacity: The annual production capacity of the asset
         cuf: The capacity utilization factor of the asset
+        emission_scopes:
+        cuf_lower_threshold:
+        ghgs:
 
     Returns:
         The new asset
