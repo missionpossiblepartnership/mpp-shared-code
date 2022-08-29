@@ -69,7 +69,7 @@ COST_METRIC_CUF_ADJUSTMENT = None
 MAX_ANNUAL_RENOVATION_SHARE = {
     "bau": 0.2,
     "fa": 0.2,
-    "lc": 1.0
+    "lc": 0.5
 }
 
 

@@ -29,7 +29,7 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 PATHWAYS_SENSITIVITIES = {
     # "bau": ["def"],  # ALL_SENSITIVITIES,
     # "fa": ["def"],
-    "lc": ["high"],  # ALL_SENSITIVITIES,
+    "lc": ["def"],  # ALL_SENSITIVITIES,
 }
 
 PATHWAYS_WITH_CARBON_COST = ["lc"]
@@ -69,7 +69,7 @@ COST_METRIC_CUF_ADJUSTMENT = None
 MAX_ANNUAL_RENOVATION_SHARE = {
     "bau": 0.2,
     "fa": 0.2,
-    "lc": 1.0
+    "lc": 0.5
 }
 
 

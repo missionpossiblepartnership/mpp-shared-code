@@ -130,7 +130,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             f"(annual production: {asset_to_update.get_annual_production_volume()}, UUID: {asset_to_update.uuid})"
         )
         tentative_stack.update_asset(
-            asset_to_update=asset_to_update,
+            asset_to_update=deepcopy(asset_to_update),
             new_technology=new_technology,
             new_classification=best_transition["technology_classification"],
             switch_type=switch_type,
@@ -153,6 +153,19 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 if k in pathway.constraints_to_apply and k != "regional_constraint"
             ]
         ) | (origin_technology == new_technology):
+
+            # todo dev:
+            if origin_technology == new_technology:
+                af_prod_volume_stack = stack.get_annual_ng_af_production_volume(
+                    product=asset_to_update.product, region=asset_to_update.region, tech_substr="alternative fuels"
+                )
+                af_prod_volume_tentative_stack = tentative_stack.get_annual_ng_af_production_volume(
+                    product=asset_to_update.product, region=asset_to_update.region, tech_substr="alternative fuels"
+                )
+                if round(af_prod_volume_stack, 5) != round(af_prod_volume_tentative_stack, 5):
+                    stop = 1
+            # todo dev
+
             logger.debug(
                 f"{year}: All constraints fulfilled. "
                 f"Updating asset in {asset_to_update.region} from {origin_technology} to {new_technology} "
@@ -160,7 +173,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             )
             # Update asset stack
             stack.update_asset(
-                asset_to_update=asset_to_update,
+                asset_to_update=deepcopy(asset_to_update),
                 new_technology=new_technology,
                 new_classification=best_transition["technology_classification"],
                 switch_type=switch_type,
