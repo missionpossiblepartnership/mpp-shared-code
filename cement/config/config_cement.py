@@ -29,7 +29,7 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 PATHWAYS_SENSITIVITIES = {
     # "bau": ["def"],  # ALL_SENSITIVITIES,
     # "fa": ["def"],
-    "lc": ["def"],  # ALL_SENSITIVITIES,
+    "lc": ["high"],  # ALL_SENSITIVITIES,
 }
 
 PATHWAYS_WITH_CARBON_COST = ["lc"]
