@@ -3,14 +3,13 @@
 import numpy as np
 import pandas as pd
 
-from config_ammonia import *
-
-# from mppshared.config import CORE_DATA_PATH, IMPORT_DATA_PATH
-from utility.utils import (
+from ammonia.config_ammonia import *
+from ammonia.utility.utils import (
     rename_columns_to_standard_names,
     write_intermediate_data_to_csv,
     explode_rows_for_all_products,
 )
+from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.utility.utils import get_logger
 
 # Create logger
@@ -18,8 +17,20 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def import_all(sensitivity: str):
-    """Load all input data, reformat to long format and save to .csv files for subsequent use."""
+def import_all(
+    pathway_name: str,
+    sensitivity: str,
+    sector: str,
+    carbon_cost_trajectory: CarbonCostTrajectory,
+):
+    """Load all input data, reformat to long format and save to .csv files for subsequent use.
+
+    Args:
+        pathway_name: for compatibility with other model step functions
+        sensitivity: Business Cases.xlsx needs to have a suffix "_{sensivity}"
+        sector: for compatibility
+        carbon_cost_trajectory: for compatibility
+    """
 
     # Mapping of regions to cost classification
     region_to_cost = map_region_to_cost_category(sensitivity)

@@ -7,7 +7,7 @@ import multiprocessing as mp
 import os
 
 # Imports from sector-specific code
-from config_ammonia import (
+from ammonia.config_ammonia import (
     CARBON_COSTS,
     END_YEAR,
     LOG_LEVEL,
@@ -18,10 +18,10 @@ from config_ammonia import (
     SENSITIVITIES,
     run_config,
 )
-from preprocess.import_data import import_all
-from solver.implicit_forcing import apply_implicit_forcing
-from solver.ranking import make_rankings
-from solver.simulate import simulate_pathway
+from ammonia.preprocess.import_data import import_all
+from ammonia.solver.implicit_forcing import apply_implicit_forcing
+from ammonia.solver.ranking import make_rankings
+from ammonia.solver.simulate import simulate_pathway
 
 # Imports from mppshared
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
@@ -38,7 +38,7 @@ funcs = {
     "IMPORT_DATA": import_all,
     # "CALCULATE_VARIABLES": calculate_variables,
     # "SOLVER_INPUT": create_solver_input_tables,
-    # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
+    "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     # "MAKE_RANKINGS": make_rankings,
     # "SIMULATE_PATHWAY": simulate_pathway,
     # "CALCULATE_OUTPUTS": calculate_outputs,

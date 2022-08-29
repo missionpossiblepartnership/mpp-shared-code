@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from config_ammonia import (
+from ammonia.config_ammonia import (
     CALCULATE_FOLDER,
     COMMON_INDEX,
     CORE_DATA_PATH,

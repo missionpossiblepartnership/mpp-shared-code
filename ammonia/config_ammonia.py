@@ -28,8 +28,10 @@ run_config = {
     # "MERGE_OUTPUTS"
 }
 
-### DATA PATHS ###
-CORE_DATA_PATH = "mppchemicals/data"
+### DATA IMPORT AND PREPROCESSING ###
+
+# Data paths
+CORE_DATA_PATH = "ammonia/data/preprocess"
 LOG_PATH = "logs/"
 IMPORT_DATA_PATH = CORE_DATA_PATH
 INTERMEDIATE_DATA_PATH = f"{CORE_DATA_PATH}/intermediate_data"
@@ -37,9 +39,7 @@ SOLVER_INPUT_FOLDER = "solver_input_tables"
 RAW_IMPORTS_FOLDER = "imports_raw"
 PROCESSED_IMPORTS_FOLDER = "imports_processed"
 CALCULATE_FOLDER = "calculate_variables"
-LOG_PATH = "logs"
 
-### DATA IMPORT AND PREPROCESSING ###
 
 # List of input sheets in Business Cases.xlsx (do not change order)
 INPUT_SHEETS = [
