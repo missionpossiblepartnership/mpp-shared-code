@@ -221,6 +221,13 @@ def select_asset_for_greenfield(
             product=product,
         )
 
+        # Ensure that newbuild capacity from project pipeline does not lead to erroneous constraint violation
+        if "CCS" not in asset_transition["technology_destination"]:
+            dict_constraints["co2_storage_constraint"] = True
+
+        if "Electrolyser" not in asset_transition["technology_destination"]:
+            dict_constraints["electrolysis_capacity_addition_constraint"] = True
+
         # Asset can be created if no constraint hurt
         if all(
             [
@@ -262,7 +269,9 @@ def select_asset_for_greenfield(
             if "rampup_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["rampup_constraint"]:
                     # remove all transitions with that destination technology from the ranking table
-                    logger.debug(f"Handle ramp up constraint: removing destination technology")
+                    logger.debug(
+                        f"Handle ramp up constraint: removing destination technology"
+                    )
                     df_rank = remove_all_transitions_with_destination_technology(
                         df_rank, asset_transition["technology_destination"]
                     )
