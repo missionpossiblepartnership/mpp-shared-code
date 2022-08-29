@@ -1,13 +1,13 @@
 """Execute the MPP Ammonia model."""
 
+# Import external libraries
 import distutils
 import itertools
 import multiprocessing as mp
 import os
 
-import numpy as np
-
-from ammonia.config_ammonia import (
+# Imports from sector-specific code
+from config_ammonia import (
     CARBON_COSTS,
     END_YEAR,
     LOG_LEVEL,
@@ -18,28 +18,30 @@ from ammonia.config_ammonia import (
     SENSITIVITIES,
     run_config,
 )
-from ammonia.solver.implicit_forcing import apply_implicit_forcing
-from ammonia.solver.ranking import make_rankings
-from ammonia.solver.simulate import simulate_pathway
+from preprocess.import_data import import_all
+from solver.implicit_forcing import apply_implicit_forcing
+from solver.ranking import make_rankings
+from solver.simulate import simulate_pathway
+
+# Imports from mppshared
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.solver.debugging_outputs import create_debugging_outputs
 from mppshared.solver.output_processing import calculate_outputs
 from mppshared.utility.utils import get_logger
 
-# from mppshared.solver.sensitivity_outputs import create_sensitivity_outputs
-
+# Logging functionality
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
-np.random.seed(100)
 
 funcs = {
-    "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    "MAKE_RANKINGS": make_rankings,
-    "SIMULATE_PATHWAY": simulate_pathway,
+    "IMPORT_DATA": import_all,
+    # "CALCULATE_VARIABLES": calculate_variables,
+    # "SOLVER_INPUT": create_solver_input_tables,
+    # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
+    # "MAKE_RANKINGS": make_rankings,
+    # "SIMULATE_PATHWAY": simulate_pathway,
     # "CALCULATE_OUTPUTS": calculate_outputs,
-    # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
-    # "SENSITIVITY_ANALYSIS": create_sensitivity_outputs,
 }
 
 

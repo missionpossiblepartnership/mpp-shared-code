@@ -27,6 +27,206 @@ run_config = {
     # "PLOT_AVAILABILITIES"
     # "MERGE_OUTPUTS"
 }
+
+### DATA PATHS ###
+CORE_DATA_PATH = "mppchemicals/data"
+LOG_PATH = "logs/"
+IMPORT_DATA_PATH = CORE_DATA_PATH
+INTERMEDIATE_DATA_PATH = f"{CORE_DATA_PATH}/intermediate_data"
+SOLVER_INPUT_FOLDER = "solver_input_tables"
+RAW_IMPORTS_FOLDER = "imports_raw"
+PROCESSED_IMPORTS_FOLDER = "imports_processed"
+CALCULATE_FOLDER = "calculate_variables"
+LOG_PATH = "logs"
+
+### DATA IMPORT AND PREPROCESSING ###
+
+# List of input sheets in Business Cases.xlsx (do not change order)
+INPUT_SHEETS = [
+    "Shared inputs - prices",
+    "Shared inputs - emissions",
+    "Business case OPEX & CAPEX",
+    "Region CAPEX mapping",
+    "Technology switching table",
+    "Electrolyser CFs",
+]
+
+# Column ranges in Excel
+EXCEL_COLUMN_RANGES = {
+    "Business case OPEX & CAPEX": "B:AT",
+    "Shared inputs - prices": "B:AR",
+    "Shared inputs - emissions": "B:AT",
+    "Region CAPEX mapping": "B:Z",
+    "Technology switching table": "B:AA",
+    "Electrolyser CFs": "B:AQ",
+}
+
+# Renaming of columns to follow naming convention
+MAP_COLUMN_NAMES = {
+    "Unit": "unit",
+    "Product": "product",
+    "Technology": "technology_destination",
+    "Region": "region",
+    "Metric": "name",
+    "Scope": "scope",
+    "Renovation from": "technology_origin",
+    "Origin Technology": "technology_origin",
+    "Low/High/Standard": "cost_classification",
+    "Emissivity type": "emissivity_type",
+    "Scenario": "scenario",
+}
+
+# Order of columns
+COLUMN_ORDER = ["product", "technology", "year", "region"]
+
+# Names of DataFrames created from imported data, indexed by sheet name in Business Cases.xlsx
+INPUT_METRICS = {
+    "Business case OPEX & CAPEX": [
+        "capex",
+        "opex_fixed",
+        "wacc",
+        "capacity_factor",
+        "lifetime",
+        "trl_current",
+        "expected_maturity",
+        "classification",
+        "inputs_material",
+        "inputs_energy",
+        "h2_storage",
+        "capture_rates",
+    ],
+    "Shared inputs - prices": ["prices"],
+    "Shared inputs - emissions": [
+        "emission_factors_co2",
+        "emission_factors_n2o",
+        "emission_factors_ch4",
+    ],
+    "Electrolyser CFs": [
+        "electrolyser_cfs",
+        "electrolyser_proportions",
+        "electrolyser_efficiencies",
+    ],
+}
+
+# DataFrames are extracted based on columns ["Metric type", "Metric"] in Business Cases.xlsx
+MAP_EXCEL_NAMES = {
+    "capex": ["Capex", None],
+    "opex_fixed": ["Opex", "Fixed Opex"],
+    "wacc": ["WACC", "Real WACC"],
+    "capacity_factor": ["CF", "Capacity factor"],
+    "lifetime": ["Lifetime", "Lifetime"],
+    "trl_current": ["TRL", "Current TRL"],
+    "expected_maturity": ["TRL", "Expected maturity (TRL>=8)"],
+    "classification": ["Classification", "Technology classification"],
+    "inputs_material": ["Raw material", None],
+    "inputs_energy": ["Energy", None],
+    "h2_storage": ["H2 storage", None],
+    "prices": ["Commodity prices", None],
+    "emission_factors_co2": ["CO2 Emissivity", None],
+    "emission_factors_n2o": ["N2O Emissivity", None],
+    "emission_factors_ch4": ["CH4 Emissivity", None],
+    "capture_rates": ["CCS", None],
+    "electrolyser_cfs": ["Capacity factor", "Electrolyser capacity factor"],
+    "electrolyser_proportions": [
+        "Proportion of H2 produced via electrolysis",
+        "Proportion of H2 produced via electrolysis",
+    ],
+    "electrolyser_efficiencies": ["Efficiency", "Electrolyser efficiency"],
+}
+
+# Columns to use from Business Cases.xlsx for each DataFrame in addition to MODEL_YEARS
+standard_cols = ["Product", "Technology", "Region", "Unit"]
+emission_cols = [
+    "Product",
+    "Region",
+    "Scope",
+    "Scenario",
+    "Emissivity type",
+    "Unit",
+    "Metric",
+]
+MAP_FIELDS_TO_DF_NAME = {
+    "capex": standard_cols + ["Renovation from", "Low/High/Standard", "Metric"],
+    "opex_fixed": standard_cols + ["Low/High/Standard"],
+    "wacc": standard_cols,
+    "capacity_factor": standard_cols,
+    "lifetime": standard_cols,
+    "trl_current": standard_cols,
+    "expected_maturity": standard_cols,
+    "classification": standard_cols,
+    "inputs_material": standard_cols + ["Metric"],
+    "inputs_energy": standard_cols + ["Metric"],
+    "h2_storage": standard_cols + ["Metric"],
+    "prices": ["Product", "Region", "Unit", "Metric"],
+    "emission_factors_co2": emission_cols,
+    "emission_factors_n2o": emission_cols,
+    "emission_factors_ch4": emission_cols,
+    "capture_rates": standard_cols + ["Metric"],
+    "electrolyser_cfs": standard_cols + ["Metric"],
+    "electrolyser_proportions": standard_cols + ["Metric"],
+    "electrolyser_efficiencies": standard_cols + ["Metric"],
+}
+
+# Metric names for reformatting to long format
+METRIC_NAMES = {
+    "capex": "switching_capex",
+    "opex_fixed": "opex_fixed",
+    "wacc": "wacc",
+    "capacity_factor": "capacity_factor",
+    "lifetime": "lifetime",
+    "trl_current": "trl_current",
+    "expected_maturity": "expected_maturity",
+    "classification": "classification",
+    "inputs_material": "input_material",
+    "inputs_energy": "input_energy",
+    "h2_storage": "h2_storage",
+    "prices": "price",
+    "emission_factors_co2": "emission_factor_co2",
+    "emission_factors_n2o": "emission_factor_n2o",
+    "emission_factors_ch4": "emission_factor_ch4",
+    "capture_rates": "capture_rate",
+    "electrolyser_cfs": "electrolyser_capacity_factor",
+    "electrolyser_proportions": "electrolyser_hydrogen_proportion",
+    "electrolyser_efficiencies": "electrolyser_efficiency",
+}
+
+# Types of switches
+SWITCH_TYPES = [
+    "brownfield_renovation",
+    "brownfield_rebuild",
+    "greenfield",
+    "decommission",
+]
+
+MAP_SWITCH_TYPES_TO_CAPEX = {
+    "greenfield": "Greenfield Capex",
+    "brownfield_rebuild": "Greenfield Capex",  # assumed identical
+    "brownfield_renovation": "Renovation Capex",
+    "decommission": "Decommission Capex",  # assumed zero
+}
+
+# Map Low-cost power regions to overall regions
+LCPR_MAP = {
+    "Latin America": "Brazil",
+    "Middle East": "Saudi Arabia",
+    "Africa": "Namibia",
+    "Oceania": "Australia",
+}
+
+# Common index for pivot table concatenation
+COMMON_INDEX = ["product", "technology_destination", "year", "region"]
+
+# Cost DataFrame MultiIndex
+COST_DF_INDEX = [
+    "product",
+    "technology_destination",
+    "year",
+    "region",
+    "technology_origin",
+    "type",
+]
+
+### CONSTRAINTS ###
 # Integrate current project pipeline or not
 BUILD_CURRENT_PROJECT_PIPELINE = True
 
