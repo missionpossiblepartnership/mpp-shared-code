@@ -1,13 +1,13 @@
 """ Logic for technology transitions of type greenfield (add new Asset to AssetStack."""
 
 from copy import deepcopy
+import sys
 
 import numpy as np
 import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_destination_technology,
-    remove_transition,
     remove_techs_in_region_by_tech_substr,
     select_best_transition,
 )
@@ -299,7 +299,7 @@ def select_asset_for_greenfield(
                     ]
                     # check if regions other than the tentatively updated asset's region exceed the constraint
                     if exceeding_regions != [new_asset.region]:
-                        logger.critical(
+                        sys.exit(
                             f"{year}: Regions other than the tentatively updated asset's region exceed the natural gas "
                             f"constraint!"
                         )
@@ -335,7 +335,7 @@ def select_asset_for_greenfield(
                     ]
                     # check if regions other than the tentatively updated asset's region exceed the constraint
                     if exceeding_regions != [new_asset.region]:
-                        logger.critical(
+                        sys.exit(
                             f"{year}: Regions other than the tentatively updated asset's region exceed the alternative "
                             "fuel constraint!"
                         )
