@@ -29,8 +29,8 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 funcs = {
-    "IMPORT_DATA": import_and_preprocess,
-    "CALCULATE_VARIABLES": get_ranking_inputs,
+    # "IMPORT_DATA": import_and_preprocess,
+    # "CALCULATE_VARIABLES": get_ranking_inputs,
     "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     "MAKE_RANKINGS": make_rankings,
     # "SIMULATE_PATHWAY": simulate_pathway,
