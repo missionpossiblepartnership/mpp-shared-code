@@ -225,10 +225,10 @@ RANKING_CONFIG = {
 ### CONSTRAINTS ###
 # todo: when this is set to None, it causes troubles...
 YEAR_2050_EMISSIONS_CONSTRAINT = 2060
-# Technology ramp-up parameters (on technology-level, only applies to transition and end-state techs!)
+# Technology ramp-up parameters (on global technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
-    "maximum_asset_additions": 1000,  # set high such that is deactivated
-    "maximum_capacity_growth_rate": 0.05,
+    "init_maximum_asset_additions": 20,  # set high such that is deactivated
+    "maximum_asset_growth_rate": 0.05,
     "years_rampup_phase": 10,
 }
 CONSTRAINTS_TO_APPLY = {

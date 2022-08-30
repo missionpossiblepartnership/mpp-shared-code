@@ -152,10 +152,10 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         model_start_year=START_YEAR,
         model_end_year=END_YEAR,
         maximum_asset_additions=TECHNOLOGY_RAMP_UP_CONSTRAINT[
-            "maximum_asset_additions"
+            "init_maximum_asset_additions"
         ],
         maximum_capacity_growth_rate=TECHNOLOGY_RAMP_UP_CONSTRAINT[
-            "maximum_capacity_growth_rate"
+            "maximum_asset_growth_rate"
         ],
         years_rampup_phase=TECHNOLOGY_RAMP_UP_CONSTRAINT["years_rampup_phase"],
     )
