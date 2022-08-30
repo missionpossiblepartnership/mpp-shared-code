@@ -1,14 +1,6 @@
 """Configuration of the MPP Ammonia model."""
 import logging
-
 import numpy as np
-
-SECTOR = "ammonia"
-# Scope of the model run - to be specified
-MODEL_SCOPE = "Global"
-
-INITIAL_ASSET_DATA_LEVEL = "regional"
-
 
 ### RUN CONFIGURATION ###
 LOG_LEVEL = "DEBUG"
@@ -24,10 +16,42 @@ run_config = {
     "MAKE_RANKINGS",
     "SIMULATE_PATHWAY",
     "CALCULATE_OUTPUTS",
-}
+    "CALCULATE_DEBUGGING_OUTPUTS",
+}  # comment lines to adjust run configuration
+
+### OVERARCHING MODEL PARAMETERS ###
+SECTOR = "ammonia"
+MODEL_SCOPE = "Global"
+INITIAL_ASSET_DATA_LEVEL = "regional"
+START_YEAR = 2020
+END_YEAR = 2050
+MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
+PRODUCTS = ["Ammonia", "Ammonium nitrate", "Urea"]
+
+### PATHWAYS, SENSITIVITIES AND CARBON COSTS ###
+PATHWAYS = [
+    "lc",
+    # "fa",
+    # "bau",
+]
+
+SENSITIVITIES = [
+    "def",
+    # "ng_partial",
+    # "ng_high",
+    # "ng_low",
+]
+
+CARBON_COSTS = [
+    # 0,
+    # 50,
+    100,
+    150,
+    200,
+    250,
+]
 
 ### DATA IMPORT AND PREPROCESSING ###
-
 # Data paths
 CORE_DATA_PATH = "ammonia/data/"
 PREPROCESS_DATA_PATH = f"{CORE_DATA_PATH}/preprocess"
@@ -226,7 +250,6 @@ COST_DF_INDEX = [
 ]
 
 ### CALCULATION OF COST AND EMISSION METRICS ###
-
 # Decide whether CO2 emission from urea production are allocated to scope 1 or scope 3 downstream
 UREA_CO2_EMISSIONS_TO_SCOPE1 = True
 
@@ -251,90 +274,6 @@ COST_COMPONENTS = [
     "total",
 ]
 
-
-### CONSTRAINTS ###
-# Integrate current project pipeline or not
-BUILD_CURRENT_PROJECT_PIPELINE = True
-
-# Delays for brownfield transitions to make the model more realistic
-BROWNFIELD_RENOVATION_START_YEAR = 2025  # means retrofit plants come online in 2026
-
-BROWNFIELD_REBUILD_START_YEAR = 2027  # means rebuild plants come online in 2028
-
-START_YEAR = 2020
-END_YEAR = 2050
-MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
-PRODUCTS = ["Ammonia", "Ammonium nitrate", "Urea"]
-# Override asset parameters; annual production capacity in Mt/year
-ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
-
-# Override asset parameters; annual production capacity in Mt/year
-# Ratios for calculating electrolysis capacity
-H2_PER_AMMONIA = 0.176471
-AMMONIA_PER_UREA = 0.565724
-AMMONIA_PER_AMMONIUM_NITRATE = 0.425534
-ammonia_typical_plant_capacity_Mt = (2000 * 365) / 1e6
-
-ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT = {
-    "Ammonia": ammonia_typical_plant_capacity_Mt,
-    "Urea": ammonia_typical_plant_capacity_Mt / AMMONIA_PER_UREA,
-    "Ammonium nitrate": ammonia_typical_plant_capacity_Mt
-    / AMMONIA_PER_AMMONIUM_NITRATE,
-    "Aluminium": 1,
-}
-
-### PATHWAYS, SENSITIVITIES AND CARBON COSTS ###
-PATHWAYS = [
-    "lc",
-    # "fa",
-    # "bau",
-]
-
-SENSITIVITIES = [
-    "def",
-    # "ng_partial",
-    # "ng_high",
-    # "ng_low",
-]
-
-CARBON_COSTS = [
-    0,
-    50,
-    100,
-    150,
-    200,
-    250,
-]
-
-REGIONAL_PRODUCTION_SHARES = {
-    "Africa": 0.4,
-    "China": 0.4,
-    "Europe": 0.4,
-    "India": 0.4,
-    "Latin America": 0.4,
-    "Middle East": 0.4,
-    "North America": 0.4,
-    "Oceania": 0.4,
-    "Russia": 0.4,
-    "Rest of Asia": 0.4,
-}
-
-MAP_LOW_COST_POWER_REGIONS = {
-    "Middle East": "Saudi Arabia",
-    "Africa": "Namibia",
-    "Oceania": "Australia",
-    "Latin America": "Brazil",
-}
-
-### STANDARD ASSUMPTIONS FOR AMMOINA PLANTS ###
-STANDARD_CUF = 0.95
-STANDARD_LIFETIME = 30  # years
-STANDARD_WACC = 0.08
-
-### EMISSIONS CALCULATIONS ###
-GHGS = ["co2", "n2o", "ch4"]
-
-### COST CALCULATIONS ###
 GROUPING_COLS_FOR_NPV = [
     "product",
     "technology_origin",
@@ -345,99 +284,39 @@ GROUPING_COLS_FOR_NPV = [
 
 SCOPES_CO2_COST = ["scope1", "scope2", "scope3_upstream"]
 
-### CONSTRAINTS ON POSSIBLE TECHNOLOGY SWITCHES ###
+GHGS = ["co2", "n2o", "ch4"]
 
-# Regions where geological H2 storage is not allowed because no salt caverns are available
-REGIONS_SALT_CAVERN_AVAILABILITY = {
-    "Africa": "yes",
-    "China": "yes",
-    "Europe": "yes",
-    "India": "no",
-    "Latin America": "yes",
-    "Middle East": "yes",
-    "North America": "yes",
-    "Oceania": "yes",
-    "Russia": "yes",
-    "Rest of Asia": "yes",
+### ARCHETYPE PLANT ASSUMPTIONS ###
+# Ratios for calculating electrolysis capacity
+H2_PER_AMMONIA = 0.176471
+AMMONIA_PER_UREA = 0.565724
+AMMONIA_PER_AMMONIUM_NITRATE = 0.425534
+
+# Archetypal plant capacities
+ammonia_typical_plant_capacity_Mt = (2000 * 365) / 1e6
+
+ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT = {
+    "Ammonia": ammonia_typical_plant_capacity_Mt,
+    "Urea": ammonia_typical_plant_capacity_Mt / AMMONIA_PER_UREA,
+    "Ammonium nitrate": ammonia_typical_plant_capacity_Mt
+    / AMMONIA_PER_AMMONIUM_NITRATE,
+    "Aluminium": 1,
 }
 
-# List of regions
-REGIONS = [
-    "Africa",
-    "China",
-    "Europe",
-    "India",
-    "Latin America",
-    "Middle East",
-    "North America",
-    "Oceania",
-    "Russia",
-    "Rest of Asia",
-    "Brazil",
-    "Australia",
-    "Namibia",
-    "Saudi Arabia",
-]
-
-
-# Maximum share of global demand that can be supplied by one region
-MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION = 0.3
-
-TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE = [
-    "Biomass Gasification + ammonia synthesis",
-    "Biomass Digestion + ammonia synthesis",
-    "Methane Pyrolysis + ammonia synthesis",
-]
-
-# TODO: transfer this to input file
-MAXIMUM_GLOBAL_DEMAND_SHARE = {
-    2020: 0.02,
-    2021: 0.02,
-    2022: 0.02,
-    2023: 0.02,
-    2024: 0.02,
-    2025: 0.02,
-    2026: 0.02,
-    2027: 0.02,
-    2028: 0.02,
-    2029: 0.02,
-    2030: 0.02,
-    2031: 0.02,
-    2032: 0.02,
-    2033: 0.02,
-    2034: 0.02,
-    2035: 0.02,
-    2036: 0.02,
-    2037: 0.02,
-    2038: 0.02,
-    2039: 0.02,
-    2040: 0.02,
-    2041: 1,
-    2042: 1,
-    2043: 1,
-    2044: 1,
-    2045: 1,
-    2046: 1,
-    2047: 1,
-    2048: 1,
-    2049: 1,
-    2050: 1,
-}
-
-# Year from which newbuild capacity must have transition or end-state technology
-TECHNOLOGY_MORATORIUM = 2020
-
-# Duration for which transition technologies are still allowed after the technology moratorium comes into force
-TRANSITIONAL_PERIOD_YEARS = 30
+STANDARD_CUF = 0.95
+STANDARD_LIFETIME = 30  # years
+STANDARD_WACC = 0.08
 
 ### RANKING OF TECHNOLOGY SWITCHES ###
 RANKING_COST_METRIC = "lcox"
 COST_METRIC_RELATIVE_UNCERTAINTY = 0.05
 GHGS_RANKING = ["co2"]
 EMISSION_SCOPES_RANKING = ["scope1", "scope2", "scope3_upstream"]
+
 # Emission scopes included in data analysis
 EMISSION_SCOPES = ["scope1", "scope2", "scope3_upstream", "scope3_downstream"]
-# list to define the columns that the ranking will groupby and create a separate ranking for
+
+# List to define the columns that the ranking will groupby and create a separate ranking for
 UNCERTAINTY_RANKING_GROUPS = ["year"]
 
 TRANSITION_TYPES = [
@@ -500,6 +379,116 @@ RANKING_CONFIG = {
 }
 
 ### CONSTRAINTS ###
+# Integrate current project pipeline or not
+BUILD_CURRENT_PROJECT_PIPELINE = True
+
+# Delays for brownfield transitions to make the model more realistic
+BROWNFIELD_RENOVATION_START_YEAR = 2025  # means retrofit plants come online in 2026
+BROWNFIELD_REBUILD_START_YEAR = 2027  # means rebuild plants come online in 2028
+
+TECHNOLOGIES_NOT_FOR_SOLVER = ["Waste to ammonia", "Waste Water to ammonium nitrate"]
+
+REGIONAL_PRODUCTION_SHARES = {
+    "Africa": 0.4,
+    "China": 0.4,
+    "Europe": 0.4,
+    "India": 0.4,
+    "Latin America": 0.4,
+    "Middle East": 0.4,
+    "North America": 0.4,
+    "Oceania": 0.4,
+    "Russia": 0.4,
+    "Rest of Asia": 0.4,
+}
+
+MAP_LOW_COST_POWER_REGIONS = {
+    "Middle East": "Saudi Arabia",
+    "Africa": "Namibia",
+    "Oceania": "Australia",
+    "Latin America": "Brazil",
+}
+
+# Regions where geological H2 storage is not allowed because no salt caverns are available
+REGIONS_SALT_CAVERN_AVAILABILITY = {
+    "Africa": "yes",
+    "China": "yes",
+    "Europe": "yes",
+    "India": "no",
+    "Latin America": "yes",
+    "Middle East": "yes",
+    "North America": "yes",
+    "Oceania": "yes",
+    "Russia": "yes",
+    "Rest of Asia": "yes",
+}
+
+# List of regions
+REGIONS = [
+    "Africa",
+    "China",
+    "Europe",
+    "India",
+    "Latin America",
+    "Middle East",
+    "North America",
+    "Oceania",
+    "Russia",
+    "Rest of Asia",
+    "Brazil",
+    "Australia",
+    "Namibia",
+    "Saudi Arabia",
+]
+
+# Maximum share of global demand that can be supplied by one region
+MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION = 0.3
+
+# For less mature technologies, limit the technology's share in global demand
+TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE = [
+    "Biomass Gasification + ammonia synthesis",
+    "Biomass Digestion + ammonia synthesis",
+    "Methane Pyrolysis + ammonia synthesis",
+]
+MAXIMUM_GLOBAL_DEMAND_SHARE = {
+    2020: 0.02,
+    2021: 0.02,
+    2022: 0.02,
+    2023: 0.02,
+    2024: 0.02,
+    2025: 0.02,
+    2026: 0.02,
+    2027: 0.02,
+    2028: 0.02,
+    2029: 0.02,
+    2030: 0.02,
+    2031: 0.02,
+    2032: 0.02,
+    2033: 0.02,
+    2034: 0.02,
+    2035: 0.02,
+    2036: 0.02,
+    2037: 0.02,
+    2038: 0.02,
+    2039: 0.02,
+    2040: 0.02,
+    2041: 1,
+    2042: 1,
+    2043: 1,
+    2044: 1,
+    2045: 1,
+    2046: 1,
+    2047: 1,
+    2048: 1,
+    2049: 1,
+    2050: 1,
+}
+
+# Year from which newbuild capacity must have transition or end-state technology
+TECHNOLOGY_MORATORIUM = 2020
+
+# Duration for which transition technologies are still allowed after the technology moratorium comes into force
+TRANSITIONAL_PERIOD_YEARS = 30
+
 SET_CO2_STORAGE_CONSTRAINT = True
 CO2_STORAGE_CONSTRAINT_CUMULATIVE = False
 CUF_LOWER_THRESHOLD = 0.5
@@ -516,26 +505,8 @@ CONSTRAINTS_TO_APPLY = {
     "fa": ["co2_storage_constraint"],
 }
 
-YEAR_2050_EMISSIONS_CONSTRAINT = 2050
-
 # Share of assets renovated annually (limits number of brownfield transitions)
-ANNUAL_RENOVATION_SHARE = 0.5
-# Technology ramp-up parameters
-TECHNOLOGY_RAMP_UP_CONSTRAINT = {
-    "maximum_asset_additions": 10,
-    "maximum_capacity_growth_rate": 0.7,
-    "years_rampup_phase": 5,
-}
-
-CARBON_BUDGET_SECTOR_CSV = False
-residual_share = 0.05
-emissions_2020 = 0.62  # Gt CO2 (scope 1 and 2)
-
-SECTORAL_CARBON_PATHWAY = {
-    "emissions_start": emissions_2020,
-    "emissions_end": residual_share * emissions_2020,
-    "action_start": 2023,
-}
+ANNUAL_RENOVATION_SHARE = 0.05
 
 # Increase in cost metric required to enact a brownfield renovation or brownfield rebuild transition
 COST_METRIC_DECREASE_BROWNFIELD = 0.05
