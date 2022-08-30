@@ -40,14 +40,14 @@ def select_best_transition(df_rank: pd.DataFrame) -> dict:
 
 
 def remove_transition(df_rank: pd.DataFrame, transition: dict) -> pd.DataFrame:
-    """Filter transition from ranking table.
+    """Remove specific transition from ranking table.
 
     Args:
         df_rank: table with ranking of technology switches
         transition: row from the ranking table
 
     Returns:
-        ranking table with the row corresponding to the transition removed
+        ranking table without the row corresponding to the transition removed
     """
     return df_rank.loc[
         ~(df_rank[list(transition)] == pd.Series(transition)).all(axis=1)
@@ -64,15 +64,14 @@ def remove_all_transitions_with_destination_technology(
     return df_rank
 
 
-def remove_transition_in_region_by_tech_substr(
-    df_rank: pd.DataFrame, transition: dict, tech_substr: str
+def remove_techs_in_region_by_tech_substr(
+    df_rank: pd.DataFrame, region: str, tech_substr: str
 ) -> pd.DataFrame:
 
     df_rank = df_rank.loc[
         ~(
-            df_rank["region"]
-            == transition["region"]
-            & df_rank["technology_destination"].str.contains(tech_substr)
+            (df_rank["region"] == region)
+            & (df_rank["technology_destination"].str.contains(tech_substr))
         ),
         :,
     ]
@@ -225,7 +224,8 @@ def create_dict_technology_rampup(
     maximum_capacity_growth_rate: float,
     years_rampup_phase: int,
 ) -> dict:
-    """Create dictionary of TechnologyRampup objects with the technologies in that sector as keys. Set None if the technology has no ramp-up trajectory."""
+    """Create dictionary of TechnologyRampup objects with the technologies in that sector as keys. Set None if the
+    technology has no ramp-up trajectory."""
     logger.info("Creating ramp-up trajectories for technologies")
 
     technology_characteristics = importer.get_technology_characteristics()
@@ -234,7 +234,8 @@ def create_dict_technology_rampup(
 
     for technology in technologies:
 
-        # Expected maturity and classification are constant across regions, products and years, hence take the first row for that technology
+        # Expected maturity and classification are constant across regions, products and years, hence take the first row
+        #   for that technology
         df_characteristics = technology_characteristics.loc[
             technology_characteristics["technology"] == technology
         ].iloc[0]

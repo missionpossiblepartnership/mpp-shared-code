@@ -25,7 +25,6 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     Args:
         pathway: decarbonization pathway that describes the composition of the AssetStack in every year of the model horizon
         year: current year in which technology transitions are enacted
-        product: product for which technology transitions are enacted
 
     Returns:
         Updated decarbonization pathway with the updated AssetStack in the subsequent year according to the brownfield transitions enacted
@@ -36,13 +35,9 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     new_stack = pathway.get_stack(year=year + 1)
     # Get the emissions, used for the LC scenario
     if year == 2050:
-        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(
-            year, pathway.sector
-        )
+        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year)
     else:
-        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(
-            year + 1, pathway.sector
-        )
+        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year + 1)
 
     # Get ranking table for brownfield transitions
     df_rank = pathway.get_ranking(year=year, rank_type="brownfield")
@@ -139,8 +134,12 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         )
 
         # Check constraints with tentative new stack
+        assert (
+            len(pathway.products) == 1
+        ), "Adjust aluminium brownfield logic if more than one product!"
         dict_constraints = check_constraints(
             pathway=pathway,
+            product=pathway.products[0],
             stack=tentative_stack,
             year=year,
             transition_type="brownfield",

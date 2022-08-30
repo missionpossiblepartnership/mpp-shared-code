@@ -1,6 +1,7 @@
 """Asset and asset stack classes, code adapted from MCC"""
 import sys
 from calendar import c
+from copy import deepcopy
 from uuid import uuid4
 from xmlrpc.client import Boolean
 
@@ -226,7 +227,29 @@ class AssetStack:
         )
         return sum(asset.get_annual_production_volume() for asset in assets)
 
-    def get_ng_af_production_volume(
+    def log_annual_production_volume_by_region_and_tech(self, product: str):
+        """Only in debug logger mode: logs production volumes per region and technology"""
+        regions = get_unique_list_values(
+            [x for x in [asset.region for asset in self.filter_assets(product=product)]]
+        )
+
+        for region in regions:
+            technologies = get_unique_list_values(
+                [
+                    x
+                    for x in [
+                        asset.technology
+                        for asset in self.filter_assets(product=product, region=region)
+                    ]
+                ]
+            )
+            for technology in technologies:
+                prod_vol = self.get_annual_production_volume(
+                    product=product, region=region, technology=technology
+                )
+                logger.debug(f"{region} | {technology}: {prod_vol} Mt {product}")
+
+    def get_annual_ng_af_production_volume(
         self,
         product: str,
         region: str,
@@ -255,17 +278,12 @@ class AssetStack:
             ]
         )
 
-        if len(technologies) == 0:
-            return float(0)
-
         production_volume = float(0)
-        for technology in technologies:
-            assets = self.filter_assets(
-                product=product, region=region, technology=technology
-            )
-            production_volume += sum(
-                (asset.annual_production_capacity * asset.cuf) for asset in assets
-            )
+        if len(technologies) != 0:
+            for technology in technologies:
+                production_volume += self.get_annual_production_volume(
+                    product=product, region=region, technology=technology
+                )
 
         return production_volume
 
@@ -282,6 +300,8 @@ class AssetStack:
 
         Args:
             aggregation_vars: aggregate by these variables
+            technology_classification:
+            product:
 
         Returns:
             Dataframe with technologies
@@ -322,7 +342,8 @@ class AssetStack:
         technology_classification=None,
         product=None,
     ) -> dict:
-        """Calculate emissions of the current stack in MtGHG by GHG and scope, optionally filtered for technology classification and/or a specific product"""
+        """Calculate emissions of the current stack in MtGHG by GHG and scope, optionally filtered for technology
+        classification and/or a specific product"""
 
         # Sum emissions by GHG and scope
         emission_columns = get_emission_columns(
@@ -330,7 +351,8 @@ class AssetStack:
         )
         dict_emissions = dict.fromkeys(emission_columns)
 
-        # Get DataFrame with annual production volume by product, region and technology (optionally filtered for technology classification and specific product)
+        # Get DataFrame with annual production volume by product, region and technology (optionally filtered for
+        #   technology classification and specific product)
         df_stack = self.aggregate_stack(
             aggregation_vars=["technology", "product", "region"],
             technology_classification=technology_classification,
@@ -518,7 +540,7 @@ class AssetStack:
         """Return a list of Assets from the AssetStack that are eligible for decommissioning"""
 
         # Filter for assets with the specified product
-        assets = self.filter_assets(product=product)
+        assets = deepcopy(self.filter_assets(product=product))
 
         # assets can be decommissioned if they have not undergone a renovation or rebuild
         candidates = filter(lambda asset: not asset.retrofit, assets)
@@ -550,7 +572,7 @@ class AssetStack:
         """Return a list of Assets from the AssetStack that are eligible for a brownfield technology transition"""
 
         # cement: all assets are eligible for a brownfield transition
-        return self.assets
+        return deepcopy(self.assets)
 
 
 def make_new_asset(

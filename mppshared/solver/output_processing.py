@@ -5,8 +5,7 @@ import pandas as pd
 
 from mppshared.config import *
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.solver.debugging_outputs import \
-    create_table_asset_transition_sequences
+from mppshared.solver.debugging_outputs import create_table_asset_transition_sequences
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)

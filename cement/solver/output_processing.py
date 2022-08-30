@@ -2,16 +2,256 @@
 
 import numpy as np
 import pandas as pd
+import plotly.express as px
+from plotly.offline import plot
 
-from cement.config.config_cement import EMISSION_SCOPES_RANKING, GHGS
-from mppshared.config import *
+from cement.config.config_cement import (
+    EMISSION_SCOPES_RANKING,
+    END_YEAR,
+    GHGS,
+    PRODUCTS,
+    START_YEAR,
+)
+from cement.config.plot_config_cement import TECHNOLOGY_LAYOUT
+from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.solver.debugging_outputs import \
-    create_table_asset_transition_sequences
+from mppshared.models.simulation_pathway import SimulationPathway
+from mppshared.solver.debugging_outputs import create_table_asset_transition_sequences
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
+
+
+def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products: list):
+    importer = IntermediateDataImporter(
+        pathway_name=pathway_name,
+        sensitivity=sensitivity,
+        sector=sector,
+        products=PRODUCTS,
+    )
+
+    # export technology roadmap
+    df_tech_roadmap = _create_tech_roadmaps_by_region(
+        importer=importer, start_year=START_YEAR, end_year=END_YEAR
+    )
+    _export_and_plot_tech_roadmaps_by_region(
+        importer=importer,
+        df_roadmap=df_tech_roadmap,
+        unit="Mt Clk",
+        technology_layout=TECHNOLOGY_LAYOUT,
+    )
+
+    # Create summary table of asset transitions
+    """logger.info("Creating table with asset transition sequences.")
+    df_transitions = create_table_asset_transition_sequences(importer=importer, start_year=START_YEAR, end_year=END_YEAR)
+    importer.export_data(
+        df=df_transitions,
+        filename=f"asset_transition_sequences_sensitivity_{sensitivity}.csv",
+        export_dir="final",
+        index=True,
+    )"""
+
+    """# Calculate weighted average of LCOX
+    df_cost = importer.get_technology_transitions_and_cost()
+    df_lcox = calculate_weighted_average_lcox(
+        df_cost=df_cost,
+        importer=importer,
+        sector=sector,
+        agg_vars=["product", "region", "technology"],
+    )
+    df_lcox_all_techs = calculate_weighted_average_lcox(
+        df_cost=df_cost,
+        importer=importer,
+        sector=sector,
+        agg_vars=["product", "region"],
+    )
+    df_lcox_all_regions_all_techs = calculate_weighted_average_lcox(
+        df_cost=df_cost,
+        importer=importer,
+        sector=sector,
+        agg_vars=["product"],
+    )
+
+    df_lcox_all_regions = calculate_weighted_average_lcox(
+        df_cost=df_cost,
+        importer=importer,
+        sector=sector,
+        agg_vars=["product", "technology"],
+    )
+
+    # Calculate annual investments
+    df_annual_investments = _calculate_annual_investments(
+        df_cost=df_cost,
+        importer=importer,
+        sector=sector,
+        agg_vars=["product", "region", "switch_type", "technology_destination"],
+    )
+    df_annual_investments_all_tech = _calculate_annual_investments(
+        df_cost=df_cost,
+        importer=importer,
+        sector=sector,
+        agg_vars=["product", "region", "switch_type"],
+    )
+    df_annual_investments_all_switch_types = _calculate_annual_investments(
+        df_cost=df_cost,
+        importer=importer,
+        sector=sector,
+        agg_vars=["product", "region", "technology_destination"],
+    )
+    df_annual_investments_all_tech_all_switch_types = _calculate_annual_investments(
+        df_cost=df_cost,
+        importer=importer,
+        sector=sector,
+        agg_vars=["product", "region"],
+    )
+
+    # Create output table for every year and concatenate
+    data = []
+    data_stacks = []
+
+    for year in range(START_YEAR, END_YEAR + 1):
+        logger.info(f"Processing year {year}")
+        yearly = create_table_all_data_year(year, importer)
+        yearly["year"] = year
+        data.append(yearly)
+        df_stack = importer.get_asset_stack(year)
+        df_stack["year"] = year
+        data_stacks.append(df_stack)
+
+    suffix = f"{sector}_{pathway_name}_{sensitivity}"
+    df_stacks = pd.concat(data_stacks)
+    importer.export_data(
+        df_stacks, f"plant_stack_transition_{suffix}.csv", "final", index=False
+    )
+    df = pd.concat(data)
+    df["sector"] = sector
+
+    # Pivot the dataframe to have the years as columns
+    df_pivot = df.pivot_table(
+        index=[
+            "sector",
+            "product",
+            "region",
+            "technology",
+            "parameter_group",
+            "parameter",
+            "unit",
+        ],
+        columns="year",
+        values="value",
+    )
+
+    df_pivot = pd.concat(
+        [
+            df_pivot,
+            df_annual_investments,
+            df_annual_investments_all_tech,
+            df_annual_investments_all_tech_all_switch_types,
+            df_annual_investments_all_switch_types,
+            df_lcox,
+            df_lcox_all_techs,
+            df_lcox_all_regions,
+            df_lcox_all_regions_all_techs,
+        ]
+    )
+    df_pivot.reset_index(inplace=True)
+    df_pivot.fillna(0, inplace=True)
+
+    importer.export_data(
+        df_pivot, f"simulation_outputs_{suffix}.csv", "final", index=False
+    )
+    # df_pivot.to_csv(
+    #     f"{OUTPUT_WRITE_PATH[sector]}/simulation_outputs_{suffix}.csv", index=False
+    # )
+
+    columns = [
+        "sector",
+        "product",
+        "region",
+        "technology",
+        "year",
+        "parameter_group",
+        "parameter",
+        "unit",
+        "value",
+    ]
+    importer.export_data(
+        df[columns], f"interface_outputs_{suffix}.csv", "final", index=False
+    )"""
+    logger.info("All data for all years processed.")
+
+
+def _create_tech_roadmaps_by_region(
+    importer: IntermediateDataImporter, start_year: int, end_year: int
+) -> pd.DataFrame:
+    # Annual production volume in Mt production_output by technology and region
+
+    # region
+    df_list = []
+    for year in np.arange(start_year, end_year + 1):
+        # Group by technology and sum annual production volume
+        df_stack = importer.get_asset_stack(year=year)
+        df_stack = df_stack[["region", "technology", "annual_production_volume"]]
+        df_stack = df_stack.groupby(["region", "technology"]).sum().reset_index()
+        df_stack["year"] = year
+        df_stack = df_stack.set_index(["year", "region", "technology"]).sort_index()
+        # add to df_list
+        df_list.append(df_stack)
+    df_stack = pd.concat(df_list)
+
+    # global
+    df_stack_global = df_stack.groupby(["year", "technology"]).sum()
+    df_stack_global["region"] = "Global"
+    df_stack_global = df_stack_global.reset_index().set_index(
+        ["year", "region", "technology"]
+    )
+
+    df_stack = pd.concat([df_stack, df_stack_global]).sort_index()
+
+    return df_stack
+
+
+def _export_and_plot_tech_roadmaps_by_region(
+    importer: IntermediateDataImporter,
+    df_roadmap: pd.DataFrame,
+    unit: str,
+    technology_layout: dict,
+):
+
+    regions = df_roadmap.reset_index()["region"].unique()
+
+    for region in regions:
+        df_roadmap_region = df_roadmap.xs(key=region, level="region")
+
+        importer.export_data(
+            df=df_roadmap_region,
+            filename=f"technology_roadmap_{region}.csv",
+            export_dir="final",
+            index=True,
+        )
+
+        fig = px.area(
+            data_frame=df_roadmap_region.reset_index(),
+            x="year",
+            y="annual_production_volume",
+            color="technology",
+            labels={
+                "year": "Year",
+                "annual_production_volume": f"Annual production volume in {unit}",
+            },
+            title=f"{region}: Technology roadmap",
+            category_orders={"technology": list(technology_layout)},
+            color_discrete_map=technology_layout,
+        )
+
+        fig.for_each_trace(lambda trace: trace.update(fillcolor=trace.line.color))
+
+        plot(
+            figure_or_data=fig,
+            filename=f"{importer.final_path}/technology_roadmap_{region}.html",
+            auto_open=False,
+        )
 
 
 def _calculate_number_of_assets(df_stack: pd.DataFrame) -> pd.DataFrame:
@@ -590,155 +830,6 @@ def calculate_weighted_average_lcox(
     ).fillna(0)
 
     return df
-
-
-def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products: list):
-    importer = IntermediateDataImporter(
-        pathway_name=pathway_name,
-        sensitivity=sensitivity,
-        sector=sector,
-        products=PRODUCTS[sector],
-    )
-
-    # Write key assumptions to txt file
-
-    # Create summary table of asset transitions
-    logger.info("Creating table with asset transition sequences.")
-    df_transitions = create_table_asset_transition_sequences(importer)
-    importer.export_data(
-        df_transitions,
-        f"asset_transition_sequences_sensitivity_{sensitivity}.csv",
-        "final",
-    )
-
-    # Calculate weighted average of LCOX
-    df_cost = importer.get_technology_transitions_and_cost()
-    df_lcox = calculate_weighted_average_lcox(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region", "technology"],
-    )
-    df_lcox_all_techs = calculate_weighted_average_lcox(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region"],
-    )
-    df_lcox_all_regions_all_techs = calculate_weighted_average_lcox(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product"],
-    )
-
-    df_lcox_all_regions = calculate_weighted_average_lcox(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "technology"],
-    )
-
-    # Calculate annual investments
-    df_annual_investments = _calculate_annual_investments(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region", "switch_type", "technology_destination"],
-    )
-    df_annual_investments_all_tech = _calculate_annual_investments(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region", "switch_type"],
-    )
-    df_annual_investments_all_switch_types = _calculate_annual_investments(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region", "technology_destination"],
-    )
-    df_annual_investments_all_tech_all_switch_types = _calculate_annual_investments(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region"],
-    )
-
-    # Create output table for every year and concatenate
-    data = []
-    data_stacks = []
-
-    for year in range(START_YEAR, END_YEAR + 1):
-        logger.info(f"Processing year {year}")
-        yearly = create_table_all_data_year(year, importer)
-        yearly["year"] = year
-        data.append(yearly)
-        df_stack = importer.get_asset_stack(year)
-        df_stack["year"] = year
-        data_stacks.append(df_stack)
-
-    suffix = f"{sector}_{pathway_name}_{sensitivity}"
-    df_stacks = pd.concat(data_stacks)
-    importer.export_data(
-        df_stacks, f"plant_stack_transition_{suffix}.csv", "final", index=False
-    )
-    df = pd.concat(data)
-    df["sector"] = sector
-
-    # Pivot the dataframe to have the years as columns
-    df_pivot = df.pivot_table(
-        index=[
-            "sector",
-            "product",
-            "region",
-            "technology",
-            "parameter_group",
-            "parameter",
-            "unit",
-        ],
-        columns="year",
-        values="value",
-    )
-
-    df_pivot = pd.concat(
-        [
-            df_pivot,
-            df_annual_investments,
-            df_annual_investments_all_tech,
-            df_annual_investments_all_tech_all_switch_types,
-            df_annual_investments_all_switch_types,
-            df_lcox,
-            df_lcox_all_techs,
-            df_lcox_all_regions,
-            df_lcox_all_regions_all_techs,
-        ]
-    )
-    df_pivot.reset_index(inplace=True)
-    df_pivot.fillna(0, inplace=True)
-
-    importer.export_data(
-        df_pivot, f"simulation_outputs_{suffix}.csv", "final", index=False
-    )
-    # df_pivot.to_csv(
-    #     f"{OUTPUT_WRITE_PATH[sector]}/simulation_outputs_{suffix}.csv", index=False
-    # )
-
-    columns = [
-        "sector",
-        "product",
-        "region",
-        "technology",
-        "year",
-        "parameter_group",
-        "parameter",
-        "unit",
-        "value",
-    ]
-    importer.export_data(
-        df[columns], f"interface_outputs_{suffix}.csv", "final", index=False
-    )
-    logger.info("All data for all years processed.")
 
 
 def save_consolidated_outputs(sector: str):

@@ -1,11 +1,15 @@
 """Calculates all cost metrics required for technology ranking"""
 
+import sys
+from copy import deepcopy
 from itertools import chain
 
 import numpy as np
 import pandas as pd
 
 from mppshared.config import IDX_TECH_RANKING_COLUMNS, LOG_LEVEL
+from mppshared.import_data.intermediate_data import IntermediateDataImporter
+from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.utility.dataframe_utility import df_dict_to_df
 from mppshared.utility.log_utility import get_logger
 from mppshared.utility.utils import get_unique_list_values
@@ -16,11 +20,13 @@ logger.setLevel(LOG_LEVEL)
 
 
 def calculate_tech_transitions(
+    importer: IntermediateDataImporter,
     # parameters
     sector: str,
     model_years: np.ndarray,
     products: list,
     model_regions: list,
+    compute_lcox: bool,
     cost_classifications: dict,
     map_switch_types_to_capex_type: dict,
     idx_per_input_metric: dict,
@@ -30,9 +36,12 @@ def calculate_tech_transitions(
     opex_ccus_emissivity_metric_types: list,
     opex_ccus_process_metrics: list,
     opex_ccus_context_metrics: dict,
+    list_technologies: list,
+    carbon_cost_scopes: list,
     # data
     df_tech_switches: pd.DataFrame,
     dict_emissivity: dict,
+    df_emissions: pd.DataFrame,
     df_capex: pd.DataFrame,
     df_opex: pd.DataFrame,
     df_inputs_material: pd.DataFrame,
@@ -42,7 +51,7 @@ def calculate_tech_transitions(
     df_capacity_factor: pd.DataFrame,
     df_lifetime: pd.DataFrame,
     df_capture_rate: pd.DataFrame,
-    list_technologies: list,
+    carbon_cost_trajectory: CarbonCostTrajectory,
 ) -> pd.DataFrame:
     """
     Calculate all cost metrics for each technology switch for use in the technology ranking.
@@ -55,10 +64,12 @@ def calculate_tech_transitions(
         6) Marginal cost (not yet implemented)
 
     Args:
+        importer ():
         sector ():
         model_years ():
         products ():
         model_regions ():
+        compute_lcox (): function will compute LCOX data if True
         cost_classifications ():
         map_switch_types_to_capex_type
         idx_per_input_metric ():
@@ -68,8 +79,11 @@ def calculate_tech_transitions(
         opex_ccus_emissivity_metric_types ():
         opex_ccus_process_metrics ():
         opex_ccus_context_metrics ():
+        list_technologies (): list of all technologies in the model
+        carbon_cost_scopes ():
         df_tech_switches (): df with all feasible tech switches and their switch type
         dict_emissivity (): dict of all emissivity metric types
+        df_emissions ():
         df_capex ():
         df_opex ():
         df_inputs_material ():
@@ -79,7 +93,7 @@ def calculate_tech_transitions(
         df_capacity_factor ():
         df_lifetime ():
         df_capture_rate ():
-        list_technologies (): list of all technologies in the model
+        carbon_cost_trajectory ():
 
     Returns:
 
@@ -104,10 +118,12 @@ def calculate_tech_transitions(
     if sector == "cement":
         dict_opex_variable = _get_opex_variable(
             dict_emissivity=dict_emissivity,
+            df_emissions=df_emissions,
             df_inputs_material=df_inputs_material,
             df_inputs_energy=df_inputs_energy,
             df_commodity_prices=df_commodity_prices,
             df_capture_rate=df_capture_rate,
+            carbon_cost_trajectory=carbon_cost_trajectory,
             sector=sector,
             list_technologies=list_technologies,
             cost_classifications=cost_classifications,
@@ -118,40 +134,45 @@ def calculate_tech_transitions(
             opex_ccus_emissivity_metric_types=opex_ccus_emissivity_metric_types,
             opex_ccus_process_metrics=opex_ccus_process_metrics,
             opex_ccus_context_metrics=opex_ccus_context_metrics,
+            carbon_cost_scopes=carbon_cost_scopes,
         )
+        # convert dict to df
+        df_opex_variable = df_dict_to_df(df_dict=dict_opex_variable)
     else:
         # placeholder
         df_opex_variable = pd.DataFrame()
 
     # LCOX
-    logger.info("Calculate LCOX")
-    # todo: uncomment (this takes some minutes, therefore the workaround with the csv import below)
-    """if sector == "cement":
-        dict_lcox = _get_lcox(
-            df_switch_capex=df_switch_capex,
-            df_opex_fixed=df_opex_fixed,
-            dict_opex_variable=dict_opex_variable,
-            df_wacc=df_wacc,
-            df_capacity_factor=df_capacity_factor,
-            df_lifetime=df_lifetime,
-        )
-        for key in dict_lcox.keys():
-            dict_lcox[key] = dict_lcox[key][["lcox"]]
-            dict_lcox[key].rename(columns={"lcox": "value"}, inplace=True)
+    if compute_lcox:
+        logger.info("Calculate LCOX")
+        if sector == "cement":
+            dict_lcox = _get_lcox(
+                df_switch_capex=df_switch_capex,
+                df_opex_fixed=df_opex_fixed,
+                dict_opex_variable=dict_opex_variable,
+                df_wacc=df_wacc,
+                df_capacity_factor=df_capacity_factor,
+                df_lifetime=df_lifetime,
+            )
+            for key in dict_lcox.keys():
+                dict_lcox[key] = dict_lcox[key][["lcox"]]
+                dict_lcox[key].rename(columns={"lcox": "value"}, inplace=True)
+            # convert dict to df
+            df_lcox = df_dict_to_df(df_dict=dict_lcox)
+            # export lcox
+            importer.export_data(
+                df=df_lcox,
+                filename="lcox.csv",
+                export_dir="intermediate",
+            )
     else:
-        # placeholder
-        df_lcox = pd.DataFrame()"""
-
-    if sector == "cement":
-        # convert dicts to dfs
-        df_opex_variable = df_dict_to_df(df_dict=dict_opex_variable)
-        # todo: dev
-        # df_lcox = df_dict_to_df(df_dict=dict_lcox)
-        # df_lcox.to_csv("C:/Users/TimonRueckel/PycharmProjects/mpp-shared-code/cement/data/bau/def/intermediate/lcox.csv")
-        df_lcox = pd.read_csv(
-            "C:/Users/TimonRueckel/PycharmProjects/mpp-shared-code/cement/data/bau/def/intermediate/lcox.csv"
-        ).set_index(IDX_TECH_RANKING_COLUMNS)
-        # todo: dev
+        try:
+            logger.info("Import LCOX")
+            df_lcox = importer.get_lcox().set_index(IDX_TECH_RANKING_COLUMNS)
+        except FileNotFoundError:
+            sys.exit(
+                "No LCOX data found. Set config parameter COMPUTE_LCOX to True to generate LCOX data."
+            )
 
     # add all outputs to dict
     # todo: add missing dataframes
@@ -346,6 +367,56 @@ def _get_switch_capex(
         df_brownfield_renovation["value_destination"]
         - df_brownfield_renovation["value_origin"]
     )
+    # brownfield switch CAPEX for switches from one CCU/S tech to another CCU/S tech are set to the renovation CAPEX of
+    #   the destination tech
+    df_brownfield_renovation.loc[
+        (
+            df_brownfield_renovation["technology_origin"].str.contains(
+                "post combustion"
+            )
+            & (
+                df_brownfield_renovation["technology_destination"].str.contains(
+                    "oxyfuel"
+                )
+                ^ df_brownfield_renovation["technology_destination"].str.contains(
+                    "direct separation"
+                )
+            )
+        ),
+        "value",
+    ] = df_brownfield_renovation["value_destination"]
+    df_brownfield_renovation.loc[
+        (
+            df_brownfield_renovation["technology_origin"].str.contains("oxyfuel")
+            & (
+                df_brownfield_renovation["technology_destination"].str.contains(
+                    "post combustion"
+                )
+                ^ df_brownfield_renovation["technology_destination"].str.contains(
+                    "direct separation"
+                )
+            )
+        ),
+        "value",
+    ] = df_brownfield_renovation["value_destination"]
+    df_brownfield_renovation.loc[
+        (
+            df_brownfield_renovation["technology_origin"].str.contains(
+                "direct separation"
+            )
+            & (
+                df_brownfield_renovation["technology_destination"].str.contains(
+                    "post combustion"
+                )
+                ^ df_brownfield_renovation["technology_destination"].str.contains(
+                    "oxyfuel"
+                )
+            )
+        ),
+        "value",
+    ] = df_brownfield_renovation["value_destination"]
+
+    # filter relevent columns
     df_brownfield_renovation = df_brownfield_renovation[
         IDX_TECH_RANKING_COLUMNS + ["value"]
     ]
@@ -363,11 +434,8 @@ def _get_switch_capex(
     df_switch_capex = df_switch_capex.set_index(IDX_TECH_RANKING_COLUMNS).sort_index()
 
     # check for negative values
-    # todo: uncomment as soon as all renovation CAPEX values are available
-    """assert not any(
-        df_switch_capex["value"] < 0
-    ), "Warning: Negative switch CAPEX values exist!"
-    """
+    if any(df_switch_capex["value"] < 0):
+        logger.critical("Warning: Negative switch CAPEX values exist!")
 
     return df_switch_capex
 
@@ -403,10 +471,12 @@ def _get_opex_fixed(
 def _get_opex_variable(
     # data
     dict_emissivity: dict,
+    df_emissions: pd.DataFrame,
     df_inputs_material: pd.DataFrame,
     df_inputs_energy: pd.DataFrame,
     df_commodity_prices: pd.DataFrame,
     df_capture_rate: pd.DataFrame,
+    carbon_cost_trajectory: CarbonCostTrajectory,
     # parameters
     sector: str,
     list_technologies: list,
@@ -418,17 +488,20 @@ def _get_opex_variable(
     opex_ccus_emissivity_metric_types: list,
     opex_ccus_emissivity_metrics: list,
     opex_ccus_context_metrics: dict,
+    carbon_cost_scopes: list,
 ) -> dict:
     """
     Computes the variable OPEX data per product, year, region, and technology_destination, considering the different
         CCU/CCS contexts.
 
     Args:
-        dict_emissivity ():
+        dict_emissivity (): Unit: [t GHG / GJ]
+        df_emissions (): Unit: [t GHG / t production_output]
         df_inputs_material (): Unit: [t input_material / t product_output]
         df_inputs_energy (): Unit: [GJ / t product_output]
         df_commodity_prices (): Units: [USD / resource_consumption]
         df_capture_rate (): Unit: [$]
+        carbon_cost_trajectory ():
         sector ():
         list_technologies ():
         idx_per_input_metric ():
@@ -437,6 +510,7 @@ def _get_opex_variable(
         opex_ccus_process_metrics ():
         opex_ccus_emissivity_metric_types ():
         opex_ccus_emissivity_metrics ():
+        carbon_cost_scopes ():
 
     Returns:
         dict_opex_variable (dict): Dictionary with cost_classifications as keys and respective variable OPEX dataframes
@@ -591,6 +665,26 @@ def _get_opex_variable(
         )
         # unit dict_ov_ccus: [USD / t product_output]
 
+    """carbon cost"""
+
+    if carbon_cost_trajectory is not None:
+        df_ov_carbon_cost = (
+            deepcopy(carbon_cost_trajectory.df_carbon_cost)
+            .set_index("year")
+            .sort_index()
+        )
+        df_ov_carbon_cost.rename(
+            columns={list(df_ov_carbon_cost)[0]: "value"}, inplace=True
+        )
+        df_emissions = (
+            df_emissions[[f"co2_{x}" for x in carbon_cost_scopes]]
+            .sum(axis=1)
+            .to_frame()
+        )
+        df_emissions.rename(columns={list(df_emissions)[0]: "value"}, inplace=True)
+        df_ov_carbon_cost = df_ov_carbon_cost.mul(df_emissions).sort_index()
+        # unit df_ov_carbon_cost: [USD / t product_output]
+
     """aggregate"""
 
     dict_opex_variable = dict.fromkeys(dict_ov_ccus)
@@ -599,10 +693,15 @@ def _get_opex_variable(
         dict_opex_variable[cost_classification] = dict_ov_ccus[cost_classification].add(
             df_ov_materials
         )
-        # CCU/S OPEX + materials OPEX + energy OPEX
+        # + energy OPEX
         dict_opex_variable[cost_classification] = dict_opex_variable[
             cost_classification
         ].add(df_ov_energy)
+        if carbon_cost_trajectory is not None:
+            # + carbon cost
+            dict_opex_variable[cost_classification] = dict_opex_variable[
+                cost_classification
+            ].add(df_ov_carbon_cost)
         # unit dict_opex_variable: [USD / t product_output]
         dict_opex_variable[cost_classification].sort_index(inplace=True)
 

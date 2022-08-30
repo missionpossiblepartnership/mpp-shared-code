@@ -18,12 +18,12 @@ INPUT_SHEETS = [
 # Column ranges
 EXCEL_COLUMN_RANGES = {
     # todo: check again when structure of Business case excel is final
-    "Technology switching table": "C:AA",
+    "Technology switching table": "C:AC",
     "Technology cards": "B:AT",
-    "Region CAPEX mapping": "B:W",
+    "Region CAPEX mapping": "B:Y",
     "Shared inputs - Prices": "B:AS",
     "Shared inputs - Emissivity": "B:AS",
-    "Start technologies": "B:E",
+    "Start technologies": "B:F",
     "Region OPEX mapping": "B:F",
     "demand": "B:AS",
     "Alternative fuels and NG": "B:AK",

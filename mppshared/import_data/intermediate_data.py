@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 
 import pandas as pd
@@ -78,6 +79,16 @@ class IntermediateDataImporter:
 
         df.to_csv(export_path, index=index)
 
+    def export_sector_config(self):
+        # Make export directory if it doesn't exist yet
+        self.final_path.mkdir(exist_ok=True, parents=True)
+
+        # export config script
+        shutil.copyfile(
+            src=f"{Path(__file__).resolve().parents[2]}/{self.sector}/config/config_{self.sector}.py",
+            dst=f"{self.final_path}/run_config.py",
+        )
+
     # imports & preprocessing
     def get_raw_input_data(
         self,
@@ -128,6 +139,9 @@ class IntermediateDataImporter:
         return imported_input_data
 
     # intermediate
+    def get_lcox(self):
+        return pd.read_csv(self.intermediate_path.joinpath("lcox.csv"))
+
     def get_emissions(self):
         return pd.read_csv(self.intermediate_path.joinpath("emissions.csv"))
 
@@ -167,11 +181,19 @@ class IntermediateDataImporter:
         )
 
     def get_natural_gas_constraint(self):
+        """
+        Returns: natural_gas_constraint (Unit: Mt production_output)
+        """
+
         return pd.read_csv(
             self.intermediate_path.joinpath("natural_gas_constraint.csv")
         )
 
     def get_alternative_fuel_constraint(self):
+        """
+        Returns: alternative_fuel_constraint (Unit: Mt production_output)
+        """
+
         return pd.read_csv(
             self.intermediate_path.joinpath("alternative_fuel_constraint.csv")
         )
