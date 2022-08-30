@@ -14,6 +14,7 @@ from ammonia.config_ammonia import (
     BUILD_CURRENT_PROJECT_PIPELINE,
     LOG_LEVEL,
     MAP_LOW_COST_POWER_REGIONS,
+    MAXIMUM_GLOBAL_DEMAND_SHARE,
     MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION,
     MODEL_SCOPE,
     REGIONAL_TECHNOLOGY_BAN,
@@ -202,6 +203,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                         cuf=pathway.cuf_upper_threshold,
                         year=year,
                         df_region_demand=df_region_demand,
+                        region_global_demand_share=MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION,
                     )
                     enact_greenfield_transition(
                         pathway=pathway,
@@ -240,6 +242,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     cuf=pathway.cuf_upper_threshold,
                     year=year,
                     df_region_demand=df_region_demand,
+                    region_global_demand_share=MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION,
                 )
             except ValueError:
                 logger.info(
