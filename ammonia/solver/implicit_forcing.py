@@ -130,13 +130,12 @@ def apply_implicit_forcing(
         )
 
         # Write carbon cost to intermediate folder
-        parent_path = Path(__file__).resolve().parents[2]
-        folder = f"{pathway_name}/{sensitivity}"
-        cc = df_cc.loc[df_cc["year"] == 2050, "carbon_cost"].item()
-        path = parent_path.joinpath(
-            f"data/{sector}/{folder}/carbon_cost_{cc}/intermediate/carbon_cost_addition.csv"
+        importer.export_data(
+            df=df_carbon_cost_addition,
+            filename="carbon_cost_addition.csv",
+            export_dir="intermediate",
+            index=False,
         )
-        df_carbon_cost_addition.to_csv(path, index=False)
 
         # Update cost metric in technology switching DataFrame with carbon cost
         cost_metric = RANKING_COST_METRIC

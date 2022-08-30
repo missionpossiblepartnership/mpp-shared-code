@@ -13,20 +13,20 @@ logger.setLevel(LOG_LEVEL)
 
 
 def calculate_outputs(
-    pathway: str, sensitivity: str, sector: str, carbon_cost: CarbonCostTrajectory
+    pathway_name: str,
+    sensitivity: str,
+    sector: str,
+    carbon_cost_trajectory: CarbonCostTrajectory,
 ):
     """Calculate all outputs and save in .csv file"""
 
     importer = IntermediateDataImporter(
-        pathway=pathway,
+        pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
-        products=PRODUCTS[sector],
-        carbon_cost=carbon_cost,
+        products=PRODUCTS,
+        carbon_cost_trajectory=carbon_cost_trajectory,
     )
-
-    # Write key assumptions to txt file
-    write_key_assumptions_to_txt(pathway=pathway, sector=sector, importer=importer)
 
     # Create summary table of asset transitions
     logger.info("Creating table with asset transition sequences.")
@@ -50,6 +50,7 @@ def calculate_outputs(
         df = _calculate_emissions_intensity_abatement(
             importer=importer,
             sector=sector,
+            pathway=pathway_name,
             agg_vars=agg_vars,
         )
         df_abatement = pd.concat([df_abatement, df])
@@ -61,7 +62,7 @@ def calculate_outputs(
         df = calculate_scope3_downstream_emissions(
             importer=importer,
             sector=sector,
-            pathway=pathway,
+            pathway=pathway_name,
             agg_vars=agg_vars,
         )
         df_scope3 = pd.concat([df, df_scope3])
@@ -156,7 +157,7 @@ def calculate_outputs(
     df_pivot.reset_index(inplace=True)
     df_pivot.fillna(0, inplace=True)
 
-    suffix = f"{sector}_{pathway}_{sensitivity}"
+    suffix = f"{sector}_{pathway_name}_{sensitivity}"
 
     # For regions, replace All with Global
     df_pivot["region"] = df_pivot["region"].replace({"All": "Global"})
@@ -1781,7 +1782,7 @@ def get_regions_with_lcprs():
 
 
 def _calculate_emissions_intensity_abatement(
-    importer: IntermediateDataImporter, sector: str, agg_vars=[]
+    importer: IntermediateDataImporter, sector: str, pathway, agg_vars=[]
 ) -> pd.DataFrame:
     """Calculate the abatement of emissions intensity contributed by each type of supply technology, including circularity.
     Expressed in terms of ammonia. Regional breakdown non-sensical because of trade flows."""
@@ -1857,7 +1858,7 @@ def _calculate_emissions_intensity_abatement(
         df_stacks, df_emissions, agg_vars
     )
 
-    if CIRCULARITY_IN_DEMAND:
+    if CIRCULARITY_IN_DEMAND[pathway]:
         df_circularity = importer.get_circularity_driver()
         if "region" not in agg_vars:
             df_circularity = df_circularity.loc[df_circularity["region"] == "Global"]
@@ -2189,29 +2190,6 @@ def calculate_investment_dedicated_renewables(
     ).fillna(0)
 
     return df_pivot
-
-
-def write_key_assumptions_to_txt(
-    pathway: str, sector: str, importer: IntermediateDataImporter
-):
-    """Write important assumptions in the configuration file to a txt file"""
-    type = "greenfield"
-    lines = [
-        f"Investment cycle: {INVESTMENT_CYCLES[sector]} years",
-        f"CUF: maximum={CUF_UPPER_THRESHOLD}, minimum={CUF_LOWER_THRESHOLD}, cost metric={COST_METRIC_CUF_ADJUSTMENT[sector]}",
-        f"Weights: {RANKING_CONFIG[sector][type][pathway]}",
-        f"Technology ramp-up: {TECHNOLOGY_RAMP_UP_CONSTRAINTS[sector]}",
-        f"Year 2050 emissions constraint: {YEAR_2050_EMISSIONS_CONSTRAINT[sector]}",
-        f"Annual renovation share: {ANNUAL_RENOVATION_SHARE[sector]}",
-        f"Regional production shares: {REGIONAL_PRODUCTION_SHARES[sector]}"
-        f"Technology moratorium year: {TECHNOLOGY_MORATORIUM[sector]}",
-        f"Transitional period years: {TRANSITIONAL_PERIOD_YEARS[sector]}",
-    ]
-    path = importer.final_path.joinpath("configuration.txt")
-    with open(path, "w") as f:
-        for line in lines:
-            f.write(line)
-            f.write("\n")
 
 
 def add_ammonia_type_to_df(df: pd.DataFrame) -> pd.DataFrame:

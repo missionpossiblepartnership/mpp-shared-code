@@ -41,9 +41,9 @@ funcs = {
     # "IMPORT_DATA": import_all,
     # "CALCULATE_VARIABLES": calculate_variables,
     # "SOLVER_INPUT": create_solver_input_tables,
-    "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    "MAKE_RANKINGS": make_rankings,
-    "SIMULATE_PATHWAY": simulate_pathway,
+    # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
+    # "MAKE_RANKINGS": make_rankings,
+    # "SIMULATE_PATHWAY": simulate_pathway,
     "CALCULATE_OUTPUTS": calculate_outputs,
     "CALCULATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
 }

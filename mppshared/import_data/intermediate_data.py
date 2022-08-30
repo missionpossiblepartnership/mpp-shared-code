@@ -86,7 +86,7 @@ class IntermediateDataImporter:
         # export config script
         shutil.copyfile(
             src=f"{Path(__file__).resolve().parents[2]}/{self.sector}/config/config_{self.sector}.py",
-            dst=f"{self.final_path}/run_config.py"
+            dst=f"{self.final_path}/run_config.py",
         )
 
     # imports & preprocessing
@@ -266,3 +266,28 @@ class IntermediateDataImporter:
         return pd.read_csv(
             self.intermediate_path.joinpath("start_technologies.csv"),
         )
+
+    def get_solar_wind_shares_cfs(self):
+        return pd.read_csv(self.intermediate_path.joinpath("solar_wind_shares_cfs.csv"))
+
+    def get_wind_capex(self):
+        df = pd.read_csv(self.intermediate_path.joinpath("wind_capex.csv"))
+        df = df.melt(id_vars="region", value_name="wind_capex", var_name="year")
+        df["year"] = df["year"].astype(int)
+        return df
+
+    def get_solar_capex(self):
+        df = pd.read_csv(self.intermediate_path.joinpath("solar_capex.csv"))
+        df = df.melt(id_vars="region", value_name="solar_capex", var_name="year")
+        df["year"] = df["year"].astype(int)
+        return df
+
+    def get_circularity_driver(self):
+        df = pd.read_csv(self.intermediate_path.joinpath("circularity_driver.csv"))
+        df = df.melt(
+            id_vars=["product", "region", "driver", "unit"],
+            value_name="circularity_demand",
+            var_name="year",
+        )
+        df["year"] = df["year"].astype(int)
+        return df

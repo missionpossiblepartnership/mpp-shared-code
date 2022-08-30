@@ -524,3 +524,13 @@ REGIONAL_TECHNOLOGY_BAN = {
         "ESMR Gas + CCS + ammonia synthesis",
     ]
 }
+
+### OUTPUTS PROCESSING ###
+# Demand driver circularity in pathway or not
+CIRCULARITY_IN_DEMAND = {"bau": False, "fa": True, "lc": False}
+
+# Global Warming Potentials for calculating CO2e
+GWP = {
+    "GWP-20": {"co2": 1, "ch4": 82.5, "n2o": 273},
+    "GWP-100": {"co2": 1, "ch4": 29.8, "n2o": 273},
+}
