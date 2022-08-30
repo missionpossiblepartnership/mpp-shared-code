@@ -137,6 +137,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             deepcopy(asset_to_update),
             new_technology=new_technology,
             new_classification=best_transition["technology_classification"],
+            switch_type=switch_type,
+            origin_technology=origin_technology,
         )
 
         # Check constraints with tentative new stack
@@ -145,6 +147,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             stack=tentative_stack,
             year=year,
             transition_type="brownfield",
+            product=best_transition["product"],
         )
 
         # If no constraint is hurt, execute the brownfield transition
@@ -172,7 +175,9 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             n_assets_transitioned += 1
 
         # ELECTROLYSIS CAPACITY ADDITION
-        if "electrolysis_capacity_addition_constraint" in pathway.constraints_to_apply:
+        elif (
+            "electrolysis_capacity_addition_constraint" in pathway.constraints_to_apply
+        ):
             if not dict_constraints["electrolysis_capacity_addition_constraint"]:
                 # Remove all transitions with that destination technology from the ranking table
                 logger.debug(
@@ -183,7 +188,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 )
 
         # CO2 STORAGE
-        if "co2_storage_constraint" in pathway.constraints_to_apply:
+        elif "co2_storage_constraint" in pathway.constraints_to_apply:
             if not dict_constraints["co2_storage_constraint"]:
                 # Remove all transitions with that destination technology from the ranking table
                 logger.debug(
@@ -194,7 +199,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 )
 
         # GLOBAL DEMAND SHARE
-        if "demand_share_constraint" in pathway.constraints_to_apply:
+        elif "demand_share_constraint" in pathway.constraints_to_apply:
             if not dict_constraints["demand_share_constraint"]:
                 # Remove all transitions with that destination technology from the ranking table
                 logger.debug(

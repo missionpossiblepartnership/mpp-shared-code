@@ -212,17 +212,15 @@ def apply_brownfield_filters_ammonia(
     ranking_cost_metric: str,
     cost_metric_decrease_brownfield: float,
 ) -> pd.DataFrame:
-    """For chemicals, the LC pathway is driven by a carbon price. Hence, brownfield transitions only happen
+    """For ammonia, the LC pathway is driven by a carbon price. Hence, brownfield transitions only happen
     when they decrease LCOX. For the FA pathway, this is not the case."""
 
-    if pathway.pathway_name == "fa":
+    if pathway.pathway_name != "lc":
         return df_rank
 
     cost_metric = ranking_cost_metric
 
     # Get LCOX of origin technologies for retrofit
-    # TODO: check simplification that lcox of the current year is taken
-    #! Compare LCOX of newbuild technologies
     df_greenfield = pathway.get_ranking(year=year, rank_type="greenfield")
     df_lcox = df_greenfield.loc[df_greenfield["technology_origin"] == "New-build"]
     df_lcox = df_lcox[
@@ -259,27 +257,6 @@ def apply_brownfield_filters_ammonia(
         on=["product", "region", "technology_destination", "year"],
         how="left",
     ).fillna(0)
-
-    # Enforce retrofit of CCS with process emissions only
-    # TODO: remove this workaround
-    # df_cc = pathway.carbon_cost.df_carbon_cost
-    # flag_transition_forced_retrofit = False
-    # if df_cc.loc[df_cc["year"] == END_YEAR, "carbon_cost"].item() == 75:
-    #     flag_transition_forced_retrofit = True
-
-    # if flag_transition_forced_retrofit & (pathway.pathway == "def") & (year >= 2045):
-    #     # if year > 2050:
-    #     df_rank.loc[
-    #         (
-    #             df_rank["technology_origin"]
-    #             == "Natural Gas SMR + CCS (process emissions only) + ammonia synthesis"
-    #         )
-    #         & (
-    #             df_rank["technology_destination"]
-    #             == "Natural Gas SMR + CCS + ammonia synthesis"
-    #         ),
-    #         f"{cost_metric}_destination",
-    #     ] = 0
 
     filter = df_rank[f"{cost_metric}_destination"] < df_rank[
         f"{cost_metric}_origin"

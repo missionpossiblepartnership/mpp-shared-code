@@ -41,8 +41,6 @@ class SimulationPathway:
         rank_types: list,
         initial_asset_data_level: str,
         assumed_annual_production_capacity: float,
-        technology_rampup: dict,
-        carbon_budget: CarbonBudget,
         emission_scopes: list,
         cuf_lower_threshold: float,
         cuf_upper_threshold: float,
@@ -51,7 +49,9 @@ class SimulationPathway:
         annual_renovation_share: float,
         regional_production_shares: dict,
         constraints_to_apply: list[str],
-        year_2050_emissions_constraint: int,
+        year_2050_emissions_constraint: int = None,
+        technology_rampup: dict = None,
+        carbon_budget: CarbonBudget = None,
         set_co2_storage_constraint: bool = False,
         co2_storage_constraint_cumulative: bool = False,
         set_natural_gas_constraint: bool = False,
@@ -274,8 +274,12 @@ class SimulationPathway:
             color="technology",
             x="year",
             y="annual_volume",
-            category_orders={"technology": list(technology_layout)} if technology_layout is not None else {},
-            color_discrete_map=technology_layout if technology_layout is not None else {},
+            category_orders={"technology": list(technology_layout)}
+            if technology_layout is not None
+            else {},
+            color_discrete_map=technology_layout
+            if technology_layout is not None
+            else {},
         )
 
         fig.add_traces(wedge_fig.data)

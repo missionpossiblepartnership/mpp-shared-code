@@ -6,6 +6,7 @@ from ammonia.config_ammonia import (
     PREPROCESS_DATA_PATH,
     CORE_DATA_PATH,
     GHGS,
+    TECHNOLOGIES_NOT_FOR_SOLVER,
 )
 
 from ammonia.utility.utils import (
@@ -67,6 +68,15 @@ def create_solver_input_tables(
     df_tech_transitions = df_tech_transitions.fillna(0)
     df_tech_transitions = df_tech_transitions.reset_index(drop=False)
     df_tech_transitions = df_tech_transitions.rename({"type": "switch_type"}, axis=1)
+
+    # Filter out undesired technologies
+    df_tech_transitions = df_tech_transitions.loc[
+        ~df_tech_transitions["technology_destination"].isin(TECHNOLOGIES_NOT_FOR_SOLVER)
+    ]
+    df_tech_transitions = df_tech_transitions.loc[
+        ~df_tech_transitions["technology_origin"].isin(TECHNOLOGIES_NOT_FOR_SOLVER)
+    ]
+
     df_tech_transitions.to_csv(f"{write_path}/technology_transitions.csv", index=True)
 
     for path in solver_input_paths:

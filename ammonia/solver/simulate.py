@@ -29,11 +29,8 @@ from ammonia.solver.decommission import decommission
 from ammonia.solver.greenfield import greenfield
 from mppshared.agent_logic.agent_logic_functions import (
     adjust_capacity_utilisation,
-    create_dict_technology_rampup,
 )
-from mppshared.config import SECTORAL_CARBON_BUDGETS
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger

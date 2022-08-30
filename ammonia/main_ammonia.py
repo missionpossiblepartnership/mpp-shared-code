@@ -5,6 +5,7 @@ import distutils
 import itertools
 import multiprocessing as mp
 import os
+from venv import create
 
 # Imports from sector-specific code
 from ammonia.config_ammonia import (
@@ -25,10 +26,11 @@ from ammonia.solver.implicit_forcing import apply_implicit_forcing
 from ammonia.solver.ranking import make_rankings
 from ammonia.solver.simulate import simulate_pathway
 
+# from ammonia.output.output_processing import create_outputs
+from ammonia.output.debugging_outputs import create_debugging_outputs
+
 # Imports from mppshared
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
-from mppshared.solver.debugging_outputs import create_debugging_outputs
-from mppshared.solver.output_processing import calculate_outputs
 from mppshared.utility.utils import get_logger
 
 # Logging functionality
@@ -40,10 +42,11 @@ funcs = {
     # "IMPORT_DATA": import_all,
     # "CALCULATE_VARIABLES": calculate_variables,
     # "SOLVER_INPUT": create_solver_input_tables,
-    # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    # "MAKE_RANKINGS": make_rankings,
+    "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
+    "MAKE_RANKINGS": make_rankings,
     "SIMULATE_PATHWAY": simulate_pathway,
-    "CALCULATE_OUTPUTS": calculate_outputs,
+    # "CALCULATE_OUTPUTS": calculate_outputs,
+    "CALCULATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
 }
 
 
