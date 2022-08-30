@@ -5,7 +5,7 @@ from timeit import default_timer as timer
 
 from ammonia.config_ammonia import (
     ANNUAL_RENOVATION_SHARE,
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
     CO2_STORAGE_CONSTRAINT_CUMULATIVE,
     CONSTRAINTS_TO_APPLY,
     CUF_LOWER_THRESHOLD,
@@ -116,7 +116,7 @@ def simulate_pathway(
         products=PRODUCTS,
         rank_types=RANK_TYPES,
         initial_asset_data_level=INITIAL_ASSET_DATA_LEVEL,
-        assumed_annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+        assumed_annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
         carbon_cost_trajectory=carbon_cost_trajectory,
         emission_scopes=EMISSION_SCOPES,
         cuf_lower_threshold=CUF_LOWER_THRESHOLD,

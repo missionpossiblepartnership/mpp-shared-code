@@ -25,8 +25,7 @@ from ammonia.preprocess.create_solver_input import create_solver_input_tables
 from ammonia.solver.implicit_forcing import apply_implicit_forcing
 from ammonia.solver.ranking import make_rankings
 from ammonia.solver.simulate import simulate_pathway
-
-# from ammonia.output.output_processing import create_outputs
+from ammonia.output.output_processing import calculate_outputs
 from ammonia.output.debugging_outputs import create_debugging_outputs
 
 # Imports from mppshared
@@ -45,7 +44,7 @@ funcs = {
     "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     "MAKE_RANKINGS": make_rankings,
     "SIMULATE_PATHWAY": simulate_pathway,
-    # "CALCULATE_OUTPUTS": calculate_outputs,
+    "CALCULATE_OUTPUTS": calculate_outputs,
     "CALCULATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
 }
 

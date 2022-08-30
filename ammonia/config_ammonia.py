@@ -484,7 +484,7 @@ MAXIMUM_GLOBAL_DEMAND_SHARE = {
 }
 
 # Year from which newbuild capacity must have transition or end-state technology
-TECHNOLOGY_MORATORIUM = 2020
+TECHNOLOGY_MORATORIUM = 2050
 
 # Duration for which transition technologies are still allowed after the technology moratorium comes into force
 TRANSITIONAL_PERIOD_YEARS = 30
