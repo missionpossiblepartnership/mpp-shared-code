@@ -67,7 +67,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
 
         # Decommission assets
         logger.info(
-            f"{year}: Production volumes pre decommission: {hex(id(pathway.stacks[year]))}"
+            f"{year}: Production volumes pre decommission:"
         )
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
             product=product
@@ -81,7 +81,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
 
         # Renovate and rebuild assets (brownfield transition)
         logger.info(
-            f"{year}: Production volumes pre brownfield: {hex(id(pathway.stacks[year]))}"
+            f"{year}: Production volumes pre brownfield:"
         )
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
             product=product
@@ -95,7 +95,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
 
         # Build new assets
         logger.info(
-            f"{year}: Production volumes pre greenfield: {hex(id(pathway.stacks[year]))}"
+            f"{year}: Production volumes pre greenfield:"
         )
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
             product=product
@@ -107,7 +107,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
             f"{year}: Time elapsed for greenfield: {timedelta(seconds=end-start)} seconds"
         )
         logger.info(
-            f"{year}: Production volumes post greenfield: {hex(id(pathway.stacks[year]))}"
+            f"{year}: Production volumes post greenfield:"
         )
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
             product=product
@@ -152,10 +152,10 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         model_start_year=START_YEAR,
         model_end_year=END_YEAR,
         maximum_asset_additions=TECHNOLOGY_RAMP_UP_CONSTRAINT[
-            "maximum_asset_additions"
+            "init_maximum_asset_additions"
         ],
         maximum_capacity_growth_rate=TECHNOLOGY_RAMP_UP_CONSTRAINT[
-            "maximum_capacity_growth_rate"
+            "maximum_asset_growth_rate"
         ],
         years_rampup_phase=TECHNOLOGY_RAMP_UP_CONSTRAINT["years_rampup_phase"],
     )
@@ -179,7 +179,7 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         ghgs=GHGS,
         regional_production_shares=REGIONAL_PRODUCTION_SHARES,
         investment_cycle=INVESTMENT_CYCLE,
-        annual_renovation_share=MAX_ANNUAL_RENOVATION_SHARE,
+        annual_renovation_share=MAX_ANNUAL_RENOVATION_SHARE[pathway_name],
         constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],
         year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
         set_natural_gas_constraint=(
