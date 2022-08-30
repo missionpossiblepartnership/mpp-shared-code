@@ -32,9 +32,9 @@ PRODUCTS = ["Ammonia", "Ammonium nitrate", "Urea"]
 
 ### PATHWAYS, SENSITIVITIES AND CARBON COSTS ###
 PATHWAYS = [
-    "lc",
+    # "lc",
     # "fa",
-    # "bau",
+    "bau",
 ]
 
 SENSITIVITIES = [
@@ -45,9 +45,9 @@ SENSITIVITIES = [
 ]
 
 CARBON_COSTS = [
-    # 0,
+    0,
     # 50,
-    100,
+    # 100,
     # 150,
     # 200,
     # 250,
@@ -498,7 +498,7 @@ CUF_UPPER_THRESHOLD = 0.95
 INVESTMENT_CYCLE = 20  # years
 
 CONSTRAINTS_TO_APPLY = {
-    "bau": [None],
+    "bau": ["co2_storage_constraint"],
     "lc": [
         "co2_storage_constraint",
         "electrolysis_capacity_addition_constraint",

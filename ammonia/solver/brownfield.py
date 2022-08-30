@@ -68,10 +68,6 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         df_rank, sector_bans=REGIONAL_TECHNOLOGY_BAN
     )
 
-    # If pathway is BAU, take out brownfield renovation to avoid retrofits to end-state technologies
-    if pathway.pathway_name == "BAU":
-        df_rank = df_rank.loc[~(df_rank["switch_type"] == "brownfield_renovation")]
-
     # Apply start years of brownfield transitions
     df_rank = apply_start_years_brownfield_transitions(
         df_rank=df_rank,

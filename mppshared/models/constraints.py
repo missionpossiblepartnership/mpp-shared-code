@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+from ammonia.config_ammonia import END_YEAR
 
 from mppshared.config import (
     AMMONIA_PER_AMMONIUM_NITRATE,
@@ -485,7 +486,12 @@ def check_co2_storage_constraint(
 
     # Get constraint value
     df_co2_storage = pathway.co2_storage_constraint
-    limit = df_co2_storage.loc[df_co2_storage["year"] == year + 1, "value"].item()
+    if year < END_YEAR:
+        limit_year = year
+    else:
+        limit_year = END_YEAR
+
+    limit = df_co2_storage.loc[df_co2_storage["year"] == limit_year, "value"].item()
 
     # Constraint based on total CO2 storage available in that year
     if pathway.co2_storage_constraint_cumulative:

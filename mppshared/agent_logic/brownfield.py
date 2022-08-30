@@ -212,10 +212,10 @@ def apply_brownfield_filters_ammonia(
     ranking_cost_metric: str,
     cost_metric_decrease_brownfield: float,
 ) -> pd.DataFrame:
-    """For ammonia, the LC pathway is driven by a carbon price. Hence, brownfield transitions only happen
+    """For ammonia, the BAU and LC pathways are driven by minimum cost. Hence, brownfield transitions only happen
     when they decrease LCOX. For the FA pathway, this is not the case."""
 
-    if pathway.pathway_name != "lc":
+    if pathway.pathway_name == "fa":
         return df_rank
 
     cost_metric = ranking_cost_metric
