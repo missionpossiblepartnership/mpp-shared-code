@@ -3,7 +3,7 @@
 import numpy as np
 import pandas as pd
 
-from mppshared.config import *
+from aluminium.config_aluminium import *
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.solver.debugging_outputs import \
     create_table_asset_transition_sequences
@@ -312,12 +312,6 @@ def create_table_all_data_year(
     df_emissions = importer.get_emissions()
     df_emissions = df_emissions[df_emissions["year"] == year]
     df_stack_emissions = _calculate_emissions(df_stack, df_emissions)
-    df_stack_emissions_co2e = _calculate_emissions_co2e(
-        df_stack, df_emissions, gwp="GWP-20"
-    )
-    df_stack_emissions_co2e_all_tech = _calculate_emissions_co2e(
-        df_stack, df_emissions, gwp="GWP-20", agg_vars=["product", "region"]
-    )
     df_emissions_intensity = _calculate_emissions_intensity(df_stack, df_emissions)
     df_emissions_intensity_all_tech = _calculate_emissions_intensity(
         df_stack, df_emissions, agg_vars=["product", "region"]
@@ -347,8 +341,6 @@ def create_table_all_data_year(
             df_total_assets,
             df_production_capacity,
             df_stack_emissions,
-            df_stack_emissions_co2e,
-            df_stack_emissions_co2e_all_tech,
             df_emissions_intensity,
             df_emissions_intensity_all_tech,
             df_co2_captured,
@@ -586,158 +578,23 @@ def calculate_weighted_average_lcox(
     return df
 
 
-def calculate_electrolysis_capacity(
-    importer: IntermediateDataImporter,
-    sector: str,
-    agg_vars=["product", "region", "technology"],
-) -> pd.DataFrame:
-    """Calculate electrolysis capacity in every year."""
-
-    df_stack = pd.DataFrame()
-
-    # Get annual production volume by technology in every year
-    for year in np.arange(START_YEAR, END_YEAR + 1):
-        stack = importer.get_asset_stack(year)
-        stack = (
-            stack.groupby(["product", "region", "technology"])[
-                "annual_production_volume"
-            ]
-            .sum()
-            .reset_index(drop=False)
-        )
-        stack["year"] = year
-        df_stack = pd.concat([df_stack, stack])
-
-    # Filter for electrolysis technologies and group
-    df_stack = df_stack.loc[df_stack["technology"].str.contains("Electrolyser")]
-
-    # Add capacity factors, efficiencies and hydrogen proportions
-    electrolyser_cfs = importer.get_electrolyser_cfs().rename(
-        columns={"technology_destination": "technology"}
-    )
-    electrolyser_effs = importer.get_electrolyser_efficiencies().rename(
-        columns={"technology_destination": "technology"}
-    )
-    electrolyser_props = importer.get_electrolyser_proportions().rename(
-        columns={"technology_destination": "technology"}
-    )
-
-    merge_vars1 = ["product", "region", "technology", "year"]
-    merge_vars2 = ["product", "region", "year"]
-    df_stack = df_stack.merge(
-        electrolyser_cfs[merge_vars1 + ["electrolyser_capacity_factor"]],
-        on=merge_vars1,
-        how="left",
-    )
-    df_stack = df_stack.merge(
-        electrolyser_effs[merge_vars2 + ["electrolyser_efficiency"]],
-        on=merge_vars2,
-        how="left",
-    )
-    df_stack = df_stack.merge(
-        electrolyser_props[merge_vars1 + ["electrolyser_hydrogen_proportion"]],
-        on=merge_vars1,
-        how="left",
-    )
-    # Electrolysis capacity = Ammonia production * Proportion of H2 produced via electrolysis * Ratio of ammonia to H2 * Electrolyser efficiency / (365 * 24 * CUF)
-    df_stack["electrolysis_capacity"] = (
-        df_stack["annual_production_volume"]
-        * df_stack["electrolyser_hydrogen_proportion"]
-        * df_stack["electrolyser_efficiency"]
-        / (365 * 24 * df_stack["electrolyser_capacity_factor"])
-    )
-
-    def choose_ratio(row: pd.Series) -> float:
-        if row["product"] == "Ammonia":
-            ratio = H2_PER_AMMONIA
-        elif row["product"] == "Urea":
-            ratio = H2_PER_AMMONIA * AMMONIA_PER_UREA
-        elif row["product"] == "Ammonium nitrate":
-            ratio = H2_PER_AMMONIA * AMMONIA_PER_AMMONIUM_NITRATE
-        return ratio
-
-    df_stack["electrolysis_capacity"] = df_stack.apply(
-        lambda row: row["electrolysis_capacity"] * choose_ratio(row), axis=1
-    )
-
-    df = (
-        df_stack.groupby(agg_vars + ["year"])[["electrolysis_capacity"]]
-        .sum()
-        .reset_index(drop=False)
-    )
-
-    # Transform to output table format
-    df["parameter_group"] = "Capacity"
-    df["parameter"] = "Electrolysis capacity"
-    df["unit"] = "GW"
-    df["sector"] = sector
-    df = df.rename(columns={"electrolysis_capacity": "value"})
-    df["year"] = df["year"].astype(int)
-
-    for variable in [
-        agg_var
-        for agg_var in ["product", "region", "technology"]
-        if agg_var not in agg_vars
-    ]:
-        df[variable] = "All"
-
-    df = df.pivot_table(
-        index=[
-            "sector",
-            "product",
-            "region",
-            "technology",
-            "parameter_group",
-            "parameter",
-            "unit",
-        ],
-        columns="year",
-        values="value",
-    ).fillna(0)
-
-    return df
-
-
-def calculate_outputs(pathway: str, sensitivity: str, sector: str):
+def calculate_outputs(pathway_name: str, sensitivity: str, sector: str):
     importer = IntermediateDataImporter(
-        pathway_name=pathway,
+        pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
-        products=PRODUCTS[sector],
+        products=PRODUCTS,
     )
 
-    # Write key assumptions to txt file
-    write_key_assumptions_to_txt(pathway=pathway, sector=sector, importer=importer)
 
     # Create summary table of asset transitions
     logger.info("Creating table with asset transition sequences.")
-    df_transitions = create_table_asset_transition_sequences(importer, start_year=START_YEAR, end_year=END_YEAR)
+    df_transitions = create_table_asset_transition_sequences(importer, START_YEAR, END_YEAR)
     importer.export_data(
         df_transitions,
         f"asset_transition_sequences_sensitivity_{sensitivity}.csv",
         "final",
     )
-
-    if sector == "chemicals":
-        # Calculate electrolysis capacity
-        df_electrolysis_capacity = calculate_electrolysis_capacity(
-            importer=importer,
-            sector=sector,
-            agg_vars=["product", "region", "technology"],
-        )
-
-        df_electrolysis_capacity_all_tech = calculate_electrolysis_capacity(
-            importer=importer, sector=sector, agg_vars=["product", "region"]
-        )
-
-        df_electrolysis_capacity_all_tech_all_regions = calculate_electrolysis_capacity(
-            importer=importer, sector=sector, agg_vars=["product"]
-        )
-
-        df_electrolysis_capacity_all_regions = calculate_electrolysis_capacity(
-            importer=importer, sector=sector, agg_vars=["product", "technology"]
-        )
-
     # Calculate weighted average of LCOX
     df_cost = importer.get_technology_transitions_and_cost()
     df_lcox = calculate_weighted_average_lcox(
@@ -824,49 +681,29 @@ def calculate_outputs(pathway: str, sensitivity: str, sector: str):
         values="value",
     )
 
-    # Export as required
-    if sector == "chemicals":
-        df_pivot = pd.concat(
-            [
-                df_pivot,
-                df_annual_investments,
-                df_annual_investments_all_tech,
-                df_annual_investments_all_tech_all_switch_types,
-                df_annual_investments_all_switch_types,
-                df_lcox,
-                df_lcox_all_techs,
-                df_lcox_all_regions,
-                df_lcox_all_regions_all_techs,
-                df_electrolysis_capacity,
-                df_electrolysis_capacity_all_regions,
-                df_electrolysis_capacity_all_tech,
-                df_electrolysis_capacity_all_tech_all_regions,
-            ]
-        )
-    else:
-        df_pivot = pd.concat(
-            [
-                df_pivot,
-                df_annual_investments,
-                df_annual_investments_all_tech,
-                df_annual_investments_all_tech_all_switch_types,
-                df_annual_investments_all_switch_types,
-                df_lcox,
-                df_lcox_all_techs,
-                df_lcox_all_regions,
-                df_lcox_all_regions_all_techs,
-            ]
-        )
+    df_pivot = pd.concat(
+        [
+            df_pivot,
+            df_annual_investments,
+            df_annual_investments_all_tech,
+            df_annual_investments_all_tech_all_switch_types,
+            df_annual_investments_all_switch_types,
+            df_lcox,
+            df_lcox_all_techs,
+            df_lcox_all_regions,
+            df_lcox_all_regions_all_techs,
+        ]
+    )
     df_pivot.reset_index(inplace=True)
     df_pivot.fillna(0, inplace=True)
 
-    suffix = f"{sector}_{pathway}_{sensitivity}"
+    suffix = f"{sector}_{pathway_name}_{sensitivity}"
 
     importer.export_data(
         df_pivot, f"simulation_outputs_{suffix}.csv", "final", index=False
     )
     df_pivot.to_csv(
-        f"{OUTPUT_WRITE_PATH[sector]}/simulation_outputs_{suffix}.csv", index=False
+        f"{OUTPUT_WRITE_PATH}/simulation_outputs_{suffix}.csv", index=False
     )
 
     columns = [
@@ -898,7 +735,7 @@ def save_consolidated_outputs(sector: str):
     # for pathway, sensitivity in itertools.product(PATHWAYS, SENSITIVITIES):
     for pathway, sensitivity in runs:
         df_ = pd.read_csv(
-            f"{SECTOR}/data/{pathway}/{sensitivity}/final/simulation_outputs_{SECTOR}_{pathway}_{sensitivity}.csv"
+            f"../mpp-shared-code/data/{SECTOR}/{pathway}/{sensitivity}/final/simulation_outputs_{SECTOR}_{pathway}_{sensitivity}.csv"
         )
         df_["pathway"] = pathway
         df_["sensitivity"] = sensitivity
@@ -917,7 +754,7 @@ def save_consolidated_outputs(sector: str):
     ] + [str(i) for i in range(START_YEAR, END_YEAR + 1)]
     df = df[columns]
     df.to_csv(
-        f"{OUTPUT_WRITE_PATH[sector]}/simulation_outputs_{SECTOR}_consolidated.csv",
+        f"{OUTPUT_WRITE_PATH}/simulation_outputs_{SECTOR}_consolidated.csv",
         index=False,
     )
     df.to_csv(f"data/{sector}/simulation_outputs_{SECTOR}_consolidated.csv")

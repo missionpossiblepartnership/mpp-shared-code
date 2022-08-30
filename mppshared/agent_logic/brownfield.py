@@ -7,11 +7,10 @@ import numpy as np
 import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_all_transitions_with_destination_technology,
-    remove_transition,
-    select_best_transition,
-)
+    remove_all_transitions_with_destination_technology, remove_transition,
+    select_best_transition)
 from mppshared.config import ANNUAL_RENOVATION_SHARE, LOG_LEVEL
+from mppshared.models.asset import Asset
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
@@ -38,11 +37,11 @@ def brownfield_def(pathway: SimulationPathway, year: int) -> SimulationPathway:
     # Get the emissions, used for the LC scenario
     if year == 2050:
         emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(
-            year, pathway.sector
+            year
         )
     else:
         emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(
-            year + 1, pathway.sector
+            year + 1
         )
 
     # Get ranking table for brownfield transitions
@@ -68,7 +67,7 @@ def brownfield_def(pathway: SimulationPathway, year: int) -> SimulationPathway:
         # TODO: implement foresight with brownfield rebuild
 
         # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
-        best_candidates = []
+        best_candidates: list[Asset] = []
         while not best_candidates:
             # If no more transitions available, break and return pathway
             if df_rank.empty:
@@ -145,6 +144,7 @@ def brownfield_def(pathway: SimulationPathway, year: int) -> SimulationPathway:
             stack=tentative_stack,
             year=year,
             transition_type="brownfield",
+            product=asset_to_update.product,
         )
         # If no constraint is hurt, execute the brownfield transition
         if (

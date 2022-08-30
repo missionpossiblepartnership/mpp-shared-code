@@ -128,7 +128,7 @@ class AssetStack:
         self.ghgs = ghgs
         self.cuf_lower_threshold = cuf_lower_threshold
         # Keep track of all assets added this year
-        self.new_ids = []
+        self.new_ids: list[str] = []
 
     def __eq__(self, other):
         self_uuids = {asset.uuid for asset in self.assets}
@@ -185,26 +185,26 @@ class AssetStack:
         """Filter assets based on one or more criteria"""
         assets = self.assets
         if region is not None:
-            assets = filter(lambda asset: asset.region == region, assets)
+            assets = list(filter(lambda asset: asset.region == region, assets))
         if technology is not None:
-            assets = filter(lambda asset: asset.technology == technology, assets)
+            assets = list(filter(lambda asset: asset.technology == technology, assets))
         if product is not None:
-            assets = filter(lambda asset: (asset.product == product), assets)
+            assets = list(filter(lambda asset: (asset.product == product), assets))
         if technology_classification is not None:
-            assets = filter(
+            assets = list(filter(
                 lambda asset: (
                     asset.technology_classification == technology_classification
                 ),
                 assets,
-            )
+                ))
         if status == "greenfield_status":
-            assets = filter(lambda asset: asset.greenfield == True, assets)
+            assets = list(filter(lambda asset: asset.greenfield == True, assets))
         if status == "retrofit_status":
-            assets = filter(lambda asset: asset.retrofit == True, assets)
+            assets = list(filter(lambda asset: asset.retrofit == True, assets))
         if status == "rebuild_status":
-            assets = filter(lambda asset: asset.rebuild == True, assets)
+            assets = list(filter(lambda asset: asset.rebuild == True, assets))
 
-        return list(assets)
+        return assets
 
     def get_annual_production_capacity(
         self, product, region=None, technology=None

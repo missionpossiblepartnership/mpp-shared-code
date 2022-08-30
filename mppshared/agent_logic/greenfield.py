@@ -7,21 +7,16 @@ import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_destination_technology,
-    remove_techs_in_region_by_tech_substr,
-    remove_transition,
-    select_best_transition,
-)
-from mppshared.config import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-    LOG_LEVEL,
-    MAP_LOW_COST_POWER_REGIONS,
-)
+    remove_techs_in_region_by_tech_substr, remove_transition,
+    select_best_transition)
+from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                              CUF_UPPER_THRESHOLD, LOG_LEVEL,
+                              MAP_LOW_COST_POWER_REGIONS, MODEL_SCOPE)
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
-    check_alternative_fuel_constraint,
-    check_constraints,
-    check_natural_gas_constraint,
-)
+    check_alternative_fuel_constraint, check_constraints,
+    check_natural_gas_constraint, get_regional_production_constraint_table,
+    hydro_constraints)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 
@@ -93,6 +88,8 @@ def greenfield_default(pathway: SimulationPathway, year: int) -> SimulationPathw
                         df_rank=df_rank_region,
                         product=product,
                         year=year,
+                        annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                        cuf=CUF_UPPER_THRESHOLD,
                     )
                     enact_greenfield_transition(
                         pathway=pathway, stack=new_stack, new_asset=new_asset, year=year
@@ -122,6 +119,8 @@ def greenfield_default(pathway: SimulationPathway, year: int) -> SimulationPathw
                     df_rank=df_rank,
                     product=product,
                     year=year,
+                    annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                    cuf=CUF_UPPER_THRESHOLD,
                 )
                 logger.debug(
                     f"Tentative new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}"

@@ -3,7 +3,6 @@ from pathlib import Path
 
 import pandas as pd
 
-# todo: adjust config structure
 from mppshared.config import END_YEAR, LOG_LEVEL
 from mppshared.utility.utils import get_logger
 
@@ -20,7 +19,6 @@ class IntermediateDataImporter:
         sensitivity: str,
         sector: str,
         products: list,
-        # todo: None should be replaced by a config parameter I suppose?
         carbon_cost_trajectory=None,
     ):
         parent_path = Path(__file__).resolve().parents[2]

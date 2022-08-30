@@ -15,7 +15,7 @@ class TransitionRegistry:
         self,
         year: int,
         transition_type: Literal[
-            "decommission", "brownfield_renovation", "brownfield_newbuild", "newbuild"
+            "decommission", "brownfield_renovation", "brownfield_newbuild", "greenfield"
         ],
         origin: Optional[Asset] = None,
         destination: Optional[Asset] = None,

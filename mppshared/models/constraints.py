@@ -3,13 +3,8 @@
 import numpy as np
 import pandas as pd
 
-from mppshared.config import (
-    AMMONIA_PER_AMMONIUM_NITRATE,
-    AMMONIA_PER_UREA,
-    H2_PER_AMMONIA,
-    HYDRO_TECHNOLOGY_BAN,
-    LOG_LEVEL,
-)
+from mppshared.config import (AMMONIA_PER_AMMONIUM_NITRATE, AMMONIA_PER_UREA,
+                              H2_PER_AMMONIA, HYDRO_TECHNOLOGY_BAN, LOG_LEVEL)
 from mppshared.models.asset import AssetStack
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
@@ -308,7 +303,7 @@ def check_global_demand_share_constraint(
     ).reset_index()
     constraint = True
 
-    for technology in pathway.technologies_maximum_global_demand_share:
+    for technology in pathway.technologies_maximum_global_demand_share: # type: ignore
 
         # Calculate annual production volume based on CUF upper threshold
         df = (
@@ -324,7 +319,7 @@ def check_global_demand_share_constraint(
         df["demand"] = df["product"].apply(
             lambda x: pathway.get_demand(product=x, year=year, region="Global")
         )
-        df["demand_maximum"] = pathway.maximum_global_demand_share[year] * df["demand"]
+        df["demand_maximum"] = pathway.maximum_global_demand_share[year] * df["demand"] # type: ignore
 
         # Compare
         df["check"] = np.where(
@@ -573,7 +568,7 @@ def check_alternative_fuel_constraint(
     year: int,
     transition_type: str,
     return_dict: bool = False,
-):
+)-> dict or bool:
     """Check if the constraint on annual alternative fuel capacity (regionally) is fulfilled"""
 
     if not return_dict:
