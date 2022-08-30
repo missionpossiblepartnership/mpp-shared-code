@@ -96,8 +96,12 @@ def check_technology_rampup_constraint(
         f"{year}: Checking ramp-up constraint (transition type: {transition_type})"
     )
     # Get asset numbers of new and old stack for each technology
+    if product == "Clinker":
+        year_old_stack = year - 1
+    else:
+        year_old_stack = year
     df_old_stack = (
-        pathway.stacks[year]
+        pathway.stacks[year_old_stack]
         .aggregate_stack(aggregation_vars=["technology"])[["number_of_assets"]]
         .rename({"number_of_assets": "number_old"}, axis=1)
     )
@@ -106,7 +110,11 @@ def check_technology_rampup_constraint(
     ].rename({"number_of_assets": "number_new"}, axis=1)
 
     # Create DataFrame for rampup comparison
-    df_rampup = df_old_stack.join(df_new_stack, how="outer").fillna(0)
+    df_rampup = (
+        df_old_stack.join(df_new_stack, how="outer")
+        .fillna(0)
+        .astype(dtype={"number_old": int, "number_new": int})
+    )
     df_rampup["proposed_asset_additions"] = (
         df_rampup["number_new"] - df_rampup["number_old"]
     )
@@ -209,7 +217,9 @@ def check_annual_carbon_budget_constraint(
 
     """
 
-    logger.info(f"{year}: Checking annual carbon budget constraint (transition type: {transition_type})")
+    logger.info(
+        f"{year}: Checking annual carbon budget constraint (transition type: {transition_type})"
+    )
 
     # After a sector-specific year, all end-state newbuild capacity has to fulfill the 2050 emissions limit with a stack
     #   composed of only end-state technologies
@@ -217,9 +227,7 @@ def check_annual_carbon_budget_constraint(
     if (transition_type == "greenfield") & (
         year >= pathway.year_2050_emissions_constraint
     ):
-        limit = pathway.carbon_budget.get_annual_emissions_limit(
-            pathway.end_year
-        )
+        limit = pathway.carbon_budget.get_annual_emissions_limit(pathway.end_year)
 
         dict_stack_emissions = stack.calculate_emissions_stack(
             year=year,
