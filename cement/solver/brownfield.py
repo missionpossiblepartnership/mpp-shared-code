@@ -153,19 +153,6 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 if k in pathway.constraints_to_apply and k != "regional_constraint"
             ]
         ) | (origin_technology == new_technology):
-
-            # todo dev:
-            if origin_technology == new_technology:
-                af_prod_volume_stack = stack.get_annual_ng_af_production_volume(
-                    product=asset_to_update.product, region=asset_to_update.region, tech_substr="alternative fuels"
-                )
-                af_prod_volume_tentative_stack = tentative_stack.get_annual_ng_af_production_volume(
-                    product=asset_to_update.product, region=asset_to_update.region, tech_substr="alternative fuels"
-                )
-                if round(af_prod_volume_stack, 5) != round(af_prod_volume_tentative_stack, 5):
-                    stop = 1
-            # todo dev
-
             logger.debug(
                 f"{year}: All constraints fulfilled. "
                 f"Updating asset in {asset_to_update.region} from {origin_technology} to {new_technology} "
