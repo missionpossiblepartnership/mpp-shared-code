@@ -4,8 +4,13 @@ from operator import methodcaller
 
 import pandas as pd
 
-from mppshared.config import (COST_METRIC_CUF_ADJUSTMENT, CUF_LOWER_THRESHOLD,
-                              CUF_UPPER_THRESHOLD, LOG_LEVEL, MODEL_SCOPE)
+from mppshared.config import (
+    COST_METRIC_CUF_ADJUSTMENT,
+    CUF_LOWER_THRESHOLD,
+    CUF_UPPER_THRESHOLD,
+    LOG_LEVEL,
+    MODEL_SCOPE,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.technology_rampup import TechnologyRampup
@@ -82,11 +87,10 @@ def adjust_capacity_utilisation(
 
     Args:
         pathway: pathway with AssetStack and demand data for the specified year
-        product:
-        year:
+        year: year in which to adjust asset's capacity utilisation
 
     Returns:
-        pathway with updated capacity factor for each Asset in the AssetStack of the given year
+        pathway with updated capacity utilisation factor for each Asset in the AssetStack of the given year
     """
 
     # Adjust capacity utilisation for each product
@@ -220,7 +224,7 @@ def create_dict_technology_rampup(
     years_rampup_phase: int,
 ) -> dict:
     """Create dictionary of TechnologyRampup objects with the technologies in that sector as keys. Set None if the
-        technology has no ramp-up trajectory."""
+    technology has no ramp-up trajectory."""
     logger.info("Creating ramp-up trajectories for technologies")
 
     technology_characteristics = importer.get_technology_characteristics()

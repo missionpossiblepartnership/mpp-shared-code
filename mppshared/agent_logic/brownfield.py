@@ -205,7 +205,7 @@ def apply_start_years_brownfield_transitions(
     return df_rank
 
 
-def apply_brownfield_filters_chemicals(
+def apply_brownfield_filters_ammonia(
     df_rank: pd.DataFrame,
     pathway: SimulationPathway,
     year: int,
