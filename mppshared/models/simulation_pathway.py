@@ -40,7 +40,7 @@ class SimulationPathway:
         products: list,
         rank_types: list,
         initial_asset_data_level: str,
-        assumed_annual_production_capacity: float,
+        assumed_annual_production_capacity: dict,
         emission_scopes: list,
         cuf_lower_threshold: float,
         cuf_upper_threshold: float,
@@ -495,13 +495,15 @@ class SimulationPathway:
         df_stack = self.importer.get_initial_asset_stack()
 
         # Get the number assets required
-        # TODO: based on distribution of typical production capacities
-        # TODO: create smaller asset to meet production capacity precisely
-        df_stack["number_assets"] = (
-            df_stack["annual_production_capacity"]
-            / self.assumed_annual_production_capacity
-        ).apply(lambda x: int(x))
-
+        df_stack["number_assets"] = df_stack.apply(
+            lambda row: int(
+                np.ceil(
+                    row["annual_production_capacity"]
+                    / self.assumed_annual_production_capacity[row["product"]]
+                )
+            ),
+            axis=1,
+        )
         # Merge with technology specifications to get technology lifetime
         df_tech_characteristics = self.importer.get_technology_characteristics()
         df_stack = df_stack.merge(
@@ -520,7 +522,6 @@ class SimulationPathway:
         )
 
         # Create list of assets for every product, region and technology (corresponds to one row in the DataFrame)
-        # TODO: based on distribution of CUF and commissioning year
         assets = df_stack.apply(
             lambda row: create_assets(
                 n_assets=row["number_assets"],
@@ -528,7 +529,9 @@ class SimulationPathway:
                 technology=row["technology"],
                 region=row["region"],
                 year_commissioned=row["year"] - row["average_age"],
-                annual_production_capacity=self.assumed_annual_production_capacity,
+                annual_production_capacity=self.assumed_annual_production_capacity[
+                    row["product"]
+                ],
                 cuf=row["average_cuf"],
                 asset_lifetime=row["technology_lifetime"],
                 technology_classification=row["technology_classification"],
