@@ -84,13 +84,12 @@ def adjust_capacity_utilisation(
 ) -> SimulationPathway:
     """Adjust capacity utilisation of each asset based on a predefined cost metric (LCOX or marginal cost of production) within predefined thresholds to balance demand
     and production as much as possible in the given year.
-
     Args:
         pathway: pathway with AssetStack and demand data for the specified year
-        year: year in which to adjust asset's capacity utilisation
-
+        product:
+        year:
     Returns:
-        pathway with updated capacity utilisation factor for each Asset in the AssetStack of the given year
+        pathway with updated capacity factor for each Asset in the AssetStack of the given year
     """
 
     # Adjust capacity utilisation for each product
@@ -130,7 +129,9 @@ def adjust_capacity_utilisation(
                 cost_metric=COST_METRIC_CUF_ADJUSTMENT[pathway.sector],
             )
 
+        #! Development only
         production = stack.get_annual_production_volume(product)
+        pass
 
     return pathway
 
@@ -145,8 +146,9 @@ def increase_cuf_of_assets(
 
     # Identify all assets that produce below CUF threshold and sort list so asset with lowest LCOX
     # is first
+    assets = stack.filter_assets(product=product)
     assets_below_cuf_threshold = list(
-        filter(lambda asset: asset.cuf < CUF_UPPER_THRESHOLD, stack.assets)
+        filter(lambda asset: asset.cuf < CUF_UPPER_THRESHOLD, assets)
     )
     assets_below_cuf_threshold = sort_assets_cost_metric(
         assets_below_cuf_threshold, pathway, year, cost_metric
@@ -176,9 +178,10 @@ def decrease_cuf_of_assets(
     # Get AssetStack for the given year
     stack = pathway.get_stack(year)
 
-    # Identify all assets that produce above CUF threshold and sort list so asset with highest
+    # Identify all assets that produce above CUF threshold and sort list so asset with highest cost metric is first
+    assets = stack.filter_assets(product=product)
     assets_above_cuf_threshold = list(
-        filter(lambda asset: asset.cuf > CUF_LOWER_THRESHOLD, stack.assets)
+        filter(lambda asset: asset.cuf > CUF_LOWER_THRESHOLD, assets)
     )
     assets_above_cuf_threshold = sort_assets_cost_metric(
         assets_above_cuf_threshold, pathway, year, cost_metric, descending=True
