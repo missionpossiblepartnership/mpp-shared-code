@@ -257,10 +257,10 @@ def create_dict_technology_rampup(
                 model_start_year=model_start_year,
                 model_end_year=model_end_year,
                 technology=technology,
-                start_year=expected_maturity,
-                end_year=expected_maturity + years_rampup_phase,
-                maximum_asset_additions=maximum_asset_additions,
-                maximum_capacity_growth_rate=maximum_capacity_growth_rate,
+                ramp_up_start_year=expected_maturity,
+                ramp_up_end_year=expected_maturity + years_rampup_phase,
+                init_maximum_asset_additions=maximum_asset_additions,
+                maximum_asset_growth_rate=maximum_capacity_growth_rate,
             )
 
     return dict_technology_rampup

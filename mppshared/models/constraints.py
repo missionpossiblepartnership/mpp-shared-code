@@ -82,7 +82,8 @@ def check_technology_rampup_constraint(
     year: int,
     transition_type: str,
 ) -> bool:
-    """Check if the technology rampup between the stacked passed and the previous year's stack complies with the technology ramp-up trajectory
+    """Check if the technology rampup between the stack passed and the previous year's stack complies with the
+        technology ramp-up trajectory
 
     Args:
         pathway: contains the stack of the previous year
@@ -116,7 +117,7 @@ def check_technology_rampup_constraint(
                 technology, "maximum_asset_additions"
             ] = rampup_constraint.df_rampup.loc[year, "maximum_asset_additions"]
         else:
-            df_rampup.loc[technology, "maximum_asset_additions"] = None
+            df_rampup.loc[technology, "maximum_asset_additions"] = np.nan
 
     df_rampup["check"] = (
         df_rampup["proposed_asset_additions"] <= df_rampup["maximum_asset_additions"]
@@ -125,10 +126,10 @@ def check_technology_rampup_constraint(
     if df_rampup["check"].all():
         logger.info("Ramp-up constraint is satisfied")
         return True
-
-    technology_affected = list(df_rampup[~df_rampup["check"]].index)
-    logger.info(f"Technology ramp-up constraint hurt for {technology_affected}.")
-    return False
+    else:
+        technology_affected = list(df_rampup[~df_rampup["check"]].index)
+        logger.info(f"Technology ramp-up constraint hurt for {technology_affected}.")
+        return False
 
 
 def check_constraint_regional_production(
