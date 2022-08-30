@@ -1,11 +1,11 @@
 """Utility module for functions used throughout the module"""
 
 import pandas as pd
+import os
 
 from ammonia.config_ammonia import (
     CALCULATE_FOLDER,
     COMMON_INDEX,
-    CORE_DATA_PATH,
     MAP_COLUMN_NAMES,
     COST_DF_INDEX,
     PREPROCESS_DATA_PATH,
@@ -23,8 +23,10 @@ def write_intermediate_data_to_csv(
         filename (str): name of the DataFrame for saving
         df (pd.DataFrame): DataFrame to be saved
     """
-    full_path = f"{folder}/{filename}.csv"
-    df.to_csv(full_path, index=flag_index)
+    full_path = f"{folder}"
+    if not os.path.exists(full_path):
+        os.makedirs(full_path)
+    df.to_csv(f"{full_path}/{filename}.csv", index=flag_index)
 
 
 def load_intermediate_data_from_csv(folder: str, filename: str) -> pd.DataFrame:

@@ -1,5 +1,6 @@
 """Create and copy over the input files for the solver."""
 import pandas as pd
+import os
 from functools import reduce
 
 from ammonia.config_ammonia import (
@@ -38,6 +39,10 @@ def create_solver_input_tables(
         f"{CORE_DATA_PATH}/{pathway}/{sensitivity}/intermediate"
         for pathway in ["lc", "fa", "bau"]
     ]
+
+    for path in solver_input_paths:
+        if not os.path.exists(path):
+            os.makedirs(path)
 
     # Emissions table is only copy and paste
     df_emissions = load_intermediate_data_from_csv(calculate_folder, "emissions")

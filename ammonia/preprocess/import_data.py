@@ -169,7 +169,7 @@ def read_business_case_excel(sheet_name: str, sensitivity: str) -> pd.DataFrame:
     """
 
     filename = f"Business Cases_{sensitivity}.xlsx"
-    full_path = f"{IMPORT_DATA_PATH}/{filename}"
+    full_path = f"{PREPROCESS_DATA_PATH}/{filename}"
     df = pd.read_excel(
         full_path,
         sheet_name=sheet_name,

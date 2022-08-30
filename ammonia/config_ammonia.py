@@ -9,9 +9,11 @@ LOG_FORMATTER = logging.Formatter(
 )
 RUN_PARALLEL = False
 run_config = {
+    # These steps can only be run sequentially (run_parallel = False)
     "IMPORT_DATA",
     "CALCULATE_VARIABLES",
     "SOLVER_INPUT",
+    # These steps can optionally be run in parallel (run_parallel = False) for several carbon costs, pathways and sensitivities
     "APPLY_IMPLICIT_FORCING",
     "MAKE_RANKINGS",
     "SIMULATE_PATHWAY",
@@ -46,9 +48,9 @@ CARBON_COSTS = [
     # 0,
     # 50,
     100,
-    150,
-    200,
-    250,
+    # 150,
+    # 200,
+    # 250,
 ]
 
 ### DATA IMPORT AND PREPROCESSING ###

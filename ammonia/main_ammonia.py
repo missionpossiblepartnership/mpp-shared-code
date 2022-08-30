@@ -38,12 +38,14 @@ logger.setLevel(LOG_LEVEL)
 
 
 funcs = {
-    # "IMPORT_DATA": import_all,
-    # "CALCULATE_VARIABLES": calculate_variables,
-    # "SOLVER_INPUT": create_solver_input_tables,
-    # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    # "MAKE_RANKINGS": make_rankings,
-    # "SIMULATE_PATHWAY": simulate_pathway,
+    # These steps can only be run sequentially (run_parallel = False)
+    "IMPORT_DATA": import_all,
+    "CALCULATE_VARIABLES": calculate_variables,
+    "SOLVER_INPUT": create_solver_input_tables,
+    # These steps can optionally be run in parallel (run_parallel = True)
+    "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
+    "MAKE_RANKINGS": make_rankings,
+    "SIMULATE_PATHWAY": simulate_pathway,
     "CALCULATE_OUTPUTS": calculate_outputs,
     "CALCULATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
 }
@@ -114,7 +116,6 @@ def main():
 
     # Create a list of carbon cost trajectories that each start in 2025 and have a constant carbon cost
     carbon_costs = CARBON_COSTS
-    # carbon_costs = [1]  # for creating carbon cost addition DataFrame
     carbon_cost_trajectories = []
     end_year_map = {0: 2025, 50: 2030, 100: 2035, 150: 2040, 200: 2045, 250: 2050}
     for cc in carbon_costs:
@@ -133,9 +134,6 @@ def main():
         run_model_parallel(runs)
     else:
         run_model_sequential(runs)
-    # Create sensitivity outputs
-    # if "SENSITIVITY_ANALYSIS" in funcs:
-    #     create_sensitivity_outputs()
 
 
 if __name__ == "__main__":
