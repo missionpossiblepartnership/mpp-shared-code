@@ -1,7 +1,6 @@
 """ Additional functions required for the agent logic, e.g. demand balances. """
 
 from operator import methodcaller
-
 import pandas as pd
 
 from mppshared.config import (
@@ -80,14 +79,18 @@ def remove_techs_in_region_by_tech_substr(
 
 
 def adjust_capacity_utilisation(
-    pathway: SimulationPathway, year: int
+    pathway: SimulationPathway,
+    year: int,
+    cuf_upper_threshold: float = CUF_UPPER_THRESHOLD,
+    cuf_lower_threshold: float = CUF_LOWER_THRESHOLD,
 ) -> SimulationPathway:
     """Adjust capacity utilisation of each asset based on a predefined cost metric (LCOX or marginal cost of production) within predefined thresholds to balance demand
     and production as much as possible in the given year.
+
     Args:
         pathway: pathway with AssetStack and demand data for the specified year
-        product:
-        year:
+        year: year in which to adjust asset's capacity utilisation
+
     Returns:
         pathway with updated capacity factor for each Asset in the AssetStack of the given year
     """
@@ -100,7 +103,6 @@ def adjust_capacity_utilisation(
         stack = pathway.get_stack(year=year)
         production = stack.get_annual_production_volume(product)
 
-        # TODO: make sure that CUF adjustment does not overshoot demand and production balance
         # If demand exceeds production, increase capacity utilisation of each asset to make production
         # deficit as small as possible, starting at the asset with the lowest cost metric
         if demand > production:
@@ -113,6 +115,7 @@ def adjust_capacity_utilisation(
                 product=product,
                 year=year,
                 cost_metric=COST_METRIC_CUF_ADJUSTMENT[pathway.sector],
+                cuf_upper_threshold=cuf_upper_threshold,
             )
 
         # If production exceeds demand, decrease capacity utilisation of each asset to make production
@@ -127,17 +130,19 @@ def adjust_capacity_utilisation(
                 product=product,
                 year=year,
                 cost_metric=COST_METRIC_CUF_ADJUSTMENT[pathway.sector],
+                cuf_lower_threshold=cuf_lower_threshold,
             )
-
-        #! Development only
-        production = stack.get_annual_production_volume(product)
-        pass
 
     return pathway
 
 
 def increase_cuf_of_assets(
-    pathway: SimulationPathway, demand: float, product: str, year: int, cost_metric: str
+    pathway: SimulationPathway,
+    demand: float,
+    product: str,
+    year: int,
+    cost_metric: str,
+    cuf_upper_threshold: float,
 ) -> SimulationPathway:
     """Increase CUF of assets to minimise the production deficit."""
 
@@ -148,7 +153,7 @@ def increase_cuf_of_assets(
     # is first
     assets = stack.filter_assets(product=product)
     assets_below_cuf_threshold = list(
-        filter(lambda asset: asset.cuf < CUF_UPPER_THRESHOLD, assets)
+        filter(lambda asset: asset.cuf < cuf_upper_threshold, assets)
     )
     assets_below_cuf_threshold = sort_assets_cost_metric(
         assets_below_cuf_threshold, pathway, year, cost_metric
@@ -164,14 +169,19 @@ def increase_cuf_of_assets(
         # Increase CUF of asset with lowest LCOX to upper threshold and remove from list
         asset = assets_below_cuf_threshold[0]
         # logger.debug(f"Increase CUF of {str(asset)}")
-        asset.cuf = CUF_UPPER_THRESHOLD
+        asset.cuf = cuf_upper_threshold
         assets_below_cuf_threshold.pop(0)
 
     return pathway
 
 
 def decrease_cuf_of_assets(
-    pathway: SimulationPathway, demand: float, product: str, year: int, cost_metric: str
+    pathway: SimulationPathway,
+    demand: float,
+    product: str,
+    year: int,
+    cost_metric: str,
+    cuf_lower_threshold: float,
 ) -> SimulationPathway:
     """Decrease CUF of assets to minimise the production surplus."""
 
@@ -181,7 +191,7 @@ def decrease_cuf_of_assets(
     # Identify all assets that produce above CUF threshold and sort list so asset with highest cost metric is first
     assets = stack.filter_assets(product=product)
     assets_above_cuf_threshold = list(
-        filter(lambda asset: asset.cuf > CUF_LOWER_THRESHOLD, assets)
+        filter(lambda asset: asset.cuf > cuf_lower_threshold, assets)
     )
     assets_above_cuf_threshold = sort_assets_cost_metric(
         assets_above_cuf_threshold, pathway, year, cost_metric, descending=True
@@ -197,7 +207,7 @@ def decrease_cuf_of_assets(
         # Increase CUF of asset with lowest LCOX to upper threshold and remove from list
         asset = assets_above_cuf_threshold[0]
         # logger.debug(f"Decrease CUF of {str(asset)}")
-        asset.cuf = CUF_LOWER_THRESHOLD
+        asset.cuf = cuf_lower_threshold
         assets_above_cuf_threshold.pop(0)
 
     return pathway
