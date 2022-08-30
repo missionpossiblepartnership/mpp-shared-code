@@ -145,23 +145,25 @@ def get_best_asset_to_decommission(
 
 def get_best_asset_to_decommission_cement(
     stack: AssetStack,
-    df_rank: pd.DataFrame,
+    df_rank_region: pd.DataFrame,
     product: str,
+    region: str,
 ) -> Asset:
     """Get best asset to decommission according to decommission ranking. Choose randomly if several assets have the same
     decommission ranking. Does not check whether removing the asset hurts any constraints.
 
     Args:
         stack:
-        df_rank:
+        df_rank_region:
         product:
+        region:
 
     Returns:
         Asset to be decommissioned
 
     """
     # Get all assets eligible for decommissioning
-    candidates = stack.get_assets_eligible_for_decommission_cement(product=product)
+    candidates = stack.get_assets_eligible_for_decommission_cement(product=product, region=region)
     # If no more assets to decommission, raise ValueError
     if not candidates:
         raise ValueError
@@ -172,7 +174,7 @@ def get_best_asset_to_decommission_cement(
     best_candidates: list[Asset] = []
     while not best_candidates:
 
-        best_transition = select_best_transition(df_rank)
+        best_transition = select_best_transition(df_rank_region)
 
         best_candidates = list(
             filter(
@@ -184,7 +186,7 @@ def get_best_asset_to_decommission_cement(
         )
 
         # Remove best transition from ranking table
-        df_rank = remove_transition(df_rank, best_transition)
+        df_rank_region = remove_transition(df_rank=df_rank_region, transition=best_transition)
 
     # If several candidates for best transition, choose randomly
     best_asset_to_decommission = random.choice(best_candidates)
