@@ -41,7 +41,7 @@ funcs = {
     # These steps can only be run sequentially (run_parallel = False)
     # "IMPORT_DATA": import_all,
     # "CALCULATE_VARIABLES": calculate_variables,
-    "SOLVER_INPUT": create_solver_input_tables,
+    # "SOLVER_INPUT": create_solver_input_tables,
     # These steps can optionally be run in parallel (run_parallel = True)
     "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     "MAKE_RANKINGS": make_rankings,
@@ -104,7 +104,7 @@ def run_model_parallel(runs):
                 if not os.path.exists(final_folder):
                     os.makedirs(final_folder)
                 if folder == "intermediate":
-                    source_dir = f"data/{SECTOR}/{pathway}/{sensitivity}/{folder}"
+                    source_dir = f"{SECTOR}/data/{pathway}/{sensitivity}/{folder}"
                     distutils.dir_util.copy_tree(source_dir, final_folder)
         pool.apply_async(_run_model, args=(pathway, sensitivity, carbon_cost))
     pool.close()
