@@ -1,9 +1,4 @@
 """ Process outputs to standardised output table."""
-import itertools
-from collections import defaultdict
-from lib2to3.pgen2.pgen import DFAState
-from re import T
-from tkinter import END
 
 import numpy as np
 import pandas as pd
@@ -11,7 +6,8 @@ import pandas as pd
 from cement.config.config_cement import EMISSION_SCOPES_RANKING, GHGS
 from mppshared.config import *
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.solver.debugging_outputs import create_table_asset_transition_sequences
+from mppshared.solver.debugging_outputs import \
+    create_table_asset_transition_sequences
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)

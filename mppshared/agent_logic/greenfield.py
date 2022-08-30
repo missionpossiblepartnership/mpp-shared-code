@@ -11,7 +11,11 @@ from mppshared.agent_logic.agent_logic_functions import (
     remove_transition_in_region_by_tech_substr,
     select_best_transition,
 )
-from mppshared.config import LOG_LEVEL, MAP_LOW_COST_POWER_REGIONS
+from mppshared.config import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    LOG_LEVEL,
+    MAP_LOW_COST_POWER_REGIONS,
+)
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
     check_alternative_fuel_constraint,
