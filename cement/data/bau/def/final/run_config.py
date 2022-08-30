@@ -61,13 +61,16 @@ CARBON_COST_SENSITIVITIES = {
 }
 CARBON_COST_SCOPES = ["scope1", "scope2"]
 
-INVESTMENT_CYCLE = 10  # years
+INVESTMENT_CYCLE = None  # years
 CAPACITY_UTILISATION_FACTOR = 0.913
 COST_METRIC_CUF_ADJUSTMENT = None
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-# todo: make pathway-specific
-MAX_ANNUAL_RENOVATION_SHARE = 0.2
+MAX_ANNUAL_RENOVATION_SHARE = {
+    "bau": 0.2,
+    "fa": 0.2,
+    "lc": 0.2
+}
 
 
 ### initial asset stack ###
@@ -148,7 +151,7 @@ TRANSITION_TYPES = {
 
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 
-# define which regions can have switches to natural gas
+# define regions that can have switches to natural gas
 REGIONS_NATURAL_GAS = ["North America", "Russia", "Middle East"]
 
 # set of cost classifications
@@ -222,10 +225,10 @@ RANKING_CONFIG = {
 ### CONSTRAINTS ###
 # todo: when this is set to None, it causes troubles...
 YEAR_2050_EMISSIONS_CONSTRAINT = 2060
-# Technology ramp-up parameters (on technology-level, only applies to transition and end-state techs!)
+# Technology ramp-up parameters (on global technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
-    "maximum_asset_additions": 1000,  # set high such that is deactivated
-    "maximum_capacity_growth_rate": 0.05,
+    "init_maximum_asset_additions": 20,  # set high such that is deactivated
+    "maximum_asset_growth_rate": 0.05,
     "years_rampup_phase": 10,
 }
 CONSTRAINTS_TO_APPLY = {

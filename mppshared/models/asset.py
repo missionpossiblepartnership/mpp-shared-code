@@ -535,11 +535,12 @@ class AssetStack:
     def get_assets_eligible_for_decommission_cement(
         self,
         product: str,
+        region: str,
     ) -> list:
         """Return a list of Assets from the AssetStack that are eligible for decommissioning"""
 
         # Filter for assets with the specified product
-        assets = deepcopy(self.filter_assets(product=product))
+        assets = deepcopy(self.filter_assets(product=product, region=region))
 
         # assets can be decommissioned if they have not undergone a renovation or rebuild
         candidates = filter(lambda asset: not asset.retrofit, assets)
