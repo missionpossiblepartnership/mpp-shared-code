@@ -35,6 +35,10 @@ def create_solver_input_tables(
     calculate_folder = f"{PREPROCESS_DATA_PATH}/{sensitivity}/calculate_variables"
     imports_folder = f"{PREPROCESS_DATA_PATH}/{sensitivity}/imports_processed"
     write_path = f"{PREPROCESS_DATA_PATH}/{sensitivity}/solver_input_tables"
+
+    if not os.path.exists(write_path):
+        os.makedirs(write_path)
+
     solver_input_paths = [
         f"{CORE_DATA_PATH}/{pathway}/{sensitivity}/intermediate"
         for pathway in ["lc", "fa", "bau"]

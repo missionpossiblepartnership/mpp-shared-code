@@ -39,8 +39,8 @@ logger.setLevel(LOG_LEVEL)
 
 funcs = {
     # These steps can only be run sequentially (run_parallel = False)
-    "IMPORT_DATA": import_all,
-    "CALCULATE_VARIABLES": calculate_variables,
+    # "IMPORT_DATA": import_all,
+    # "CALCULATE_VARIABLES": calculate_variables,
     "SOLVER_INPUT": create_solver_input_tables,
     # These steps can optionally be run in parallel (run_parallel = True)
     "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
