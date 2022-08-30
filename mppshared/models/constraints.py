@@ -132,7 +132,7 @@ def check_technology_rampup_constraint(
     ) | (df_rampup["maximum_asset_additions"].isna())
 
     if df_rampup["check"].all():
-        logger.info("Ramp-up constraint is satisfied")
+        logger.info("Technology ramp-up constraint satisfied")
         return True
     else:
         technology_affected = list(df_rampup[~df_rampup["check"]].index)
@@ -271,17 +271,6 @@ def hydro_constraints(df_ranking: pd.DataFrame, sector: str) -> pd.DataFrame:
         ]
     else:
         return df_ranking
-
-
-# todo: is this a dead function? Can't find any usage of it
-def regional_supply_constraint(df_region_demand, asset_transition):
-    # Check if regional supply constraint is met
-    return (
-        df_region_demand.loc[asset_transition["region"], "region_newbuild_additions"]
-        >= df_region_demand.loc[
-            asset_transition["region"], "region_max_plants_newbuild"
-        ]
-    )
 
 
 def apply_greenfield_filters_chemicals(
