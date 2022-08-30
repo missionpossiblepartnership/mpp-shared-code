@@ -83,7 +83,8 @@ def check_technology_rampup_constraint(
     year: int,
     transition_type: str,
 ) -> bool:
-    """Check if the technology rampup between the stacked passed and the previous year's stack complies with the technology ramp-up trajectory
+    """Check if the technology rampup between the stack passed and the previous year's stack complies with the
+        technology ramp-up trajectory
 
     Args:
         pathway: contains the stack of the previous year
@@ -93,11 +94,15 @@ def check_technology_rampup_constraint(
         transition_type:
     """
     logger.info(
-        f"Checking ramp-up constraint for year {year} and transition type {transition_type}"
+        f"{year}: Checking ramp-up constraint (transition type: {transition_type})"
     )
     # Get asset numbers of new and old stack for each technology
+    if product == "Clinker":
+        year_old_stack = year - 1
+    else:
+        year_old_stack = year
     df_old_stack = (
-        pathway.stacks[year]
+        pathway.stacks[year_old_stack]
         .aggregate_stack(aggregation_vars=["technology"])[["number_of_assets"]]
         .rename({"number_of_assets": "number_old"}, axis=1)
     )
@@ -106,7 +111,11 @@ def check_technology_rampup_constraint(
     ].rename({"number_of_assets": "number_new"}, axis=1)
 
     # Create DataFrame for rampup comparison
-    df_rampup = df_old_stack.join(df_new_stack, how="outer").fillna(0)
+    df_rampup = (
+        df_old_stack.join(df_new_stack, how="outer")
+        .fillna(0)
+        .astype(dtype={"number_old": int, "number_new": int})
+    )
     df_rampup["proposed_asset_additions"] = (
         df_rampup["number_new"] - df_rampup["number_old"]
     )
@@ -117,19 +126,19 @@ def check_technology_rampup_constraint(
                 technology, "maximum_asset_additions"
             ] = rampup_constraint.df_rampup.loc[year, "maximum_asset_additions"]
         else:
-            df_rampup.loc[technology, "maximum_asset_additions"] = None
+            df_rampup.loc[technology, "maximum_asset_additions"] = np.nan
 
     df_rampup["check"] = (
         df_rampup["proposed_asset_additions"] <= df_rampup["maximum_asset_additions"]
     ) | (df_rampup["maximum_asset_additions"].isna())
 
     if df_rampup["check"].all():
-        logger.info("Ramp-up constraint is satisfied")
+        logger.info("Technology ramp-up constraint satisfied")
         return True
-
-    technology_affected = list(df_rampup[~df_rampup["check"]].index)
-    logger.info(f"Technology ramp-up constraint hurt for {technology_affected}.")
-    return False
+    else:
+        technology_affected = list(df_rampup[~df_rampup["check"]].index)
+        logger.info(f"Technology ramp-up constraint hurt for {technology_affected}.")
+        return False
 
 
 def check_constraint_regional_production(
@@ -150,7 +159,7 @@ def check_constraint_regional_production(
             dictionary
     """
     logger.info(
-        f"Checking regional production constraint for year {year} and transition type {transition_type}"
+        f"{year}: Checking regional production constraint (transition type: {transition_type})"
     )
     df = get_regional_production_constraint_table(pathway, stack, product, year)
     # The constraint is hurt if any region does not meet its required regional production share
@@ -209,7 +218,9 @@ def check_annual_carbon_budget_constraint(
 
     """
 
-    logger.info(f"{year}: Checking annual carbon budget constraint")
+    logger.info(
+        f"{year}: Checking annual carbon budget constraint (transition type: {transition_type})"
+    )
 
     # After a sector-specific year, all end-state newbuild capacity has to fulfill the 2050 emissions limit with a stack
     #   composed of only end-state technologies
@@ -261,16 +272,6 @@ def hydro_constraints(df_ranking: pd.DataFrame, sector: str) -> pd.DataFrame:
         ]
     else:
         return df_ranking
-
-
-def regional_supply_constraint(df_region_demand, asset_transition):
-    # Check if regional supply constraint is met
-    return (
-        df_region_demand.loc[asset_transition["region"], "region_newbuild_additions"]
-        >= df_region_demand.loc[
-            asset_transition["region"], "region_max_plants_newbuild"
-        ]
-    )
 
 
 def apply_greenfield_filters_chemicals(
@@ -540,7 +541,7 @@ def check_natural_gas_constraint(
 
     if not return_dict:
         logger.info(
-            f"{year}: Checking natural gas constraint (asset stack: {hex(id(stack))})"
+            f"{year}: Checking natural gas constraint  (transition type: {transition_type})"
         )
 
     # Get constraint value
@@ -589,7 +590,7 @@ def check_alternative_fuel_constraint(
 
     if not return_dict:
         logger.info(
-            f"{year}: Checking alternative fuel constraint (asset stack: {hex(id(stack))})"
+            f"{year}: Checking alternative fuel constraint  (transition type: {transition_type})"
         )
 
     # Get constraint value

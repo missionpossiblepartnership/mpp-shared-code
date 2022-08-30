@@ -53,6 +53,8 @@ def get_ranking_inputs(
         sensitivity=sensitivity,
         sector=sector,
         products=products,
+        carbon_cost_trajectory=None,
+        business_case_excel_filename="business_cases.xlsx"
     )
 
     # get imported inputs

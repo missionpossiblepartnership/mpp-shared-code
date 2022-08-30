@@ -42,6 +42,8 @@ def import_and_preprocess(
         sensitivity=sensitivity,
         sector=sector,
         products=products,
+        carbon_cost_trajectory=None,
+        business_case_excel_filename="business_cases.xlsx"
     )
 
     import_all(

@@ -1,13 +1,13 @@
 """ Logic for technology transitions of type greenfield (add new Asset to AssetStack."""
 
 from copy import deepcopy
+import sys
 
 import numpy as np
 import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_destination_technology,
-    remove_transition,
     remove_techs_in_region_by_tech_substr,
     select_best_transition,
 )

@@ -11,6 +11,7 @@ from cement.config.config_cement import (
     START_YEAR,
     TECHNOLOGY_MORATORIUM,
     TRANSITIONAL_PERIOD_YEARS,
+    REGIONS_NATURAL_GAS,
 )
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
@@ -93,6 +94,14 @@ def apply_implicit_forcing(
         ghgs=GHGS,
     )
 
+    # only allow switches to natural gas in regions in REGIONS_NATURAL_GAS
+    df_tech_to_rank = df_tech_to_rank.loc[
+        ~(
+            ~df_tech_to_rank["region"].isin(REGIONS_NATURAL_GAS)
+            & df_tech_to_rank["technology_destination"].str.contains("natural gas")
+        ), :
+    ]
+
     # todo: For future Luis, Timon or any other developer, this line was added to filter the technologies and only
     # keep the ones with the right context for the first run of the code
     # Only get the rows with value value_high_low in column opex_context
@@ -108,15 +117,6 @@ def apply_implicit_forcing(
         ),
         :,
     ]
-    # todo dev
-
-    # todo dev: discuss whether or not and if so, how to include renovations from and to same tech / rebuilds.
-    """df_tech_to_rank = df_tech_to_rank.loc[
-        ~(
-            (df_tech_to_rank["technology_origin"] == df_tech_to_rank["technology_destination"])
-            & (df_tech_to_rank["switch_type"] == "brownfield_renovation")
-        )
-    ]"""
     # todo dev
 
     # Export technology switching table to be used for ranking
