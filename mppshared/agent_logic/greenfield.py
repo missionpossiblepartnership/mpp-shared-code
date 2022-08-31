@@ -1,7 +1,7 @@
 """ Logic for technology transitions of type greenfield (add new Asset to AssetStack."""
 
-from copy import deepcopy
 import sys
+from copy import deepcopy
 
 import numpy as np
 import pandas as pd
@@ -9,14 +9,23 @@ import pandas as pd
 from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_destination_technology,
     remove_techs_in_region_by_tech_substr,
+    remove_transition,
     select_best_transition,
 )
-from mppshared.config import LOG_LEVEL, MAP_LOW_COST_POWER_REGIONS
+from mppshared.config import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CUF_UPPER_THRESHOLD,
+    LOG_LEVEL,
+    MAP_LOW_COST_POWER_REGIONS,
+    MODEL_SCOPE,
+)
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
     check_alternative_fuel_constraint,
     check_constraints,
     check_natural_gas_constraint,
+    get_regional_production_constraint_table,
+    hydro_constraints,
 )
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
@@ -89,6 +98,8 @@ def greenfield_default(pathway: SimulationPathway, year: int) -> SimulationPathw
                         df_rank=df_rank_region,
                         product=product,
                         year=year,
+                        annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                        cuf=CUF_UPPER_THRESHOLD,
                     )
                     enact_greenfield_transition(
                         pathway=pathway, stack=new_stack, new_asset=new_asset, year=year
@@ -118,6 +129,8 @@ def greenfield_default(pathway: SimulationPathway, year: int) -> SimulationPathw
                     df_rank=df_rank,
                     product=product,
                     year=year,
+                    annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+                    cuf=CUF_UPPER_THRESHOLD,
                 )
                 logger.debug(
                     f"Tentative new asset with technology {new_asset.technology} in region {new_asset.region}, annual production {new_asset.get_annual_production_volume()} and UUID {new_asset.uuid}"
@@ -242,7 +255,9 @@ def select_asset_for_greenfield(
                     and not dict_constraints["flag_residual"]
                 ):
                     # remove best transition from ranking table and try again
-                    logger.debug(f"Handle emissions constraint: removing destination technology")
+                    logger.debug(
+                        f"Handle emissions constraint: removing destination technology"
+                    )
                     df_rank = remove_all_transitions_with_destination_technology(
                         df_rank=df_rank,
                         technology_destination=asset_transition[
@@ -284,7 +299,7 @@ def select_asset_for_greenfield(
             if "natural_gas_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["natural_gas_constraint"]:
                     # get regions where natural gas is exceeded
-                    dict_natural_gas_exceedance = check_natural_gas_constraint(
+                    dict_natural_gas_exceedance: dict = check_natural_gas_constraint(  # type: ignore
                         pathway=pathway,
                         product=product,
                         stack=tentative_stack,
@@ -318,8 +333,8 @@ def select_asset_for_greenfield(
             if "alternative_fuel_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["alternative_fuel_constraint"]:
                     # get regions where alternative fuel is exceeded
-                    dict_alternative_fuel_exceedance = (
-                        check_alternative_fuel_constraint(
+                    dict_alternative_fuel_exceedance: dict = (
+                        check_alternative_fuel_constraint(  # type: ignore
                             pathway=pathway,
                             product=product,
                             stack=tentative_stack,
@@ -358,8 +373,8 @@ def select_asset_for_greenfield(
 def get_region_rank_filter(region: str, sector: str) -> list:
     """Return list of (sub)regions if the sector has low-cost power regions mapped to the overall regions"""
     if MAP_LOW_COST_POWER_REGIONS[sector]:
-        if region in MAP_LOW_COST_POWER_REGIONS[sector].keys():
-            return [region, MAP_LOW_COST_POWER_REGIONS[sector][region]]
+        if region in MAP_LOW_COST_POWER_REGIONS[sector].keys():  # type: ignore
+            return [region, MAP_LOW_COST_POWER_REGIONS[sector][region]]  # type: ignore
     return [region]
 
 

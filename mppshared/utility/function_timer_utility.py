@@ -49,6 +49,8 @@ class TimeContainerClass:
             print(f"The {entry} function took {time_container[entry]}")
         if return_object:
             return time_container
+        else:
+            return None
 
 
 TIME_CONTAINER = TimeContainerClass()

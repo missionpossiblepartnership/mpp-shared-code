@@ -1,4 +1,5 @@
 """ Enforce constraints in the yearly optimization of technology switches."""
+from typing import Union
 
 import numpy as np
 import pandas as pd
@@ -53,7 +54,7 @@ def check_constraints(
     if pathway.constraints_to_apply:
         for constraint in pathway.constraints_to_apply:
             if constraint == "emissions_constraint":
-                emissions_constraint, flag_residual = funcs_constraints[constraint](
+                emissions_constraint, flag_residual = funcs_constraints[constraint](  # type: ignore
                     pathway=pathway,
                     stack=stack,
                     year=year,
@@ -62,7 +63,7 @@ def check_constraints(
                 constraints_checked[constraint] = emissions_constraint
                 constraints_checked["flag_residual"] = flag_residual
             else:
-                constraints_checked[constraint] = funcs_constraints[constraint](
+                constraints_checked[constraint] = funcs_constraints[constraint](  # type: ignore
                     pathway=pathway,
                     stack=stack,
                     product=product,
@@ -309,7 +310,7 @@ def check_global_demand_share_constraint(
     ).reset_index()
     constraint = True
 
-    for technology in pathway.technologies_maximum_global_demand_share:
+    for technology in pathway.technologies_maximum_global_demand_share:  # type: ignore
 
         # Calculate annual production volume based on CUF upper threshold
         df = (
@@ -325,7 +326,7 @@ def check_global_demand_share_constraint(
         df["demand"] = df["product"].apply(
             lambda x: pathway.get_demand(product=x, year=year, region="Global")
         )
-        df["demand_maximum"] = pathway.maximum_global_demand_share[year] * df["demand"]
+        df["demand_maximum"] = pathway.maximum_global_demand_share[year] * df["demand"]  # type: ignore
 
         # Compare
         df["check"] = np.where(
@@ -574,7 +575,7 @@ def check_alternative_fuel_constraint(
     year: int,
     transition_type: str,
     return_dict: bool = False,
-):
+) -> Union[dict, bool]:
     """Check if the constraint on annual alternative fuel capacity (regionally) is fulfilled"""
 
     if not return_dict:

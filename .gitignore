@@ -166,6 +166,7 @@ cement/data/01_business_case_raw/Archive
 # Allow
 !aluminium/data/bau/def/intermediate/*.csv
 !ammonia/data/lc/def/intermediate/*.csv
+!tests/tests_data/*.csv
 
 # development
 experimental*.py

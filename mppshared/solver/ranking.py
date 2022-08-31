@@ -1,5 +1,6 @@
 """Functions to create the ranking of technology switches"""
 import numpy as np
+import numpy.typing as npt
 import pandas as pd
 
 from mppshared.utility.utils import get_logger
@@ -7,7 +8,7 @@ from mppshared.utility.utils import get_logger
 logger = get_logger(__name__)
 
 
-def bin_ranking(rank_array: np.array, n_bins: int) -> np.array:
+def bin_ranking(rank_array: npt.NDArray, n_bins: int) -> npt.NDArray:
     """
     Bin the ranking, i.e. values that are close together end up in the same bin
     Args:

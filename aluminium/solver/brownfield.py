@@ -135,7 +135,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
         # Check constraints with tentative new stack
         assert (
-                len(pathway.products) == 1
+            len(pathway.products) == 1
         ), "Adjust aluminium brownfield logic if more than one product!"
         dict_constraints = check_constraints(
             pathway=pathway,
