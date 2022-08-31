@@ -3,7 +3,6 @@ from pathlib import Path
 
 import pandas as pd
 
-# todo: adjust config structure
 from mppshared.config import END_YEAR, LOG_LEVEL
 from mppshared.utility.utils import get_logger
 
@@ -53,7 +52,9 @@ class IntermediateDataImporter:
                 f"{sector}/data/{pathway_name}/{sensitivity}"
             )
         if not business_case_excel_filename:
-            self.business_case_excel_filename = f"Business Cases_{self.sensitivity}.xlsx"
+            self.business_case_excel_filename = (
+                f"Business Cases_{self.sensitivity}.xlsx"
+            )
         else:
             self.business_case_excel_filename = business_case_excel_filename
         self.raw_path = parent_path.joinpath(f"{sector}/data/01_business_case_raw")
@@ -101,7 +102,7 @@ class IntermediateDataImporter:
         # export config script
         shutil.copyfile(
             src=f"{Path(__file__).resolve().parents[2]}/{self.sector}/config/config_{self.sector}.py",
-            dst=f"{self.final_path}/run_config.py"
+            dst=f"{self.final_path}/run_config.py",
         )
 
     # imports & preprocessing

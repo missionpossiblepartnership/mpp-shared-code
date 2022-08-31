@@ -1,15 +1,15 @@
 """Create inputs for ranking of technology switches (cost metrics, emissions, and technology characteristics)."""
 
 from cement.config.config_cement import (
+    CARBON_COST_SCOPES,
+    CARBON_COST_SENSITIVITIES,
+    COMPUTE_LCOX,
     COST_CLASSIFICATIONS,
     LIST_TECHNOLOGIES,
     MODEL_YEARS,
+    PATHWAYS_WITH_CARBON_COST,
     REGIONS,
     TRANSITION_TYPES,
-    COMPUTE_LCOX,
-    PATHWAYS_WITH_CARBON_COST,
-    CARBON_COST_SENSITIVITIES,
-    CARBON_COST_SCOPES,
 )
 from cement.config.dataframe_config_cement import (
     DF_DATATYPES_PER_COLUMN,
@@ -28,14 +28,12 @@ from cement.config.import_config_cement import (
     OPEX_ENERGY_METRICS,
     OPEX_MATERIALS_METRICS,
 )
-from mppshared.config import LOG_LEVEL
 from cement.preprocess.import_data import get_tech_switches
-from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from cement.preprocess.preprocess_emissions import calculate_emissions
-from cement.preprocess.preprocess_tech_characteristics import (
-    get_tech_characteristics,
-)
+from cement.preprocess.preprocess_tech_characteristics import get_tech_characteristics
 from cement.preprocess.preprocess_tech_transitions import calculate_tech_transitions
+from mppshared.config import LOG_LEVEL
+from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.utility.log_utility import get_logger
 
@@ -54,7 +52,7 @@ def get_ranking_inputs(
         sector=sector,
         products=products,
         carbon_cost_trajectory=None,
-        business_case_excel_filename="business_cases.xlsx"
+        business_case_excel_filename="business_cases.xlsx",
     )
 
     # get imported inputs
@@ -87,8 +85,12 @@ def get_ranking_inputs(
     if pathway_name in PATHWAYS_WITH_CARBON_COST:
         carbon_cost_trajectory = CarbonCostTrajectory(
             trajectory=CARBON_COST_SENSITIVITIES[sensitivity]["trajectory"],
-            initial_carbon_cost=CARBON_COST_SENSITIVITIES[sensitivity]["initial_carbon_cost"],
-            final_carbon_cost=CARBON_COST_SENSITIVITIES[sensitivity]["final_carbon_cost"],
+            initial_carbon_cost=CARBON_COST_SENSITIVITIES[sensitivity][
+                "initial_carbon_cost"
+            ],
+            final_carbon_cost=CARBON_COST_SENSITIVITIES[sensitivity][
+                "final_carbon_cost"
+            ],
             start_year=CARBON_COST_SENSITIVITIES[sensitivity]["start_year"],
             end_year=CARBON_COST_SENSITIVITIES[sensitivity]["end_year"],
             model_years=MODEL_YEARS,

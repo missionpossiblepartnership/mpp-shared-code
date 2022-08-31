@@ -1,9 +1,4 @@
 """ Process outputs to standardised output table."""
-import itertools
-from collections import defaultdict
-from lib2to3.pgen2.pgen import DFAState
-from re import T
-from tkinter import END
 
 import numpy as np
 import pandas as pd
@@ -704,18 +699,17 @@ def calculate_electrolysis_capacity(
 
 def calculate_outputs(pathway: str, sensitivity: str, sector: str):
     importer = IntermediateDataImporter(
-        pathway=pathway,
+        pathway_name=pathway,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS[sector],
     )
 
-    # Write key assumptions to txt file
-    write_key_assumptions_to_txt(pathway=pathway, sector=sector, importer=importer)
-
     # Create summary table of asset transitions
     logger.info("Creating table with asset transition sequences.")
-    df_transitions = create_table_asset_transition_sequences(importer)
+    df_transitions = create_table_asset_transition_sequences(
+        importer, start_year=START_YEAR, end_year=END_YEAR
+    )
     importer.export_data(
         df_transitions,
         f"asset_transition_sequences_sensitivity_{sensitivity}.csv",
@@ -891,24 +885,6 @@ def calculate_outputs(pathway: str, sensitivity: str, sector: str):
         df_stacks, f"plant_stack_transition_{suffix}.csv", "final", index=False
     )
     logger.info("All data for all years processed.")
-
-
-def write_key_assumptions_to_txt(
-    pathway: str, sector: str, importer: IntermediateDataImporter
-):
-    """Write important assumptions in the configuration file to a txt file"""
-    type = "greenfield"
-    lines = [
-        f"Investment cycle: {INVESTMENT_CYCLES[sector]} years",
-        f"CUF: maximum={CUF_UPPER_THRESHOLD}, minimum={CUF_LOWER_THRESHOLD}, cost metric={COST_METRIC_CUF_ADJUSTMENT[sector]}",
-        f"Weights: {RANKING_CONFIG[sector][type][pathway]}",
-        f"Technology ramp-up: {TECHNOLOGY_RAMP_UP_CONSTRAINTS[sector]}",
-        f"Year 2050 emissions constraint: {YEAR_2050_EMISSIONS_CONSTRAINT[sector]}",
-        f"Annual renovation share: {ANNUAL_RENOVATION_SHARE[sector]}",
-        f"Regional production shares: {REGIONAL_PRODUCTION_SHARES[sector]}"
-        f"Technology moratorium year: {TECHNOLOGY_MORATORIUM[sector]}",
-        f"Transitional period years: {TRANSITIONAL_PERIOD_YEARS[sector]}",
-    ]
 
 
 def save_consolidated_outputs(sector: str):

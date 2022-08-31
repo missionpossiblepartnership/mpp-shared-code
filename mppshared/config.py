@@ -1,6 +1,5 @@
 """Configuration file for the library."""
 import logging
-from pickle import FALSE
 
 import numpy as np
 

@@ -4,8 +4,13 @@ from operator import methodcaller
 
 import pandas as pd
 
-from mppshared.config import (COST_METRIC_CUF_ADJUSTMENT, CUF_LOWER_THRESHOLD,
-                              CUF_UPPER_THRESHOLD, LOG_LEVEL, MODEL_SCOPE)
+from mppshared.config import (
+    COST_METRIC_CUF_ADJUSTMENT,
+    CUF_LOWER_THRESHOLD,
+    CUF_UPPER_THRESHOLD,
+    LOG_LEVEL,
+    MODEL_SCOPE,
+)
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.technology_rampup import TechnologyRampup
@@ -234,7 +239,7 @@ def create_dict_technology_rampup(
     years_rampup_phase: int,
 ) -> dict:
     """Create dictionary of TechnologyRampup objects with the technologies in that sector as keys. Set None if the
-        technology has no ramp-up trajectory."""
+    technology has no ramp-up trajectory."""
     logger.info("Creating ramp-up trajectories for technologies")
 
     technology_characteristics = importer.get_technology_characteristics()
@@ -270,7 +275,7 @@ def apply_regional_technology_ban(
     df_technology_switches: pd.DataFrame, sector_bans: dict
 ) -> pd.DataFrame:
     """Remove certain technologies from the technology switching table that are banned in certain regions (defined in
-        config.py)"""
+    config.py)"""
     if not sector_bans:
         return df_technology_switches
     for region in sector_bans.keys():
