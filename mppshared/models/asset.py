@@ -1,6 +1,4 @@
 """Asset and asset stack classes, code adapted from MCC"""
-import sys
-from calendar import c
 from copy import deepcopy
 from uuid import uuid4
 from xmlrpc.client import Boolean
@@ -9,7 +7,7 @@ import pandas as pd
 
 from mppshared.config import LOG_LEVEL
 from mppshared.utility.dataframe_utility import get_emission_columns
-from mppshared.utility.utils import first, get_logger, get_unique_list_values
+from mppshared.utility.utils import get_logger, get_unique_list_values
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
