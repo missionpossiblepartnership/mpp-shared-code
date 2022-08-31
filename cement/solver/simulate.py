@@ -34,6 +34,7 @@ from mppshared.agent_logic.agent_logic_functions import create_dict_technology_r
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.simulation_pathway import SimulationPathway
+from mppshared.models.constraints import check_constraint_regional_production
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -50,9 +51,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         The updated pathway with the asset stack in each year of the model horizon
     """
 
-    assert (
-        len(PRODUCTS) == 1
-    ), "Adjust cement model logic if more than one product!"
+    assert len(PRODUCTS) == 1, "Adjust cement model logic if more than one product!"
     product = PRODUCTS[0]
 
     # Write initial stack to csv
@@ -66,9 +65,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         pathway = pathway.copy_stack(year=year - 1)
 
         # Decommission assets
-        logger.info(
-            f"{year}: Production volumes pre decommission:"
-        )
+        logger.info(f"{year}: Production volumes pre decommission:")
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
             product=product
         )
@@ -79,10 +76,8 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
             f"{year}: Time elapsed for decommission: {timedelta(seconds=end-start)} seconds"
         )
 
-        # Renovate and rebuild assets (brownfield transition)
-        logger.info(
-            f"{year}: Production volumes pre brownfield:"
-        )
+        # Brownfield: Renovate and rebuild assets
+        logger.info(f"{year}: Production volumes pre brownfield:")
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
             product=product
         )
@@ -93,10 +88,8 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
             f"{year}: Time elapsed for brownfield: {timedelta(seconds=end-start)} seconds"
         )
 
-        # Build new assets
-        logger.info(
-            f"{year}: Production volumes pre greenfield:"
-        )
+        # Greenfield: Build new assets
+        logger.info(f"{year}: Production volumes pre greenfield:")
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
             product=product
         )
@@ -106,11 +99,18 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         logger.debug(
             f"{year}: Time elapsed for greenfield: {timedelta(seconds=end-start)} seconds"
         )
-        logger.info(
-            f"{year}: Production volumes post greenfield:"
-        )
+        logger.info(f"{year}: Production volumes post greenfield:")
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
             product=product
+        )
+
+        # check regional production constraint
+        assert check_constraint_regional_production(
+            pathway=pathway,
+            stack=pathway.stacks[year],
+            product=product,
+            year=year,
+            transition_type="all",
         )
 
         # Write stack to csv
@@ -192,5 +192,5 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
 
     # Optimize asset stack on a yearly basis
     _simulate(pathway=pathway)
-    
+
     logger.info("Pathway simulation complete")
