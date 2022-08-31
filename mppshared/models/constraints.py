@@ -165,8 +165,9 @@ def check_constraint_regional_production(
     if df["check"].all():
         logger.info("Regional production constraint satisfied")
         return True
-
-    return False
+    else:
+        logger.info("Regional production constraint hurt")
+        return False
 
 
 def get_regional_production_constraint_table(
