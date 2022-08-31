@@ -42,7 +42,7 @@ class CarbonBudget:
         return "Instance of Carbon Budget"
 
     def list_pathways(self):
-        return list(self.pathways.keys())
+        return list(self.sectoral_carbon_pathway.keys())
 
     def total_budget_all_sectors(self):
         return sum(list(self.budgets.values()))
@@ -58,7 +58,6 @@ class CarbonBudget:
             )
 
             # Annual emissions are reduced linearly
-            # TODO: implement in a better way
             trajectory = self.sectoral_carbon_pathway
             if pathway_shape == "linear":
                 initial_level = np.full(
@@ -71,7 +70,8 @@ class CarbonBudget:
                     num=self.end_year - trajectory["action_start"] + 1,
                 )
                 values = np.concatenate((initial_level, linear_reduction))
-            # TODO: implement other pathway shapes
+            else:
+                values = [np.nan] * (self.end_year - self.start_year + 1)
             df = pd.DataFrame(data={"year": index, "annual_limit": values}).set_index(
                 "year"
             )
@@ -115,4 +115,4 @@ class CarbonBudget:
             value_type (str): value_type
         """
         mapper = {"annual": "annual_limit", "cumulative": "cumulative_limit"}
-        return self.pathways[sector].loc[year][mapper[value_type]]
+        return self.sectoral_carbon_pathway[sector].loc[year][mapper[value_type]]

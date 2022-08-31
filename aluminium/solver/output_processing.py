@@ -5,8 +5,7 @@ import pandas as pd
 
 from aluminium.config_aluminium import *
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.solver.debugging_outputs import \
-    create_table_asset_transition_sequences
+from mppshared.solver.debugging_outputs import create_table_asset_transition_sequences
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -586,10 +585,11 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str):
         products=PRODUCTS,
     )
 
-
     # Create summary table of asset transitions
     logger.info("Creating table with asset transition sequences.")
-    df_transitions = create_table_asset_transition_sequences(importer, START_YEAR, END_YEAR)
+    df_transitions = create_table_asset_transition_sequences(
+        importer, START_YEAR, END_YEAR
+    )
     importer.export_data(
         df_transitions,
         f"asset_transition_sequences_sensitivity_{sensitivity}.csv",
@@ -702,9 +702,7 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str):
     importer.export_data(
         df_pivot, f"simulation_outputs_{suffix}.csv", "final", index=False
     )
-    df_pivot.to_csv(
-        f"{OUTPUT_WRITE_PATH}/simulation_outputs_{suffix}.csv", index=False
-    )
+    df_pivot.to_csv(f"{OUTPUT_WRITE_PATH}/simulation_outputs_{suffix}.csv", index=False)
 
     columns = [
         "sector",

@@ -282,7 +282,7 @@ def select_asset_for_greenfield(
             if "natural_gas_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["natural_gas_constraint"]:
                     # get regions where natural gas is exceeded
-                    dict_natural_gas_exceedance = check_natural_gas_constraint(
+                    dict_natural_gas_exceedance: dict = check_natural_gas_constraint(  # type: ignore
                         pathway=pathway,
                         product=product,
                         stack=tentative_stack,
@@ -316,8 +316,8 @@ def select_asset_for_greenfield(
             if "alternative_fuel_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["alternative_fuel_constraint"]:
                     # get regions where alternative fuel is exceeded
-                    dict_alternative_fuel_exceedance = (
-                        check_alternative_fuel_constraint(
+                    dict_alternative_fuel_exceedance: dict = (
+                        check_alternative_fuel_constraint(  # type: ignore
                             pathway=pathway,
                             product=product,
                             stack=tentative_stack,
@@ -356,8 +356,8 @@ def select_asset_for_greenfield(
 def get_region_rank_filter(region: str, sector: str) -> list:
     """Return list of (sub)regions if the sector has low-cost power regions mapped to the overall regions"""
     if MAP_LOW_COST_POWER_REGIONS[sector]:
-        if region in MAP_LOW_COST_POWER_REGIONS[sector].keys():
-            return [region, MAP_LOW_COST_POWER_REGIONS[sector][region]]
+        if region in MAP_LOW_COST_POWER_REGIONS[sector].keys(): # type: ignore
+            return [region, MAP_LOW_COST_POWER_REGIONS[sector][region]] # type: ignore
     return [region]
 
 

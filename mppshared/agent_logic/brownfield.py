@@ -7,8 +7,10 @@ import numpy as np
 import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
-    remove_all_transitions_with_destination_technology, remove_transition,
-    select_best_transition)
+    remove_all_transitions_with_destination_technology,
+    remove_transition,
+    select_best_transition,
+)
 from mppshared.config import ANNUAL_RENOVATION_SHARE, LOG_LEVEL
 from mppshared.models.asset import Asset
 from mppshared.models.constraints import check_constraints
@@ -36,13 +38,9 @@ def brownfield_def(pathway: SimulationPathway, year: int) -> SimulationPathway:
     new_stack = pathway.get_stack(year=year + 1)
     # Get the emissions, used for the LC scenario
     if year == 2050:
-        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(
-            year
-        )
+        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year)
     else:
-        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(
-            year + 1
-        )
+        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year + 1)
 
     # Get ranking table for brownfield transitions
     df_rank = pathway.get_ranking(year=year, rank_type="brownfield")

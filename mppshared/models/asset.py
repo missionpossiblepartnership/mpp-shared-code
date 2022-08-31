@@ -191,12 +191,14 @@ class AssetStack:
         if product is not None:
             assets = list(filter(lambda asset: (asset.product == product), assets))
         if technology_classification is not None:
-            assets = list(filter(
-                lambda asset: (
-                    asset.technology_classification == technology_classification
-                ),
-                assets,
-                ))
+            assets = list(
+                filter(
+                    lambda asset: (
+                        asset.technology_classification == technology_classification
+                    ),
+                    assets,
+                )
+            )
         if status == "greenfield_status":
             assets = list(filter(lambda asset: asset.greenfield == True, assets))
         if status == "retrofit_status":
@@ -508,7 +510,10 @@ class AssetStack:
     def get_tech_asset_stack(self, technology: str):
         """Get AssetStack with a specific technology."""
         return AssetStack(
-            assets=[asset for asset in self.assets if asset.technology == technology]
+            assets=[asset for asset in self.assets if asset.technology == technology],
+            emission_scopes=self.emission_scopes,
+            ghgs=self.ghgs,
+            cuf_lower_threshold=self.cuf_lower_threshold,
         )
 
     def get_assets_eligible_for_decommission(

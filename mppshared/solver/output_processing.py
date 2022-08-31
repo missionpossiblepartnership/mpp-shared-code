@@ -5,8 +5,7 @@ import pandas as pd
 
 from mppshared.config import *
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.solver.debugging_outputs import \
-    create_table_asset_transition_sequences
+from mppshared.solver.debugging_outputs import create_table_asset_transition_sequences
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -706,12 +705,11 @@ def calculate_outputs(pathway: str, sensitivity: str, sector: str):
         products=PRODUCTS[sector],
     )
 
-    # Write key assumptions to txt file
-    write_key_assumptions_to_txt(pathway=pathway, sector=sector, importer=importer)
-
     # Create summary table of asset transitions
     logger.info("Creating table with asset transition sequences.")
-    df_transitions = create_table_asset_transition_sequences(importer, start_year=START_YEAR, end_year=END_YEAR)
+    df_transitions = create_table_asset_transition_sequences(
+        importer, start_year=START_YEAR, end_year=END_YEAR
+    )
     importer.export_data(
         df_transitions,
         f"asset_transition_sequences_sensitivity_{sensitivity}.csv",

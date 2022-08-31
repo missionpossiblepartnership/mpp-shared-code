@@ -23,8 +23,8 @@ class TransitionRegistry:
         transition = {
             "year": year,
             "transition_type": transition_type,
-            "region": getattr(origin, "region", None) or destination.region,
-            "product": getattr(origin, "product", None) or destination.product,
+            "region": getattr(origin, "region", None) or destination.region,  # type: ignore
+            "product": getattr(origin, "product", None) or destination.product,  # type: ignore
             "technology_origin": getattr(origin, "technology", None),
             "type_of_tech_origin": getattr(origin, "type_of_tech", None),
             "technology_destination": getattr(destination, "technology", None),
