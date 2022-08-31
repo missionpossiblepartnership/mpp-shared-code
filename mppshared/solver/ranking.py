@@ -162,7 +162,7 @@ def rank_technology_uncertainty_bins(
             technology switch
     """
 
-    logger.info(f"Making ranking for {rank_type}")
+    logger.info(f"Generating ranking for transition type {rank_type}")
 
     # Filter ranking table for desired product and ranking type
     df = get_ranking_table(df_ranking=df_ranking, rank_type=rank_type)
@@ -177,7 +177,7 @@ def rank_technology_uncertainty_bins(
         emission_scopes_ranking,
         ghgs_ranking,
     )
-    logger.info(f"Ranking for {rank_type} done")
+    logger.info(f"Ranking for transition type {rank_type} done")
 
     return df
 
@@ -243,6 +243,10 @@ def _create_ranking_uncertainty_bins(
 
         if (bin_range != 0) & (bin_interval != 0):
             n_bins = int(bin_range / bin_interval)
+
+            # make sure that there is at least one bin
+            if n_bins == 0:
+                n_bins = 1
 
             # Bin the rank scores
             _, bins = np.histogram(df["rank_raw"], bins=n_bins)

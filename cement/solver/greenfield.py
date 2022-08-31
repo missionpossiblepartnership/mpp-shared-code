@@ -60,6 +60,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             f"{year}: Building {number_new_assets} new assets in {region} to fulfil production deficit "
             f"of {deficit} Mt {product}"
         )
+        # todo: update as this is for low cost power regions
         region_rank_filter = get_region_rank_filter(
             region=region, sector=pathway.sector
         )

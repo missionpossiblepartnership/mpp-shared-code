@@ -16,7 +16,7 @@ from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.models.technology_rampup import TechnologyRampup
 from mppshared.utility.utils import get_logger
 
-logger = logger = get_logger(__name__)
+logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
@@ -57,9 +57,24 @@ def remove_transition(df_rank: pd.DataFrame, transition: dict) -> pd.DataFrame:
 def remove_all_transitions_with_destination_technology(
     df_rank: pd.DataFrame, technology_destination: str
 ) -> pd.DataFrame:
-    """Remove all transitions with a specific destination technology from the ranking table. This is done when the transition for this technology hits the technology ramp-up constraint."""
+    """Remove all transitions with a specific destination technology from the ranking table."""
     df_rank = df_rank.loc[
         ~(df_rank["technology_destination"] == technology_destination)
+    ]
+    return df_rank
+
+
+def remove_all_transitions_with_origin_destination_technology(
+    df_rank: pd.DataFrame, transition: dict
+) -> pd.DataFrame:
+    """
+    Remove all transitions with a specific combination of origin and destination technology from the ranking table.
+    """
+    df_rank = df_rank.loc[
+        ~(
+            (df_rank["technology_destination"] == transition["technology_destination"])
+            & (df_rank["technology_origin"] == transition["technology_origin"])
+        )
     ]
     return df_rank
 
@@ -82,12 +97,11 @@ def remove_techs_in_region_by_tech_substr(
 def adjust_capacity_utilisation(
     pathway: SimulationPathway, year: int
 ) -> SimulationPathway:
-    """Adjust capacity utilisation of each asset based on a predefined cost metric (LCOX or marginal cost of production) within predefined thresholds to balance demand
-    and production as much as possible in the given year.
+    """Adjust capacity utilisation of each asset based on a predefined cost metric (LCOX or marginal cost of production)
+        within predefined thresholds to balance demand and production as much as possible in the given year.
 
     Args:
         pathway: pathway with AssetStack and demand data for the specified year
-        product:
         year:
 
     Returns:
@@ -248,10 +262,10 @@ def create_dict_technology_rampup(
                 model_start_year=model_start_year,
                 model_end_year=model_end_year,
                 technology=technology,
-                start_year=expected_maturity,
-                end_year=expected_maturity + years_rampup_phase,
-                maximum_asset_additions=maximum_asset_additions,
-                maximum_capacity_growth_rate=maximum_capacity_growth_rate,
+                ramp_up_start_year=expected_maturity,
+                ramp_up_end_year=expected_maturity + years_rampup_phase,
+                init_maximum_asset_additions=maximum_asset_additions,
+                maximum_asset_growth_rate=maximum_capacity_growth_rate,
             )
 
     return dict_technology_rampup
@@ -260,7 +274,8 @@ def create_dict_technology_rampup(
 def apply_regional_technology_ban(
     df_technology_switches: pd.DataFrame, sector_bans: dict
 ) -> pd.DataFrame:
-    """Remove certain technologies from the technology switching table that are banned in certain regions (defined in config.py)"""
+    """Remove certain technologies from the technology switching table that are banned in certain regions (defined in
+    config.py)"""
     if not sector_bans:
         return df_technology_switches
     for region in sector_bans.keys():

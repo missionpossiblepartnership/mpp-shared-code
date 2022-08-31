@@ -20,7 +20,19 @@ class IntermediateDataImporter:
         sector: str,
         products: list,
         carbon_cost_trajectory=None,
+        business_case_excel_filename: str = None,
     ):
+        """
+
+        Args:
+            pathway_name ():
+            sensitivity ():
+            sector ():
+            products ():
+            carbon_cost_trajectory (class CarbonCostTrajectory): if provided, export directory will be set based on
+                carbon cost in end_year
+            business_case_excel_filename (): if None, defaults to "Business Cases_{sensitivity}.xlsx"
+        """
         parent_path = Path(__file__).resolve().parents[2]
         self.sector = sector
         self.products = products
@@ -39,6 +51,12 @@ class IntermediateDataImporter:
             self.export_dir = parent_path.joinpath(
                 f"{sector}/data/{pathway_name}/{sensitivity}"
             )
+        if not business_case_excel_filename:
+            self.business_case_excel_filename = (
+                f"Business Cases_{self.sensitivity}.xlsx"
+            )
+        else:
+            self.business_case_excel_filename = business_case_excel_filename
         self.raw_path = parent_path.joinpath(f"{sector}/data/01_business_case_raw")
         self.import_path = self.export_dir.joinpath("import")
         self.intermediate_path = self.export_dir.joinpath("intermediate")
@@ -105,7 +123,7 @@ class IntermediateDataImporter:
             pd.DataFrame: Full data of sheet with correct header
         """
 
-        filename = f"Business Cases_{self.sensitivity}.xlsx"
+        filename = self.business_case_excel_filename
         full_path = self.raw_path.joinpath(filename)
         df = pd.read_excel(
             full_path,
