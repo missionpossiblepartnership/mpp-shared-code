@@ -110,9 +110,15 @@ def calculate_tech_transitions(
         model_regions=model_regions,
         map_switch_types_to_capex_type=map_switch_types_to_capex_type,
     )
+    # check for negative values
+    if any(df_switch_capex["value"] < 0):
+        logger.critical("Warning: Negative switch CAPEX values exist!")
 
     # OPEX fixed
     df_opex_fixed = _get_opex_fixed(df_opex=df_opex)
+    # check for negative values
+    if any(df_opex_fixed["value"] < 0):
+        logger.critical("Warning: Negative OPEX_fixed values exist!")
 
     # OPEX variable
     if sector == "cement":
@@ -141,6 +147,13 @@ def calculate_tech_transitions(
     else:
         # placeholder
         df_opex_variable = pd.DataFrame()
+    # check for negative values
+    if (
+        (df_opex_variable[[x for x in df_opex_variable.columns if "value" in x]] < 0)
+        .any()
+        .any()
+    ):
+        logger.critical("Warning: Negative OPEX_variable values exist!")
 
     # LCOX
     if compute_lcox:
@@ -173,6 +186,9 @@ def calculate_tech_transitions(
             sys.exit(
                 "No LCOX data found. Set config parameter COMPUTE_LCOX to True to generate LCOX data."
             )
+    # check for negative values
+    if (df_lcox[[x for x in df_lcox.columns if "value" in x]] < 0).any().any():
+        logger.critical("Warning: Negative LCOX values exist!")
 
     # add all outputs to dict
     # todo: add missing dataframes
@@ -432,10 +448,6 @@ def _get_switch_capex(
         ]
     ).reset_index(drop=True)
     df_switch_capex = df_switch_capex.set_index(IDX_TECH_RANKING_COLUMNS).sort_index()
-
-    # check for negative values
-    if any(df_switch_capex["value"] < 0):
-        logger.critical("Warning: Negative switch CAPEX values exist!")
 
     return df_switch_capex
 

@@ -1,6 +1,6 @@
 """Decommission plants."""
 
-from cement.config.config_cement import LOG_LEVEL, MODEL_SCOPE
+from cement.config.config_cement import LOG_LEVEL, MODEL_SCOPE, REGIONS
 from mppshared.agent_logic.decommission import get_best_asset_to_decommission_cement
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
@@ -22,28 +22,30 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
             transitions enacted
     """
 
-    # todo: decommission per region!
+    logger.debug(f"{year}: Starting decommission logic")
 
-    for product in pathway.products:
+    product = pathway.products[0]
+    old_stack = pathway.get_stack(year=year - 1)
+    new_stack = pathway.get_stack(year=year)
 
-        logger.info(f"Running decommission logic for {product}")
+    for region in REGIONS:
 
-        # Current stack is for calculating production, next year's stack is updated with each decommissioning
-        old_stack = pathway.get_stack(year=year - 1)
-        new_stack = pathway.get_stack(year=year)
+        logger.info(f"Running decommission logic in {region}")
 
         # Get demand balance (demand - production)
-        demand = pathway.get_demand(product=product, year=year, region=MODEL_SCOPE)
-        production = old_stack.get_annual_production_volume(product)
+        demand = pathway.get_demand(product=product, year=year, region=region)
+        production = old_stack.get_annual_production_volume(
+            product=product, region=region
+        )
 
         # Get ranking table for decommissioning
-        df_rank = pathway.get_ranking(year=year, rank_type="decommission")
-        df_rank = df_rank.loc[df_rank["product"] == product]
+        df_rank_region = pathway.get_ranking(year=year, rank_type="decommission")
+        df_rank_region = df_rank_region.loc[df_rank_region["region"] == region]
 
         # Decommission while production exceeds demand
         surplus = production - demand
         logger.debug(
-            f"Year: {year} Production: {production} Mt {product}, Demand: {demand} Mt {product}, "
+            f"{year}, {region}: Production: {production} Mt {product}, Demand: {demand} Mt {product}, "
             f"Surplus: {surplus} Mt {product}"
         )
         while surplus > 0:
@@ -52,18 +54,17 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
             try:
                 asset_to_remove = get_best_asset_to_decommission_cement(
                     stack=new_stack,
-                    df_rank=df_rank,
+                    df_rank_region=df_rank_region,
                     product=product,
+                    region=region,
                 )
-
                 # TODO: check if removing this asset violates any constraints
-
             except ValueError:
-                logger.info("--No more assets to decommission")
+                logger.info("No more assets to decommission")
                 break
 
             logger.debug(
-                f"--Removing asset with technology {asset_to_remove.technology} in region {asset_to_remove.region}, "
+                f"Removing asset in {asset_to_remove.region} with technology {asset_to_remove.technology}, "
                 f"annual production {asset_to_remove.get_annual_production_volume()} and UUID {asset_to_remove.uuid}"
             )
 

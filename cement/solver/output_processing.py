@@ -36,6 +36,8 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
         importer=importer, start_year=START_YEAR, end_year=END_YEAR
     )
     _export_and_plot_tech_roadmaps_by_region(
+        pathway_name=pathway_name,
+        sensitivity=sensitivity,
         importer=importer,
         df_roadmap=df_tech_roadmap,
         unit="Mt Clk",
@@ -213,6 +215,8 @@ def _create_tech_roadmaps_by_region(
 
 
 def _export_and_plot_tech_roadmaps_by_region(
+    pathway_name: str,
+    sensitivity: str,
     importer: IntermediateDataImporter,
     df_roadmap: pd.DataFrame,
     unit: str,
@@ -240,7 +244,7 @@ def _export_and_plot_tech_roadmaps_by_region(
                 "year": "Year",
                 "annual_production_volume": f"Annual production volume in {unit}",
             },
-            title=f"{region}: Technology roadmap",
+            title=f"{region}: Technology roadmap ({pathway_name}_{sensitivity})",
             category_orders={"technology": list(technology_layout)},
             color_discrete_map=technology_layout,
         )

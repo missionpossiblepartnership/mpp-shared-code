@@ -212,7 +212,7 @@ YEAR_2050_EMISSIONS_CONSTRAINT = 2050
 
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
-    "maximum_asset_additions": 6,  # 10
-    "maximum_capacity_growth_rate": 0.5,  # 0.25
+    "init_maximum_asset_additions": 6,  # 10
+    "maximum_asset_growth_rate": 0.5,  # 0.25
     "years_rampup_phase": 8,  # 5
 }

@@ -5,90 +5,63 @@ import pandas as pd
 
 
 class TechnologyRampup:
-    """Describes an approximately exponential ramp-up trajectory for a technology with a maximum number of discrete asset additions per year.
-    The ramp-up either needs to fulfill a limit on discrete asset additions or on capacity growth."""
+    """Describes an approximately exponential ramp-up trajectory for a technology with a maximum number of absolute
+    asset additions per year.
+    """
 
     def __init__(
         self,
         model_start_year: int,
         model_end_year: int,
         technology: str,
-        start_year: int,
-        end_year: int,
-        maximum_asset_additions: int,
-        maximum_capacity_growth_rate: float,
+        ramp_up_start_year: int,
+        ramp_up_end_year: int,
+        init_maximum_asset_additions: int,
+        maximum_asset_growth_rate: float,
     ):
         """_summary_
 
         Args:
             technology (str): technology to be ramped-up
-            start_year (int): Start year for technology ramp-up (year of technology maturity)
-            end_year (int): _End year for technology ramp-up
-            maximum_asset_additions (int): Maximum number of assets that can be added in a given year
-            maximum_capacity_growth_rate (float): Maximum rate at which installed capacity can grow from one year to the next
+            ramp_up_start_year (int): Start year for technology ramp-up (year of technology maturity from technology
+                characteristics)
+            ramp_up_end_year (int): End year for technology ramp-up
+            init_maximum_asset_additions (int): Maximum number of assets that can be added in ramp_up_start_year
+            maximum_asset_growth_rate (float): Maximum rate at which number of assets per technology can grow from one
+                year to the next
         """
         self.model_start_year = model_start_year
         self.model_end_year = model_end_year
         self.technology = technology
-        self.start_year = start_year
-        self.end_year = end_year
-        self.maximum_asset_additions = maximum_asset_additions
-        self.maximum_capacity_growth_rate = maximum_capacity_growth_rate
-        self.df_rampup = self.create_rampup_df(
-            start_year, end_year, maximum_asset_additions, maximum_capacity_growth_rate
-        )
+        self.ramp_up_start_year = ramp_up_start_year
+        self.ramp_up_end_year = ramp_up_end_year
+        self.init_maximum_asset_additions = init_maximum_asset_additions
+        self.maximum_asset_growth_rate = maximum_asset_growth_rate
+        self.df_rampup = self.create_rampup_df()
 
-    def create_rampup_df(
-        self,
-        start_year: int,
-        end_year: int,
-        maximum_asset_additions: int,
-        maximum_capacity_growth_rate: float,
-    ):
-        """Create DataFrame indexed by year with maximum number of asset additions."""
+    def create_rampup_df(self):
+        """Create DataFrame indexed by year with absolute maximum number of asset additions."""
 
-        # Rampup DataFrame needs to start one year before model to account for technologies that become mature in model start year
         df_rampup = pd.DataFrame(
-            index=np.arange(self.model_start_year - 1, self.model_end_year + 1),
-            columns=[
-                "maximum_asset_additions",
-                "maximum_asset_number",
-                "discrete_asset_additions",
-                "growth_rate_asset_additions",
-            ],
+            index=np.arange(self.model_start_year, self.model_end_year + 1),
+            columns=["maximum_asset_additions"],
         )
+        df_rampup = df_rampup.astype(dtype={"maximum_asset_additions": float})
 
-        # Zero assets before start year
-        df_rampup.loc[
-            self.model_start_year - 1 : start_year - 1, "maximum_asset_additions"
-        ] = 0
-        df_rampup.loc[
-            self.model_start_year - 1 : start_year - 1, "maximum_asset_number"
-        ] = 0
-        df_rampup.loc[
-            start_year : start_year + end_year + 1, "discrete_asset_additions"
-        ] = maximum_asset_additions
-        df_rampup.loc[start_year, "growth_rate_asset_additions"] = 0
+        for year in np.arange(self.model_start_year, self.model_end_year + 1):
+            if year == self.ramp_up_start_year:
+                df_rampup.loc[year, "maximum_asset_additions"] = float(
+                    self.init_maximum_asset_additions
+                )
+            elif year in np.arange(
+                self.ramp_up_start_year + 1, self.ramp_up_end_year + 1
+            ):
+                df_rampup.loc[year, "maximum_asset_additions"] = df_rampup.loc[
+                    year - 1, "maximum_asset_additions"
+                ] * (1 + self.maximum_asset_growth_rate)
+            else:
+                df_rampup.loc[year, "maximum_asset_additions"] = np.nan
 
-        # Maximum asset number needs to fulfill both constraints on maximum discrete asset additions and maximum capacity growth rate
-        for year in np.arange(start_year, end_year + 1):
-            df_rampup.loc[year, "maximum_asset_additions"] = max(
-                df_rampup.loc[year, "discrete_asset_additions"],
-                df_rampup.loc[year, "growth_rate_asset_additions"],
-            )
-            df_rampup.loc[year, "maximum_asset_number"] = (
-                df_rampup.loc[year - 1, "maximum_asset_number"]
-                + df_rampup.loc[year, "maximum_asset_additions"]
-            )
-            df_rampup.loc[year + 1, "growth_rate_asset_additions"] = (
-                df_rampup.loc[year, "maximum_asset_number"]
-                * maximum_capacity_growth_rate
-            )
+        df_rampup = df_rampup.apply(lambda x: np.round(x, decimals=0))
 
-        df_rampup["maximum_asset_additions"] = df_rampup[
-            "maximum_asset_additions"
-        ].apply(lambda x: np.floor(x))
-
-        return df_rampup.loc[
-            self.model_start_year : self.model_end_year + 1, ["maximum_asset_additions"]
-        ]
+        return df_rampup
