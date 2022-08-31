@@ -7,16 +7,25 @@ import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_destination_technology,
-    remove_techs_in_region_by_tech_substr, remove_transition,
-    select_best_transition)
-from mppshared.config import (ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-                              CUF_UPPER_THRESHOLD, LOG_LEVEL,
-                              MAP_LOW_COST_POWER_REGIONS, MODEL_SCOPE)
+    remove_techs_in_region_by_tech_substr,
+    remove_transition,
+    select_best_transition,
+)
+from mppshared.config import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CUF_UPPER_THRESHOLD,
+    LOG_LEVEL,
+    MAP_LOW_COST_POWER_REGIONS,
+    MODEL_SCOPE,
+)
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
-    check_alternative_fuel_constraint, check_constraints,
-    check_natural_gas_constraint, get_regional_production_constraint_table,
-    hydro_constraints)
+    check_alternative_fuel_constraint,
+    check_constraints,
+    check_natural_gas_constraint,
+    get_regional_production_constraint_table,
+    hydro_constraints,
+)
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 
@@ -356,8 +365,8 @@ def select_asset_for_greenfield(
 def get_region_rank_filter(region: str, sector: str) -> list:
     """Return list of (sub)regions if the sector has low-cost power regions mapped to the overall regions"""
     if MAP_LOW_COST_POWER_REGIONS[sector]:
-        if region in MAP_LOW_COST_POWER_REGIONS[sector].keys(): # type: ignore
-            return [region, MAP_LOW_COST_POWER_REGIONS[sector][region]] # type: ignore
+        if region in MAP_LOW_COST_POWER_REGIONS[sector].keys():  # type: ignore
+            return [region, MAP_LOW_COST_POWER_REGIONS[sector][region]]  # type: ignore
     return [region]
 
 
