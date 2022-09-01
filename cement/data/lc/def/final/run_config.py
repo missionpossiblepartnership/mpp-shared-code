@@ -19,7 +19,7 @@ run_config = {
 RUN_PARALLEL = False
 LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
-COMPUTE_LCOX = True
+COMPUTE_LCOX = False
 
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
@@ -69,7 +69,7 @@ COST_METRIC_CUF_ADJUSTMENT = None
 MAX_ANNUAL_RENOVATION_SHARE = {
     "bau": 0.2,
     "fa": 0.2,
-    "lc": 0.5
+    "lc": 0.2
 }
 
 
@@ -227,9 +227,9 @@ RANKING_CONFIG = {
 YEAR_2050_EMISSIONS_CONSTRAINT = 2060
 # Technology ramp-up parameters (on global technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
-    "init_maximum_asset_additions": 20,  # set high such that is deactivated
+    "init_maximum_asset_additions": 40,
     "maximum_asset_growth_rate": 0.05,
-    "years_rampup_phase": 10,
+    "years_rampup_phase": 30,
 }
 CONSTRAINTS_TO_APPLY = {
     "bau": [
@@ -246,7 +246,7 @@ CONSTRAINTS_TO_APPLY = {
         "alternative_fuel_constraint",
     ],
     "lc": [
-        "emissions_constraint",
+        # "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",
         # "natural_gas_constraint",
