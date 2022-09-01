@@ -1,9 +1,4 @@
 """ Process outputs to standardised output table."""
-import itertools
-from collections import defaultdict
-from lib2to3.pgen2.pgen import DFAState
-from re import T
-from tkinter import END
 
 import numpy as np
 import pandas as pd
@@ -11,11 +6,12 @@ import plotly.express as px
 from plotly.offline import plot
 
 from cement.config.config_cement import (
-    EMISSION_SCOPES_RANKING,
+    EMISSION_SCOPES,
     END_YEAR,
     GHGS,
     PRODUCTS,
     START_YEAR,
+    MODEL_YEARS,
 )
 from cement.config.plot_config_cement import TECHNOLOGY_LAYOUT
 from mppshared.config import LOG_LEVEL
@@ -36,7 +32,7 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
         products=PRODUCTS,
     )
 
-    # export technology roadmap
+    # technology roadmap
     df_tech_roadmap = _create_tech_roadmaps_by_region(
         importer=importer, start_year=START_YEAR, end_year=END_YEAR
     )
@@ -44,144 +40,21 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
         pathway_name=pathway_name, sensitivity=sensitivity, importer=importer, df_roadmap=df_tech_roadmap, unit="Mt Clk", technology_layout=TECHNOLOGY_LAYOUT
     )
 
-    # Create summary table of asset transitions
-    """logger.info("Creating table with asset transition sequences.")
-    df_transitions = create_table_asset_transition_sequences(importer=importer, start_year=START_YEAR, end_year=END_YEAR)
-    importer.export_data(
-        df=df_transitions,
-        filename=f"asset_transition_sequences_sensitivity_{sensitivity}.csv",
-        export_dir="final",
-        index=True,
-    )"""
-
-    """# Calculate weighted average of LCOX
-    df_cost = importer.get_technology_transitions_and_cost()
-    df_lcox = calculate_weighted_average_lcox(
-        df_cost=df_cost,
+    # emissions
+    df_total_emissions = _calculate_emissions_total(
+        importer=importer, ghgs=GHGS, emission_scopes=EMISSION_SCOPES, format_data=False
+    )
+    _export_and_plot_emissions_by_region(
+        pathway_name=pathway_name,
+        sensitivity=sensitivity,
         importer=importer,
-        sector=sector,
-        agg_vars=["product", "region", "technology"],
-    )
-    df_lcox_all_techs = calculate_weighted_average_lcox(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region"],
-    )
-    df_lcox_all_regions_all_techs = calculate_weighted_average_lcox(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product"],
+        df_total_emissions=df_total_emissions,
+        ghgs=GHGS,
+        emission_scopes=EMISSION_SCOPES,
+        technology_layout=TECHNOLOGY_LAYOUT,
     )
 
-    df_lcox_all_regions = calculate_weighted_average_lcox(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "technology"],
-    )
-
-    # Calculate annual investments
-    df_annual_investments = _calculate_annual_investments(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region", "switch_type", "technology_destination"],
-    )
-    df_annual_investments_all_tech = _calculate_annual_investments(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region", "switch_type"],
-    )
-    df_annual_investments_all_switch_types = _calculate_annual_investments(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region", "technology_destination"],
-    )
-    df_annual_investments_all_tech_all_switch_types = _calculate_annual_investments(
-        df_cost=df_cost,
-        importer=importer,
-        sector=sector,
-        agg_vars=["product", "region"],
-    )
-
-    # Create output table for every year and concatenate
-    data = []
-    data_stacks = []
-
-    for year in range(START_YEAR, END_YEAR + 1):
-        logger.info(f"Processing year {year}")
-        yearly = create_table_all_data_year(year, importer)
-        yearly["year"] = year
-        data.append(yearly)
-        df_stack = importer.get_asset_stack(year)
-        df_stack["year"] = year
-        data_stacks.append(df_stack)
-
-    suffix = f"{sector}_{pathway_name}_{sensitivity}"
-    df_stacks = pd.concat(data_stacks)
-    importer.export_data(
-        df_stacks, f"plant_stack_transition_{suffix}.csv", "final", index=False
-    )
-    df = pd.concat(data)
-    df["sector"] = sector
-
-    # Pivot the dataframe to have the years as columns
-    df_pivot = df.pivot_table(
-        index=[
-            "sector",
-            "product",
-            "region",
-            "technology",
-            "parameter_group",
-            "parameter",
-            "unit",
-        ],
-        columns="year",
-        values="value",
-    )
-
-    df_pivot = pd.concat(
-        [
-            df_pivot,
-            df_annual_investments,
-            df_annual_investments_all_tech,
-            df_annual_investments_all_tech_all_switch_types,
-            df_annual_investments_all_switch_types,
-            df_lcox,
-            df_lcox_all_techs,
-            df_lcox_all_regions,
-            df_lcox_all_regions_all_techs,
-        ]
-    )
-    df_pivot.reset_index(inplace=True)
-    df_pivot.fillna(0, inplace=True)
-
-    importer.export_data(
-        df_pivot, f"simulation_outputs_{suffix}.csv", "final", index=False
-    )
-    # df_pivot.to_csv(
-    #     f"{OUTPUT_WRITE_PATH[sector]}/simulation_outputs_{suffix}.csv", index=False
-    # )
-
-    columns = [
-        "sector",
-        "product",
-        "region",
-        "technology",
-        "year",
-        "parameter_group",
-        "parameter",
-        "unit",
-        "value",
-    ]
-    importer.export_data(
-        df[columns], f"interface_outputs_{suffix}.csv", "final", index=False
-    )"""
-    logger.info("All data for all years processed.")
+    logger.info("Output processing done")
 
 
 def _create_tech_roadmaps_by_region(
@@ -231,7 +104,7 @@ def _export_and_plot_tech_roadmaps_by_region(
         importer.export_data(
             df=df_roadmap_region,
             filename=f"technology_roadmap_{region}.csv",
-            export_dir="final",
+            export_dir="final/technology_roadmap",
             index=True,
         )
 
@@ -302,141 +175,258 @@ def _calculate_production_volume(df_stack: pd.DataFrame) -> pd.DataFrame:
     return df_stack
 
 
-def _calculate_emissions(
-    df_stack: pd.DataFrame,
-    df_emissions: pd.DataFrame,
-    agg_vars=["product", "region", "technology"],
+def _calculate_emissions_year(
+    importer: IntermediateDataImporter,
+    year: int,
+    ghgs: list = GHGS,
+    emission_scopes: list = EMISSION_SCOPES,
+    format_data: bool = True,
 ) -> pd.DataFrame:
     """Calculate emissions for all GHGs and scopes by production, region and technology"""
 
-    logger.info("-- Calculating emissions")
+    idx = ["product", "region", "technology"]
+
+    df_emissions = importer.get_emissions()
+    df_emissions = df_emissions.loc[df_emissions["year"] == year, :].drop(columns="year")
+    df_stack = importer.get_asset_stack(year=year)
 
     # Emissions are the emissions factor multiplied with the annual production volume
-    df_stack = df_stack.merge(df_emissions, on=["product", "region", "technology"])
-    scopes = [
-        f"{ghg}_{scope}"
-        for scope in ["scope1", "scope2", "scope3_upstream"]
-        for ghg in ["co2e"]
-    ]
 
-    logger.debug(df_stack.columns)
+    df_stack = df_stack.merge(df_emissions, on=idx)
+    scopes = [f"{ghg}_{scope}" for scope in emission_scopes for ghg in ghgs]
+
     for scope in scopes:
         df_stack[scope] = df_stack[scope] * df_stack["annual_production_volume"]
 
     df_stack = (
-        df_stack.groupby(agg_vars)[scopes + ["annual_production_volume"]]
-        .sum()
-        .reset_index()
+        df_stack.groupby(idx)[scopes + ["annual_production_volume"]].sum().reset_index()
     )
 
+    # global
+    df_stack_global = (
+        df_stack.copy().set_index(idx).groupby(["product", "technology"]).sum()
+    )
+    df_stack_global["region"] = "Global"
+    df_stack_global = df_stack_global.reset_index()
+    df_stack = pd.concat(objs=[df_stack, df_stack_global], axis=0)
+
     df_stack = df_stack.melt(
-        id_vars=agg_vars,
+        id_vars=idx,
         value_vars=scopes,
         var_name="parameter",
         value_name="value",
     )
 
-    # Add unit and parameter group
-    map_unit = {
-        f"{ghg}_{scope}": f"Mt {str.upper(ghg)}"
-        for scope in ["scope1", "scope2", "scope3_upstream"]
-        for ghg in ["co2e"]
-    }
-    map_rename = {
-        f"{ghg}_{scope}": f"{str.upper(ghg)} {str.capitalize(scope).replace('_', ' ')}"
-        for scope in EMISSION_SCOPES
-        for ghg in GHGS
-    }
+    if format_data:
+        # Add unit and parameter group
+        map_unit = {
+            f"{ghg}_{scope}": f"Mt {str.upper(ghg)}"
+            for scope in emission_scopes
+            for ghg in ghgs
+        }
+        map_rename = {
+            f"{ghg}_{scope}": f"{str.upper(ghg)} {str.capitalize(scope).replace('_', ' ')}"
+            for scope in emission_scopes
+            for ghg in ghgs
+        }
 
-    df_stack["parameter_group"] = "Emissions"
-    df_stack["unit"] = df_stack["parameter"].apply(lambda x: map_unit[x])
-    df_stack["parameter"] = df_stack["parameter"].replace(map_rename)
-    if "technology" not in agg_vars:
-        df_stack["technology"] = "All"
-
-    return df_stack
-
-
-def _calculate_emissions_co2e(
-    df_stack: pd.DataFrame,
-    df_emissions: pd.DataFrame,
-    gwp="GWP-100",
-    agg_vars=["product", "region", "technology"],
-):
-    """Calculate GHG emissions in CO2e according to specified GWP (GWP-20 or GWP-100)."""
-
-    logger.info("-- Calculating emissions in CO2e")
-
-    # Emissions are the emissions factor multiplied with the annual production volume
-    df_stack = df_stack.merge(df_emissions, on=["product", "region", "technology"])
-    scopes = [f"{ghg}_{scope}" for scope in EMISSION_SCOPES for ghg in GHGS]
-
-    for scope in scopes:
-        df_stack[scope] = df_stack[scope] * df_stack["annual_production_volume"]
-
-    df_stack = (
-        df_stack.groupby(agg_vars)[scopes + ["annual_production_volume"]]
-        .sum()
-        .reset_index()
-    )
-
-    for scope in EMISSION_SCOPES:
-        df_stack[f"CO2e {str.capitalize(scope).replace('_', ' ')}"] = 0
-        for ghg in GHGS:
-            df_stack[f"CO2e {str.capitalize(scope).replace('_', ' ')}"] += (
-                df_stack[f"{ghg}_{scope}"] * GWP[gwp][ghg]
-            )
-
-    df_stack = df_stack.melt(
-        id_vars=agg_vars,
-        value_vars=[
-            f"CO2e {str.capitalize(scope).replace('_', ' ')}"
-            for scope in EMISSION_SCOPES
-        ],
-        var_name="parameter",
-        value_name="value",
-    )
-
-    df_stack["parameter_group"] = "Emissions"
-    df_stack["unit"] = "Mt CO2e"
-    if "technology" not in agg_vars:
-        df_stack["technology"] = "All"
+        df_stack["parameter_group"] = "Emissions"
+        df_stack["unit"] = df_stack["parameter"].apply(lambda x: map_unit[x])
+        df_stack["parameter"] = df_stack["parameter"].replace(map_rename)
+        if "technology" not in idx:
+            df_stack["technology"] = "All"
 
     return df_stack
 
 
 def _calculate_co2_captured(
-    df_stack: pd.DataFrame,
-    df_emissions: pd.DataFrame,
-    agg_vars=["product", "region", "technology"],
+    importer: IntermediateDataImporter,
+    year: int,
+    format_data: bool = True,
 ) -> pd.DataFrame:
     """Calculate captured CO2 by product, region and technology for a given asset stack"""
 
-    logger.info("-- Calculating CO2 captured")
+    idx = ["product", "region", "technology"]
+
+    df_emissions = importer.get_emissions()
+    df_emissions = df_emissions.loc[df_emissions["year"] == year, :].drop(columns="year")
+    df_stack = importer.get_asset_stack(year=year)
 
     # Captured CO2 by technology is calculated by multiplying with the annual production volume
-    df_stack = df_stack.merge(df_emissions, on=["product", "region", "technology"])
+    df_stack = df_stack.merge(df_emissions, on=idx)
     df_stack["co2_scope1_captured"] = (
-        df_stack["co2_scope1_captured"] * df_stack["annual_production_volume"]
+        -df_stack["co2_scope1_captured"] * df_stack["annual_production_volume"]
     )
 
-    df_stack = df_stack.groupby(agg_vars)["co2_scope1_captured"].sum().reset_index()
+    df_stack = df_stack.groupby(idx)["co2_scope1_captured"].sum().reset_index()
+
+    # global
+    df_stack_global = (
+        df_stack.copy().set_index(idx).groupby(["product", "technology"]).sum()
+    )
+    df_stack_global["region"] = "Global"
+    df_stack_global = df_stack_global.reset_index()
+    df_stack = pd.concat(objs=[df_stack, df_stack_global], axis=0)
 
     # Melt and add parameter descriptions
     df_stack = df_stack.melt(
-        id_vars=agg_vars,
+        id_vars=idx,
         value_vars="co2_scope1_captured",
         var_name="parameter",
         value_name="value",
     )
-    df_stack["parameter_group"] = "Emissions"
-    df_stack["parameter"] = "CO2 Scope1 captured"
-    df_stack["unit"] = "Mt CO2"
 
-    if "technology" not in agg_vars:
-        df_stack["technology"] = "All"
+    if format_data:
+        df_stack["parameter_group"] = "Emissions"
+        df_stack["parameter"] = "CO2 Scope1 captured"
+        df_stack["unit"] = "Mt CO2"
+
+        if "technology" not in idx:
+            df_stack["technology"] = "All"
 
     return df_stack
+
+
+def _calculate_emissions_total(
+    importer: IntermediateDataImporter,
+    ghgs: list = GHGS,
+    emission_scopes: list = EMISSION_SCOPES,
+    format_data: bool = True,
+) -> pd.DataFrame:
+    """Calculates the emissions of the entire model horizon"""
+
+    df_list = []
+    for year in MODEL_YEARS:
+        df_emissions = _calculate_emissions_year(
+            importer=importer,
+            year=year,
+            ghgs=ghgs,
+            emission_scopes=emission_scopes,
+            format_data=format_data,
+        )
+        df_captured_emissions = _calculate_co2_captured(
+            importer=importer,
+            year=year,
+            format_data=format_data,
+        )
+        df_emissions["year"] = year
+        df_captured_emissions["year"] = year
+        df_list.append(df_emissions)
+        df_list.append(df_captured_emissions)
+
+    df = pd.concat(objs=df_list, axis=0)
+
+    cols = ["year"] + [x for x in df.columns if x != "year"]
+    df = df[cols]
+
+    df = df.sort_values(
+        ["year", "product", "region", "technology", "parameter"]
+    ).reset_index(drop=True)
+
+    return df
+
+
+def _export_and_plot_emissions_by_region(
+    pathway_name: str,
+    sensitivity: str,
+    importer: IntermediateDataImporter,
+    df_total_emissions: pd.DataFrame,
+    ghgs: list = GHGS,
+    emission_scopes: list = EMISSION_SCOPES,
+    technology_layout: dict = TECHNOLOGY_LAYOUT,
+):
+
+    regions = df_total_emissions["region"].unique()
+
+    for region in regions:
+        df_region = df_total_emissions.copy().loc[df_total_emissions["region"] == region, :]
+
+        importer.export_data(
+            df=df_region,
+            filename=f"emissions_{region}.csv",
+            export_dir="final/emissions",
+            index=False,
+        )
+
+        # area plots
+        for ghg in ghgs:
+
+            df_region_area = df_region.copy().loc[
+                df_region["parameter"].isin([f"{ghg}_{x}" for x in emission_scopes]), :
+            ]
+            df_region_area = (
+                df_region_area
+                .set_index([x for x in df_region_area.columns if x != "value"])
+                .groupby(["year", "technology"])
+                .sum()
+                .reset_index()
+            )
+
+            fig_area = px.area(
+                data_frame=df_region_area,
+                x="year",
+                y="value",
+                color="technology",
+                labels={
+                    "year": "Year",
+                    "value": f"{ghg} emissions in Mt {ghg}",
+                },
+                title=f"{region}: {ghg} emissions all scopes ({pathway_name}_{sensitivity})",
+                category_orders={"technology": list(technology_layout)},
+                color_discrete_map=technology_layout,
+            )
+
+            fig_area.for_each_trace(lambda trace: trace.update(fillcolor=trace.line.color))
+
+            plot(
+                figure_or_data=fig_area,
+                filename=f"{importer.final_path}/emissions/emissions_by_tech_{region}_{ghg}.html",
+                auto_open=False,
+            )
+
+        # line plots
+        df_region_line = (
+            df_region.copy()
+            .set_index([x for x in df_region.columns if x != "value"])
+            .groupby(["year", "parameter"])
+            .sum()
+            .reset_index()
+        )
+        # add total emissions over all scopes
+        df_list = []
+        for ghg in ghgs:
+            df_region_line_all_scopes = df_region_line.copy().loc[
+                df_region_line["parameter"].isin([f"{ghg}_{x}" for x in emission_scopes]), :
+            ]
+            df_region_line_all_scopes = (
+                df_region_line_all_scopes
+                .set_index([x for x in df_region_line_all_scopes.columns if x not in ["value", "co2_scope1_captured"]])
+                .groupby(["year"])
+                .sum()
+                .reset_index()
+            )
+            df_region_line_all_scopes["parameter"] = f"{ghg}_all-scopes"
+            df_list.append(df_region_line_all_scopes)
+        df_region_line = pd.concat(objs=[df_region_line] + df_list, axis=0)
+        fig_line = px.line(
+            data_frame=df_region_line,
+            x="year",
+            y="value",
+            color="parameter",
+            labels={
+                "year": "Year",
+                "value": f"Emissions in Mt GHG",
+            },
+            title=f"{region}: Emissions by GHG and scope ({pathway_name}_{sensitivity})",
+            category_orders={"technology": list(technology_layout)},
+            color_discrete_map=technology_layout,
+        )
+
+        plot(
+            figure_or_data=fig_line,
+            filename=f"{importer.final_path}/emissions/emissions_by_ghg_scope_{region}.html",
+            auto_open=False,
+        )
 
 
 def _calculate_emissions_intensity(

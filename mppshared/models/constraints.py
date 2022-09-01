@@ -615,31 +615,3 @@ def check_alternative_fuel_constraint(
         else:
             logger.info("Alternative fuel constraint hurt")
         return all(dict_regional_fulfilment.values())
-
-
-def check_regional_context_mix(
-    pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
-) -> bool:
-    logger.info("Checking regional context mix")
-    # Get regional mix from stack
-    df_regional_mix = stack.get_regional_mix()
-    # Get regional mix from pathway
-    df_regional_mix_pathway = pathway.regional_mix()
-    # Merge and compare if the percentage of assets in the region complays with the percentage of assets with the given context in the regions
-    df_regional_mix_pathway = df_regional_mix_pathway.merge(
-        df_regional_mix, on=["region", "context"], how="left"
-    )
-    df_regional_mix_pathway["percentage_pathway"] = (
-        df_regional_mix_pathway["value"] / df_regional_mix_pathway["value"].sum()
-    )
-    df_regional_mix_pathway["percentage_stack"] = (
-        df_regional_mix_pathway["value"] / df_regional_mix_pathway["value"].sum()
-    )
-    # Check if the percentage of assets in the region complays with the percentage of assets with the given context in the regions
-    if df_regional_mix_pathway["percentage_pathway"].equals(
-        df_regional_mix_pathway["percentage_stack"]
-    ):
-        return True
-    else:
-        logger.debug("Regional context mix constraint hurt.")
-        return False
