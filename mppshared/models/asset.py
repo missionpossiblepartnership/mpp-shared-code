@@ -1,6 +1,4 @@
 """Asset and asset stack classes, code adapted from MCC"""
-import sys
-from calendar import c
 from copy import deepcopy
 from uuid import uuid4
 from xmlrpc.client import Boolean
@@ -9,7 +7,7 @@ import pandas as pd
 
 from mppshared.config import LOG_LEVEL
 from mppshared.utility.dataframe_utility import get_emission_columns
-from mppshared.utility.utils import first, get_logger, get_unique_list_values
+from mppshared.utility.utils import get_logger, get_unique_list_values
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -128,7 +126,7 @@ class AssetStack:
         self.ghgs = ghgs
         self.cuf_lower_threshold = cuf_lower_threshold
         # Keep track of all assets added this year
-        self.new_ids = []
+        self.new_ids: list[str] = []
 
     def __eq__(self, other):
         self_uuids = {asset.uuid for asset in self.assets}
@@ -175,7 +173,9 @@ class AssetStack:
         self.assets.append(asset_to_update)
 
         # check to make sure that number of assets does not change
-        assert len_pre == len(self.assets), "Function update_asset has changed the number of assets in the stack!"
+        assert len_pre == len(
+            self.assets
+        ), "Function update_asset has changed the number of assets in the stack!"
 
     def empty(self) -> Boolean:
         """Return True if no asset in stack"""
@@ -192,26 +192,28 @@ class AssetStack:
         """Filter assets based on one or more criteria"""
         assets = self.assets
         if region is not None:
-            assets = filter(lambda asset: asset.region == region, assets)
+            assets = list(filter(lambda asset: asset.region == region, assets))
         if technology is not None:
-            assets = filter(lambda asset: asset.technology == technology, assets)
+            assets = list(filter(lambda asset: asset.technology == technology, assets))
         if product is not None:
-            assets = filter(lambda asset: (asset.product == product), assets)
+            assets = list(filter(lambda asset: (asset.product == product), assets))
         if technology_classification is not None:
-            assets = filter(
-                lambda asset: (
-                    asset.technology_classification == technology_classification
-                ),
-                assets,
+            assets = list(
+                filter(
+                    lambda asset: (
+                        asset.technology_classification == technology_classification
+                    ),
+                    assets,
+                )
             )
         if status == "greenfield_status":
-            assets = filter(lambda asset: asset.greenfield == True, assets)
+            assets = list(filter(lambda asset: asset.greenfield == True, assets))
         if status == "retrofit_status":
-            assets = filter(lambda asset: asset.retrofit == True, assets)
+            assets = list(filter(lambda asset: asset.retrofit == True, assets))
         if status == "rebuild_status":
-            assets = filter(lambda asset: asset.rebuild == True, assets)
+            assets = list(filter(lambda asset: asset.rebuild == True, assets))
 
-        return list(assets)
+        return assets
 
     def get_annual_production_capacity(
         self, product, region=None, technology=None
@@ -242,10 +244,18 @@ class AssetStack:
 
         for region in regions:
             technologies = get_unique_list_values(
-                [x for x in [asset.technology for asset in self.filter_assets(product=product, region=region)]]
+                [
+                    x
+                    for x in [
+                        asset.technology
+                        for asset in self.filter_assets(product=product, region=region)
+                    ]
+                ]
             )
             for technology in technologies:
-                prod_vol = self.get_annual_production_volume(product=product, region=region, technology=technology)
+                prod_vol = self.get_annual_production_volume(
+                    product=product, region=region, technology=technology
+                )
                 logger.debug(f"{region} | {technology}: {prod_vol} Mt {product}")
 
     def get_annual_ng_af_production_volume(
@@ -507,7 +517,10 @@ class AssetStack:
     def get_tech_asset_stack(self, technology: str):
         """Get AssetStack with a specific technology."""
         return AssetStack(
-            assets=[asset for asset in self.assets if asset.technology == technology]
+            assets=[asset for asset in self.assets if asset.technology == technology],
+            emission_scopes=self.emission_scopes,
+            ghgs=self.ghgs,
+            cuf_lower_threshold=self.cuf_lower_threshold,
         )
 
     def get_assets_eligible_for_decommission(

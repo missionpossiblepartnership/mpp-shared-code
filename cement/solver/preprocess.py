@@ -23,8 +23,8 @@ from cement.config.import_config_cement import (
     INPUT_SHEETS,
     MAP_EXCEL_NAMES,
 )
-from mppshared.config import LOG_LEVEL
 from cement.preprocess.import_data import import_all
+from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.dataframe_utility import set_datatypes
 from mppshared.utility.log_utility import get_logger
@@ -43,7 +43,7 @@ def import_and_preprocess(
         sector=sector,
         products=products,
         carbon_cost_trajectory=None,
-        business_case_excel_filename="business_cases.xlsx"
+        business_case_excel_filename="business_cases.xlsx",
     )
 
     import_all(

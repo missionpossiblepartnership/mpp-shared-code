@@ -288,7 +288,7 @@ def apply_regional_technology_ban(
     df_technology_switches: pd.DataFrame, sector_bans: dict
 ) -> pd.DataFrame:
     """Remove certain technologies from the technology switching table that are banned in certain regions (defined in
-        config.py)"""
+    config.py)"""
     if not sector_bans:
         return df_technology_switches
     for region in sector_bans.keys():

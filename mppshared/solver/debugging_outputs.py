@@ -22,11 +22,11 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def create_debugging_outputs(pathway: str, sensitivity: str, sector: str):
+def create_debugging_outputs(pathway_name: str, sensitivity: str, sector: str):
     """Create technology roadmap and emissions trajectory for quick debugging and refinement."""
 
     importer = IntermediateDataImporter(
-        pathway=pathway,
+        pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
         products=PRODUCTS[sector],
@@ -34,7 +34,9 @@ def create_debugging_outputs(pathway: str, sensitivity: str, sector: str):
 
     # Create summary table of asset transitions
     logger.info("Creating table with asset transition sequences.")
-    df_transitions = create_table_asset_transition_sequences(importer)
+    df_transitions = create_table_asset_transition_sequences(
+        importer, start_year=START_YEAR, end_year=END_YEAR
+    )
     importer.export_data(
         df_transitions,
         f"asset_transition_sequences_sensitivity_{sensitivity}.csv",
@@ -79,15 +81,15 @@ def create_debugging_outputs(pathway: str, sensitivity: str, sector: str):
 def output_renovation_transitions_by_year(
     df_transitions: pd.DataFrame,
     importer: IntermediateDataImporter,
-    renovation_type="retrofit",
-    technology_type="origin",
+    renovation_type: str = "retrofit",
+    technology_type: str = "origin",
 ):
     """Plot origin or destination technologies of renovation transitions by year."""
     df_transitions = df_transitions.reset_index(drop=False).set_index("uuid")
     df_transitions_renovation_status = df_transitions.loc[
         df_transitions["parameter"] == f"{renovation_type}_status"
     ]
-    renovation_techs = defaultdict()
+    renovation_techs: defaultdict = defaultdict()
 
     # Iterate over every year and create dictionary of newbuild technologies in that year (no newbuild in 2020)
     for year in np.arange(START_YEAR, END_YEAR):
@@ -165,7 +167,7 @@ def create_newbuild_capacity_outputs_by_region(
     """Show newbuild capacity by region"""
 
     df_transitions = df_transitions.reset_index(drop=False)
-    newbuild_regions = defaultdict()
+    newbuild_regions: defaultdict = defaultdict()
 
     # Iterate over every year and create dictionary of newbuild technologies in that year (no newbuild in 2020)
     for year in np.arange(START_YEAR, END_YEAR):
@@ -223,7 +225,7 @@ def create_newbuild_capacity_outputs_by_technology(
     """Show newbuild capacity by technology for every year, in stacked bar chart."""
 
     df_transitions = df_transitions.reset_index(drop=False)
-    newbuild_techs = defaultdict()
+    newbuild_techs: defaultdict = defaultdict()
 
     # Iterate over every year and create dictionary of newbuild technologies in that year (no newbuild in 2020)
     for year in np.arange(START_YEAR, END_YEAR):
@@ -279,7 +281,9 @@ def create_newbuild_capacity_outputs_by_technology(
 
 
 def create_table_asset_transition_sequences(
-    importer: IntermediateDataImporter, start_year: int, end_year: int,
+    importer: IntermediateDataImporter,
+    start_year: int,
+    end_year: int,
 ) -> pd.DataFrame:
 
     # Get initial stack and melt to long for that year

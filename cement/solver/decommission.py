@@ -34,7 +34,9 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
         # Get demand balance (demand - production)
         demand = pathway.get_demand(product=product, year=year, region=region)
-        production = old_stack.get_annual_production_volume(product=product, region=region)
+        production = old_stack.get_annual_production_volume(
+            product=product, region=region
+        )
 
         # Get ranking table for decommissioning
         df_rank_region = pathway.get_ranking(year=year, rank_type="decommission")
