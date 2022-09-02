@@ -8,10 +8,10 @@ from cement.config.config_cement import (
     EMISSION_SCOPES,
     GHGS,
     PATHWAYS_WITH_TECHNOLOGY_MORATORIUM,
+    REGIONS_NATURAL_GAS,
     START_YEAR,
     TECHNOLOGY_MORATORIUM,
     TRANSITIONAL_PERIOD_YEARS,
-    REGIONS_NATURAL_GAS,
 )
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
@@ -99,7 +99,8 @@ def apply_implicit_forcing(
         ~(
             ~df_tech_to_rank["region"].isin(REGIONS_NATURAL_GAS)
             & df_tech_to_rank["technology_destination"].str.contains("natural gas")
-        ), :
+        ),
+        :,
     ]
 
     # todo: For future Luis, Timon or any other developer, this line was added to filter the technologies and only

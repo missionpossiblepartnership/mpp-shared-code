@@ -1,7 +1,7 @@
 """ Logic for technology transitions of type brownfield rebuild and brownfield renovation."""
 import random
-from copy import deepcopy
 import sys
+from copy import deepcopy
 
 import numpy as np
 
@@ -209,7 +209,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                                 dict_constraints[k]
                                 for k in dict_constraints.keys()
                                 if k in pathway.constraints_to_apply
-                                and k not in ["regional_constraint", "emissions_constraint"]
+                                and k
+                                not in ["regional_constraint", "emissions_constraint"]
                             ]
                         ):
                             # allow brownfield transition since it reduces overall emissions
@@ -243,11 +244,9 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                             f"Handle emissions constraint: removing destination technology"
                         )
                         if origin_technology != new_technology:
-                            df_rank = (
-                                remove_all_transitions_with_origin_destination_technology(
-                                    df_rank=df_rank,
-                                    transition=best_transition,
-                                )
+                            df_rank = remove_all_transitions_with_origin_destination_technology(
+                                df_rank=df_rank,
+                                transition=best_transition,
                             )
             # RAMPUP
             if "rampup_constraint" in pathway.constraints_to_apply:

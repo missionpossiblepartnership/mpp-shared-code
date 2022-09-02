@@ -168,6 +168,11 @@ cement/data/01_business_case_raw/Archive
 !ammonia/data/lc/def/intermediate/*.csv
 !ammonia/data/bau/def/intermediate/*.csv
 !ammonia/data/fa/def/intermediate/*.csv
+!cement/data/bau/def/intermediate/*.csv
+!cement/data/fa/def/intermediate/*.csv
+!cement/data/lc/def/intermediate/*.csv
+!cement/data/01_business_case_raw/*.csv
+!tests/tests_data/*.csv
 
 # development
 experimental*.py

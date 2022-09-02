@@ -1,5 +1,3 @@
-
-
 TECHNOLOGY_LAYOUT = {
     # ref
     "Dry kiln reference plant": None,

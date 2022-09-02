@@ -1,9 +1,4 @@
 """ Process outputs to standardised output table."""
-import itertools
-from collections import defaultdict
-from lib2to3.pgen2.pgen import DFAState
-from re import T
-from tkinter import END
 
 import numpy as np
 import pandas as pd
@@ -41,7 +36,12 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
         importer=importer, start_year=START_YEAR, end_year=END_YEAR
     )
     _export_and_plot_tech_roadmaps_by_region(
-        pathway_name=pathway_name, sensitivity=sensitivity, importer=importer, df_roadmap=df_tech_roadmap, unit="Mt Clk", technology_layout=TECHNOLOGY_LAYOUT
+        pathway_name=pathway_name,
+        sensitivity=sensitivity,
+        importer=importer,
+        df_roadmap=df_tech_roadmap,
+        unit="Mt Clk",
+        technology_layout=TECHNOLOGY_LAYOUT,
     )
 
     # Create summary table of asset transitions

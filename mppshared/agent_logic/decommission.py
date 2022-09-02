@@ -163,7 +163,9 @@ def get_best_asset_to_decommission_cement(
 
     """
     # Get all assets eligible for decommissioning
-    candidates = stack.get_assets_eligible_for_decommission_cement(product=product, region=region)
+    candidates = stack.get_assets_eligible_for_decommission_cement(
+        product=product, region=region
+    )
     # If no more assets to decommission, raise ValueError
     if not candidates:
         raise ValueError
@@ -186,7 +188,9 @@ def get_best_asset_to_decommission_cement(
         )
 
         # Remove best transition from ranking table
-        df_rank_region = remove_transition(df_rank=df_rank_region, transition=best_transition)
+        df_rank_region = remove_transition(
+            df_rank=df_rank_region, transition=best_transition
+        )
 
     # If several candidates for best transition, choose randomly
     best_asset_to_decommission = random.choice(best_candidates)

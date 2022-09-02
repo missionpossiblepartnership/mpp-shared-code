@@ -43,7 +43,7 @@ def create_list_permutations(list1: list, list2: list) -> list:
     return list(itertools.chain(*comb))
 
 
-def stdout_query(question: str, default: str, options: str) -> None:
+def stdout_query(question: str, default: str, options: str) -> str:
     """Ask a yes/no question via raw_input() and return their answer.
 
     "question" is a string that is presented to the user.
@@ -87,6 +87,10 @@ def get_currency_rate(base: str, target: str) -> str:
             raise ValueError(
                 f"You entered an incorrect currency, either {base} or {target}"
             )
+    else:
+        raise ValueError(
+            f"You entered an incorrect currency, either {base} or {target}"
+        )
 
 
 def enumerate_iterable(iterable: it) -> dict:
