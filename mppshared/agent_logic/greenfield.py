@@ -183,6 +183,8 @@ def select_asset_for_greenfield(
     year: int,
     annual_production_capacity: float,
     cuf: float,
+    df_region_demand: pd.DataFrame = None,
+    region_global_demand_share: float = None,
     return_df_rank: bool = False,
 ):
     """Select asset for newbuild (greenfield transition)
@@ -207,6 +209,30 @@ def select_asset_for_greenfield(
             df_rank=df_rank,
         )
 
+        # Check constraint on regional supply (if desired)
+        if df_region_demand is not None:
+            # Check if regional supply constraint is met
+            regional_supply_constraint_hurt = (
+                df_region_demand.loc[
+                    asset_transition["region"], "region_newbuild_additions"
+                ]
+                >= df_region_demand.loc[
+                    asset_transition["region"], "region_max_plants_newbuild"
+                ]
+            )
+            
+            # Remove greenfield switches in that region if regional supply constraint hurt
+            if regional_supply_constraint_hurt:
+                df_rank = df_rank.loc[df_rank["region"] != asset_transition["region"]]
+                logger.debug(
+                    f"Region {asset_transition['region']} already supplies {region_global_demand_share*100} % of global demand."
+                )
+                
+                # move to next iteration
+                continue
+
+        
+        # Make new asset and check the constraints
         new_asset = make_new_asset(
             asset_transition=asset_transition,
             df_technology_characteristics=pathway.df_technology_characteristics,
@@ -234,6 +260,16 @@ def select_asset_for_greenfield(
             product=product,
         )
 
+        # todo: check if we need this; the constraints checking functions should return True in these cases and make this obsolete!
+        """
+        # Ensure that newbuild capacity from project pipeline does not lead to erroneous constraint violation
+        if "CCS" not in asset_transition["technology_destination"]:
+            dict_constraints["co2_storage_constraint"] = True
+
+        if "Electrolyser" not in asset_transition["technology_destination"]:
+            dict_constraints["electrolysis_capacity_addition_constraint"] = True
+        """
+
         # Asset can be created if no constraint hurt
         if all(
             [
@@ -248,6 +284,7 @@ def select_asset_for_greenfield(
             else:
                 return new_asset
         else:
+        
             # EMISSIONS
             if "emissions_constraint" in pathway.constraints_to_apply:
                 if (
@@ -275,6 +312,26 @@ def select_asset_for_greenfield(
                     df_rank = df_rank.loc[
                         ~(df_rank["technology_destination"].str.contains("CCS"))
                     ]
+                    
+            # ELECTROLYSIS CAPACITY ADDITION
+                if (
+                    "electrolysis_capacity_addition_constraint"
+                    in pathway.constraints_to_apply
+                ):
+                    if not dict_constraints[
+                        "electrolysis_capacity_addition_constraint"
+                    ]:
+                        # Remove all transitions with that destination technology from the ranking table
+                        logger.debug(
+                            f"Handle electrolysis capacity addition constraint: removing destination technology"
+                    logger.debug(
+                        f"Handle (residual) emissions constraint: removing all transitions with CCS"
+                    )
+                    # remove all transitions with CCS (i.e. with residual emissions)
+                    df_rank = df_rank.loc[
+                        ~(df_rank["technology_destination"].str.contains("CCS"))
+                    ]
+                    
             # RAMPUP
             if "rampup_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["rampup_constraint"]:
@@ -288,6 +345,37 @@ def select_asset_for_greenfield(
                             "technology_destination"
                         ],
                     )
+                    
+            # REGIONAL PRODUCTION
+            if "regional_constraint" in pathway.constraints_to_apply:
+                if not dict_constraints["regional_constraint"]:
+                    # todo
+                    logger.critical(
+                        f"WARNING: Regional production constraint not fulfilled in {year}."
+                    )
+
+            # CO2 STORAGE
+            if "co2_storage_constraint" in pathway.constraints_to_apply:
+                if not dict_constraints["co2_storage_constraint"]:
+                    # Remove all transitions with that destination technology from the ranking table
+                    logger.debug(
+                        f"Handle CO2 storage constraint: removing destination technology"
+                    )
+                    df_rank = remove_all_transitions_with_destination_technology(
+                        df_rank, asset_transition["technology_destination"]
+                    )
+
+            # GLOBAL DEMAND SHARE
+            if "demand_share_constraint" in pathway.constraints_to_apply:
+                if not dict_constraints["demand_share_constraint"]:
+                    # Remove all transitions with that destination technology from the ranking table
+                    logger.debug(
+                        f"Handle global demand share constraint: removing destination technology"
+                    )
+                    df_rank = remove_all_transitions_with_destination_technology(
+                        df_rank, asset_transition["technology_destination"]
+                    )
+
             # REGIONAL PRODUCTION
             if "regional_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["regional_constraint"]:
@@ -299,7 +387,7 @@ def select_asset_for_greenfield(
             if "natural_gas_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["natural_gas_constraint"]:
                     # get regions where natural gas is exceeded
-                    dict_natural_gas_exceedance: dict = check_natural_gas_constraint(  # type: ignore
+                    dict_natural_gas_exceedance = check_natural_gas_constraint(
                         pathway=pathway,
                         product=product,
                         stack=tentative_stack,
@@ -314,7 +402,7 @@ def select_asset_for_greenfield(
                     ]
                     # check if regions other than the tentatively updated asset's region exceed the constraint
                     if exceeding_regions != [new_asset.region]:
-                        sys.exit(
+                        logger.critical(
                             f"{year}: Regions other than the tentatively updated asset's region exceed the natural gas "
                             f"constraint!"
                         )
@@ -333,8 +421,8 @@ def select_asset_for_greenfield(
             if "alternative_fuel_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["alternative_fuel_constraint"]:
                     # get regions where alternative fuel is exceeded
-                    dict_alternative_fuel_exceedance: dict = (
-                        check_alternative_fuel_constraint(  # type: ignore
+                    dict_alternative_fuel_exceedance = (
+                        check_alternative_fuel_constraint(
                             pathway=pathway,
                             product=product,
                             stack=tentative_stack,
@@ -350,7 +438,7 @@ def select_asset_for_greenfield(
                     ]
                     # check if regions other than the tentatively updated asset's region exceed the constraint
                     if exceeding_regions != [new_asset.region]:
-                        sys.exit(
+                        logger.critical(
                             f"{year}: Regions other than the tentatively updated asset's region exceed the alternative "
                             "fuel constraint!"
                         )
