@@ -3,6 +3,7 @@ from typing import Union
 
 import numpy as np
 import pandas as pd
+from ammonia.config_ammonia import END_YEAR
 
 from mppshared.config import (
     AMMONIA_PER_AMMONIUM_NITRATE,
@@ -291,6 +292,7 @@ def check_global_demand_share_constraint(
     stack: AssetStack,
     year: int,
     transition_type: str,
+    product: str,
 ) -> bool:
     """
     Check for specified technologies whether they fulfill the constraint of supplying a maximum share of global demand
@@ -348,6 +350,7 @@ def check_electrolysis_capacity_addition_constraint(
     stack: AssetStack,
     year: int,
     transition_type: str,
+    product: str,
 ) -> bool:
     """Check if the annual addition of electrolysis capacity fulfills the constraint
 
@@ -475,14 +478,22 @@ def convert_production_volume_to_electrolysis_capacity(
 
 
 def check_co2_storage_constraint(
-    pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
+    pathway: SimulationPathway,
+    stack: AssetStack,
+    year: int,
+    transition_type: str,
+    product: str,
 ) -> bool:
     """Check if the constraint on total CO2 storage (globally) is met"""
 
     # Get constraint value
     df_co2_storage = pathway.co2_storage_constraint
-    # todo: Johannes, I suppose the +1 must now be removed as we corrected the year logic
-    limit = df_co2_storage.loc[df_co2_storage["year"] == year + 1, "value"].item()
+    if year < END_YEAR:
+        limit_year = year
+    else:
+        limit_year = END_YEAR
+
+    limit = df_co2_storage.loc[df_co2_storage["year"] == limit_year, "value"].item()
 
     # Constraint based on total CO2 storage available in that year
     if pathway.co2_storage_constraint_cumulative:
@@ -504,7 +515,7 @@ def check_co2_storage_constraint(
         co2_captured_old_stack = pathway.stacks[year].calculate_co2_captured_stack(
             year=year, df_emissions=pathway.emissions
         )
-        # todo: Johannes, I suppose the +1 must now be removed as we corrected the year logic
+
         co2_captured_new_stack = stack.calculate_co2_captured_stack(
             year=year + 1, df_emissions=pathway.emissions
         )
