@@ -1,12 +1,13 @@
 """Execute the MPP Ammonia model."""
 
+# Import external libraries
 import distutils
 import itertools
 import multiprocessing as mp
 import os
+from venv import create
 
-import numpy as np
-
+# Imports from sector-specific code
 from ammonia.config_ammonia import (
     CARBON_COSTS,
     END_YEAR,
@@ -18,28 +19,35 @@ from ammonia.config_ammonia import (
     SENSITIVITIES,
     run_config,
 )
+from ammonia.preprocess.import_data import import_all
+from ammonia.preprocess.calculate import calculate_variables
+from ammonia.preprocess.create_solver_input import create_solver_input_tables
 from ammonia.solver.implicit_forcing import apply_implicit_forcing
 from ammonia.solver.ranking import make_rankings
 from ammonia.solver.simulate import simulate_pathway
+from ammonia.output.output_processing import calculate_outputs
+from ammonia.output.debugging_outputs import create_debugging_outputs
+
+# Imports from mppshared
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
-from mppshared.solver.debugging_outputs import create_debugging_outputs
-from mppshared.solver.output_processing import calculate_outputs
 from mppshared.utility.utils import get_logger
 
-# from mppshared.solver.sensitivity_outputs import create_sensitivity_outputs
-
+# Logging functionality
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
-np.random.seed(100)
 
 funcs = {
+    # These steps can only be run sequentially (run_parallel = False)
+    # "IMPORT_DATA": import_all,
+    # "CALCULATE_VARIABLES": calculate_variables,
+    # "SOLVER_INPUT": create_solver_input_tables,
+    # These steps can optionally be run in parallel (run_parallel = True)
     "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     "MAKE_RANKINGS": make_rankings,
     "SIMULATE_PATHWAY": simulate_pathway,
-    # "CALCULATE_OUTPUTS": calculate_outputs,
-    # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
-    # "SENSITIVITY_ANALYSIS": create_sensitivity_outputs,
+    "CALCULATE_OUTPUTS": calculate_outputs,
+    "CALCULATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
 }
 
 
@@ -96,7 +104,7 @@ def run_model_parallel(runs):
                 if not os.path.exists(final_folder):
                     os.makedirs(final_folder)
                 if folder == "intermediate":
-                    source_dir = f"data/{SECTOR}/{pathway}/{sensitivity}/{folder}"
+                    source_dir = f"{SECTOR}/data/{pathway}/{sensitivity}/{folder}"
                     distutils.dir_util.copy_tree(source_dir, final_folder)
         pool.apply_async(_run_model, args=(pathway, sensitivity, carbon_cost))
     pool.close()
@@ -108,7 +116,6 @@ def main():
 
     # Create a list of carbon cost trajectories that each start in 2025 and have a constant carbon cost
     carbon_costs = CARBON_COSTS
-    # carbon_costs = [1]  # for creating carbon cost addition DataFrame
     carbon_cost_trajectories = []
     end_year_map = {0: 2025, 50: 2030, 100: 2035, 150: 2040, 200: 2045, 250: 2050}
     for cc in carbon_costs:
@@ -127,9 +134,6 @@ def main():
         run_model_parallel(runs)
     else:
         run_model_sequential(runs)
-    # Create sensitivity outputs
-    # if "SENSITIVITY_ANALYSIS" in funcs:
-    #     create_sensitivity_outputs()
 
 
 if __name__ == "__main__":

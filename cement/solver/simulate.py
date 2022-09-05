@@ -6,7 +6,6 @@ from datetime import timedelta
 from timeit import default_timer as timer
 
 from cement.config.config_cement import (
-    MAX_ANNUAL_RENOVATION_SHARE,
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
     CAPACITY_UTILISATION_FACTOR,
     CARBON_BUDGET_SECTOR_CSV,
@@ -18,6 +17,7 @@ from cement.config.config_cement import (
     INITIAL_ASSET_DATA_LEVEL,
     INVESTMENT_CYCLE,
     LOG_LEVEL,
+    MAX_ANNUAL_RENOVATION_SHARE,
     PRODUCTS,
     RANK_TYPES,
     REGIONAL_PRODUCTION_SHARES,

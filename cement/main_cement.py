@@ -6,15 +6,15 @@ import itertools
 import multiprocessing as mp
 
 from cement.config.config_cement import (
+    PATHWAYS_SENSITIVITIES,
     PRODUCTS,
     RUN_PARALLEL,
     SECTOR,
-    PATHWAYS_SENSITIVITIES,
     run_config,
 )
 from cement.solver.implicit_forcing import apply_implicit_forcing
-from cement.solver.preprocess import import_and_preprocess
 from cement.solver.output_processing import calculate_outputs
+from cement.solver.preprocess import import_and_preprocess
 from cement.solver.ranking import make_rankings
 from cement.solver.ranking_inputs import get_ranking_inputs
 from cement.solver.simulate import simulate_pathway

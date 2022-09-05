@@ -15,7 +15,7 @@ class TransitionRegistry:
         self,
         year: int,
         transition_type: Literal[
-            "decommission", "brownfield_renovation", "brownfield_newbuild", "newbuild"
+            "decommission", "brownfield_renovation", "brownfield_newbuild", "greenfield"
         ],
         origin: Optional[Asset] = None,
         destination: Optional[Asset] = None,
@@ -23,8 +23,8 @@ class TransitionRegistry:
         transition = {
             "year": year,
             "transition_type": transition_type,
-            "region": getattr(origin, "region", None) or destination.region,
-            "product": getattr(origin, "product", None) or destination.product,
+            "region": getattr(origin, "region", None) or destination.region,  # type: ignore
+            "product": getattr(origin, "product", None) or destination.product,  # type: ignore
             "technology_origin": getattr(origin, "technology", None),
             "type_of_tech_origin": getattr(origin, "type_of_tech", None),
             "technology_destination": getattr(destination, "technology", None),

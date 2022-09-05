@@ -112,12 +112,6 @@ def calculate_carbon_cost_addition_to_cost_metric(
     """Apply the carbon cost to the cost metric for each technology switch across the entire model time horizon.
 
     Args:
-        df_technology_switches: all technology switches along with a value for the cost metric
-        df_emissions: emissions data for every technology
-        df_technology_characteristics: characteristics for every technology
-    Returns:
-        pd.DataFrame: all technology switches with the cost metric including the carbon cost component
-    Args:
         df_technology_switches (pd.DataFrame): all technology switches for which the carbon cost addition is to be calculated
         df_emissions (pd.DataFrame): emissions data for every technology
         df_technology_characteristics (pd.DataFrame): technology characteristics (lifetime, capacity utilisation factor, WACC)

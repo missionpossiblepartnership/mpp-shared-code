@@ -1,7 +1,7 @@
 """ Logic for technology transitions of type brownfield rebuild and brownfield renovation."""
 import random
-from copy import deepcopy
 import sys
+from copy import deepcopy
 
 import numpy as np
 

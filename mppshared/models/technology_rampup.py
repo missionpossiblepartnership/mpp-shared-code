@@ -50,11 +50,15 @@ class TechnologyRampup:
 
         for year in np.arange(self.model_start_year, self.model_end_year + 1):
             if year == self.ramp_up_start_year:
-                df_rampup.loc[year, "maximum_asset_additions"] = float(self.init_maximum_asset_additions)
-            elif year in np.arange(self.ramp_up_start_year + 1, self.ramp_up_end_year + 1):
-                df_rampup.loc[year, "maximum_asset_additions"] = (
-                    df_rampup.loc[year - 1, "maximum_asset_additions"] * (1 + self.maximum_asset_growth_rate)
+                df_rampup.loc[year, "maximum_asset_additions"] = float(
+                    self.init_maximum_asset_additions
                 )
+            elif year in np.arange(
+                self.ramp_up_start_year + 1, self.ramp_up_end_year + 1
+            ):
+                df_rampup.loc[year, "maximum_asset_additions"] = df_rampup.loc[
+                    year - 1, "maximum_asset_additions"
+                ] * (1 + self.maximum_asset_growth_rate)
             else:
                 df_rampup.loc[year, "maximum_asset_additions"] = np.nan
 
