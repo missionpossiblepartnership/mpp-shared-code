@@ -5,7 +5,7 @@ from typing import List
 import numpy as np
 import pandas as pd
 
-from mppshared.config import LOG_LEVEL, PKL_DATA_INTERMEDIATE
+from mppshared.config import LOG_LEVEL, PKL_DATA_INTERMEDIATE, PRODUCTS, SECTOR
 from mppshared.utility.file_handling_utility import read_pickle_folder
 from mppshared.utility.location_utility import get_region_from_country_code
 from mppshared.utility.log_utility import get_logger
@@ -285,7 +285,7 @@ def get_grouping_columns_for_npv_calculation(sector: str) -> list:
     return grouping_cols[sector]
 
 
-def convert_df_to_regional(df: pd.DataFrame) -> pd.DataFrame:
+def convert_df_to_regional(df: pd.DataFrame, regions_other) -> pd.DataFrame:
     """
     Converts a dataframe that has both regional and global values to one that just has regional values.
 
@@ -303,7 +303,7 @@ def convert_df_to_regional(df: pd.DataFrame) -> pd.DataFrame:
 
     # Regionalize the world df
     df_world.drop(columns="region", inplace=True)
-    df_regions = pd.DataFrame({"region": list(REGIONS_OTHER)})
+    df_regions = pd.DataFrame({"region": list(regions_other)})
     df_regional_2 = df_world.merge(df_regions, how="cross")
 
     # Return the region df

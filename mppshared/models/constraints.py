@@ -1,8 +1,11 @@
 """ Enforce constraints in the yearly optimization of technology switches."""
+
 import sys
+from typing import Union
 
 import numpy as np
 import pandas as pd
+from ammonia.config_ammonia import END_YEAR
 
 from mppshared.config import (
     AMMONIA_PER_AMMONIUM_NITRATE,
@@ -54,7 +57,7 @@ def check_constraints(
     if pathway.constraints_to_apply:
         for constraint in pathway.constraints_to_apply:
             if constraint == "emissions_constraint":
-                emissions_constraint, flag_residual = funcs_constraints[constraint](
+                emissions_constraint, flag_residual = funcs_constraints[constraint](  # type: ignore
                     pathway=pathway,
                     stack=stack,
                     year=year,
@@ -63,7 +66,7 @@ def check_constraints(
                 constraints_checked[constraint] = emissions_constraint
                 constraints_checked["flag_residual"] = flag_residual
             else:
-                constraints_checked[constraint] = funcs_constraints[constraint](
+                constraints_checked[constraint] = funcs_constraints[constraint](  # type: ignore
                     pathway=pathway,
                     stack=stack,
                     product=product,
@@ -292,6 +295,7 @@ def check_global_demand_share_constraint(
     stack: AssetStack,
     year: int,
     transition_type: str,
+    product: str,
 ) -> bool:
     """
     Check for specified technologies whether they fulfill the constraint of supplying a maximum share of global demand
@@ -311,7 +315,7 @@ def check_global_demand_share_constraint(
     ).reset_index()
     constraint = True
 
-    for technology in pathway.technologies_maximum_global_demand_share:
+    for technology in pathway.technologies_maximum_global_demand_share:  # type: ignore
 
         # Calculate annual production volume based on CUF upper threshold
         df = (
@@ -327,7 +331,7 @@ def check_global_demand_share_constraint(
         df["demand"] = df["product"].apply(
             lambda x: pathway.get_demand(product=x, year=year, region="Global")
         )
-        df["demand_maximum"] = pathway.maximum_global_demand_share[year] * df["demand"]
+        df["demand_maximum"] = pathway.maximum_global_demand_share[year] * df["demand"]  # type: ignore
 
         # Compare
         df["check"] = np.where(
@@ -349,6 +353,7 @@ def check_electrolysis_capacity_addition_constraint(
     stack: AssetStack,
     year: int,
     transition_type: str,
+    product: str,
 ) -> bool:
     """Check if the annual addition of electrolysis capacity fulfills the constraint
 
@@ -496,7 +501,12 @@ def check_co2_storage_constraint(
         limit = df_co2_storage.loc[df_co2_storage["year"] == year, :]
     else:
         df_co2_storage = pathway.co2_storage_constraint
-        limit = df_co2_storage.loc[df_co2_storage["year"] == year + 1, "value"].item()
+        if year < END_YEAR:
+            limit_year = year
+        else:
+            limit_year = END_YEAR
+
+        limit = df_co2_storage.loc[df_co2_storage["year"] == limit_year, "value"].item()
 
     # Regional constraint based on total CO2 storage available in that year
     if pathway.co2_storage_constraint_type == "annual_cumulative":
@@ -519,6 +529,7 @@ def check_co2_storage_constraint(
         co2_captured_old_stack = pathway.stacks[year].calculate_co2_captured_stack(
             year=year, df_emissions=pathway.emissions
         )
+
         co2_captured_new_stack = stack.calculate_co2_captured_stack(
             year=year + 1, df_emissions=pathway.emissions
         )
@@ -634,7 +645,7 @@ def check_alternative_fuel_constraint(
     year: int,
     transition_type: str,
     return_dict: bool = False,
-):
+) -> Union[dict, bool]:
     """Check if the constraint on annual alternative fuel capacity (regionally) is fulfilled"""
 
     if not return_dict:

@@ -5,9 +5,9 @@ from timeit import default_timer as timer
 
 from ammonia.config_ammonia import (
     ANNUAL_RENOVATION_SHARE,
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
     CARBON_BUDGET_SECTOR_CSV,
     CO2_STORAGE_CONSTRAINT_TYPE,
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
     CONSTRAINTS_TO_APPLY,
     CUF_LOWER_THRESHOLD,
     CUF_UPPER_THRESHOLD,
@@ -21,23 +21,17 @@ from ammonia.config_ammonia import (
     PRODUCTS,
     RANK_TYPES,
     REGIONAL_PRODUCTION_SHARES,
-    SECTORAL_CARBON_PATHWAY,
     SET_CO2_STORAGE_CONSTRAINT,
     START_YEAR,
     TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE,
-    TECHNOLOGY_RAMP_UP_CONSTRAINT,
-    YEAR_2050_EMISSIONS_CONSTRAINT,
 )
 from ammonia.solver.brownfield import brownfield
 from ammonia.solver.decommission import decommission
 from ammonia.solver.greenfield import greenfield
 from mppshared.agent_logic.agent_logic_functions import (
     adjust_capacity_utilisation,
-    create_dict_technology_rampup,
 )
-from mppshared.config import SECTORAL_CARBON_BUDGETS
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
@@ -113,32 +107,6 @@ def simulate_pathway(
         carbon_cost_trajectory=carbon_cost_trajectory,
     )
 
-    # Create carbon budget
-    carbon_budget = CarbonBudget(
-        start_year=START_YEAR,
-        end_year=END_YEAR,
-        sectoral_carbon_budgets=SECTORAL_CARBON_BUDGETS,
-        pathway_shape="linear",
-        sector=sector,
-        carbon_budget_sector_csv=CARBON_BUDGET_SECTOR_CSV,
-        sectoral_carbon_pathway=SECTORAL_CARBON_PATHWAY,
-        importer=importer,
-    )
-
-    # Create technology ramp-up trajectory for each technology in the form of a dictionary
-    dict_technology_rampup = create_dict_technology_rampup(
-        importer=importer,
-        model_start_year=START_YEAR,
-        model_end_year=END_YEAR,
-        maximum_asset_additions=TECHNOLOGY_RAMP_UP_CONSTRAINT[
-            "init_maximum_asset_additions"
-        ],
-        maximum_capacity_growth_rate=TECHNOLOGY_RAMP_UP_CONSTRAINT[
-            "maximum_asset_growth_rate"
-        ],
-        years_rampup_phase=TECHNOLOGY_RAMP_UP_CONSTRAINT["years_rampup_phase"],
-    )
-
     # Make pathway
     pathway = SimulationPathway(
         start_year=START_YEAR,
@@ -149,9 +117,7 @@ def simulate_pathway(
         products=PRODUCTS,
         rank_types=RANK_TYPES,
         initial_asset_data_level=INITIAL_ASSET_DATA_LEVEL,
-        assumed_annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
-        technology_rampup=dict_technology_rampup,
-        carbon_budget=carbon_budget,
+        assumed_annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
         carbon_cost_trajectory=carbon_cost_trajectory,
         emission_scopes=EMISSION_SCOPES,
         cuf_lower_threshold=CUF_LOWER_THRESHOLD,
@@ -159,7 +125,9 @@ def simulate_pathway(
         ghgs=GHGS,
         regional_production_shares=REGIONAL_PRODUCTION_SHARES,
         constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],
-        year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
+        year_2050_emissions_constraint=None,
+        technology_rampup=None,
+        carbon_budget=None,
         investment_cycle=INVESTMENT_CYCLE,
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,
         technologies_maximum_global_demand_share=TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE,

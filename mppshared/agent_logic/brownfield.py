@@ -12,6 +12,7 @@ from mppshared.agent_logic.agent_logic_functions import (
     select_best_transition,
 )
 from mppshared.config import ANNUAL_RENOVATION_SHARE, LOG_LEVEL
+from mppshared.models.asset import Asset
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
@@ -37,13 +38,9 @@ def brownfield_def(pathway: SimulationPathway, year: int) -> SimulationPathway:
     new_stack = pathway.get_stack(year=year + 1)
     # Get the emissions, used for the LC scenario
     if year == 2050:
-        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(
-            year, pathway.sector
-        )
+        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year)
     else:
-        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(
-            year + 1, pathway.sector
-        )
+        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year + 1)
 
     # Get ranking table for brownfield transitions
     df_rank = pathway.get_ranking(year=year, rank_type="brownfield")
@@ -68,7 +65,7 @@ def brownfield_def(pathway: SimulationPathway, year: int) -> SimulationPathway:
         # TODO: implement foresight with brownfield rebuild
 
         # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
-        best_candidates = []
+        best_candidates: list[Asset] = []
         while not best_candidates:
             # If no more transitions available, break and return pathway
             if df_rank.empty:
@@ -145,6 +142,7 @@ def brownfield_def(pathway: SimulationPathway, year: int) -> SimulationPathway:
             stack=tentative_stack,
             year=year,
             transition_type="brownfield",
+            product=asset_to_update.product,
         )
         # If no constraint is hurt, execute the brownfield transition
         if (
@@ -205,14 +203,14 @@ def apply_start_years_brownfield_transitions(
     return df_rank
 
 
-def apply_brownfield_filters_chemicals(
+def apply_brownfield_filters_ammonia(
     df_rank: pd.DataFrame,
     pathway: SimulationPathway,
     year: int,
     ranking_cost_metric: str,
     cost_metric_decrease_brownfield: float,
 ) -> pd.DataFrame:
-    """For chemicals, the LC pathway is driven by a carbon price. Hence, brownfield transitions only happen
+    """For ammonia, the BAU and LC pathways are driven by minimum cost. Hence, brownfield transitions only happen
     when they decrease LCOX. For the FA pathway, this is not the case."""
 
     if pathway.pathway_name == "fa":
@@ -221,8 +219,6 @@ def apply_brownfield_filters_chemicals(
     cost_metric = ranking_cost_metric
 
     # Get LCOX of origin technologies for retrofit
-    # TODO: check simplification that lcox of the current year is taken
-    #! Compare LCOX of newbuild technologies
     df_greenfield = pathway.get_ranking(year=year, rank_type="greenfield")
     df_lcox = df_greenfield.loc[df_greenfield["technology_origin"] == "New-build"]
     df_lcox = df_lcox[
@@ -259,27 +255,6 @@ def apply_brownfield_filters_chemicals(
         on=["product", "region", "technology_destination", "year"],
         how="left",
     ).fillna(0)
-
-    # Enforce retrofit of CCS with process emissions only
-    # TODO: remove this workaround
-    # df_cc = pathway.carbon_cost.df_carbon_cost
-    # flag_transition_forced_retrofit = False
-    # if df_cc.loc[df_cc["year"] == END_YEAR, "carbon_cost"].item() == 75:
-    #     flag_transition_forced_retrofit = True
-
-    # if flag_transition_forced_retrofit & (pathway.pathway == "def") & (year >= 2045):
-    #     # if year > 2050:
-    #     df_rank.loc[
-    #         (
-    #             df_rank["technology_origin"]
-    #             == "Natural Gas SMR + CCS (process emissions only) + ammonia synthesis"
-    #         )
-    #         & (
-    #             df_rank["technology_destination"]
-    #             == "Natural Gas SMR + CCS + ammonia synthesis"
-    #         ),
-    #         f"{cost_metric}_destination",
-    #     ] = 0
 
     filter = df_rank[f"{cost_metric}_destination"] < df_rank[
         f"{cost_metric}_origin"

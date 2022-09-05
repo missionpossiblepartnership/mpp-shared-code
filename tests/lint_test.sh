@@ -15,7 +15,7 @@ isort --profile black . --check-only
 black . --line-length 88 --check --diff
 
 # lint the code
-flake8 . --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
+# flake8 . --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
 
 # run the tests
 coverage run --source ./mppshared --module pytest --verbose

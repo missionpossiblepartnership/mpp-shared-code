@@ -57,7 +57,7 @@ CARBON_COST_SENSITIVITIES = {
         "final_carbon_cost": 210,
         "start_year": 2023,
         "end_year": 2050,
-    }
+    },
 }
 CARBON_COST_SCOPES = ["scope1", "scope2"]
 
@@ -168,7 +168,8 @@ SECTORAL_CARBON_BUDGETS = {
 emissions_2020 = 2.4  # Gt CO2 (scopes 1 and 2)
 SECTORAL_CARBON_PATHWAY = {
     "emissions_start": emissions_2020,
-    "emissions_end": 0.06 * 3.85,   # recarbonation share in 2050 according to GCCA roadmap
+    "emissions_end": 0.06
+    * 3.85,  # recarbonation share in 2050 according to GCCA roadmap
     "action_start": 2023,
 }
 

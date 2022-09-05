@@ -9,7 +9,6 @@ import numpy as np
 import pandas as pd
 
 from ammonia.config_ammonia import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
     BUILD_CURRENT_PROJECT_PIPELINE,
     LOG_LEVEL,
@@ -202,6 +201,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                         cuf=pathway.cuf_upper_threshold,
                         year=year,
                         df_region_demand=df_region_demand,
+                        region_global_demand_share=MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION,
                     )
                     enact_greenfield_transition(
                         pathway=pathway,
@@ -240,6 +240,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     cuf=pathway.cuf_upper_threshold,
                     year=year,
                     df_region_demand=df_region_demand,
+                    region_global_demand_share=MAXIMUM_GLOBAL_DEMAND_SHARE_ONE_REGION,
                 )
             except ValueError:
                 logger.info(

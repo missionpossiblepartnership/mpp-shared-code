@@ -1,15 +1,15 @@
 """Calculates all cost metrics required for technology ranking"""
 
 import sys
-from itertools import chain
 from copy import deepcopy
+from itertools import chain
 
 import numpy as np
 import pandas as pd
 
+from mppshared.config import IDX_TECH_RANKING_COLUMNS, LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
-from mppshared.config import IDX_TECH_RANKING_COLUMNS, LOG_LEVEL
 from mppshared.utility.dataframe_utility import df_dict_to_df
 from mppshared.utility.log_utility import get_logger
 from mppshared.utility.utils import get_unique_list_values
@@ -148,7 +148,11 @@ def calculate_tech_transitions(
         # placeholder
         df_opex_variable = pd.DataFrame()
     # check for negative values
-    if (df_opex_variable[[x for x in df_opex_variable.columns if "value" in x]] < 0).any().any():
+    if (
+        (df_opex_variable[[x for x in df_opex_variable.columns if "value" in x]] < 0)
+        .any()
+        .any()
+    ):
         logger.critical("Warning: Negative OPEX_variable values exist!")
 
     # LCOX
@@ -179,7 +183,9 @@ def calculate_tech_transitions(
             logger.info("Import LCOX")
             df_lcox = importer.get_lcox().set_index(IDX_TECH_RANKING_COLUMNS)
         except FileNotFoundError:
-            sys.exit("No LCOX data found. Set config parameter COMPUTE_LCOX to True to generate LCOX data.")
+            sys.exit(
+                "No LCOX data found. Set config parameter COMPUTE_LCOX to True to generate LCOX data."
+            )
     # check for negative values
     if (df_lcox[[x for x in df_lcox.columns if "value" in x]] < 0).any().any():
         logger.critical("Warning: Negative LCOX values exist!")
@@ -381,30 +387,49 @@ def _get_switch_capex(
     #   the destination tech
     df_brownfield_renovation.loc[
         (
-            df_brownfield_renovation["technology_origin"].str.contains("post combustion")
-            & (
-                df_brownfield_renovation["technology_destination"].str.contains("oxyfuel")
-                ^ df_brownfield_renovation["technology_destination"].str.contains("direct separation")
+            df_brownfield_renovation["technology_origin"].str.contains(
+                "post combustion"
             )
-        ), "value"
+            & (
+                df_brownfield_renovation["technology_destination"].str.contains(
+                    "oxyfuel"
+                )
+                ^ df_brownfield_renovation["technology_destination"].str.contains(
+                    "direct separation"
+                )
+            )
+        ),
+        "value",
     ] = df_brownfield_renovation["value_destination"]
     df_brownfield_renovation.loc[
         (
             df_brownfield_renovation["technology_origin"].str.contains("oxyfuel")
             & (
-                    df_brownfield_renovation["technology_destination"].str.contains("post combustion")
-                    ^ df_brownfield_renovation["technology_destination"].str.contains("direct separation")
+                df_brownfield_renovation["technology_destination"].str.contains(
+                    "post combustion"
+                )
+                ^ df_brownfield_renovation["technology_destination"].str.contains(
+                    "direct separation"
+                )
             )
-        ), "value"
+        ),
+        "value",
     ] = df_brownfield_renovation["value_destination"]
     df_brownfield_renovation.loc[
         (
-            df_brownfield_renovation["technology_origin"].str.contains("direct separation")
-            & (
-                    df_brownfield_renovation["technology_destination"].str.contains("post combustion")
-                    ^ df_brownfield_renovation["technology_destination"].str.contains("oxyfuel")
+            df_brownfield_renovation["technology_origin"].str.contains(
+                "direct separation"
             )
-        ), "value"
+            & (
+                df_brownfield_renovation["technology_destination"].str.contains(
+                    "post combustion"
+                )
+                ^ df_brownfield_renovation["technology_destination"].str.contains(
+                    "oxyfuel"
+                )
+            )
+        ),
+        "value",
     ] = df_brownfield_renovation["value_destination"]
 
     # filter relevent columns
@@ -655,9 +680,19 @@ def _get_opex_variable(
     """carbon cost"""
 
     if carbon_cost_trajectory is not None:
-        df_ov_carbon_cost = deepcopy(carbon_cost_trajectory.df_carbon_cost).set_index("year").sort_index()
-        df_ov_carbon_cost.rename(columns={list(df_ov_carbon_cost)[0]: "value"}, inplace=True)
-        df_emissions = df_emissions[[f"co2_{x}" for x in carbon_cost_scopes]].sum(axis=1).to_frame()
+        df_ov_carbon_cost = (
+            deepcopy(carbon_cost_trajectory.df_carbon_cost)
+            .set_index("year")
+            .sort_index()
+        )
+        df_ov_carbon_cost.rename(
+            columns={list(df_ov_carbon_cost)[0]: "value"}, inplace=True
+        )
+        df_emissions = (
+            df_emissions[[f"co2_{x}" for x in carbon_cost_scopes]]
+            .sum(axis=1)
+            .to_frame()
+        )
         df_emissions.rename(columns={list(df_emissions)[0]: "value"}, inplace=True)
         df_ov_carbon_cost = df_ov_carbon_cost.mul(df_emissions).sort_index()
         # unit df_ov_carbon_cost: [USD / t product_output]
@@ -676,7 +711,9 @@ def _get_opex_variable(
         ].add(df_ov_energy)
         if carbon_cost_trajectory is not None:
             # + carbon cost
-            dict_opex_variable[cost_classification] = dict_opex_variable[cost_classification].add(df_ov_carbon_cost)
+            dict_opex_variable[cost_classification] = dict_opex_variable[
+                cost_classification
+            ].add(df_ov_carbon_cost)
         # unit dict_opex_variable: [USD / t product_output]
         dict_opex_variable[cost_classification].sort_index(inplace=True)
 
