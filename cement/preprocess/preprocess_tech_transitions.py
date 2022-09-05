@@ -638,7 +638,7 @@ def _get_opex_variable(
         )
         # unit df_ov_ccus_captured_emissivity: [t CO2 / t Clk]
     else:
-        # todo: remove - just to avoid reference before assignment warning
+        # avoid reference before assignment warning
         df_ov_ccus_captured_emissivity = pd.DataFrame()
 
     # compute CCU/S OPEX in [USD / t product_output]

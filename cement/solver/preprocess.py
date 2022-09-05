@@ -190,6 +190,30 @@ def import_and_preprocess(
     )
     # Unit df_af_constraint: [Mt Clk / year]
 
+    # CO2 STORAGE CONSTRAINT
+    df_co2_storage_constraint = importer.get_raw_input_data(
+        sheet_name="CO2 storage capacity",
+        header_business_case_excel=HEADER_BUSINESS_CASE_EXCEL,
+        excel_column_ranges=EXCEL_COLUMN_RANGES,
+    ).rename(columns={"Region": "region"})
+    # Unit df_co2_storage_constraint: [Gt CO2]
+    df_co2_storage_constraint = df_co2_storage_constraint[["region"] + list(MODEL_YEARS)].set_index(["region"])
+    df_co2_storage_constraint *= 1e3
+    # Unit df_co2_storage_constraint: [Mt CO2]
+    df_co2_storage_constraint = pd.melt(
+        frame=df_co2_storage_constraint.reset_index(),
+        id_vars="region",
+        value_vars=list(MODEL_YEARS),
+        var_name="year",
+        value_name="value"
+    )
+    importer.export_data(
+        df=df_co2_storage_constraint,
+        filename="co2_storage_constraint.csv",
+        export_dir="intermediate",
+        index=False,
+    )
+
 
 def _get_initial_asset_stack(
     importer: IntermediateDataImporter, product: list

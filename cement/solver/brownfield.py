@@ -17,6 +17,7 @@ from mppshared.models.constraints import (
     check_alternative_fuel_constraint,
     check_constraints,
     check_natural_gas_constraint,
+    check_co2_storage_constraint,
 )
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
@@ -175,7 +176,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
         # if not all constraints are fulfilled
         else:
-            # todo: make sure that all constraints are being handled here!
+
             # EMISSIONS
             if "emissions_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["emissions_constraint"]:
@@ -209,7 +210,8 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                                 dict_constraints[k]
                                 for k in dict_constraints.keys()
                                 if k in pathway.constraints_to_apply
-                                and k not in ["regional_constraint", "emissions_constraint"]
+                                and k
+                                not in ["regional_constraint", "emissions_constraint"]
                             ]
                         ):
                             # allow brownfield transition since it reduces overall emissions
@@ -243,12 +245,11 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                             f"Handle emissions constraint: removing destination technology"
                         )
                         if origin_technology != new_technology:
-                            df_rank = (
-                                remove_all_transitions_with_origin_destination_technology(
-                                    df_rank=df_rank,
-                                    transition=best_transition,
-                                )
+                            df_rank = remove_all_transitions_with_origin_destination_technology(
+                                df_rank=df_rank,
+                                transition=best_transition,
                             )
+
             # RAMPUP
             if "rampup_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["rampup_constraint"]:
@@ -262,6 +263,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                             "technology_destination"
                         ],
                     )
+
             # NATURAL GAS
             if "natural_gas_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["natural_gas_constraint"]:
@@ -296,6 +298,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                             region=asset_to_update.region,
                             tech_substr="natural gas",
                         )
+
             # ALTERNATIVE FUEL
             if "alternative_fuel_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["alternative_fuel_constraint"]:
@@ -331,6 +334,45 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                             df_rank=df_rank,
                             region=asset_to_update.region,
                             tech_substr="alternative fuels",
+                        )
+
+            # CO2 STORAGE
+            if "co2_storage_constraint" in pathway.constraints_to_apply:
+                if not dict_constraints["co2_storage_constraint"]:
+                    # get regions where CO2 storage constraint is exceeded
+                    dict_co2_storage_exceedance = (
+                        check_co2_storage_constraint(
+                            pathway=pathway,
+                            product=PRODUCTS[0],
+                            stack=tentative_stack,
+                            year=year,
+                            transition_type="brownfield",
+                            return_dict=True,
+                        )
+                    )
+                    exceeding_regions = [
+                        k
+                        for k in dict_co2_storage_exceedance.keys()
+                        if not dict_co2_storage_exceedance[k]
+                    ]
+                    # check if regions other than the tentatively updated asset's region exceed the constraint
+                    if exceeding_regions != [asset_to_update.region]:
+                        sys.exit(
+                            f"{year}: Regions other than the tentatively updated asset's region exceed the CO2 "
+                            "storage constraint!"
+                        )
+                    else:
+                        # remove destination technology in exceeding region from ranking
+                        logger.debug(
+                            f"Handle CO2 storage constraint: removing destination technology "
+                            f"in {asset_to_update.region}"
+                        )
+                        df_rank = remove_all_transitions_with_destination_technology(
+                            df_rank=df_rank,
+                            technology_destination=best_transition[
+                                "technology_destination"
+                            ],
+                            region=asset_to_update.region,
                         )
 
     logger.debug(

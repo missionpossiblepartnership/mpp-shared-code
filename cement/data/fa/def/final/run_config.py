@@ -29,7 +29,7 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 PATHWAYS_SENSITIVITIES = {
     # "bau": ["def"],  # ALL_SENSITIVITIES,
     "fa": ["def"],
-    # "lc": ["high"],  # ALL_SENSITIVITIES,
+    # "lc": ["def"],  # ALL_SENSITIVITIES,
 }
 
 PATHWAYS_WITH_CARBON_COST = ["lc"]
@@ -227,16 +227,20 @@ RANKING_CONFIG = {
 YEAR_2050_EMISSIONS_CONSTRAINT = 2060
 # Technology ramp-up parameters (on global technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
-    "init_maximum_asset_additions": 30,  # set high such that is deactivated
+    "init_maximum_asset_additions": 40,
     "maximum_asset_growth_rate": 0.05,
     "years_rampup_phase": 30,
 }
+# CO2 storage constraint
+SET_CO2_STORAGE_CONSTRAINT = True
+CO2_STORAGE_CONSTRAINT_TYPE = "total_cumulative"   # "annual_cumulative", "annual_addition", "total_cumulative", or None
 CONSTRAINTS_TO_APPLY = {
     "bau": [
         "rampup_constraint",
         # "regional_constraint",
         # "natural_gas_constraint",
         "alternative_fuel_constraint",
+        "co2_storage_constraint",
     ],
     "fa": [
         # "emissions_constraint",
@@ -244,6 +248,7 @@ CONSTRAINTS_TO_APPLY = {
         # "regional_constraint",
         # "natural_gas_constraint",
         "alternative_fuel_constraint",
+        "co2_storage_constraint",
     ],
     "lc": [
         # "emissions_constraint",
@@ -251,6 +256,7 @@ CONSTRAINTS_TO_APPLY = {
         # "regional_constraint",
         # "natural_gas_constraint",
         "alternative_fuel_constraint",
+        "co2_storage_constraint",
     ],
 }
 REGIONAL_PRODUCTION_SHARES = {

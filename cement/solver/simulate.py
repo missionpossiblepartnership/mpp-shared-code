@@ -26,6 +26,7 @@ from cement.config.config_cement import (
     START_YEAR,
     TECHNOLOGY_RAMP_UP_CONSTRAINT,
     YEAR_2050_EMISSIONS_CONSTRAINT,
+    CO2_STORAGE_CONSTRAINT_TYPE,
 )
 from cement.solver.brownfield import brownfield
 from cement.solver.decommission import decommission
@@ -188,6 +189,10 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         set_alternative_fuel_constraint=(
             "alternative_fuel_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]
         ),
+        set_co2_storage_constraint=(
+            "co2_storage_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]
+        ),
+        co2_storage_constraint_type=CO2_STORAGE_CONSTRAINT_TYPE,
     )
 
     # Optimize asset stack on a yearly basis
