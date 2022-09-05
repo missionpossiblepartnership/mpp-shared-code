@@ -231,12 +231,16 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "maximum_asset_growth_rate": 0.05,
     "years_rampup_phase": 30,
 }
+# CO2 storage constraint
+SET_CO2_STORAGE_CONSTRAINT = True
+CO2_STORAGE_CONSTRAINT_TYPE = "total_cumulative"   # "annual_cumulative", "annual_addition", "total_cumulative", or None
 CONSTRAINTS_TO_APPLY = {
     "bau": [
         "rampup_constraint",
         # "regional_constraint",
         # "natural_gas_constraint",
         "alternative_fuel_constraint",
+        # "co2_storage_constraint",
     ],
     "fa": [
         # "emissions_constraint",
@@ -244,6 +248,7 @@ CONSTRAINTS_TO_APPLY = {
         # "regional_constraint",
         # "natural_gas_constraint",
         "alternative_fuel_constraint",
+        # "co2_storage_constraint",
     ],
     "lc": [
         # "emissions_constraint",
@@ -251,6 +256,7 @@ CONSTRAINTS_TO_APPLY = {
         # "regional_constraint",
         # "natural_gas_constraint",
         "alternative_fuel_constraint",
+        # "co2_storage_constraint",
     ],
 }
 REGIONAL_PRODUCTION_SHARES = {

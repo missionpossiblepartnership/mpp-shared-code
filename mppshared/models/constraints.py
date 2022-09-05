@@ -1,4 +1,5 @@
 """ Enforce constraints in the yearly optimization of technology switches."""
+import sys
 
 import numpy as np
 import pandas as pd
@@ -475,17 +476,31 @@ def convert_production_volume_to_electrolysis_capacity(
 
 
 def check_co2_storage_constraint(
-    pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
-) -> bool:
+    pathway: SimulationPathway,
+    stack: AssetStack,
+    product: str,
+    year: int,
+    transition_type: str,
+    return_dict: bool = False,
+):
     """Check if the constraint on total CO2 storage (globally) is met"""
 
-    # Get constraint value
-    df_co2_storage = pathway.co2_storage_constraint
-    # todo: Johannes, I suppose the +1 must now be removed as we corrected the year logic
-    limit = df_co2_storage.loc[df_co2_storage["year"] == year + 1, "value"].item()
+    if not return_dict:
+        logger.info(
+            f"{year}: Checking CO2 storage constraint  (transition type: {transition_type})"
+        )
 
-    # Constraint based on total CO2 storage available in that year
-    if pathway.co2_storage_constraint_cumulative:
+    # Get constraint value
+    if product == "Clinker":
+        df_co2_storage = pathway.co2_storage_constraint
+        limit = df_co2_storage.loc[df_co2_storage["year"] == year, :]
+    else:
+        df_co2_storage = pathway.co2_storage_constraint
+        limit = df_co2_storage.loc[df_co2_storage["year"] == year + 1, "value"].item()
+
+    # Regional constraint based on total CO2 storage available in that year
+    if pathway.co2_storage_constraint_type == "annual_cumulative":
+
         # Calculate CO2 captured annually by the stack (Mt CO2)
         co2_captured = stack.calculate_co2_captured_stack(
             year=year, df_emissions=pathway.emissions
@@ -494,17 +509,16 @@ def check_co2_storage_constraint(
         # Compare with the limit on annual CO2 storage addition (MtCO2)
         if limit >= co2_captured:
             return True
-
-        logger.debug("CO2 storage constraint hurt.")
-        return False
+        else:
+            logger.debug("CO2 storage constraint hurt.")
+            return False
 
     # Constraint based on addition of storage capacity for additional captured CO2 in that year
-    else:
+    elif pathway.co2_storage_constraint_type == "annual_addition":
         # Calculate new CO2 captured
         co2_captured_old_stack = pathway.stacks[year].calculate_co2_captured_stack(
             year=year, df_emissions=pathway.emissions
         )
-        # todo: Johannes, I suppose the +1 must now be removed as we corrected the year logic
         co2_captured_new_stack = stack.calculate_co2_captured_stack(
             year=year + 1, df_emissions=pathway.emissions
         )
@@ -514,9 +528,54 @@ def check_co2_storage_constraint(
         # Compare with the limit on additional storage capacity
         if limit >= additional_co2_captured:
             return True
+        else:
+            logger.debug("CO2 storage constraint hurt.")
+            return False
 
-        logger.debug("CO2 storage constraint hurt.")
-        return False
+    # Constraint based on cumulative volume of CO2 stored over all model years (until current year)
+    elif pathway.co2_storage_constraint_type == "total_cumulative":
+        # get all years that have already been modelled
+        modelled_years = pathway.stacks.keys()
+
+        # get all regions that have a CO2 storage constraint
+        dict_regional_fulfilment = {}
+        for region in limit.region.unique():
+            # get the cumulative sum of annually stored CO2 over all modelled years [Mt CO2]
+            co2_captured_storage = float(0)
+            for year in modelled_years:
+                co2_captured_storage += stack.calculate_co2_captured_stack(
+                    year=year,
+                    df_emissions=pathway.emissions,
+                    region=region,
+                    usage_storage="storage",
+                    product=product,
+                )
+
+            limit_region = limit.loc[limit["region"] == region, "value"].squeeze()
+
+            # add to dict (change sign of co2_captured_storage since captured emissions are provided as negative
+            #   values)
+            dict_regional_fulfilment[region] = limit_region >= -co2_captured_storage
+
+            if not return_dict:
+                logger.debug(
+                    f"{region}: {dict_regional_fulfilment[region]} (limit: {limit_region} Mt CO2, "
+                    f"CCS volume: {-co2_captured_storage} Mt CO2)"
+                )
+
+        if return_dict:
+            return dict_regional_fulfilment
+        else:
+            if all(dict_regional_fulfilment.values()):
+                logger.info("CO2 storage constraint satisfied")
+            else:
+                logger.info("CO2 storage constraint hurt")
+            return all(dict_regional_fulfilment.values())
+
+    else:
+        sys.exit(
+            "Invalid string for config parameter CO2_STORAGE_CONSTRAINT_TYPE provided"
+        )
 
 
 def check_natural_gas_constraint(
