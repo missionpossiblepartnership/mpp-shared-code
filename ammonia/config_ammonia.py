@@ -53,6 +53,9 @@ CARBON_COSTS = [
     # 250,
 ]
 
+# Map each carbon cost to a year in which the final carbon cost is reached
+END_YEAR_MAP = {0: 2025, 50: 2030, 100: 2035, 150: 2040, 200: 2045, 250: 2050}
+
 ### DATA IMPORT AND PREPROCESSING ###
 # Data paths
 CORE_DATA_PATH = "ammonia/data/"
