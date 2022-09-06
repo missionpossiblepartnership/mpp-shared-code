@@ -106,13 +106,14 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         )
 
         # check regional production constraint
-        assert check_constraint_regional_production(
+        if not check_constraint_regional_production(
             pathway=pathway,
             stack=pathway.stacks[year],
             product=product,
             year=year,
             transition_type="all",
-        )
+        ):
+            logger.critical(f"{year}: Not every region fulfills its demand!")
 
         # Write stack to csv
         pathway.export_stack_to_csv(year=year)
