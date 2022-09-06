@@ -1,4 +1,6 @@
 """ Enforce constraints in the yearly optimization of technology switches."""
+
+import sys
 from typing import Union
 
 import numpy as np
@@ -167,8 +169,9 @@ def check_constraint_regional_production(
     if df["check"].all():
         logger.info("Regional production constraint satisfied")
         return True
-
-    return False
+    else:
+        logger.info("Regional production constraint hurt")
+        return False
 
 
 def get_regional_production_constraint_table(
@@ -480,23 +483,34 @@ def convert_production_volume_to_electrolysis_capacity(
 def check_co2_storage_constraint(
     pathway: SimulationPathway,
     stack: AssetStack,
+    product: str,
     year: int,
     transition_type: str,
-    product: str,
-) -> bool:
+    return_dict: bool = False,
+):
     """Check if the constraint on total CO2 storage (globally) is met"""
 
+    if not return_dict:
+        logger.info(
+            f"{year}: Checking CO2 storage constraint  (transition type: {transition_type})"
+        )
+
     # Get constraint value
-    df_co2_storage = pathway.co2_storage_constraint
-    if year < END_YEAR:
-        limit_year = year
+    if product == "Clinker":
+        df_co2_storage = pathway.co2_storage_constraint
+        limit = df_co2_storage.loc[df_co2_storage["year"] == year, :]
     else:
-        limit_year = END_YEAR
+        df_co2_storage = pathway.co2_storage_constraint
+        if year < END_YEAR:
+            limit_year = year
+        else:
+            limit_year = END_YEAR
 
-    limit = df_co2_storage.loc[df_co2_storage["year"] == limit_year, "value"].item()
+        limit = df_co2_storage.loc[df_co2_storage["year"] == limit_year, "value"].item()
 
-    # Constraint based on total CO2 storage available in that year
-    if pathway.co2_storage_constraint_cumulative:
+    # Regional constraint based on total CO2 storage available in that year
+    if pathway.co2_storage_constraint_type == "annual_cumulative":
+
         # Calculate CO2 captured annually by the stack (Mt CO2)
         co2_captured = stack.calculate_co2_captured_stack(
             year=year, df_emissions=pathway.emissions
@@ -505,12 +519,12 @@ def check_co2_storage_constraint(
         # Compare with the limit on annual CO2 storage addition (MtCO2)
         if limit >= co2_captured:
             return True
-
-        logger.debug("CO2 storage constraint hurt.")
-        return False
+        else:
+            logger.debug("CO2 storage constraint hurt.")
+            return False
 
     # Constraint based on addition of storage capacity for additional captured CO2 in that year
-    else:
+    elif pathway.co2_storage_constraint_type == "annual_addition":
         # Calculate new CO2 captured
         co2_captured_old_stack = pathway.stacks[year].calculate_co2_captured_stack(
             year=year, df_emissions=pathway.emissions
@@ -525,9 +539,54 @@ def check_co2_storage_constraint(
         # Compare with the limit on additional storage capacity
         if limit >= additional_co2_captured:
             return True
+        else:
+            logger.debug("CO2 storage constraint hurt.")
+            return False
 
-        logger.debug("CO2 storage constraint hurt.")
-        return False
+    # Constraint based on cumulative volume of CO2 stored over all model years (until current year)
+    elif pathway.co2_storage_constraint_type == "total_cumulative":
+        # get all years that have already been modelled
+        modelled_years = pathway.stacks.keys()
+
+        # get all regions that have a CO2 storage constraint
+        dict_regional_fulfilment = {}
+        for region in limit.region.unique():
+            # get the cumulative sum of annually stored CO2 over all modelled years [Mt CO2]
+            co2_captured_storage = float(0)
+            for year in modelled_years:
+                co2_captured_storage += stack.calculate_co2_captured_stack(
+                    year=year,
+                    df_emissions=pathway.emissions,
+                    region=region,
+                    usage_storage="storage",
+                    product=product,
+                )
+
+            limit_region = limit.loc[limit["region"] == region, "value"].squeeze()
+
+            # add to dict (change sign of co2_captured_storage since captured emissions are provided as negative
+            #   values)
+            dict_regional_fulfilment[region] = limit_region >= -co2_captured_storage
+
+            if not return_dict:
+                logger.debug(
+                    f"{region}: {dict_regional_fulfilment[region]} (limit: {limit_region} Mt CO2, "
+                    f"CCS volume: {-co2_captured_storage} Mt CO2)"
+                )
+
+        if return_dict:
+            return dict_regional_fulfilment
+        else:
+            if all(dict_regional_fulfilment.values()):
+                logger.info("CO2 storage constraint satisfied")
+            else:
+                logger.info("CO2 storage constraint hurt")
+            return all(dict_regional_fulfilment.values())
+
+    else:
+        sys.exit(
+            "Invalid string for config parameter CO2_STORAGE_CONSTRAINT_TYPE provided"
+        )
 
 
 def check_natural_gas_constraint(
@@ -626,31 +685,3 @@ def check_alternative_fuel_constraint(
         else:
             logger.info("Alternative fuel constraint hurt")
         return all(dict_regional_fulfilment.values())
-
-
-def check_regional_context_mix(
-    pathway: SimulationPathway, stack: AssetStack, year: int, transition_type: str
-) -> bool:
-    logger.info("Checking regional context mix")
-    # Get regional mix from stack
-    df_regional_mix = stack.get_regional_mix()
-    # Get regional mix from pathway
-    df_regional_mix_pathway = pathway.regional_mix()
-    # Merge and compare if the percentage of assets in the region complays with the percentage of assets with the given context in the regions
-    df_regional_mix_pathway = df_regional_mix_pathway.merge(
-        df_regional_mix, on=["region", "context"], how="left"
-    )
-    df_regional_mix_pathway["percentage_pathway"] = (
-        df_regional_mix_pathway["value"] / df_regional_mix_pathway["value"].sum()
-    )
-    df_regional_mix_pathway["percentage_stack"] = (
-        df_regional_mix_pathway["value"] / df_regional_mix_pathway["value"].sum()
-    )
-    # Check if the percentage of assets in the region complays with the percentage of assets with the given context in the regions
-    if df_regional_mix_pathway["percentage_pathway"].equals(
-        df_regional_mix_pathway["percentage_stack"]
-    ):
-        return True
-    else:
-        logger.debug("Regional context mix constraint hurt.")
-        return False

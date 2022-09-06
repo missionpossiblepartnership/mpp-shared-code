@@ -26,6 +26,7 @@ from cement.config.config_cement import (
     START_YEAR,
     TECHNOLOGY_RAMP_UP_CONSTRAINT,
     YEAR_2050_EMISSIONS_CONSTRAINT,
+    CO2_STORAGE_CONSTRAINT_TYPE,
 )
 from cement.solver.brownfield import brownfield
 from cement.solver.decommission import decommission
@@ -34,6 +35,7 @@ from mppshared.agent_logic.agent_logic_functions import create_dict_technology_r
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.simulation_pathway import SimulationPathway
+from mppshared.models.constraints import check_constraint_regional_production
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -75,7 +77,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
             f"{year}: Time elapsed for decommission: {timedelta(seconds=end-start)} seconds"
         )
 
-        # Renovate and rebuild assets (brownfield transition)
+        # Brownfield: Renovate and rebuild assets
         logger.info(f"{year}: Production volumes pre brownfield:")
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
             product=product
@@ -87,7 +89,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
             f"{year}: Time elapsed for brownfield: {timedelta(seconds=end-start)} seconds"
         )
 
-        # Build new assets
+        # Greenfield: Build new assets
         logger.info(f"{year}: Production volumes pre greenfield:")
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
             product=product
@@ -101,6 +103,15 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         logger.info(f"{year}: Production volumes post greenfield:")
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
             product=product
+        )
+
+        # check regional production constraint
+        assert check_constraint_regional_production(
+            pathway=pathway,
+            stack=pathway.stacks[year],
+            product=product,
+            year=year,
+            transition_type="all",
         )
 
         # Write stack to csv
@@ -178,6 +189,10 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         set_alternative_fuel_constraint=(
             "alternative_fuel_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]
         ),
+        set_co2_storage_constraint=(
+            "co2_storage_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]
+        ),
+        co2_storage_constraint_type=CO2_STORAGE_CONSTRAINT_TYPE,
     )
 
     # Optimize asset stack on a yearly basis

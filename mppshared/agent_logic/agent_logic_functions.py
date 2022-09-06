@@ -54,12 +54,31 @@ def remove_transition(df_rank: pd.DataFrame, transition: dict) -> pd.DataFrame:
 
 
 def remove_all_transitions_with_destination_technology(
-    df_rank: pd.DataFrame, technology_destination: str
+    df_rank: pd.DataFrame, technology_destination: str, region: str = None
 ) -> pd.DataFrame:
-    """Remove all transitions with a specific destination technology from the ranking table."""
-    df_rank = df_rank.loc[
-        ~(df_rank["technology_destination"] == technology_destination)
-    ]
+    """Remove all transitions with a specific destination technology from the ranking table.
+
+    Args:
+        df_rank ():
+        technology_destination ():
+        region (): If provided, will only remove destination technologies in that region
+
+    Returns:
+
+    """
+
+    if region:
+        df_rank = df_rank.loc[
+            ~(
+                (df_rank["technology_destination"] == technology_destination)
+                & (df_rank["region"] == region)
+            ), :
+        ]
+    else:
+        df_rank = df_rank.loc[
+            ~(df_rank["technology_destination"] == technology_destination), :
+        ]
+
     return df_rank
 
 
