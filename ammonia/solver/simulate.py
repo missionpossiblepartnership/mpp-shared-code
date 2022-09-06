@@ -5,7 +5,6 @@ from timeit import default_timer as timer
 
 from ammonia.config_ammonia import (
     ANNUAL_RENOVATION_SHARE,
-    CARBON_BUDGET_SECTOR_CSV,
     CO2_STORAGE_CONSTRAINT_TYPE,
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
     CONSTRAINTS_TO_APPLY,
@@ -99,14 +98,6 @@ def simulate_pathway(
     """
     Get data per technology, ranking data and then run the pathway simulation
     """
-    importer = IntermediateDataImporter(
-        pathway_name=pathway_name,
-        sensitivity=sensitivity,
-        sector=sector,
-        products=PRODUCTS,
-        carbon_cost_trajectory=carbon_cost_trajectory,
-    )
-
     # Make pathway
     pathway = SimulationPathway(
         start_year=START_YEAR,
