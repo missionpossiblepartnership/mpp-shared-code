@@ -154,9 +154,8 @@ REGIONS_NATURAL_GAS = ["North America", "Russia", "Middle East"]
 COST_CLASSIFICATIONS = {"low": "Low", "standard": "Standard", "high": "High"}
 
 CARBON_BUDGET_SECTOR_CSV = False
-CARBON_BUDGET_SHAPE = "linear"  # options: todo
+CARBON_BUDGET_SHAPE = "exponential"  # linear, exponential
 # carbon budget 2020 - 2050 in Gt
-# todo: why is this not being used?
 SECTORAL_CARBON_BUDGETS = {
     "cement": 42,
 }
@@ -164,8 +163,7 @@ SECTORAL_CARBON_BUDGETS = {
 emissions_2020 = 2.4  # Gt CO2 (scopes 1 and 2)
 SECTORAL_CARBON_PATHWAY = {
     "emissions_start": emissions_2020,
-    "emissions_end": 0.06
-    * 3.85,  # recarbonation share in 2050 according to GCCA roadmap
+    "emissions_end": 0.06 * 3.85,  # recarbonation GCCA roadmap
     "action_start": 2023,
 }
 
@@ -230,7 +228,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
 }
 # CO2 storage constraint
 SET_CO2_STORAGE_CONSTRAINT = True
-CO2_STORAGE_CONSTRAINT_TYPE = "total_cumulative"   # "annual_cumulative", "annual_addition", "total_cumulative", or None
+CO2_STORAGE_CONSTRAINT_TYPE = "total_cumulative"  # "annual_cumulative", "annual_addition", "total_cumulative", or None
 CONSTRAINTS_TO_APPLY = {
     "bau": [
         "rampup_constraint",

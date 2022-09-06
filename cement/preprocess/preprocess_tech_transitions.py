@@ -1,15 +1,15 @@
 """Calculates all cost metrics required for technology ranking"""
 
 import sys
-from copy import deepcopy
 from itertools import chain
+from copy import deepcopy
 
 import numpy as np
 import pandas as pd
 
-from mppshared.config import IDX_TECH_RANKING_COLUMNS, LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
+from mppshared.config import IDX_TECH_RANKING_COLUMNS, LOG_LEVEL
 from mppshared.utility.dataframe_utility import df_dict_to_df
 from mppshared.utility.log_utility import get_logger
 from mppshared.utility.utils import get_unique_list_values
@@ -610,7 +610,7 @@ def _get_opex_variable(
     """CCU/S OPEX (considering the different contexts)"""
 
     # CCU/S: CC process cost
-    # get unique keys as list from OPEX_CC_CAPTURE_METRICS
+    # get unique keys as list from opex_ccus_process_metrics
     dict_ccus_process_cost = get_unique_list_values(
         list(chain(*[list(x.keys()) for x in opex_ccus_process_metrics]))
     )
@@ -627,6 +627,7 @@ def _get_opex_variable(
         idx_per_input_metric=idx_per_input_metric,
         opex_ccus_process_metrics=opex_ccus_process_metrics,
     )
+    # todo: different metrics
     # df_ov_ccus_process unit: [USD / t CO2]
 
     # CCU/S: get context-dependent cost components as dict
@@ -1022,7 +1023,10 @@ def _opex_get_ccus_process_cost(
             capture cost
         idx_opex ():
         idx_per_input_metric ():
-        opex_ccus_process_metrics ():
+        opex_ccus_process_metrics (list): List of all CCU/S process cost components. Every item in the list is a dict
+            with two keys: the name of the dataframe with prices (must be part of input_data) and a price metric as
+            value as well as the corresponding name of the energy or material intensity dataframe (must be part of
+            input_data) and an energy/material intensity metric as value.
 
     Returns:
         df_ov_ccus_process (): Unit: [USD / t Clk]
@@ -1057,6 +1061,7 @@ def _opex_get_ccus_process_cost(
 
     # concat and groupby
     df_ov_ccus_process = pd.concat(df_list).reorder_levels(idx_opex)
+    # todo: check whether this is possible with different metrics!
     df_ov_ccus_process = df_ov_ccus_process.groupby(
         list(df_ov_ccus_process.index.names)
     ).sum()
@@ -1074,7 +1079,8 @@ def _get_ccus_captured_emissivity_cement(
     """
 
     Args:
-        df_ov_ccus_emissivity (): Unit: mixed ([t CO2 / t Clk] & [t CO2 / t GJ])
+        df_ov_ccus_emissivity (): Emissivity of metric types in opex_ccus_emissivity_metric_types and corresponging
+            metrics in opex_ccus_emissivity_metrics. Unit: mixed ([t CO2 / t Clk] & [t CO2 / t GJ])
         df_inputs_energy (): Unit: [GJ / t Clk]
         df_capture_rate (): Unit: [%]
         idx_opex ():
@@ -1085,7 +1091,7 @@ def _get_ccus_captured_emissivity_cement(
 
     """emissions with unit [t CO2 / GJ]"""
 
-    # split into emissions with unit [t CO2 / GJ] and other emissions
+    # split into emissions of unit [t CO2 / GJ] and other emissions
     df_ov_ccus_emissivity_gj = (
         df_ov_ccus_emissivity.copy()
         .loc[df_ov_ccus_emissivity["emissivity_type"] != "Process", :]
