@@ -1,11 +1,11 @@
-"""Year-by-year optimisation logic of plant investment decisions to simulate a pathway for the ammonia supply technology mix."""
+"""Year-by-year optimisation logic of plant investment decisions to simulate a pathway for the ammonia supply
+technology mix."""
 
 from datetime import timedelta
 from timeit import default_timer as timer
 
 from ammonia.config_ammonia import (
     ANNUAL_RENOVATION_SHARE,
-    CARBON_BUDGET_SECTOR_CSV,
     CO2_STORAGE_CONSTRAINT_TYPE,
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
     CONSTRAINTS_TO_APPLY,
