@@ -301,11 +301,14 @@ class AssetStack:
         return list({asset.product for asset in self.assets})
 
     def aggregate_stack(
-        self, aggregation_vars, technology_classification=None, product=None
+        self,
+        aggregation_vars: list,
+        technology_classification: str = None,
+        product: str = None,
     ) -> pd.DataFrame:
         """
-        Aggregate AssetStack according to product, technology or region, and show annual
-        production capacity, annual production volume and number of assets. Optionally filtered by technology classification and/or product
+        Aggregate AssetStack according to product, technology or region, and show annual production capacity, annual
+            production volume and number of assets. Optionally filtered by technology classification and/or product
 
         Args:
             aggregation_vars: aggregate by these variables
@@ -397,12 +400,28 @@ class AssetStack:
         self,
         year: int,
         df_emissions: pd.DataFrame,
-        technology_classification=None,
-        product=None,
+        technology_classification: str = None,
+        product: str = None,
+        region: str = None,
+        usage_storage: str = None,
     ) -> float:
-        """Calculate the CO2 captured by the stack in a given year."""
+        """Calculate the CO2 captured by the stack in a given year.
 
-        # Get DataFrame with annual production volume by product, region and technology (optionally filtered for technology classification and specific product)
+        Args:
+            year ():
+            df_emissions ():
+            technology_classification ():
+            product ():
+            region ():
+            usage_storage (): if "usage" or "storage" provided, return only the captured sum of emissions from
+                technologies with "usage" / "storage" in their name
+
+        Returns:
+
+        """
+
+        # Get DataFrame with annual production volume by product, region and technology (optionally filtered for
+        #   technology classification and specific product)
         df_stack = self.aggregate_stack(
             aggregation_vars=["technology", "product", "region"],
             technology_classification=technology_classification,
@@ -411,18 +430,25 @@ class AssetStack:
 
         # If the stack DataFrame is empty, return 0 for all emissions
         if df_stack.empty:
-            return 0
+            return float(0)
 
         df_stack = df_stack.reset_index()
 
         # Filter emissions DataFrame for the given year
         df_emissions = df_emissions.reset_index()
-        df_emissions = df_emissions[(df_emissions.year == year)]
+        df_emissions = df_emissions.loc[(df_emissions.year == year), :]
 
-        # Add emissions by GHG and scope to each technologyy
+        # Add emissions by GHG and scope to each technology
         df_stack = df_stack.merge(
             df_emissions, how="left", on=["technology", "product", "region"]
         )
+
+        # apply filters
+        if region:
+            df_stack = df_stack.loc[(df_stack.region == region), :]
+
+        if usage_storage:
+            df_stack = df_stack.loc[(df_stack["technology"].str.contains(usage_storage)), :]
 
         co2_captured = (
             df_stack["co2_scope1_captured"] * df_stack["annual_production_volume"]

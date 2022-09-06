@@ -66,7 +66,11 @@ CAPACITY_UTILISATION_FACTOR = 0.913
 COST_METRIC_CUF_ADJUSTMENT = None
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-MAX_ANNUAL_RENOVATION_SHARE = {"bau": 0.2, "fa": 0.2, "lc": 0.5}
+MAX_ANNUAL_RENOVATION_SHARE = {
+    "bau": 0.2,
+    "fa": 0.2,
+    "lc": 0.2
+}
 
 
 ### initial asset stack ###
@@ -224,16 +228,20 @@ RANKING_CONFIG = {
 YEAR_2050_EMISSIONS_CONSTRAINT = 2060
 # Technology ramp-up parameters (on global technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
-    "init_maximum_asset_additions": 20,  # set high such that is deactivated
+    "init_maximum_asset_additions": 40,
     "maximum_asset_growth_rate": 0.05,
-    "years_rampup_phase": 10,
+    "years_rampup_phase": 30,
 }
+# CO2 storage constraint
+SET_CO2_STORAGE_CONSTRAINT = True
+CO2_STORAGE_CONSTRAINT_TYPE = "total_cumulative"   # "annual_cumulative", "annual_addition", "total_cumulative", or None
 CONSTRAINTS_TO_APPLY = {
     "bau": [
         "rampup_constraint",
         # "regional_constraint",
         # "natural_gas_constraint",
         "alternative_fuel_constraint",
+        "co2_storage_constraint",
     ],
     "fa": [
         # "emissions_constraint",
@@ -241,13 +249,15 @@ CONSTRAINTS_TO_APPLY = {
         # "regional_constraint",
         # "natural_gas_constraint",
         "alternative_fuel_constraint",
+        "co2_storage_constraint",
     ],
     "lc": [
-        "emissions_constraint",
+        # "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",
         # "natural_gas_constraint",
         "alternative_fuel_constraint",
+        "co2_storage_constraint",
     ],
 }
 REGIONAL_PRODUCTION_SHARES = {

@@ -1,6 +1,11 @@
 """Decommission plants."""
 
-from cement.config.config_cement import LOG_LEVEL, MODEL_SCOPE, REGIONS
+from cement.config.config_cement import (
+    LOG_LEVEL,
+    REGIONS,
+    CAPACITY_UTILISATION_FACTOR,
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+)
 from mppshared.agent_logic.decommission import get_best_asset_to_decommission_cement
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
@@ -48,7 +53,11 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
             f"{year}, {region}: Production: {production} Mt {product}, Demand: {demand} Mt {product}, "
             f"Surplus: {surplus} Mt {product}"
         )
-        while surplus > 0:
+
+        # decommission plants while the surplus is higher than one plant's production volume
+        while (
+            surplus >= ASSUMED_ANNUAL_PRODUCTION_CAPACITY * CAPACITY_UTILISATION_FACTOR
+        ):
 
             # Identify asset to be decommissioned
             try:
