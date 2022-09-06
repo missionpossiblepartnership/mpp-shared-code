@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -27,6 +29,7 @@ class CarbonBudget:
         logger.info("Initializing Carbon Budget")
         self.start_year = start_year
         self.end_year = end_year
+        self.sector = sector
         self.budgets = sectoral_carbon_budgets
         self.pathway_shape = pathway_shape
         self.importer = importer
@@ -42,7 +45,7 @@ class CarbonBudget:
         return "Instance of Carbon Budget"
 
     def list_pathways(self):
-        return list(self.sectoral_carbon_pathway.keys())
+        return list(self.pathways.keys())
 
     def total_budget_all_sectors(self):
         return sum(list(self.budgets.values()))
@@ -70,8 +73,38 @@ class CarbonBudget:
                     num=self.end_year - trajectory["action_start"] + 1,
                 )
                 values = np.concatenate((initial_level, linear_reduction))
-            else:
-                values = [np.nan] * (self.end_year - self.start_year + 1)
+
+                if values.sum() > self.budgets[self.sector]:
+                    sys.exit(
+                        "Config parameters for linear shape do not yield carbon budget shape within the sectoral "
+                        "budget!"
+                    )
+
+            if pathway_shape == "exponential":
+                # todo: make polynomial
+
+                # init values with immediate action start
+                values1 = np.linspace(
+                    start=trajectory["emissions_start"],
+                    stop=0.6 * trajectory["emissions_start"],
+                    num=2035 - self.start_year,
+                )
+                values2 = np.linspace(
+                    start=0.6 * trajectory["emissions_start"],
+                    stop=trajectory["emissions_end"],
+                    num=self.end_year - 2035 + 2,
+                )[1:]
+                values = np.concatenate((values1, values2))
+
+                # check whether the initial values are within the total carbon budget and revert to linear shape if so
+                if values.sum() > self.budgets[self.sector]:
+                    logger.critical(
+                        "Cannot find exponential carbon budget shape within the sectoral budget! "
+                        "Revert to linear shape."
+                    )
+                    self.pathway_shape = "linear"
+                    self.create_emissions_pathway(pathway_shape=self.pathway_shape)
+
             df = pd.DataFrame(data={"year": index, "annual_limit": values}).set_index(
                 "year"
             )
@@ -81,9 +114,8 @@ class CarbonBudget:
         """Get scope 1 and 2 CO2 emissions limit for a specific year for the given sector"""
         return self.df_pathway.loc[year, "annual_limit"]
 
-    # TODO: implement
-    def output_emissions_pathway(self, sector: str, importer: IntermediateDataImporter):
-        if self.carbon_budget_sector_csv == True:
+    def output_carbon_budget(self, sector: str, importer: IntermediateDataImporter):
+        if self.carbon_budget_sector_csv:
             df = self.importer.get_carbon_budget()
             df.set_index("year", inplace=True)
         else:
@@ -115,4 +147,4 @@ class CarbonBudget:
             value_type (str): value_type
         """
         mapper = {"annual": "annual_limit", "cumulative": "cumulative_limit"}
-        return self.sectoral_carbon_pathway[sector].loc[year][mapper[value_type]]
+        return self.pathways[sector].loc[year][mapper[value_type]]

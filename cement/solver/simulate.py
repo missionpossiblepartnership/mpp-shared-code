@@ -161,6 +161,7 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         ],
         years_rampup_phase=TECHNOLOGY_RAMP_UP_CONSTRAINT["years_rampup_phase"],
     )
+    carbon_budget.output_carbon_budget(sector=sector, importer=importer)
 
     # Make pathway
     pathway = SimulationPathway(
