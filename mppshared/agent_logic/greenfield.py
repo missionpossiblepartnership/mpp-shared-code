@@ -323,14 +323,7 @@ def select_asset_for_greenfield(
                     ]:
                         # Remove all transitions with that destination technology from the ranking table
                         logger.debug(
-                            f"Handle electrolysis capacity addition constraint: removing destination technology"
-                    logger.debug(
-                        f"Handle (residual) emissions constraint: removing all transitions with CCS"
-                    )
-                    # remove all transitions with CCS (i.e. with residual emissions)
-                    df_rank = df_rank.loc[
-                        ~(df_rank["technology_destination"].str.contains("CCS"))
-                    ]
+                            f"Handle electrolysis capacity addition constraint: removing destination technology")
                     
             # RAMPUP
             if "rampup_constraint" in pathway.constraints_to_apply:
