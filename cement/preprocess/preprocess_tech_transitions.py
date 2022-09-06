@@ -34,7 +34,8 @@ def calculate_tech_transitions(
     opex_materials_metrics: list,
     opex_ccus_emissivity_metrics: list,
     opex_ccus_emissivity_metric_types: list,
-    opex_ccus_process_metrics: list,
+    opex_ccus_process_metrics_energy: list,
+    opex_ccus_process_metrics_material: list,
     opex_ccus_context_metrics: dict,
     list_technologies: list,
     carbon_cost_scopes: list,
@@ -77,7 +78,8 @@ def calculate_tech_transitions(
         opex_materials_metrics ():
         opex_ccus_emissivity_metrics ():
         opex_ccus_emissivity_metric_types ():
-        opex_ccus_process_metrics ():
+        opex_ccus_process_metrics_energy ():
+        opex_ccus_process_metrics_material ():
         opex_ccus_context_metrics ():
         list_technologies (): list of all technologies in the model
         carbon_cost_scopes ():
@@ -138,7 +140,8 @@ def calculate_tech_transitions(
             opex_materials_metrics=opex_materials_metrics,
             opex_ccus_emissivity_metrics=opex_ccus_emissivity_metrics,
             opex_ccus_emissivity_metric_types=opex_ccus_emissivity_metric_types,
-            opex_ccus_process_metrics=opex_ccus_process_metrics,
+            opex_ccus_process_metrics_energy=opex_ccus_process_metrics_energy,
+            opex_ccus_process_metrics_material=opex_ccus_process_metrics_material,
             opex_ccus_context_metrics=opex_ccus_context_metrics,
             carbon_cost_scopes=carbon_cost_scopes,
         )
@@ -474,9 +477,6 @@ def _get_opex_fixed(
     # sum different fixed OPEX components
     df_opex_fixed = df_opex.copy().groupby(idx_opex).sum().sort_index()
 
-    # todo: include in config for all columns
-    # SWITCH_TYPE = "switch_type"
-
     return df_opex_fixed
 
 
@@ -496,7 +496,8 @@ def _get_opex_variable(
     idx_per_input_metric: dict,
     opex_energy_metrics: list,
     opex_materials_metrics: list,
-    opex_ccus_process_metrics: list,
+    opex_ccus_process_metrics_energy: list,
+    opex_ccus_process_metrics_material: list,
     opex_ccus_emissivity_metric_types: list,
     opex_ccus_emissivity_metrics: list,
     opex_ccus_context_metrics: dict,
@@ -519,7 +520,8 @@ def _get_opex_variable(
         idx_per_input_metric ():
         opex_energy_metrics ():
         opex_materials_metrics ():
-        opex_ccus_process_metrics ():
+        opex_ccus_process_metrics_energy ():
+        opex_ccus_process_metrics_material ():
         opex_ccus_emissivity_metric_types ():
         opex_ccus_emissivity_metrics ():
         carbon_cost_scopes ():
@@ -609,25 +611,42 @@ def _get_opex_variable(
 
     """CCU/S OPEX (considering the different contexts)"""
 
-    # CCU/S: CC process cost
+    # CCU/S: CC process cost (energy)
     # get unique keys as list from opex_ccus_process_metrics
     dict_ccus_process_cost = get_unique_list_values(
-        list(chain(*[list(x.keys()) for x in opex_ccus_process_metrics]))
+        list(chain(*[list(x.keys()) for x in opex_ccus_process_metrics_energy]))
     )
     # generate dict from the unique list
     dict_ccus_process_cost = dict.fromkeys(dict_ccus_process_cost)
     # fill dict with respective dataframes
     dict_ccus_process_cost["inputs_energy"] = df_inputs_energy
-    dict_ccus_process_cost["inputs_material"] = df_inputs_material
     dict_ccus_process_cost["commodity_prices"] = df_commodity_prices
     # compute all cost components of CC process cost
-    df_ov_ccus_process = _opex_get_ccus_process_cost(
+    df_ov_ccus_process_energy = _opex_get_ccus_process_cost(
         input_data=dict_ccus_process_cost,
         idx_opex=idx_opex,
         idx_per_input_metric=idx_per_input_metric,
-        opex_ccus_process_metrics=opex_ccus_process_metrics,
+        opex_ccus_process_metrics=opex_ccus_process_metrics_energy,
     )
-    # todo: different metrics
+    # df_ov_ccus_process unit: [USD / t Clk]
+
+    # CCU/S: CC process cost (material)
+    # get unique keys as list from opex_ccus_process_metrics
+    dict_ccus_process_cost = get_unique_list_values(
+        list(chain(*[list(x.keys()) for x in opex_ccus_process_metrics_material]))
+    )
+    # generate dict from the unique list
+    dict_ccus_process_cost = dict.fromkeys(dict_ccus_process_cost)
+    # fill dict with respective dataframes
+    dict_ccus_process_cost["inputs_material"] = df_inputs_material
+    dict_ccus_process_cost["commodity_prices"] = df_commodity_prices
+    # compute all cost components of CC process cost
+    df_ov_ccus_process_material = _opex_get_ccus_process_cost(
+        input_data=dict_ccus_process_cost,
+        idx_opex=idx_opex,
+        idx_per_input_metric=idx_per_input_metric,
+        opex_ccus_process_metrics=opex_ccus_process_metrics_material,
+    )
     # df_ov_ccus_process unit: [USD / t CO2]
 
     # CCU/S: get context-dependent cost components as dict
@@ -670,13 +689,21 @@ def _get_opex_variable(
     # compute CCU/S OPEX in [USD / t product_output]
     dict_ov_ccus = dict.fromkeys(dict_ov_ccus_context)
     for cost_classification in dict_ov_ccus.keys():
+        # CCU/S OPEX process (material) + CCU/S OPEX non-process
         dict_ov_ccus[cost_classification] = dict_ov_ccus_context[
             cost_classification
-        ].add(df_ov_ccus_process)
+        ].add(df_ov_ccus_process_material)
+        # unit dict_ov_ccus: [USD / t CO2]
+        # * captured emissivity
         dict_ov_ccus[cost_classification] = dict_ov_ccus[cost_classification].mul(
             df_ov_ccus_captured_emissivity
         )
-        # unit dict_ov_ccus: [USD / t product_output]
+        # unit dict_ov_ccus: [USD / t production_output]
+        # + CCU/S OPEX process (energy)
+        dict_ov_ccus[cost_classification] = dict_ov_ccus[cost_classification].add(
+            df_ov_ccus_process_energy
+        )
+        # unit dict_ov_ccus: [USD / t production_output]
 
     """carbon cost"""
 
@@ -1029,7 +1056,7 @@ def _opex_get_ccus_process_cost(
             input_data) and an energy/material intensity metric as value.
 
     Returns:
-        df_ov_ccus_process (): Unit: [USD / t Clk]
+        df_ov_ccus_process (): Unit: [USD / t production_output] or [USD / t CO2]
     """
 
     df_list = []
@@ -1061,7 +1088,6 @@ def _opex_get_ccus_process_cost(
 
     # concat and groupby
     df_ov_ccus_process = pd.concat(df_list).reorder_levels(idx_opex)
-    # todo: check whether this is possible with different metrics!
     df_ov_ccus_process = df_ov_ccus_process.groupby(
         list(df_ov_ccus_process.index.names)
     ).sum()
@@ -1079,7 +1105,7 @@ def _get_ccus_captured_emissivity_cement(
     """
 
     Args:
-        df_ov_ccus_emissivity (): Emissivity of metric types in opex_ccus_emissivity_metric_types and corresponging
+        df_ov_ccus_emissivity (): Emissivity of metric types in opex_ccus_emissivity_metric_types and corresponding
             metrics in opex_ccus_emissivity_metrics. Unit: mixed ([t CO2 / t Clk] & [t CO2 / t GJ])
         df_inputs_energy (): Unit: [GJ / t Clk]
         df_capture_rate (): Unit: [%]
