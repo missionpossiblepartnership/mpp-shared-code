@@ -41,9 +41,12 @@ class IntermediateDataImporter:
 
         # Export directory depends on whether a CarbonCostTrajectory is passed or not
         if carbon_cost_trajectory:
-            final_carbon_cost = carbon_cost_trajectory.df_carbon_cost.loc[
-                carbon_cost_trajectory.df_carbon_cost["year"] == END_YEAR, "carbon_cost"
-            ].item()
+            final_carbon_cost = int(
+                carbon_cost_trajectory.df_carbon_cost.loc[
+                    carbon_cost_trajectory.df_carbon_cost["year"] == END_YEAR,
+                    "carbon_cost",
+                ].item()
+            )
             self.export_dir = parent_path.joinpath(
                 f"{sector}/data/{pathway_name}/{sensitivity}/carbon_cost_{final_carbon_cost}"
             )
