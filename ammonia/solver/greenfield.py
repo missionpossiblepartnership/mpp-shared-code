@@ -1,12 +1,5 @@
 """ Logic for technology transitions of type greenfield (add new Asset to AssetStack."""
-
-from copy import deepcopy
-from importlib.resources import path
-from multiprocessing.sharedctypes import Value
-from operator import methodcaller
-
 import numpy as np
-import pandas as pd
 
 from ammonia.config_ammonia import (
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
@@ -18,26 +11,18 @@ from ammonia.config_ammonia import (
     REGIONAL_TECHNOLOGY_BAN,
     REGIONS,
 )
-from mppshared.agent_logic.agent_logic_functions import (
-    apply_regional_technology_ban,
-    remove_all_transitions_with_destination_technology,
-    remove_transition,
-    select_best_transition,
-)
+from mppshared.agent_logic.agent_logic_functions import apply_regional_technology_ban
+
 from mppshared.agent_logic.greenfield import (
     create_dataframe_check_regional_share_global_demand,
     enact_greenfield_transition,
     select_asset_for_greenfield,
 )
 from mppshared.models.asset import (
-    Asset,
-    AssetStack,
-    make_new_asset,
     make_new_asset_project_pipeline,
 )
 from mppshared.models.constraints import (
     apply_greenfield_filters_chemicals,
-    check_constraints,
     get_regional_production_constraint_table,
 )
 from mppshared.models.simulation_pathway import SimulationPathway
@@ -75,10 +60,6 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         # Build current project pipeline if desired
         if BUILD_CURRENT_PROJECT_PIPELINE:
 
-            #! Development only
-            # TODO: if we use the +1 in the year then we are looking for the demand in the next
-            # year and there's a bug in 2050 as it looks for demand in 2051.
-            # to fix it I implemented the following control flow
             if year == 2050:
                 demand = pathway.get_demand(
                     product=product, year=year, region=MODEL_SCOPE
@@ -148,9 +129,6 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             demand = pathway.get_demand(
                 product=product, year=year + 1, region=MODEL_SCOPE
             )
-        production = new_stack.get_annual_production_volume(
-            product
-        )  #! Development only
 
         # Create DataFrame of maximum plant additions in each region
         df_region_demand = create_dataframe_check_regional_share_global_demand(
@@ -256,9 +234,4 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             # Add one plant to regional supply constraint DataFrame
             df_region_demand.loc[new_asset.region, "region_newbuild_additions"] += 1
 
-        production = new_stack.get_annual_production_volume(
-            product
-        )  #! Development only
-        deficit = production - demand
-        pass
     return pathway
