@@ -23,7 +23,6 @@ from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
     check_alternative_fuel_constraint,
     check_constraints,
-    check_natural_gas_constraint,
     check_co2_storage_constraint,
 )
 from mppshared.models.simulation_pathway import SimulationPathway
