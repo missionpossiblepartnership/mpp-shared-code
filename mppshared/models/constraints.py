@@ -28,20 +28,23 @@ def check_constraints(
     year: int,
     transition_type: str,
     product: str,
+    region: str = None,
 ) -> dict:
     """Check all constraints for a given asset stack and return dictionary of Booleans with constraint types as keys.
 
     Args:
-        pathway: contains data on demand and resource availability
+        pathway:
         stack: stack of assets for which constraints are to be checked
-        product
+        product:
         year: required for resource availabilities
         transition_type: either of "decommission", "brownfield", "greenfield"
+        region: some constraints allow a regional and global checks to improve runtime. If a region is provided, these
+            constraints will only check the constraint fulfilment in that region
 
     Returns:
-        Returns True if no constraint hurt
+        Returns a dictionary with all constraints that have been checked and respective values (True if constraint
+            satisfied, False if constraint hurt)
     """
-    # TODO: Map constraint application to the three transition types
 
     funcs_constraints = {
         "emissions_constraint": check_annual_carbon_budget_constraint,
@@ -57,7 +60,7 @@ def check_constraints(
     if pathway.constraints_to_apply:
         for constraint in pathway.constraints_to_apply:
             if constraint == "emissions_constraint":
-                emissions_constraint, flag_residual = funcs_constraints[constraint](  # type: ignore
+                emissions_constraint, flag_residual = funcs_constraints[constraint](
                     pathway=pathway,
                     stack=stack,
                     year=year,
@@ -65,8 +68,17 @@ def check_constraints(
                 )
                 constraints_checked[constraint] = emissions_constraint
                 constraints_checked["flag_residual"] = flag_residual
+            elif region is not None and constraint in ["co2_storage_constraint"]:
+                constraints_checked[constraint] = funcs_constraints[constraint](
+                    pathway=pathway,
+                    stack=stack,
+                    product=product,
+                    year=year,
+                    transition_type=transition_type,
+                    region=region,
+                )
             else:
-                constraints_checked[constraint] = funcs_constraints[constraint](  # type: ignore
+                constraints_checked[constraint] = funcs_constraints[constraint](
                     pathway=pathway,
                     stack=stack,
                     product=product,
@@ -486,9 +498,25 @@ def check_co2_storage_constraint(
     product: str,
     year: int,
     transition_type: str,
+    region: str = None,
     return_dict: bool = False,
 ):
-    """Check if the constraint on total CO2 storage (globally) is met"""
+    """Check if the constraint on CO2 storage (globally or regionally) is met
+
+    Args:
+        pathway ():
+        stack ():
+        product ():
+        year ():
+        transition_type ():
+        region (): If a region is provided, only checks constraint fulfilment in this region. Only valid for
+            pathway.co2_storage_constraint_type == "total_cumulative" (will not have an impact for other types)
+        return_dict (): Returns dict with constraint fulfilment for every region if True. Else returns only True or
+            False, depending on overall constraint fulfilment
+
+    Returns:
+
+    """
 
     if not return_dict:
         logger.info(
@@ -508,7 +536,7 @@ def check_co2_storage_constraint(
 
         limit = df_co2_storage.loc[df_co2_storage["year"] == limit_year, "value"].item()
 
-    # Regional constraint based on total CO2 storage available in that year
+    # Global constraint based on total CO2 storage available in that year
     if pathway.co2_storage_constraint_type == "annual_cumulative":
 
         # Calculate CO2 captured annually by the stack (Mt CO2)
@@ -543,14 +571,49 @@ def check_co2_storage_constraint(
             logger.debug("CO2 storage constraint hurt.")
             return False
 
-    # Constraint based on cumulative volume of CO2 stored over all model years (until current year)
+    # Regional or global constraint based on cumulative volume of CO2 stored over all model years (until current year)
     elif pathway.co2_storage_constraint_type == "total_cumulative":
         # get all years that have already been modelled
         modelled_years = pathway.stacks.keys()
 
-        # get all regions that have a CO2 storage constraint
-        dict_regional_fulfilment = {}
-        for region in limit.region.unique():
+        if region is None:
+            # check constraint fulfilment for all regions that have a CO2 storage constraint
+            dict_regional_fulfilment = {}
+            for region_to_check in limit.region.unique():
+                # get the cumulative sum of annually stored CO2 over all modelled years [Mt CO2]
+                co2_captured_storage = float(0)
+                for year in modelled_years:
+                    co2_captured_storage += stack.calculate_co2_captured_stack(
+                        year=year,
+                        df_emissions=pathway.emissions,
+                        region=region_to_check,
+                        usage_storage="storage",
+                        product=product,
+                    )
+
+                limit_region = limit.loc[limit["region"] == region_to_check, "value"].squeeze()
+
+                # add to dict (change sign of co2_captured_storage since captured emissions are provided as negative
+                #   values)
+                dict_regional_fulfilment[region_to_check] = limit_region >= -co2_captured_storage
+
+                if not return_dict:
+                    logger.debug(
+                        f"{region_to_check}: {dict_regional_fulfilment[region_to_check]} (limit: {limit_region} Mt CO2, "
+                        f"CCS volume: {-co2_captured_storage} Mt CO2)"
+                    )
+
+            if return_dict:
+                return dict_regional_fulfilment
+            else:
+                if all(dict_regional_fulfilment.values()):
+                    logger.info("CO2 storage constraint satisfied")
+                else:
+                    logger.info("CO2 storage constraint hurt")
+                return all(dict_regional_fulfilment.values())
+
+        else:
+            # check constraint fulfilment for one region only
             # get the cumulative sum of annually stored CO2 over all modelled years [Mt CO2]
             co2_captured_storage = float(0)
             for year in modelled_years:
@@ -561,27 +624,21 @@ def check_co2_storage_constraint(
                     usage_storage="storage",
                     product=product,
                 )
-
             limit_region = limit.loc[limit["region"] == region, "value"].squeeze()
 
-            # add to dict (change sign of co2_captured_storage since captured emissions are provided as negative
+            # check fulfilment (change sign of co2_captured_storage since captured emissions are provided as negative
             #   values)
-            dict_regional_fulfilment[region] = limit_region >= -co2_captured_storage
+            regional_fulfilment = limit_region >= -co2_captured_storage
+            logger.debug(
+                f"{region}: {regional_fulfilment} (limit: {limit_region} Mt CO2, "
+                f"CCS volume: {-co2_captured_storage} Mt CO2)"
+            )
 
-            if not return_dict:
-                logger.debug(
-                    f"{region}: {dict_regional_fulfilment[region]} (limit: {limit_region} Mt CO2, "
-                    f"CCS volume: {-co2_captured_storage} Mt CO2)"
-                )
-
-        if return_dict:
-            return dict_regional_fulfilment
-        else:
-            if all(dict_regional_fulfilment.values()):
+            if regional_fulfilment:
                 logger.info("CO2 storage constraint satisfied")
             else:
                 logger.info("CO2 storage constraint hurt")
-            return all(dict_regional_fulfilment.values())
+            return regional_fulfilment
 
     else:
         sys.exit(
