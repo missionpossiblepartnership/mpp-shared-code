@@ -68,7 +68,7 @@ def check_constraints(
                 )
                 constraints_checked[constraint] = emissions_constraint
                 constraints_checked["flag_residual"] = flag_residual
-            elif region is not None and constraint in ["co2_storage_constraint"]:
+            elif region is not None and constraint in ["co2_storage_constraint", "alternative_fuel_constraint"]:
                 constraints_checked[constraint] = funcs_constraints[constraint](
                     pathway=pathway,
                     stack=stack,
@@ -701,8 +701,24 @@ def check_alternative_fuel_constraint(
     stack: AssetStack,
     year: int,
     transition_type: str,
+    region: str = None,
     return_dict: bool = False,
 ) -> Union[dict, bool]:
+    """
+
+    Args:
+        pathway ():
+        product ():
+        stack ():
+        year ():
+        transition_type ():
+        region (): If a region is provided, only checks constraint fulfilment in this region. Only valid for
+            pathway.co2_storage_constraint_type == "total_cumulative" (will not have an impact for other types)
+        return_dict ():
+
+    Returns:
+
+    """
     """Check if the constraint on annual alternative fuel capacity (regionally) is fulfilled"""
 
     if not return_dict:
@@ -713,9 +729,40 @@ def check_alternative_fuel_constraint(
     # Get constraint value
     df_af_limit = pathway.alternative_fuel_constraint
 
-    dict_regional_fulfilment = {}
-    regions = list(df_af_limit["region"].unique())
-    for region in regions:
+    if region is None:
+        # check constraint fulfilment for all regions that have a CO2 storage constraint
+        dict_regional_fulfilment = {}
+        regions = list(df_af_limit["region"].unique())
+        for region_to_check in regions:
+            limit_region = df_af_limit.loc[
+                ((df_af_limit["year"] == year) & (df_af_limit["region"] == region_to_check)),
+                "value",
+            ].squeeze()
+
+            # calculate natural gas-based production capacity
+            af_prod_volume = stack.get_annual_ng_af_production_volume(
+                product=product, region=region_to_check, tech_substr="alternative fuels"
+            )
+
+            # add to dict
+            dict_regional_fulfilment[region_to_check] = limit_region >= af_prod_volume
+
+            if not return_dict:
+                logger.debug(
+                    f"{region_to_check}: {dict_regional_fulfilment[region_to_check]} (limit: {limit_region}, prod. vol.: {af_prod_volume})"
+                )
+
+        if return_dict:
+            return dict_regional_fulfilment
+        else:
+            if all(dict_regional_fulfilment.values()):
+                logger.info("Alternative fuel constraint satisfied")
+            else:
+                logger.info("Alternative fuel constraint hurt")
+            return all(dict_regional_fulfilment.values())
+
+    else:
+        # check constraint fulfilment for one region only
         limit_region = df_af_limit.loc[
             ((df_af_limit["year"] == year) & (df_af_limit["region"] == region)),
             "value",
@@ -727,18 +774,18 @@ def check_alternative_fuel_constraint(
         )
 
         # add to dict
-        dict_regional_fulfilment[region] = limit_region >= af_prod_volume
+        regional_fulfilment = limit_region >= af_prod_volume
 
         if not return_dict:
             logger.debug(
-                f"{region}: {dict_regional_fulfilment[region]} (limit: {limit_region}, prod. vol.: {af_prod_volume})"
+                f"{region}: {regional_fulfilment} (limit: {limit_region}, prod. vol.: {af_prod_volume})"
             )
 
     if return_dict:
-        return dict_regional_fulfilment
+        return regional_fulfilment
     else:
-        if all(dict_regional_fulfilment.values()):
+        if regional_fulfilment:
             logger.info("Alternative fuel constraint satisfied")
         else:
             logger.info("Alternative fuel constraint hurt")
-        return all(dict_regional_fulfilment.values())
+        return regional_fulfilment
