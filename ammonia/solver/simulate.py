@@ -5,8 +5,8 @@ from timeit import default_timer as timer
 
 from ammonia.config_ammonia import (
     ANNUAL_RENOVATION_SHARE,
+    CO2_STORAGE_CONSTRAINT_TYPE,
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
-    CO2_STORAGE_CONSTRAINT_CUMULATIVE,
     CONSTRAINTS_TO_APPLY,
     CUF_LOWER_THRESHOLD,
     CUF_UPPER_THRESHOLD,
@@ -98,14 +98,6 @@ def simulate_pathway(
     """
     Get data per technology, ranking data and then run the pathway simulation
     """
-    importer = IntermediateDataImporter(
-        pathway_name=pathway_name,
-        sensitivity=sensitivity,
-        sector=sector,
-        products=PRODUCTS,
-        carbon_cost_trajectory=carbon_cost_trajectory,
-    )
-
     # Make pathway
     pathway = SimulationPathway(
         start_year=START_YEAR,
@@ -132,7 +124,7 @@ def simulate_pathway(
         technologies_maximum_global_demand_share=TECHNOLOGIES_MAXIMUM_GLOBAL_DEMAND_SHARE,
         maximum_global_demand_share=MAXIMUM_GLOBAL_DEMAND_SHARE,
         set_co2_storage_constraint=SET_CO2_STORAGE_CONSTRAINT,
-        co2_storage_constraint_cumulative=CO2_STORAGE_CONSTRAINT_CUMULATIVE,
+        co2_storage_constraint_type=CO2_STORAGE_CONSTRAINT_TYPE,
     )
 
     # Optimize asset stack on a yearly basis

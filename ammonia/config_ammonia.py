@@ -53,6 +53,9 @@ CARBON_COSTS = [
     # 250,
 ]
 
+# Map each carbon cost to a year in which the final carbon cost is reached
+END_YEAR_MAP = {0: 2025, 50: 2030, 100: 2035, 150: 2040, 200: 2045, 250: 2050}
+
 ### DATA IMPORT AND PREPROCESSING ###
 # Data paths
 CORE_DATA_PATH = "ammonia/data/"
@@ -492,7 +495,7 @@ TECHNOLOGY_MORATORIUM = 2050
 TRANSITIONAL_PERIOD_YEARS = 30
 
 SET_CO2_STORAGE_CONSTRAINT = True
-CO2_STORAGE_CONSTRAINT_CUMULATIVE = False
+CO2_STORAGE_CONSTRAINT_TYPE = "annual_addition"    # "annual_cumulative", "annual_addition", "total_cumulative", or None
 CUF_LOWER_THRESHOLD = 0.5
 CUF_UPPER_THRESHOLD = 0.95
 INVESTMENT_CYCLE = 20  # years
