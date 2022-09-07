@@ -120,6 +120,16 @@ def apply_implicit_forcing(
     ]
     # todo dev
 
+    # todo dev: remove this workaround of excluding all direct separation techs
+    df_tech_to_rank = df_tech_to_rank.loc[
+        ~(
+            df_tech_to_rank["technology_origin"].str.contains("direct separation")
+            | df_tech_to_rank["technology_destination"].str.contains("direct separation")
+        ),
+        :,
+    ]
+    # todo dev
+
     # Export technology switching table to be used for ranking
     importer.export_data(
         df=df_tech_to_rank,

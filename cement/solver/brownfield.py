@@ -5,7 +5,7 @@ from copy import deepcopy
 
 import numpy as np
 
-from cement.config.config_cement import LOG_LEVEL, PRODUCTS
+from cement.config.config_cement import LOG_LEVEL, PRODUCTS, CONSTRAINTS_REGIONAL_CHECK
 from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_destination_technology,
     remove_all_transitions_with_origin_destination_technology,
@@ -124,7 +124,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
         # Update asset tentatively (needs deepcopy to provide changes to original stack)
         tentative_stack = deepcopy(stack)
-        assert origin_technology == asset_to_update.technology
+        assert (origin_technology == asset_to_update.technology) & (asset_to_update.region == best_transition["region"])
         logger.debug(
             f"{year}: Tentatively transitioning asset in {asset_to_update.region} "
             f"from {origin_technology} to {new_technology} "
@@ -145,6 +145,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             year=year,
             transition_type="brownfield",
             product=PRODUCTS[0],
+            region=asset_to_update.region if CONSTRAINTS_REGIONAL_CHECK else None,
         )
         # If no constraint is hurt, execute the brownfield transition
         if all(
@@ -339,29 +340,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             # CO2 STORAGE
             if "co2_storage_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["co2_storage_constraint"]:
-                    # get regions where CO2 storage constraint is exceeded
-                    dict_co2_storage_exceedance = (
-                        check_co2_storage_constraint(
-                            pathway=pathway,
-                            product=PRODUCTS[0],
-                            stack=tentative_stack,
-                            year=year,
-                            transition_type="brownfield",
-                            return_dict=True,
-                        )
-                    )
-                    exceeding_regions = [
-                        k
-                        for k in dict_co2_storage_exceedance.keys()
-                        if not dict_co2_storage_exceedance[k]
-                    ]
-                    # check if regions other than the tentatively updated asset's region exceed the constraint
-                    if exceeding_regions != [asset_to_update.region]:
-                        sys.exit(
-                            f"{year}: Regions other than the tentatively updated asset's region exceed the CO2 "
-                            "storage constraint!"
-                        )
-                    else:
+                    if CONSTRAINTS_REGIONAL_CHECK:
                         # remove destination technology in exceeding region from ranking
                         logger.debug(
                             f"Handle CO2 storage constraint: removing destination technology "
@@ -374,6 +353,42 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                             ],
                             region=asset_to_update.region,
                         )
+                    else:
+                        # get regions where CO2 storage constraint is exceeded
+                        dict_co2_storage_exceedance = (
+                            check_co2_storage_constraint(
+                                pathway=pathway,
+                                product=PRODUCTS[0],
+                                stack=tentative_stack,
+                                year=year,
+                                transition_type="brownfield",
+                                return_dict=True,
+                            )
+                        )
+                        exceeding_regions = [
+                            k
+                            for k in dict_co2_storage_exceedance.keys()
+                            if not dict_co2_storage_exceedance[k]
+                        ]
+                        # check if regions other than the tentatively updated asset's region exceed the constraint
+                        if exceeding_regions != [asset_to_update.region]:
+                            sys.exit(
+                                f"{year}: Regions other than the tentatively updated asset's region exceed the CO2 "
+                                "storage constraint!"
+                            )
+                        else:
+                            # remove destination technology in exceeding region from ranking
+                            logger.debug(
+                                f"Handle CO2 storage constraint: removing destination technology "
+                                f"in {asset_to_update.region}"
+                            )
+                            df_rank = remove_all_transitions_with_destination_technology(
+                                df_rank=df_rank,
+                                technology_destination=best_transition[
+                                    "technology_destination"
+                                ],
+                                region=asset_to_update.region,
+                            )
 
     logger.debug(
         f"{year}: assets transitioned: {n_assets_transitioned}; maximum: {maximum_n_assets_transitioned}; "

@@ -185,6 +185,7 @@ def select_asset_for_greenfield(
     df_region_demand: pd.DataFrame = None,
     region_global_demand_share: float = None,
     return_df_rank: bool = False,
+    constraints_regional_check: bool = False,
 ):
     """Select asset for newbuild (greenfield transition)
     Args:
@@ -198,6 +199,7 @@ def select_asset_for_greenfield(
         df_region_demand (optional): df to check whether the regional supply constraint is met
         region_global_demand_share (optional): df to check whether the regional supply constraint is met
         return_df_rank: function returns updated df_rank if True
+        constraints_regional_check: set True if constraints shall only be checked regionally (if applicable)
     Returns:
         Asset for greenfield transition
     """
@@ -256,6 +258,7 @@ def select_asset_for_greenfield(
             year=year,
             transition_type="greenfield",
             product=product,
+            region=new_asset.region if constraints_regional_check else None,
         )
 
         # Ensure that newbuild capacity from project pipeline does not lead to erroneous constraint violation
@@ -345,29 +348,7 @@ def select_asset_for_greenfield(
                 if not dict_constraints["co2_storage_constraint"]:
                     # "total_cumulative" requires regional approach
                     if pathway.co2_storage_constraint_type == "total_cumulative":
-                        # get regions where CO2 storage constraint is exceeded
-                        dict_co2_storage_exceedance = (
-                            check_co2_storage_constraint(
-                                pathway=pathway,
-                                product=product,
-                                stack=tentative_stack,
-                                year=year,
-                                transition_type="greenfield",
-                                return_dict=True,
-                            )
-                        )
-                        exceeding_regions = [
-                            k
-                            for k in dict_co2_storage_exceedance.keys()
-                            if not dict_co2_storage_exceedance[k]
-                        ]
-                        # check if regions other than the tentatively updated asset's region exceed the constraint
-                        if exceeding_regions != [new_asset.region]:
-                            sys.exit(
-                                f"{year}: Regions other than the tentatively updated asset's region exceed the CO2 "
-                                "storage constraint!"
-                            )
-                        else:
+                        if constraints_regional_check:
                             # remove destination technology in exceeding region from ranking
                             logger.debug(
                                 f"Handle CO2 storage constraint: removing destination technology "
@@ -380,7 +361,43 @@ def select_asset_for_greenfield(
                                 ],
                                 region=new_asset.region,
                             )
-                    # co2_storage_constraint_type other than co2_storage_constraint_type are global
+                        else:
+                            # get regions where CO2 storage constraint is exceeded
+                            dict_co2_storage_exceedance = (
+                                check_co2_storage_constraint(
+                                    pathway=pathway,
+                                    product=product,
+                                    stack=tentative_stack,
+                                    year=year,
+                                    transition_type="greenfield",
+                                    return_dict=True,
+                                )
+                            )
+                            exceeding_regions = [
+                                k
+                                for k in dict_co2_storage_exceedance.keys()
+                                if not dict_co2_storage_exceedance[k]
+                            ]
+                            # check if regions other than the tentatively updated asset's region exceed the constraint
+                            if exceeding_regions != [new_asset.region]:
+                                sys.exit(
+                                    f"{year}: Regions other than the tentatively updated asset's region exceed the CO2 "
+                                    "storage constraint!"
+                                )
+                            else:
+                                # remove destination technology in exceeding region from ranking
+                                logger.debug(
+                                    f"Handle CO2 storage constraint: removing destination technology "
+                                    f"in {new_asset.region}"
+                                )
+                                df_rank = remove_all_transitions_with_destination_technology(
+                                    df_rank=df_rank,
+                                    technology_destination=asset_transition[
+                                        "technology_destination"
+                                    ],
+                                    region=new_asset.region,
+                                )
+                    # co2_storage_constraint_type other than total_cumulative are global
                     else:
                         # Remove all transitions with that destination technology from the ranking table
                         logger.debug(

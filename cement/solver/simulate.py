@@ -35,7 +35,7 @@ from mppshared.agent_logic.agent_logic_functions import create_dict_technology_r
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.simulation_pathway import SimulationPathway
-from mppshared.models.constraints import check_constraint_regional_production
+from mppshared.models.constraints import check_constraints, check_constraint_regional_production
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -65,7 +65,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         # Copy over last year's stack to this year
         pathway = pathway.copy_stack(year=year - 1)
 
-        # Decommission assets
+        """ Decommission assets """
         logger.info(f"{year}: Production volumes pre decommission:")
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
             product=product
@@ -77,7 +77,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
             f"{year}: Time elapsed for decommission: {timedelta(seconds=end-start)} seconds"
         )
 
-        # Brownfield: Renovate and rebuild assets
+        """ Brownfield: Renovate and rebuild assets """
         logger.info(f"{year}: Production volumes pre brownfield:")
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
             product=product
@@ -88,8 +88,10 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         logger.debug(
             f"{year}: Time elapsed for brownfield: {timedelta(seconds=end-start)} seconds"
         )
+        # check constraints for all regions
+        _check_all_constraints(pathway=pathway, year=year, transition_type="brownfield")
 
-        # Greenfield: Build new assets
+        """ Greenfield: Build new assets """
         logger.info(f"{year}: Production volumes pre greenfield:")
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
             product=product
@@ -104,6 +106,8 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
             product=product
         )
+        # check constraints for all regions
+        _check_all_constraints(pathway=pathway, year=year, transition_type="greenfield")
 
         # check regional production constraint
         if not check_constraint_regional_production(
@@ -119,6 +123,29 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         pathway.export_stack_to_csv(year=year)
 
     return pathway
+
+
+def _check_all_constraints(pathway: SimulationPathway, year: int, transition_type: str):
+    # Check constraints with tentative new stack
+    dict_constraints = check_constraints(
+        pathway=pathway,
+        stack=pathway.stacks[year],
+        year=year,
+        transition_type=transition_type,
+        product=PRODUCTS[0],
+        region=None,
+    )
+    # If no constraint is hurt, execute the brownfield transition
+    if all(
+        [
+            dict_constraints[k]
+            for k in dict_constraints.keys()
+            if k in pathway.constraints_to_apply and k != "regional_constraint"
+        ]
+    ):
+        logger.info(f"{year}: All constraints fulfilled for {transition_type}")
+    else:
+        logger.critical(f"{year}: Not all constraints fulfilled for {transition_type}")
 
 
 def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products: list):

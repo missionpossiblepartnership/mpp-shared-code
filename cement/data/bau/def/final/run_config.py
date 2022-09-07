@@ -243,7 +243,7 @@ CONSTRAINTS_TO_APPLY = {
         # "regional_constraint",
         # "natural_gas_constraint",
         "alternative_fuel_constraint",
-        # "co2_storage_constraint",
+        "co2_storage_constraint",
     ],
     "lc": [
         # "emissions_constraint",
@@ -251,7 +251,7 @@ CONSTRAINTS_TO_APPLY = {
         # "regional_constraint",
         # "natural_gas_constraint",
         "alternative_fuel_constraint",
-        # "co2_storage_constraint",
+        "co2_storage_constraint",
     ],
 }
 REGIONAL_PRODUCTION_SHARES = {
