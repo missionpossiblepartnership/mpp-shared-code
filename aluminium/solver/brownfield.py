@@ -145,9 +145,12 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             transition_type="brownfield",
         )
         # If no constraint is hurt, execute the brownfield transition
-        if (
-            (dict_constraints["emissions_constraint"] == True)
-            & (dict_constraints["rampup_constraint"] == True)
+        if all(
+            [
+                dict_constraints[k]
+                for k in dict_constraints.keys()
+                if k in pathway.constraints_to_apply and k != "regional_constraint"
+            ]
         ) | (origin_technology == new_technology):
             logger.debug(
                 f"Year {year} Updating {asset_to_update.product} asset from technology {origin_technology} to technology {new_technology} in region {asset_to_update.region}, annual production {asset_to_update.get_annual_production_volume()} and UUID {asset_to_update.uuid}"

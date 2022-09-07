@@ -76,7 +76,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 row["annual_production_volume_minimum"]
                 - row["annual_production_volume"]
             )
-            number_new_assets = np.ceil(deficit / ASSUMED_ANNUAL_PRODUCTION_CAPACITY)
+            number_new_assets = np.ceil(deficit / (ASSUMED_ANNUAL_PRODUCTION_CAPACITY*CUF_UPPER_THRESHOLD))
             region_rank_filter = get_region_rank_filter(
                 region=row["region"], sector=pathway.sector
             )
@@ -109,7 +109,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         production = new_stack.get_annual_production_volume(
             product
         )  #! Development only
-        while demand > new_stack.get_annual_production_volume(product):
+        while demand > production:
 
             # Identify asset for greenfield transition
             try:
@@ -135,7 +135,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             enact_greenfield_transition(
                 pathway=pathway, stack=new_stack, new_asset=new_asset, year=year
             )
-        production = new_stack.get_annual_production_volume(
+            production = new_stack.get_annual_production_volume(
             product
-        )  #! Development only
+            )  #! Development only
     return pathway
