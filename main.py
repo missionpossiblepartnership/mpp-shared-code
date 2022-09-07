@@ -3,8 +3,8 @@
 # todo: check whether this is needed
 from multiprocessing import freeze_support
 
-SECTOR = "cement"
-# SECTOR = "aluminium"
+# SECTOR = "cement"
+SECTOR = "aluminium"
 # SECTOR = "ammonia"
 
 

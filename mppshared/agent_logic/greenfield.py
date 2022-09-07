@@ -323,7 +323,7 @@ def select_asset_for_greenfield(
                     ]:
                         # Remove all transitions with that destination technology from the ranking table
                         logger.debug(
-                            f"Handle electrolysis capacity addition constraint: removing destination technology"
+                            f"Handle electrolysis capacity addition constraint: removing destination technology")
                     logger.debug(
                         f"Handle (residual) emissions constraint: removing all transitions with CCS"
                     )
