@@ -27,6 +27,7 @@ EXCEL_COLUMN_RANGES = {
     "Region OPEX mapping": "B:F",
     "demand": "B:AS",
     "Alternative fuels and NG": "B:AK",
+    "CO2 storage capacity": "B:AK",
 }
 
 # name of column that determines whether metric has single value (rather than annual values)
@@ -119,7 +120,7 @@ OPEX_CCUS_EMISSIVITY_METRICS = [
 
 # metrics that are included in the CCU/S process OPEX.
 OPEX_CCUS_PROCESS_METRICS = [
-    # values of this dict must be always be dicts with 2 keys!
+    # values of this dict must always be dicts with 2 keys!
     # energy
     {
         "commodity_prices": ("Electricity - grid",),
