@@ -426,78 +426,55 @@ def select_asset_for_greenfield(
                         f"WARNING: Regional production constraint not fulfilled in {year}."
                     )
 
-            # NATURAL GAS
-            if "natural_gas_constraint" in pathway.constraints_to_apply:
-                if not dict_constraints["natural_gas_constraint"]:
-                    # get regions where natural gas is exceeded
-                    dict_natural_gas_exceedance = check_natural_gas_constraint(
-                        pathway=pathway,
-                        product=product,
-                        stack=tentative_stack,
-                        year=year,
-                        transition_type="greenfield",
-                        return_dict=True,
-                    )
-                    exceeding_regions = [
-                        k
-                        for k in dict_natural_gas_exceedance.keys()
-                        if not dict_natural_gas_exceedance[k]
-                    ]
-                    # check if regions other than the tentatively updated asset's region exceed the constraint
-                    if exceeding_regions != [new_asset.region]:
-                        logger.critical(
-                            f"{year}: Regions other than the tentatively updated asset's region exceed the natural gas "
-                            f"constraint!"
-                        )
-                    else:
-                        # remove exceeding region from ranking
-                        logger.debug(
-                            f"Handle natural gas constraint: removing all natural gas technologies "
-                            f"in {new_asset.region}"
-                        )
-                    df_rank = remove_techs_in_region_by_tech_substr(
-                        df_rank=df_rank,
-                        region=new_asset.region,
-                        tech_substr="natural gas",
-                    )
-
             # ALTERNATIVE FUEL
             if "alternative_fuel_constraint" in pathway.constraints_to_apply:
                 if not dict_constraints["alternative_fuel_constraint"]:
-                    # get regions where alternative fuel is exceeded
-                    dict_alternative_fuel_exceedance = (
-                        check_alternative_fuel_constraint(
-                            pathway=pathway,
-                            product=product,
-                            stack=tentative_stack,
-                            year=year,
-                            transition_type="greenfield",
-                            return_dict=True,
-                        )
-                    )
-                    exceeding_regions = [
-                        k
-                        for k in dict_alternative_fuel_exceedance.keys()
-                        if not dict_alternative_fuel_exceedance[k]
-                    ]
-                    # check if regions other than the tentatively updated asset's region exceed the
-                    #   constraint
-                    if exceeding_regions != [new_asset.region]:
-                        logger.critical(
-                            f"{year}: Regions other than the tentatively updated asset's region exceed the alternative "
-                            "fuel constraint!"
-                        )
-                    else:
+                    if constraints_regional_check:
                         # remove exceeding region from ranking
                         logger.debug(
                             f"Handle alternative fuels constraint: removing all alternative fuels "
                             f"technologies in {new_asset.region}"
                         )
-                    df_rank = remove_techs_in_region_by_tech_substr(
-                        df_rank=df_rank,
-                        region=new_asset.region,
-                        tech_substr="alternative fuels",
-                    )
+                        df_rank = remove_techs_in_region_by_tech_substr(
+                            df_rank=df_rank,
+                            region=new_asset.region,
+                            tech_substr="alternative fuels",
+                        )
+                    else:
+                        # get regions where alternative fuel is exceeded
+                        dict_alternative_fuel_exceedance = (
+                            check_alternative_fuel_constraint(
+                                pathway=pathway,
+                                product=product,
+                                stack=tentative_stack,
+                                year=year,
+                                transition_type="greenfield",
+                                return_dict=True,
+                            )
+                        )
+                        exceeding_regions = [
+                            k
+                            for k in dict_alternative_fuel_exceedance.keys()
+                            if not dict_alternative_fuel_exceedance[k]
+                        ]
+                        # check if regions other than the tentatively updated asset's region exceed the
+                        #   constraint
+                        if exceeding_regions != [new_asset.region]:
+                            logger.critical(
+                                f"{year}: Regions other than the tentatively updated asset's region exceed the alternative "
+                                "fuel constraint!"
+                            )
+                        else:
+                            # remove exceeding region from ranking
+                            logger.debug(
+                                f"Handle alternative fuels constraint: removing all alternative fuels "
+                                f"technologies in {new_asset.region}"
+                            )
+                            df_rank = remove_techs_in_region_by_tech_substr(
+                                df_rank=df_rank,
+                                region=new_asset.region,
+                                tech_substr="alternative fuels",
+                            )
 
     # If ranking table empty, no greenfield construction possible
     raise ValueError

@@ -238,7 +238,6 @@ CONSTRAINTS_TO_APPLY = {
     "bau": [
         "rampup_constraint",
         # "regional_constraint",
-        # "natural_gas_constraint",
         "alternative_fuel_constraint",
         # "co2_storage_constraint",
     ],
@@ -246,7 +245,6 @@ CONSTRAINTS_TO_APPLY = {
         # "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",
-        # "natural_gas_constraint",
         "alternative_fuel_constraint",
         "co2_storage_constraint",
     ],
@@ -254,7 +252,6 @@ CONSTRAINTS_TO_APPLY = {
         # "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",
-        # "natural_gas_constraint",
         "alternative_fuel_constraint",
         "co2_storage_constraint",
     ],

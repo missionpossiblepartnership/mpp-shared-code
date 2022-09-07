@@ -53,7 +53,6 @@ def check_constraints(
         "demand_share_constraint": check_global_demand_share_constraint,
         "electrolysis_capacity_addition_constraint": check_electrolysis_capacity_addition_constraint,
         "co2_storage_constraint": check_co2_storage_constraint,
-        "natural_gas_constraint": check_natural_gas_constraint,
         "alternative_fuel_constraint": check_alternative_fuel_constraint,
     }
     constraints_checked = {}
@@ -644,55 +643,6 @@ def check_co2_storage_constraint(
         sys.exit(
             "Invalid string for config parameter CO2_STORAGE_CONSTRAINT_TYPE provided"
         )
-
-
-def check_natural_gas_constraint(
-    pathway: SimulationPathway,
-    product: str,
-    stack: AssetStack,
-    year: int,
-    transition_type: str,
-    return_dict: bool = False,
-):
-    """Check if the constraint on annual natural gas capacity (regionally) is fulfilled"""
-
-    if not return_dict:
-        logger.info(
-            f"{year}: Checking natural gas constraint  (transition type: {transition_type})"
-        )
-
-    # Get constraint value
-    df_ng_limit = pathway.natural_gas_constraint
-
-    dict_regional_fulfilment = {}
-    regions = list(df_ng_limit["region"].unique())
-    for region in regions:
-        limit_region = df_ng_limit.loc[
-            ((df_ng_limit["year"] == year) & (df_ng_limit["region"] == region)),
-            "value",
-        ].squeeze()
-
-        # calculate natural gas-based production capacity
-        ng_prod_volume = stack.get_annual_ng_af_production_volume(
-            product=product, region=region, tech_substr="natural gas"
-        )
-
-        # add to dict
-        dict_regional_fulfilment[region] = limit_region >= ng_prod_volume
-
-        if not return_dict:
-            logger.debug(
-                f"{region}: {dict_regional_fulfilment[region]} (limit: {limit_region}, prod. vol.: {ng_prod_volume})"
-            )
-
-    if return_dict:
-        return dict_regional_fulfilment
-    else:
-        if all(dict_regional_fulfilment.values()):
-            logger.info("Natural gas constraint satisfied")
-        else:
-            logger.info("Natural gas constraint hurt")
-        return all(dict_regional_fulfilment.values())
 
 
 def check_alternative_fuel_constraint(
