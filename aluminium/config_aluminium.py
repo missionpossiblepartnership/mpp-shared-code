@@ -32,7 +32,7 @@ run_config = {
     # "MERGE_OUTPUTS"
 }
 RUN_PARALLEL = False
-APPLY_CARBON_COST = True
+APPLY_CARBON_COST = False
 
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
@@ -102,7 +102,7 @@ ASSUMED_ANNUAL_PRODUCTION_CAPACITY = 1
 # Year from which newbuild capacity must have transition or end-state technology
 TECHNOLOGY_MORATORIUM = 2030
 # Control for how many years is allowed to use transition technologies once the moratorium is enable
-TRANSITIONAL_PERIOD_YEARS = 20
+TRANSITIONAL_PERIOD_YEARS = 10
 # Emission scopes included in data analysis
 EMISSION_SCOPES = [
     "scope1",
@@ -208,7 +208,7 @@ CONSTRAINTS_TO_APPLY = {
     "fa": ["emissions_constraint", "rampup_constraint"],
 }
 
-YEAR_2050_EMISSIONS_CONSTRAINT = 2050
+YEAR_2050_EMISSIONS_CONSTRAINT = 2051
 
 # Technology ramp-up parameters
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
