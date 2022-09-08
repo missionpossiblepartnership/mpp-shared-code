@@ -431,9 +431,9 @@ def select_asset_for_greenfield(
                         f"WARNING: Regional production constraint not fulfilled in {year}."
                     )
 
-            # ALTERNATIVE FUEL
-            if "alternative_fuel_constraint" in constraints_to_apply:
-                if not dict_constraints["alternative_fuel_constraint"]:
+            # BIOMASS
+            if "biomass_constraint" in constraints_to_apply:
+                if not dict_constraints["biomass_constraint"]:
                     # remove all transitions with that destination technology from the ranking table
                     logger.debug(
                         f"Handle biomass constraint: removing destination technology"

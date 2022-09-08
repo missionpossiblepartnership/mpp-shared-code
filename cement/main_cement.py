@@ -32,7 +32,7 @@ funcs = {
     # "CALCULATE_VARIABLES": get_ranking_inputs,
     # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     # "MAKE_RANKINGS": make_rankings,
-    "SIMULATE_PATHWAY": simulate_pathway,
+    # "SIMULATE_PATHWAY": simulate_pathway,
     "CALCULATE_OUTPUTS": calculate_outputs,
     # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
 }

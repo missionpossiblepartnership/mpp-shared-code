@@ -32,8 +32,8 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
         products=PRODUCTS,
     )
 
-    # technology roadmap
-    df_tech_roadmap = _create_tech_roadmaps_by_region(
+    """ technology roadmap """
+    """df_tech_roadmap = _create_tech_roadmaps_by_region(
         importer=importer, start_year=START_YEAR, end_year=END_YEAR
     )
     _export_and_plot_tech_roadmaps_by_region(
@@ -43,10 +43,10 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
         df_roadmap=df_tech_roadmap,
         unit="Mt Clk",
         technology_layout=TECHNOLOGY_LAYOUT,
-    )
+    )"""
 
-    # emissions
-    df_total_emissions = _calculate_emissions_total(
+    """ Emissions """
+    """df_total_emissions = _calculate_emissions_total(
         importer=importer, ghgs=GHGS, emission_scopes=EMISSION_SCOPES, format_data=False
     )
     _export_and_plot_emissions_by_region(
@@ -57,6 +57,13 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
         ghgs=GHGS,
         emission_scopes=EMISSION_SCOPES,
         technology_layout=TECHNOLOGY_LAYOUT,
+    )"""
+
+    """ Investments """
+    df_investments = _calculate_annual_investments(
+        df_cost=importer.get_technology_transitions_and_cost(),
+        importer=importer,
+        sector=sector,
     )
 
     logger.info("Output processing done")
@@ -192,7 +199,9 @@ def _calculate_emissions_year(
     idx = ["product", "region", "technology"]
 
     df_emissions = importer.get_emissions()
-    df_emissions = df_emissions.loc[df_emissions["year"] == year, :].drop(columns="year")
+    df_emissions = df_emissions.loc[df_emissions["year"] == year, :].drop(
+        columns="year"
+    )
     df_stack = importer.get_asset_stack(year=year)
 
     # Emissions are the emissions factor multiplied with the annual production volume
@@ -254,7 +263,9 @@ def _calculate_co2_captured(
     idx = ["product", "region", "technology"]
 
     df_emissions = importer.get_emissions()
-    df_emissions = df_emissions.loc[df_emissions["year"] == year, :].drop(columns="year")
+    df_emissions = df_emissions.loc[df_emissions["year"] == year, :].drop(
+        columns="year"
+    )
     df_stack = importer.get_asset_stack(year=year)
 
     # Captured CO2 by technology is calculated by multiplying with the annual production volume
@@ -344,7 +355,9 @@ def _export_and_plot_emissions_by_region(
     regions = df_total_emissions["region"].unique()
 
     for region in regions:
-        df_region = df_total_emissions.copy().loc[df_total_emissions["region"] == region, :]
+        df_region = df_total_emissions.copy().loc[
+            df_total_emissions["region"] == region, :
+        ]
 
         importer.export_data(
             df=df_region,
@@ -360,8 +373,9 @@ def _export_and_plot_emissions_by_region(
                 df_region["parameter"].isin([f"{ghg}_{x}" for x in emission_scopes]), :
             ]
             df_region_area = (
-                df_region_area
-                .set_index([x for x in df_region_area.columns if x != "value"])
+                df_region_area.set_index(
+                    [x for x in df_region_area.columns if x != "value"]
+                )
                 .groupby(["year", "technology"])
                 .sum()
                 .reset_index()
@@ -381,7 +395,9 @@ def _export_and_plot_emissions_by_region(
                 color_discrete_map=technology_layout,
             )
 
-            fig_area.for_each_trace(lambda trace: trace.update(fillcolor=trace.line.color))
+            fig_area.for_each_trace(
+                lambda trace: trace.update(fillcolor=trace.line.color)
+            )
 
             plot(
                 figure_or_data=fig_area,
@@ -401,11 +417,19 @@ def _export_and_plot_emissions_by_region(
         df_list = []
         for ghg in ghgs:
             df_region_line_all_scopes = df_region_line.copy().loc[
-                df_region_line["parameter"].isin([f"{ghg}_{x}" for x in emission_scopes]), :
+                df_region_line["parameter"].isin(
+                    [f"{ghg}_{x}" for x in emission_scopes]
+                ),
+                :,
             ]
             df_region_line_all_scopes = (
-                df_region_line_all_scopes
-                .set_index([x for x in df_region_line_all_scopes.columns if x not in ["value", "co2_scope1_captured"]])
+                df_region_line_all_scopes.set_index(
+                    [
+                        x
+                        for x in df_region_line_all_scopes.columns
+                        if x not in ["value", "co2_scope1_captured"]
+                    ]
+                )
                 .groupby(["year"])
                 .sum()
                 .reset_index()
@@ -609,9 +633,9 @@ def _calculate_annual_investments(
     sector: str,
     agg_vars=["product", "region", "switch_type", "technology_destination"],
 ) -> pd.DataFrame:
-    """Calculate annual investments."""
+    """Calculate annual investments (CAPEX)."""
 
-    # Calculate invesment in newbuild, brownfield retrofit and brownfield rebuild technologies in every year
+    # Calculate investment from newbuild, brownfield retrofit and brownfield rebuild technologies in every year
     switch_types = ["greenfield", "rebuild", "retrofit"]
     df_investment = pd.DataFrame()
 
