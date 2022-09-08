@@ -333,6 +333,9 @@ TRANSITION_TYPES = [
 
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 
+# set the switch types that will update an assets commissioning year
+SWITCH_TYPES_UPDATE_YEAR_COMMISSIONED = ["brownfield_rebuild"]
+
 # Ranking configuration depends on type of technology switch and pathway
 lc_weight_cost = 0.8
 lc_weight_emissions = 1 - lc_weight_cost

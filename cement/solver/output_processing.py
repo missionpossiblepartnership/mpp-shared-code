@@ -131,7 +131,7 @@ def _export_and_plot_tech_roadmaps_by_region(
 
         plot(
             figure_or_data=fig,
-            filename=f"{importer.final_path}/technology_roadmap_{region}.html",
+            filename=f"{importer.final_path}/technology_roadmap/technology_roadmap_{region}.html",
             auto_open=False,
         )
 
