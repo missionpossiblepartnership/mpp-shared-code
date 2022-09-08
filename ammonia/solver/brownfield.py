@@ -16,6 +16,7 @@ from ammonia.config_ammonia import (
     LOG_LEVEL,
     RANKING_COST_METRIC,
     REGIONAL_TECHNOLOGY_BAN,
+    SWITCH_TYPES_UPDATE_YEAR_COMMISSIONED,
 )
 from mppshared.agent_logic.agent_logic_functions import (
     apply_regional_technology_ban,
@@ -130,11 +131,14 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         tentative_stack = deepcopy(new_stack)
         origin_technology = asset_to_update.technology
         tentative_stack.update_asset(
-            deepcopy(asset_to_update),
+            year=year,
+            asset_to_update=deepcopy(asset_to_update),
             new_technology=new_technology,
             new_classification=best_transition["technology_classification"],
+            asset_lifetime=best_transition["technology_lifetime"],
             switch_type=switch_type,
             origin_technology=origin_technology,
+            update_year_commission=False,
         )
 
         # Check constraints with tentative new stack
@@ -159,11 +163,14 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
             # Update asset stack
             new_stack.update_asset(
-                asset_to_update,
+                year=year,
+                asset_to_update=asset_to_update,
                 new_technology=new_technology,
                 new_classification=best_transition["technology_classification"],
+                asset_lifetime=best_transition["technology_lifetime"],
                 switch_type=switch_type,
                 origin_technology=origin_technology,
+                update_year_commission=(switch_type in SWITCH_TYPES_UPDATE_YEAR_COMMISSIONED)
             )
 
             # Remove asset from candidates

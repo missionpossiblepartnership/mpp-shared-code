@@ -127,6 +127,10 @@ TRANSITION_TYPES = [
 
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 
+# set the switch types that will update an assets commissioning year
+SWITCH_TYPES_UPDATE_YEAR_COMMISSIONED = ["brownfield_rebuild"]
+
+
 CARBON_BUDGET_SECTOR_CSV = True
 
 residual_share = 0.05

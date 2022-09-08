@@ -409,6 +409,9 @@ def apply_technology_moratorium(
     )
     df_technology_switches = df_technology_switches.loc[~banned_transitions]
 
+    # drop technology_classification column
+    df_technology_switches.drop(columns="technology_classification", inplace=True)
+
     return df_technology_switches
 
 

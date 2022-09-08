@@ -95,6 +95,9 @@ OPEX_ENERGY_METRICS = [
     "Alternative fuels (H2)",
     "Alternative fuels (excl. H2)",
     "Electricity - grid",
+    "Waste of fossil origin (including fossil fuel from mixed fuels)",
+    "Biomass (including biomass from mixed fuels)",
+    "Hydrogen",
 ]
 
 # set of input materials that are included in variable OPEX
@@ -114,14 +117,13 @@ OPEX_CCUS_EMISSIVITY_METRICS = [
     "Calcination process emissions",
     "Coal",
     "Natural gas",
-    "Alternative fuels (H2)",
-    "Alternative fuels (excl. H2)",
+    "Waste of fossil origin (including fossil fuel from mixed fuels)",
+    "Biomass (including biomass from mixed fuels)",
 ]
 
-# metrics that are included in the CCU/S process OPEX.
-OPEX_CCUS_PROCESS_METRICS = [
+# energy metrics that are included in the CCU/S process OPEX.
+OPEX_CCUS_PROCESS_METRICS_ENERGY = [
     # values of this dict must always be dicts with 2 keys!
-    # energy
     {
         "commodity_prices": ("Electricity - grid",),
         "inputs_energy": ("CC Electricity - grid",),
@@ -135,10 +137,22 @@ OPEX_CCUS_PROCESS_METRICS = [
         "inputs_energy": ("CC Natural gas",),
     },
     {
-        "commodity_prices": ("Alternative fuels (excl. H2)",),
-        "inputs_energy": ("CC Alternative fuels (excl. H2)",),
+        "commodity_prices": ("Waste of fossil origin (including fossil fuel from mixed fuels)",),
+        "inputs_energy": ("CC Waste of fossil origin (including fossil fuel from mixed fuels)",),
     },
-    # material
+    {
+        "commodity_prices": ("Biomass (including biomass from mixed fuels)",),
+        "inputs_energy": ("CC Biomass (including biomass from mixed fuels)",),
+    },
+    {
+        "commodity_prices": ("Hydrogen",),
+        "inputs_energy": ("CC Hydrogen",),
+    },
+]
+
+# material metrics that are included in the CCU/S process OPEX.
+OPEX_CCUS_PROCESS_METRICS_MATERIAL = [
+    # values of this dict must always be dicts with 2 keys!
     {
         "commodity_prices": ("CC - MEA make up stream",),
         "inputs_material": ("CC - MEA make up stream",),
