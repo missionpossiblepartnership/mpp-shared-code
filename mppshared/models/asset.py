@@ -144,13 +144,32 @@ class AssetStack:
 
     def update_asset(
         self,
+        year: int,
         asset_to_update: Asset,
         new_technology: str,
         new_classification: str,
+        asset_lifetime: int,
         switch_type: str,
         origin_technology: str,
+        update_year_commission: bool,
     ):
-        """Update an asset in AssetStack. This is done using the UUID to ensure correct updating."""
+        """Update an asset's technology and technology classification in AssetStack (while retaining the same UUID).
+
+        Args:
+            asset_to_update ():
+            year ():
+            new_technology ():
+            new_classification ():
+            asset_lifetime ():
+            switch_type ():
+            origin_technology ():
+            update_year_commission (): if True, the asset's year_commissioned will be updated to the current year
+                (except for those cases where
+                (new_technology == origin_technology) & (switch_type == brownfield_renovation))
+
+        Returns:
+
+        """
 
         # check to make sure that number of assets does not change
         len_pre = len(self.assets)
@@ -158,6 +177,7 @@ class AssetStack:
         uuid_update = asset_to_update.uuid
         asset_to_update.technology = new_technology
         asset_to_update.technology_classification = new_classification
+        asset_to_update.asset_lifetime = asset_lifetime
         if origin_technology != new_technology:
             if switch_type == "brownfield_renovation":
                 asset_to_update.retrofit = True
@@ -169,6 +189,12 @@ class AssetStack:
                 asset_to_update.stay_same = False
         if origin_technology == new_technology:
             asset_to_update.stay_same = True
+        if update_year_commission:
+            if not (new_technology == origin_technology) & (
+                switch_type == "brownfield_renovation"
+            ):
+                asset_to_update.year_commissioned = year
+
         self.assets = [asset for asset in self.assets if asset.uuid != uuid_update]
         self.assets.append(asset_to_update)
 
@@ -263,6 +289,7 @@ class AssetStack:
         product: str,
         region: str,
         tech_substr: str,
+        aggregate_techs: bool = True,
     ) -> float:
         """Get the yearly production volumes of all natural gas (ng) or alternative fuels (af) the AssetStack per region
             and technology for a specific product
@@ -270,7 +297,10 @@ class AssetStack:
         Args:
             product ():
             region ():
-            tech_substr ():
+            tech_substr (): a substring that determines the set of technologies for which the production volume will be
+                calculated
+            aggregate_techs (): If False, function will return a dictionary with the production volumes of all
+                technologies that include the tech_substr. If True, it will return the sum of their production volumes.
 
         Returns:
 
@@ -287,14 +317,23 @@ class AssetStack:
             ]
         )
 
-        production_volume = float(0)
-        if len(technologies) != 0:
+        if aggregate_techs:
+            # output the sum of all production volumes
+            production_volume = float(0)
+            if len(technologies) != 0:
+                for technology in technologies:
+                    production_volume += self.get_annual_production_volume(
+                        product=product, region=region, technology=technology
+                    )
+                return production_volume
+        else:
+            # output a dictionary with production volumes of all techs with tech_substr
+            production_volumes = dict.fromkeys(technologies)
             for technology in technologies:
-                production_volume += self.get_annual_production_volume(
+                production_volumes[technology] = self.get_annual_production_volume(
                     product=product, region=region, technology=technology
                 )
-
-        return production_volume
+            return production_volumes
 
     def get_products(self) -> list:
         """Get list of unique products produced by the AssetStack"""
@@ -448,7 +487,9 @@ class AssetStack:
             df_stack = df_stack.loc[(df_stack.region == region), :]
 
         if usage_storage:
-            df_stack = df_stack.loc[(df_stack["technology"].str.contains(usage_storage)), :]
+            df_stack = df_stack.loc[
+                (df_stack["technology"].str.contains(usage_storage)), :
+            ]
 
         co2_captured = (
             df_stack["co2_scope1_captured"] * df_stack["annual_production_volume"]
@@ -575,6 +616,7 @@ class AssetStack:
         self,
         product: str,
         region: str,
+        year: int,
     ) -> list:
         """Return a list of Assets from the AssetStack that are eligible for decommissioning"""
 
@@ -584,7 +626,17 @@ class AssetStack:
         # assets can be decommissioned if they have not undergone a renovation or rebuild
         candidates = filter(lambda asset: not asset.retrofit, assets)
 
-        return deepcopy(list(candidates))
+        # if there are no assets left, those that are at the end of their lifetime can be decommissioned
+        if len(list(candidates)) == 0:
+            candidates = filter(
+                lambda asset: asset.get_age(year) >= asset.asset_lifetime, candidates
+            )
+
+        # if there are still no assets left, every asset can be decommissioned
+        if len(list(candidates)) == 0:
+            return deepcopy(self.assets)
+
+        return list(candidates)
 
     def get_assets_eligible_for_brownfield(
         self, year: int, investment_cycle: int
@@ -607,11 +659,29 @@ class AssetStack:
 
         return list(candidates_renovation) + list(candidates_rebuild)
 
-    def get_assets_eligible_for_brownfield_cement(self) -> list:
-        """Return a list of Assets from the AssetStack that are eligible for a brownfield technology transition"""
+    def get_assets_eligible_for_brownfield_cement_renovation(self, year: int) -> list:
+        """Return a list of Assets from the AssetStack that are eligible for a brownfield renovation transition in
+            cement"""
 
-        # cement: all assets are eligible for a brownfield transition
-        return deepcopy(self.assets)
+        # all initial assets can switch
+        candidates_renovation = filter(
+            lambda asset: (asset.technology_classification == "initial"),
+            self.assets,
+        )
+
+        return deepcopy(list(candidates_renovation))
+
+    def get_assets_eligible_for_brownfield_cement_rebuild(self, year: int) -> list:
+        """Return a list of Assets from the AssetStack that are eligible for a brownfield rebuild transition in
+            cement"""
+
+        # all assets that reached the end of their lifetime can switch
+        candidates_rebuild = filter(
+            lambda asset: asset.get_age(year) >= asset.asset_lifetime,
+            self.assets,
+        )
+
+        return deepcopy(list(candidates_rebuild))
 
 
 def make_new_asset(

@@ -28,6 +28,7 @@ def check_constraints(
     year: int,
     transition_type: str,
     product: str,
+    constraints_to_apply: list = None,
     region: str = None,
 ) -> dict:
     """Check all constraints for a given asset stack and return dictionary of Booleans with constraint types as keys.
@@ -38,6 +39,8 @@ def check_constraints(
         product:
         year: required for resource availabilities
         transition_type: either of "decommission", "brownfield", "greenfield"
+        constraints_to_apply: a list of constraints to apply can be passed. If it is None, it will be set to
+            pathway.constraints_to_apply
         region: some constraints allow a regional and global checks to improve runtime. If a region is provided, these
             constraints will only check the constraint fulfilment in that region
 
@@ -55,9 +58,14 @@ def check_constraints(
         "co2_storage_constraint": check_co2_storage_constraint,
         "alternative_fuel_constraint": check_alternative_fuel_constraint,
     }
+
+    if constraints_to_apply is None:
+        constraints_to_apply = pathway.constraints_to_apply
+
     constraints_checked = {}
-    if pathway.constraints_to_apply:
-        for constraint in pathway.constraints_to_apply:
+    if constraints_to_apply:
+        # if the list is not empty
+        for constraint in constraints_to_apply:
             if constraint == "emissions_constraint":
                 emissions_constraint, flag_residual = funcs_constraints[constraint](
                     pathway=pathway,
@@ -720,7 +728,7 @@ def check_alternative_fuel_constraint(
 
         # calculate natural gas-based production capacity
         af_prod_volume = stack.get_annual_ng_af_production_volume(
-            product=product, region=region, tech_substr="alternative fuels"
+            product=product, region=region, tech_substr="alternative fuels"     # , aggregate_techs=False
         )
 
         # add to dict
