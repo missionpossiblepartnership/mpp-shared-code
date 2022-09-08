@@ -208,13 +208,13 @@ class IntermediateDataImporter:
             self.intermediate_path.joinpath("natural_gas_constraint.csv")
         )
 
-    def get_alternative_fuel_constraint(self):
+    def get_biomass_constraint(self):
         """
-        Returns: alternative_fuel_constraint (Unit: Mt production_output)
+        Returns: biomass_constraint (Unit: GJ / year)
         """
 
         return pd.read_csv(
-            self.intermediate_path.joinpath("alternative_fuel_constraint.csv")
+            self.intermediate_path.joinpath("biomass_constraint.csv")
         )
 
     def get_electrolysis_capacity_addition_constraint(self):

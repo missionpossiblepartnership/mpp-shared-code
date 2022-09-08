@@ -22,7 +22,7 @@ from mppshared.config import (
 )
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
-    check_alternative_fuel_constraint,
+    check_biomass_constraint,
     check_constraints,
     check_co2_storage_constraint,
 )
@@ -434,52 +434,16 @@ def select_asset_for_greenfield(
             # ALTERNATIVE FUEL
             if "alternative_fuel_constraint" in constraints_to_apply:
                 if not dict_constraints["alternative_fuel_constraint"]:
-                    if constraints_regional_check:
-                        # remove exceeding region from ranking
-                        logger.debug(
-                            f"Handle alternative fuels constraint: removing all alternative fuels "
-                            f"technologies in {new_asset.region}"
-                        )
-                        df_rank = remove_techs_in_region_by_tech_substr(
-                            df_rank=df_rank,
-                            region=new_asset.region,
-                            tech_substr="alternative fuels",
-                        )
-                    else:
-                        # get regions where alternative fuel is exceeded
-                        dict_alternative_fuel_exceedance = (
-                            check_alternative_fuel_constraint(
-                                pathway=pathway,
-                                product=product,
-                                stack=tentative_stack,
-                                year=year,
-                                transition_type="greenfield",
-                                return_dict=True,
-                            )
-                        )
-                        exceeding_regions = [
-                            k
-                            for k in dict_alternative_fuel_exceedance.keys()
-                            if not dict_alternative_fuel_exceedance[k]
-                        ]
-                        # check if regions other than the tentatively updated asset's region exceed the
-                        #   constraint
-                        if exceeding_regions != [new_asset.region]:
-                            logger.critical(
-                                f"{year}: Regions other than the tentatively updated asset's region exceed the alternative "
-                                "fuel constraint!"
-                            )
-                        else:
-                            # remove exceeding region from ranking
-                            logger.debug(
-                                f"Handle alternative fuels constraint: removing all alternative fuels "
-                                f"technologies in {new_asset.region}"
-                            )
-                            df_rank = remove_techs_in_region_by_tech_substr(
-                                df_rank=df_rank,
-                                region=new_asset.region,
-                                tech_substr="alternative fuels",
-                            )
+                    # remove all transitions with that destination technology from the ranking table
+                    logger.debug(
+                        f"Handle biomass constraint: removing destination technology"
+                    )
+                    df_rank = remove_all_transitions_with_destination_technology(
+                        df_rank=df_rank,
+                        technology_destination=asset_transition[
+                            "technology_destination"
+                        ],
+                    )
 
     # If ranking table empty, no greenfield construction possible
     raise ValueError

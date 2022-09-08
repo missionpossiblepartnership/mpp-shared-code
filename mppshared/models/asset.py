@@ -284,11 +284,12 @@ class AssetStack:
                 )
                 logger.debug(f"{region} | {technology}: {prod_vol} Mt {product}")
 
+    # todo: consider removing since it is not being used
     def get_annual_ng_af_production_volume(
         self,
         product: str,
-        region: str,
         tech_substr: str,
+        region: str = None,
         aggregate_techs: bool = True,
     ) -> float:
         """Get the yearly production volumes of all natural gas (ng) or alternative fuels (af) the AssetStack per region
