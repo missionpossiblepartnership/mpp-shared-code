@@ -8,8 +8,6 @@ import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_destination_technology,
-    remove_techs_in_region_by_tech_substr,
-    remove_transition,
     select_best_transition,
     get_constraints_to_apply,
 )

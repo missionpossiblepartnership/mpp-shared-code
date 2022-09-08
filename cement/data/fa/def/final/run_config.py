@@ -235,6 +235,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "maximum_asset_growth_rate": 0.05,
     "years_rampup_phase": 30,
 }
+RAMP_UP_TECH_CLASSIFICATIONS = ["initial, end-state"]
 # CO2 storage constraint
 SET_CO2_STORAGE_CONSTRAINT = True
 CO2_STORAGE_CONSTRAINT_TYPE = "total_cumulative"  # "annual_cumulative", "annual_addition", "total_cumulative", or None
