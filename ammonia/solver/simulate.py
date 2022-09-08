@@ -99,14 +99,6 @@ def simulate_pathway(
     """
     Get data per technology, ranking data and then run the pathway simulation
     """
-    importer = IntermediateDataImporter(
-        pathway_name=pathway_name,
-        sensitivity=sensitivity,
-        sector=sector,
-        products=PRODUCTS,
-        carbon_cost_trajectory=carbon_cost_trajectory,
-    )
-
     # Make pathway
     pathway = SimulationPathway(
         start_year=START_YEAR,

@@ -5,12 +5,12 @@ import distutils
 import itertools
 import multiprocessing as mp
 import os
-from venv import create
 
 # Imports from sector-specific code
 from ammonia.config_ammonia import (
     CARBON_COSTS,
     END_YEAR,
+    END_YEAR_MAP,
     LOG_LEVEL,
     MODEL_YEARS,
     PATHWAYS,
@@ -39,9 +39,9 @@ logger.setLevel(LOG_LEVEL)
 
 funcs = {
     # These steps can only be run sequentially (run_parallel = False)
-    # "IMPORT_DATA": import_all,
-    # "CALCULATE_VARIABLES": calculate_variables,
-    # "SOLVER_INPUT": create_solver_input_tables,
+    "IMPORT_DATA": import_all,
+    "CALCULATE_VARIABLES": calculate_variables,
+    "SOLVER_INPUT": create_solver_input_tables,
     # These steps can optionally be run in parallel (run_parallel = True)
     "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     "MAKE_RANKINGS": make_rankings,
@@ -114,21 +114,22 @@ def run_model_parallel(runs):
 def main():
     logger.info(f"Running model for {SECTOR}")
 
-    # Create a list of carbon cost trajectories that each start in 2025 and have a constant carbon cost
-    carbon_costs = CARBON_COSTS
+    # Create a list of carbon cost trajectories that each start in 2025 and reach their final value in different years
     carbon_cost_trajectories = []
-    end_year_map = {0: 2025, 50: 2030, 100: 2035, 150: 2040, 200: 2045, 250: 2050}
-    for cc in carbon_costs:
+
+    for cc in CARBON_COSTS:
         carbon_cost_trajectories.append(
             CarbonCostTrajectory(
                 trajectory="linear",
                 initial_carbon_cost=0,
                 final_carbon_cost=cc,
                 start_year=2025,
-                end_year=end_year_map[cc],
+                end_year=END_YEAR_MAP[cc],
                 model_years=MODEL_YEARS,
             )
         )
+
+    # Execute the model runs
     runs = list(itertools.product(PATHWAYS, SENSITIVITIES, carbon_cost_trajectories))
     if RUN_PARALLEL:
         run_model_parallel(runs)
