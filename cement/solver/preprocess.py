@@ -141,59 +141,33 @@ def import_and_preprocess(
     )
 
     # NATURAL GAS AND ALTERNATIVE FUEL CONSTRAINTS
-    df_ng_af_constraint = importer.get_raw_input_data(
-        sheet_name="Alternative fuels and NG",
+    df_feedstock_constraint = importer.get_raw_input_data(
+        sheet_name="Biomass",
         header_business_case_excel=HEADER_BUSINESS_CASE_EXCEL,
         excel_column_ranges=EXCEL_COLUMN_RANGES,
     ).rename(columns={"Region": "region"})
 
-    # natural gas
-    df_ng_constraint = df_ng_af_constraint.copy().loc[
-        df_ng_af_constraint["Metric"] == "Maximum demand from natural gas", :
+    # biomass constraint limits
+    df_bio_constraint = df_feedstock_constraint.copy().loc[
+        df_feedstock_constraint["Metric"] == "Maximum available biomass", :
     ]
-    df_ng_constraint = pd.melt(
-        frame=df_ng_constraint,
+    df_bio_constraint = pd.melt(
+        frame=df_bio_constraint,
         id_vars="region",
         value_vars=MODEL_YEARS,
         var_name="year",
         value_name="value",
     )
-    df_ng_constraint = set_datatypes(
-        df=df_ng_constraint, datatypes_per_column=DF_DATATYPES_PER_COLUMN
+    df_bio_constraint = set_datatypes(
+        df=df_bio_constraint, datatypes_per_column=DF_DATATYPES_PER_COLUMN
     )
-    # convert from [t Clk / year] to [Mt Clk / year]
-    df_ng_constraint["value"] *= 1e-6
     importer.export_data(
-        df=df_ng_constraint,
-        filename="natural_gas_constraint.csv",
-        export_dir="intermediate",
-        index=False,
-    )
-    # Unit df_ng_constraint: [Mt Clk / year]
-
-    # alternative fuel
-    df_af_constraint = df_ng_af_constraint.copy().loc[
-        df_ng_af_constraint["Metric"] == "Maximum demand from alternative fuels", :
-    ]
-    df_af_constraint = pd.melt(
-        frame=df_af_constraint,
-        id_vars="region",
-        value_vars=MODEL_YEARS,
-        var_name="year",
-        value_name="value",
-    )
-    df_af_constraint = set_datatypes(
-        df=df_af_constraint, datatypes_per_column=DF_DATATYPES_PER_COLUMN
-    )
-    # convert from [t Clk / year] to [Mt Clk / year]
-    df_af_constraint["value"] *= 1e-6
-    importer.export_data(
-        df=df_af_constraint,
+        df=df_bio_constraint,
         filename="alternative_fuel_constraint.csv",
         export_dir="intermediate",
         index=False,
     )
-    # Unit df_af_constraint: [Mt Clk / year]
+    # Unit df_bio_constraint: [GJ / year]
 
     # CO2 STORAGE CONSTRAINT
     df_co2_storage_constraint = importer.get_raw_input_data(
