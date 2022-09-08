@@ -56,7 +56,8 @@ def remove_transition(df_rank: pd.DataFrame, transition: dict) -> pd.DataFrame:
 def remove_all_transitions_with_destination_technology(
     df_rank: pd.DataFrame, technology_destination: str, region: str = None
 ) -> pd.DataFrame:
-    """Remove all transitions with a specific destination technology from the ranking table.
+    """Remove all transitions with a specific destination technology from the ranking table (except for switches with
+        equal origin and destination tech).
 
     Args:
         df_rank ():
@@ -72,12 +73,17 @@ def remove_all_transitions_with_destination_technology(
             ~(
                 (df_rank["technology_destination"] == technology_destination)
                 & (df_rank["region"] == region)
+                & (df_rank["technology_origin"] != df_rank["technology_destination"])
             ),
             :,
         ]
     else:
         df_rank = df_rank.loc[
-            ~(df_rank["technology_destination"] == technology_destination), :
+            ~(
+                (df_rank["technology_destination"] == technology_destination)
+                & (df_rank["technology_origin"] != df_rank["technology_destination"])
+            ),
+            :,
         ]
 
     return df_rank
@@ -106,6 +112,7 @@ def remove_techs_in_region_by_tech_substr(
         ~(
             (df_rank["region"] == region)
             & (df_rank["technology_destination"].str.contains(tech_substr))
+            & (df_rank["technology_origin"] != df_rank["technology_destination"])
         ),
         :,
     ]
@@ -270,14 +277,33 @@ def create_dict_technology_rampup(
     maximum_asset_additions: int,
     maximum_capacity_growth_rate: float,
     years_rampup_phase: int,
+    ramp_up_tech_classifications: list = None,
 ) -> dict:
     """Create dictionary of TechnologyRampup objects with the technologies in that sector as keys. Set None if the
-    technology has no ramp-up trajectory."""
+    technology has no ramp-up trajectory.
+
+    Args:
+        importer ():
+        model_start_year ():
+        model_end_year ():
+        maximum_asset_additions ():
+        maximum_capacity_growth_rate ():
+        years_rampup_phase ():
+        ramp_up_tech_classifications (): technology classification that underlie the ramp up constraint. If None, will
+            default to ["transition", "end-state"]
+
+    Returns:
+
+    """
+
     logger.info("Creating ramp-up trajectories for technologies")
 
     technology_characteristics = importer.get_technology_characteristics()
     technologies = technology_characteristics["technology"].unique()
     dict_technology_rampup = dict.fromkeys(technologies)
+
+    if ramp_up_tech_classifications is None:
+        ramp_up_tech_classifications = ["transition", "end-state"]
 
     for technology in technologies:
 
@@ -290,7 +316,7 @@ def create_dict_technology_rampup(
         classification = df_characteristics["technology_classification"]
 
         # Only define technology ramp-up rates for transition and end-state technologies
-        if classification in ["transition", "end-state"]:
+        if classification in ramp_up_tech_classifications:
             dict_technology_rampup[technology] = TechnologyRampup(
                 model_start_year=model_start_year,
                 model_end_year=model_end_year,

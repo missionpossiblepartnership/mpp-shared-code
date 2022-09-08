@@ -27,6 +27,7 @@ from cement.config.config_cement import (
     TECHNOLOGY_RAMP_UP_CONSTRAINT,
     YEAR_2050_EMISSIONS_CONSTRAINT,
     CO2_STORAGE_CONSTRAINT_TYPE,
+    RAMP_UP_TECH_CLASSIFICATIONS,
 )
 from cement.solver.brownfield import brownfield
 from cement.solver.decommission import decommission
@@ -100,7 +101,7 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         pathway = greenfield(pathway=pathway, year=year)
         end = timer()
         logger.debug(
-            f"{year}: Time elapsed for greenfield: {timedelta(seconds=end-start)} seconds"
+            f"{year}: Time elapsed for greenfield: {timedelta(seconds=end - start)} seconds"
         )
         logger.info(f"{year}: Production volumes post greenfield:")
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
@@ -187,6 +188,7 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
             "maximum_asset_growth_rate"
         ],
         years_rampup_phase=TECHNOLOGY_RAMP_UP_CONSTRAINT["years_rampup_phase"],
+        ramp_up_tech_classifications=RAMP_UP_TECH_CLASSIFICATIONS,
     )
     carbon_budget.output_carbon_budget(sector=sector, importer=importer)
 
