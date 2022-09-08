@@ -26,7 +26,7 @@ EXCEL_COLUMN_RANGES = {
     "Start technologies": "B:F",
     "Region OPEX mapping": "B:F",
     "demand": "B:AS",
-    "Alternative fuels and NG": "B:AK",
+    "Biomass": "B:AK",
     "CO2 storage capacity": "B:AK",
 }
 
