@@ -35,6 +35,12 @@ PATHWAYS_SENSITIVITIES = {
 PATHWAYS_WITH_CARBON_COST = ["lc"]
 PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = ["lc"]
 
+PATHWAY_DEMAND_SCENARIO_MAPPING = {
+    "bau": "bau",
+    "fa": "gcca",
+    "lc": "gcca",
+}
+
 # carbon cost sensitivities: define carbon cost in USD/t CO2 for different sensitivities
 CARBON_COST_SENSITIVITIES = {
     "low": {
