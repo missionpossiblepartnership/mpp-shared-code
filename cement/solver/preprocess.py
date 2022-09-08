@@ -9,6 +9,7 @@ from cement.config.config_cement import (
     MODEL_YEARS,
     REGIONS,
     START_YEAR,
+    PATHWAY_DEMAND_SCENARIO_MAPPING,
 )
 from cement.config.dataframe_config_cement import (
     DF_DATATYPES_PER_COLUMN,
@@ -106,6 +107,10 @@ def import_and_preprocess(
         excel_column_ranges=EXCEL_COLUMN_RANGES,
     )
     df_demand.rename(columns={"Product": "product"}, inplace=True)
+    # filter scenario
+    df_demand = df_demand.loc[
+        (df_demand["scenario"] == PATHWAY_DEMAND_SCENARIO_MAPPING[pathway_name]), :
+    ]
     df_demand = pd.melt(
         frame=df_demand,
         id_vars=["product", "region"],
@@ -197,7 +202,9 @@ def import_and_preprocess(
         excel_column_ranges=EXCEL_COLUMN_RANGES,
     ).rename(columns={"Region": "region"})
     # Unit df_co2_storage_constraint: [Gt CO2]
-    df_co2_storage_constraint = df_co2_storage_constraint[["region"] + list(MODEL_YEARS)].set_index(["region"])
+    df_co2_storage_constraint = df_co2_storage_constraint[
+        ["region"] + list(MODEL_YEARS)
+    ].set_index(["region"])
     df_co2_storage_constraint *= 1e3
     # Unit df_co2_storage_constraint: [Mt CO2]
     df_co2_storage_constraint = pd.melt(
@@ -205,7 +212,7 @@ def import_and_preprocess(
         id_vars="region",
         value_vars=list(MODEL_YEARS),
         var_name="year",
-        value_name="value"
+        value_name="value",
     )
     importer.export_data(
         df=df_co2_storage_constraint,
