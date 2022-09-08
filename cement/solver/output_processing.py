@@ -33,7 +33,7 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
     )
 
     """ technology roadmap """
-    """df_tech_roadmap = _create_tech_roadmaps_by_region(
+    df_tech_roadmap = _create_tech_roadmaps_by_region(
         importer=importer, start_year=START_YEAR, end_year=END_YEAR
     )
     _export_and_plot_tech_roadmaps_by_region(
@@ -43,10 +43,10 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
         df_roadmap=df_tech_roadmap,
         unit="Mt Clk",
         technology_layout=TECHNOLOGY_LAYOUT,
-    )"""
+    )
 
     """ Emissions """
-    """df_total_emissions = _calculate_emissions_total(
+    df_total_emissions = _calculate_emissions_total(
         importer=importer, ghgs=GHGS, emission_scopes=EMISSION_SCOPES, format_data=False
     )
     _export_and_plot_emissions_by_region(
@@ -57,7 +57,7 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
         ghgs=GHGS,
         emission_scopes=EMISSION_SCOPES,
         technology_layout=TECHNOLOGY_LAYOUT,
-    )"""
+    )
 
     """ Investments """
     df_investments = _calculate_annual_investments(
@@ -676,29 +676,28 @@ def _calculate_annual_investments(
         )
         df = current_stack.merge(
             previous_stack.drop(columns=["product", "region"]), on="uuid", how="left"
-        )
+        ).fillna(False)
 
         # Identify newly built assets
         df.loc[
-            (df["greenfield_status"] == True)
-            & (df["previous_greenfield_status"].isna()),
+            (df["greenfield_status"] & ~df["previous_greenfield_status"]),
             ["switch_type", "technology_origin"],
         ] = ["greenfield", "New-build"]
 
         # Identify retrofit assets
         df.loc[
-            (df["retrofit_status"] == True) & (df["previous_retrofit_status"] == False),
+            (df["retrofit_status"] & ~df["previous_retrofit_status"]),
             "switch_type",
         ] = "brownfield_renovation"
 
         # Identify rebuild assets
         df.loc[
-            (df["rebuild_status"] == True) & (df["previous_rebuild_status"] == False),
+            (df["rebuild_status"] & ~df["previous_rebuild_status"]),
             "switch_type",
         ] = "brownfield_newbuild"
 
         # Drop all assets that haven't undergone a transition
-        df = df.loc[df["switch_type"].notna()]
+        df = df.loc[df["switch_type"].notna(), :]
         df["year"] = year
 
         # Add the corresponding switching CAPEX to every asset that has changed
@@ -715,20 +714,19 @@ def _calculate_annual_investments(
             how="left",
         )
 
-        # Calculate investment cost per changed asset by multiplying CAPEX (in USD/tpa) with production capacity (in Mtpa) and sum
+        # Calculate investment cost per changed asset by multiplying CAPEX (in USD/tpa) with production capacity
+        #   (in Mtpa) and sum
         df["investment"] = (
             df["switch_capex"] * df["annual_production_capacity_destination"] * 1e6
         )
-        df = df.groupby(agg_vars)[["investment"]].sum().reset_index(drop=False)
+        df = df.groupby(agg_vars + ["year"])[["investment"]].sum().reset_index(drop=False)
 
         df = df.melt(
-            id_vars=agg_vars,
+            id_vars=agg_vars + ["year"],
             value_vars="investment",
             var_name="parameter",
             value_name="value",
         )
-
-        df["year"] = year
 
         df_investment = pd.concat([df_investment, df])
 
