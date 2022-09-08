@@ -285,10 +285,6 @@ def _get_switch_capex(
     # filter columns
     df_decommission = df_decommission[IDX_TECH_RANKING_COLUMNS + ["value"]]
 
-    # todo-dev: delete
-    df_decommission["value"] = float(0)
-    # todo
-
     """greenfield"""
 
     # get slice

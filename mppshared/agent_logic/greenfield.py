@@ -11,6 +11,7 @@ from mppshared.agent_logic.agent_logic_functions import (
     remove_techs_in_region_by_tech_substr,
     remove_transition,
     select_best_transition,
+    get_constraints_to_apply,
 )
 from mppshared.config import (
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
@@ -219,7 +220,7 @@ def select_asset_for_greenfield(
                     asset_transition["region"], "region_max_plants_newbuild"
                 ]
             )
-            
+
             # Remove greenfield switches in that region if regional supply constraint hurt
             if regional_supply_constraint_hurt:
                 df_rank = df_rank.loc[df_rank["region"] != asset_transition["region"]]
@@ -230,7 +231,7 @@ def select_asset_for_greenfield(
 
                 # move to next iteration
                 continue
-                
+
         # Make new asset and check the constraints
         new_asset = make_new_asset(
             asset_transition=asset_transition,
@@ -251,12 +252,18 @@ def select_asset_for_greenfield(
         tentative_stack = deepcopy(stack)
         tentative_stack.append(new_asset)
 
+        constraints_to_apply = get_constraints_to_apply(
+            pathway_constraints_to_apply=pathway.constraints_to_apply,
+            origin_technology="greenfield",
+            destination_technology=new_asset.technology,
+        )
         dict_constraints = check_constraints(
             pathway=pathway,
             stack=tentative_stack,
             year=year,
             transition_type="greenfield",
             product=product,
+            constraints_to_apply=constraints_to_apply,
             region=new_asset.region if constraints_regional_check else None,
         )
 
@@ -268,11 +275,11 @@ def select_asset_for_greenfield(
 
         # Asset can be created if no constraint hurt
         if all(
-                [
-                    dict_constraints[k]
-                    for k in dict_constraints.keys()
-                    if k in pathway.constraints_to_apply and k != "regional_constraint"
-                ]
+            [
+                dict_constraints[k]
+                for k in dict_constraints.keys()
+                if k in pathway.constraints_to_apply and k != "regional_constraint"
+            ]
         ):
             logger.debug(f"{year}: All constraints fulfilled.")
             if return_df_rank:
@@ -281,10 +288,10 @@ def select_asset_for_greenfield(
                 return new_asset
         else:
             # EMISSIONS
-            if "emissions_constraint" in pathway.constraints_to_apply:
+            if "emissions_constraint" in constraints_to_apply:
                 if (
-                        not dict_constraints["emissions_constraint"]
-                        and not dict_constraints["flag_residual"]
+                    not dict_constraints["emissions_constraint"]
+                    and not dict_constraints["flag_residual"]
                 ):
                     # remove best transition from ranking table and try again
                     logger.debug(
@@ -297,8 +304,8 @@ def select_asset_for_greenfield(
                         ],
                     )
                 if (
-                        not dict_constraints["emissions_constraint"]
-                        and dict_constraints["flag_residual"]
+                    not dict_constraints["emissions_constraint"]
+                    and dict_constraints["flag_residual"]
                 ):
                     logger.debug(
                         f"Handle (residual) emissions constraint: removing all transitions with CCS"
@@ -311,11 +318,9 @@ def select_asset_for_greenfield(
             # ELECTROLYSIS CAPACITY ADDITION
             if (
                 "electrolysis_capacity_addition_constraint"
-                in pathway.constraints_to_apply
+                in constraints_to_apply
             ):
-                if not dict_constraints[
-                    "electrolysis_capacity_addition_constraint"
-                ]:
+                if not dict_constraints["electrolysis_capacity_addition_constraint"]:
                     # Remove all transitions with that destination technology from the ranking table
                     logger.debug(
                         f"Handle electrolysis capacity addition constraint: removing destination technology"
@@ -327,9 +332,9 @@ def select_asset_for_greenfield(
                     df_rank = df_rank.loc[
                         ~(df_rank["technology_destination"].str.contains("CCS"))
                     ]
-                    
+
             # RAMPUP
-            if "rampup_constraint" in pathway.constraints_to_apply:
+            if "rampup_constraint" in constraints_to_apply:
                 if not dict_constraints["rampup_constraint"]:
                     # remove all transitions with that destination technology from the ranking table
                     logger.debug(
@@ -343,7 +348,7 @@ def select_asset_for_greenfield(
                     )
 
             # CO2 STORAGE
-            if "co2_storage_constraint" in pathway.constraints_to_apply:
+            if "co2_storage_constraint" in constraints_to_apply:
                 if not dict_constraints["co2_storage_constraint"]:
                     # "total_cumulative" requires regional approach
                     if pathway.co2_storage_constraint_type == "total_cumulative":
@@ -353,24 +358,24 @@ def select_asset_for_greenfield(
                                 f"Handle CO2 storage constraint: removing destination technology "
                                 f"in {new_asset.region}"
                             )
-                            df_rank = remove_all_transitions_with_destination_technology(
-                                df_rank=df_rank,
-                                technology_destination=asset_transition[
-                                    "technology_destination"
-                                ],
-                                region=new_asset.region,
+                            df_rank = (
+                                remove_all_transitions_with_destination_technology(
+                                    df_rank=df_rank,
+                                    technology_destination=asset_transition[
+                                        "technology_destination"
+                                    ],
+                                    region=new_asset.region,
+                                )
                             )
                         else:
                             # get regions where CO2 storage constraint is exceeded
-                            dict_co2_storage_exceedance = (
-                                check_co2_storage_constraint(
-                                    pathway=pathway,
-                                    product=product,
-                                    stack=tentative_stack,
-                                    year=year,
-                                    transition_type="greenfield",
-                                    return_dict=True,
-                                )
+                            dict_co2_storage_exceedance = check_co2_storage_constraint(
+                                pathway=pathway,
+                                product=product,
+                                stack=tentative_stack,
+                                year=year,
+                                transition_type="greenfield",
+                                return_dict=True,
                             )
                             exceeding_regions = [
                                 k
@@ -389,12 +394,14 @@ def select_asset_for_greenfield(
                                     f"Handle CO2 storage constraint: removing destination technology "
                                     f"in {new_asset.region}"
                                 )
-                                df_rank = remove_all_transitions_with_destination_technology(
-                                    df_rank=df_rank,
-                                    technology_destination=asset_transition[
-                                        "technology_destination"
-                                    ],
-                                    region=new_asset.region,
+                                df_rank = (
+                                    remove_all_transitions_with_destination_technology(
+                                        df_rank=df_rank,
+                                        technology_destination=asset_transition[
+                                            "technology_destination"
+                                        ],
+                                        region=new_asset.region,
+                                    )
                                 )
                     # co2_storage_constraint_type other than total_cumulative are global
                     else:
@@ -407,7 +414,7 @@ def select_asset_for_greenfield(
                         )
 
             # GLOBAL DEMAND SHARE
-            if "demand_share_constraint" in pathway.constraints_to_apply:
+            if "demand_share_constraint" in constraints_to_apply:
                 if not dict_constraints["demand_share_constraint"]:
                     # Remove all transitions with that destination technology from the ranking table
                     logger.debug(
@@ -418,7 +425,7 @@ def select_asset_for_greenfield(
                     )
 
             # REGIONAL PRODUCTION
-            if "regional_constraint" in pathway.constraints_to_apply:
+            if "regional_constraint" in constraints_to_apply:
                 if not dict_constraints["regional_constraint"]:
                     # todo
                     logger.critical(
@@ -426,7 +433,7 @@ def select_asset_for_greenfield(
                     )
 
             # ALTERNATIVE FUEL
-            if "alternative_fuel_constraint" in pathway.constraints_to_apply:
+            if "alternative_fuel_constraint" in constraints_to_apply:
                 if not dict_constraints["alternative_fuel_constraint"]:
                     if constraints_regional_check:
                         # remove exceeding region from ranking

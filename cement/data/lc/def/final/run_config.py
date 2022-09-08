@@ -19,7 +19,7 @@ run_config = {
 RUN_PARALLEL = False
 LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
-COMPUTE_LCOX = False
+COMPUTE_LCOX = True
 
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
@@ -147,6 +147,9 @@ TRANSITION_TYPES = {
 
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 
+# set the switch types that will update an assets commissioning year
+SWITCH_TYPES_UPDATE_YEAR_COMMISSIONED = ["brownfield_renovation", "brownfield_rebuild"]
+
 # define regions that can have switches to natural gas
 REGIONS_NATURAL_GAS = ["North America", "Russia", "Middle East"]
 
@@ -238,7 +241,6 @@ CONSTRAINTS_TO_APPLY = {
     "bau": [
         "rampup_constraint",
         # "regional_constraint",
-        # "natural_gas_constraint",
         "alternative_fuel_constraint",
         # "co2_storage_constraint",
     ],
@@ -246,7 +248,6 @@ CONSTRAINTS_TO_APPLY = {
         # "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",
-        # "natural_gas_constraint",
         "alternative_fuel_constraint",
         "co2_storage_constraint",
     ],
@@ -254,7 +255,6 @@ CONSTRAINTS_TO_APPLY = {
         # "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",
-        # "natural_gas_constraint",
         "alternative_fuel_constraint",
         "co2_storage_constraint",
     ],

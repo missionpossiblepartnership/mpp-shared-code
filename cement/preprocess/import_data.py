@@ -387,15 +387,15 @@ def get_tech_switches(
             .rename(columns={"value": "switch_type"})
         )
 
-    # set datatypes
-    df = set_datatypes(df=df, datatypes_per_column=datatypes_per_column)
-
     # remove NaNs (i.e., unfeasible switches) and set index
     df = (
         df.set_index(["technology_origin", "technology_destination"])
         .dropna(how="all")
         .sort_index()
     )
+
+    # set datatypes
+    df = set_datatypes(df=df, datatypes_per_column=datatypes_per_column)
 
     # rename values
     reversed_switch_types_dict = {v: k for k, v in transition_types.items()}

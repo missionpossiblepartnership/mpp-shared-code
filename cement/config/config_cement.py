@@ -19,7 +19,7 @@ run_config = {
 RUN_PARALLEL = False
 LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
-COMPUTE_LCOX = False
+COMPUTE_LCOX = True
 
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
@@ -27,8 +27,8 @@ END_YEAR = 2050
 MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 PATHWAYS_SENSITIVITIES = {
-    "bau": ["def"],  # ALL_SENSITIVITIES,
-    # "fa": ["def"],
+    # "bau": ["def"],  # ALL_SENSITIVITIES,
+    "fa": ["def"],
     # "lc": ["def"],  # ALL_SENSITIVITIES,
 }
 
@@ -146,6 +146,9 @@ TRANSITION_TYPES = {
 }
 
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
+
+# set the switch types that will update an assets commissioning year
+SWITCH_TYPES_UPDATE_YEAR_COMMISSIONED = ["brownfield_renovation", "brownfield_rebuild"]
 
 # define regions that can have switches to natural gas
 REGIONS_NATURAL_GAS = ["North America", "Russia", "Middle East"]
