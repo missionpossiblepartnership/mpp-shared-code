@@ -212,11 +212,8 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         annual_renovation_share=MAX_ANNUAL_RENOVATION_SHARE[pathway_name],
         constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],
         year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
-        set_natural_gas_constraint=(
-            "natural_gas_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]
-        ),
-        set_alternative_fuel_constraint=(
-            "alternative_fuel_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]
+        set_biomass_constraint=(
+            "biomass_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]
         ),
         set_co2_storage_constraint=(
             "co2_storage_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]

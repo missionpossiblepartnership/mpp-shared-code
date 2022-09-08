@@ -163,7 +163,7 @@ def import_and_preprocess(
     )
     importer.export_data(
         df=df_bio_constraint,
-        filename="alternative_fuel_constraint.csv",
+        filename="biomass_constraint.csv",
         export_dir="intermediate",
         index=False,
     )

@@ -341,11 +341,7 @@ def get_constraints_to_apply(
     if origin_technology == destination_technology:
         return []
 
-    # remove alternative fuels constraint if destination tech != alternative fuels
-    if not ("alternative fuels" in destination_technology):
-        constraints_to_apply = [
-            x for x in constraints_to_apply if x != "alternative_fuel_constraint"
-        ]
+    # todo: remove biomass constraint (based on techs with bio consumption)
 
     # remove CO2 storage constraint if destination tech != storage tech
     if not ("storage" in destination_technology):

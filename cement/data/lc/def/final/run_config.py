@@ -28,8 +28,8 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 PATHWAYS_SENSITIVITIES = {
     # "bau": ["def"],  # ALL_SENSITIVITIES,
-    "fa": ["def"],
-    # "lc": ["def"],  # ALL_SENSITIVITIES,
+    # "fa": ["def"],
+    "lc": ["def"],  # ALL_SENSITIVITIES,
 }
 
 PATHWAYS_WITH_CARBON_COST = ["lc"]
@@ -166,14 +166,14 @@ CARBON_BUDGET_SECTOR_CSV = False
 CARBON_BUDGET_SHAPE = "exponential"  # linear, exponential
 # carbon budget 2020 - 2050 in Gt
 SECTORAL_CARBON_BUDGETS = {
-    "cement": 42 * 0.95,
+    "cement": 42,
 }
 
-emissions_2020 = 2.4 * 0.95  # Gt CO2 (scopes 1 and 2)
+emissions_2020 = 2.4  # Gt CO2 (scopes 1 and 2)
 SECTORAL_CARBON_PATHWAY = {
     "emissions_start": emissions_2020,
-    "emissions_end": 0.06 * 3.85 * 0.9,  # recarbonation GCCA roadmap
-    "action_start": 2022,
+    "emissions_end": 0.06 * 3.85,  # recarbonation GCCA roadmap
+    "action_start": 2023,
 }
 
 # Ranking configuration depends on type of technology switch and pathway
