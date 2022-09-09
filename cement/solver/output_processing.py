@@ -33,6 +33,7 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
     )
 
     """ technology roadmap """
+    logger.info("Post-processing technology roadmap")
     df_tech_roadmap = _create_tech_roadmaps_by_region(
         importer=importer, start_year=START_YEAR, end_year=END_YEAR
     )
@@ -46,6 +47,7 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
     )
 
     """ Emissions """
+    logger.info("Post-processing emissions")
     df_total_emissions = _calculate_emissions_total(
         importer=importer, ghgs=GHGS, emission_scopes=EMISSION_SCOPES, format_data=False
     )
@@ -59,11 +61,45 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
         technology_layout=TECHNOLOGY_LAYOUT,
     )
 
-    """ Investments """
+    """ Cost """
+    logger.info("Post-processing cost data")
     df_investments = _calculate_annual_investments(
         df_cost=importer.get_technology_transitions_and_cost(),
         importer=importer,
         sector=sector,
+    )
+    importer.export_data(
+        df=df_investments,
+        filename="pathway_investments.csv",
+        export_dir="final/cost",
+        index=True,
+    )
+    if pathway_name != "bau":
+        df_additional_investments = _calculate_total_additional_investments(
+            df_investments=df_investments,
+            importer=importer,
+            sector=sector,
+            pathway_name=pathway_name,
+            sensitivity=sensitivity,
+        )
+        importer.export_data(
+            df=df_additional_investments,
+            filename="additional_investments.csv",
+            export_dir="final/cost",
+            index=True,
+        )
+
+    """ LCOC """
+    df_lcoc = calculate_weighted_average_lcox(
+        df_cost=importer.get_technology_transitions_and_cost(),
+        importer=importer,
+        sector=sector,
+    )
+    importer.export_data(
+        df=df_lcoc,
+        filename="lcoc.csv",
+        export_dir="final/cost",
+        index=True,
     )
 
     logger.info("Output processing done")
@@ -719,7 +755,11 @@ def _calculate_annual_investments(
         df["investment"] = (
             df["switch_capex"] * df["annual_production_capacity_destination"] * 1e6
         )
-        df = df.groupby(agg_vars + ["year"])[["investment"]].sum().reset_index(drop=False)
+        df = (
+            df.groupby(agg_vars + ["year"])[["investment"]]
+            .sum()
+            .reset_index(drop=False)
+        )
 
         df = df.melt(
             id_vars=agg_vars + ["year"],
@@ -772,6 +812,102 @@ def _calculate_annual_investments(
     return df_pivot
 
 
+def _calculate_total_additional_investments(
+    df_investments: pd.DataFrame,
+    importer: IntermediateDataImporter,
+    sector: str,
+    pathway_name: str,
+    sensitivity: str,
+) -> pd.DataFrame:
+    """Calculates the investments in addition to the BAU scenario
+
+    Args:
+        df_investments ():
+        importer ():
+        sector ():
+
+    Returns:
+
+    """
+
+    if pathway_name != "bau":
+        # get BAU demand
+        df_investments_bau = importer.get_pathway_investments(
+            pathway_name="bau", sensitivity=sensitivity
+        )
+        model_years_str = [str(x) for x in MODEL_YEARS]
+        df_investments_bau = pd.melt(
+            frame=df_investments_bau,
+            id_vars=[x for x in list(df_investments_bau) if x not in model_years_str],
+            value_vars=[str(x) for x in MODEL_YEARS if x != MODEL_YEARS[0]],
+            var_name="year",
+            value_name="value",
+        )[["region", "technology", "parameter", "year", "value"]]
+        df_investments_bau = df_investments_bau.astype(
+            dtype={
+                "region": str,
+                "technology": str,
+                "parameter": str,
+                "year": int,
+                "value": float,
+            }
+        )
+        # df_investments_bau.set_index(keys=[x for x in list(df_investments_bau) if x != "value"], inplace=True)
+
+        df_investments = pd.melt(
+            frame=df_investments.reset_index(),
+            id_vars=list(df_investments.index.names),
+            value_vars=list(df_investments),
+            var_name="year",
+            value_name="value",
+        )[["region", "technology", "parameter", "year", "value"]]
+        df_investments_bau = df_investments_bau.astype(
+            dtype={
+                "region": str,
+                "technology": str,
+                "parameter": str,
+                "year": int,
+                "value": float,
+            }
+        )
+        # df_investments.set_index(keys=[x for x in list(df_investments) if x != "value"], inplace=True)
+
+        # merge and calculate additional investments
+        df_investments = pd.merge(
+            left=df_investments_bau.reset_index(drop=True),
+            right=df_investments.reset_index(drop=True),
+            how="outer",
+            on=["region", "technology", "parameter", "year"],
+            suffixes=("_bau", f"_{pathway_name}"),
+        ).fillna(float(0))
+        df_investments["value"] = (
+            df_investments[f"value_{pathway_name}"] - df_investments["value_bau"]
+        )
+        df_investments = df_investments.set_index(
+            ["region", "technology", "parameter", "year"]
+        ).sort_index()[["value"]]
+
+        return df_investments
+
+
+def _export_and_plot_investments(
+    pathway_name: str,
+    sensitivity: str,
+    df_investments: pd.DataFrame,
+    importer: IntermediateDataImporter,
+):
+
+    df_investments = pd.melt(
+        frame=df_investments.reset_index(),
+        id_vars=list(df_investments.index.names),
+        value_vars=list(df_investments),
+        var_name="year",
+        value_name="value",
+    )
+
+    # todo: plot
+
+
 def calculate_weighted_average_lcox(
     df_cost: pd.DataFrame,
     importer: IntermediateDataImporter,
@@ -789,7 +925,8 @@ def calculate_weighted_average_lcox(
 
     else:
         df = pd.DataFrame()
-        # In every year, get LCOX of the asset based on the year it was commissioned and average according to desired aggregation
+        # In every year, get LCOX of the asset based on the year it was commissioned and average according to desired
+        #   aggregation
         for year in np.arange(START_YEAR, END_YEAR + 1):
             df_stack = importer.get_asset_stack(year)
             df_stack = df_stack.rename(columns={"year_commissioned": "year"})
