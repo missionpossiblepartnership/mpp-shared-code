@@ -185,6 +185,7 @@ class AssetStack:
             if (switch_type == "brownfield_rebuild") or (
                 switch_type == "brownfield_newbuild"
             ):
+                # todo: make it count in cement if it's the same tech!
                 asset_to_update.rebuild = True
                 asset_to_update.stay_same = False
         if origin_technology == new_technology:

@@ -231,7 +231,7 @@ RANKING_CONFIG = {
 YEAR_2050_EMISSIONS_CONSTRAINT = 2060
 # Technology ramp-up parameters (on global technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
-    "init_maximum_asset_additions": 10,
+    "init_maximum_asset_additions": 5,
     "maximum_asset_growth_rate": 0.05,
     "years_rampup_phase": 30,
 }
