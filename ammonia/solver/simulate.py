@@ -1,4 +1,5 @@
-"""Year-by-year optimisation logic of plant investment decisions to simulate a pathway for the ammonia supply technology mix."""
+"""Year-by-year optimisation logic of plant investment decisions to simulate a pathway for the ammonia supply
+technology mix."""
 
 from datetime import timedelta
 from timeit import default_timer as timer
