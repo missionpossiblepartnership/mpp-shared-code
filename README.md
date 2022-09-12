@@ -24,7 +24,15 @@ The main files for the MPP shared solver are in the `mppshared` package. The `mp
   - `mppshared.agent_logic.greenfield`: It has the actions to build a new greenfield asset.
   - `mppshared.agent_logic.decommission`: It has the actions to decommission an asset.
   - `mppshared.agent_logic.agent_logic_functions`: Shared functions for the previously described modules.
-- `mppshared.solver`:
+- `mppshared.solver`: This modul contains different submodules used to solve the simulations, the most relevant are:
+  - `mppshared.solver.implicit_forcing`: Contains the different functions used to simulate the implicit forcing mechanisms in the available transitions, such as filtering out non logical transitions (end-state to initial technologies), add carbon costs to the ranking metric, apply technology moratoriums, etc.
+  - `mppshared.solver.ranking` Contains the functions used to create the ranking tables to be used while deciding to which technology transition. Currently, the ranking can be calculated as an histogram, or by uncertainty bins.
+
+Using this modules it is possible to build simulations like the ones for Aluminium and Ammonia. Both of these sector use the building block provided in the `mppshared` library to build their models.
+
+### How to run the simulations
+
+## Contributing
 
 #### Code style
 
@@ -32,7 +40,7 @@ The repository uses black as a code formatter. From README:
 
 >Black is the uncompromising Python code formatter. By using it, you agree to cede control over minutiae of hand-formatting. In return, Black gives you speed, determinism, and freedom from pycodestyle nagging about formatting. You will save time and mental energy for more important matters.
 
-Blackened code looks the same regardless of the project you're reading. Formatting becomes transparent after a while and you can focus on the content instead.
+> Blackened code looks the same regardless of the project you're reading. Formatting becomes transparent after a while and you can focus on the content instead.
 
 Black makes code review faster by producing the smallest diffs possible.
 
