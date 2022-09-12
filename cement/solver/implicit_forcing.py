@@ -80,11 +80,11 @@ def apply_implicit_forcing(
             moratorium_year=TECHNOLOGY_MORATORIUM,
             transitional_period_years=TRANSITIONAL_PERIOD_YEARS,
         )
+
     # Add technology classification
-    else:
-        df_technology_switches = add_technology_classification_to_switching_table(
-            df_technology_switches, df_technology_characteristics
-        )
+    df_technology_switches = add_technology_classification_to_switching_table(
+        df_technology_switches, df_technology_characteristics
+    )
 
     # Calculate emission deltas between origin and destination technology
     df_tech_to_rank = calculate_emission_reduction(
@@ -115,6 +115,16 @@ def apply_implicit_forcing(
         ~(
             df_tech_to_rank["technology_origin"].str.contains("usage")
             | df_tech_to_rank["technology_destination"].str.contains("usage")
+        ),
+        :,
+    ]
+    # todo dev
+
+    # todo dev: remove this workaround of excluding all direct separation techs
+    df_tech_to_rank = df_tech_to_rank.loc[
+        ~(
+            df_tech_to_rank["technology_origin"].str.contains("direct separation")
+            | df_tech_to_rank["technology_destination"].str.contains("direct separation")
         ),
         :,
     ]
