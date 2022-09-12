@@ -66,6 +66,7 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     df_rank_region=df_rank_region,
                     product=product,
                     region=region,
+                    year=year,
                 )
                 # TODO: check if removing this asset violates any constraints
             except ValueError:

@@ -72,7 +72,8 @@ def remove_all_transitions_with_destination_technology(
             ~(
                 (df_rank["technology_destination"] == technology_destination)
                 & (df_rank["region"] == region)
-            ), :
+            ),
+            :,
         ]
     else:
         df_rank = df_rank.loc[
@@ -316,3 +317,40 @@ def apply_regional_technology_ban(
         )
         df_technology_switches = df_technology_switches.loc[~banned_transitions]
     return df_technology_switches
+
+
+def get_constraints_to_apply(
+    pathway_constraints_to_apply: list,
+    origin_technology: str,
+    destination_technology: str,
+):
+    """Filters the constraints to apply based on the chosen transition to reduce runtime
+
+    Args:
+        pathway_constraints_to_apply ():
+        origin_technology ():
+        destination_technology ():
+
+    Returns:
+        constraints_to_apply (list): list of all constraints that must be applied for the chosen transition
+    """
+
+    constraints_to_apply = pathway_constraints_to_apply
+
+    # remove all constraints if origin tech == destination tech
+    if origin_technology == destination_technology:
+        return []
+
+    # remove alternative fuels constraint if destination tech != alternative fuels
+    if not ("alternative fuels" in destination_technology):
+        constraints_to_apply = [
+            x for x in constraints_to_apply if x != "alternative_fuel_constraint"
+        ]
+
+    # remove CO2 storage constraint if destination tech != storage tech
+    if not ("storage" in destination_technology):
+        constraints_to_apply = [
+            x for x in constraints_to_apply if x != "co2_storage_constraint"
+        ]
+
+    return constraints_to_apply
