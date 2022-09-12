@@ -9,6 +9,14 @@ This repository contains the MPP Shared Industry Solver and the Ammonia and Alum
 
 ## How to use it
 
+To start using the code, you can clone the repository and install the required packages using the following commands:
+
+```bash
+git clone
+cd mpp-shared-code
+pip install -r requirements.txt
+```
+
 The main files for the MPP shared solver are in the `mppshared` package. The `mppshared` package contains the following modules:
 
 - `mppshared.import_data.intermediate_data`: Stores the `IntermediateDataImporter` class, which provides methods to retrieve all the different datafiles needed for the simulations.
@@ -32,85 +40,32 @@ Using this modules it is possible to build simulations like the ones for Alumini
 
 ### How to run the simulations
 
-## Contributing
+The Aluminium and Ammonia code are stored in their own folders, it is possible to run either of them directly from `main.py`, the only configuration needed is to change the name of the sector in the `main.py` file. The code will run the simulation for the sector and save the results in the `{sector}/data/{pathway}/final` folder.
 
-#### Code style
+Each sector has a `config_{sector}.py` file to store the different configurations available to the model, such as `START_YEAR`, END_YEAR` for the simulations, pathways to run, constraints to apply, and ranking configurations.
 
-The repository uses black as a code formatter. From README:
+Each sector has their own `main_{sector}.py` file that controls the different steps of the simulation and calls the different functions to load the data, apply the implicit forcing mechanisms, make the ranking tables, run the simulation, and produce the results.
 
->Black is the uncompromising Python code formatter. By using it, you agree to cede control over minutiae of hand-formatting. In return, Black gives you speed, determinism, and freedom from pycodestyle nagging about formatting. You will save time and mental energy for more important matters.
-
-> Blackened code looks the same regardless of the project you're reading. Formatting becomes transparent after a while and you can focus on the content instead.
-
-Black makes code review faster by producing the smallest diffs possible.
-
-You can configure your editor to use Black by default and format the code every time it is saved.
-
-+ [VSCode](https://code.visualstudio.com/docs/python/editing#_formatting)
-+ [PyCharm](https://black.readthedocs.io/en/stable/integrations/editors.html#pycharm-intellij-idea)
-
-For sorting the imports and the repository uses `isort`, it sort imports alphabetically, and automatically separated into sections and by type. As with Black, isort can be used directly in the [code editors](https://github.com/pycqa/isort/wiki/isort-Plugins).
-
-Both black and isort are installed by default in the `mpp-dev` conda environment. To automatically format the code, move to the repository's root directory and run the following:
-
-```bash
-bash ./tests/black.sh
-```
-
-## Project Context
-
-## Project Goals
-
-## Installation
-
-To install it with pip directly from GitHub:
-
-```bash
-pip install git+https://${YOUR_GITHUB_TOKEN}@github.com/systemiqofficial/mpp-shared-code.git
-```
-
-Change the `YOUR_GITHUB_TOKEN` to your personal access token. You can create one in https://github.com/settings/tokens.
-
-### Installation from source
-
-To install MPP-SHARED-CODE from source you will need the dependencies, and in the mppshared folder execute:
-
-```bash
-python setup.py install
-```
-
-## Useful resources
-
-+ [Official MPP Website](https://missionpossiblepartnership.org/)
-+ [Energy Transistions Commission](https://www.energy-transitions.org/)
-
-## Setting up and running the model
-Set up a conda environnment using the environment.yml file
-
-To create a new environment:
-
-```bash
-conda env create -f environment.yml
-```
+The `solver` inside each of the sectors, contains the dedicated files to run the simulation, these files are built using the classes and methods from `mppshared`.
 
 ## Contributing
 
 All contributions, bug reports, bug fixes, documentation improvements, code enhancements, and ideas are welcome.
 
-Before opening a pull request make sure to check the code format, linting and Continuous Integration process [here.](tests/README.md)
+To contribute to the code you can fork the repository and create a pull request with your changes. The code is formatted using `black` and `isort`, so it is recommended to use these tools to format the code before creating the pull request. Make sure that the tests pass before creating the pull request.
 
-### Development environment
+## Useful resources
 
-There is a development environment, to install it:
-
-```bash
-conda env create -f tests/environment-dev.yml
-```
++ [Official MPP Website](https://missionpossiblepartnership.org/)
++ [Energy Transition Commission](https://www.energy-transitions.org/)
 
 ## Contacts
 
-### Technical questions
+For any questions, please contact [MPP](mailto:).
+
+### Contributors
 
 - [Andrew Isabirye](andrew.isabirye@systemiq.earth)
 - [Luis Natera](luis.natera@systemiq.earth)
-- [Pim Sauter](pim.sauter@systemiq.earth)
+- [Johannes Wullenweber]()
+- [Timon Ruckel]()
