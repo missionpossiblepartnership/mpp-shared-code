@@ -20,34 +20,19 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Set up Python 3.9
+      - name: Set up Python 3.10
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: 3.10
 
-      - name: Setup conda environment
-        uses: conda-incubator/setup-miniconda@v2
-        with:
-          python-version: 3.9
-          use-only-tar-bz2: false # required for caching
-          show-channel-urls: true
-          channel-priority: strict
-          activate-environment: mpp-dev
-          environment-file: tests/environment-dev.yml
-
-      - name: Install mppshared
+      - name: Install dependencies
         run: |
-          conda activate mpp-dev
-          python setup.py install
-          conda list
-          conda info --all
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
       - name: Unit Tests
         id: unit-tests
         run: |
-          conda activate mpp-dev
-          which conda
-          which python
           coverage run --source ./mppshared --module pytest --verbose
           coverage xml -i
           coverage report -m
