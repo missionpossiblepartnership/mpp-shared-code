@@ -13,3 +13,4 @@ setuptools>=62.6.0
 pyparsing>=3.0.9
 future>=0.18.2
 rich>=10.16.2
+coverage>=6.4
