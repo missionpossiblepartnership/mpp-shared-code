@@ -6,6 +6,7 @@ from cement.config.config_cement import (
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
     CAPACITY_UTILISATION_FACTOR,
     LOG_LEVEL,
+    CONSTRAINTS_REGIONAL_CHECK,
 )
 from mppshared.agent_logic.greenfield import (
     enact_greenfield_transition,
@@ -78,6 +79,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
                     cuf=CAPACITY_UTILISATION_FACTOR,
                     return_df_rank=True,
+                    constraints_regional_check=CONSTRAINTS_REGIONAL_CHECK,
                 )
                 enact_greenfield_transition(
                     pathway=pathway, stack=stack, new_asset=new_asset, year=year

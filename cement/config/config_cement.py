@@ -19,7 +19,7 @@ run_config = {
 RUN_PARALLEL = False
 LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
-COMPUTE_LCOX = False
+COMPUTE_LCOX = True
 
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
@@ -147,6 +147,9 @@ TRANSITION_TYPES = {
 
 RANK_TYPES = ["decommission", "greenfield", "brownfield"]
 
+# set the switch types that will update an assets commissioning year
+SWITCH_TYPES_UPDATE_YEAR_COMMISSIONED = ["brownfield_renovation", "brownfield_rebuild"]
+
 # define regions that can have switches to natural gas
 REGIONS_NATURAL_GAS = ["North America", "Russia", "Middle East"]
 
@@ -154,9 +157,8 @@ REGIONS_NATURAL_GAS = ["North America", "Russia", "Middle East"]
 COST_CLASSIFICATIONS = {"low": "Low", "standard": "Standard", "high": "High"}
 
 CARBON_BUDGET_SECTOR_CSV = False
-CARBON_BUDGET_SHAPE = "linear"  # options: todo
+CARBON_BUDGET_SHAPE = "exponential"  # linear, exponential
 # carbon budget 2020 - 2050 in Gt
-# todo: why is this not being used?
 SECTORAL_CARBON_BUDGETS = {
     "cement": 42,
 }
@@ -164,8 +166,7 @@ SECTORAL_CARBON_BUDGETS = {
 emissions_2020 = 2.4  # Gt CO2 (scopes 1 and 2)
 SECTORAL_CARBON_PATHWAY = {
     "emissions_start": emissions_2020,
-    "emissions_end": 0.06
-    * 3.85,  # recarbonation share in 2050 according to GCCA roadmap
+    "emissions_end": 0.06 * 3.85,  # recarbonation GCCA roadmap
     "action_start": 2023,
 }
 
@@ -224,18 +225,22 @@ RANKING_CONFIG = {
 YEAR_2050_EMISSIONS_CONSTRAINT = 2060
 # Technology ramp-up parameters (on global technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
-    "init_maximum_asset_additions": 40,
+    "init_maximum_asset_additions": 10,
     "maximum_asset_growth_rate": 0.05,
     "years_rampup_phase": 30,
 }
 # CO2 storage constraint
 SET_CO2_STORAGE_CONSTRAINT = True
-CO2_STORAGE_CONSTRAINT_TYPE = "total_cumulative"   # "annual_cumulative", "annual_addition", "total_cumulative", or None
+CO2_STORAGE_CONSTRAINT_TYPE = "total_cumulative"  # "annual_cumulative", "annual_addition", "total_cumulative", or None
+
+# define whether constraints shall only checked regionally (if applicable) to reduce runtime
+CONSTRAINTS_REGIONAL_CHECK = True
+
+# define which constraints will be applied for every pathway
 CONSTRAINTS_TO_APPLY = {
     "bau": [
         "rampup_constraint",
         # "regional_constraint",
-        # "natural_gas_constraint",
         "alternative_fuel_constraint",
         # "co2_storage_constraint",
     ],
@@ -243,17 +248,15 @@ CONSTRAINTS_TO_APPLY = {
         # "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",
-        # "natural_gas_constraint",
         "alternative_fuel_constraint",
-        # "co2_storage_constraint",
+        "co2_storage_constraint",
     ],
     "lc": [
         # "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",
-        # "natural_gas_constraint",
         "alternative_fuel_constraint",
-        # "co2_storage_constraint",
+        "co2_storage_constraint",
     ],
 }
 REGIONAL_PRODUCTION_SHARES = {
