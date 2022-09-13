@@ -5,7 +5,7 @@
 
 # MPP Shared Industry Solver
 
-This repository contains the MPP Shared Industry Solver and the Ammonia and Aluminium models. Both models were developed as part of the [Mission Possible Partnership](https://www.missionpossiblepartnership.org) (MPP). The MPP Shared Industry Solver is a Python package that can be used to build industry decarbonization models. The Ammonia and Aluminium models are examples of how to use the building blocks provided in the MPP Solver.
+This repository contains the MPP Shared Industry Solver and the Ammonia and Aluminium models. Both models were developed as part of the [Mission Possible Partnership](https://www.missionpossiblepartnership.org) (MPP). The MPP Shared Industry Solver is a Python package that can be used to build industry decarbonization models. The Ammonia and Aluminium models are built up from modules provided by the MPP Shared Industry Solver.
 
 [Read the full documentation](https://app.gitbook.com/o/vfc6mmxMh4Zr7LjKZ5yL/s/UKDdKXTb4UiV0Lp7btFG/)
 
@@ -26,10 +26,10 @@ The main files for the MPP shared solver are in the `mppshared` package. The `mp
   - `mppshared.models.asset`: Contains the `Asset` class, this class is used to store the assets through the simulation, and it contains multiple parameters and methods to work with. Besides the `Asset` class it also includes an `AssetStack` class to store all the assets that are available during a given year in a simulation.
   - `mppshared.models.simulation_pathway`: Contains the `SimulationPathway` class, this class is used to store the simulation pathways, and it contains all the parameters needed to describe the pathway running, and methods to interact with the pathway (e.g. calculate the emissions for a given year, get the stack for a given year, etc).
   - `mppshared.models.transition`: Contains the `TransitionRegistry` class, used to track the different transitions that have been applied to the assets in the simulation. This class can produce a `pandas.DataFrame` with all the transitions.
-  - `mppshared.models.carbon_budget`: Contains the `CarbonBudget` class, used to store the carbon budget for a sector, it can produce different carbon budget shapes by taking the start, end year. IT also has a method to access the emission limit for a given year.
+  - `mppshared.models.carbon_budget`: Contains the `CarbonBudget` class, used to store the carbon budget for a sector, it can produce different carbon budget shapes by taking the start, end year. It also has a method to access the emission limit for a given year.
   - `mppshared.models.carbon_cost_trajectory`: Contains a `CarbonCost` class to define the trajectory of the carbon cost to be applied to the different transitions based on the technology destination emissions.
-  - `mppshared.models.constraints`: A collection of different constraints to be used with the model, THe constraints are applied each time the model wants to make a transition, each constraint returns a boolean value indicating if the transition is allowed or not.
-- `mppshared.agent_logic`: Contains the different actions that can be implemented in a company asset:
+  - `mppshared.models.constraints`: A collection of different constraints to be used with the model, The constraints are applied each time the model wants to make a transition, each constraint returns a boolean value indicating if the transition is allowed or not.
+- `mppshared.agent_logic`: Contains the different actions that the assets can take in the simulation, from being decommissioned, to being replaced by a new asset, or being upgraded:
   - `mppshared.agent_logic.brownfield`: It has the actions to enact a retrofit in a brownfield asset.
   - `mppshared.agent_logic.greenfield`: It has the actions to build a new greenfield asset.
   - `mppshared.agent_logic.decommission`: It has the actions to decommission an asset.
@@ -50,12 +50,6 @@ Each sector has their own `main_{sector}.py` file that controls the different st
 
 The `solver` inside each of the sectors, contains the dedicated files to run the simulation, these files are built using the classes and methods from `mppshared`.
 
-## Contributing
-
-All contributions, bug reports, bug fixes, documentation improvements, code enhancements, and ideas are welcome.
-
-To contribute to the code you can fork the repository and create a pull request with your changes. The code is formatted using `black` and `isort`, so it is recommended to use these tools to format the code before creating the pull request. Make sure that the tests pass before creating the pull request.
-
 ## Useful resources
 
 + [Official MPP Website](https://missionpossiblepartnership.org/)
@@ -67,7 +61,8 @@ For any questions, please contact [MPP](mailto:).
 
 ### Contributors
 
-- [Andrew Isabirye](andrew.isabirye@systemiq.earth)
-- [Luis Natera](luis.natera@systemiq.earth)
-- [Johannes Wullenweber]()
-- [Timon Ruckel]()
+- Andrew Isabirye
+- Johannes Wüllenweber
+- Luis Natera
+- Shajeeshan Lingeswaran
+- Timon Rückel
