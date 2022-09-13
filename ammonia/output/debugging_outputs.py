@@ -95,7 +95,7 @@ def output_renovation_transitions_by_year(
     df_transitions_renovation_status = df_transitions.loc[
         df_transitions["parameter"] == f"{renovation_type}_status"
     ]
-    renovation_techs = defaultdict()
+    renovation_techs = defaultdict() # type: dict
 
     # Iterate over every year and create dictionary of newbuild technologies in that year (no newbuild in 2020)
     for year in np.arange(START_YEAR, END_YEAR):
@@ -172,7 +172,7 @@ def create_newbuild_capacity_outputs_by_region(
     """Show newbuild capacity by region"""
 
     df_transitions = df_transitions.reset_index(drop=False)
-    newbuild_regions = defaultdict()
+    newbuild_regions = defaultdict() # type: dict
 
     # Iterate over every year and create dictionary of newbuild technologies in that year (no newbuild in 2020)
     for year in np.arange(START_YEAR, END_YEAR):
@@ -230,7 +230,7 @@ def create_newbuild_capacity_outputs_by_technology(
     """Show newbuild capacity by technology for every year, in stacked bar chart."""
 
     df_transitions = df_transitions.reset_index(drop=False)
-    newbuild_techs = defaultdict()
+    newbuild_techs = defaultdict() # type: dict
 
     # Iterate over every year and create dictionary of newbuild technologies in that year (no newbuild in 2020)
     for year in np.arange(START_YEAR, END_YEAR):

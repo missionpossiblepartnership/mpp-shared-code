@@ -1,6 +1,5 @@
 """ Process outputs to standardised output table."""
 
-import numpy as np
 import pandas as pd
 
 from aluminium.config_aluminium import *
@@ -100,54 +99,6 @@ def _calculate_emissions(
     df_stack["parameter_group"] = "Emissions"
     df_stack["unit"] = df_stack["parameter"].apply(lambda x: map_unit[x])
     df_stack["parameter"] = df_stack["parameter"].replace(map_rename)
-    if "technology" not in agg_vars:
-        df_stack["technology"] = "All"
-
-    return df_stack
-
-
-def _calculate_emissions_co2e(
-    df_stack: pd.DataFrame,
-    df_emissions: pd.DataFrame,
-    gwp="GWP-100",
-    agg_vars=["product", "region", "technology"],
-):
-    """Calculate GHG emissions in CO2e according to specified GWP (GWP-20 or GWP-100)."""
-
-    logger.info("-- Calculating emissions in CO2e")
-
-    # Emissions are the emissions factor multiplied with the annual production volume
-    df_stack = df_stack.merge(df_emissions, on=["product", "region", "technology"])
-    scopes = [f"{ghg}_{scope}" for scope in EMISSION_SCOPES for ghg in GHGS]
-
-    for scope in scopes:
-        df_stack[scope] = df_stack[scope] * df_stack["annual_production_volume"]
-
-    df_stack = (
-        df_stack.groupby(agg_vars)[scopes + ["annual_production_volume"]]
-        .sum()
-        .reset_index()
-    )
-
-    for scope in EMISSION_SCOPES:
-        df_stack[f"CO2e {str.capitalize(scope).replace('_', ' ')}"] = 0
-        for ghg in GHGS:
-            df_stack[f"CO2e {str.capitalize(scope).replace('_', ' ')}"] += (
-                df_stack[f"{ghg}_{scope}"] * GWP[gwp][ghg]
-            )
-
-    df_stack = df_stack.melt(
-        id_vars=agg_vars,
-        value_vars=[
-            f"CO2e {str.capitalize(scope).replace('_', ' ')}"
-            for scope in EMISSION_SCOPES
-        ],
-        var_name="parameter",
-        value_name="value",
-    )
-
-    df_stack["parameter_group"] = "Emissions"
-    df_stack["unit"] = "Mt CO2e"
     if "technology" not in agg_vars:
         df_stack["technology"] = "All"
 
