@@ -1,4 +1,5 @@
 """Asset and asset stack classes, code adapted from MCC"""
+import sys
 from copy import deepcopy
 from uuid import uuid4
 from xmlrpc.client import Boolean
@@ -620,7 +621,7 @@ class AssetStack:
         region: str,
         year: int,
     ) -> list:
-        """Return a list of Assets from the AssetStack that are eligible for decommissioning"""
+        """Return a list of Assets from the AssetStack that are eligible for decommissioning in a region"""
 
         # Filter for assets with the specified product
         assets = deepcopy(self.filter_assets(product=product, region=region))
@@ -631,14 +632,21 @@ class AssetStack:
         # if there are no assets left, those that are at the end of their lifetime can be decommissioned
         if len(list(candidates)) == 0:
             candidates = filter(
-                lambda asset: asset.get_age(year) >= asset.asset_lifetime, candidates
+                lambda asset: (asset.get_age(year) >= asset.asset_lifetime), assets
             )
+        else:
+            return list(candidates)
 
-        # if there are still no assets left, every asset can be decommissioned
+        # if there are still no assets left, every asset in the region can be decommissioned
         if len(list(candidates)) == 0:
-            return deepcopy(self.assets)
+            candidates = assets
+        else:
+            return list(candidates)
 
-        return list(candidates)
+        if len(list(candidates)) == 0:
+            logger.critical(f"{year}: No assets can be found in {region}")
+        else:
+            return list(candidates)
 
     def get_assets_eligible_for_brownfield(
         self, year: int, investment_cycle: int

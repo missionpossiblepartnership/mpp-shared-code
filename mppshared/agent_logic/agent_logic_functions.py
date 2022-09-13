@@ -48,6 +48,7 @@ def remove_transition(df_rank: pd.DataFrame, transition: dict) -> pd.DataFrame:
     Returns:
         ranking table without the row corresponding to the transition removed
     """
+
     return df_rank.loc[
         ~(df_rank[list(transition)] == pd.Series(transition)).all(axis=1)
     ]
@@ -95,12 +96,14 @@ def remove_all_transitions_with_origin_destination_technology(
     """
     Remove all transitions with a specific combination of origin and destination technology from the ranking table.
     """
+
     df_rank = df_rank.loc[
         ~(
             (df_rank["technology_destination"] == transition["technology_destination"])
             & (df_rank["technology_origin"] == transition["technology_origin"])
         )
     ]
+
     return df_rank
 
 

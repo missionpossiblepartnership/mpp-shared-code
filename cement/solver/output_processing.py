@@ -37,6 +37,7 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
     df_tech_roadmap = _create_tech_roadmaps_by_region(
         importer=importer, start_year=START_YEAR, end_year=END_YEAR
     )
+    # todo: add shares in % per tech
     _export_and_plot_tech_roadmaps_by_region(
         pathway_name=pathway_name,
         sensitivity=sensitivity,
@@ -70,7 +71,7 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
     )
     importer.export_data(
         df=df_investments,
-        filename="pathway_investments.csv",
+        filename=f"{pathway_name}_pathway_investments.csv",
         export_dir="final/cost",
         index=True,
     )
@@ -84,7 +85,7 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
         )
         importer.export_data(
             df=df_additional_investments,
-            filename="additional_investments.csv",
+            filename=f"{pathway_name}_additional_investments.csv",
             export_dir="final/cost",
             index=True,
         )
@@ -97,7 +98,7 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
     )
     importer.export_data(
         df=df_lcoc,
-        filename="lcoc.csv",
+        filename=f"{pathway_name}_lcoc.csv",
         export_dir="final/cost",
         index=True,
     )
@@ -151,7 +152,7 @@ def _export_and_plot_tech_roadmaps_by_region(
 
         importer.export_data(
             df=df_roadmap_region,
-            filename=f"technology_roadmap_{region}.csv",
+            filename=f"{pathway_name}_technology_roadmap_{region}.csv",
             export_dir="final/technology_roadmap",
             index=True,
         )
@@ -163,9 +164,9 @@ def _export_and_plot_tech_roadmaps_by_region(
             color="technology",
             labels={
                 "year": "Year",
-                "annual_production_volume": f"Annual production volume in {unit}",
+                "annual_production_volume": f"Annual production volume in %",
             },
-            title=f"{region}: Technology roadmap ({pathway_name}_{sensitivity})",
+            title=f"{region}: Technology roadmap shares ({pathway_name}_{sensitivity})",
             category_orders={"technology": list(technology_layout)},
             color_discrete_map=technology_layout,
         )
@@ -174,9 +175,36 @@ def _export_and_plot_tech_roadmaps_by_region(
 
         plot(
             figure_or_data=fig,
-            filename=f"{importer.final_path}/technology_roadmap/technology_roadmap_{region}.html",
+            filename=f"{importer.final_path}/technology_roadmap/{pathway_name}_technology_roadmap_{region}.html",
             auto_open=False,
         )
+
+        # get global tech shares
+        if region == "Global":
+            fig = px.area(
+                data_frame=df_roadmap_region.reset_index(),
+                x="year",
+                y="annual_production_volume",
+                color="technology",
+                labels={
+                    "year": "Year",
+                    "annual_production_volume": f"Annual production volume in {unit}",
+                },
+                title=f"{region}: Technology roadmap ({pathway_name}_{sensitivity})",
+                category_orders={"technology": list(technology_layout)},
+                color_discrete_map=technology_layout,
+                groupnorm="percent",
+            )
+
+            fig.for_each_trace(lambda trace: trace.update(fillcolor=trace.line.color))
+
+            plot(
+                figure_or_data=fig,
+                filename=(
+                    f"{importer.final_path}/technology_roadmap/{pathway_name}_technology_roadmap_{region}_shares.html"
+                ),
+                auto_open=False,
+            )
 
 
 def _calculate_number_of_assets(df_stack: pd.DataFrame) -> pd.DataFrame:
@@ -397,7 +425,7 @@ def _export_and_plot_emissions_by_region(
 
         importer.export_data(
             df=df_region,
-            filename=f"emissions_{region}.csv",
+            filename=f"{pathway_name}_emissions_{region}.csv",
             export_dir="final/emissions",
             index=False,
         )
@@ -417,6 +445,7 @@ def _export_and_plot_emissions_by_region(
                 .reset_index()
             )
 
+            cum_sum = np.round(df_region_area["value"].sum() / 1e3, decimals=2)
             fig_area = px.area(
                 data_frame=df_region_area,
                 x="year",
@@ -426,7 +455,7 @@ def _export_and_plot_emissions_by_region(
                     "year": "Year",
                     "value": f"{ghg} emissions in Mt {ghg}",
                 },
-                title=f"{region}: {ghg} emissions all scopes ({pathway_name}_{sensitivity})",
+                title=f"{region}: {ghg} emissions all scopes ({pathway_name}_{sensitivity}; cum.: {cum_sum} Gt {ghg})",
                 category_orders={"technology": list(technology_layout)},
                 color_discrete_map=technology_layout,
             )
@@ -437,7 +466,7 @@ def _export_and_plot_emissions_by_region(
 
             plot(
                 figure_or_data=fig_area,
-                filename=f"{importer.final_path}/emissions/emissions_by_tech_{region}_{ghg}.html",
+                filename=f"{importer.final_path}/emissions/{pathway_name}_emissions_by_tech_{region}_{ghg}.html",
                 auto_open=False,
             )
 
@@ -489,7 +518,7 @@ def _export_and_plot_emissions_by_region(
 
         plot(
             figure_or_data=fig_line,
-            filename=f"{importer.final_path}/emissions/emissions_by_ghg_scope_{region}.html",
+            filename=f"{importer.final_path}/emissions/{pathway_name}_emissions_by_ghg_scope_{region}.html",
             auto_open=False,
         )
 
@@ -670,6 +699,9 @@ def _calculate_annual_investments(
     agg_vars=["product", "region", "switch_type", "technology_destination"],
 ) -> pd.DataFrame:
     """Calculate annual investments (CAPEX)."""
+
+    # todo: adjust when implementing OPEX context!
+    df_cost = df_cost.loc[(df_cost["opex_context"] == "value_high_low"), :]
 
     # Calculate investment from newbuild, brownfield retrofit and brownfield rebuild technologies in every year
     switch_types = ["greenfield", "rebuild", "retrofit"]

@@ -28,10 +28,10 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 funcs = {
-    "IMPORT_DATA": import_and_preprocess,
-    "CALCULATE_VARIABLES": get_ranking_inputs,
-    "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    "MAKE_RANKINGS": make_rankings,
+    # "IMPORT_DATA": import_and_preprocess,
+    # "CALCULATE_VARIABLES": get_ranking_inputs,
+    # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
+    # "MAKE_RANKINGS": make_rankings,
     "SIMULATE_PATHWAY": simulate_pathway,
     "CALCULATE_OUTPUTS": calculate_outputs,
     # "CREATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
@@ -54,7 +54,6 @@ def _run_model(pathway_name: str, sensitivity: str):
 
 def run_model_sequential(runs: list):
     """Run model sequentially, slower but better for debugging"""
-    # TODO: Pass carbon cost trajectories into the model
     for pathway_name, sensitivity in runs:
         _run_model(pathway_name=pathway_name, sensitivity=sensitivity)
 

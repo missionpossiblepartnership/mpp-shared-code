@@ -61,7 +61,9 @@ class IntermediateDataImporter:
         else:
             self.business_case_excel_filename = business_case_excel_filename
         self.core_data_path = parent_path.joinpath(f"{sector}/data")
-        self.raw_path = parent_path.joinpath(f"{self.core_data_path}/01_business_case_raw")
+        self.raw_path = parent_path.joinpath(
+            f"{self.core_data_path}/01_business_case_raw"
+        )
         self.import_path = self.export_dir.joinpath("import")
         self.intermediate_path = self.export_dir.joinpath("intermediate")
         self.stack_tracker_path = self.export_dir.joinpath("stack_tracker")
@@ -214,9 +216,7 @@ class IntermediateDataImporter:
         Returns: biomass_constraint (Unit: GJ / year)
         """
 
-        return pd.read_csv(
-            self.intermediate_path.joinpath("biomass_constraint.csv")
-        )
+        return pd.read_csv(self.intermediate_path.joinpath("biomass_constraint.csv"))
 
     def get_electrolysis_capacity_addition_constraint(self):
         return pd.read_csv(
@@ -312,12 +312,20 @@ class IntermediateDataImporter:
         df["year"] = df["year"].astype(int)
         return df
 
-    def get_pathway_investments(self, pathway_name: str = None, sensitivity: str = None,):
+    def get_pathway_investments(
+        self,
+        pathway_name: str = None,
+        sensitivity: str = None,
+    ):
         if pathway_name is None and sensitivity is None:
             return pd.read_csv(
-                self.final_path.joinpath("cost/pathway_investments.csv"),
+                self.final_path.joinpath(
+                    f"cost/{self.pathway_name}_pathway_investments.csv"
+                ),
             )
         else:
             return pd.read_csv(
-                self.core_data_path.joinpath(f"{pathway_name}/{sensitivity}/final/cost/pathway_investments.csv"),
+                self.core_data_path.joinpath(
+                    f"{pathway_name}/{sensitivity}/final/cost/{pathway_name}_pathway_investments.csv"
+                ),
             )
