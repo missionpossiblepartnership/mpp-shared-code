@@ -290,7 +290,7 @@ class AssetStack:
         region: str,
         tech_substr: str,
         aggregate_techs: bool = True,
-    ) -> float:
+    ) -> float | dict:
         """Get the yearly production volumes of all natural gas (ng) or alternative fuels (af) the AssetStack per region
             and technology for a specific product
 
@@ -334,6 +334,7 @@ class AssetStack:
                     product=product, region=region, technology=technology
                 )
             return production_volumes
+        raise NotImplementedError
 
     def get_products(self) -> list:
         """Get list of unique products produced by the AssetStack"""

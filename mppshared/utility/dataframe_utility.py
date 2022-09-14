@@ -171,6 +171,7 @@ def add_results_metadata(
     """Adds scenario and (optionally) regional metadata column(s) to each row in a DataFrame.
 
     Args:
+        regions_to_map:
         df (pd.DataFrame): The DataFrame you want to modify.
         scenario_dict (dict): A metadata dictionary with scenario information.
         include_regions (bool, optional): Boolean flag that optionally adds regional metadata information. Defaults to True.
@@ -185,7 +186,7 @@ def add_results_metadata(
     df_c = df.copy()
     df_c = add_scenarios(df_c, scenario_dict, single_line)
     if include_regions:
-        for schema in regions_to_map:
+        for schema in regions_to_map: # type: ignore
             df_c = add_regions(df_c, country_reference_dict, "country_code", schema)
     return df_c
 
@@ -203,6 +204,7 @@ def return_furnace_group(furnace_dict: dict, tech: str) -> str:
     for key, value in furnace_dict.items():
         if tech in furnace_dict[key]:
             return value
+    raise ValueError(f"{tech} is not in a furnace group")
 
 
 def melt_and_index(

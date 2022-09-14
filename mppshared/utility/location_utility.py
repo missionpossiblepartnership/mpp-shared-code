@@ -2,6 +2,7 @@
 
 import itertools
 from collections import namedtuple
+from typing import Any, Tuple
 
 import pandas as pd
 import pycountry
@@ -70,7 +71,7 @@ def official_country_attr_getter(country_code: str, attr: str = "official_name")
     return ""
 
 
-def country_matcher(country_list: list, output_type: str = "all") -> dict:
+def country_matcher(country_list: list, output_type: str = "all") -> dict[Any, str] | Tuple[dict[Any, str], dict[Any, str]]:
     """Fuzzy matches a list of countries and creates a mapping of the country to ISO Alpha-3 name.
     The function produces a dictionary of mappings and also a dictionary of all unmapped countries.
 
@@ -95,9 +96,10 @@ def country_matcher(country_list: list, output_type: str = "all") -> dict:
         return countries_dict
     if output_type == "nonmatches":
         return unmatched_dict
+    return {}
 
 
-CountryMetadata = namedtuple("CountryMetadata", NEW_COUNTRY_COL_LIST)
+CountryMetadata = namedtuple("CountryMetadata", NEW_COUNTRY_COL_LIST) #type: ignore
 
 
 def get_region_from_country_code(

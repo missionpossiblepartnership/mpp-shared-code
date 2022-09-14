@@ -25,6 +25,8 @@ from mppshared.models.constraints import (
     check_alternative_fuel_constraint,
     check_constraints,
     check_co2_storage_constraint,
+hydro_constraints,
+get_regional_production_constraint_table
 )
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
@@ -225,7 +227,7 @@ def select_asset_for_greenfield(
             if regional_supply_constraint_hurt:
                 df_rank = df_rank.loc[df_rank["region"] != asset_transition["region"]]
                 logger.debug(
-                    f"Region {asset_transition['region']} already supplies {region_global_demand_share * 100} % of "
+                    f"Region {asset_transition['region']} already supplies {region_global_demand_share * 100} % of " # type: ignore
                     f"global demand."
                 )
 
@@ -459,8 +461,8 @@ def select_asset_for_greenfield(
                         )
                         exceeding_regions = [
                             k
-                            for k in dict_alternative_fuel_exceedance.keys()
-                            if not dict_alternative_fuel_exceedance[k]
+                            for k in dict_alternative_fuel_exceedance.keys() # type: ignore
+                            if not dict_alternative_fuel_exceedance[k] # type: ignore
                         ]
                         # check if regions other than the tentatively updated asset's region exceed the
                         #   constraint
