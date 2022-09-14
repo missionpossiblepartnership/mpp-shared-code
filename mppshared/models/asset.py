@@ -1,4 +1,5 @@
 """Asset and asset stack classes, code adapted from MCC"""
+import sys
 from copy import deepcopy
 from uuid import uuid4
 from xmlrpc.client import Boolean
@@ -185,6 +186,7 @@ class AssetStack:
             if (switch_type == "brownfield_rebuild") or (
                 switch_type == "brownfield_newbuild"
             ):
+                # todo: make it count in cement if it's the same tech!
                 asset_to_update.rebuild = True
                 asset_to_update.stay_same = False
         if origin_technology == new_technology:
@@ -284,11 +286,12 @@ class AssetStack:
                 )
                 logger.debug(f"{region} | {technology}: {prod_vol} Mt {product}")
 
+    # todo: consider removing since it is not being used
     def get_annual_ng_af_production_volume(
         self,
         product: str,
-        region: str,
         tech_substr: str,
+        region: str = None,
         aggregate_techs: bool = True,
     ) -> float | dict:
         """Get the yearly production volumes of all natural gas (ng) or alternative fuels (af) the AssetStack per region
@@ -619,25 +622,28 @@ class AssetStack:
         region: str,
         year: int,
     ) -> list:
-        """Return a list of Assets from the AssetStack that are eligible for decommissioning"""
+        """Return a list of Assets from the AssetStack that are eligible for decommissioning in a region"""
 
         # Filter for assets with the specified product
         assets = deepcopy(self.filter_assets(product=product, region=region))
 
         # assets can be decommissioned if they have not undergone a renovation or rebuild
-        candidates = filter(lambda asset: not asset.retrofit, assets)
+        candidates = list(filter(lambda asset: not asset.retrofit, assets))
 
         # if there are no assets left, those that are at the end of their lifetime can be decommissioned
-        if len(list(candidates)) == 0:
-            candidates = filter(
-                lambda asset: asset.get_age(year) >= asset.asset_lifetime, candidates
-            )
+        if len(candidates) == 0:
+            candidates = list(filter(
+                lambda asset: (asset.get_age(year) >= asset.asset_lifetime), assets
+            ))
 
-        # if there are still no assets left, every asset can be decommissioned
-        if len(list(candidates)) == 0:
-            return deepcopy(self.assets)
+            # if there are still no assets left, every asset in the region can be decommissioned
+            if len(candidates) == 0:
+                candidates = assets
 
-        return list(candidates)
+        if len(candidates) == 0:
+            logger.critical(f"{year}: No assets can be found in {region}")
+        else:
+            return candidates
 
     def get_assets_eligible_for_brownfield(
         self, year: int, investment_cycle: int
@@ -670,6 +676,12 @@ class AssetStack:
             self.assets,
         )
 
+        # remove greenfields in the current year
+        candidates_renovation = filter(
+            lambda asset: (asset.year_commissioned != year),
+            candidates_renovation,
+        )
+
         return deepcopy(list(candidates_renovation))
 
     def get_assets_eligible_for_brownfield_cement_rebuild(self, year: int) -> list:
@@ -680,6 +692,12 @@ class AssetStack:
         candidates_rebuild = filter(
             lambda asset: asset.get_age(year) >= asset.asset_lifetime,
             self.assets,
+        )
+
+        # remove greenfields in the current year
+        candidates_rebuild = filter(
+            lambda asset: (asset.year_commissioned != year),
+            candidates_rebuild,
         )
 
         return deepcopy(list(candidates_rebuild))

@@ -27,6 +27,7 @@ from cement.config.config_cement import (
     TECHNOLOGY_RAMP_UP_CONSTRAINT,
     YEAR_2050_EMISSIONS_CONSTRAINT,
     CO2_STORAGE_CONSTRAINT_TYPE,
+    RAMP_UP_TECH_CLASSIFICATIONS,
 )
 from cement.solver.brownfield import brownfield
 from cement.solver.decommission import decommission
@@ -77,6 +78,24 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
             f"{year}: Time elapsed for decommission: {timedelta(seconds=end-start)} seconds"
         )
 
+        """ Greenfield: Build new assets """
+        logger.info(f"{year}: Production volumes pre greenfield:")
+        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
+            product=product
+        )
+        start = timer()
+        pathway = greenfield(pathway=pathway, year=year)
+        end = timer()
+        logger.debug(
+            f"{year}: Time elapsed for greenfield: {timedelta(seconds=end - start)} seconds"
+        )
+        logger.info(f"{year}: Production volumes post greenfield:")
+        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
+            product=product
+        )
+        # check constraints for all regions
+        _check_all_constraints(pathway=pathway, year=year, transition_type="greenfield")
+
         """ Brownfield: Renovate and rebuild assets """
         logger.info(f"{year}: Production volumes pre brownfield:")
         pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
@@ -90,24 +109,6 @@ def _simulate(pathway: SimulationPathway) -> SimulationPathway:
         )
         # check constraints for all regions
         _check_all_constraints(pathway=pathway, year=year, transition_type="brownfield")
-
-        """ Greenfield: Build new assets """
-        logger.info(f"{year}: Production volumes pre greenfield:")
-        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
-            product=product
-        )
-        start = timer()
-        pathway = greenfield(pathway=pathway, year=year)
-        end = timer()
-        logger.debug(
-            f"{year}: Time elapsed for greenfield: {timedelta(seconds=end-start)} seconds"
-        )
-        logger.info(f"{year}: Production volumes post greenfield:")
-        pathway.stacks[year].log_annual_production_volume_by_region_and_tech(
-            product=product
-        )
-        # check constraints for all regions
-        _check_all_constraints(pathway=pathway, year=year, transition_type="greenfield")
 
         # check regional production constraint
         if not check_constraint_regional_production(
@@ -180,13 +181,14 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         importer=importer,
         model_start_year=START_YEAR,
         model_end_year=END_YEAR,
-        maximum_asset_additions=TECHNOLOGY_RAMP_UP_CONSTRAINT[
+        maximum_asset_additions=TECHNOLOGY_RAMP_UP_CONSTRAINT[pathway_name][
             "init_maximum_asset_additions"
         ],
-        maximum_capacity_growth_rate=TECHNOLOGY_RAMP_UP_CONSTRAINT[
+        maximum_capacity_growth_rate=TECHNOLOGY_RAMP_UP_CONSTRAINT[pathway_name][
             "maximum_asset_growth_rate"
         ],
-        years_rampup_phase=TECHNOLOGY_RAMP_UP_CONSTRAINT["years_rampup_phase"],
+        years_rampup_phase=TECHNOLOGY_RAMP_UP_CONSTRAINT[pathway_name]["years_rampup_phase"],
+        ramp_up_tech_classifications=RAMP_UP_TECH_CLASSIFICATIONS,
     )
     carbon_budget.output_carbon_budget(sector=sector, importer=importer)
 
@@ -212,11 +214,8 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         annual_renovation_share=MAX_ANNUAL_RENOVATION_SHARE[pathway_name],
         constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],
         year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
-        set_natural_gas_constraint=(
-            "natural_gas_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]
-        ),
-        set_alternative_fuel_constraint=(
-            "alternative_fuel_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]
+        set_biomass_constraint=(
+            "biomass_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]
         ),
         set_co2_storage_constraint=(
             "co2_storage_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]

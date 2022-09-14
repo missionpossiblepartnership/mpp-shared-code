@@ -28,12 +28,20 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 PATHWAYS_SENSITIVITIES = {
     # "bau": ["def"],  # ALL_SENSITIVITIES,
-    "fa": ["def"],
-    # "lc": ["def"],  # ALL_SENSITIVITIES,
+    # "fa": ["def"],
+    "lc": ["def"],  # ALL_SENSITIVITIES,
+    # "check": ["def"],
 }
 
 PATHWAYS_WITH_CARBON_COST = ["lc"]
 PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = ["lc"]
+
+PATHWAY_DEMAND_SCENARIO_MAPPING = {
+    "bau": "bau",
+    "fa": "gcca",
+    "lc": "gcca",
+    "check": "gcca"
+}
 
 # carbon cost sensitivities: define carbon cost in USD/t CO2 for different sensitivities
 CARBON_COST_SENSITIVITIES = {
@@ -66,7 +74,7 @@ CAPACITY_UTILISATION_FACTOR = 0.913
 COST_METRIC_CUF_ADJUSTMENT = None
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-MAX_ANNUAL_RENOVATION_SHARE = {"bau": 0.2, "fa": 0.2, "lc": 0.2}
+MAX_ANNUAL_RENOVATION_SHARE = {"bau": 0.2, "fa": 0.2, "lc": 0.2, "check": 0.2}
 
 
 ### initial asset stack ###
@@ -160,14 +168,14 @@ CARBON_BUDGET_SECTOR_CSV = False
 CARBON_BUDGET_SHAPE = "exponential"  # linear, exponential
 # carbon budget 2020 - 2050 in Gt
 SECTORAL_CARBON_BUDGETS = {
-    "cement": 42,
+    "cement": 42 * 0.95,
 }
 
-emissions_2020 = 2.4  # Gt CO2 (scopes 1 and 2)
+emissions_2020 = 2.4 * 0.95  # Gt CO2 (scopes 1 and 2)
 SECTORAL_CARBON_PATHWAY = {
     "emissions_start": emissions_2020,
-    "emissions_end": 0.06 * 3.85,  # recarbonation GCCA roadmap
-    "action_start": 2023,
+    "emissions_end": 0.06 * 3.85 * 0.9,  # recarbonation GCCA roadmap
+    "action_start": 2022,
 }
 
 # Ranking configuration depends on type of technology switch and pathway
@@ -189,6 +197,10 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
+        "check": {
+            "cost": 1.0,
+            "emissions": 0.0,
+        },
     },
     "brownfield": {
         "bau": {
@@ -202,6 +214,10 @@ RANKING_CONFIG = {
         "lc": {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
+        },
+        "check": {
+            "cost": 1.0,
+            "emissions": 0.0,
         },
     },
     "decommission": {
@@ -217,6 +233,10 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
+        "check": {
+            "cost": 1.0,
+            "emissions": 0.0,
+        },
     },
 }
 
@@ -225,10 +245,28 @@ RANKING_CONFIG = {
 YEAR_2050_EMISSIONS_CONSTRAINT = 2060
 # Technology ramp-up parameters (on global technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
-    "init_maximum_asset_additions": 10,
-    "maximum_asset_growth_rate": 0.05,
-    "years_rampup_phase": 30,
+    "bau": {
+        "init_maximum_asset_additions": 10,
+        "maximum_asset_growth_rate": 0.05,
+        "years_rampup_phase": 30,
+    },
+    "fa": {
+        "init_maximum_asset_additions": 10,
+        "maximum_asset_growth_rate": 0.05,
+        "years_rampup_phase": 30,
+    },
+    "lc": {
+        "init_maximum_asset_additions": 15,
+        "maximum_asset_growth_rate": 0.05,
+        "years_rampup_phase": 30,
+    },
+    "check": {
+        "init_maximum_asset_additions": 10,
+        "maximum_asset_growth_rate": 0.05,
+        "years_rampup_phase": 30,
+    },
 }
+RAMP_UP_TECH_CLASSIFICATIONS = ["initial", "end-state"]
 # CO2 storage constraint
 SET_CO2_STORAGE_CONSTRAINT = True
 CO2_STORAGE_CONSTRAINT_TYPE = "total_cumulative"  # "annual_cumulative", "annual_addition", "total_cumulative", or None
@@ -241,21 +279,28 @@ CONSTRAINTS_TO_APPLY = {
     "bau": [
         "rampup_constraint",
         # "regional_constraint",
-        "alternative_fuel_constraint",
+        "biomass_constraint",
         # "co2_storage_constraint",
     ],
     "fa": [
         # "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",
-        "alternative_fuel_constraint",
+        "biomass_constraint",
         "co2_storage_constraint",
     ],
     "lc": [
         # "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",
-        "alternative_fuel_constraint",
+        "biomass_constraint",
+        "co2_storage_constraint",
+    ],
+    "check": [
+        "emissions_constraint",
+        "rampup_constraint",
+        # "regional_constraint",
+        "biomass_constraint",
         "co2_storage_constraint",
     ],
 }

@@ -56,7 +56,7 @@ def check_constraints(
         "demand_share_constraint": check_global_demand_share_constraint,
         "electrolysis_capacity_addition_constraint": check_electrolysis_capacity_addition_constraint,
         "co2_storage_constraint": check_co2_storage_constraint,
-        "alternative_fuel_constraint": check_alternative_fuel_constraint,
+        "biomass_constraint": check_biomass_constraint,
     }
 
     if constraints_to_apply is None:
@@ -75,7 +75,7 @@ def check_constraints(
                 )
                 constraints_checked[constraint] = emissions_constraint
                 constraints_checked["flag_residual"] = flag_residual
-            elif region is not None and constraint in ["co2_storage_constraint", "alternative_fuel_constraint"]:
+            elif region is not None and constraint in ["co2_storage_constraint"]:
                 constraints_checked[constraint] = funcs_constraints[constraint]( # type: ignore
                     pathway=pathway,
                     stack=stack,
@@ -598,11 +598,15 @@ def check_co2_storage_constraint(
                         product=product,
                     )
 
-                limit_region = limit.loc[limit["region"] == region_to_check, "value"].squeeze()
+                limit_region = limit.loc[
+                    limit["region"] == region_to_check, "value"
+                ].squeeze()
 
                 # add to dict (change sign of co2_captured_storage since captured emissions are provided as negative
                 #   values)
-                dict_regional_fulfilment[region_to_check] = limit_region >= -co2_captured_storage
+                dict_regional_fulfilment[region_to_check] = (
+                    limit_region >= -co2_captured_storage
+                )
 
                 if not return_dict:
                     logger.debug(
@@ -653,16 +657,14 @@ def check_co2_storage_constraint(
         )
 
 
-def check_alternative_fuel_constraint(
+def check_biomass_constraint(
     pathway: SimulationPathway,
     product: str,
     stack: AssetStack,
     year: int,
     transition_type: str,
-    region: str = None,
-    return_dict: bool = False,
-) -> Union[dict, bool]:
-    """
+) -> bool:
+    """Check if the constraint on annual biomass availability in GJ (globally) is fulfilled
 
     Args:
         pathway ():
@@ -670,80 +672,67 @@ def check_alternative_fuel_constraint(
         stack ():
         year ():
         transition_type ():
-        region (): If a region is provided, only checks constraint fulfilment in this region. Only valid for
-            pathway.co2_storage_constraint_type == "total_cumulative" (will not have an impact for other types)
-        return_dict ():
 
     Returns:
 
     """
-    """Check if the constraint on annual alternative fuel capacity (regionally) is fulfilled"""
 
-    if not return_dict:
-        logger.info(
-            f"{year}: Checking alternative fuel constraint  (transition type: {transition_type})"
-        )
+    logger.info(
+        f"{year}: Checking biomass constraint  (transition type: {transition_type})"
+    )
 
     # Get constraint value
-    df_af_limit = pathway.alternative_fuel_constraint
+    df_biomass_limit = pathway.biomass_constraint
+    bio_limit = df_biomass_limit.loc[
+        (df_biomass_limit["year"] == year), "value"
+    ].squeeze()
 
-    if region is None:
-        # check constraint fulfilment for all regions that have a CO2 storage constraint
-        dict_regional_fulfilment = {}
-        regions = list(df_af_limit["region"].unique())
-        for region_to_check in regions:
-            limit_region = df_af_limit.loc[
-                ((df_af_limit["year"] == year) & (df_af_limit["region"] == region_to_check)),
-                "value",
-            ].squeeze()
+    # get biomass consumption
+    df_biomass_consumption = pathway.df_biomass_consumption
+    df_biomass_consumption = df_biomass_consumption.loc[
+        (df_biomass_consumption["year"] == year), :
+    ]
 
-            # calculate natural gas-based production capacity
-            af_prod_volume = stack.get_annual_ng_af_production_volume(
-                product=product, region=region_to_check, tech_substr="alternative fuels"
-            )
+    # get regions and technologies with biomass consumption in the current year
+    technologies = df_biomass_consumption["technology_destination"].unique()
+    regions = df_biomass_consumption["region"].unique()
 
-            # add to dict
-            dict_regional_fulfilment[region_to_check] = limit_region >= af_prod_volume
+    # get annual production volumes per region and technology
+    df_list = []
+    for region in regions:
+        df_prod_volume = dict.fromkeys(technologies)
+        for technology in technologies:
+            # get annual production volume in [Mt Clk] and convert to [t Clk]
+            df_prod_volume[technology] = stack.get_annual_production_volume(
+                product=product, region=region, technology=technology
+            ) * 1e6
+        df_prod_volume = pd.DataFrame.from_dict(
+            data=df_prod_volume, orient="index"
+        ).reset_index()
+        df_prod_volume.columns = ["technology_destination", "value"]
+        df_prod_volume["region"] = region
+        df_list.append(df_prod_volume)
+    df_prod_volume = pd.concat(df_list, axis=0).set_index(
+        ["region", "technology_destination"]
+    )
 
-            if not return_dict:
-                logger.debug(
-                    f"{region_to_check}: {dict_regional_fulfilment[region_to_check]} (limit: {limit_region}, prod. vol.: {af_prod_volume})"
-                )
+    # multiply and sum
+    df_biomass_consumption = df_biomass_consumption[
+        ["region", "technology_destination", "value"]
+    ].set_index(["region", "technology_destination"])
+    biomass_consumption = (
+        df_prod_volume.mul(df_biomass_consumption).sum(axis=0).squeeze()
+    )
 
-        if return_dict:
-            return dict_regional_fulfilment
-        else:
-            if all(dict_regional_fulfilment.values()):
-                logger.info("Alternative fuel constraint satisfied")
-            else:
-                logger.info("Alternative fuel constraint hurt")
-            return all(dict_regional_fulfilment.values())
+    # check limit
+    check = bio_limit >= biomass_consumption
 
+    logger.debug(
+        f"Biomass constraint: {check} (limit: {bio_limit}, prod. vol.: {biomass_consumption} [GJ / year])"
+    )
+
+    if check:
+        logger.info("Biomass constraint satisfied")
     else:
-        # check constraint fulfilment for one region only
-        limit_region = df_af_limit.loc[
-            ((df_af_limit["year"] == year) & (df_af_limit["region"] == region)),
-            "value",
-        ].squeeze()
-
-        # calculate natural gas-based production capacity
-        af_prod_volume = stack.get_annual_ng_af_production_volume(
-            product=product, region=region, tech_substr="alternative fuels"     # , aggregate_techs=False
-        )
-
-        # add to dict
-        regional_fulfilment = limit_region >= af_prod_volume
-
-        if not return_dict:
-            logger.debug(
-                f"{region}: {regional_fulfilment} (limit: {limit_region}, prod. vol.: {af_prod_volume})"
-            )
-
-    if return_dict:
-        return regional_fulfilment
-    else:
-        if regional_fulfilment:
-            logger.info("Alternative fuel constraint satisfied")
-        else:
-            logger.info("Alternative fuel constraint hurt")
-        return regional_fulfilment
+        logger.info("Biomass constraint hurt")
+    return check
