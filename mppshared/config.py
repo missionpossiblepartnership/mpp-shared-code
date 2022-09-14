@@ -121,18 +121,6 @@ NEW_COUNTRY_COL_LIST = [
     "rmi_region",
 ]
 
-NEW_COUNTRY_COL_LIST = [
-    "country_code",
-    "country",
-    "official_name",
-    "m49_code",
-    "region",
-    "continent",
-    "wsa_region",
-    "rmi_region",
-]
-
-
 EU_COUNTRIES = [
     "AUT",
     "BEL",

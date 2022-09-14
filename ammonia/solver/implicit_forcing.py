@@ -179,7 +179,7 @@ def apply_salt_cavern_availability_constraint(
 
     salt_cavern_availability = REGIONS_SALT_CAVERN_AVAILABILITY[sector]
     for region in [
-        reg for reg in salt_cavern_availability if salt_cavern_availability[reg] == "no"
+        reg for reg in salt_cavern_availability if salt_cavern_availability[reg] == "no" # type: ignore
     ]:
         filter = (df_technology_transitions["region"] == region) & (
             (
