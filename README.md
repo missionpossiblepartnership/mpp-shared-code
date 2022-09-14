@@ -1,8 +1,3 @@
-[![Tests](https://github.com/systemiqofficial/mpp-shared-code/actions/workflows/testing.yml/badge.svg)](https://github.com/systemiqofficial/mpp-shared-code/actions/workflows/testing.yml)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
-
-
 # MPP Shared Industry Solver
 
 This repository contains the MPP Shared Industry Solver and the Ammonia and Aluminium models. Both models were developed as part of the [Mission Possible Partnership](https://www.missionpossiblepartnership.org) (MPP). The MPP Shared Industry Solver is a Python package that can be used to build industry decarbonization models. The Ammonia and Aluminium models are built up from modules provided by the MPP Shared Industry Solver.
