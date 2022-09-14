@@ -46,6 +46,8 @@ def read_pickle_folder(
             with open(rf"{data_path}/{pkl_file}", "rb") as f:
                 new_data_dict[pkl_file.split(".")[0]] = pickle.load(f)
         return new_data_dict
+    else:
+        raise ValueError("Mode must be either 'df' or 'dict'")
 
 
 def extract_data(
@@ -135,6 +137,6 @@ def pickle_to_csv(
         f"||| Saving {pkl_filename} pickle file as {csv_filename or pkl_filename}.csv"
     )
     if csv_filename:
-        df.to_csv(f"{csv_folder}/{csv_filename}.csv", index=False)
+        df.to_csv(f"{csv_folder}/{csv_filename}.csv", index=False) # type: ignore
     else:
-        df.to_csv(f"{csv_folder}/{pkl_filename}.csv", index=False)
+        df.to_csv(f"{csv_folder}/{pkl_filename}.csv", index=False) # type: ignore

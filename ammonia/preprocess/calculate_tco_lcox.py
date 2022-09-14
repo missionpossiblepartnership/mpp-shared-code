@@ -1,4 +1,5 @@
 """Calculate TCO and LCOX for every technology switch."""
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -231,7 +232,7 @@ def discount_costs(df_cost: pd.DataFrame, from_csv: Boolean = False) -> pd.DataF
     return df_cost.join(pd.concat({"npv_over_lifetime": df_discount}, axis=1))
 
 
-def calculate_total_discounted_production(rate: float, lifetime: int) -> float:
+def calculate_total_discounted_production(rate: float, lifetime: int) -> Optional[float]:
     """Calculate total discounted production assuming an annual production volume of 1 tpa."""
     if (math.isnan(lifetime)) | (math.isnan(rate)):
         return None

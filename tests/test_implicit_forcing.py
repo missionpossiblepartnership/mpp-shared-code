@@ -53,6 +53,9 @@ def test_apply_technology_moratorium():
         moratorium_year=2030,
         transitional_period_years=10,
     )
+    df_technologies = add_technology_classification_to_switching_table(
+        df_technologies, df_technology_characteristics)
+
     assert (
         df_technologies[df_technologies["technology_classification"] == "initial"][
             "year"
