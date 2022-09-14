@@ -102,7 +102,7 @@ def create_timeseries_extension_array(
 
     series_length += 1
 
-    terminal_value = 0  # empty variable for real value
+    terminal_value = 0.0  # empty variable for real value
     generated_series = np.array([])  # empty variable for real series
 
     if growth_type == "pct":

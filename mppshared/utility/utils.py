@@ -100,12 +100,12 @@ def enumerate_iterable(iterable: it) -> dict:
         iterable (Iterable): The iterable you want to enumerate
 
     Returns:
-        dict: A dictionary with the the iterable value as the key and the order number as the value.
+        dict: A dictionary with the iterable value as the key and the order number as the value.
     """
-    return dict(zip(iterable, range(len(iterable))))
+    return dict(zip(iterable, range(len([i for i in iterable]))))
 
 
-def cast_to_float(val: Union[float, int, Iterable]) -> float:
+def cast_to_float(val: Union[float, int, list[float|int]]) -> float:
     """Casts a numerical object to a float if not a float already.
 
     Args:
@@ -116,8 +116,8 @@ def cast_to_float(val: Union[float, int, Iterable]) -> float:
     """
     if isinstance(val, float):
         return val
-    elif isinstance(val, Iterable):
-        return float(val.sum())
+    elif isinstance(val, list):
+        return float(sum(val))
 
 
 def first(series: pd.Series):

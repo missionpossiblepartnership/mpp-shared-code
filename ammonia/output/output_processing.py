@@ -58,7 +58,7 @@ def calculate_outputs(
     # Calculate scope 3 downstream emissions for fertilizer end-use - CHECKE
     df_scope3 = pd.DataFrame()
 
-    for agg_vars in [["product"]] + aggregations.copy():
+    for agg_vars in [["product"]] + aggregations.copy(): # type: ignore
         df = calculate_scope3_downstream_emissions(
             importer=importer,
             sector=sector,
@@ -1620,7 +1620,7 @@ def _calculate_plant_numbers(
         )
 
         # Map low-cost power regions to corresponding regions
-        stack["region"] = stack["region"].apply(lambda x: map_low_cost_power_regions(x))
+        stack["region"] = stack["region"].apply(lambda x: map_low_cost_power_regions(x)) #type: ignore
 
         stack = add_ammonia_type_to_df(stack)
 
