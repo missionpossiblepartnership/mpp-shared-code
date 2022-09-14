@@ -10,6 +10,7 @@ from cement.config.config_cement import (
     CAPACITY_UTILISATION_FACTOR,
     CARBON_BUDGET_SECTOR_CSV,
     CARBON_BUDGET_SHAPE,
+    CO2_STORAGE_CONSTRAINT_TYPE,
     CONSTRAINTS_TO_APPLY,
     EMISSION_SCOPES,
     END_YEAR,
@@ -19,6 +20,7 @@ from cement.config.config_cement import (
     LOG_LEVEL,
     MAX_ANNUAL_RENOVATION_SHARE,
     PRODUCTS,
+    RAMP_UP_TECH_CLASSIFICATIONS,
     RANK_TYPES,
     REGIONAL_PRODUCTION_SHARES,
     SECTORAL_CARBON_BUDGETS,
@@ -26,8 +28,6 @@ from cement.config.config_cement import (
     START_YEAR,
     TECHNOLOGY_RAMP_UP_CONSTRAINT,
     YEAR_2050_EMISSIONS_CONSTRAINT,
-    CO2_STORAGE_CONSTRAINT_TYPE,
-    RAMP_UP_TECH_CLASSIFICATIONS,
 )
 from cement.solver.brownfield import brownfield
 from cement.solver.decommission import decommission
@@ -35,8 +35,11 @@ from cement.solver.greenfield import greenfield
 from mppshared.agent_logic.agent_logic_functions import create_dict_technology_rampup
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_budget import CarbonBudget
+from mppshared.models.constraints import (
+    check_constraint_regional_production,
+    check_constraints,
+)
 from mppshared.models.simulation_pathway import SimulationPathway
-from mppshared.models.constraints import check_constraints, check_constraint_regional_production
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -187,7 +190,9 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         maximum_capacity_growth_rate=TECHNOLOGY_RAMP_UP_CONSTRAINT[pathway_name][
             "maximum_asset_growth_rate"
         ],
-        years_rampup_phase=TECHNOLOGY_RAMP_UP_CONSTRAINT[pathway_name]["years_rampup_phase"],
+        years_rampup_phase=TECHNOLOGY_RAMP_UP_CONSTRAINT[pathway_name][
+            "years_rampup_phase"
+        ],
         ramp_up_tech_classifications=RAMP_UP_TECH_CLASSIFICATIONS,
     )
     carbon_budget.output_carbon_budget(sector=sector, importer=importer)

@@ -1,11 +1,11 @@
 """ Calculate all cost components (CCS cost, material and energy input cost)."""
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from ammonia.config_ammonia import CCS_COST_COMPONENTS, INCLUDE_DAC_IN_COST
-from ammonia.utility.utils import unit_column_suffix
 from ammonia.preprocess.pivot_inputs import pivot_inputs
+from ammonia.utility.utils import unit_column_suffix
 
 
 def calculate_ccs_cost(
@@ -116,9 +116,7 @@ def calculate_all_cost_components(
     """
 
     # Calculate the two cost components of CCS, capture and transport & storage
-    df_ccs_cost = calculate_ccs_cost(
-        df_prices=df_prices, df_emissions=df_emissions
-    )
+    df_ccs_cost = calculate_ccs_cost(df_prices=df_prices, df_emissions=df_emissions)
 
     # Calculate cost of inputs (returned as pivot table)
     df_cost = calculate_input_cost(

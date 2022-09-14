@@ -4,14 +4,15 @@
 from datetime import timedelta
 from pathlib import Path
 from timeit import default_timer as timer
+
 import numpy as np
 import pandas as pd
 
-from mppshared.calculate.calculate_cost import discount_costs
 from ammonia.config_ammonia import (
     EMISSION_SCOPES,
     GHGS,
     GROUPING_COLS_FOR_NPV,
+    LOG_LEVEL,
     PRODUCTS,
     RANKING_COST_METRIC,
     REGIONS_SALT_CAVERN_AVAILABILITY,
@@ -22,13 +23,11 @@ from ammonia.config_ammonia import (
     START_YEAR,
     TECHNOLOGY_MORATORIUM,
     TRANSITIONAL_PERIOD_YEARS,
-    LOG_LEVEL,
 )
+from mppshared.calculate.calculate_cost import discount_costs
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
-from mppshared.utility.dataframe_utility import (
-    add_column_header_suffix,
-)
+from mppshared.utility.dataframe_utility import add_column_header_suffix
 from mppshared.utility.function_timer_utility import timer_func
 from mppshared.utility.log_utility import get_logger
 
@@ -179,7 +178,7 @@ def apply_salt_cavern_availability_constraint(
 
     salt_cavern_availability = REGIONS_SALT_CAVERN_AVAILABILITY[sector]
     for region in [
-        reg for reg in salt_cavern_availability if salt_cavern_availability[reg] == "no" # type: ignore
+        reg for reg in salt_cavern_availability if salt_cavern_availability[reg] == "no"  # type: ignore
     ]:
         filter = (df_technology_transitions["region"] == region) & (
             (

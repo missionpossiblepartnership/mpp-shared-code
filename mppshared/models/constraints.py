@@ -5,8 +5,8 @@ from typing import Union
 
 import numpy as np
 import pandas as pd
-from ammonia.config_ammonia import END_YEAR
 
+from ammonia.config_ammonia import END_YEAR
 from mppshared.config import (
     AMMONIA_PER_AMMONIUM_NITRATE,
     AMMONIA_PER_UREA,
@@ -67,7 +67,7 @@ def check_constraints(
         # if the list is not empty
         for constraint in constraints_to_apply:
             if constraint == "emissions_constraint":
-                emissions_constraint, flag_residual = funcs_constraints[constraint]( # type: ignore
+                emissions_constraint, flag_residual = funcs_constraints[constraint](  # type: ignore
                     pathway=pathway,
                     stack=stack,
                     year=year,
@@ -76,7 +76,7 @@ def check_constraints(
                 constraints_checked[constraint] = emissions_constraint
                 constraints_checked["flag_residual"] = flag_residual
             elif region is not None and constraint in ["co2_storage_constraint"]:
-                constraints_checked[constraint] = funcs_constraints[constraint]( # type: ignore
+                constraints_checked[constraint] = funcs_constraints[constraint](  # type: ignore
                     pathway=pathway,
                     stack=stack,
                     product=product,
@@ -85,7 +85,7 @@ def check_constraints(
                     region=region,
                 )
             else:
-                constraints_checked[constraint] = funcs_constraints[constraint]( # type: ignore
+                constraints_checked[constraint] = funcs_constraints[constraint](  # type: ignore
                     pathway=pathway,
                     stack=stack,
                     product=product,
@@ -142,7 +142,7 @@ def check_technology_rampup_constraint(
         df_rampup["number_new"] - df_rampup["number_old"]
     )
     for technology in df_rampup.index:
-        rampup_constraint = pathway.technology_rampup[technology] # type: ignore
+        rampup_constraint = pathway.technology_rampup[technology]  # type: ignore
         if rampup_constraint:
             df_rampup.loc[
                 technology, "maximum_asset_additions"
@@ -249,9 +249,9 @@ def check_annual_carbon_budget_constraint(
     #   composed of only end-state technologies
     # todo: change this such that YEAR_2050_EMISSIONS_CONSTRAINT can be set to None
     if (transition_type == "greenfield") & (
-        year >= pathway.year_2050_emissions_constraint # type: ignore
+        year >= pathway.year_2050_emissions_constraint  # type: ignore
     ):
-        limit = pathway.carbon_budget.get_annual_emissions_limit(pathway.end_year) # type: ignore
+        limit = pathway.carbon_budget.get_annual_emissions_limit(pathway.end_year)  # type: ignore
 
         dict_stack_emissions = stack.calculate_emissions_stack(
             year=year,
@@ -262,7 +262,7 @@ def check_annual_carbon_budget_constraint(
 
     # In other cases, the limit is equivalent to that year's emission limit
     else:
-        limit = pathway.carbon_budget.get_annual_emissions_limit(year=year) # type: ignore
+        limit = pathway.carbon_budget.get_annual_emissions_limit(year=year)  # type: ignore
 
         dict_stack_emissions = stack.calculate_emissions_stack(
             year=year, df_emissions=pathway.emissions, technology_classification=None
@@ -703,9 +703,12 @@ def check_biomass_constraint(
         df_prod_volume = dict.fromkeys(technologies)
         for technology in technologies:
             # get annual production volume in [Mt Clk] and convert to [t Clk]
-            df_prod_volume[technology] = stack.get_annual_production_volume(
-                product=product, region=region, technology=technology
-            ) * 1e6
+            df_prod_volume[technology] = (
+                stack.get_annual_production_volume(
+                    product=product, region=region, technology=technology
+                )
+                * 1e6
+            )
         df_prod_volume = pd.DataFrame.from_dict(
             data=df_prod_volume, orient="index"
         ).reset_index()

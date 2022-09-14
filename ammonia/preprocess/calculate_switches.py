@@ -1,19 +1,20 @@
 """ Calculate the possible switches for each technology. """
-from typing import Sequence, Any, Optional
+from typing import Any, Optional, Sequence
 from xmlrpc.client import Boolean
+
 import pandas as pd
 
 from ammonia.config_ammonia import (
     CALCULATE_FOLDER,
-    MAP_SWITCH_TYPES_TO_CAPEX,
-    REGIONS,
-    PRODUCTS,
-    MODEL_YEARS,
     LOG_LEVEL,
+    MAP_SWITCH_TYPES_TO_CAPEX,
+    MODEL_YEARS,
+    PRODUCTS,
+    REGIONS,
 )
 from ammonia.utility.utils import (
-    load_intermediate_data_from_csv,
     explode_rows_for_all_products,
+    load_intermediate_data_from_csv,
 )
 from mppshared.utility.utils import get_logger
 

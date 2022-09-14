@@ -32,7 +32,7 @@ def make_rankings(pathway_name: str, sensitivity: str, sector: str):
             pathway_name=pathway_name,
             cost_metric=RANKING_COST_METRIC,
             n_bins=NUMBER_OF_BINS_RANKING,
-            ranking_config=RANKING_CONFIG[rank_type][pathway_name], # type: ignore
+            ranking_config=RANKING_CONFIG[rank_type][pathway_name],  # type: ignore
             emission_scopes_ranking=EMISSION_SCOPES_RANKING,
             ghgs_ranking=GHGS_RANKING,
         )

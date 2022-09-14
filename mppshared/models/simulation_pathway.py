@@ -383,7 +383,9 @@ class SimulationPathway:
             :,
         ]
         # remove technologies without biomass consumption
-        df_biomass_consumption = df_biomass_consumption.loc[(df_biomass_consumption["value"] != float(0)), :]
+        df_biomass_consumption = df_biomass_consumption.loc[
+            (df_biomass_consumption["value"] != float(0)), :
+        ]
         # df_biomass_consumption unit: [GJ / year]
 
         return df_biomass_consumption

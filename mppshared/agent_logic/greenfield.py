@@ -7,9 +7,9 @@ import numpy as np
 import pandas as pd
 
 from mppshared.agent_logic.agent_logic_functions import (
+    get_constraints_to_apply,
     remove_all_transitions_with_destination_technology,
     select_best_transition,
-    get_constraints_to_apply,
 )
 from mppshared.config import (
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
@@ -21,10 +21,10 @@ from mppshared.config import (
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
     check_biomass_constraint,
-    check_constraints,
     check_co2_storage_constraint,
-hydro_constraints,
-get_regional_production_constraint_table
+    check_constraints,
+    get_regional_production_constraint_table,
+    hydro_constraints,
 )
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
@@ -225,7 +225,7 @@ def select_asset_for_greenfield(
             if regional_supply_constraint_hurt:
                 df_rank = df_rank.loc[df_rank["region"] != asset_transition["region"]]
                 logger.debug(
-                    f"Region {asset_transition['region']} already supplies {region_global_demand_share * 100} % of " # type: ignore
+                    f"Region {asset_transition['region']} already supplies {region_global_demand_share * 100} % of "  # type: ignore
                     f"global demand."
                 )
 
@@ -318,10 +318,7 @@ def select_asset_for_greenfield(
                     ]
 
             # ELECTROLYSIS CAPACITY ADDITION
-            if (
-                "electrolysis_capacity_addition_constraint"
-                in constraints_to_apply
-            ):
+            if "electrolysis_capacity_addition_constraint" in constraints_to_apply:
                 if not dict_constraints["electrolysis_capacity_addition_constraint"]:
                     # Remove all transitions with that destination technology from the ranking table
                     logger.debug(

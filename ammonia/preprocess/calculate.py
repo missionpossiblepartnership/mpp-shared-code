@@ -2,21 +2,16 @@
 
 import pandas as pd
 
-from ammonia.config_ammonia import (
-    PREPROCESS_DATA_PATH,
-    INPUT_METRICS,
-    LOG_LEVEL,
-)
-from ammonia.preprocess.calculate_emissions import calculate_emissions_aggregate
+from ammonia.config_ammonia import INPUT_METRICS, LOG_LEVEL, PREPROCESS_DATA_PATH
 from ammonia.preprocess.calculate_cost import calculate_all_cost_components
-from ammonia.preprocess.import_data import get_tech_switches
-
+from ammonia.preprocess.calculate_emissions import calculate_emissions_aggregate
 from ammonia.preprocess.calculate_switches import calculate_switch_capex
 from ammonia.preprocess.calculate_tco_lcox import (
     calculate_tco_lcox,
-    calculate_variable_opex,
     calculate_total_opex,
+    calculate_variable_opex,
 )
+from ammonia.preprocess.import_data import get_tech_switches
 from ammonia.utility.utils import (
     load_intermediate_data_from_csv,
     write_intermediate_data_to_csv,

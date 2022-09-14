@@ -1,10 +1,10 @@
 """Decommission plants."""
 
 from cement.config.config_cement import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CAPACITY_UTILISATION_FACTOR,
     LOG_LEVEL,
     REGIONS,
-    CAPACITY_UTILISATION_FACTOR,
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
 )
 from mppshared.agent_logic.decommission import get_best_asset_to_decommission_cement
 from mppshared.models.simulation_pathway import SimulationPathway

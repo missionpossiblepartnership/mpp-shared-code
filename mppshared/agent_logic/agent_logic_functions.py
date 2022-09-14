@@ -1,6 +1,7 @@
 """ Additional functions required for the agent logic, e.g. demand balances. """
 
 from operator import methodcaller
+
 import pandas as pd
 
 from mppshared.config import (

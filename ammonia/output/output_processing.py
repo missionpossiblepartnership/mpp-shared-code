@@ -1,11 +1,11 @@
 """ Process outputs to standardised output table."""
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from ammonia.config_ammonia import *
+from ammonia.output.debugging_outputs import create_table_asset_transition_sequences
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
-from ammonia.output.debugging_outputs import create_table_asset_transition_sequences
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -58,7 +58,7 @@ def calculate_outputs(
     # Calculate scope 3 downstream emissions for fertilizer end-use - CHECKE
     df_scope3 = pd.DataFrame()
 
-    for agg_vars in [["product"]] + aggregations.copy(): # type: ignore
+    for agg_vars in [["product"]] + aggregations.copy():  # type: ignore
         df = calculate_scope3_downstream_emissions(
             importer=importer,
             sector=sector,
@@ -1620,7 +1620,7 @@ def _calculate_plant_numbers(
         )
 
         # Map low-cost power regions to corresponding regions
-        stack["region"] = stack["region"].apply(lambda x: map_low_cost_power_regions(x)) #type: ignore
+        stack["region"] = stack["region"].apply(lambda x: map_low_cost_power_regions(x))  # type: ignore
 
         stack = add_ammonia_type_to_df(stack)
 

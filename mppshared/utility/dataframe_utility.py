@@ -186,7 +186,7 @@ def add_results_metadata(
     df_c = df.copy()
     df_c = add_scenarios(df_c, scenario_dict, single_line)
     if include_regions:
-        for schema in regions_to_map: # type: ignore
+        for schema in regions_to_map:  # type: ignore
             df_c = add_regions(df_c, country_reference_dict, "country_code", schema)
     return df_c
 

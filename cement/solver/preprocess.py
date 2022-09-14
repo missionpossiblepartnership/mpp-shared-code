@@ -7,9 +7,9 @@ from cement.config.config_cement import (
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
     LIST_TECHNOLOGIES,
     MODEL_YEARS,
+    PATHWAY_DEMAND_SCENARIO_MAPPING,
     REGIONS,
     START_YEAR,
-    PATHWAY_DEMAND_SCENARIO_MAPPING,
 )
 from cement.config.dataframe_config_cement import (
     DF_DATATYPES_PER_COLUMN,

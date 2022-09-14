@@ -98,7 +98,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     while (candidates != []) & (n_assets_transitioned <= maximum_n_assets_transitioned):
 
         # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
-        best_candidates = [] # type: list
+        best_candidates = []  # type: list
         while not best_candidates:
 
             # If no more transitions available, break and return pathway
@@ -170,7 +170,9 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 asset_lifetime=best_transition["technology_lifetime"],
                 switch_type=switch_type,
                 origin_technology=origin_technology,
-                update_year_commission=(switch_type in SWITCH_TYPES_UPDATE_YEAR_COMMISSIONED)
+                update_year_commission=(
+                    switch_type in SWITCH_TYPES_UPDATE_YEAR_COMMISSIONED
+                ),
             )
 
             # Remove asset from candidates

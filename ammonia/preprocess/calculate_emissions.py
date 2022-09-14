@@ -2,17 +2,16 @@
 
 from functools import reduce
 
-import pandas as pd
 import numpy as np
+import pandas as pd
+
 from ammonia.config_ammonia import (
     GHGS,
+    LOG_LEVEL,
     UREA_CO2_EMISSIONS_TO_SCOPE1,
     UREA_YEAR_MANDATORY_DAC,
-    LOG_LEVEL,
 )
-
 from ammonia.utility.utils import unit_column_suffix
-
 from mppshared.utility.utils import get_logger
 
 # Logging functionality
