@@ -251,12 +251,12 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
         "years_rampup_phase": 30,
     },
     "fa": {
-        "init_maximum_asset_additions": 7,
+        "init_maximum_asset_additions": 10,
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
     },
     "lc": {
-        "init_maximum_asset_additions": 10,
+        "init_maximum_asset_additions": 15,
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
     },

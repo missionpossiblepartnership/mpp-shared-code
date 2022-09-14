@@ -62,6 +62,20 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
         technology_layout=TECHNOLOGY_LAYOUT,
     )
 
+    """ Number of plants """
+    logger.info("Post-processing number of plants")
+    df_number_plants = _calculate_number_plants(
+        df_cost=importer.get_technology_transitions_and_cost(),
+        importer=importer,
+        sector=sector,
+    )
+    importer.export_data(
+        df=df_number_plants,
+        filename=f"{pathway_name}_number_of_plants.csv",
+        export_dir="final",
+        index=True,
+    )
+
     """ Cost """
     logger.info("Post-processing cost data")
     df_investments = _calculate_annual_investments(
@@ -690,6 +704,135 @@ def create_table_all_data_year(
         ]
     )
     return df_all_data_year
+
+
+def _calculate_number_plants(
+    df_cost: pd.DataFrame,
+    importer: IntermediateDataImporter,
+    sector: str,
+) -> pd.DataFrame:
+
+    # todo: adjust when implementing OPEX context!
+    df_cost = df_cost.loc[
+        (df_cost["opex_context"] == "value_high_low"),
+        ["year", "region", "technology_origin", "technology_destination", "switch_type", "switch_capex"]
+    ]
+
+    switch_types = ["greenfield", "brownfield_renovation", "brownfield_rebuild", "decommission"]
+    df_number_plants = pd.DataFrame()
+
+    for year in np.arange(START_YEAR + 1, END_YEAR + 1):
+
+        # Get current and previous stack
+        drop_cols = ["annual_production_volume", "cuf", "asset_lifetime"]
+        current_stack = (
+            importer.get_asset_stack(year)
+            .drop(columns=drop_cols)
+            .rename(
+                {
+                    "technology": "technology_destination",
+                    "annual_production_capacity": "annual_production_capacity_destination",
+                },
+                axis=1,
+            )
+        )
+        previous_stack = (
+            importer.get_asset_stack(year - 1)
+            .drop(columns=drop_cols)
+            .rename(
+                {
+                    "technology": "technology_origin",
+                    "annual_production_capacity": "annual_production_capacity_origin",
+                },
+                axis=1,
+            )
+        )
+
+        # Merge to compare retrofit, rebuild and greenfield status
+        df = pd.merge(
+            left=current_stack,
+            right=previous_stack,
+            on=["uuid", "product", "region"],
+            how="outer",
+            suffixes=("", "_previous"),
+        ).fillna(False)
+
+        # Identify newly built assets
+        df["switch_type"] = np.nan
+        df["greenfield"] = 0
+        df.loc[
+            (df["greenfield_status"] & ~df["greenfield_status_previous"]),
+            ["greenfield", "technology_origin", "switch_type"],
+        ] = [1, "New-build", "greenfield"]
+
+        # Identify retrofit assets
+        df["brownfield_renovation"] = 0
+        df.loc[
+            (
+                df["retrofit_status"]
+                & ~df["retrofit_status_previous"]
+                & (df["technology_origin"] != df["technology_destination"])
+            ),
+            ["brownfield_renovation", "switch_type"],
+        ] = [1, "brownfield_renovation"]
+
+        # Identify rebuild assets
+        df["brownfield_rebuild"] = 0
+        df.loc[
+            (df["rebuild_status"] & ~df["rebuild_status_previous"]),
+            ["brownfield_rebuild", "switch_type"],
+        ] = [1, "brownfield_rebuild"]
+
+        # Identify decommissioned assets
+        df["decommission"] = 0
+        df.loc[
+            ~(df["year_commissioned"].astype(bool)),
+            ["decommission", "technology_destination", "switch_type"],
+        ] = [1, "Decommissioned", "decommission"]
+
+        # filter
+        df = df.loc[df["switch_type"].isin(switch_types), :]
+
+        # set year
+        df["year"] = year
+
+        # groupby and reduce columns
+        df = df[["year", "region", "technology_origin", "technology_destination"] + switch_types]
+        df = pd.melt(
+            frame=df,
+            id_vars=["year", "region", "technology_origin", "technology_destination"],
+            value_vars=switch_types,
+            var_name="switch_type",
+            value_name="number_plants",
+        )
+        df.set_index(keys=["year", "region", "technology_origin", "technology_destination", "switch_type"], inplace=True)
+        df = df.loc[df["number_plants"] != 0, :]
+        df = df.groupby(["year", "region", "technology_origin", "technology_destination", "switch_type"]).sum()
+        df.sort_index(inplace=True)
+
+        # Add the corresponding switching CAPEX to every asset that has changed
+        df = df.merge(
+            df_cost,
+            on=[
+                "year",
+                "region",
+                "technology_origin",
+                "technology_destination",
+                "switch_type",
+            ],
+            how="left",
+        )
+
+        df_number_plants = pd.concat([df_number_plants, df])
+
+    # todo: remove workaround
+    df_number_plants.loc[(df_number_plants["switch_type"] == "decommission"), "switch_capex"] = 0
+    # todo
+
+    df_number_plants = df_number_plants.set_index(["year", "region", "technology_origin", "technology_destination", "switch_type"]).sort_index()
+    df_number_plants["investment"] = df_number_plants["number_plants"] * df_number_plants["switch_capex"]
+
+    return df_number_plants
 
 
 def _calculate_annual_investments(
