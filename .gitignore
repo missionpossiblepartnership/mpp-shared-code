@@ -176,3 +176,5 @@ cement/data/01_business_case_raw/Archive
 
 # development
 experimental*.py
+
+*.zip

@@ -35,9 +35,9 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     new_stack = pathway.get_stack(year=year + 1)
     # Get the emissions, used for the LC scenario
     if year == 2050:
-        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year)
+        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year) # type: ignore
     else:
-        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year + 1)
+        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year + 1) # type: ignore
 
     # Get ranking table for brownfield transitions
     df_rank = pathway.get_ranking(year=year, rank_type="brownfield")
@@ -62,7 +62,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         # TODO: implement foresight with brownfield rebuild
 
         # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
-        best_candidates = []
+        best_candidates = [] # type: ignore
         while not best_candidates:
             # If no more transitions available, break and return pathway
             if df_rank.empty:
@@ -148,9 +148,12 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             transition_type="brownfield",
         )
         # If no constraint is hurt, execute the brownfield transition
-        if (
-            (dict_constraints["emissions_constraint"] == True)
-            & (dict_constraints["rampup_constraint"] == True)
+        if all(
+            [
+                dict_constraints[k]
+                for k in dict_constraints.keys()
+                if k in pathway.constraints_to_apply and k != "regional_constraint"
+            ]
         ) | (origin_technology == new_technology):
             logger.debug(
                 f"Year {year} Updating {asset_to_update.product} asset from technology {origin_technology} to technology {new_technology} in region {asset_to_update.region}, annual production {asset_to_update.get_annual_production_volume()} and UUID {asset_to_update.uuid}"
