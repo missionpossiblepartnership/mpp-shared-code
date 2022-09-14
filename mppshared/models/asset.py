@@ -632,9 +632,11 @@ class AssetStack:
 
         # if there are no assets left, those that are at the end of their lifetime can be decommissioned
         if len(candidates) == 0:
-            candidates = list(filter(
-                lambda asset: (asset.get_age(year) >= asset.asset_lifetime), assets
-            ))
+            candidates = list(
+                filter(
+                    lambda asset: (asset.get_age(year) >= asset.asset_lifetime), assets
+                )
+            )
 
             # if there are still no assets left, every asset in the region can be decommissioned
             if len(candidates) == 0:
@@ -668,7 +670,7 @@ class AssetStack:
 
     def get_assets_eligible_for_brownfield_cement_renovation(self, year: int) -> list:
         """Return a list of Assets from the AssetStack that are eligible for a brownfield renovation transition in
-            cement"""
+        cement"""
 
         # all initial assets can switch
         candidates_renovation = filter(
@@ -686,7 +688,7 @@ class AssetStack:
 
     def get_assets_eligible_for_brownfield_cement_rebuild(self, year: int) -> list:
         """Return a list of Assets from the AssetStack that are eligible for a brownfield rebuild transition in
-            cement"""
+        cement"""
 
         # all assets that reached the end of their lifetime can switch
         candidates_rebuild = filter(

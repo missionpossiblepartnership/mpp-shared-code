@@ -7,25 +7,25 @@ import numpy as np
 import pandas as pd
 
 from cement.config.config_cement import (
+    CONSTRAINTS_REGIONAL_CHECK,
     LOG_LEVEL,
     PRODUCTS,
-    CONSTRAINTS_REGIONAL_CHECK,
     SWITCH_TYPES_UPDATE_YEAR_COMMISSIONED,
 )
 from mppshared.agent_logic.agent_logic_functions import (
+    get_constraints_to_apply,
     remove_all_transitions_with_destination_technology,
     remove_all_transitions_with_origin_destination_technology,
     remove_transition,
     select_best_transition,
-    get_constraints_to_apply,
 )
+from mppshared.models.asset import AssetStack
 from mppshared.models.constraints import (
     check_biomass_constraint,
-    check_constraints,
     check_co2_storage_constraint,
+    check_constraints,
 )
 from mppshared.models.simulation_pathway import SimulationPathway
-from mppshared.models.asset import AssetStack
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)

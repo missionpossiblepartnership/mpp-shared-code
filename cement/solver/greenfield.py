@@ -5,8 +5,8 @@ import numpy as np
 from cement.config.config_cement import (
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
     CAPACITY_UTILISATION_FACTOR,
-    LOG_LEVEL,
     CONSTRAINTS_REGIONAL_CHECK,
+    LOG_LEVEL,
 )
 from mppshared.agent_logic.greenfield import (
     enact_greenfield_transition,

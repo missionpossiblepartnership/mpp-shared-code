@@ -5,9 +5,9 @@ import pandas as pd
 
 from ammonia.config_ammonia import *
 from ammonia.utility.utils import (
+    explode_rows_for_all_products,
     rename_columns_to_standard_names,
     write_intermediate_data_to_csv,
-    explode_rows_for_all_products,
 )
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.utility.utils import get_logger
@@ -208,12 +208,12 @@ def extract_business_case_data(df: pd.DataFrame, metric: str) -> pd.DataFrame:
     usecols = MAP_FIELDS_TO_DF_NAME[metric] + list(MODEL_YEARS)
 
     # Apply filters
-    if metric_filter[1]: #type: ignore
+    if metric_filter[1]:  # type: ignore
         df = df[
-            (df["Metric type"] == metric_filter[0]) & (df["Metric"] == metric_filter[1]) #type: ignore
+            (df["Metric type"] == metric_filter[0]) & (df["Metric"] == metric_filter[1])  # type: ignore
         ]
     else:
-        df = df[df["Metric type"] == metric_filter[0]] #type: ignore
+        df = df[df["Metric type"] == metric_filter[0]]  # type: ignore
     df = df[usecols]
 
     # Reset index
@@ -240,7 +240,7 @@ def map_region_to_cost_category(
 
     # Initialize dictionary
     keys = set(df.columns) - {"Region", "Sector", "Product", "Shorthand"}
-    cost_map = {k: dict.fromkeys(["Low", "Standard", "High"], []) for k in keys} # type: ignore
+    cost_map = {k: dict.fromkeys(["Low", "Standard", "High"], []) for k in keys}  # type: ignore
 
     # Fill dictionary
     for technology in cost_map.keys():

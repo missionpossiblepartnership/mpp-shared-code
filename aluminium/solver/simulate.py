@@ -148,7 +148,7 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str):
         regional_production_shares=REGIONAL_PRODUCTION_SHARES,
         investment_cycle=INVESTMENT_CYCLE,
         annual_renovation_share=ANNUAL_RENOVATION_SHARE,
-        constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name], # type: ignore
+        constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],  # type: ignore
         year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
     )
 

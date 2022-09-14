@@ -1,13 +1,14 @@
 """Utility module for functions used throughout the module"""
 
-import pandas as pd
 import os
+
+import pandas as pd
 
 from ammonia.config_ammonia import (
     CALCULATE_FOLDER,
     COMMON_INDEX,
-    MAP_COLUMN_NAMES,
     COST_DF_INDEX,
+    MAP_COLUMN_NAMES,
     PREPROCESS_DATA_PATH,
     PRODUCTS,
 )

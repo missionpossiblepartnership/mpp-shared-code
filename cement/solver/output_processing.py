@@ -9,9 +9,9 @@ from cement.config.config_cement import (
     EMISSION_SCOPES,
     END_YEAR,
     GHGS,
+    MODEL_YEARS,
     PRODUCTS,
     START_YEAR,
-    MODEL_YEARS,
 )
 from cement.config.plot_config_cement import TECHNOLOGY_LAYOUT
 from mppshared.config import LOG_LEVEL
@@ -715,10 +715,22 @@ def _calculate_number_plants(
     # todo: adjust when implementing OPEX context!
     df_cost = df_cost.loc[
         (df_cost["opex_context"] == "value_high_low"),
-        ["year", "region", "technology_origin", "technology_destination", "switch_type", "switch_capex"]
+        [
+            "year",
+            "region",
+            "technology_origin",
+            "technology_destination",
+            "switch_type",
+            "switch_capex",
+        ],
     ]
 
-    switch_types = ["greenfield", "brownfield_renovation", "brownfield_rebuild", "decommission"]
+    switch_types = [
+        "greenfield",
+        "brownfield_renovation",
+        "brownfield_rebuild",
+        "decommission",
+    ]
     df_number_plants = pd.DataFrame()
 
     for year in np.arange(START_YEAR + 1, END_YEAR + 1):
@@ -797,7 +809,10 @@ def _calculate_number_plants(
         df["year"] = year
 
         # groupby and reduce columns
-        df = df[["year", "region", "technology_origin", "technology_destination"] + switch_types]
+        df = df[
+            ["year", "region", "technology_origin", "technology_destination"]
+            + switch_types
+        ]
         df = pd.melt(
             frame=df,
             id_vars=["year", "region", "technology_origin", "technology_destination"],
@@ -805,9 +820,26 @@ def _calculate_number_plants(
             var_name="switch_type",
             value_name="number_plants",
         )
-        df.set_index(keys=["year", "region", "technology_origin", "technology_destination", "switch_type"], inplace=True)
+        df.set_index(
+            keys=[
+                "year",
+                "region",
+                "technology_origin",
+                "technology_destination",
+                "switch_type",
+            ],
+            inplace=True,
+        )
         df = df.loc[df["number_plants"] != 0, :]
-        df = df.groupby(["year", "region", "technology_origin", "technology_destination", "switch_type"]).sum()
+        df = df.groupby(
+            [
+                "year",
+                "region",
+                "technology_origin",
+                "technology_destination",
+                "switch_type",
+            ]
+        ).sum()
         df.sort_index(inplace=True)
 
         # Add the corresponding switching CAPEX to every asset that has changed
@@ -826,11 +858,17 @@ def _calculate_number_plants(
         df_number_plants = pd.concat([df_number_plants, df])
 
     # todo: remove workaround
-    df_number_plants.loc[(df_number_plants["switch_type"] == "decommission"), "switch_capex"] = 0
+    df_number_plants.loc[
+        (df_number_plants["switch_type"] == "decommission"), "switch_capex"
+    ] = 0
     # todo
 
-    df_number_plants = df_number_plants.set_index(["year", "region", "technology_origin", "technology_destination", "switch_type"]).sort_index()
-    df_number_plants["investment"] = df_number_plants["number_plants"] * df_number_plants["switch_capex"]
+    df_number_plants = df_number_plants.set_index(
+        ["year", "region", "technology_origin", "technology_destination", "switch_type"]
+    ).sort_index()
+    df_number_plants["investment"] = (
+        df_number_plants["number_plants"] * df_number_plants["switch_capex"]
+    )
 
     return df_number_plants
 

@@ -1,17 +1,14 @@
 """Calculate TCO and LCOX for every technology switch."""
+import math
 from typing import Optional
+from xmlrpc.client import Boolean
 
 import numpy as np
 import pandas as pd
-import math
-from xmlrpc.client import Boolean
 
 from ammonia.config_ammonia import COMMON_INDEX, COST_COMPONENTS, LOG_LEVEL
-
-from mppshared.config import END_YEAR
-
 from ammonia.utility.utils import load_cost_data_from_csv, set_common_multi_index
-
+from mppshared.config import END_YEAR
 from mppshared.utility.utils import get_logger
 
 # Logging functionality
@@ -232,7 +229,9 @@ def discount_costs(df_cost: pd.DataFrame, from_csv: Boolean = False) -> pd.DataF
     return df_cost.join(pd.concat({"npv_over_lifetime": df_discount}, axis=1))
 
 
-def calculate_total_discounted_production(rate: float, lifetime: int) -> Optional[float]:
+def calculate_total_discounted_production(
+    rate: float, lifetime: int
+) -> Optional[float]:
     """Calculate total discounted production assuming an annual production volume of 1 tpa."""
     if (math.isnan(lifetime)) | (math.isnan(rate)):
         return None

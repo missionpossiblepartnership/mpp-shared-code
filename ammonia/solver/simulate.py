@@ -6,8 +6,8 @@ from timeit import default_timer as timer
 
 from ammonia.config_ammonia import (
     ANNUAL_RENOVATION_SHARE,
-    CO2_STORAGE_CONSTRAINT_TYPE,
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
+    CO2_STORAGE_CONSTRAINT_TYPE,
     CONSTRAINTS_TO_APPLY,
     CUF_LOWER_THRESHOLD,
     CUF_UPPER_THRESHOLD,
@@ -28,9 +28,7 @@ from ammonia.config_ammonia import (
 from ammonia.solver.brownfield import brownfield
 from ammonia.solver.decommission import decommission
 from ammonia.solver.greenfield import greenfield
-from mppshared.agent_logic.agent_logic_functions import (
-    adjust_capacity_utilisation,
-)
+from mppshared.agent_logic.agent_logic_functions import adjust_capacity_utilisation
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.models.simulation_pathway import SimulationPathway

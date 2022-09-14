@@ -1,15 +1,15 @@
 """Calculates all cost metrics required for technology ranking"""
 
 import sys
-from itertools import chain
 from copy import deepcopy
+from itertools import chain
 
 import numpy as np
 import pandas as pd
 
+from mppshared.config import IDX_TECH_RANKING_COLUMNS, LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
-from mppshared.config import IDX_TECH_RANKING_COLUMNS, LOG_LEVEL
 from mppshared.utility.dataframe_utility import df_dict_to_df
 from mppshared.utility.log_utility import get_logger
 from mppshared.utility.utils import get_unique_list_values

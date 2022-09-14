@@ -35,9 +35,9 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
     new_stack = pathway.get_stack(year=year + 1)
     # Get the emissions, used for the LC scenario
     if year == 2050:
-        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year) # type: ignore
+        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year)  # type: ignore
     else:
-        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year + 1) # type: ignore
+        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year + 1)  # type: ignore
 
     # Get ranking table for brownfield transitions
     df_rank = pathway.get_ranking(year=year, rank_type="brownfield")
@@ -62,7 +62,7 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
         # TODO: implement foresight with brownfield rebuild
 
         # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
-        best_candidates = [] # type: ignore
+        best_candidates = []  # type: ignore
         while not best_candidates:
             # If no more transitions available, break and return pathway
             if df_rank.empty:
@@ -167,7 +167,9 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
                 asset_lifetime=best_transition["technology_lifetime"],
                 switch_type=switch_type,
                 origin_technology=origin_technology,
-                update_year_commission=(switch_type in SWITCH_TYPES_UPDATE_YEAR_COMMISSIONED)
+                update_year_commission=(
+                    switch_type in SWITCH_TYPES_UPDATE_YEAR_COMMISSIONED
+                ),
             )
             # Remove asset from candidates
             candidates.remove(asset_to_update)

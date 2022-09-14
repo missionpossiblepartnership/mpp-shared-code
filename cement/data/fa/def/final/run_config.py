@@ -40,7 +40,7 @@ PATHWAY_DEMAND_SCENARIO_MAPPING = {
     "bau": "bau",
     "fa": "gcca",
     "lc": "gcca",
-    "check": "gcca"
+    "check": "gcca",
 }
 
 # carbon cost sensitivities: define carbon cost in USD/t CO2 for different sensitivities

@@ -1,20 +1,19 @@
 """Create and copy over the input files for the solver."""
-import pandas as pd
 import os
 from functools import reduce
 
+import pandas as pd
+
 from ammonia.config_ammonia import (
-    PREPROCESS_DATA_PATH,
     CORE_DATA_PATH,
     GHGS,
+    PREPROCESS_DATA_PATH,
     TECHNOLOGIES_NOT_FOR_SOLVER,
 )
-
 from ammonia.utility.utils import (
     load_cost_data_from_csv,
     load_intermediate_data_from_csv,
 )
-
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 
 

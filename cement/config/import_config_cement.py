@@ -137,8 +137,12 @@ OPEX_CCUS_PROCESS_METRICS_ENERGY = [
         "inputs_energy": ("CC Natural gas",),
     },
     {
-        "commodity_prices": ("Waste of fossil origin (including fossil fuel from mixed fuels)",),
-        "inputs_energy": ("CC Waste of fossil origin (including fossil fuel from mixed fuels)",),
+        "commodity_prices": (
+            "Waste of fossil origin (including fossil fuel from mixed fuels)",
+        ),
+        "inputs_energy": (
+            "CC Waste of fossil origin (including fossil fuel from mixed fuels)",
+        ),
     },
     {
         "commodity_prices": ("Biomass (including biomass from mixed fuels)",),

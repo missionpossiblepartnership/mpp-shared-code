@@ -12,15 +12,12 @@ from ammonia.config_ammonia import (
     REGIONS,
 )
 from mppshared.agent_logic.agent_logic_functions import apply_regional_technology_ban
-
 from mppshared.agent_logic.greenfield import (
     create_dataframe_check_regional_share_global_demand,
     enact_greenfield_transition,
     select_asset_for_greenfield,
 )
-from mppshared.models.asset import (
-    make_new_asset_project_pipeline,
-)
+from mppshared.models.asset import make_new_asset_project_pipeline
 from mppshared.models.constraints import (
     apply_greenfield_filters_chemicals,
     get_regional_production_constraint_table,

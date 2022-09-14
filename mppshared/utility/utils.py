@@ -105,7 +105,7 @@ def enumerate_iterable(iterable: it) -> dict:
     return dict(zip(iterable, range(len([i for i in iterable]))))
 
 
-def cast_to_float(val: Union[float, int, list[float|int]]) -> float:
+def cast_to_float(val: Union[float, int, list[float | int]]) -> float:
     """Casts a numerical object to a float if not a float already.
 
     Args:
