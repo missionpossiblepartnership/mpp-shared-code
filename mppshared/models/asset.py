@@ -627,26 +627,22 @@ class AssetStack:
         assets = deepcopy(self.filter_assets(product=product, region=region))
 
         # assets can be decommissioned if they have not undergone a renovation or rebuild
-        candidates = filter(lambda asset: not asset.retrofit, assets)
+        candidates = list(filter(lambda asset: not asset.retrofit, assets))
 
         # if there are no assets left, those that are at the end of their lifetime can be decommissioned
-        if len(list(candidates)) == 0:
-            candidates = filter(
+        if len(candidates) == 0:
+            candidates = list(filter(
                 lambda asset: (asset.get_age(year) >= asset.asset_lifetime), assets
-            )
-        else:
-            return list(candidates)
+            ))
 
-        # if there are still no assets left, every asset in the region can be decommissioned
-        if len(list(candidates)) == 0:
-            candidates = assets
-        else:
-            return list(candidates)
+            # if there are still no assets left, every asset in the region can be decommissioned
+            if len(candidates) == 0:
+                candidates = assets
 
-        if len(list(candidates)) == 0:
+        if len(candidates) == 0:
             logger.critical(f"{year}: No assets can be found in {region}")
         else:
-            return list(candidates)
+            return candidates
 
     def get_assets_eligible_for_brownfield(
         self, year: int, investment_cycle: int
