@@ -44,9 +44,6 @@ class CarbonBudget:
     def __str__(self):
         return "Instance of Carbon Budget"
 
-    def list_pathways(self):
-        return list(self.pathways.keys())
-
     def total_budget_all_sectors(self):
         return sum(list(self.budgets.values()))
 
@@ -137,14 +134,3 @@ class CarbonBudget:
         )
 
         importer.export_data(df, "carbon_budget.csv", "final")
-
-    def pathway_getter(self, sector: str, year: int, value_type: str):
-        """pathway_getter.
-
-        Args:
-            sector (str): sector
-            year (int): year
-            value_type (str): value_type
-        """
-        mapper = {"annual": "annual_limit", "cumulative": "cumulative_limit"}
-        return self.pathways[sector].loc[year][mapper[value_type]]

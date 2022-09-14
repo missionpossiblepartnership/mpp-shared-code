@@ -38,9 +38,9 @@ def brownfield_def(pathway: SimulationPathway, year: int) -> SimulationPathway:
     new_stack = pathway.get_stack(year=year + 1)
     # Get the emissions, used for the LC scenario
     if year == 2050:
-        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year)
+        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year) # type: ignore
     else:
-        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year + 1)
+        emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year + 1) # type: ignore
 
     # Get ranking table for brownfield transitions
     df_rank = pathway.get_ranking(year=year, rank_type="brownfield")
@@ -129,7 +129,10 @@ def brownfield_def(pathway: SimulationPathway, year: int) -> SimulationPathway:
         tentative_stack = deepcopy(new_stack)
         origin_technology = asset_to_update.technology
         tentative_stack.update_asset(
-            asset_to_update,
+            asset_to_update = asset_to_update,
+            asset_lifetime=best_transition["lifetime"],
+            update_year_commission=True,
+            year=year,
             new_technology=new_technology,
             new_classification=best_transition["technology_classification"],
             switch_type=switch_type,
@@ -154,7 +157,10 @@ def brownfield_def(pathway: SimulationPathway, year: int) -> SimulationPathway:
             )
             # Update asset stack
             new_stack.update_asset(
-                asset_to_update,
+                asset_to_update = asset_to_update,
+                asset_lifetime=best_transition["lifetime"],
+                update_year_commission=True,
+                year=year,
                 new_technology=new_technology,
                 new_classification=best_transition["technology_classification"],
                 switch_type=switch_type,
