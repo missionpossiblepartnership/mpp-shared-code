@@ -675,6 +675,12 @@ class AssetStack:
             self.assets,
         )
 
+        # remove greenfields in the current year
+        candidates_renovation = filter(
+            lambda asset: (asset.year_commissioned != year),
+            candidates_renovation,
+        )
+
         return deepcopy(list(candidates_renovation))
 
     def get_assets_eligible_for_brownfield_cement_rebuild(self, year: int) -> list:
@@ -685,6 +691,12 @@ class AssetStack:
         candidates_rebuild = filter(
             lambda asset: asset.get_age(year) >= asset.asset_lifetime,
             self.assets,
+        )
+
+        # remove greenfields in the current year
+        candidates_rebuild = filter(
+            lambda asset: (asset.year_commissioned != year),
+            candidates_rebuild,
         )
 
         return deepcopy(list(candidates_rebuild))
