@@ -32,10 +32,12 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
         products=PRODUCTS,
     )
 
-    # technology roadmap
+    """ technology roadmap """
+    logger.info("Post-processing technology roadmap")
     df_tech_roadmap = _create_tech_roadmaps_by_region(
         importer=importer, start_year=START_YEAR, end_year=END_YEAR
     )
+    # todo: add shares in % per tech
     _export_and_plot_tech_roadmaps_by_region(
         pathway_name=pathway_name,
         sensitivity=sensitivity,
@@ -45,7 +47,8 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
         technology_layout=TECHNOLOGY_LAYOUT,
     )
 
-    # emissions
+    """ Emissions """
+    logger.info("Post-processing emissions")
     df_total_emissions = _calculate_emissions_total(
         importer=importer, ghgs=GHGS, emission_scopes=EMISSION_SCOPES, format_data=False
     )
@@ -57,6 +60,61 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
         ghgs=GHGS,
         emission_scopes=EMISSION_SCOPES,
         technology_layout=TECHNOLOGY_LAYOUT,
+    )
+
+    """ Number of plants """
+    logger.info("Post-processing number of plants")
+    df_number_plants = _calculate_number_plants(
+        df_cost=importer.get_technology_transitions_and_cost(),
+        importer=importer,
+        sector=sector,
+    )
+    importer.export_data(
+        df=df_number_plants,
+        filename=f"{pathway_name}_number_of_plants.csv",
+        export_dir="final",
+        index=True,
+    )
+
+    """ Cost """
+    logger.info("Post-processing cost data")
+    df_investments = _calculate_annual_investments(
+        df_cost=importer.get_technology_transitions_and_cost(),
+        importer=importer,
+        sector=sector,
+    )
+    importer.export_data(
+        df=df_investments,
+        filename=f"{pathway_name}_pathway_investments.csv",
+        export_dir="final/cost",
+        index=True,
+    )
+    if pathway_name != "bau":
+        df_additional_investments = _calculate_total_additional_investments(
+            df_investments=df_investments,
+            importer=importer,
+            sector=sector,
+            pathway_name=pathway_name,
+            sensitivity=sensitivity,
+        )
+        importer.export_data(
+            df=df_additional_investments,
+            filename=f"{pathway_name}_additional_investments.csv",
+            export_dir="final/cost",
+            index=True,
+        )
+
+    """ LCOC """
+    df_lcoc = calculate_weighted_average_lcox(
+        df_cost=importer.get_technology_transitions_and_cost(),
+        importer=importer,
+        sector=sector,
+    )
+    importer.export_data(
+        df=df_lcoc,
+        filename=f"{pathway_name}_lcoc.csv",
+        export_dir="final/cost",
+        index=True,
     )
 
     logger.info("Output processing done")
@@ -108,7 +166,7 @@ def _export_and_plot_tech_roadmaps_by_region(
 
         importer.export_data(
             df=df_roadmap_region,
-            filename=f"technology_roadmap_{region}.csv",
+            filename=f"{pathway_name}_technology_roadmap_{region}.csv",
             export_dir="final/technology_roadmap",
             index=True,
         )
@@ -131,9 +189,36 @@ def _export_and_plot_tech_roadmaps_by_region(
 
         plot(
             figure_or_data=fig,
-            filename=f"{importer.final_path}/technology_roadmap/technology_roadmap_{region}.html",
+            filename=f"{importer.final_path}/technology_roadmap/{pathway_name}_technology_roadmap_{region}.html",
             auto_open=False,
         )
+
+        # get global tech shares
+        if region == "Global":
+            fig = px.area(
+                data_frame=df_roadmap_region.reset_index(),
+                x="year",
+                y="annual_production_volume",
+                color="technology",
+                labels={
+                    "year": "Year",
+                    "annual_production_volume": f"Annual production volume in %",
+                },
+                title=f"{region}: Technology roadmap shares ({pathway_name}_{sensitivity})",
+                category_orders={"technology": list(technology_layout)},
+                color_discrete_map=technology_layout,
+                groupnorm="percent",
+            )
+
+            fig.for_each_trace(lambda trace: trace.update(fillcolor=trace.line.color))
+
+            plot(
+                figure_or_data=fig,
+                filename=(
+                    f"{importer.final_path}/technology_roadmap/{pathway_name}_technology_roadmap_{region}_shares.html"
+                ),
+                auto_open=False,
+            )
 
 
 def _calculate_number_of_assets(df_stack: pd.DataFrame) -> pd.DataFrame:
@@ -192,7 +277,9 @@ def _calculate_emissions_year(
     idx = ["product", "region", "technology"]
 
     df_emissions = importer.get_emissions()
-    df_emissions = df_emissions.loc[df_emissions["year"] == year, :].drop(columns="year")
+    df_emissions = df_emissions.loc[df_emissions["year"] == year, :].drop(
+        columns="year"
+    )
     df_stack = importer.get_asset_stack(year=year)
 
     # Emissions are the emissions factor multiplied with the annual production volume
@@ -254,7 +341,9 @@ def _calculate_co2_captured(
     idx = ["product", "region", "technology"]
 
     df_emissions = importer.get_emissions()
-    df_emissions = df_emissions.loc[df_emissions["year"] == year, :].drop(columns="year")
+    df_emissions = df_emissions.loc[df_emissions["year"] == year, :].drop(
+        columns="year"
+    )
     df_stack = importer.get_asset_stack(year=year)
 
     # Captured CO2 by technology is calculated by multiplying with the annual production volume
@@ -344,11 +433,13 @@ def _export_and_plot_emissions_by_region(
     regions = df_total_emissions["region"].unique()
 
     for region in regions:
-        df_region = df_total_emissions.copy().loc[df_total_emissions["region"] == region, :]
+        df_region = df_total_emissions.copy().loc[
+            df_total_emissions["region"] == region, :
+        ]
 
         importer.export_data(
             df=df_region,
-            filename=f"emissions_{region}.csv",
+            filename=f"{pathway_name}_emissions_{region}.csv",
             export_dir="final/emissions",
             index=False,
         )
@@ -360,13 +451,15 @@ def _export_and_plot_emissions_by_region(
                 df_region["parameter"].isin([f"{ghg}_{x}" for x in emission_scopes]), :
             ]
             df_region_area = (
-                df_region_area
-                .set_index([x for x in df_region_area.columns if x != "value"])
+                df_region_area.set_index(
+                    [x for x in df_region_area.columns if x != "value"]
+                )
                 .groupby(["year", "technology"])
                 .sum()
                 .reset_index()
             )
 
+            cum_sum = np.round(df_region_area["value"].sum() / 1e3, decimals=2)
             fig_area = px.area(
                 data_frame=df_region_area,
                 x="year",
@@ -376,16 +469,18 @@ def _export_and_plot_emissions_by_region(
                     "year": "Year",
                     "value": f"{ghg} emissions in Mt {ghg}",
                 },
-                title=f"{region}: {ghg} emissions all scopes ({pathway_name}_{sensitivity})",
+                title=f"{region}: {ghg} emissions all scopes ({pathway_name}_{sensitivity}; cum.: {cum_sum} Gt {ghg})",
                 category_orders={"technology": list(technology_layout)},
                 color_discrete_map=technology_layout,
             )
 
-            fig_area.for_each_trace(lambda trace: trace.update(fillcolor=trace.line.color))
+            fig_area.for_each_trace(
+                lambda trace: trace.update(fillcolor=trace.line.color)
+            )
 
             plot(
                 figure_or_data=fig_area,
-                filename=f"{importer.final_path}/emissions/emissions_by_tech_{region}_{ghg}.html",
+                filename=f"{importer.final_path}/emissions/{pathway_name}_emissions_by_tech_{region}_{ghg}.html",
                 auto_open=False,
             )
 
@@ -401,11 +496,19 @@ def _export_and_plot_emissions_by_region(
         df_list = []
         for ghg in ghgs:
             df_region_line_all_scopes = df_region_line.copy().loc[
-                df_region_line["parameter"].isin([f"{ghg}_{x}" for x in emission_scopes]), :
+                df_region_line["parameter"].isin(
+                    [f"{ghg}_{x}" for x in emission_scopes]
+                ),
+                :,
             ]
             df_region_line_all_scopes = (
-                df_region_line_all_scopes
-                .set_index([x for x in df_region_line_all_scopes.columns if x not in ["value", "co2_scope1_captured"]])
+                df_region_line_all_scopes.set_index(
+                    [
+                        x
+                        for x in df_region_line_all_scopes.columns
+                        if x not in ["value", "co2_scope1_captured"]
+                    ]
+                )
                 .groupby(["year"])
                 .sum()
                 .reset_index()
@@ -429,7 +532,7 @@ def _export_and_plot_emissions_by_region(
 
         plot(
             figure_or_data=fig_line,
-            filename=f"{importer.final_path}/emissions/emissions_by_ghg_scope_{region}.html",
+            filename=f"{importer.final_path}/emissions/{pathway_name}_emissions_by_ghg_scope_{region}.html",
             auto_open=False,
         )
 
@@ -603,15 +706,147 @@ def create_table_all_data_year(
     return df_all_data_year
 
 
+def _calculate_number_plants(
+    df_cost: pd.DataFrame,
+    importer: IntermediateDataImporter,
+    sector: str,
+) -> pd.DataFrame:
+
+    # todo: adjust when implementing OPEX context!
+    df_cost = df_cost.loc[
+        (df_cost["opex_context"] == "value_high_low"),
+        ["year", "region", "technology_origin", "technology_destination", "switch_type", "switch_capex"]
+    ]
+
+    switch_types = ["greenfield", "brownfield_renovation", "brownfield_rebuild", "decommission"]
+    df_number_plants = pd.DataFrame()
+
+    for year in np.arange(START_YEAR + 1, END_YEAR + 1):
+
+        # Get current and previous stack
+        drop_cols = ["annual_production_volume", "cuf", "asset_lifetime"]
+        current_stack = (
+            importer.get_asset_stack(year)
+            .drop(columns=drop_cols)
+            .rename(
+                {
+                    "technology": "technology_destination",
+                    "annual_production_capacity": "annual_production_capacity_destination",
+                },
+                axis=1,
+            )
+        )
+        previous_stack = (
+            importer.get_asset_stack(year - 1)
+            .drop(columns=drop_cols)
+            .rename(
+                {
+                    "technology": "technology_origin",
+                    "annual_production_capacity": "annual_production_capacity_origin",
+                },
+                axis=1,
+            )
+        )
+
+        # Merge to compare retrofit, rebuild and greenfield status
+        df = pd.merge(
+            left=current_stack,
+            right=previous_stack,
+            on=["uuid", "product", "region"],
+            how="outer",
+            suffixes=("", "_previous"),
+        ).fillna(False)
+
+        # Identify newly built assets
+        df["switch_type"] = np.nan
+        df["greenfield"] = 0
+        df.loc[
+            (df["greenfield_status"] & ~df["greenfield_status_previous"]),
+            ["greenfield", "technology_origin", "switch_type"],
+        ] = [1, "New-build", "greenfield"]
+
+        # Identify retrofit assets
+        df["brownfield_renovation"] = 0
+        df.loc[
+            (
+                df["retrofit_status"]
+                & ~df["retrofit_status_previous"]
+                & (df["technology_origin"] != df["technology_destination"])
+            ),
+            ["brownfield_renovation", "switch_type"],
+        ] = [1, "brownfield_renovation"]
+
+        # Identify rebuild assets
+        df["brownfield_rebuild"] = 0
+        df.loc[
+            (df["rebuild_status"] & ~df["rebuild_status_previous"]),
+            ["brownfield_rebuild", "switch_type"],
+        ] = [1, "brownfield_rebuild"]
+
+        # Identify decommissioned assets
+        df["decommission"] = 0
+        df.loc[
+            ~(df["year_commissioned"].astype(bool)),
+            ["decommission", "technology_destination", "switch_type"],
+        ] = [1, "Decommissioned", "decommission"]
+
+        # filter
+        df = df.loc[df["switch_type"].isin(switch_types), :]
+
+        # set year
+        df["year"] = year
+
+        # groupby and reduce columns
+        df = df[["year", "region", "technology_origin", "technology_destination"] + switch_types]
+        df = pd.melt(
+            frame=df,
+            id_vars=["year", "region", "technology_origin", "technology_destination"],
+            value_vars=switch_types,
+            var_name="switch_type",
+            value_name="number_plants",
+        )
+        df.set_index(keys=["year", "region", "technology_origin", "technology_destination", "switch_type"], inplace=True)
+        df = df.loc[df["number_plants"] != 0, :]
+        df = df.groupby(["year", "region", "technology_origin", "technology_destination", "switch_type"]).sum()
+        df.sort_index(inplace=True)
+
+        # Add the corresponding switching CAPEX to every asset that has changed
+        df = df.merge(
+            df_cost,
+            on=[
+                "year",
+                "region",
+                "technology_origin",
+                "technology_destination",
+                "switch_type",
+            ],
+            how="left",
+        )
+
+        df_number_plants = pd.concat([df_number_plants, df])
+
+    # todo: remove workaround
+    df_number_plants.loc[(df_number_plants["switch_type"] == "decommission"), "switch_capex"] = 0
+    # todo
+
+    df_number_plants = df_number_plants.set_index(["year", "region", "technology_origin", "technology_destination", "switch_type"]).sort_index()
+    df_number_plants["investment"] = df_number_plants["number_plants"] * df_number_plants["switch_capex"]
+
+    return df_number_plants
+
+
 def _calculate_annual_investments(
     df_cost: pd.DataFrame,
     importer: IntermediateDataImporter,
     sector: str,
     agg_vars=["product", "region", "switch_type", "technology_destination"],
 ) -> pd.DataFrame:
-    """Calculate annual investments."""
+    """Calculate annual investments (CAPEX)."""
 
-    # Calculate invesment in newbuild, brownfield retrofit and brownfield rebuild technologies in every year
+    # todo: adjust when implementing OPEX context!
+    df_cost = df_cost.loc[(df_cost["opex_context"] == "value_high_low"), :]
+
+    # Calculate investment from newbuild, brownfield retrofit and brownfield rebuild technologies in every year
     switch_types = ["greenfield", "rebuild", "retrofit"]
     df_investment = pd.DataFrame()
 
@@ -652,29 +887,28 @@ def _calculate_annual_investments(
         )
         df = current_stack.merge(
             previous_stack.drop(columns=["product", "region"]), on="uuid", how="left"
-        )
+        ).fillna(False)
 
         # Identify newly built assets
         df.loc[
-            (df["greenfield_status"] == True)
-            & (df["previous_greenfield_status"].isna()),
+            (df["greenfield_status"] & ~df["previous_greenfield_status"]),
             ["switch_type", "technology_origin"],
         ] = ["greenfield", "New-build"]
 
         # Identify retrofit assets
         df.loc[
-            (df["retrofit_status"] == True) & (df["previous_retrofit_status"] == False),
+            (df["retrofit_status"] & ~df["previous_retrofit_status"]),
             "switch_type",
         ] = "brownfield_renovation"
 
         # Identify rebuild assets
         df.loc[
-            (df["rebuild_status"] == True) & (df["previous_rebuild_status"] == False),
+            (df["rebuild_status"] & ~df["previous_rebuild_status"]),
             "switch_type",
-        ] = "brownfield_newbuild"
+        ] = "brownfield_rebuild"
 
         # Drop all assets that haven't undergone a transition
-        df = df.loc[df["switch_type"].notna()]
+        df = df.loc[df["switch_type"].notna(), :]
         df["year"] = year
 
         # Add the corresponding switching CAPEX to every asset that has changed
@@ -691,20 +925,23 @@ def _calculate_annual_investments(
             how="left",
         )
 
-        # Calculate investment cost per changed asset by multiplying CAPEX (in USD/tpa) with production capacity (in Mtpa) and sum
+        # Calculate investment cost per changed asset by multiplying CAPEX (in USD/tpa) with production capacity
+        #   (in Mtpa) and sum
         df["investment"] = (
             df["switch_capex"] * df["annual_production_capacity_destination"] * 1e6
         )
-        df = df.groupby(agg_vars)[["investment"]].sum().reset_index(drop=False)
+        df = (
+            df.groupby(agg_vars + ["year"])[["investment"]]
+            .sum()
+            .reset_index(drop=False)
+        )
 
         df = df.melt(
-            id_vars=agg_vars,
+            id_vars=agg_vars + ["year"],
             value_vars="investment",
             var_name="parameter",
             value_name="value",
         )
-
-        df["year"] = year
 
         df_investment = pd.concat([df_investment, df])
 
@@ -750,6 +987,102 @@ def _calculate_annual_investments(
     return df_pivot
 
 
+def _calculate_total_additional_investments(
+    df_investments: pd.DataFrame,
+    importer: IntermediateDataImporter,
+    sector: str,
+    pathway_name: str,
+    sensitivity: str,
+) -> pd.DataFrame:
+    """Calculates the investments in addition to the BAU scenario
+
+    Args:
+        df_investments ():
+        importer ():
+        sector ():
+
+    Returns:
+
+    """
+
+    if pathway_name != "bau":
+        # get BAU demand
+        df_investments_bau = importer.get_pathway_investments(
+            pathway_name="bau", sensitivity=sensitivity
+        )
+        model_years_str = [str(x) for x in MODEL_YEARS]
+        df_investments_bau = pd.melt(
+            frame=df_investments_bau,
+            id_vars=[x for x in list(df_investments_bau) if x not in model_years_str],
+            value_vars=[str(x) for x in MODEL_YEARS if x != MODEL_YEARS[0]],
+            var_name="year",
+            value_name="value",
+        )[["region", "technology", "parameter", "year", "value"]]
+        df_investments_bau = df_investments_bau.astype(
+            dtype={
+                "region": str,
+                "technology": str,
+                "parameter": str,
+                "year": int,
+                "value": float,
+            }
+        )
+        # df_investments_bau.set_index(keys=[x for x in list(df_investments_bau) if x != "value"], inplace=True)
+
+        df_investments = pd.melt(
+            frame=df_investments.reset_index(),
+            id_vars=list(df_investments.index.names),
+            value_vars=list(df_investments),
+            var_name="year",
+            value_name="value",
+        )[["region", "technology", "parameter", "year", "value"]]
+        df_investments_bau = df_investments_bau.astype(
+            dtype={
+                "region": str,
+                "technology": str,
+                "parameter": str,
+                "year": int,
+                "value": float,
+            }
+        )
+        # df_investments.set_index(keys=[x for x in list(df_investments) if x != "value"], inplace=True)
+
+        # merge and calculate additional investments
+        df_investments = pd.merge(
+            left=df_investments_bau.reset_index(drop=True),
+            right=df_investments.reset_index(drop=True),
+            how="outer",
+            on=["region", "technology", "parameter", "year"],
+            suffixes=("_bau", f"_{pathway_name}"),
+        ).fillna(float(0))
+        df_investments["value"] = (
+            df_investments[f"value_{pathway_name}"] - df_investments["value_bau"]
+        )
+        df_investments = df_investments.set_index(
+            ["region", "technology", "parameter", "year"]
+        ).sort_index()[["value"]]
+
+        return df_investments
+
+
+def _export_and_plot_investments(
+    pathway_name: str,
+    sensitivity: str,
+    df_investments: pd.DataFrame,
+    importer: IntermediateDataImporter,
+):
+
+    df_investments = pd.melt(
+        frame=df_investments.reset_index(),
+        id_vars=list(df_investments.index.names),
+        value_vars=list(df_investments),
+        var_name="year",
+        value_name="value",
+    )
+
+    # todo: plot
+
+
 def calculate_weighted_average_lcox(
     df_cost: pd.DataFrame,
     importer: IntermediateDataImporter,
@@ -767,7 +1100,8 @@ def calculate_weighted_average_lcox(
 
     else:
         df = pd.DataFrame()
-        # In every year, get LCOX of the asset based on the year it was commissioned and average according to desired aggregation
+        # In every year, get LCOX of the asset based on the year it was commissioned and average according to desired
+        #   aggregation
         for year in np.arange(START_YEAR, END_YEAR + 1):
             df_stack = importer.get_asset_stack(year)
             df_stack = df_stack.rename(columns={"year_commissioned": "year"})

@@ -9,6 +9,7 @@ from plotly.subplots import make_subplots
 
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
+
 # from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import Asset, AssetStack, create_assets
 from mppshared.models.carbon_budget import CarbonBudget
@@ -48,8 +49,7 @@ class SimulationPathway:
         carbon_budget: CarbonBudget = None,
         set_co2_storage_constraint: bool = False,
         co2_storage_constraint_type: str = None,
-        set_natural_gas_constraint: bool = False,
-        set_alternative_fuel_constraint: bool = False,
+        set_biomass_constraint: bool = False,
         carbon_cost_trajectory: CarbonCostTrajectory = None,
         technologies_maximum_global_demand_share: list = None,
         maximum_global_demand_share: dict = None,
@@ -98,13 +98,9 @@ class SimulationPathway:
             self.co2_storage_constraint = self.importer.get_co2_storage_constraint()
             self.co2_storage_constraint_type = co2_storage_constraint_type
 
-        if set_natural_gas_constraint:
-            self.natural_gas_constraint = self.importer.get_natural_gas_constraint()
-
-        if set_alternative_fuel_constraint:
-            self.alternative_fuel_constraint = (
-                self.importer.get_alternative_fuel_constraint()
-            )
+        if set_biomass_constraint:
+            self.biomass_constraint = self.importer.get_biomass_constraint()
+            self.df_biomass_consumption = self.get_biomass_consumption()
 
         self.assumed_annual_production_capacity = assumed_annual_production_capacity
 
@@ -373,6 +369,24 @@ class SimulationPathway:
             {"region": region, "demand": self.get_demand(product, year, region)}
             for region in df["region"].unique()
         )
+
+    def get_biomass_consumption(self):
+        df_biomass_consumption = self.importer.get_imported_input_data(
+            {"Technology cards": ["inputs_energy"]}
+        )["inputs_energy"]
+        # filter biomass consumption
+        df_biomass_consumption = df_biomass_consumption.loc[
+            (
+                df_biomass_consumption["metric"]
+                == "Biomass (including biomass from mixed fuels)"
+            ),
+            :,
+        ]
+        # remove technologies without biomass consumption
+        df_biomass_consumption = df_biomass_consumption.loc[(df_biomass_consumption["value"] != float(0)), :]
+        # df_biomass_consumption unit: [GJ / year]
+
+        return df_biomass_consumption
 
     def get_inputs(self, year, product=None):
         """Get the inputs for a product in a year"""

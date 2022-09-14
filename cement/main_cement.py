@@ -2,7 +2,6 @@
 
 import itertools
 
-# Library imports
 import multiprocessing as mp
 
 from cement.config.config_cement import (
@@ -55,7 +54,6 @@ def _run_model(pathway_name: str, sensitivity: str):
 
 def run_model_sequential(runs: list):
     """Run model sequentially, slower but better for debugging"""
-    # TODO: Pass carbon cost trajectories into the model
     for pathway_name, sensitivity in runs:
         _run_model(pathway_name=pathway_name, sensitivity=sensitivity)
 
