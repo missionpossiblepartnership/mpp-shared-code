@@ -178,9 +178,9 @@ def _export_and_plot_tech_roadmaps_by_region(
             color="technology",
             labels={
                 "year": "Year",
-                "annual_production_volume": f"Annual production volume in %",
+                "annual_production_volume": f"Annual production volume in {unit}",
             },
-            title=f"{region}: Technology roadmap shares ({pathway_name}_{sensitivity})",
+            title=f"{region}: Technology roadmap ({pathway_name}_{sensitivity})",
             category_orders={"technology": list(technology_layout)},
             color_discrete_map=technology_layout,
         )
@@ -202,9 +202,9 @@ def _export_and_plot_tech_roadmaps_by_region(
                 color="technology",
                 labels={
                     "year": "Year",
-                    "annual_production_volume": f"Annual production volume in {unit}",
+                    "annual_production_volume": f"Annual production volume in %",
                 },
-                title=f"{region}: Technology roadmap ({pathway_name}_{sensitivity})",
+                title=f"{region}: Technology roadmap shares ({pathway_name}_{sensitivity})",
                 category_orders={"technology": list(technology_layout)},
                 color_discrete_map=technology_layout,
                 groupnorm="percent",
@@ -905,7 +905,7 @@ def _calculate_annual_investments(
         df.loc[
             (df["rebuild_status"] & ~df["previous_rebuild_status"]),
             "switch_type",
-        ] = "brownfield_newbuild"
+        ] = "brownfield_rebuild"
 
         # Drop all assets that haven't undergone a transition
         df = df.loc[df["switch_type"].notna(), :]

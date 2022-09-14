@@ -290,7 +290,7 @@ CONSTRAINTS_TO_APPLY = {
         "co2_storage_constraint",
     ],
     "lc": [
-        "emissions_constraint",
+        # "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",
         "biomass_constraint",
