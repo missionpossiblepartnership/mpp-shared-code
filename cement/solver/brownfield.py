@@ -305,7 +305,7 @@ def _enact_brownfield_transition(
                     else:
                         # remove destination technology from ranking
                         logger.debug(
-                            f"Handle emissions constraint: removing destination technology"
+                            f"Handle emissions constraint: removing origin - destination technology"
                         )
                         if origin_technology != new_technology:
                             df_rank = remove_all_transitions_with_origin_destination_technology(

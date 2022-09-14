@@ -265,11 +265,13 @@ def select_asset_for_greenfield(
             region=new_asset.region if constraints_regional_check else None,
         )
 
-        # Ensure that newbuild capacity from project pipeline does not lead to erroneous constraint violation
-        if "CCS" not in asset_transition["technology_destination"]:
-            dict_constraints["co2_storage_constraint"] = True
-        if "Electrolyser" not in asset_transition["technology_destination"]:
-            dict_constraints["electrolysis_capacity_addition_constraint"] = True
+        # todo: improve workaround
+        if product in ["Ammonia", "Ammonium nitrate", "Urea"]:
+            # Ensure that newbuild capacity from project pipeline does not lead to erroneous constraint violation
+            if "CCS" not in asset_transition["technology_destination"]:
+                dict_constraints["co2_storage_constraint"] = True
+            if "Electrolyser" not in asset_transition["technology_destination"]:
+                dict_constraints["electrolysis_capacity_addition_constraint"] = True
 
         # Asset can be created if no constraint hurt
         if all(
