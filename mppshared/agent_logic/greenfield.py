@@ -435,7 +435,7 @@ def select_asset_for_greenfield(
                 if not dict_constraints["biomass_constraint"]:
                     # remove all transitions with that destination technology from the ranking table
                     logger.debug(
-                        f"Handle biomass constraint: removing destination technology"
+                        f"Handle biomass constraint"
                     )
                     df_rank = remove_all_transitions_with_destination_technology(
                         df_rank=df_rank,

@@ -108,6 +108,36 @@ def remove_all_transitions_with_origin_destination_technology(
     return df_rank
 
 
+def handle_biomass_constraint(
+    df_rank: pd.DataFrame, technology_destination: str, origin_technology: str,
+) -> pd.DataFrame:
+
+    advanced_af_techs = [
+        "Dry kiln alternative fuels 90%",
+        "Dry kiln alternative fuels + post combustion + storage",
+        "Dry kiln alternative fuels + oxyfuel + storage",
+        "Dry kiln alternative fuels + direct separation + storage",
+        "Dry kiln alternative fuels + post combustion + usage",
+        "Dry kiln alternative fuels + oxyfuel + usage",
+        "Dry kiln alternative fuels + direct separation + usage",
+    ]
+
+    if origin_technology == "Dry kiln alternative fuels 43%":
+        df_rank = df_rank.loc[
+            ~(
+                (df_rank["technology_origin"] == origin_technology)
+                & (df_rank["technology_destination"].isin(advanced_af_techs))
+            )
+        ]
+    else:
+        df_rank = remove_all_transitions_with_destination_technology(
+            df_rank=df_rank,
+            technology_destination=technology_destination,
+        )
+
+    return df_rank
+
+
 def remove_techs_in_region_by_tech_substr(
     df_rank: pd.DataFrame, region: str, tech_substr: str
 ) -> pd.DataFrame:

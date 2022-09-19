@@ -73,7 +73,7 @@ def official_country_attr_getter(country_code: str, attr: str = "official_name")
 
 def country_matcher(
     country_list: list, output_type: str = "all"
-) -> dict[Any, str] | Tuple[dict[Any, str], dict[Any, str]]:
+) -> dict[Any, str] or Tuple[dict[Any, str], dict[Any, str]]:
     """Fuzzy matches a list of countries and creates a mapping of the country to ISO Alpha-3 name.
     The function produces a dictionary of mappings and also a dictionary of all unmapped countries.
 

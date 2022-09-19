@@ -18,6 +18,7 @@ from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_origin_destination_technology,
     remove_transition,
     select_best_transition,
+    handle_biomass_constraint,
 )
 from mppshared.models.asset import AssetStack
 from mppshared.models.constraints import (
@@ -332,13 +333,14 @@ def _enact_brownfield_transition(
                 if not dict_constraints["biomass_constraint"]:
                     # remove all transitions with that destination technology from the ranking table
                     logger.debug(
-                        f"Handle biomass constraint: removing destination technology"
+                        f"Handle biomass constraint"
                     )
-                    df_rank = remove_all_transitions_with_destination_technology(
+                    df_rank = handle_biomass_constraint(
                         df_rank=df_rank,
                         technology_destination=best_transition[
                             "technology_destination"
                         ],
+                        origin_technology=origin_technology,
                     )
 
             # CO2 STORAGE

@@ -293,7 +293,7 @@ class AssetStack:
         tech_substr: str,
         region: str = None,
         aggregate_techs: bool = True,
-    ) -> float | dict:
+    ) -> float or dict:
         """Get the yearly production volumes of all natural gas (ng) or alternative fuels (af) the AssetStack per region
             and technology for a specific product
 
