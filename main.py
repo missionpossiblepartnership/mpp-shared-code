@@ -16,6 +16,6 @@ elif SECTOR == "ammonia":
     main()
 
 elif SECTOR == "cement":
-    from ammonia.main_cement import cement
+    from cement.main_cement import main
 
     main()

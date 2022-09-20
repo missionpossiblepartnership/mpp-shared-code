@@ -10,10 +10,7 @@ from plotly.subplots import make_subplots
 
 from mppshared.config import (
     EMISSION_SCOPES_DEFAULT,
-    END_YEAR,
     LOG_LEVEL,
-    PRODUCTS,
-    START_YEAR,
 )
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.log_utility import get_logger
@@ -22,20 +19,27 @@ logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
 
 
-def create_debugging_outputs(pathway_name: str, sensitivity: str, sector: str):
+def create_debugging_outputs(
+    pathway_name: str,
+    sensitivity: str,
+    sector: str,
+    start_year: int,
+    end_year: int,
+    products: list,
+):
     """Create technology roadmap and emissions trajectory for quick debugging and refinement."""
 
     importer = IntermediateDataImporter(
         pathway_name=pathway_name,
         sensitivity=sensitivity,
         sector=sector,
-        products=PRODUCTS[sector],
+        products=products,
     )
 
     # Create summary table of asset transitions
     logger.info("Creating table with asset transition sequences.")
     df_transitions = create_table_asset_transition_sequences(
-        importer, start_year=START_YEAR, end_year=END_YEAR
+        importer, start_year=start_year, end_year=end_year
     )
     importer.export_data(
         df_transitions,
@@ -45,42 +49,71 @@ def create_debugging_outputs(pathway_name: str, sensitivity: str, sector: str):
 
     # Create outputs on rebuild capacity
     output_renovation_transitions_by_year(
-        df_transitions, importer, renovation_type="rebuild", technology_type="origin"
+        df_transitions=df_transitions,
+        importer=importer,
+        renovation_type="rebuild",
+        technology_type="origin",
+        start_year=start_year,
+        end_year=end_year,
     )
     output_renovation_transitions_by_year(
         df_transitions,
         importer,
         renovation_type="rebuild",
         technology_type="destination",
+        start_year=start_year,
+        end_year=end_year,
     )
 
     # Create outputs on retrofit capacity
     output_renovation_transitions_by_year(
-        df_transitions, importer, renovation_type="retrofit", technology_type="origin"
+        df_transitions,
+        importer,
+        renovation_type="retrofit",
+        technology_type="origin",
+        start_year=start_year,
+        end_year=end_year,
     )
     output_renovation_transitions_by_year(
         df_transitions,
         importer,
         renovation_type="retrofit",
         technology_type="destination",
+        start_year=start_year,
+        end_year=end_year,
     )
 
     # Create outputs on newbuild capacity
     create_newbuild_capacity_outputs_by_region(
-        df_transitions=df_transitions, importer=importer
+        df_transitions=df_transitions, importer=importer,
+        start_year=start_year,
+        end_year=end_year,
     )
     create_newbuild_capacity_outputs_by_technology(
-        df_transitions=df_transitions, importer=importer
+        df_transitions=df_transitions,
+        importer=importer,
+        start_year=start_year,
+        end_year=end_year,
     )
 
     # Create emissions trajectory and technology roadmap
-    output_emissions_trajectory(importer)
-    output_technology_roadmap(importer)
+    output_emissions_trajectory(
+        importer=importer,
+        start_year=start_year,
+        end_year=end_year,
+    )
+    output_technology_roadmap(
+        importer=importer,
+        start_year=start_year,
+        end_year=end_year,
+    )
 
 
 def output_renovation_transitions_by_year(
     df_transitions: pd.DataFrame,
     importer: IntermediateDataImporter,
+    start_year: int,
+    end_year: int,
     renovation_type: str = "retrofit",
     technology_type: str = "origin",
 ):
@@ -92,7 +125,7 @@ def output_renovation_transitions_by_year(
     renovation_techs: defaultdict = defaultdict()
 
     # Iterate over every year and create dictionary of newbuild technologies in that year (no newbuild in 2020)
-    for year in np.arange(START_YEAR, END_YEAR):
+    for year in np.arange(start_year, end_year):
         renovation_cond1 = (
             df_transitions.loc[
                 df_transitions["parameter"] == f"{renovation_type}_status", year
@@ -162,7 +195,10 @@ def output_renovation_transitions_by_year(
 
 
 def create_newbuild_capacity_outputs_by_region(
-    df_transitions: pd.DataFrame, importer: IntermediateDataImporter
+    df_transitions: pd.DataFrame,
+    importer: IntermediateDataImporter,
+    start_year: int,
+    end_year: int,
 ):
     """Show newbuild capacity by region"""
 
@@ -170,7 +206,7 @@ def create_newbuild_capacity_outputs_by_region(
     newbuild_regions: defaultdict = defaultdict()
 
     # Iterate over every year and create dictionary of newbuild technologies in that year (no newbuild in 2020)
-    for year in np.arange(START_YEAR, END_YEAR):
+    for year in np.arange(start_year, end_year):
         newbuild_cond1 = df_transitions[year].isna()
         newbuild_cond2 = df_transitions[year + 1].notna()
         newbuild_uuids = df_transitions.loc[
@@ -220,7 +256,10 @@ def create_newbuild_capacity_outputs_by_region(
 
 
 def create_newbuild_capacity_outputs_by_technology(
-    df_transitions: pd.DataFrame, importer: IntermediateDataImporter
+    df_transitions: pd.DataFrame,
+    importer: IntermediateDataImporter,
+    start_year: int,
+    end_year: int,
 ):
     """Show newbuild capacity by technology for every year, in stacked bar chart."""
 
@@ -228,7 +267,7 @@ def create_newbuild_capacity_outputs_by_technology(
     newbuild_techs: defaultdict = defaultdict()
 
     # Iterate over every year and create dictionary of newbuild technologies in that year (no newbuild in 2020)
-    for year in np.arange(START_YEAR, END_YEAR):
+    for year in np.arange(start_year, end_year):
         newbuild_cond1 = df_transitions[year].isna()
         newbuild_cond2 = df_transitions[year + 1].notna()
         newbuild_uuids = df_transitions.loc[
@@ -277,7 +316,6 @@ def create_newbuild_capacity_outputs_by_technology(
         ),
         auto_open=False,
     )
-    pass
 
 
 def create_table_asset_transition_sequences(
@@ -362,14 +400,30 @@ def create_table_asset_transition_sequences(
     return df
 
 
-def output_technology_roadmap(importer: IntermediateDataImporter):
-    df_roadmap = create_technology_roadmap(importer)
+def output_technology_roadmap(
+    importer: IntermediateDataImporter,
+    start_year: int,
+    end_year: int,
+):
+    df_roadmap = create_technology_roadmap(
+        importer=importer,
+        start_year=start_year,
+        end_year=end_year,
+    )
     importer.export_data(df_roadmap, "technology_roadmap.csv", "final")
     plot_technology_roadmap(importer=importer, df_roadmap=df_roadmap)
 
 
-def output_emissions_trajectory(importer: IntermediateDataImporter):
-    df_trajectory = create_emissions_trajectory(importer)
+def output_emissions_trajectory(
+    importer: IntermediateDataImporter,
+    start_year: int,
+    end_year: int,
+):
+    df_trajectory = create_emissions_trajectory(
+        importer=importer,
+        start_year=start_year,
+        end_year=end_year,
+    )
     df_wide = pd.pivot_table(
         df_trajectory, values="value", index="variable", columns="year"
     )
@@ -377,15 +431,18 @@ def output_emissions_trajectory(importer: IntermediateDataImporter):
     plot_emissions_trajectory(importer=importer, df_trajectory=df_trajectory)
 
 
-def create_technology_roadmap(importer: IntermediateDataImporter) -> pd.DataFrame:
+def create_technology_roadmap(
+    importer: IntermediateDataImporter,
+    start_year: int,
+    end_year: int,
+) -> pd.DataFrame:
     """Create technology roadmap that shows evolution of stack (supply mix) over model horizon."""
 
-    # TODO: filter by product
     # Annual production volume in MtNH3 by technology
     technologies = importer.get_technology_characteristics()["technology"].unique()
     df_roadmap = pd.DataFrame(data={"technology": technologies})
 
-    for year in np.arange(START_YEAR, END_YEAR + 1):
+    for year in np.arange(start_year, end_year + 1):
 
         # Group by technology and sum annual production volume
         df_stack = importer.get_asset_stack(year=year)
@@ -464,7 +521,11 @@ def plot_technology_roadmap(
     )
 
 
-def create_emissions_trajectory(importer: IntermediateDataImporter) -> pd.DataFrame:
+def create_emissions_trajectory(
+    importer: IntermediateDataImporter,
+    start_year: int,
+    end_year: int,
+) -> pd.DataFrame:
     """Create emissions trajectory for scope 1, 2, 3 along with demand."""
 
     # Get emissions for each technology
@@ -476,7 +537,7 @@ def create_emissions_trajectory(importer: IntermediateDataImporter) -> pd.DataFr
         f"{ghg}_{scope}" for ghg in greenhousegases for scope in EMISSION_SCOPES_DEFAULT
     ] + ["co2_scope1_captured"]
 
-    for year in np.arange(START_YEAR, END_YEAR + 1):
+    for year in np.arange(start_year, end_year + 1):
 
         # Filter emissions for the year
         df_em = df_emissions.loc[df_emissions["year"] == year]
@@ -537,7 +598,7 @@ def sort_technologies_by_classification(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: _description_
     """
-    # TODO: read from Business Cases.xlsx
+
     tech_class = get_tech_classification()
 
     tech_class_inv = {

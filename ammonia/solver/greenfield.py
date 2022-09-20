@@ -132,7 +132,6 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             demand=demand,
             production=production,
             product=product,
-            pathway=pathway,
             current_stack=current_stack,
             assumed_annual_production_capacity_mt=ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
             regions=REGIONS,

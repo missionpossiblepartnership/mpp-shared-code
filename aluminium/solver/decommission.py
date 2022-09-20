@@ -53,8 +53,6 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     minimum_decommission_age=pathway.investment_cycle,
                 )
 
-                # TODO: check if removing this asset violates any constraints
-
             except ValueError:
                 logger.info("--No more assets to decommission")
                 break

@@ -15,17 +15,14 @@ def load_and_validate_inputs(sector: str) -> dict:
         dict: dictionary with the input DataFrames
     """
 
-    # TODO: use class IntermediateDataImporter for handling data import
     input_dfs = dict.fromkeys(SOLVER_INPUT_TABLES)
 
     for input_table in input_dfs.keys():
         path = f"{SOLVER_INPUT_DATA_PATH}/{sector}/{input_table}.csv"
         df = pd.read_csv(path)
-        #! Remove for production
+        # Remove for production
         df = filter_df_for_development(df)
         input_dfs[input_table] = df
-
-    # TODO: implement input validation
 
     return input_dfs
 
