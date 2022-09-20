@@ -77,9 +77,7 @@ class CarbonBudget:
                         "budget!"
                     )
 
-            if pathway_shape == "exponential":
-                # todo: make polynomial
-
+            if pathway_shape == "cement":
                 # init values with immediate action start
                 values1 = np.linspace(
                     start=trajectory["emissions_start"],
