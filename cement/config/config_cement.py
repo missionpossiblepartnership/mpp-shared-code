@@ -29,8 +29,8 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 PATHWAYS_SENSITIVITIES = {
     # "bau": ["def"],  # ALL_SENSITIVITIES,
     # "fa": ["def"],
-    "lc": ["def"],  # ALL_SENSITIVITIES,
-    # "bau_gcca_demand": ["def"],
+    # "lc": ["def"],  # ALL_SENSITIVITIES,
+    "custom": ["def"],
 }
 
 PATHWAYS_WITH_CARBON_COST = ["lc"]
@@ -38,9 +38,9 @@ PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = ["lc"]
 
 PATHWAY_DEMAND_SCENARIO_MAPPING = {
     "bau": "bau",
-    "fa": "gcca",
+    "fa": "gcca accelerated", # todo
     "lc": "gcca",
-    "bau_gcca_demand": "gcca",
+    "custom": "gcca",
 }
 
 # carbon cost sensitivities: define carbon cost in USD/t CO2 for different sensitivities
@@ -74,7 +74,7 @@ CAPACITY_UTILISATION_FACTOR = 0.913
 COST_METRIC_CUF_ADJUSTMENT = None
 
 # Share of assets renovated annually (limits number of brownfield transitions)
-MAX_ANNUAL_RENOVATION_SHARE = {"bau": 0.2, "fa": 0.2, "lc": 0.2, "bau_gcca_demand": 0.2}
+MAX_ANNUAL_RENOVATION_SHARE = {"bau": 0.2, "fa": 0.2, "lc": 0.2, "custom": 0.2}
 
 
 ### initial asset stack ###
@@ -115,22 +115,28 @@ LIST_TECHNOLOGIES = [
     "Dry kiln alternative fuels 90%",
     "Dry kiln coal + post combustion + storage",
     "Dry kiln natural gas + post combustion + storage",
-    "Dry kiln alternative fuels + post combustion + storage",
+    "Dry kiln alternative fuels (43%) + post combustion + storage",
+    "Dry kiln alternative fuels (90%) + post combustion + storage",
     "Dry kiln coal + oxyfuel + storage",
     "Dry kiln natural gas + oxyfuel + storage",
-    "Dry kiln alternative fuels + oxyfuel + storage",
+    "Dry kiln alternative fuels (43%) + oxyfuel + storage",
+    "Dry kiln alternative fuels (90%) + oxyfuel + storage",
     "Dry kiln coal + direct separation + storage",
     "Dry kiln natural gas + direct separation + storage",
-    "Dry kiln alternative fuels + direct separation + storage",
+    "Dry kiln alternative fuels (43%) + direct separation + storage",
+    "Dry kiln alternative fuels (90%) + direct separation + storage",
     "Dry kiln coal + post combustion + usage",
     "Dry kiln natural gas + post combustion + usage",
-    "Dry kiln alternative fuels + post combustion + usage",
+    "Dry kiln alternative fuels (43%) + post combustion + usage",
+    "Dry kiln alternative fuels (90%) + post combustion + usage",
     "Dry kiln coal + oxyfuel + usage",
     "Dry kiln natural gas + oxyfuel + usage",
-    "Dry kiln alternative fuels + oxyfuel + usage",
+    "Dry kiln alternative fuels (43%) + oxyfuel + usage",
+    "Dry kiln alternative fuels (90%) + oxyfuel + usage",
     "Dry kiln coal + direct separation + usage",
     "Dry kiln natural gas + direct separation + usage",
-    "Dry kiln alternative fuels + direct separation + usage",
+    "Dry kiln alternative fuels (43%) + direct separation + usage",
+    "Dry kiln alternative fuels (90%) + direct separation + usage",
 ]
 
 ### RANKING OF TECHNOLOGY SWITCHES ###
@@ -171,10 +177,10 @@ SECTORAL_CARBON_BUDGETS = {
     "cement": 48.925,    # == 51.5 * 0.95
 }
 
-emissions_2020 = 2.4 * 0.95  # Gt CO2 (scopes 1 and 2)
+emissions_2020 = 2.8  # Gt CO2 (scopes 1 and 2)
 SECTORAL_CARBON_PATHWAY = {
     "emissions_start": emissions_2020,
-    "emissions_end": 0.06 * 3.85 * 0.9,  # recarbonation GCCA roadmap
+    "emissions_end": 0.06 * 3.85 * 0.95,  # recarbonation GCCA roadmap
     "action_start": 2022,
 }
 
@@ -197,7 +203,7 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
-        "bau_gcca_demand": {
+        "custom": {
             "cost": 1.0,
             "emissions": 0.0,
         },
@@ -215,7 +221,7 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
-        "bau_gcca_demand": {
+        "custom": {
             "cost": 1.0,
             "emissions": 0.0,
         },
@@ -233,7 +239,7 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
-        "bau_gcca_demand": {
+        "custom": {
             "cost": 1.0,
             "emissions": 0.0,
         },
@@ -246,12 +252,12 @@ YEAR_2050_EMISSIONS_CONSTRAINT = 2060
 # Technology ramp-up parameters (on global technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "bau": {
-        "init_maximum_asset_additions": 10,
+        "init_maximum_asset_additions": 12,
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
     },
     "fa": {
-        "init_maximum_asset_additions": 12,
+        "init_maximum_asset_additions": 5,
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
     },
@@ -260,7 +266,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
     },
-    "bau_gcca_demand": {
+    "custom": {
         "init_maximum_asset_additions": 10,
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
@@ -270,6 +276,9 @@ RAMP_UP_TECH_CLASSIFICATIONS = ["initial", "end-state"]
 # CO2 storage constraint
 SET_CO2_STORAGE_CONSTRAINT = True
 CO2_STORAGE_CONSTRAINT_TYPE = "total_cumulative"  # "annual_cumulative", "annual_addition", "total_cumulative", or None
+
+# define the market entry of alternative fuels 90%
+MARKET_ENTRY_AF_90 = 2030
 
 # define whether constraints shall only checked regionally (if applicable) to reduce runtime
 CONSTRAINTS_REGIONAL_CHECK = True
@@ -296,8 +305,8 @@ CONSTRAINTS_TO_APPLY = {
         "biomass_constraint",
         "co2_storage_constraint",
     ],
-    "bau_gcca_demand": [
-        # "emissions_constraint",
+    "custom": [
+        "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",
         "biomass_constraint",

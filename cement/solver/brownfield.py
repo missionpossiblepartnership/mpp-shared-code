@@ -337,7 +337,7 @@ def _enact_brownfield_transition(
                     )
                     df_rank = handle_biomass_constraint(
                         df_rank=df_rank,
-                        technology_destination=best_transition[
+                        destination_technology=best_transition[
                             "technology_destination"
                         ],
                         origin_technology=origin_technology,

@@ -286,59 +286,6 @@ class AssetStack:
                 )
                 logger.debug(f"{region} | {technology}: {prod_vol} Mt {product}")
 
-    # todo: consider removing since it is not being used
-    def get_annual_ng_af_production_volume(
-        self,
-        product: str,
-        tech_substr: str,
-        region: str = None,
-        aggregate_techs: bool = True,
-    ) -> float or dict:
-        """Get the yearly production volumes of all natural gas (ng) or alternative fuels (af) the AssetStack per region
-            and technology for a specific product
-
-        Args:
-            product ():
-            region ():
-            tech_substr (): a substring that determines the set of technologies for which the production volume will be
-                calculated
-            aggregate_techs (): If False, function will return a dictionary with the production volumes of all
-                technologies that include the tech_substr. If True, it will return the sum of their production volumes.
-
-        Returns:
-
-        """
-
-        technologies = get_unique_list_values(
-            [
-                x
-                for x in [
-                    asset.technology
-                    for asset in self.filter_assets(product=product, region=region)
-                ]
-                if tech_substr in x
-            ]
-        )
-
-        if aggregate_techs:
-            # output the sum of all production volumes
-            production_volume = float(0)
-            if len(technologies) != 0:
-                for technology in technologies:
-                    production_volume += self.get_annual_production_volume(
-                        product=product, region=region, technology=technology
-                    )
-                return production_volume
-        else:
-            # output a dictionary with production volumes of all techs with tech_substr
-            production_volumes = dict.fromkeys(technologies)
-            for technology in technologies:
-                production_volumes[technology] = self.get_annual_production_volume(
-                    product=product, region=region, technology=technology
-                )
-            return production_volumes
-        raise NotImplementedError
-
     def get_products(self) -> list:
         """Get list of unique products produced by the AssetStack"""
         return list({asset.product for asset in self.assets})
