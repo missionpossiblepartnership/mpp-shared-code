@@ -38,7 +38,7 @@ class CarbonCostTrajectory:
     ):
         """Set carbon cost trajectory in the form of a DataFrame with columns "year", "carbon_cost"
         Args:
-            trajectory: either of "constant", "linear", # TODO
+            trajectory: either of "constant", "linear", "cement"
             initial_carbon_cost: carbon cost in the start year in USD/tCO2
             final_carbon_cost: carbon cost in the end year in USD/tCO2
             start_year: year in which the carbon cost sets in

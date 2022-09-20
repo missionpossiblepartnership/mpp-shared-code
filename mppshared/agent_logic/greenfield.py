@@ -20,7 +20,6 @@ from mppshared.config import (
 )
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
 from mppshared.models.constraints import (
-    check_biomass_constraint,
     check_co2_storage_constraint,
     check_constraints,
     get_regional_production_constraint_table,
@@ -267,9 +266,9 @@ def select_asset_for_greenfield(
             region=new_asset.region if constraints_regional_check else None,
         )
 
-        # todo: improve workaround
+        # only in Ammonia: Ensure that newbuild capacity from project pipeline does not lead to erroneous constraint
+        #   violation
         if product in ["Ammonia", "Ammonium nitrate", "Urea"]:
-            # Ensure that newbuild capacity from project pipeline does not lead to erroneous constraint violation
             if "CCS" not in asset_transition["technology_destination"]:
                 dict_constraints["co2_storage_constraint"] = True
             if "Electrolyser" not in asset_transition["technology_destination"]:
@@ -425,7 +424,6 @@ def select_asset_for_greenfield(
             # REGIONAL PRODUCTION
             if "regional_constraint" in constraints_to_apply:
                 if not dict_constraints["regional_constraint"]:
-                    # todo
                     logger.critical(
                         f"WARNING: Regional production constraint not fulfilled in {year}."
                     )

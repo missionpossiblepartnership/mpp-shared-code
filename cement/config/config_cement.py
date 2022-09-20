@@ -27,9 +27,9 @@ END_YEAR = 2050
 MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 PATHWAYS_SENSITIVITIES = {
-    # "bau": ["def"],  # ALL_SENSITIVITIES,
+    "bau": ["def"],  # ALL_SENSITIVITIES,
     # "fa": ["def"],
-    "lc": ["def"],  # ALL_SENSITIVITIES,
+    # "lc": ["def"],  # ALL_SENSITIVITIES,
     # "custom": ["def"],
 }
 
@@ -171,7 +171,7 @@ REGIONS_NATURAL_GAS = ["North America", "Russia", "Middle East"]
 COST_CLASSIFICATIONS = {"low": "Low", "standard": "Standard", "high": "High"}
 
 CARBON_BUDGET_SECTOR_CSV = False
-CARBON_BUDGET_SHAPE = "exponential"  # linear, exponential
+CARBON_BUDGET_SHAPE = "cement"  # linear, cement
 # carbon budget 2020 - 2050 in Gt
 SECTORAL_CARBON_BUDGETS = {
     "cement": 48.925,    # == 51.5 * 0.95
@@ -247,12 +247,10 @@ RANKING_CONFIG = {
 }
 
 ### CONSTRAINTS ###
-# todo: when this is set to None, it causes troubles...
-YEAR_2050_EMISSIONS_CONSTRAINT = 2060
 # Technology ramp-up parameters (on global technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "bau": {
-        "init_maximum_asset_additions": 16,
+        "init_maximum_asset_additions": 17,
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
     },
