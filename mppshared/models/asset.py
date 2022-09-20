@@ -600,13 +600,12 @@ class AssetStack:
         """Return a list of Assets from the AssetStack that are eligible for a brownfield technology transition"""
 
         # Assets can be renovated at any time unless they've been renovated already
-        # TODO: Fix it, what happens if we want to switch from transition to end-state technology
         candidates_renovation = filter(
-            lambda asset: (asset.retrofit == False),
+            lambda asset: (not asset.retrofit),
             self.assets,
         )
 
-        # Assets can be rebuild if their CUF exceeds the threshold and they are older than the investment cycle
+        # Assets can be rebuild if their CUF exceeds the threshold and if they are older than the investment cycle
         candidates_rebuild = filter(
             lambda asset: (asset.cuf > self.cuf_lower_threshold)
             & (asset.get_age(year) >= investment_cycle),
@@ -625,7 +624,7 @@ class AssetStack:
             self.assets,
         )
 
-        # remove greenfields in the current year
+        # do not allow assets that have been newly built in the current year to undergo a brownfield transition
         candidates_renovation = filter(
             lambda asset: (asset.year_commissioned != year),
             candidates_renovation,
@@ -643,7 +642,7 @@ class AssetStack:
             self.assets,
         )
 
-        # remove greenfields in the current year
+        # do not allow assets that have been newly built in the current year to undergo a brownfield transition
         candidates_rebuild = filter(
             lambda asset: (asset.year_commissioned != year),
             candidates_rebuild,
