@@ -1,7 +1,5 @@
-"""Main script for the MPP solver, to run a sector chnge the SECTOR parameter to the appropiate one."""
+"""Main script for the MPP solver, to run a sector change the SECTOR parameter to the appropiate one."""
 
-# todo: check whether this is needed
-from multiprocessing import freeze_support
 
 # SECTOR = "cement"
 SECTOR = "aluminium"
@@ -18,7 +16,3 @@ elif SECTOR == "ammonia":
 
     main()
 
-elif SECTOR == "cement":
-    from cement.main_cement import main
-
-    main()
