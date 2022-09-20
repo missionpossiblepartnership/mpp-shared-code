@@ -259,7 +259,7 @@ def increase_cuf_of_assets(
     # is first
     assets = stack.filter_assets(product=product)
     assets_below_cuf_threshold = list(
-        filter(lambda asset: asset.cuf < cuf_upper_threshold, assets)
+        filter(lambda _asset: _asset.cuf < cuf_upper_threshold, assets)
     )
     assets_below_cuf_threshold = sort_assets_cost_metric(
         assets_below_cuf_threshold, pathway, year, cost_metric
@@ -311,9 +311,9 @@ def decrease_cuf_of_assets(
             break
 
         # Increase CUF of asset with lowest LCOX to upper threshold and remove from list
-        asset = assets_above_cuf_threshold[0]
+        _asset = assets_above_cuf_threshold[0]
         # logger.debug(f"Decrease CUF of {str(asset)}")
-        asset.cuf = cuf_lower_threshold
+        _asset.cuf = cuf_lower_threshold
         assets_above_cuf_threshold.pop(0)
 
     return pathway

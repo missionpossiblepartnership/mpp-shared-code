@@ -58,10 +58,9 @@ def brownfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
 
     # Enact brownfield transitions while there are still candidates
     while (candidates != []) & (n_assets_transitioned <= maximum_n_assets_transitioned):
-        # TODO: how do we avoid that all assets are retrofit at once in the beginning?
-        # TODO: implement foresight with brownfield rebuild
 
-        # Find assets can undergo the best transition. If there are no assets for the best transition, continue searching with the next-best transition
+        # Find assets can undergo the best transition. If there are no assets for the best transition, continue
+        #   searching with the next-best transition
         best_candidates = []  # type: ignore
         while not best_candidates:
             # If no more transitions available, break and return pathway

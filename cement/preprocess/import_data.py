@@ -93,7 +93,7 @@ def import_all(
             )
 
             # Expand to individual products where data is for all products
-            df = explode_rows_for_all_products(df)
+            df = explode_rows_for_all_products(df=df, products=["Clinker"])
 
             # Reformat to long
             df = reformat_df_to_long(df=df, value_name="value", model_years=model_years)

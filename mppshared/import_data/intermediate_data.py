@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from mppshared.config import END_YEAR, LOG_LEVEL
+from mppshared.config import LOG_LEVEL
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)
@@ -43,7 +43,7 @@ class IntermediateDataImporter:
         if carbon_cost_trajectory:
             final_carbon_cost = int(
                 carbon_cost_trajectory.df_carbon_cost.loc[
-                    carbon_cost_trajectory.df_carbon_cost["year"] == END_YEAR,
+                    carbon_cost_trajectory.df_carbon_cost["year"] == carbon_cost_trajectory.end_year,
                     "carbon_cost",
                 ].item()
             )

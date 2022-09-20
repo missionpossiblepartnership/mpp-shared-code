@@ -223,7 +223,6 @@ def check_annual_carbon_budget_constraint(
 
     # After a sector-specific year, all end-state newbuild capacity has to fulfill the 2050 emissions limit with a stack
     #   composed of only end-state technologies
-    # todo: change this such that YEAR_2050_EMISSIONS_CONSTRAINT can be set to None
     if (transition_type == "greenfield") & (
         year >= pathway.year_2050_emissions_constraint  # type: ignore
     ):
@@ -259,7 +258,6 @@ def check_annual_carbon_budget_constraint(
 
 
 def hydro_constraints(df_ranking: pd.DataFrame, sector: str) -> pd.DataFrame:
-    # TODO: refactor to not check for sector
     # check if the product is aluminium:
     if HYDRO_TECHNOLOGY_BAN[sector]:
         logger.debug("Removing new builds Hydro")

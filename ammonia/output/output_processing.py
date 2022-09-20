@@ -2272,7 +2272,6 @@ def calculate_annual_production_volume_as_ammonia(df):
     )
     df = df.unstack(level=-1, fill_value=0).reset_index()
 
-    # TODO: improve this workaround
     columns = [
         "sector",
         "region",
