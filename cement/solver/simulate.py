@@ -178,6 +178,7 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         sectoral_carbon_pathway=SECTORAL_CARBON_PATHWAY,
         importer=importer,
     )
+    carbon_budget.output_carbon_budget(sector=sector, importer=importer)
 
     # Create technology ramp-up trajectory for each technology in the form of a dictionary
     dict_technology_rampup = create_dict_technology_rampup(
@@ -195,7 +196,6 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         ],
         ramp_up_tech_classifications=RAMP_UP_TECH_CLASSIFICATIONS,
     )
-    carbon_budget.output_carbon_budget(sector=sector, importer=importer)
 
     # Make pathway
     pathway = SimulationPathway(
