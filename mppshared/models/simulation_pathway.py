@@ -10,7 +10,6 @@ from plotly.subplots import make_subplots
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 
-# from mppshared.rank.rank_technologies import import_tech_data, rank_tech
 from mppshared.models.asset import Asset, AssetStack, create_assets
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
@@ -129,20 +128,8 @@ class SimulationPathway:
             self.importer.get_technology_characteristics()
         )
 
-        self.df_cost = self.importer.get_technology_transitions_and_cost()
-
-        # TODO: Availability missing, if it is available we should import
-        # logger.debug("Getting availability")
-        # self.availability = self._import_availability()
-
-        logger.debug("Getting process data")
-        # self.process_data = self.importer.get_all_process_data()
         logger.debug("Getting all transitions and cost")
         self.df_cost = self.importer.get_technology_transitions_and_cost()
-        # TODO: Raw material data is missing and should be called inputs to import it
-        # self.inputs_pivot = self.importer.get_process_data(data_type="inputs")
-        logger.debug("Getting the asset specs")
-        # self.asset_specs = self.importer.get_asset_specs()
 
         # Initialize TransitionRegistry to track technology transitions
         logger.debug("Getting the transition registry to track technology transitions")
@@ -160,6 +147,7 @@ class SimulationPathway:
         return rankings
 
     def save_rankings(self):
+        """Save rankings for all products to .csv files"""
         for product in self.products:
             for rank_type in self.rank_types:
                 df = pd.concat(
@@ -177,6 +165,8 @@ class SimulationPathway:
                 )
 
     def save_demand(self):
+        """Save demand to .csv file"""
+        
         df = self.demand
         df = df[df.year <= self.end_year]
         df = df.pivot(index="product", columns="year", values="demand")
@@ -210,7 +200,6 @@ class SimulationPathway:
     def create_technology_roadmap(self) -> pd.DataFrame:
         """Create technology roadmap that shows evolution of stack (supply mix) over model horizon."""
 
-        # TODO: filter by product
         # Annual production volume in MtNH3 by technology
         technologies = self.importer.get_technology_characteristics()[
             "technology"
@@ -237,16 +226,7 @@ class SimulationPathway:
     def plot_technology_roadmap(
         self, df_roadmap: pd.DataFrame, technology_layout: dict = None
     ):
-        """
-        Plot the technology roadmap and save as .html
-
-        Args:
-            df_roadmap ():
-            technology_layout (): Order in which technologies will be plotted
-
-        Returns:
-
-        """
+        """Plot the technology roadmap and save as .html"""
 
         # remove technologies without production volume
         df_roadmap = df_roadmap.set_index("technology")
@@ -287,8 +267,6 @@ class SimulationPathway:
             filename=str(self.importer.final_path.joinpath("technology_roadmap.html")),
             auto_open=False,
         )
-        # logger.debug("Exporting technology roadmap PNG")
-        # fig.write_image(self.importer.final_path.joinpath("technology_roadmap.png"))
 
     def output_emission_trajectory(self):
         """Output emission trajectory as csv and figure"""
@@ -326,13 +304,14 @@ class SimulationPathway:
         )
 
     def get_inputs_pivot(self, product, year):
-        """Get  the cost for a product in a year"""
+        """Get the cost for a product in a year"""
         df = self.inputs_pivot
         return df.query(f"product == '{product}' & year == {year}").droplevel(
             ["product", "year"]
         )
 
     def get_specs(self, product, year):
+        """Get asset specifications for a specific product and year"""
         df = self.asset_specs
         return df.query(f"product == '{product}' & year == {year}").droplevel(
             ["product", "year"]
@@ -344,18 +323,9 @@ class SimulationPathway:
         year: int,
         region: str,
     ):
-        """
-        Get the demand for a product in a given year and region
-
-        Args:
-            product: get for this product
-            region: get for this region
-            year: and this year
-        Returns:
-
-        """
+        """Get the demand for a product in a given year and region"""
+        
         df = self.demand
-        # logger.debug(f"Getting demand for {product} in {year} in {region}")
         return df.loc[
             (df["product"] == product)
             & (df["year"] == year)
@@ -435,14 +405,7 @@ class SimulationPathway:
         )
 
     def update_availability(self, asset, year, remove=False):
-        """
-        Update the amount used of resources
-
-        Args:
-            year: current year
-            remove:
-            asset: update based on this asset
-        """
+        """Update the amount of resources used"""
         df = self.availability
         df = None
         self.availability = df.round(1)
