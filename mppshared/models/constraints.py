@@ -34,9 +34,9 @@ def check_constraints(
     """Check all constraints for a given asset stack and return dictionary of Booleans with constraint types as keys.
 
     Args:
-        pathway:
+        pathway: contains AssetStacks of previous years
         stack: stack of assets for which constraints are to be checked
-        product:
+        product: specific product for which to filter the AssetStack in some constraints
         year: required for resource availabilities
         transition_type: either of "decommission", "brownfield", "greenfield"
         constraints_to_apply: a list of constraints to apply can be passed. If it is None, it will be set to
@@ -106,15 +106,8 @@ def check_technology_rampup_constraint(
     transition_type: str,
 ) -> bool:
     """Check if the technology rampup between the stack passed and the previous year's stack complies with the
-        technology ramp-up trajectory
-
-    Args:
-        pathway: contains the stack of the previous year
-        stack: new stack for which the ramp-up constraint is to be checked
-        product: dummy for this function; standardisation required as constraint functions are called from dictionary
-        year: year corresponding to the stack passed
-        transition_type:
-    """
+        technology ramp-up trajectory"""
+    
     logger.info(
         f"{year}: Checking ramp-up constraint (transition type: {transition_type})"
     )
@@ -170,16 +163,8 @@ def check_constraint_regional_production(
     year: int,
     transition_type: str,
 ) -> bool:
-    """Check constraints that regional production is at least a specified share of regional demand
-
-    Args:
-        pathway
-        stack (_type_): _description_
-        product (_type_): _description_
-        year
-        transition_type: dummy for this function; standardisation required as constraint functions are called from
-            dictionary
-    """
+    """Check constraints that regional production is at least a specified share of regional demand"""
+    
     logger.info(
         f"{year}: Checking regional production constraint (transition type: {transition_type})"
     )
@@ -200,6 +185,7 @@ def get_regional_production_constraint_table(
     year: int,
 ) -> pd.DataFrame:
     """Get table that compares regional production with regional demand for a given year"""
+    
     # Get regional production and demand
     df_regional_production = stack.get_regional_production_volume(product)
     df_demand = pathway.get_regional_demand(product=product, year=year)
@@ -229,17 +215,7 @@ def check_annual_carbon_budget_constraint(
     year: int,
     transition_type: str,
 ) -> tuple[bool, bool]:
-    """Check if the stack exceeds the Carbon Budget defined in the pathway for the given product and year
-
-    Args:
-        pathway ():
-        stack ():
-        year ():
-        transition_type ():
-
-    Returns:
-
-    """
+    """Check if the stack exceeds the Carbon Budget defined in the pathway for the given product and year"""
 
     logger.info(
         f"{year}: Checking annual carbon budget constraint (transition type: {transition_type})"
@@ -316,18 +292,7 @@ def check_global_demand_share_constraint(
     transition_type: str,
     product: str,
 ) -> bool:
-    """
-    Check for specified technologies whether they fulfill the constraint of supplying a maximum share of global demand
-
-    Args:
-        pathway ():
-        stack ():
-        year ():
-        transition_type ():
-
-    Returns:
-
-    """
+    """Check for specified technologies whether they fulfill the constraint of supplying a maximum share of global demand"""
 
     df_stack = stack.aggregate_stack(
         aggregation_vars=["product", "technology"]
@@ -374,17 +339,7 @@ def check_electrolysis_capacity_addition_constraint(
     transition_type: str,
     product: str,
 ) -> bool:
-    """Check if the annual addition of electrolysis capacity fulfills the constraint
-
-    Args:
-        pathway ():
-        stack ():
-        year ():
-        transition_type ():
-
-    Returns:
-
-    """
+    """Check if the annual addition of electrolysis capacity fulfills the constraint"""
 
     # Get annual production capacities per technology of current and tentative new stack
     df_old_stack = (
@@ -511,18 +466,17 @@ def check_co2_storage_constraint(
     """Check if the constraint on CO2 storage (globally or regionally) is met
 
     Args:
-        pathway ():
-        stack ():
-        product ():
-        year ():
-        transition_type ():
-        region (): If a region is provided, only checks constraint fulfilment in this region. Only valid for
+        pathway:
+        stack:
+        product:
+        year:
+        transition_type:
+        region: If a region is provided, only checks constraint fulfilment in this region. Only valid for
             pathway.co2_storage_constraint_type == "total_cumulative" (will not have an impact for other types)
-        return_dict (): Returns dict with constraint fulfilment for every region if True. Else returns only True or
-            False, depending on overall constraint fulfilment
-
+        
     Returns:
-
+        return_dict: Returns dict with constraint fulfilment for every region if True. Else returns only True or
+            False, depending on overall constraint fulfilment
     """
 
     if not return_dict:
@@ -664,18 +618,7 @@ def check_biomass_constraint(
     year: int,
     transition_type: str,
 ) -> bool:
-    """Check if the constraint on annual biomass availability in GJ (globally) is fulfilled
-
-    Args:
-        pathway ():
-        product ():
-        stack ():
-        year ():
-        transition_type ():
-
-    Returns:
-
-    """
+    """Check if the constraint on annual biomass availability in GJ (globally) is fulfilled"""
 
     logger.info(
         f"{year}: Checking biomass constraint  (transition type: {transition_type})"
@@ -712,7 +655,7 @@ def check_biomass_constraint(
         df_prod_volume = pd.DataFrame.from_dict(
             data=df_prod_volume, orient="index"
         ).reset_index()
-        df_prod_volume.columns = ["technology_destination", "value"]
+        df_prod_volume.columns = ["technology_destination", "value"] # type: ignore
         df_prod_volume["region"] = region
         df_list.append(df_prod_volume)
     df_prod_volume = pd.concat(df_list, axis=0).set_index(
@@ -724,7 +667,7 @@ def check_biomass_constraint(
         ["region", "technology_destination", "value"]
     ].set_index(["region", "technology_destination"])
     biomass_consumption = (
-        df_prod_volume.mul(df_biomass_consumption).sum(axis=0).squeeze()
+        df_prod_volume.mul(df_biomass_consumption).sum(axis=0).squeeze() # type: ignore
     )
 
     # check limit

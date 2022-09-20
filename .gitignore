@@ -165,6 +165,8 @@ cement/data/01_business_case_raw/Archive
 
 # Allow
 !aluminium/data/bau/def/intermediate/*.csv
+!aluminium/data/lc/def/intermediate/*.csv
+!aluminium/data/fa/def/intermediate/*.csv
 !ammonia/data/lc/def/intermediate/*.csv
 !ammonia/data/bau/def/intermediate/*.csv
 !ammonia/data/fa/def/intermediate/*.csv
