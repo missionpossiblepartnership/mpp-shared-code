@@ -28,8 +28,8 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 PATHWAYS_SENSITIVITIES = {
     # "bau": ["def"],  # ALL_SENSITIVITIES,
-    # "fa": ["def"],
-    "lc": ["def"],  # ALL_SENSITIVITIES,
+    "fa": ["def"],
+    # "lc": ["def"],  # ALL_SENSITIVITIES,
     # "custom": ["def"],
 }
 
@@ -250,7 +250,7 @@ RANKING_CONFIG = {
 # Technology ramp-up parameters (on global technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "bau": {
-        "init_maximum_asset_additions": 17,
+        "init_maximum_asset_additions": 20,
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
     },

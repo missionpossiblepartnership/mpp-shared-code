@@ -7,11 +7,11 @@ class CarbonCostTrajectory:
 
     def __init__(
         self,
-        trajectory,
-        initial_carbon_cost,
-        final_carbon_cost,
-        start_year,
-        end_year,
+        trajectory: str,
+        initial_carbon_cost: float,
+        final_carbon_cost: float,
+        start_year: int,
+        end_year: int,
         model_years: range,
     ):
 
