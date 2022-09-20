@@ -31,6 +31,7 @@ def select_best_transition(df_rank: pd.DataFrame) -> dict:
         The highest ranking technology transition
 
     """
+    stop = 1
     # Best transition has minimum rank (if same rank, chosen randomly with sample)
     return (
         df_rank[df_rank["rank"] == df_rank["rank"].min()]
@@ -109,31 +110,59 @@ def remove_all_transitions_with_origin_destination_technology(
 
 
 def handle_biomass_constraint(
-    df_rank: pd.DataFrame, technology_destination: str, origin_technology: str,
+    df_rank: pd.DataFrame, destination_technology: str, origin_technology: str,
 ) -> pd.DataFrame:
 
-    advanced_af_techs = [
-        "Dry kiln alternative fuels 90%",
-        "Dry kiln alternative fuels + post combustion + storage",
-        "Dry kiln alternative fuels + oxyfuel + storage",
-        "Dry kiln alternative fuels + direct separation + storage",
-        "Dry kiln alternative fuels + post combustion + usage",
-        "Dry kiln alternative fuels + oxyfuel + usage",
-        "Dry kiln alternative fuels + direct separation + usage",
+    af_43_techs = [
+        "Dry kiln alternative fuels 43%",
+        "Dry kiln alternative fuels (43%) + post combustion + storage",
+        "Dry kiln alternative fuels (43%) + oxyfuel + storage",
+        "Dry kiln alternative fuels (43%) + direct separation + storage",
+        "Dry kiln alternative fuels (43%) + post combustion + usage",
+        "Dry kiln alternative fuels (43%) + oxyfuel + usage",
+        "Dry kiln alternative fuels (43%) + direct separation + usage",
     ]
 
-    if origin_technology == "Dry kiln alternative fuels 43%":
+    af_90_techs = [
+        "Dry kiln alternative fuels 90%",
+        "Dry kiln alternative fuels (90%) + post combustion + storage",
+        "Dry kiln alternative fuels (90%) + oxyfuel + storage",
+        "Dry kiln alternative fuels (90%) + direct separation + storage",
+        "Dry kiln alternative fuels (90%) + post combustion + usage",
+        "Dry kiln alternative fuels (90%) + oxyfuel + usage",
+        "Dry kiln alternative fuels (90%) + direct separation + usage",
+    ]
+
+    if "43%" in origin_technology:
+        logger.debug(
+            "Removing all switches from all setups with alternative fuels 43% to all setups with alternative fuels 90%"
+        )
         df_rank = df_rank.loc[
             ~(
-                (df_rank["technology_origin"] == origin_technology)
-                & (df_rank["technology_destination"].isin(advanced_af_techs))
+                (df_rank["technology_origin"].isin(af_43_techs))
+                & (df_rank["technology_destination"].isin(af_90_techs))
             )
         ]
     else:
-        df_rank = remove_all_transitions_with_destination_technology(
-            df_rank=df_rank,
-            technology_destination=technology_destination,
+        logger.debug(
+            f"Removing all switches with destination technology {destination_technology} while keeping those within "
+            f"alternative fuels 43% and 90%"
         )
+        df_rank = df_rank.loc[
+            ~(
+                (df_rank["technology_destination"] == destination_technology)
+                & ~(
+                    df_rank["technology_origin"].isin(af_43_techs)
+                    & df_rank["technology_destination"].isin(af_43_techs)
+                )
+                & ~(
+                    df_rank["technology_origin"].isin(af_90_techs)
+                    & df_rank["technology_destination"].isin(af_90_techs)
+                )
+                & (df_rank["technology_origin"] != df_rank["technology_destination"])
+            ),
+            :,
+        ]
 
     return df_rank
 
@@ -397,7 +426,7 @@ def get_constraints_to_apply(
 
     constraints_to_apply = pathway_constraints_to_apply
 
-    # remove all constraints if origin tech == destination tech
+    # don't check any constraints if origin tech == destination tech
     if origin_technology == destination_technology:
         return []
 

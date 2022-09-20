@@ -19,7 +19,7 @@ run_config = {
 RUN_PARALLEL = False
 LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
-COMPUTE_LCOX = False
+COMPUTE_LCOX = True
 
 ### MODEL DECISION PARAMETERS ###
 START_YEAR = 2020
@@ -115,22 +115,28 @@ LIST_TECHNOLOGIES = [
     "Dry kiln alternative fuels 90%",
     "Dry kiln coal + post combustion + storage",
     "Dry kiln natural gas + post combustion + storage",
-    "Dry kiln alternative fuels + post combustion + storage",
+    "Dry kiln alternative fuels (43%) + post combustion + storage",
+    "Dry kiln alternative fuels (90%) + post combustion + storage",
     "Dry kiln coal + oxyfuel + storage",
     "Dry kiln natural gas + oxyfuel + storage",
-    "Dry kiln alternative fuels + oxyfuel + storage",
+    "Dry kiln alternative fuels (43%) + oxyfuel + storage",
+    "Dry kiln alternative fuels (90%) + oxyfuel + storage",
     "Dry kiln coal + direct separation + storage",
     "Dry kiln natural gas + direct separation + storage",
-    "Dry kiln alternative fuels + direct separation + storage",
+    "Dry kiln alternative fuels (43%) + direct separation + storage",
+    "Dry kiln alternative fuels (90%) + direct separation + storage",
     "Dry kiln coal + post combustion + usage",
     "Dry kiln natural gas + post combustion + usage",
-    "Dry kiln alternative fuels + post combustion + usage",
+    "Dry kiln alternative fuels (43%) + post combustion + usage",
+    "Dry kiln alternative fuels (90%) + post combustion + usage",
     "Dry kiln coal + oxyfuel + usage",
     "Dry kiln natural gas + oxyfuel + usage",
-    "Dry kiln alternative fuels + oxyfuel + usage",
+    "Dry kiln alternative fuels (43%) + oxyfuel + usage",
+    "Dry kiln alternative fuels (90%) + oxyfuel + usage",
     "Dry kiln coal + direct separation + usage",
     "Dry kiln natural gas + direct separation + usage",
-    "Dry kiln alternative fuels + direct separation + usage",
+    "Dry kiln alternative fuels (43%) + direct separation + usage",
+    "Dry kiln alternative fuels (90%) + direct separation + usage",
 ]
 
 ### RANKING OF TECHNOLOGY SWITCHES ###
@@ -251,7 +257,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
         "years_rampup_phase": 30,
     },
     "fa": {
-        "init_maximum_asset_additions": 12,
+        "init_maximum_asset_additions": 5,
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
     },
@@ -270,6 +276,9 @@ RAMP_UP_TECH_CLASSIFICATIONS = ["initial", "end-state"]
 # CO2 storage constraint
 SET_CO2_STORAGE_CONSTRAINT = True
 CO2_STORAGE_CONSTRAINT_TYPE = "total_cumulative"  # "annual_cumulative", "annual_addition", "total_cumulative", or None
+
+# define the market entry of alternative fuels 90%
+MARKET_ENTRY_AF_90 = 2030
 
 # define whether constraints shall only checked regionally (if applicable) to reduce runtime
 CONSTRAINTS_REGIONAL_CHECK = True
