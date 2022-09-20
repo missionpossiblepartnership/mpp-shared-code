@@ -593,6 +593,7 @@ class AssetStack:
             logger.critical(f"{year}: No assets can be found in {region}")
         else:
             return candidates
+        return []
 
     def get_assets_eligible_for_brownfield(
         self, year: int, investment_cycle: int

@@ -39,23 +39,24 @@ class CarbonCostTrajectory:
         """Set carbon cost trajectory in the form of a DataFrame with columns "year", "carbon_cost"
         Args:
             trajectory: either of "constant", "linear", # TODO
-            initial_carbon_cost: carbon cost at MODEL_START_YEAR in USD/tCO2
-            final_carbon_cost: carbon cost at MODEL_END_YEAR in USD/tCO2
-            start_year:
-            end_year:
+            initial_carbon_cost: carbon cost in the start year in USD/tCO2
+            final_carbon_cost: carbon cost in the end year in USD/tCO2
+            start_year: year in which the carbon cost sets in
+            end_year: year in which the carbon cost has reached its final value
         """
         # Initialize DataFrame
         df_carbon_cost = pd.DataFrame(
             data={"year": self.model_years, "carbon_cost": None}
         )
 
-        # TODO: make this much nicer
         # Constant carbon cost
         if trajectory == "constant":
             df_carbon_cost.loc[df_carbon_cost["year"] < start_year, "carbon_cost"] = 0
             df_carbon_cost.loc[
                 df_carbon_cost["year"] >= start_year, "carbon_cost"
             ] = initial_carbon_cost
+          
+        # Linear carbon cost
         elif trajectory == "linear":
             df_carbon_cost.loc[df_carbon_cost["year"] < start_year, "carbon_cost"] = 0
             df_carbon_cost.loc[
@@ -66,10 +67,6 @@ class CarbonCostTrajectory:
             df_carbon_cost.loc[
                 df_carbon_cost["year"] >= end_year, "carbon_cost"
             ] = final_carbon_cost
-
-        # TODO: implement logistic carbon cost
-
-        # TODO: implement exponential carbon cost
 
         df_carbon_cost = df_carbon_cost.astype(
             dtype={"year": int, "carbon_cost": float}
