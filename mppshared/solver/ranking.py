@@ -147,12 +147,12 @@ def rank_technology_uncertainty_bins(
     """Create technology binned according to histogram methodology with number of bins from cost metric uncertainty.
 
     Args:
-        df_ranking (pd.DataFrame): table with technology switches
-        rank_type (str): either of "decommission", "brownfield", "greenfield"
-        pathway_name (str): pathway for which to create the ranking, either of "lc", "bau", "fa"
-        cost_metric (str): cost metric used for the ranking
-        cost_metric_relative_uncertainty (str):
-        ranking_config (dict): weights for cost and emissions, keys are "cost" and "emissions"
+        df_ranking: table with technology switches
+        rank_type: either of "decommission", "brownfield", "greenfield"
+        pathway_name: pathway for which to create the ranking, either of "lc", "bau", "fa"
+        cost_metric: cost metric used for the ranking
+        cost_metric_relative_uncertainty: relative uncertainty of the cost metric used to determine the number of bins
+        ranking_config: weights for cost and emissions, keys are "cost" and "emissions"
         emission_scopes_ranking: use these emission scopes for the emission part of the ranking
         ghgs_ranking: use these GHGS for the emission part of the ranking
         ranking_groups: this list defines the columns that will be grouped and get their own ranking
