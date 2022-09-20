@@ -1,8 +1,7 @@
-"""Main script for the MPP solver, to run a sector change the SECTOR parameter to the appropiate one."""
+"""Main script for the MPP solver, to run a sector change the SECTOR parameter to the appropriate one."""
 
-
-# SECTOR = "cement"
-SECTOR = "aluminium"
+SECTOR = "cement"
+# SECTOR = "aluminium"
 # SECTOR = "ammonia"
 
 
@@ -16,3 +15,7 @@ elif SECTOR == "ammonia":
 
     main()
 
+elif SECTOR == "cement":
+    from cement.main_cement import main
+
+    main()

@@ -7,11 +7,11 @@ class CarbonCostTrajectory:
 
     def __init__(
         self,
-        trajectory,
-        initial_carbon_cost,
-        final_carbon_cost,
-        start_year,
-        end_year,
+        trajectory: str,
+        initial_carbon_cost: float,
+        final_carbon_cost: float,
+        start_year: int,
+        end_year: int,
         model_years: range,
     ):
 
@@ -38,7 +38,7 @@ class CarbonCostTrajectory:
     ):
         """Set carbon cost trajectory in the form of a DataFrame with columns "year", "carbon_cost"
         Args:
-            trajectory: either of "constant", "linear", # TODO
+            trajectory: either of "constant", "linear", "cement"
             initial_carbon_cost: carbon cost in the start year in USD/tCO2
             final_carbon_cost: carbon cost in the end year in USD/tCO2
             start_year: year in which the carbon cost sets in

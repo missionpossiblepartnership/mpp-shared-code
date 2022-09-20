@@ -3,8 +3,6 @@
 # Library imports
 import multiprocessing as mp
 
-import numpy as np
-
 from aluminium.config_aluminium import RUN_PARALLEL, SECTOR, SENSITIVITIES, run_config
 from aluminium.solver.implicit_forcing import apply_implicit_forcing
 from aluminium.solver.output_processing import calculate_outputs
@@ -13,7 +11,6 @@ from aluminium.solver.simulate import simulate_pathway
 
 # Shared imports
 from mppshared.config import LOG_LEVEL
-from mppshared.solver.output_processing import save_consolidated_outputs
 
 # Initialize logger
 from mppshared.utility.utils import get_logger

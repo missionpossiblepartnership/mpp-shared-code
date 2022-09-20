@@ -108,6 +108,64 @@ def remove_all_transitions_with_origin_destination_technology(
     return df_rank
 
 
+def handle_biomass_constraint(
+    df_rank: pd.DataFrame, destination_technology: str, origin_technology: str,
+) -> pd.DataFrame:
+
+    af_43_techs = [
+        "Dry kiln alternative fuels 43%",
+        "Dry kiln alternative fuels (43%) + post combustion + storage",
+        "Dry kiln alternative fuels (43%) + oxyfuel + storage",
+        "Dry kiln alternative fuels (43%) + direct separation + storage",
+        "Dry kiln alternative fuels (43%) + post combustion + usage",
+        "Dry kiln alternative fuels (43%) + oxyfuel + usage",
+        "Dry kiln alternative fuels (43%) + direct separation + usage",
+    ]
+
+    af_90_techs = [
+        "Dry kiln alternative fuels 90%",
+        "Dry kiln alternative fuels (90%) + post combustion + storage",
+        "Dry kiln alternative fuels (90%) + oxyfuel + storage",
+        "Dry kiln alternative fuels (90%) + direct separation + storage",
+        "Dry kiln alternative fuels (90%) + post combustion + usage",
+        "Dry kiln alternative fuels (90%) + oxyfuel + usage",
+        "Dry kiln alternative fuels (90%) + direct separation + usage",
+    ]
+
+    if "43%" in origin_technology:
+        logger.debug(
+            "Removing all switches from all setups with alternative fuels 43% to all setups with alternative fuels 90%"
+        )
+        df_rank = df_rank.loc[
+            ~(
+                (df_rank["technology_origin"].isin(af_43_techs))
+                & (df_rank["technology_destination"].isin(af_90_techs))
+            )
+        ]
+    else:
+        logger.debug(
+            f"Removing all switches with destination technology {destination_technology} while keeping those within "
+            f"alternative fuels 43% and 90%"
+        )
+        df_rank = df_rank.loc[
+            ~(
+                (df_rank["technology_destination"] == destination_technology)
+                & ~(
+                    df_rank["technology_origin"].isin(af_43_techs)
+                    & df_rank["technology_destination"].isin(af_43_techs)
+                )
+                & ~(
+                    df_rank["technology_origin"].isin(af_90_techs)
+                    & df_rank["technology_destination"].isin(af_90_techs)
+                )
+                & (df_rank["technology_origin"] != df_rank["technology_destination"])
+            ),
+            :,
+        ]
+
+    return df_rank
+
+
 def remove_techs_in_region_by_tech_substr(
     df_rank: pd.DataFrame, region: str, tech_substr: str
 ) -> pd.DataFrame:
@@ -136,6 +194,8 @@ def adjust_capacity_utilisation(
     Args:
         pathway: pathway with AssetStack and demand data for the specified year
         year: year in which to adjust asset's capacity utilisation
+        cuf_upper_threshold:
+        cuf_lower_threshold:
 
     Returns:
         pathway with updated capacity factor for each Asset in the AssetStack of the given year
@@ -199,7 +259,7 @@ def increase_cuf_of_assets(
     # is first
     assets = stack.filter_assets(product=product)
     assets_below_cuf_threshold = list(
-        filter(lambda asset: asset.cuf < cuf_upper_threshold, assets)
+        filter(lambda _asset: _asset.cuf < cuf_upper_threshold, assets)
     )
     assets_below_cuf_threshold = sort_assets_cost_metric(
         assets_below_cuf_threshold, pathway, year, cost_metric
@@ -251,9 +311,9 @@ def decrease_cuf_of_assets(
             break
 
         # Increase CUF of asset with lowest LCOX to upper threshold and remove from list
-        asset = assets_above_cuf_threshold[0]
+        _asset = assets_above_cuf_threshold[0]
         # logger.debug(f"Decrease CUF of {str(asset)}")
-        asset.cuf = cuf_lower_threshold
+        _asset.cuf = cuf_lower_threshold
         assets_above_cuf_threshold.pop(0)
 
     return pathway
@@ -367,11 +427,9 @@ def get_constraints_to_apply(
 
     constraints_to_apply = pathway_constraints_to_apply
 
-    # remove all constraints if origin tech == destination tech
+    # don't check any constraints if origin tech == destination tech
     if origin_technology == destination_technology:
         return []
-
-    # todo: remove biomass constraint (based on techs with bio consumption)
 
     # remove CO2 storage constraint if destination tech != storage tech
     if not ("storage" in destination_technology):
