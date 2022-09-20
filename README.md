@@ -2,14 +2,14 @@
 
 This repository contains the MPP Shared Industry Solver and the Ammonia and Aluminium models. Both models were developed as part of the [Mission Possible Partnership](https://www.missionpossiblepartnership.org) (MPP). The MPP Shared Industry Solver is a Python package that can be used to build industry decarbonization models. The Ammonia and Aluminium models are built up from modules provided by the MPP Shared Industry Solver.
 
-[Read the full documentation](https://app.gitbook.com/o/vfc6mmxMh4Zr7LjKZ5yL/s/UKDdKXTb4UiV0Lp7btFG/)
+[Read the full documentation](https://mpp.gitbook.io/mpp-industry-documentation/)
 
 ## How to use it
 
 To start using the code, you can clone the repository and install the required packages using the following commands:
 
 ```bash
-git clone
+git clone https://github.com/missionpossiblepartnership/mpp-shared-code.git
 cd mpp-shared-code
 pip install -r requirements.txt
 ```
@@ -41,7 +41,7 @@ The Aluminium and Ammonia code are stored in their own folders, it is possible t
 
 Each sector has a `config_{sector}.py` file to store the different configurations available to the model, such as `START_YEAR`, END_YEAR` for the simulations, pathways to run, constraints to apply, and ranking configurations.
 
-Each sector has their own `main_{sector}.py` file that controls the different steps of the simulation and calls the different functions to load the data, apply the implicit forcing mechanisms, make the ranking tables, run the simulation, and produce the results.
+Each sector has their own `main_{sector}.py` file that controls the different steps of the simulation and calls the different functions to load the data, apply the implicit forcing mechanisms, make the ranking tables, run the simulation, and produce the results. This functions can be called from `main.py`, inside it a parameter with the name of the sector is called and depending of the sector it runs the specified simulation.
 
 The `solver` inside each of the sectors, contains the dedicated files to run the simulation, these files are built using the classes and methods from `mppshared`.
 
@@ -52,7 +52,10 @@ The `solver` inside each of the sectors, contains the dedicated files to run the
 
 ## Contacts
 
-For any questions, please contact [MPP](mailto:).
+For any questions, please contact:
+
++ [MPP Aluminium](mailto:aluminium@missionpossiblepartnership.org)
++ [MPP Ammonia](mailto:chemicals@missionpossiblepartnership.org)
 
 ### Contributors
 
