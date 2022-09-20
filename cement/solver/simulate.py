@@ -27,7 +27,6 @@ from cement.config.config_cement import (
     SECTORAL_CARBON_PATHWAY,
     START_YEAR,
     TECHNOLOGY_RAMP_UP_CONSTRAINT,
-    YEAR_2050_EMISSIONS_CONSTRAINT,
 )
 from cement.solver.brownfield import brownfield
 from cement.solver.decommission import decommission
@@ -218,7 +217,6 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         investment_cycle=INVESTMENT_CYCLE,
         annual_renovation_share=MAX_ANNUAL_RENOVATION_SHARE[pathway_name],
         constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],
-        year_2050_emissions_constraint=YEAR_2050_EMISSIONS_CONSTRAINT,
         set_biomass_constraint=(
             "biomass_constraint" in CONSTRAINTS_TO_APPLY[pathway_name]
         ),

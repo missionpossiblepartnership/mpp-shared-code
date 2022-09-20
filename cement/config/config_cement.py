@@ -27,9 +27,9 @@ END_YEAR = 2050
 MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 PATHWAYS_SENSITIVITIES = {
-    "bau": ["def"],  # ALL_SENSITIVITIES,
+    # "bau": ["def"],  # ALL_SENSITIVITIES,
     # "fa": ["def"],
-    # "lc": ["def"],  # ALL_SENSITIVITIES,
+    "lc": ["def"],  # ALL_SENSITIVITIES,
     # "custom": ["def"],
 }
 
@@ -260,7 +260,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
         "years_rampup_phase": 30,
     },
     "lc": {
-        "init_maximum_asset_additions": 10,
+        "init_maximum_asset_additions": 11,
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
     },
