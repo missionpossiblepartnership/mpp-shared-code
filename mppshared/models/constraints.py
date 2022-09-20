@@ -655,7 +655,7 @@ def check_biomass_constraint(
         df_prod_volume = pd.DataFrame.from_dict(
             data=df_prod_volume, orient="index"
         ).reset_index()
-        df_prod_volume.columns = ["technology_destination", "value"]
+        df_prod_volume.columns = ["technology_destination", "value"] # type: ignore
         df_prod_volume["region"] = region
         df_list.append(df_prod_volume)
     df_prod_volume = pd.concat(df_list, axis=0).set_index(
@@ -667,7 +667,7 @@ def check_biomass_constraint(
         ["region", "technology_destination", "value"]
     ].set_index(["region", "technology_destination"])
     biomass_consumption = (
-        df_prod_volume.mul(df_biomass_consumption).sum(axis=0).squeeze()
+        df_prod_volume.mul(df_biomass_consumption).sum(axis=0).squeeze() # type: ignore
     )
 
     # check limit
