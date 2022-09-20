@@ -43,7 +43,7 @@ class SimulationPathway:
         annual_renovation_share: float,
         regional_production_shares: dict,
         constraints_to_apply: list[str],
-        year_2050_emissions_constraint: int = None,
+        year_2050_emissions_constraint: int = np.nan,
         technology_rampup: dict = None,
         carbon_budget: CarbonBudget = None,
         set_co2_storage_constraint: bool = False,

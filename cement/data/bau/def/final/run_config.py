@@ -252,17 +252,17 @@ YEAR_2050_EMISSIONS_CONSTRAINT = 2060
 # Technology ramp-up parameters (on global technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "bau": {
-        "init_maximum_asset_additions": 16,
+        "init_maximum_asset_additions": 17,
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
     },
     "fa": {
-        "init_maximum_asset_additions": 4,
+        "init_maximum_asset_additions": 3,
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
     },
     "lc": {
-        "init_maximum_asset_additions": 11,
+        "init_maximum_asset_additions": 10,
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
     },
