@@ -52,7 +52,10 @@ The `solver` inside each of the sectors, contains the dedicated files to run the
 
 ## Contacts
 
-For any questions, please contact [MPP](mailto:).
+For any questions, please contact:
+
++ [MPP Aluminium](mailto:aluminium@missionpossiblepartnership.org)
++ [MPP Ammonia](mailto:chemicals@missionpossiblepartnership.org)
 
 ### Contributors
 
