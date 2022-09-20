@@ -29,8 +29,8 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 PATHWAYS_SENSITIVITIES = {
     # "bau": ["def"],  # ALL_SENSITIVITIES,
     # "fa": ["def"],
-    # "lc": ["def"],  # ALL_SENSITIVITIES,
-    "custom": ["def"],
+    "lc": ["def"],  # ALL_SENSITIVITIES,
+    # "custom": ["def"],
 }
 
 PATHWAYS_WITH_CARBON_COST = ["lc"]
@@ -38,7 +38,7 @@ PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = ["lc"]
 
 PATHWAY_DEMAND_SCENARIO_MAPPING = {
     "bau": "bau",
-    "fa": "gcca accelerated", # todo
+    "fa": "gcca-early",
     "lc": "gcca",
     "custom": "gcca",
 }
@@ -180,7 +180,7 @@ SECTORAL_CARBON_BUDGETS = {
 emissions_2020 = 2.8  # Gt CO2 (scopes 1 and 2)
 SECTORAL_CARBON_PATHWAY = {
     "emissions_start": emissions_2020,
-    "emissions_end": 0.06 * 3.85 * 0.95,  # recarbonation GCCA roadmap
+    "emissions_end": 0.06 * 3.85 * 0.9,  # recarbonation GCCA roadmap
     "action_start": 2022,
 }
 
@@ -252,17 +252,17 @@ YEAR_2050_EMISSIONS_CONSTRAINT = 2060
 # Technology ramp-up parameters (on global technology-level, only applies to transition and end-state techs!)
 TECHNOLOGY_RAMP_UP_CONSTRAINT = {
     "bau": {
-        "init_maximum_asset_additions": 12,
+        "init_maximum_asset_additions": 16,
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
     },
     "fa": {
-        "init_maximum_asset_additions": 5,
+        "init_maximum_asset_additions": 3,
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
     },
     "lc": {
-        "init_maximum_asset_additions": 11,
+        "init_maximum_asset_additions": 10,
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
     },
@@ -310,7 +310,7 @@ CONSTRAINTS_TO_APPLY = {
         "rampup_constraint",
         # "regional_constraint",
         "biomass_constraint",
-        # "co2_storage_constraint",
+        "co2_storage_constraint",
     ],
 }
 REGIONAL_PRODUCTION_SHARES = {

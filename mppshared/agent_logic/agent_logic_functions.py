@@ -31,7 +31,6 @@ def select_best_transition(df_rank: pd.DataFrame) -> dict:
         The highest ranking technology transition
 
     """
-    stop = 1
     # Best transition has minimum rank (if same rank, chosen randomly with sample)
     return (
         df_rank[df_rank["rank"] == df_rank["rank"].min()]
@@ -195,6 +194,8 @@ def adjust_capacity_utilisation(
     Args:
         pathway: pathway with AssetStack and demand data for the specified year
         year: year in which to adjust asset's capacity utilisation
+        cuf_upper_threshold:
+        cuf_lower_threshold:
 
     Returns:
         pathway with updated capacity factor for each Asset in the AssetStack of the given year
@@ -429,8 +430,6 @@ def get_constraints_to_apply(
     # don't check any constraints if origin tech == destination tech
     if origin_technology == destination_technology:
         return []
-
-    # todo: remove biomass constraint (based on techs with bio consumption)
 
     # remove CO2 storage constraint if destination tech != storage tech
     if not ("storage" in destination_technology):
