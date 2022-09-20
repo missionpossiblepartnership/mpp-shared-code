@@ -357,7 +357,6 @@ def explode_rows_for_all_products(df: pd.DataFrame) -> pd.DataFrame:
     df["product"] = df["product"].astype(object)
     df = df.reset_index(drop=True)
 
-    # TODO: improve with a more elegant solution
     for i in df.loc[df["product"] == "All products"].index:
         df.at[i, "product"] = PRODUCTS[SECTOR]
 

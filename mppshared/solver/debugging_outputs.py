@@ -380,7 +380,6 @@ def output_emissions_trajectory(importer: IntermediateDataImporter):
 def create_technology_roadmap(importer: IntermediateDataImporter) -> pd.DataFrame:
     """Create technology roadmap that shows evolution of stack (supply mix) over model horizon."""
 
-    # TODO: filter by product
     # Annual production volume in MtNH3 by technology
     technologies = importer.get_technology_characteristics()["technology"].unique()
     df_roadmap = pd.DataFrame(data={"technology": technologies})
@@ -537,7 +536,7 @@ def sort_technologies_by_classification(df: pd.DataFrame) -> pd.DataFrame:
     Returns:
         pd.DataFrame: _description_
     """
-    # TODO: read from Business Cases.xlsx
+
     tech_class = get_tech_classification()
 
     tech_class_inv = {
