@@ -6,9 +6,8 @@ from xmlrpc.client import Boolean
 import numpy as np
 import pandas as pd
 
-from ammonia.config_ammonia import COMMON_INDEX, COST_COMPONENTS, LOG_LEVEL
+from ammonia.config_ammonia import COMMON_INDEX, COST_COMPONENTS, LOG_LEVEL, END_YEAR
 from ammonia.utility.utils import load_cost_data_from_csv, set_common_multi_index
-from mppshared.config import END_YEAR
 from mppshared.utility.utils import get_logger
 
 # Logging functionality

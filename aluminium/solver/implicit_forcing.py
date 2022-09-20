@@ -83,6 +83,11 @@ def apply_implicit_forcing(
         df_technology_switches, df_emissions, EMISSION_SCOPES, GHGS
     )
 
+    # Add the technology classification to the ranking table
+    df_ranking = add_technology_classification_to_switching_table(
+        df_ranking, df_technology_characteristics
+    )
+
     # Export technology switching table to be used for ranking
     importer.export_data(
         df=df_ranking,
