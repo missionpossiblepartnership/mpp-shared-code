@@ -4,27 +4,11 @@ from typing import List
 
 import pandas as pd
 
-from mppshared.config import LOG_LEVEL, PRODUCTS, SECTOR
+from mppshared.config import LOG_LEVEL
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
-
-
-# todo: only used in tests - remove?
-def move_cols_to_front(df: pd.DataFrame, cols_at_front: List[str]) -> list:
-    """Function that changes the order of columns based on a list of columns you
-    want at the front of a DataFrame.
-
-    Args:
-        df (pd.DataFrame): A DataFrame containing the column names you want to reorder.
-        cols_at_front (list): The columns you would like at the front of the DataFrame
-
-    Returns:
-        list: A list of reordered column names.
-    """
-    non_abatement_columns = list(set(df.columns).difference(set(cols_at_front)))
-    return cols_at_front + non_abatement_columns
 
 
 def add_column_header_suffix(df: pd.DataFrame, cols: list, suffix: str) -> pd.DataFrame:
@@ -64,11 +48,12 @@ def get_emission_columns(ghgs: list, scopes: list) -> list:
     return [f"{ghg}_{scope}" for scope in scopes for ghg in ghgs]
 
 
-def explode_rows_for_all_products(df: pd.DataFrame) -> pd.DataFrame:
+def explode_rows_for_all_products(df: pd.DataFrame, products: list) -> pd.DataFrame:
     """Explode rows with entry "All products" in column "product" to all products.
 
     Args:
         df (pd.DataFrame): contains column "product"
+        products:
 
     Returns:
         pd.DataFrame: contains column "product" where entries are only in PRODUCTS
@@ -78,7 +63,7 @@ def explode_rows_for_all_products(df: pd.DataFrame) -> pd.DataFrame:
     df = df.reset_index(drop=True)
 
     for i in df.loc[df["product"] == "All products"].index:
-        df.at[i, "product"] = PRODUCTS[SECTOR]
+        df.at[i, "product"] = products
 
     df = df.explode("product")
 
