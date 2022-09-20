@@ -19,15 +19,16 @@ class TechnologyRampup:
         init_maximum_asset_additions: int,
         maximum_asset_growth_rate: float,
     ):
-        """_summary_
-
+        """
         Args:
-            technology (str): technology to be ramped-up
-            ramp_up_start_year (int): Start year for technology ramp-up (year of technology maturity from technology
+            model_start_year:
+            model_end_year:
+            technology: technology to be ramped-up
+            ramp_up_start_year: Start year for technology ramp-up (year of technology maturity from technology
                 characteristics)
-            ramp_up_end_year (int): End year for technology ramp-up
-            init_maximum_asset_additions (int): Maximum number of assets that can be added in ramp_up_start_year
-            maximum_asset_growth_rate (float): Maximum rate at which number of assets per technology can grow from one
+            ramp_up_end_year: End year for technology ramp-up
+            init_maximum_asset_additions: Maximum number of assets that can be added in ramp_up_start_year
+            maximum_asset_growth_rate: Maximum rate at which number of assets per technology can grow from one
                 year to the next
         """
         self.model_start_year = model_start_year
