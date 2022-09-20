@@ -12,6 +12,7 @@ from cement.config.config_cement import (
     START_YEAR,
     TECHNOLOGY_MORATORIUM,
     TRANSITIONAL_PERIOD_YEARS,
+    MARKET_ENTRY_AF_90,
 )
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
@@ -80,6 +81,14 @@ def apply_implicit_forcing(
             moratorium_year=TECHNOLOGY_MORATORIUM,
             transitional_period_years=TRANSITIONAL_PERIOD_YEARS,
         )
+
+    # allow switches to all alternative fuels 90% setups after a certain market entry year
+    df_technology_switches = df_technology_switches.loc[
+        ~(
+            df_technology_switches["technology_destination"].str.contains("90%")
+            & (df_technology_switches["year"] < MARKET_ENTRY_AF_90)
+        ), :
+    ]
 
     # Add technology classification
     df_technology_switches = add_technology_classification_to_switching_table(
