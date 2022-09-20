@@ -42,7 +42,8 @@ class TimeContainerClass:
             return_object (bool, optional): Flag to return the dictionary object. Defaults to False.
 
         Returns:
-            Union[None, dict]: Returns a printed statement to the console and optionally a dictionary object depending on the `return_object` flag.
+            Union[None, dict]: Returns a printed statement to the console and optionally a dictionary object depending
+                on the `return_object` flag.
         """
         time_container = self.time_container
         for entry in time_container:
