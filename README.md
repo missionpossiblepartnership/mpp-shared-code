@@ -2,7 +2,7 @@
 
 This repository contains the MPP Shared Industry Solver and the Ammonia and Aluminium models. Both models were developed as part of the [Mission Possible Partnership](https://www.missionpossiblepartnership.org) (MPP). The MPP Shared Industry Solver is a Python package that can be used to build industry decarbonization models. The Ammonia and Aluminium models are built up from modules provided by the MPP Shared Industry Solver.
 
-[Read the full documentation](https://app.gitbook.com/o/vfc6mmxMh4Zr7LjKZ5yL/s/UKDdKXTb4UiV0Lp7btFG/)
+[Read the full documentation](https://mpp.gitbook.io/mpp-industry-documentation/)
 
 ## How to use it
 
