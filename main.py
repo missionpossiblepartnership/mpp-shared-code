@@ -16,3 +16,7 @@ elif SECTOR == "ammonia":
 
     main()
 
+elif SECTOR == "cement":
+    from ammonia.main_cement import cement
+
+    main()
