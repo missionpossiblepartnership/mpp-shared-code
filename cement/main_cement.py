@@ -37,13 +37,13 @@ funcs = {
     # "CALCULATE_VARIABLES": get_ranking_inputs,
     # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     # "MAKE_RANKINGS": make_rankings,
-    # "SIMULATE_PATHWAY": simulate_pathway,
+    "SIMULATE_PATHWAY": simulate_pathway,
     # "CALCULATE_OUTPUTS": calculate_outputs,
 
     # ARCHETYPE EXPLORER #
     # "AE_IMPORT_DATA": import_and_preprocess,
-    "AE_CALCULATE_VARIABLES": ae_get_ranking_inputs,
-    "AE_APPLY_IMPLICIT_FORCING": ae_apply_implicit_forcing,
+    # "AE_CALCULATE_VARIABLES": ae_get_ranking_inputs,
+    # "AE_APPLY_IMPLICIT_FORCING": ae_apply_implicit_forcing,
 }
 
 
