@@ -232,6 +232,9 @@ class IntermediateDataImporter:
             return df
         return df.loc[df["region"] == region]
 
+    def get_outputs_demand_model(self):
+        return pd.read_csv(self.intermediate_path.joinpath("outputs_demand_model.csv"))
+
     def get_technology_transitions_and_cost(self):
         return pd.read_csv(
             self.intermediate_path.joinpath("technology_transitions.csv")
