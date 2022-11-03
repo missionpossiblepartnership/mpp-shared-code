@@ -440,34 +440,6 @@ def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products
         index=True,
     )
 
-    """ Cost """
-    logger.info("Post-processing cost data")
-    df_investments = _calculate_annual_investments(
-        df_cost=importer.get_technology_transitions_and_cost(),
-        importer=importer,
-        sector=sector,
-    )
-    importer.export_data(
-        df=df_investments,
-        filename=f"{pathway_name}_pathway_investments.csv",
-        export_dir="final/cost",
-        index=True,
-    )
-    if pathway_name != "bau":
-        df_additional_investments = _calculate_total_additional_investments(
-            df_investments=df_investments,
-            importer=importer,
-            sector=sector,
-            pathway_name=pathway_name,
-            sensitivity=sensitivity,
-        )
-        importer.export_data(
-            df=df_additional_investments,
-            filename=f"{pathway_name}_additional_investments.csv",
-            export_dir="final/cost",
-            index=True,
-        )
-
     """ LCOC """
     # get weighted average LCOC
     df_weighted_average_lcoc = _calculate_weighted_average_lcoc(
