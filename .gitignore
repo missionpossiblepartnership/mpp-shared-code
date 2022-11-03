@@ -132,7 +132,8 @@ play.py
 
 # Data files
 data/*/*/*/intermediate/technologies_to_rank.csv
-data/*/*/*/01_business_case_raw/*
+cement/data
+cement/data/01_business_case_raw
 
 # Ignore all ranking files
 data/*/*/*/ranking
