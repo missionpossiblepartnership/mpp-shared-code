@@ -139,7 +139,7 @@ class AssetStack:
         self.assets = [asset for asset in self.assets if asset != remove_asset]
 
     def append(self, new_asset: Asset):
-        "Add new asset to stack"
+        """Add new asset to stack"""
         self.assets.append(new_asset)
         self.new_ids.append(new_asset.uuid)
 
@@ -191,9 +191,7 @@ class AssetStack:
         if origin_technology == new_technology:
             asset_to_update.stay_same = True
         if update_year_commission:
-            if not (new_technology == origin_technology) & (
-                switch_type == "brownfield_renovation"
-            ):
+            if (new_technology != origin_technology) & (switch_type != "brownfield_renovation"):
                 asset_to_update.year_commissioned = year
 
         self.assets = [asset for asset in self.assets if asset.uuid != uuid_update]

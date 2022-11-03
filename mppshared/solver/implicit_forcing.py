@@ -249,14 +249,17 @@ def apply_technology_availability_constraint(
     df_technology_characteristics: pd.DataFrame,
     start_year: int,
 ) -> pd.DataFrame:
-    """Filter out all technology switches that downgrade the technology classification and to destination technologies that have not reached maturity yet.
+    """Filter out all technology switches that downgrade the technology classification and to destination technologies
+        that have not reached maturity yet.
 
     Args:
-        df_technology_switches (pd.DataFrame): contains technology switches characterized by "product", "year", "region", "technology_origin" and "technology_destination"
-        df_technology_characteristics (pd.DataFrame): _description_
+        df_technology_switches (pd.DataFrame): contains technology switches characterized by "product", "year",
+            "region", "technology_origin" and "technology_destination"
+        df_technology_characteristics (pd.DataFrame):
+        start_year (int):
 
     Returns:
-        pd.DataFrame: _description_
+        pd.DataFrame:
     """
     logger.info("Applying technology availability constraint")
 
@@ -367,6 +370,7 @@ def apply_technology_moratorium(
     df_technology_characteristics: pd.DataFrame,
     moratorium_year: int,
     transitional_period_years: int,
+    allow_stay_same: bool = False,
 ) -> pd.DataFrame:
     """Eliminate all newbuild technology switches to a technology of classification "initial" after a specific year
 
@@ -374,7 +378,10 @@ def apply_technology_moratorium(
         df_technology_switches (pd.DataFrame): contains the possible technology switches
         df_technology_characteristics (pd.DataFrame): contains column "technology_classification" for each technology
         moratorium_year (int): year in which the technology moratorium enters into force
-        transitional_period_years (int): period starting in moratorium_year during which switches to technologies of classification "transition" are still allowed
+        transitional_period_years (int): period starting in moratorium_year during which switches to technologies of
+            classification "transition" are still allowed
+        allow_stay_same (bool): If true, brownfield renovations with technology_origin == technology_destination will be
+            allowed
 
     Returns:
         pd.DataFrame: technology switches without those banned by the moratorium
@@ -393,20 +400,43 @@ def apply_technology_moratorium(
         how="left",
     ).fillna(0)
 
-    # Drop technology transitions of type new-build where the technology_destination is classified as initial
-    banned_transitions = (
-        (df_technology_switches["year"] >= moratorium_year)
-        & (df_technology_switches["technology_classification"] == "initial")
-        & (df_technology_switches["switch_type"] != "decommission")
-    )
+    # Drop technology transitions of type greenfield and brownfield_renovation where the technology_destination is
+    #   classified as initial
+    if allow_stay_same:
+        banned_transitions = (
+            (df_technology_switches["year"] >= moratorium_year)
+            & (df_technology_switches["technology_classification"] == "initial")
+            & ~(
+                (df_technology_switches["switch_type"] == "brownfield_renovation")
+                & (df_technology_switches["technology_origin"] == df_technology_switches["technology_destination"])
+            )
+            & (df_technology_switches["switch_type"] != "decommission")
+        )
+    else:
+        banned_transitions = (
+            (df_technology_switches["year"] >= moratorium_year)
+            & (df_technology_switches["technology_classification"] == "initial")
+            & (df_technology_switches["switch_type"] != "decommission")
+        )
     df_technology_switches = df_technology_switches.loc[~banned_transitions]
 
     # Drop technology transitions for 'transition' technologies after moratorium year + x years
-    banned_transitions = (
-        (df_technology_switches["year"] >= moratorium_year + transitional_period_years)
-        & (df_technology_switches["technology_classification"] == "transition")
-        & (df_technology_switches["switch_type"] != "decommission")
-    )
+    if allow_stay_same:
+        banned_transitions = (
+            (df_technology_switches["year"] >= moratorium_year + transitional_period_years)
+            & (df_technology_switches["technology_classification"] == "transition")
+            & ~(
+                (df_technology_switches["switch_type"] == "brownfield_renovation")
+                & (df_technology_switches["technology_origin"] == df_technology_switches["technology_destination"])
+            )
+            & (df_technology_switches["switch_type"] != "decommission")
+        )
+    else:
+        banned_transitions = (
+            (df_technology_switches["year"] >= moratorium_year + transitional_period_years)
+            & (df_technology_switches["technology_classification"] == "transition")
+            & (df_technology_switches["switch_type"] != "decommission")
+        )
     df_technology_switches = df_technology_switches.loc[~banned_transitions]
 
     # drop technology_classification column

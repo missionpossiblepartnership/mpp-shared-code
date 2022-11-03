@@ -97,7 +97,7 @@ def df_dict_to_df(df_dict: dict) -> pd.DataFrame:
         in the dict
 
     Args:
-        df_dict (): dict of dataframes with the same index and one "value" column
+        df_dict (): dict of dataframes with the same indices and one "value" column
 
     Returns:
         df (pd.DataFrame): df with all the dfs in df_dict as columns
