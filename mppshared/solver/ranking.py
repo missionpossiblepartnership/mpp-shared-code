@@ -224,7 +224,7 @@ def _create_ranking_uncertainty_bins(
         + df["emissions_delta_normalized"] * ranking_config["emissions"]
     )
 
-    if pathway_name in ["bau", "lc", "custom"]:
+    if pathway_name in ["bau", "lc", "nz", "custom"]:
         # Calculate number of bins
         # get the minimum value of the cost metric and add the required positive value to move all the values to
         #   positive numbers

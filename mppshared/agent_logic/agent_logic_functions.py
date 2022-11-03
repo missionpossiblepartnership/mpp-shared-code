@@ -342,6 +342,7 @@ def create_dict_technology_rampup(
     maximum_capacity_growth_rate: float,
     years_rampup_phase: int,
     ramp_up_tech_classifications: list = None,
+    curve_type: str = "exponential",
 ) -> dict:
     """Create dictionary of TechnologyRampup objects with the technologies in that sector as keys. Set None if the
     technology has no ramp-up trajectory.
@@ -353,8 +354,9 @@ def create_dict_technology_rampup(
         maximum_asset_additions ():
         maximum_capacity_growth_rate ():
         years_rampup_phase ():
-        ramp_up_tech_classifications (): technology classification that underlie the ramp up constraint. If None, will
+        ramp_up_tech_classifications (): technology classifications that underlie the ramp up constraint. If None, will
             default to ["transition", "end-state"]
+        curve_type: "exponential" (default) or "rayleigh"
 
     Returns:
 
@@ -379,7 +381,7 @@ def create_dict_technology_rampup(
         expected_maturity = df_characteristics["expected_maturity"]
         classification = df_characteristics["technology_classification"]
 
-        # Only define technology ramp-up rates for transition and end-state technologies
+        # Only define technology ramp-up rates for technologies in ramp_up_tech_classifications
         if classification in ramp_up_tech_classifications:
             dict_technology_rampup[technology] = TechnologyRampup(
                 model_start_year=model_start_year,
@@ -389,7 +391,10 @@ def create_dict_technology_rampup(
                 ramp_up_end_year=expected_maturity + years_rampup_phase,
                 init_maximum_asset_additions=maximum_asset_additions,
                 maximum_asset_growth_rate=maximum_capacity_growth_rate,
+                curve_type=curve_type,
             )
+            if technology in ["Electric kiln + direct separation", "Dry kiln + Hydrogen + direct separation"]:
+                dict_technology_rampup[technology].df_rampup *= 1.5
 
     return dict_technology_rampup
 
