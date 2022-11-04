@@ -21,7 +21,7 @@ run_config = {
 RUN_PARALLEL = False
 LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
-COMPUTE_LCOX = True
+COMPUTE_LCOX = False
 # define CCU/S OPEX context dimensions.
 #   IMPORTANT: Don't forget to add "opex_context" to UNCERTAINTY_RANKING_GROUPS if more than one dimension!
 CCUS_CONTEXT = ["high_low"]
@@ -37,7 +37,7 @@ PATHWAYS_SENSITIVITIES = {
     # "bau": ["def"],
     # "fa": ["def"],
     # "lc": ["def"],
-    # "nz": ["nz", "inno"],
+    # "nz": ["nz"],
     # "nz": ["inno"],
     # "custom": ["decelerated"],
 
@@ -45,19 +45,25 @@ PATHWAYS_SENSITIVITIES = {
     # "nz": ["fossil-low", "fossil-high", "elec-low", "elec-high", "af-low", "af-high", "nz"],
     # "nz-scm-what-if": ["nz"],
     # "nz-scm-stretch": ["nz"],
-    "nz-binder-what-if": ["nz"],
-    "nz-binder-stretch": ["nz"],
-    "nz-gcca-early": ["nz"],
-    "nz-gcca-late": ["nz"],
-    "nz-low-ramp": ["nz"],
-    "nz-high-ramp": ["nz"],
+    # "nz-binder-what-if": ["nz"],
+    # "nz-binder-stretch": ["nz"],
+    # "nz-gcca-early": ["nz"],
+    # "nz-gcca-late": ["nz"],
+    # "nz-low-ramp": ["nz"],
+    # "nz-high-ramp": ["nz"],
 
-    "bau": ["def"],
-    "fa": ["def"],
-    "custom": ["decelerated"],
+    # SET1
+    # "nz-gcca-early": ["nz"],
+    # "nz-gcca-late": ["nz"],
+
+    # "fa": ["def"],
+    # "custom": ["decelerated"],
+    # "nz-scm-what-if": ["nz"],
+    # "nz-gcca-early": ["nz"],
+    # "nz-gcca-late": ["nz"],
 
     # ARCHETYPE EXPLORER #
-    # "archetype": ["000000", "000001"],
+    "archetype": ["000000", "000001"],
     # "archetype": ["000000"],
 }
 
@@ -67,6 +73,7 @@ PATHWAYS_WITH_CARBON_COST = [
     "nz-binder-what-if", "nz-binder-stretch",
     "nz-gcca-early", "nz-gcca-late",
     "nz-low-ramp", "nz-high-ramp",
+    "nz-bio-recarb",
 ]
 PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = [
     "lc", "nz",
@@ -74,6 +81,7 @@ PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = [
     "nz-binder-what-if", "nz-binder-stretch",
     "nz-gcca-early", "nz-gcca-late",
     "nz-low-ramp", "nz-high-ramp",
+    "nz-bio-recarb",
 ]
 
 PATHWAY_DEMAND_SCENARIO_MAPPING = {
@@ -85,7 +93,7 @@ PATHWAY_DEMAND_SCENARIO_MAPPING = {
     "nz": "gcca",
     "custom": "gcca-late",
 
-    # MAIN MODEL NZ SENSITIVITIES #
+    # SENSITIVITY RUNS #
     "nz-scm-what-if": "scm-what-if",
     "nz-scm-stretch": "scm-stretch",
     "nz-binder-what-if": "binder-what-if",
@@ -94,6 +102,7 @@ PATHWAY_DEMAND_SCENARIO_MAPPING = {
     "nz-gcca-late": "gcca-late",
     "nz-low-ramp": "gcca",
     "nz-high-ramp": "gcca",
+    "nz-bio-recarb": "gcca",
 }
 
 # carbon cost sensitivities: define carbon cost in USD/t CO2 for different sensitivities
@@ -141,7 +150,7 @@ CARBON_COST_SENSITIVITIES = {
         "end_year": 2050,
     },
 
-    # sensitivity runs
+    # SENSITIVITY RUNS #
     "fossil-low": {
         "trajectory": "linear",
         "initial_carbon_cost": 40,
@@ -209,7 +218,7 @@ MAX_ANNUAL_RENOVATION_SHARE = {
     "nz": 1.0,
     "custom": 1.0,
 
-    # sensitivity runs #
+    # SENSITIVITY RUNS #
     "nz-scm-what-if": 1.0,
     "nz-scm-stretch": 1.0,
     "nz-binder-what-if": 1.0,
@@ -218,6 +227,7 @@ MAX_ANNUAL_RENOVATION_SHARE = {
     "nz-gcca-late": 1.0,
     "nz-low-ramp": 1.0,
     "nz-high-ramp": 1.0,
+    "nz-bio-recarb": 1.0,
 }
 
 
@@ -420,6 +430,10 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
+        "nz-bio-recarb": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
     },
     "brownfield": {
         "bau": {
@@ -473,6 +487,10 @@ RANKING_CONFIG = {
             "emissions": lc_weight_emissions,
         },
         "nz-high-ramp": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-bio-recarb": {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
@@ -532,6 +550,10 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
+        "nz-bio-recarb": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
     },
 }
 
@@ -545,7 +567,7 @@ TECHNOLOGY_RAMP_UP_CURVE_TYPE = {  # "exponential" or "rayleigh"
     "nz": "rayleigh",
     "custom": "exponential",
 
-    # sensitivity runs #
+    # SENSITIVITY RUNS #
     "nz-scm-what-if": "rayleigh",
     "nz-scm-stretch": "rayleigh",
     "nz-binder-what-if": "rayleigh",
@@ -554,6 +576,7 @@ TECHNOLOGY_RAMP_UP_CURVE_TYPE = {  # "exponential" or "rayleigh"
     "nz-gcca-late": "rayleigh",
     "nz-low-ramp": "rayleigh",
     "nz-high-ramp": "rayleigh",
+    "nz-bio-recarb": "rayleigh",
 }
 # define tech classifications to which ramp up applies to
 RAMP_UP_TECH_CLASSIFICATIONS = ["initial", "end-state"]
@@ -574,8 +597,8 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
         "years_rampup_phase": 30,
     },
     "nz": {
-        "init_maximum_asset_additions": 3,
-        "maximum_asset_growth_rate": 3.25,
+        "init_maximum_asset_additions": 4.25,
+        "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "custom": {
@@ -584,45 +607,50 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
         "years_rampup_phase": 30,
     },
 
-    # sensitivity runs #
+    # SENSITIVITY RUNS #
     "nz-scm-what-if": {
-        "init_maximum_asset_additions": 3,
-        "maximum_asset_growth_rate": 3.25,
+        "init_maximum_asset_additions": 4.25,
+        "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-scm-stretch": {
-        "init_maximum_asset_additions": 3,
-        "maximum_asset_growth_rate": 3.25,
+        "init_maximum_asset_additions": 4.25,
+        "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-binder-what-if": {
-        "init_maximum_asset_additions": 3,
-        "maximum_asset_growth_rate": 3.25,
+        "init_maximum_asset_additions": 4.25,
+        "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-binder-stretch": {
-        "init_maximum_asset_additions": 3,
-        "maximum_asset_growth_rate": 3.25,
+        "init_maximum_asset_additions": 4.25,
+        "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-gcca-early": {
-        "init_maximum_asset_additions": 3,
-        "maximum_asset_growth_rate": 3.25,
+        "init_maximum_asset_additions": 4.25,
+        "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-gcca-late": {
-        "init_maximum_asset_additions": 3,
-        "maximum_asset_growth_rate": 3.25,
+        "init_maximum_asset_additions": 4.25,
+        "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-low-ramp": {
-        "init_maximum_asset_additions": 2.5,
-        "maximum_asset_growth_rate": 3.25,
+        "init_maximum_asset_additions": 3.5,
+        "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-high-ramp": {
-        "init_maximum_asset_additions": 3.5,
+        "init_maximum_asset_additions": 5,
         "maximum_asset_growth_rate": 3.25,
+        "years_rampup_phase": 30,
+    },
+    "nz-bio-recarb": {
+        "init_maximum_asset_additions": 3.25,
+        "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
 }
@@ -731,6 +759,13 @@ CONSTRAINTS_TO_APPLY = {
         "biomass_constraint",
         "co2_storage_constraint",
     ],
+    "nz-bio-recarb": [
+        # "emissions_constraint",
+        "rampup_constraint",
+        # "regional_constraint",
+        "biomass_constraint",
+        "co2_storage_constraint",
+    ],
 }
 REGIONAL_PRODUCTION_SHARES = {
     "Africa": 1.0,
@@ -745,7 +780,7 @@ REGIONAL_PRODUCTION_SHARES = {
     "Russia": 1.0,
 }
 
-### Unit conversions ###
+# Unit conversions #
 # Coal: GJ to t
 COAL_GJ_T = 0.034120842375357
 # Natural gas: GJ to billion cubic meter
@@ -754,3 +789,6 @@ NATURAL_GAS_GJ_BCM = 1 / (38.2 * 1e6)
 ELECTRICITY_GJ_TWH = 1 / (3.6 * 1e6)
 # Hydrogen: GJ to t
 HYDROGEN_GJ_T = 1 / 119.988
+
+# Gross biomass emission factor [tCO2/GJ] #
+GROSS_BIO_EMISSION_FACTOR = 0.1
