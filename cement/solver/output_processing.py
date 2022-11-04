@@ -1018,7 +1018,7 @@ def _calculate_emission_reduction_levers(
     ]
 
     # aggregate
-    df_savings_clinker_production["technology"] = "Switching to alternative fuels and energy efficiency"
+    df_savings_clinker_production["technology"] = "Switching to alternative fuels and thermal efficiency"
     df_savings_captured_emissions["technology"] = "Savings through CCU/S"
     df_unabated_s1_emissions["technology"] = "Unabated Scope 1 emissions"
     df_unabated_s2_emissions["technology"] = "Unabated Scope 2 emissions"

@@ -1,4 +1,5 @@
 """Create inputs for ranking of technology switches (cost metrics, emissions, and technology characteristics)."""
+import pandas as pd
 
 from cement.config.config_cement import (
     CARBON_COST_SCOPES,
@@ -12,6 +13,7 @@ from cement.config.config_cement import (
     TRANSITION_TYPES,
     INVESTMENT_CYCLE,
     CCUS_CONTEXT,
+    POWER_PRICE_SENSITIVITIES,
 )
 from cement.config.dataframe_config_cement import (
     DF_DATATYPES_PER_COLUMN,
@@ -63,6 +65,14 @@ def get_ranking_inputs(
         index=True,
         idx_per_input_metric=IDX_PER_INPUT_METRIC,
     )
+
+    if sensitivity in POWER_PRICE_SENSITIVITIES.keys():
+        # apply power price adjustments
+        imported_input_data["commodity_prices"] = _apply_power_price_adjustments(
+            sensitivity_metrics=POWER_PRICE_SENSITIVITIES[sensitivity][0],
+            sensitivity_percentage_change=POWER_PRICE_SENSITIVITIES[sensitivity][1],
+            df_commodity_prices=imported_input_data["commodity_prices"],
+        )
 
     # get emissions
     df_emissions = calculate_emissions(
@@ -166,3 +176,28 @@ def get_ranking_inputs(
         filename="technology_characteristics.csv",
         export_dir="intermediate",
     )
+
+
+def _apply_power_price_adjustments(
+    sensitivity_metrics: str,
+    sensitivity_percentage_change: float,
+    df_commodity_prices: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Adjusts the power prices in the imported input data accordingly:
+
+    Args:
+        sensitivity_metrics (): The metric names that will be changed (string must only be included in the metric, no
+            need to match exactly)
+        sensitivity_percentage_change (): The percentage change that will be applied
+
+    Returns:
+        adjusted imported_input_data
+    """
+
+    df = df_commodity_prices.copy()
+
+    idx = df.index.get_level_values("metric").str.contains(sensitivity_metrics, regex=True)
+    df.loc[idx, :] *= (1 + sensitivity_percentage_change)
+
+    return df
