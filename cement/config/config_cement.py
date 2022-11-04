@@ -21,7 +21,7 @@ run_config = {
 RUN_PARALLEL = False
 LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
-COMPUTE_LCOX = False
+COMPUTE_LCOX = True
 # define CCU/S OPEX context dimensions.
 #   IMPORTANT: Don't forget to add "opex_context" to UNCERTAINTY_RANKING_GROUPS if more than one dimension!
 CCUS_CONTEXT = ["high_low"]
@@ -40,9 +40,10 @@ PATHWAYS_SENSITIVITIES = {
     # "nz": ["nz"],
     # "nz": ["inno"],
     # "custom": ["decelerated"],
+    # "nz-late": ["nz"],
 
     # MAIN MODEL NZ SENSITIVITIES #
-    # "nz": ["fossil-low", "fossil-high", "elec-low", "elec-high", "af-low", "af-high", "nz"],
+    # "nz": ["nz", "inno", "fossil-low", "fossil-high", "elec-low", "elec-high", "af-low", "af-high"],
     # "nz-scm-what-if": ["nz"],
     # "nz-scm-stretch": ["nz"],
     # "nz-binder-what-if": ["nz"],
@@ -52,19 +53,10 @@ PATHWAYS_SENSITIVITIES = {
     # "nz-low-ramp": ["nz"],
     # "nz-high-ramp": ["nz"],
 
-    # SET1
-    # "nz-gcca-early": ["nz"],
-    # "nz-gcca-late": ["nz"],
-
-    # "fa": ["def"],
-    # "custom": ["decelerated"],
-    # "nz-scm-what-if": ["nz"],
-    # "nz-gcca-early": ["nz"],
-    # "nz-gcca-late": ["nz"],
 
     # ARCHETYPE EXPLORER #
-    "archetype": ["000000", "000001"],
-    # "archetype": ["000000"],
+    # "archetype": ["000000", "000001", "000002"],
+    # "archetype": ["000002"],
 }
 
 PATHWAYS_WITH_CARBON_COST = [
@@ -73,7 +65,7 @@ PATHWAYS_WITH_CARBON_COST = [
     "nz-binder-what-if", "nz-binder-stretch",
     "nz-gcca-early", "nz-gcca-late",
     "nz-low-ramp", "nz-high-ramp",
-    "nz-bio-recarb",
+    "nz-late",
 ]
 PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = [
     "lc", "nz",
@@ -81,7 +73,7 @@ PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = [
     "nz-binder-what-if", "nz-binder-stretch",
     "nz-gcca-early", "nz-gcca-late",
     "nz-low-ramp", "nz-high-ramp",
-    "nz-bio-recarb",
+    "nz-late",
 ]
 
 PATHWAY_DEMAND_SCENARIO_MAPPING = {
@@ -102,7 +94,7 @@ PATHWAY_DEMAND_SCENARIO_MAPPING = {
     "nz-gcca-late": "gcca-late",
     "nz-low-ramp": "gcca",
     "nz-high-ramp": "gcca",
-    "nz-bio-recarb": "gcca",
+    "nz-late": "gcca",
 }
 
 # carbon cost sensitivities: define carbon cost in USD/t CO2 for different sensitivities
@@ -227,7 +219,7 @@ MAX_ANNUAL_RENOVATION_SHARE = {
     "nz-gcca-late": 1.0,
     "nz-low-ramp": 1.0,
     "nz-high-ramp": 1.0,
-    "nz-bio-recarb": 1.0,
+    "nz-late": 1.0,
 }
 
 
@@ -430,7 +422,7 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
-        "nz-bio-recarb": {
+        "nz-late": {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
@@ -490,7 +482,7 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
-        "nz-bio-recarb": {
+        "nz-late": {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
@@ -550,7 +542,7 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
-        "nz-bio-recarb": {
+        "nz-late": {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
@@ -576,7 +568,7 @@ TECHNOLOGY_RAMP_UP_CURVE_TYPE = {  # "exponential" or "rayleigh"
     "nz-gcca-late": "rayleigh",
     "nz-low-ramp": "rayleigh",
     "nz-high-ramp": "rayleigh",
-    "nz-bio-recarb": "rayleigh",
+    "nz-late": "rayleigh",
 }
 # define tech classifications to which ramp up applies to
 RAMP_UP_TECH_CLASSIFICATIONS = ["initial", "end-state"]
@@ -648,7 +640,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
         "maximum_asset_growth_rate": 3.25,
         "years_rampup_phase": 30,
     },
-    "nz-bio-recarb": {
+    "nz-late": {
         "init_maximum_asset_additions": 3.25,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
@@ -759,7 +751,7 @@ CONSTRAINTS_TO_APPLY = {
         "biomass_constraint",
         "co2_storage_constraint",
     ],
-    "nz-bio-recarb": [
+    "nz-late": [
         # "emissions_constraint",
         "rampup_constraint",
         # "regional_constraint",

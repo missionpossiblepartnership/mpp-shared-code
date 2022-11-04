@@ -10,6 +10,7 @@ from cement.config.config_cement import (
 
 AE_COMPUTE_LCOX = True
 AE_LIST_TECHNOLOGIES = MATURE_TECHS + INNO_TECHS
+AE_YEARS = (2020, 2030, 2040, 2050)
 
 """ sensitivities """
 
@@ -25,6 +26,14 @@ AE_SENSITIVITY_MAPPING = {
     "000001": {
         "carbon_cost": "med",
         "elec_price": "med",
+        "fossil_price": "high",
+        "af_price": "low",
+        "capex": "high",
+        "capture_rate": "low",
+    },
+    "000002": {
+        "carbon_cost": "med",
+        "elec_price": "high",
         "fossil_price": "high",
         "af_price": "low",
         "capex": "high",

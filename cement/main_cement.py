@@ -97,9 +97,11 @@ def main():
         run_model_sequential(runs)
 
     # aggregate outputs of all runs if more than one pathway is modelled
-    # if len(runs) > 1:
-    aggregate_outputs(runs=runs, sector=SECTOR)
-    # ae_aggregate_outputs(runs=runs, sector=SECTOR)
+    if len(runs) > 1:
+        if pathway != "archetype":
+            aggregate_outputs(runs=runs, sector=SECTOR)
+        else:
+            ae_aggregate_outputs(runs=runs, sector=SECTOR)
 
 
 if __name__ == "__main__":
