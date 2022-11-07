@@ -40,6 +40,11 @@ from cement.archetype_explorer.ae_config import (
     AE_CARBON_COST,
     AE_SENSITIVITY_MAPPING,
     AE_COMPUTE_LCOX,
+    ELEC_PRICE,
+    FOSSIL_PRICE,
+    AF_PRICE,
+    CAPEX,
+    CAPTURE_RATE,
 )
 
 logger = get_logger(__name__)
@@ -80,7 +85,10 @@ def ae_get_ranking_inputs(
     )
 
     """ apply parameter adjustments """
-    imported_input_data = _apply_parameter_adjustments(imported_input_data)
+    imported_input_data = _apply_parameter_adjustments(
+        sensitivity_params=sensitivity_params,
+        imported_input_data=imported_input_data,
+    )
 
     """ emissions """
     df_emissions = calculate_emissions(
@@ -120,6 +128,7 @@ def ae_get_ranking_inputs(
         )
     else:
         carbon_cost_trajectory = None
+    # todo: can decommission and greenfield be excluded to improve runtime?
     df_tech_transitions = calculate_tech_transitions(
         importer=importer,
         # parameters
@@ -187,6 +196,60 @@ def ae_get_ranking_inputs(
     )
 
 
-def _apply_parameter_adjustments(imported_input_data: dict) -> dict:
+def _apply_parameter_adjustments(
+    sensitivity_params: dict,
+    imported_input_data: dict
+) -> dict:
+    """
+    Adjusts the imported input data according to the following contextual parameters in ae_config.py:
+        - electricity price
+        - fossil price (coal & natural gas)
+        - alternative fuels price (biomass, waste, & hydrogen)
+        - CAPEX
+        - Capture rate
+
+    Args:
+        imported_input_data ():
+
+    Returns:
+
+    """
+
+    # electricity price #
+
+    df = imported_input_data["commodity_prices"].copy()
+
+    idx_elec = df.index.get_level_values("metric").str.contains("Electricity")
+    df.loc[idx_elec, :] *= (1 + ELEC_PRICE[sensitivity_params["elec_price"]])
+
+    imported_input_data["commodity_prices"] = df.copy()
+
+    # fossil price #
+
+    df = imported_input_data["commodity_prices"].copy()
+
+    idx_fossil = df.index.get_level_values("metric").str.contains("Coal|Natural gas", regex=True)
+    df.loc[idx_fossil, :] *= (1 + FOSSIL_PRICE[sensitivity_params["fossil_price"]])
+
+    imported_input_data["commodity_prices"] = df.copy()
+
+    # alternative fuels price #
+
+    df = imported_input_data["commodity_prices"].copy()
+
+    idx_af = df.index.get_level_values("metric").str.contains("Biomass|Hydrogen|Waste", regex=True)
+    df.loc[idx_af, :] *= (1 + AF_PRICE[sensitivity_params["af_price"]])
+
+    imported_input_data["commodity_prices"] = df.copy()
+
+    # CAPEX #
+
+    imported_input_data["capex"] *= (1 + CAPEX[sensitivity_params["capex"]])
+
+    # Capture rate #
+
+    imported_input_data["capture_rate"].loc[
+        (imported_input_data["capture_rate"]["value"] > 0), :
+    ] = CAPTURE_RATE[sensitivity_params["capture_rate"]]
 
     return imported_input_data

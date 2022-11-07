@@ -20,6 +20,7 @@ from cement.solver.simulate import simulate_pathway
 # Archetype explorer
 from cement.archetype_explorer.ae_ranking_inputs import ae_get_ranking_inputs
 from cement.archetype_explorer.ae_implicit_forcing import ae_apply_implicit_forcing
+from cement.archetype_explorer.ae_generate_output import ae_aggregate_outputs
 
 # Shared imports
 from mppshared.config import LOG_LEVEL
@@ -37,7 +38,7 @@ funcs = {
     # "CALCULATE_VARIABLES": get_ranking_inputs,
     # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     # "MAKE_RANKINGS": make_rankings,
-    "SIMULATE_PATHWAY": simulate_pathway,
+    # "SIMULATE_PATHWAY": simulate_pathway,
     # "CALCULATE_OUTPUTS": calculate_outputs,
 
     # ARCHETYPE EXPLORER #
@@ -50,6 +51,7 @@ funcs = {
 def _run_model(pathway_name: str, sensitivity: str):
     for name, func in funcs.items():
         if name in run_config:
+            assert not ("AE_" in name and pathway_name != "archetype")
             logger.info(
                 f"Running pathway {pathway_name} sensitivity {sensitivity} section {name}"
             )
@@ -95,8 +97,11 @@ def main():
         run_model_sequential(runs)
 
     # aggregate outputs of all runs if more than one pathway is modelled
-    # if len(runs) > 1:
-    # aggregate_outputs(runs=runs, sector=SECTOR)
+    if len(runs) > 1:
+        if pathway != "archetype":
+            aggregate_outputs(runs=runs, sector=SECTOR)
+        else:
+            ae_aggregate_outputs(runs=runs, sector=SECTOR)
 
 
 if __name__ == "__main__":

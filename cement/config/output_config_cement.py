@@ -102,3 +102,5 @@ MAP_EMISSION_FACTOR_PRE_CAPTURE = {
     "Electric kiln + direct separation": "process_only",
     "Dry kiln + Hydrogen + direct separation": "process_only",
 }
+
+ASSUMED_CARBON_CAPTURE_RATE = 0.95

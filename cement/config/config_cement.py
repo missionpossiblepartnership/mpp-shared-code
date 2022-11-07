@@ -32,24 +32,69 @@ END_YEAR = 2050
 MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
 PATHWAYS_SENSITIVITIES = {
+
+    # MAIN MODEL #
     # "bau": ["def"],
     # "fa": ["def"],
     # "lc": ["def"],
-    # "nz": ["nz", "inno"],
-    "nz": ["inno"],
+    # "nz": ["nz"],
+    # "nz": ["inno"],
     # "custom": ["decelerated"],
-    # "archetype": ["000000"],
+    # "nz-late": ["nz"],
+
+    # MAIN MODEL NZ SENSITIVITIES #
+    # "nz": ["nz", "inno", "fossil-low", "fossil-high", "elec-low", "elec-high", "af-low", "af-high"],
+    # "nz-scm-what-if": ["nz"],
+    # "nz-scm-stretch": ["nz"],
+    # "nz-binder-what-if": ["nz"],
+    # "nz-binder-stretch": ["nz"],
+    # "nz-gcca-early": ["nz"],
+    # "nz-gcca-late": ["nz"],
+    # "nz-low-ramp": ["nz"],
+    # "nz-high-ramp": ["nz"],
+
+
+    # ARCHETYPE EXPLORER #
+    # "archetype": ["000000", "000001", "000002"],
+    # "archetype": ["000002"],
 }
 
-PATHWAYS_WITH_CARBON_COST = ["lc", "nz", "custom"]
-PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = ["lc", "nz"]
+PATHWAYS_WITH_CARBON_COST = [
+    "lc", "nz", "custom",
+    "nz-scm-what-if", "nz-scm-stretch",
+    "nz-binder-what-if", "nz-binder-stretch",
+    "nz-gcca-early", "nz-gcca-late",
+    "nz-low-ramp", "nz-high-ramp",
+    "nz-late",
+]
+PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = [
+    "lc", "nz",
+    "nz-scm-what-if", "nz-scm-stretch",
+    "nz-binder-what-if", "nz-binder-stretch",
+    "nz-gcca-early", "nz-gcca-late",
+    "nz-low-ramp", "nz-high-ramp",
+    "nz-late",
+]
 
 PATHWAY_DEMAND_SCENARIO_MAPPING = {
+
+    # MAIN MODEL #
     "bau": "bau",
     "fa": "gcca-early",
     "lc": "gcca",
     "nz": "gcca",
     "custom": "gcca-late",
+
+    # SENSITIVITY RUNS #
+    "nz-scm-what-if": "scm-what-if",
+    "nz-scm-stretch": "scm-stretch",
+    "nz-binder-what-if": "binder-what-if",
+    "nz-binder-stretch": "binder-stretch",
+    "nz-gcca-early": "gcca-early",
+    "nz-gcca-late": "gcca-late",
+    "nz-low-ramp": "gcca",
+    "nz-high-ramp": "gcca",
+    "nz-late": "gcca",
 }
 
 # carbon cost sensitivities: define carbon cost in USD/t CO2 for different sensitivities
@@ -96,8 +141,62 @@ CARBON_COST_SENSITIVITIES = {
         "start_year": 2025,
         "end_year": 2050,
     },
+
+    # SENSITIVITY RUNS #
+    "fossil-low": {
+        "trajectory": "linear",
+        "initial_carbon_cost": 40,
+        "final_carbon_cost": 100,
+        "start_year": 2025,
+        "end_year": 2050,
+    },
+    "fossil-high": {
+        "trajectory": "linear",
+        "initial_carbon_cost": 40,
+        "final_carbon_cost": 100,
+        "start_year": 2025,
+        "end_year": 2050,
+    },
+    "elec-low": {
+        "trajectory": "linear",
+        "initial_carbon_cost": 40,
+        "final_carbon_cost": 100,
+        "start_year": 2025,
+        "end_year": 2050,
+    },
+    "elec-high": {
+        "trajectory": "linear",
+        "initial_carbon_cost": 40,
+        "final_carbon_cost": 100,
+        "start_year": 2025,
+        "end_year": 2050,
+    },
+    "af-low": {
+        "trajectory": "linear",
+        "initial_carbon_cost": 40,
+        "final_carbon_cost": 100,
+        "start_year": 2025,
+        "end_year": 2050,
+    },
+    "af-high": {
+        "trajectory": "linear",
+        "initial_carbon_cost": 40,
+        "final_carbon_cost": 100,
+        "start_year": 2025,
+        "end_year": 2050,
+    },
 }
 CARBON_COST_SCOPES = ["scope1", "scope2"]
+
+# power price sensitivities (first list element: metrics it applies to; second list element: percentage change)
+POWER_PRICE_SENSITIVITIES = {
+    "fossil-low": ["Coal|Natural gas", -0.2],
+    "fossil-high": ["Coal|Natural gas", 0.2],
+    "elec-low": ["Electricity", -0.2],
+    "elec-high": ["Electricity", 0.2],
+    "af-low": ["Biomass|Hydrogen|Waste", -0.2],
+    "af-high": ["Biomass|Hydrogen|Waste", 0.2],
+}
 
 INVESTMENT_CYCLE = 10  # years
 CAPACITY_UTILISATION_FACTOR = 1.0
@@ -110,6 +209,17 @@ MAX_ANNUAL_RENOVATION_SHARE = {
     "lc": 1.0,
     "nz": 1.0,
     "custom": 1.0,
+
+    # SENSITIVITY RUNS #
+    "nz-scm-what-if": 1.0,
+    "nz-scm-stretch": 1.0,
+    "nz-binder-what-if": 1.0,
+    "nz-binder-stretch": 1.0,
+    "nz-gcca-early": 1.0,
+    "nz-gcca-late": 1.0,
+    "nz-low-ramp": 1.0,
+    "nz-high-ramp": 1.0,
+    "nz-late": 1.0,
 }
 
 
@@ -188,6 +298,14 @@ LIST_TECHNOLOGIES = {
     "decelerated": MATURE_TECHS,
     "nz": MATURE_TECHS,
     "inno": (MATURE_TECHS + INNO_TECHS),
+
+    # sensitivity runs
+    "fossil-low": MATURE_TECHS,
+    "fossil-high": MATURE_TECHS,
+    "elec-low": MATURE_TECHS,
+    "elec-high": MATURE_TECHS,
+    "af-low": MATURE_TECHS,
+    "af-high": MATURE_TECHS,
 }
 ALL_TECHNOLOGIES = MATURE_TECHS + MATURE_CCU_TECHS + INNO_TECHS
 
@@ -270,6 +388,44 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
+
+        # sensitivity runs #
+        "nz-scm-what-if": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-scm-stretch": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-binder-what-if": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-binder-stretch": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-gcca-early": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-gcca-late": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-low-ramp": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-high-ramp": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-late": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
     },
     "brownfield": {
         "bau": {
@@ -289,6 +445,44 @@ RANKING_CONFIG = {
             "emissions": lc_weight_emissions,
         },
         "custom": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+
+        # sensitivity runs #
+        "nz-scm-what-if": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-scm-stretch": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-binder-what-if": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-binder-stretch": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-gcca-early": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-gcca-late": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-low-ramp": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-high-ramp": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-late": {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
@@ -314,6 +508,44 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
+
+        # sensitivity runs #
+        "nz-scm-what-if": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-scm-stretch": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-binder-what-if": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-binder-stretch": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-gcca-early": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-gcca-late": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-low-ramp": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-high-ramp": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
+        "nz-late": {
+            "cost": lc_weight_cost,
+            "emissions": lc_weight_emissions,
+        },
     },
 }
 
@@ -326,6 +558,17 @@ TECHNOLOGY_RAMP_UP_CURVE_TYPE = {  # "exponential" or "rayleigh"
     "lc": "exponential",
     "nz": "rayleigh",
     "custom": "exponential",
+
+    # SENSITIVITY RUNS #
+    "nz-scm-what-if": "rayleigh",
+    "nz-scm-stretch": "rayleigh",
+    "nz-binder-what-if": "rayleigh",
+    "nz-binder-stretch": "rayleigh",
+    "nz-gcca-early": "rayleigh",
+    "nz-gcca-late": "rayleigh",
+    "nz-low-ramp": "rayleigh",
+    "nz-high-ramp": "rayleigh",
+    "nz-late": "rayleigh",
 }
 # define tech classifications to which ramp up applies to
 RAMP_UP_TECH_CLASSIFICATIONS = ["initial", "end-state"]
@@ -346,13 +589,60 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
         "years_rampup_phase": 30,
     },
     "nz": {
-        "init_maximum_asset_additions": 3,
-        "maximum_asset_growth_rate": 3.25,
+        "init_maximum_asset_additions": 4.25,
+        "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "custom": {
         "init_maximum_asset_additions": 5,
         "maximum_asset_growth_rate": 0.05,
+        "years_rampup_phase": 30,
+    },
+
+    # SENSITIVITY RUNS #
+    "nz-scm-what-if": {
+        "init_maximum_asset_additions": 4.25,
+        "maximum_asset_growth_rate": 3,
+        "years_rampup_phase": 30,
+    },
+    "nz-scm-stretch": {
+        "init_maximum_asset_additions": 4.25,
+        "maximum_asset_growth_rate": 3,
+        "years_rampup_phase": 30,
+    },
+    "nz-binder-what-if": {
+        "init_maximum_asset_additions": 4.25,
+        "maximum_asset_growth_rate": 3,
+        "years_rampup_phase": 30,
+    },
+    "nz-binder-stretch": {
+        "init_maximum_asset_additions": 4.25,
+        "maximum_asset_growth_rate": 3,
+        "years_rampup_phase": 30,
+    },
+    "nz-gcca-early": {
+        "init_maximum_asset_additions": 4.25,
+        "maximum_asset_growth_rate": 3,
+        "years_rampup_phase": 30,
+    },
+    "nz-gcca-late": {
+        "init_maximum_asset_additions": 4.25,
+        "maximum_asset_growth_rate": 3,
+        "years_rampup_phase": 30,
+    },
+    "nz-low-ramp": {
+        "init_maximum_asset_additions": 3.5,
+        "maximum_asset_growth_rate": 3,
+        "years_rampup_phase": 30,
+    },
+    "nz-high-ramp": {
+        "init_maximum_asset_additions": 5,
+        "maximum_asset_growth_rate": 3.25,
+        "years_rampup_phase": 30,
+    },
+    "nz-late": {
+        "init_maximum_asset_additions": 3.25,
+        "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
 }
@@ -403,6 +693,71 @@ CONSTRAINTS_TO_APPLY = {
         "biomass_constraint",
         "co2_storage_constraint",
     ],
+
+    # sensitivity runs #
+    "nz-scm-what-if": [
+        # "emissions_constraint",
+        "rampup_constraint",
+        # "regional_constraint",
+        "biomass_constraint",
+        "co2_storage_constraint",
+    ],
+    "nz-scm-stretch": [
+        # "emissions_constraint",
+        "rampup_constraint",
+        # "regional_constraint",
+        "biomass_constraint",
+        "co2_storage_constraint",
+    ],
+    "nz-binder-what-if": [
+        # "emissions_constraint",
+        "rampup_constraint",
+        # "regional_constraint",
+        "biomass_constraint",
+        "co2_storage_constraint",
+    ],
+    "nz-binder-stretch": [
+        # "emissions_constraint",
+        "rampup_constraint",
+        # "regional_constraint",
+        "biomass_constraint",
+        "co2_storage_constraint",
+    ],
+    "nz-gcca-early": [
+        # "emissions_constraint",
+        "rampup_constraint",
+        # "regional_constraint",
+        "biomass_constraint",
+        "co2_storage_constraint",
+    ],
+    "nz-gcca-late": [
+        # "emissions_constraint",
+        "rampup_constraint",
+        # "regional_constraint",
+        "biomass_constraint",
+        "co2_storage_constraint",
+    ],
+    "nz-low-ramp": [
+        # "emissions_constraint",
+        "rampup_constraint",
+        # "regional_constraint",
+        "biomass_constraint",
+        "co2_storage_constraint",
+    ],
+    "nz-high-ramp": [
+        # "emissions_constraint",
+        "rampup_constraint",
+        # "regional_constraint",
+        "biomass_constraint",
+        "co2_storage_constraint",
+    ],
+    "nz-late": [
+        # "emissions_constraint",
+        "rampup_constraint",
+        # "regional_constraint",
+        "biomass_constraint",
+        "co2_storage_constraint",
+    ],
 }
 REGIONAL_PRODUCTION_SHARES = {
     "Africa": 1.0,
@@ -417,7 +772,7 @@ REGIONAL_PRODUCTION_SHARES = {
     "Russia": 1.0,
 }
 
-### Unit conversions ###
+# Unit conversions #
 # Coal: GJ to t
 COAL_GJ_T = 0.034120842375357
 # Natural gas: GJ to billion cubic meter
@@ -426,3 +781,6 @@ NATURAL_GAS_GJ_BCM = 1 / (38.2 * 1e6)
 ELECTRICITY_GJ_TWH = 1 / (3.6 * 1e6)
 # Hydrogen: GJ to t
 HYDROGEN_GJ_T = 1 / 119.988
+
+# Gross biomass emission factor [tCO2/GJ] #
+GROSS_BIO_EMISSION_FACTOR = 0.1

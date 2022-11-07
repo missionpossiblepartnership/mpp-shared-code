@@ -13,7 +13,6 @@ from cement.config.config_cement import (
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.solver.implicit_forcing import (
-    add_technology_classification_to_switching_table,
     apply_technology_availability_constraint,
     calculate_emission_reduction,
 )
@@ -87,11 +86,6 @@ def ae_apply_implicit_forcing(
         ), :
     ]
 
-    # Add technology classification
-    df_technology_switches = add_technology_classification_to_switching_table(
-        df_technology_switches, df_technology_characteristics
-    )
-
     # Calculate emission deltas between origin and destination technology
     df_tech_to_rank = calculate_emission_reduction(
         df_technology_switches=df_technology_switches,
@@ -110,6 +104,6 @@ def ae_apply_implicit_forcing(
     importer.export_data(
         df=df_tech_to_rank,
         filename="technologies_to_rank.csv",
-        export_dir="final",
+        export_dir="intermediate",
         index=False,
     )

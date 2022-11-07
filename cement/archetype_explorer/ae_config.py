@@ -8,20 +8,37 @@ from cement.config.config_cement import (
 
 """ general """
 
-AE_COMPUTE_LCOX = False
+AE_COMPUTE_LCOX = True
 AE_LIST_TECHNOLOGIES = MATURE_TECHS + INNO_TECHS
+AE_YEARS = (2020, 2030, 2040, 2050)
 
 """ sensitivities """
 
 AE_SENSITIVITY_MAPPING = {
     "000000": {
         "carbon_cost": "med",
+        "elec_price": "low",
+        "fossil_price": "high",
+        "af_price": "low",
+        "capex": "high",
+        "capture_rate": "low",
+    },
+    "000001": {
+        "carbon_cost": "med",
         "elec_price": "med",
-        "fossil_price": "med",
-        "af_price": "med",
-        "capex": "med",
-        "capture_rate": "med",
-    }
+        "fossil_price": "high",
+        "af_price": "low",
+        "capex": "high",
+        "capture_rate": "low",
+    },
+    "000002": {
+        "carbon_cost": "med",
+        "elec_price": "high",
+        "fossil_price": "high",
+        "af_price": "low",
+        "capex": "high",
+        "capture_rate": "low",
+    },
 }
 
 AE_CARBON_COST = {
@@ -47,4 +64,40 @@ AE_CARBON_COST = {
         "start_year": 2023,
         "end_year": 2050,
     },
+}
+
+price_low = -0.2
+price_med = 0
+price_high = 0.2
+
+ELEC_PRICE = {
+    "low": price_low,
+    "med": price_med,
+    "high": price_high,
+}
+
+# gas and coal
+FOSSIL_PRICE = {
+    "low": price_low,
+    "med": price_med,
+    "high": price_high,
+}
+
+# biomass, waste, and hydrogen
+AF_PRICE = {
+    "low": price_low,
+    "med": price_med,
+    "high": price_high,
+}
+
+CAPEX = {
+    "low": price_low,
+    "med": price_med,
+    "high": price_high,
+}
+
+CAPTURE_RATE = {
+    "low": 0.90,
+    "med": 0.95,
+    "high": 0.99,
 }
