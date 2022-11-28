@@ -1,9 +1,4 @@
-"""
-1 remove reference plant
-2 add columns for all contextual parameters
-3 add abatement potential
-4 merge all sensitivities
-"""
+""" cleans and aggregates outputs of multiple archetype explorer runs """
 
 import pandas as pd
 from pathlib import Path

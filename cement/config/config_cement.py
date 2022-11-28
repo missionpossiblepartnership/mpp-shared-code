@@ -350,7 +350,7 @@ CARBON_BUDGET_SECTOR_CSV = False
 CARBON_BUDGET_SHAPE = "cement"  # linear, cement
 # carbon budget 2020 - 2050 in Gt
 SECTORAL_CARBON_BUDGETS = {
-    "cement": 48.925,  # == 51.5 * 0.95 # todo: adjust when we have latest numbers from ECRA
+    "cement": 48.925,  # == 51.5 * 0.95
 }
 
 emissions_2020 = 2.8  # Gt CO2 (scopes 1 and 2)
@@ -654,7 +654,7 @@ CO2_STORAGE_CONSTRAINT_TYPE = "total_cumulative"  # "annual_cumulative", "annual
 MARKET_ENTRY_AF_90 = 2025
 MARKET_ENTRY_CCUS = 2025
 
-# define whether constraints shall only checked regionally (if applicable) to reduce runtime
+# define whether constraints shall be checked regionally (if applicable) to reduce runtime
 CONSTRAINTS_REGIONAL_CHECK = True
 
 # define which constraints will be applied for every pathway

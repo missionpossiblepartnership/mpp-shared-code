@@ -1,4 +1,4 @@
-"""Apply implicit forcing (carbon cost, technology moratorium and other filters for technology switches)."""
+"""Applies implicit forcing for archetype explorer"""
 
 # Library imports
 import pandas as pd

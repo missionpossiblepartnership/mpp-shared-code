@@ -1,4 +1,4 @@
-"""Create inputs for ranking of technology switches (cost metrics, emissions, and technology characteristics)."""
+"""Calculate technology switch-specific data for archetype explorer"""
 
 from cement.config.config_cement import (
     CARBON_COST_SCOPES,
@@ -55,6 +55,7 @@ def ae_get_ranking_inputs(
     pathway_name: str, sensitivity: str, sector: str, products: list
 ):
     """
+    Calculates all inputs for the archetype explorer
 
     Args:
         pathway_name ():
