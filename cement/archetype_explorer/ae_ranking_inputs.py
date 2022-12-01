@@ -45,6 +45,7 @@ from cement.archetype_explorer.ae_config import (
     AF_PRICE,
     CAPEX,
     CAPTURE_RATE,
+    AE_YEARS,
 )
 
 logger = get_logger(__name__)
@@ -129,7 +130,6 @@ def ae_get_ranking_inputs(
         )
     else:
         carbon_cost_trajectory = None
-    # todo: can decommission and greenfield be excluded to improve runtime?
     df_tech_transitions = calculate_tech_transitions(
         importer=importer,
         # parameters
@@ -173,6 +173,10 @@ def ae_get_ranking_inputs(
         df_lifetime=imported_input_data["lifetime"],
         df_capture_rate=imported_input_data["capture_rate"],
         carbon_cost_trajectory=carbon_cost_trajectory,
+        # archetype explorer
+        archetype_explorer=True,
+        ae_years=AE_YEARS,
+        ae_switch_type="brownfield_renovation",
     )
     # export
     importer.export_data(

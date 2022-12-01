@@ -35,7 +35,7 @@ PATHWAYS_SENSITIVITIES = {
 
     # MAIN MODEL #
     # "bau": ["def"],
-    "fa": ["def"],
+    # "fa": ["def"],
     # "lc": ["def"],
     # "nz": ["nz"],
     # "nz": ["inno"],
@@ -55,7 +55,7 @@ PATHWAYS_SENSITIVITIES = {
 
 
     # ARCHETYPE EXPLORER #
-    # "archetype": ["000000", "000001", "000002"],
+    "archetype": ["000000", "000001", "000002"],
     # "archetype": ["000002"],
 }
 
