@@ -55,7 +55,8 @@ PATHWAYS_SENSITIVITIES = {
 
 
     # ARCHETYPE EXPLORER #
-    "archetype": ["000000", "000001", "000002"],
+    "archetype": list(np.arange(0, 972))
+    # "archetype": ["000000", "000001", "000002"],
     # "archetype": ["000002"],
 }
 
