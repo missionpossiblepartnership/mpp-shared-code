@@ -3,6 +3,7 @@
 from typing import List
 
 import pandas as pd
+import numpy as np
 
 from mppshared.config import LOG_LEVEL
 from mppshared.utility.log_utility import get_logger
@@ -116,3 +117,21 @@ def df_dict_to_df(df_dict: dict) -> pd.DataFrame:
     df = pd.concat(objs=df_list, axis=1)
 
     return df
+
+
+def round_significant_numbers(x, p: int):
+    """
+    Rounds ints/floats or arrays to p significant numbers
+
+    Args:
+        x ():
+        p ():
+
+    Returns:
+
+    """
+    x = np.asarray(x)
+    x_positive = np.where(np.isfinite(x) & (x != 0), np.abs(x), 10**(p-1))
+    mags = 10 ** (p - 1 - np.floor(np.log10(x_positive)))
+    x = np.round(x * mags) / mags
+    return x

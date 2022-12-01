@@ -35,11 +35,11 @@ funcs = {
 
     # MAIN MODEL #
     # "IMPORT_DATA": import_and_preprocess,
-    # "CALCULATE_VARIABLES": get_ranking_inputs,
+    "CALCULATE_VARIABLES": get_ranking_inputs,
     # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
     # "MAKE_RANKINGS": make_rankings,
-    # "SIMULATE_PATHWAY": simulate_pathway,
-    # "CALCULATE_OUTPUTS": calculate_outputs,
+    "SIMULATE_PATHWAY": simulate_pathway,
+    "CALCULATE_OUTPUTS": calculate_outputs,
 
     # ARCHETYPE EXPLORER #
     # "AE_IMPORT_DATA": import_and_preprocess,
@@ -86,9 +86,9 @@ def main():
 
     # create list of all runs
     runs = []
-    for pathway, sensitivities in PATHWAYS_SENSITIVITIES.items():
+    for pathway_name, sensitivities in PATHWAYS_SENSITIVITIES.items():
         for sensitivity in sensitivities:
-            runs.append((pathway, sensitivity))
+            runs.append((pathway_name, sensitivity))
 
     # run
     if RUN_PARALLEL:
@@ -98,7 +98,7 @@ def main():
 
     # aggregate outputs of all runs if more than one pathway is modelled
     if len(runs) > 1:
-        if pathway != "archetype":
+        if pathway_name != "archetype":
             aggregate_outputs(runs=runs, sector=SECTOR)
         else:
             ae_aggregate_outputs(runs=runs, sector=SECTOR)

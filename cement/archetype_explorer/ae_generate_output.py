@@ -5,10 +5,17 @@ from pathlib import Path
 
 from cement.config.config_cement import PRODUCTS, ASSUMED_ANNUAL_PRODUCTION_CAPACITY
 
-from cement.archetype_explorer.ae_config import AE_SENSITIVITY_MAPPING, AE_YEARS
+from cement.archetype_explorer.ae_config import (
+    AE_SENSITIVITY_MAPPING,
+    AE_YEARS,
+    TECH_ORIGIN_NAME_MAP,
+    TECH_SPLIT_MAP,
+    TECH_DESTINATION_NAME_MAP,
+)
 
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
+from mppshared.utility.dataframe_utility import round_significant_numbers
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
@@ -71,9 +78,9 @@ def ae_aggregate_outputs(
         ]
 
         # add capture rate to technology
-        df = _add_capture_rate_to_tech(importer=importer, df=df)
+        df = _add_capture_rate_as_str(importer=importer, df=df)
 
-        # add LCOC for technology_origin and LCOC delta
+        # add LCOC technology_origin and LCOC delta
         df = _add_lcoc(importer=importer, df=df)
 
         # add abatement potential
@@ -88,7 +95,7 @@ def ae_aggregate_outputs(
             df[key] = sensitivity_params[key]
 
         # filter and sort columns
-        idx = [x for x in sensitivity_params.keys() if x != "capture_rate"] + [
+        idx = list(sensitivity_params.keys()) + [
             "product", "year", "region", "technology_origin", "technology_destination"
         ]
         val_cols = [
@@ -108,6 +115,13 @@ def ae_aggregate_outputs(
     # drop index duplicates
     df = df.loc[df.index.drop_duplicates(), :]
 
+    # round to 3 significant numbers
+    for col in df.columns:
+        df[col] = round_significant_numbers(x=df[col], p=3)
+
+    # split and rename technologies
+    df = split_and_rename_technologies(df)
+
     # export
     export_path = (
         f"{Path(__file__).resolve().parents[2]}/{sector}/data/{pathway_name}/ae_aggregated_outputs.csv"
@@ -115,7 +129,7 @@ def ae_aggregate_outputs(
     df.to_csv(export_path, index=True)
 
 
-def _add_capture_rate_to_tech(importer: IntermediateDataImporter, df: pd.DataFrame) -> pd.DataFrame:
+def _add_capture_rate_as_str(importer: IntermediateDataImporter, df: pd.DataFrame) -> pd.DataFrame:
 
     df_capture_rate = importer.get_imported_input_data(
         input_metrics={"Technology cards": ["capture_rate"]}
@@ -143,10 +157,7 @@ def _add_capture_rate_to_tech(importer: IntermediateDataImporter, df: pd.DataFra
         on=["product", "region", "year", "technology_destination"]
     )
 
-    # add capture rate
-    df["technology_destination"] = df["technology_destination"].str.cat(df["capture_rate"])
-
-    return df.drop(columns="capture_rate")
+    return df
 
 
 def _add_lcoc(importer: IntermediateDataImporter, df: pd.DataFrame) -> pd.DataFrame:
@@ -185,7 +196,6 @@ def _add_abatement_potential(df: pd.DataFrame) -> pd.DataFrame:
 
     # abatement cost [USD / t CO2] = (LCOC switch - LCOC origin) [USD / t clk] / delta emission factor [t CO2 / t clk]
     df["abatement_cost"] = (df["lcoc_switch"] - df["lcoc_origin"]) / (df["delta_co2_scope1"] + df["delta_co2_scope2"])
-    # df["abatement_cost"] = df["abatement_cost"].fillna(float(0))
 
     # get max potential
     def _get_max_potential(row: pd.Series) -> pd.Series:
@@ -212,5 +222,31 @@ def _add_emission_delta_rel(df: pd.DataFrame) -> pd.DataFrame:
         (df["delta_co2_scope1"] + df["delta_co2_scope2"]) /
         (df["co2_scope1_origin"] + df["co2_scope2_origin"])
     )
+
+    return df
+
+
+def split_and_rename_technologies(df: pd.DataFrame) -> pd.DataFrame:
+
+    idx = [x for x in df.index.names if x != "capture_rate"] + ["fuel_type", "capture_technology"]
+    val_cols = list(df.columns)
+    df = df.reset_index()
+
+    # split tech destination
+    df["fuel_type"] = df["technology_destination"]
+    df["fuel_type"].replace(to_replace=TECH_SPLIT_MAP, inplace=True)
+    df["capture_technology"] = df["fuel_type"].str.split(", ", n=1, expand=True)[1]
+    df["fuel_type"] = df["fuel_type"].str.split(", ", n=1, expand=True)[0]
+
+    # add capture rate
+    df["capture_technology"] = df["capture_technology"].str.cat(df["capture_rate"])
+
+    # rename tech origin & destination
+    df["technology_origin"].replace(to_replace=TECH_ORIGIN_NAME_MAP, inplace=True)
+    df["technology_destination"].replace(to_replace=TECH_DESTINATION_NAME_MAP, inplace=True)
+    df["technology_destination"] = df["technology_destination"].str.cat(df["capture_rate"])
+
+    df = df[idx + val_cols]
+    df.set_index(keys=idx, inplace=True)
 
     return df

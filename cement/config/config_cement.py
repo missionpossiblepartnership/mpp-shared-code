@@ -35,7 +35,7 @@ PATHWAYS_SENSITIVITIES = {
 
     # MAIN MODEL #
     # "bau": ["def"],
-    # "fa": ["def"],
+    "fa": ["def"],
     # "lc": ["def"],
     # "nz": ["nz"],
     # "nz": ["inno"],
@@ -579,8 +579,8 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
         "years_rampup_phase": 30,
     },
     "fa": {
-        "init_maximum_asset_additions": 3,
-        "maximum_asset_growth_rate": 0.05,
+        "init_maximum_asset_additions": 1,
+        "maximum_asset_growth_rate": 0.1,
         "years_rampup_phase": 30,
     },
     "lc": {
@@ -631,7 +631,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
         "years_rampup_phase": 30,
     },
     "nz-low-ramp": {
-        "init_maximum_asset_additions": 3.5,
+        "init_maximum_asset_additions": 3.6,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },

@@ -1180,7 +1180,8 @@ def _compute_lcox(row: pd.Series, df: pd.DataFrame) -> pd.Series:
 
     Args:
         row ():
-        df ():
+        df (): dataframe with all inputs for LCOX calculation that also includes all required years needed to calculate
+            LCOX for the last model years
 
     Returns:
 

@@ -979,7 +979,7 @@ def _calculate_emission_reduction_levers(
         df_tech_roadmap=df_tech_roadmap,
     )
 
-    # get savings in clinker production (fuel switch and energy efficiency
+    # get savings in clinker production (fuel switch and energy efficiency)
     df_fuel_switch, df_energy_eff = _get_savings_in_clinker_production(
         importer=importer,
         df_tech_roadmap=df_tech_roadmap,
@@ -987,7 +987,7 @@ def _calculate_emission_reduction_levers(
     df_fuel_switch.sort_index(inplace=True)
     df_energy_eff.sort_index(inplace=True)
 
-    # get emission reduction from Switching to alternative fuels and energy efficiency
+    # get emission reduction through CCU/S
     df_savings_captured_emissions = (
         df_unabated_s1_emissions_pre_clinker_levers.copy()
         - df_unabated_s1_emissions
