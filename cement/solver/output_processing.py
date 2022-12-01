@@ -184,6 +184,60 @@ def aggregate_outputs(
             pathway_name=pathway_name,
             sensitivity=sensitivity,
         )
+        # get headline emissions for web interface
+        idx = ["scenario", "sector", "product", "region", "technology", "parameter_group", "parameter", "unit"]
+        df_emissions_headline_excl_recarb_formatted = (
+            df_emission_abatement_formatted
+            .copy()
+            .loc[df_emission_abatement_formatted["technology"].isin(
+                ["Unabated Scope 1 emissions", "Unabated Scope 2 emissions", "Recarbonation"]
+            ), :]
+            .melt(
+                id_vars=idx,
+                value_vars=list(MODEL_YEARS),
+            )
+            .set_index(idx)
+            .groupby([x for x in idx if x != "technology"] + ["year"]).sum()
+            .reset_index()
+            .pivot(
+                index=[x for x in idx if x != "technology"],
+                columns="year",
+                values="value",
+            )
+            .reset_index()
+        )
+        df_emissions_headline_excl_recarb_formatted["technology"] = "All"
+        df_emissions_headline_excl_recarb_formatted["parameter_group"] = "Headline emissions"
+        df_emissions_headline_excl_recarb_formatted["parameter"] = "Annual emissions excl. recarbonation"
+        df_emissions_headline_excl_recarb_formatted = df_emissions_headline_excl_recarb_formatted[
+            list(df_tech_roadmap_formatted.columns)
+        ]
+        df_emissions_headline_incl_recarb_formatted = (
+            df_emission_abatement_formatted
+            .copy()
+            .loc[df_emission_abatement_formatted["technology"].isin(
+                ["Unabated Scope 1 emissions", "Unabated Scope 2 emissions"]
+            ), :]
+            .melt(
+                id_vars=idx,
+                value_vars=list(MODEL_YEARS),
+            )
+            .set_index(idx)
+            .groupby([x for x in idx if x != "technology"] + ["year"]).sum()
+            .reset_index()
+            .pivot(
+                index=[x for x in idx if x != "technology"],
+                columns="year",
+                values="value",
+            )
+            .reset_index()
+        )
+        df_emissions_headline_incl_recarb_formatted["technology"] = "All"
+        df_emissions_headline_incl_recarb_formatted["parameter_group"] = "Headline emissions"
+        df_emissions_headline_incl_recarb_formatted["parameter"] = "Annual emissions incl. recarbonation"
+        df_emissions_headline_incl_recarb_formatted = df_emissions_headline_incl_recarb_formatted[
+            list(df_tech_roadmap_formatted.columns)
+        ]
 
         # LCOC
         logger.info("-- Weighted average LCOC")
@@ -353,6 +407,8 @@ def aggregate_outputs(
                 df_captured_carbon_formatted,
                 df_captured_emissions_excl_cc_process_formatted,
                 df_emission_abatement_formatted,
+                df_emissions_headline_incl_recarb_formatted,
+                df_emissions_headline_excl_recarb_formatted,
                 df_emission_intensity_formatted,
                 df_emission_intensity_cmtcnt_formatted,
                 df_biomass_captured_carbon_formatted,

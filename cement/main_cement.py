@@ -42,9 +42,9 @@ funcs = {
     # "CALCULATE_OUTPUTS": calculate_outputs,
 
     # ARCHETYPE EXPLORER #
-    "AE_IMPORT_DATA": import_and_preprocess,
-    "AE_CALCULATE_VARIABLES": ae_get_ranking_inputs,
-    "AE_APPLY_IMPLICIT_FORCING": ae_apply_implicit_forcing,
+    # "AE_IMPORT_DATA": import_and_preprocess,
+    # "AE_CALCULATE_VARIABLES": ae_get_ranking_inputs,
+    # "AE_APPLY_IMPLICIT_FORCING": ae_apply_implicit_forcing,
 }
 
 
