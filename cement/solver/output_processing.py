@@ -1876,12 +1876,16 @@ def _export_greenfield_lcoc(
 """ Resource consumption """
 
 
-def _calculate_resource_consumption_gj(importer: IntermediateDataImporter, clinker_production_only: bool = False) -> pd.DataFrame:
+def _calculate_resource_consumption_gj(
+    importer: IntermediateDataImporter,
+    clinker_production_only: bool = False
+) -> pd.DataFrame:
     """Calculate the consumption of all energy resources by year and region (incl. Global).
 
     Args:
         importer ():
-        clinker_production_only (): If True, function will only output energy consumption for heat energy (ignoring capture energy)
+        clinker_production_only (): If True, function will only output energy consumption for heat energy
+            (ignoring carbon capture heat as well as cement & concrete energy demand)
 
     Returns:
 
@@ -1981,6 +1985,21 @@ def _calculate_resource_consumption_gj(importer: IntermediateDataImporter, clink
         df_resource_consumption["parameter_group"] = "Energy from clinker production"
     else:
         df_resource_consumption["parameter_group"] = "Energy"
+        # add electricity demand from concrete mixing and cement grinding (from demand model)
+        df_cntcmt_elec = importer.get_outputs_demand_model()
+        df_cntcmt_elec = df_cntcmt_elec.loc[df_cntcmt_elec["technology"].isin(
+            ["Concrete electricity consumption", "Cement electricity consumption"]
+        )]
+        df_cntcmt_elec["product"] = np.nan
+        df_cntcmt_elec.loc[(df_cntcmt_elec["technology"] == "Concrete electricity consumption"), "product"] = "Concrete"
+        df_cntcmt_elec.loc[(df_cntcmt_elec["technology"] == "Cement electricity consumption"), "product"] = "Cement"
+        df_cntcmt_elec.drop(columns="technology", inplace=True)
+        df_cntcmt_elec["parameter"] = "Electricity"
+        df_cntcmt_elec["parameter_group"] = "Energy"
+        df_cntcmt_elec["unit"] = "GJ"
+        df_cntcmt_elec = df_cntcmt_elec[list(df_resource_consumption.columns)]
+        df_resource_consumption = pd.concat([df_resource_consumption, df_cntcmt_elec])
+
     df_resource_consumption["technology"] = "All"
 
     return df_resource_consumption.reset_index(drop=True)

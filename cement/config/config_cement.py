@@ -21,7 +21,7 @@ run_config = {
 RUN_PARALLEL = False
 LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
-COMPUTE_LCOX = True
+COMPUTE_LCOX = False
 # define CCU/S OPEX context dimensions.
 #   IMPORTANT: Don't forget to add "opex_context" to UNCERTAINTY_RANKING_GROUPS if more than one dimension!
 CCUS_CONTEXT = ["high_low"]
@@ -50,7 +50,7 @@ PATHWAYS_SENSITIVITIES = {
     # "nz-binder-stretch": ["nz"],
     # "nz-gcca-early": ["nz"],
     # "nz-gcca-late": ["nz"],
-    "nz-low-ramp": ["nz"],
+    # "nz-low-ramp": ["nz"],
     # "nz-high-ramp": ["nz"],
 
 
