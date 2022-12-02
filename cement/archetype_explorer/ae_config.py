@@ -13,7 +13,7 @@ from cement.config.config_cement import (
 
 compute_all = True
 
-AE_COMPUTE_LCOX = True
+AE_COMPUTE_LCOX = False
 AE_LIST_TECHNOLOGIES = MATURE_TECHS + INNO_TECHS
 AE_YEARS = (2020, 2030, 2040, 2050)
 

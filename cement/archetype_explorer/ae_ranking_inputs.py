@@ -91,6 +91,13 @@ def ae_get_ranking_inputs(
         sensitivity_params=sensitivity_params,
         imported_input_data=imported_input_data,
     )
+    # export
+    for metric in imported_input_data.keys():
+        importer.export_data(
+            df=imported_input_data[metric],
+            filename=f"{metric}.csv",
+            export_dir="import",
+        )
 
     """ emissions """
     df_emissions = calculate_emissions(
