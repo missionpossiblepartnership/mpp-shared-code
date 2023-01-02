@@ -47,7 +47,7 @@ funcs = {
     "MAKE_RANKINGS": make_rankings,
     "SIMULATE_PATHWAY": simulate_pathway,
     "CALCULATE_OUTPUTS": calculate_outputs,
-    "CALCULATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
+    # "CALCULATE_DEBUGGING_OUTPUTS": create_debugging_outputs,
 }
 
 
@@ -75,7 +75,7 @@ def run_model_sequential(runs):
             ].item()
             for folder in ["final", "intermediate", "ranking", "stack_tracker"]:
                 final_folder = (
-                    f"{SECTOR}/data/{pathway}/{sensitivity}/carbon_cost_{cc}/{folder}"
+                    f"{SECTOR}/data/{pathway}/{sensitivity}/carbon_cost_{int(cc)}/{folder}"
                 )
                 if not os.path.exists(final_folder):
                     os.makedirs(final_folder)
