@@ -18,6 +18,7 @@ class CarbonCostTrajectory:
         # Initialize attributes
         self.trajectory = trajectory
         self.model_years = model_years
+        self.end_year = end_year
 
         # Initialize DataFrame with carbon cost trajectory
         self.df_carbon_cost = self.set_carbon_cost(
