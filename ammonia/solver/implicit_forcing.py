@@ -27,6 +27,7 @@ from ammonia.config_ammonia import (
 from mppshared.calculate.calculate_cost import discount_costs
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
+from mppshared.solver.implicit_forcing import add_technology_classification_to_switching_table
 from mppshared.utility.dataframe_utility import add_column_header_suffix
 from mppshared.utility.function_timer_utility import timer_func
 from mppshared.utility.log_utility import get_logger
@@ -102,12 +103,9 @@ def apply_implicit_forcing(
         )
     # Add technology classification
     else:
-        df_technology_switches = df_technology_switches.merge(
-            df_technology_characteristics[
-                ["product", "year", "region", "technology", "technology_classification"]
-            ].rename({"technology": "technology_destination"}, axis=1),
-            on=["product", "year", "region", "technology_destination"],
-            how="left",
+        # Add the technology classification to the ranking table
+        df_technology_switches = add_technology_classification_to_switching_table(
+            df_technology_switches, df_technology_characteristics
         )
 
     # Apply carbon cost
