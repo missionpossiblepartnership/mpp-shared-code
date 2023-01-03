@@ -34,12 +34,12 @@ logger.setLevel(LOG_LEVEL)
 funcs = {
 
     # MAIN MODEL #
-    # "IMPORT_DATA": import_and_preprocess,
-    # "CALCULATE_VARIABLES": get_ranking_inputs,
-    # "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
-    # "MAKE_RANKINGS": make_rankings,
-    # "SIMULATE_PATHWAY": simulate_pathway,
-    # "CALCULATE_OUTPUTS": calculate_outputs,
+    "IMPORT_DATA": import_and_preprocess,
+    "CALCULATE_VARIABLES": get_ranking_inputs,
+    "APPLY_IMPLICIT_FORCING": apply_implicit_forcing,
+    "MAKE_RANKINGS": make_rankings,
+    "SIMULATE_PATHWAY": simulate_pathway,
+    "CALCULATE_OUTPUTS": calculate_outputs,
 
     # ARCHETYPE EXPLORER #
     # "AE_IMPORT_DATA": import_and_preprocess,
