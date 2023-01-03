@@ -33,8 +33,8 @@ PRODUCTS = ["Ammonia", "Ammonium nitrate", "Urea"]
 
 ### PATHWAYS, SENSITIVITIES AND CARBON COSTS ###
 PATHWAYS = [
-    # "lc",
-    # "fa",
+    "lc",
+    "fa",
     "bau",
 ]
 

@@ -34,13 +34,13 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 PATHWAYS_SENSITIVITIES = {
 
     # MAIN MODEL #
-    # "bau": ["def"],
-    # "fa": ["def"],
-    # "lc": ["def"],
-    # "nz": ["nz"],
-    # "nz": ["inno"],
-    # "custom": ["decelerated"],
-    # "nz-late": ["nz"],
+    "bau": ["def"],
+    "fa": ["def"],
+    "lc": ["def"],
+    "nz": ["nz"],
+    "nz": ["inno"],
+    "custom": ["decelerated"],
+    "nz-late": ["nz"],
 
     # MAIN MODEL NZ SENSITIVITIES #
     # "nz": ["nz", "inno", "fossil-low", "fossil-high", "elec-low", "elec-high", "af-low", "af-high"],

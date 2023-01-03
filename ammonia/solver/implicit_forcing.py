@@ -392,7 +392,7 @@ def apply_technology_moratorium(
 
     # Add technology classification to each destination technology
     df_tech_char_destination = df_technology_characteristics[
-        ["product", "year", "region", "technology", "technology_classification"]
+        ["product", "year", "region", "technology", "technology_classification", "technology_lifetime"]
     ].rename(
         {"technology": "technology_destination"},
         axis=1,
