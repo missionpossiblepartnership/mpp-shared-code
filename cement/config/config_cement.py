@@ -21,7 +21,7 @@ run_config = {
 RUN_PARALLEL = False
 LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
-COMPUTE_LCOX = False
+COMPUTE_LCOX = True
 # define CCU/S OPEX context dimensions.
 #   IMPORTANT: Don't forget to add "opex_context" to UNCERTAINTY_RANKING_GROUPS if more than one dimension!
 CCUS_CONTEXT = ["high_low"]
@@ -55,7 +55,7 @@ PATHWAYS_SENSITIVITIES = {
 
 
     # ARCHETYPE EXPLORER #
-    "archetype": list(np.arange(0, 20))
+    "archetype": list(np.arange(0, 972))  # 972
     # "archetype": ["000000", "000001", "000002"],
     # "archetype": ["000002"],
 }
@@ -590,7 +590,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
         "years_rampup_phase": 30,
     },
     "nz": {
-        "init_maximum_asset_additions": 4.25,
+        "init_maximum_asset_additions": 3.6,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
@@ -602,43 +602,43 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
 
     # SENSITIVITY RUNS #
     "nz-scm-what-if": {
-        "init_maximum_asset_additions": 4.25,
+        "init_maximum_asset_additions": 3.6,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-scm-stretch": {
-        "init_maximum_asset_additions": 4.25,
+        "init_maximum_asset_additions": 3.6,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-binder-what-if": {
-        "init_maximum_asset_additions": 4.25,
+        "init_maximum_asset_additions": 3.6,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-binder-stretch": {
-        "init_maximum_asset_additions": 4.25,
+        "init_maximum_asset_additions": 3.6,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-gcca-early": {
-        "init_maximum_asset_additions": 4.25,
+        "init_maximum_asset_additions": 3.6,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-gcca-late": {
-        "init_maximum_asset_additions": 4.25,
+        "init_maximum_asset_additions": 3.6,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-low-ramp": {
-        "init_maximum_asset_additions": 3.6,
+        "init_maximum_asset_additions": 3,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-high-ramp": {
         "init_maximum_asset_additions": 5,
-        "maximum_asset_growth_rate": 3.25,
+        "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-late": {

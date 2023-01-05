@@ -70,6 +70,12 @@ def ae_apply_implicit_forcing(
         :,
     ]
 
+    # Remove switches where technology_origin == technology_destination
+    df_technology_switches = df_technology_switches.loc[
+        df_technology_switches["technology_destination"] != df_technology_switches["technology_origin"],
+        :,
+    ]
+
     # filter technologies
     df_technology_switches = df_technology_switches.loc[
         (

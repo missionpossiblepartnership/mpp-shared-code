@@ -101,7 +101,7 @@ def ae_aggregate_outputs(
         val_cols = [
             "lcoc_delta_rel", "switch_capex", "co2_scope1_destination", "co2_scope2_destination",
             "delta_co2_scope1", "delta_co2_scope2", "delta_rel_co2_scopes12",
-            "emission_abatement", "abatement_cost", "max_emission_abatement", "min_abatement_cost"
+            "emission_abatement", "abatement_cost"
         ]
         df = df[idx + val_cols]
         df = df.set_index(idx).sort_index()
@@ -112,21 +112,21 @@ def ae_aggregate_outputs(
     # aggregate
     df = pd.concat(df_list)
 
-    # drop index duplicates
-    df = df.loc[df.index.drop_duplicates(), :]
-
     # round to 3 significant numbers
     for col in df.columns:
         df[col] = round_significant_numbers(x=df[col], p=3)
 
-    # split and rename technologies
+    # split and rename technologies (also resets index)
     df = split_and_rename_technologies(df)
+
+    # drop duplicate rows
+    df = df.loc[~df.duplicated(), :]
 
     # export
     export_path = (
         f"{Path(__file__).resolve().parents[2]}/{sector}/data/{pathway_name}/ae_aggregated_outputs.csv"
     )
-    df.to_csv(export_path, index=True)
+    df.to_csv(export_path, index=False)
 
 
 def _add_capture_rate_as_str(importer: IntermediateDataImporter, df: pd.DataFrame) -> pd.DataFrame:
@@ -189,26 +189,13 @@ def _add_lcoc(importer: IntermediateDataImporter, df: pd.DataFrame) -> pd.DataFr
     return df
 
 
-def _add_abatement_potential(df: pd.DataFrame) -> pd.DataFrame:
+def _add_abatement_potential(df: pd.DataFrame, max_potential: bool = False) -> pd.DataFrame:
 
     # emission abatement [kt CO2] = emission factor [t CO2 / t clk] * production volume [Mt CO2] * 1e3
     df["emission_abatement"] = df["prod_vol"] * (df["delta_co2_scope1"] + df["delta_co2_scope2"]) * 1e3
 
     # abatement cost [USD / t CO2] = (LCOC switch - LCOC origin) [USD / t clk] / delta emission factor [t CO2 / t clk]
     df["abatement_cost"] = (df["lcoc_switch"] - df["lcoc_origin"]) / (df["delta_co2_scope1"] + df["delta_co2_scope2"])
-
-    # get max potential
-    def _get_max_potential(row: pd.Series) -> pd.Series:
-        row["max_emission_abatement"] = row["emission_abatement"].max()
-        row["min_abatement_cost"] = row["abatement_cost"].min()
-        return row
-    df = (
-        df
-        .set_index(["product", "year", "region", "technology_origin", "technology_destination"])
-        .groupby(["product", "year", "region", "technology_origin"])
-        .apply(lambda x: _get_max_potential(x))
-        .reset_index()
-    )
 
     return df
 
@@ -247,6 +234,5 @@ def split_and_rename_technologies(df: pd.DataFrame) -> pd.DataFrame:
     df["technology_destination"] = df["technology_destination"].str.cat(df["capture_rate"])
 
     df = df[idx + val_cols]
-    df.set_index(keys=idx, inplace=True)
 
     return df
