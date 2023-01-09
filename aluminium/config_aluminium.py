@@ -75,9 +75,8 @@ ALL_SENSITIVITIES = [
     "Natural Gas Price_-0.2",
 ]
 SENSITIVITIES = {
-    # "bau": ["def"],  # ALL_SENSITIVITIES,
-    # "cc": ["def"],  # ALL_SENSITIVITIES,
-    # "fa": ["def"],
+    "bau": ["def"],  # ALL_SENSITIVITIES,
+    "fa": ["def"],
     "lc": ["def"]  # ALL_SENSITIVITIES,
 }
 INVESTMENT_CYCLE = 10  # years
@@ -206,7 +205,7 @@ RANKING_CONFIG = {
 ### CONSTRAINTS ###
 
 CONSTRAINTS_TO_APPLY = {
-    "bau": [None],
+    "bau": [],
     "cc": ["rampup_constraint"],
     "lc": ["emissions_constraint", "rampup_constraint"],
     "fa": ["emissions_constraint", "rampup_constraint"],
