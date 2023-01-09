@@ -17,7 +17,7 @@ run_config = {
     "AE_IMPORT_DATA",
     "AE_CALCULATE_VARIABLES",
     "AE_APPLY_IMPLICIT_FORCING",
-}
+}   # comment lines to adjust run configuration
 RUN_PARALLEL = False
 LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
@@ -55,6 +55,7 @@ PATHWAYS_SENSITIVITIES = {
 
 
     # ARCHETYPE EXPLORER #
+    "archetype": list(np.arange(0, 972))  # 972
     # "archetype": ["000000", "000001", "000002"],
     # "archetype": ["000002"],
 }
@@ -350,7 +351,7 @@ CARBON_BUDGET_SECTOR_CSV = False
 CARBON_BUDGET_SHAPE = "cement"  # linear, cement
 # carbon budget 2020 - 2050 in Gt
 SECTORAL_CARBON_BUDGETS = {
-    "cement": 48.925,  # == 51.5 * 0.95 # todo: adjust when we have latest numbers from ECRA
+    "cement": 48.925,  # == 51.5 * 0.95
 }
 
 emissions_2020 = 2.8  # Gt CO2 (scopes 1 and 2)
@@ -579,8 +580,8 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
         "years_rampup_phase": 30,
     },
     "fa": {
-        "init_maximum_asset_additions": 3,
-        "maximum_asset_growth_rate": 0.05,
+        "init_maximum_asset_additions": 1,
+        "maximum_asset_growth_rate": 0.1,
         "years_rampup_phase": 30,
     },
     "lc": {
@@ -589,7 +590,7 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
         "years_rampup_phase": 30,
     },
     "nz": {
-        "init_maximum_asset_additions": 4.25,
+        "init_maximum_asset_additions": 3.6,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
@@ -601,43 +602,43 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
 
     # SENSITIVITY RUNS #
     "nz-scm-what-if": {
-        "init_maximum_asset_additions": 4.25,
+        "init_maximum_asset_additions": 3.6,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-scm-stretch": {
-        "init_maximum_asset_additions": 4.25,
+        "init_maximum_asset_additions": 3.6,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-binder-what-if": {
-        "init_maximum_asset_additions": 4.25,
+        "init_maximum_asset_additions": 3.6,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-binder-stretch": {
-        "init_maximum_asset_additions": 4.25,
+        "init_maximum_asset_additions": 3.6,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-gcca-early": {
-        "init_maximum_asset_additions": 4.25,
+        "init_maximum_asset_additions": 3.6,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-gcca-late": {
-        "init_maximum_asset_additions": 4.25,
+        "init_maximum_asset_additions": 3.6,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-low-ramp": {
-        "init_maximum_asset_additions": 3.5,
+        "init_maximum_asset_additions": 3,
         "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-high-ramp": {
         "init_maximum_asset_additions": 5,
-        "maximum_asset_growth_rate": 3.25,
+        "maximum_asset_growth_rate": 3,
         "years_rampup_phase": 30,
     },
     "nz-late": {
@@ -654,7 +655,7 @@ CO2_STORAGE_CONSTRAINT_TYPE = "total_cumulative"  # "annual_cumulative", "annual
 MARKET_ENTRY_AF_90 = 2025
 MARKET_ENTRY_CCUS = 2025
 
-# define whether constraints shall only checked regionally (if applicable) to reduce runtime
+# define whether constraints shall be checked regionally (if applicable) to reduce runtime
 CONSTRAINTS_REGIONAL_CHECK = True
 
 # define which constraints will be applied for every pathway

@@ -133,7 +133,9 @@ play.py
 # Data files
 data/*/*/*/intermediate/technologies_to_rank.csv
 cement/data
-cement/data/01_business_case_raw
+# make sure that regional demand data is dummified before pushing!
+cement/data/01_business_case_raw/business_cases.xlsx
+cement/data/01_business_case_raw/Archive
 
 # Ignore all ranking files
 data/*/*/*/ranking
@@ -172,10 +174,6 @@ cement/data/01_business_case_raw/Archive
 !ammonia/data/lc/def/intermediate/*.csv
 !ammonia/data/bau/def/intermediate/*.csv
 !ammonia/data/fa/def/intermediate/*.csv
-!cement/data/bau/def/intermediate/*.csv
-!cement/data/fa/def/intermediate/*.csv
-!cement/data/lc/def/intermediate/*.csv
-!cement/data/01_business_case_raw/*.csv
 !tests/tests_data/*.csv
 
 # development

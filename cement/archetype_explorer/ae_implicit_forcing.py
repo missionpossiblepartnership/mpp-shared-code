@@ -1,4 +1,4 @@
-"""Apply implicit forcing (carbon cost, technology moratorium and other filters for technology switches)."""
+"""Applies implicit forcing for archetype explorer"""
 
 # Library imports
 import pandas as pd
@@ -67,6 +67,12 @@ def ae_apply_implicit_forcing(
     ]
     df_technology_switches = df_technology_switches.loc[
         df_technology_switches["technology_destination"] != "Dry kiln reference plant",
+        :,
+    ]
+
+    # Remove switches where technology_origin == technology_destination
+    df_technology_switches = df_technology_switches.loc[
+        df_technology_switches["technology_destination"] != df_technology_switches["technology_origin"],
         :,
     ]
 

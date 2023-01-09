@@ -1,4 +1,4 @@
-"""Create inputs for ranking of technology switches (cost metrics, emissions, and technology characteristics)."""
+"""Calculate technology switch-specific data for archetype explorer"""
 
 from cement.config.config_cement import (
     CARBON_COST_SCOPES,
@@ -45,6 +45,7 @@ from cement.archetype_explorer.ae_config import (
     AF_PRICE,
     CAPEX,
     CAPTURE_RATE,
+    AE_YEARS,
 )
 
 logger = get_logger(__name__)
@@ -55,6 +56,7 @@ def ae_get_ranking_inputs(
     pathway_name: str, sensitivity: str, sector: str, products: list
 ):
     """
+    Calculates all inputs for the archetype explorer
 
     Args:
         pathway_name ():
@@ -89,6 +91,13 @@ def ae_get_ranking_inputs(
         sensitivity_params=sensitivity_params,
         imported_input_data=imported_input_data,
     )
+    # export
+    for metric in imported_input_data.keys():
+        importer.export_data(
+            df=imported_input_data[metric],
+            filename=f"{metric}.csv",
+            export_dir="import",
+        )
 
     """ emissions """
     df_emissions = calculate_emissions(
@@ -128,7 +137,6 @@ def ae_get_ranking_inputs(
         )
     else:
         carbon_cost_trajectory = None
-    # todo: can decommission and greenfield be excluded to improve runtime?
     df_tech_transitions = calculate_tech_transitions(
         importer=importer,
         # parameters
@@ -172,6 +180,10 @@ def ae_get_ranking_inputs(
         df_lifetime=imported_input_data["lifetime"],
         df_capture_rate=imported_input_data["capture_rate"],
         carbon_cost_trajectory=carbon_cost_trajectory,
+        # archetype explorer
+        archetype_explorer=True,
+        ae_years=AE_YEARS,
+        ae_switch_type="brownfield_renovation",
     )
     # export
     importer.export_data(

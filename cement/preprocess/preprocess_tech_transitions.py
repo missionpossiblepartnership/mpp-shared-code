@@ -52,6 +52,10 @@ def calculate_tech_transitions(
     df_lifetime: pd.DataFrame,
     df_capture_rate: pd.DataFrame,
     carbon_cost_trajectory: CarbonCostTrajectory,
+    # archetype explorer
+    archetype_explorer: bool = False,
+    ae_years: tuple = None,
+    ae_switch_type: str = None,
 ) -> pd.DataFrame:
     """
     Calculate all cost metrics for each technology switch for use in the technology ranking.
@@ -95,7 +99,9 @@ def calculate_tech_transitions(
         df_lifetime ():
         df_capture_rate ():
         carbon_cost_trajectory ():
-        ae_export_import (): If true, import and export directories will be adjusted to the archetype explorer directory
+        archetype_explorer (): If true, LCOX calculation will be reduced to relevant data points for archetype explorer
+        ae_years (): years relevant for the archetype explorer
+        ae_switch_type (): switch type relevant for the archetype explorer
 
     Returns:
 
@@ -168,6 +174,10 @@ def calculate_tech_transitions(
                 df_capacity_factor=df_capacity_factor,
                 df_lifetime=df_lifetime,
                 investment_cycle=investment_cycle,
+                # archetype explorer
+                archetype_explorer=archetype_explorer,
+                ae_years=ae_years,
+                ae_switch_type=ae_switch_type,
             )
             for key in dict_lcox.keys():
                 dict_lcox[key] = dict_lcox[key][["lcox"]]
@@ -193,7 +203,6 @@ def calculate_tech_transitions(
         logger.critical("Warning: Negative LCOX values exist!")
 
     # add all outputs to dict
-    # todo: add missing dataframes
     dict_cost_metrics = {
         "switch_capex": df_switch_capex,
         "opex_fixed": df_opex_fixed,
@@ -700,6 +709,9 @@ def _get_lcox(
     df_capacity_factor: pd.DataFrame,
     df_lifetime: pd.DataFrame,
     investment_cycle: int = None,
+    archetype_explorer: bool = False,
+    ae_years: tuple = None,
+    ae_switch_type: str = None,
 ) -> dict:
     """Computes the LCOX values
     
@@ -829,12 +841,29 @@ def _get_lcox(
         )
 
         # compute LCOX
-        logger.info(f'Calculate LCOX for context "{key}"')
-        dict_capex_opex[key]["lcox"] = np.nan
-        dict_capex_opex[key].apply(
-            func=(lambda x: _compute_lcox(row=x, df=df_capex_opex_extended)),
-            axis=1,
-        )
+        if not archetype_explorer:
+            logger.info(f'Calculate LCOX for context "{key}"')
+            dict_capex_opex[key]["lcox"] = np.nan
+            dict_capex_opex[key].apply(
+                func=(lambda x: _compute_lcox(row=x, df=df_capex_opex_extended)),
+                axis=1,
+            )
+        else:
+            logger.info(f'Calculate LCOX for archetype explorer and context "{key}"')
+            dict_capex_opex[key]["lcox"] = np.nan
+            # filter years and switch types
+            idx_slice_year = dict_capex_opex[key].index.get_level_values("year").isin(ae_years)
+            dict_capex_opex[key] = dict_capex_opex[key].loc[idx_slice_year, :]
+            dict_capex_opex[key] = dict_capex_opex[key].xs(
+                key=ae_switch_type,
+                level="switch_type",
+                drop_level=False,
+            )
+            # calculate LCOX
+            dict_capex_opex[key].apply(
+                func=(lambda x: _compute_lcox(row=x, df=df_capex_opex_extended)),
+                axis=1,
+            )
 
     return dict_capex_opex
 
@@ -1180,7 +1209,8 @@ def _compute_lcox(row: pd.Series, df: pd.DataFrame) -> pd.Series:
 
     Args:
         row ():
-        df ():
+        df (): dataframe with all inputs for LCOX calculation that also includes all required years needed to calculate
+            LCOX for the last model years
 
     Returns:
 

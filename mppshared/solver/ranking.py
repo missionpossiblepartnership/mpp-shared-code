@@ -155,7 +155,7 @@ def rank_technology_uncertainty_bins(
         ranking_config: weights for cost and emissions, keys are "cost" and "emissions"
         emission_scopes_ranking: use these emission scopes for the emission part of the ranking
         ghgs_ranking: use these GHGS for the emission part of the ranking
-        ranking_groups: this list defines the columns that will be grouped and get their own ranking
+        ranking_groups: this list defines the columns that the ranking will be grouped by
 
     Returns:
         pd.DataFrame: table with technology switches where minimum value in column "rank" corresponds to highest ranked

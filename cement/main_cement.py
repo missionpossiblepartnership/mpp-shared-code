@@ -86,9 +86,9 @@ def main():
 
     # create list of all runs
     runs = []
-    for pathway, sensitivities in PATHWAYS_SENSITIVITIES.items():
+    for pathway_name, sensitivities in PATHWAYS_SENSITIVITIES.items():
         for sensitivity in sensitivities:
-            runs.append((pathway, sensitivity))
+            runs.append((pathway_name, sensitivity))
 
     # run
     if RUN_PARALLEL:
@@ -98,7 +98,7 @@ def main():
 
     # aggregate outputs of all runs if more than one pathway is modelled
     if len(runs) > 1:
-        if pathway != "archetype":
+        if pathway_name != "archetype":
             aggregate_outputs(runs=runs, sector=SECTOR)
         else:
             ae_aggregate_outputs(runs=runs, sector=SECTOR)

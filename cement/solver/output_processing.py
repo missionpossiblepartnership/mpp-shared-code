@@ -184,6 +184,60 @@ def aggregate_outputs(
             pathway_name=pathway_name,
             sensitivity=sensitivity,
         )
+        # get headline emissions for web interface
+        idx = ["scenario", "sector", "product", "region", "technology", "parameter_group", "parameter", "unit"]
+        df_emissions_headline_excl_recarb_formatted = (
+            df_emission_abatement_formatted
+            .copy()
+            .loc[df_emission_abatement_formatted["technology"].isin(
+                ["Unabated Scope 1 emissions", "Unabated Scope 2 emissions", "Recarbonation"]
+            ), :]
+            .melt(
+                id_vars=idx,
+                value_vars=list(MODEL_YEARS),
+            )
+            .set_index(idx)
+            .groupby([x for x in idx if x != "technology"] + ["year"]).sum()
+            .reset_index()
+            .pivot(
+                index=[x for x in idx if x != "technology"],
+                columns="year",
+                values="value",
+            )
+            .reset_index()
+        )
+        df_emissions_headline_excl_recarb_formatted["technology"] = "All"
+        df_emissions_headline_excl_recarb_formatted["parameter_group"] = "Headline emissions"
+        df_emissions_headline_excl_recarb_formatted["parameter"] = "Annual emissions excl. recarbonation"
+        df_emissions_headline_excl_recarb_formatted = df_emissions_headline_excl_recarb_formatted[
+            list(df_tech_roadmap_formatted.columns)
+        ]
+        df_emissions_headline_incl_recarb_formatted = (
+            df_emission_abatement_formatted
+            .copy()
+            .loc[df_emission_abatement_formatted["technology"].isin(
+                ["Unabated Scope 1 emissions", "Unabated Scope 2 emissions"]
+            ), :]
+            .melt(
+                id_vars=idx,
+                value_vars=list(MODEL_YEARS),
+            )
+            .set_index(idx)
+            .groupby([x for x in idx if x != "technology"] + ["year"]).sum()
+            .reset_index()
+            .pivot(
+                index=[x for x in idx if x != "technology"],
+                columns="year",
+                values="value",
+            )
+            .reset_index()
+        )
+        df_emissions_headline_incl_recarb_formatted["technology"] = "All"
+        df_emissions_headline_incl_recarb_formatted["parameter_group"] = "Headline emissions"
+        df_emissions_headline_incl_recarb_formatted["parameter"] = "Annual emissions incl. recarbonation"
+        df_emissions_headline_incl_recarb_formatted = df_emissions_headline_incl_recarb_formatted[
+            list(df_tech_roadmap_formatted.columns)
+        ]
 
         # LCOC
         logger.info("-- Weighted average LCOC")
@@ -353,6 +407,8 @@ def aggregate_outputs(
                 df_captured_carbon_formatted,
                 df_captured_emissions_excl_cc_process_formatted,
                 df_emission_abatement_formatted,
+                df_emissions_headline_incl_recarb_formatted,
+                df_emissions_headline_excl_recarb_formatted,
                 df_emission_intensity_formatted,
                 df_emission_intensity_cmtcnt_formatted,
                 df_biomass_captured_carbon_formatted,
@@ -979,7 +1035,7 @@ def _calculate_emission_reduction_levers(
         df_tech_roadmap=df_tech_roadmap,
     )
 
-    # get savings in clinker production (fuel switch and energy efficiency
+    # get savings in clinker production (fuel switch and energy efficiency)
     df_fuel_switch, df_energy_eff = _get_savings_in_clinker_production(
         importer=importer,
         df_tech_roadmap=df_tech_roadmap,
@@ -987,7 +1043,7 @@ def _calculate_emission_reduction_levers(
     df_fuel_switch.sort_index(inplace=True)
     df_energy_eff.sort_index(inplace=True)
 
-    # get emission reduction from Switching to alternative fuels and energy efficiency
+    # get emission reduction through CCU/S
     df_savings_captured_emissions = (
         df_unabated_s1_emissions_pre_clinker_levers.copy()
         - df_unabated_s1_emissions
@@ -1820,12 +1876,16 @@ def _export_greenfield_lcoc(
 """ Resource consumption """
 
 
-def _calculate_resource_consumption_gj(importer: IntermediateDataImporter, clinker_production_only: bool = False) -> pd.DataFrame:
+def _calculate_resource_consumption_gj(
+    importer: IntermediateDataImporter,
+    clinker_production_only: bool = False
+) -> pd.DataFrame:
     """Calculate the consumption of all energy resources by year and region (incl. Global).
 
     Args:
         importer ():
-        clinker_production_only (): If True, function will only output energy consumption for heat energy (ignoring capture energy)
+        clinker_production_only (): If True, function will only output energy consumption for heat energy
+            (ignoring carbon capture heat as well as cement & concrete energy demand)
 
     Returns:
 
@@ -1925,6 +1985,21 @@ def _calculate_resource_consumption_gj(importer: IntermediateDataImporter, clink
         df_resource_consumption["parameter_group"] = "Energy from clinker production"
     else:
         df_resource_consumption["parameter_group"] = "Energy"
+        # add electricity demand from concrete mixing and cement grinding (from demand model)
+        df_cntcmt_elec = importer.get_outputs_demand_model()
+        df_cntcmt_elec = df_cntcmt_elec.loc[df_cntcmt_elec["technology"].isin(
+            ["Concrete electricity consumption", "Cement electricity consumption"]
+        )]
+        df_cntcmt_elec["product"] = np.nan
+        df_cntcmt_elec.loc[(df_cntcmt_elec["technology"] == "Concrete electricity consumption"), "product"] = "Concrete"
+        df_cntcmt_elec.loc[(df_cntcmt_elec["technology"] == "Cement electricity consumption"), "product"] = "Cement"
+        df_cntcmt_elec.drop(columns="technology", inplace=True)
+        df_cntcmt_elec["parameter"] = "Electricity"
+        df_cntcmt_elec["parameter_group"] = "Energy"
+        df_cntcmt_elec["unit"] = "GJ"
+        df_cntcmt_elec = df_cntcmt_elec[list(df_resource_consumption.columns)]
+        df_resource_consumption = pd.concat([df_resource_consumption, df_cntcmt_elec])
+
     df_resource_consumption["technology"] = "All"
 
     return df_resource_consumption.reset_index(drop=True)
