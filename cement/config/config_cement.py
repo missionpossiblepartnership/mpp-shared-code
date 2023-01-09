@@ -17,7 +17,7 @@ run_config = {
     "AE_IMPORT_DATA",
     "AE_CALCULATE_VARIABLES",
     "AE_APPLY_IMPLICIT_FORCING",
-}
+}   # comment lines to adjust run configuration
 RUN_PARALLEL = False
 LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
