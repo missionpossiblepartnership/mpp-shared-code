@@ -72,11 +72,6 @@ def apply_implicit_forcing(
             moratorium_year=TECHNOLOGY_MORATORIUM,
             transitional_period_years=TRANSITIONAL_PERIOD_YEARS,
         )
-    # Add technology classification
-    else:
-        df_technology_switches = add_technology_classification_to_switching_table(
-            df_technology_switches, df_technology_characteristics
-        )
 
     # Calculate emission deltas between origin and destination technology
     df_ranking = calculate_emission_reduction(
