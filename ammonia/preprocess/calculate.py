@@ -124,6 +124,7 @@ def calculate_variables(
 
     # Calculate TCO
     df_tco = calculate_tco_lcox(
+        sensitivity=sensitivity,
         df_switch_capex=df_switch_capex,
         df_cost=df_cost,
         df_wacc=input_data["wacc"],

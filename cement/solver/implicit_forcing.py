@@ -34,7 +34,7 @@ logger.setLevel(LOG_LEVEL)
 
 
 def apply_implicit_forcing(
-    pathway_name: str, sensitivity: str, sector: str, products: list
+    sector: str, products: list, pathway_name: str, sensitivity: str
 ):
     """Apply the implicit forcing mechanisms to the input tables.
 

@@ -208,7 +208,7 @@ def get_region_to_capex_mapping(
 
     # Initialize dictionary
     keys = set(df.columns) - {"Region", "Sector", "Product", "Shorthand"}
-    cost_map = {k: dict.fromkeys(["Low", "Standard", "High"], []) for k in keys}
+    cost_map: dict = {k: dict.fromkeys(["Low", "Standard", "High"], []) for k in keys}
 
     # Fill dictionary
     for technology in cost_map.keys():

@@ -35,7 +35,7 @@ logger.setLevel(LOG_LEVEL)
 
 
 def import_and_preprocess(
-    pathway_name: str, sensitivity: str, sector: str, products: list
+    sector: str, products: list, pathway_name: str, sensitivity: str
 ):
 
     importer = IntermediateDataImporter(
@@ -243,7 +243,7 @@ def _get_initial_asset_stack(
     importer: IntermediateDataImporter,
     product: list,
     constant_plant_capacity: bool = False,
-) -> pd.DataFrame():
+) -> pd.DataFrame:
     """
     Creates the initial_asset_stack dataframe
 

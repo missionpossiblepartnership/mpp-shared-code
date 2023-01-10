@@ -12,7 +12,7 @@ class CarbonCostTrajectory:
         final_carbon_cost: float,
         start_year: int,
         end_year: int,
-        model_years: range,
+        model_years: np.ndarray,
     ):
 
         # Initialize attributes

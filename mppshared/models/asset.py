@@ -290,8 +290,8 @@ class AssetStack:
     def aggregate_stack(
         self,
         aggregation_vars: list,
-        technology_classification: str = None,
-        product: str = None,
+        technology_classification: str | None = None,
+        product: str | None = None,
     ) -> pd.DataFrame:
         """
         Aggregate AssetStack according to product, technology or region, and show annual production capacity, annual
@@ -387,10 +387,10 @@ class AssetStack:
         self,
         year: int,
         df_emissions: pd.DataFrame,
-        technology_classification: str = None,
-        product: str = None,
-        region: str = None,
-        usage_storage: str = None,
+        technology_classification: str | None = None,
+        product: str | None = None,
+        region: str | None = None,
+        usage_storage: str | None = None,
     ) -> float:
         """Calculate the CO2 captured by the stack in a given year.
 

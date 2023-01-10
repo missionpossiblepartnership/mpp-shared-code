@@ -57,8 +57,8 @@ def select_asset_for_greenfield(
     year: int,
     annual_production_capacity: float,
     cuf: float,
-    df_region_demand: pd.DataFrame = None,
-    region_global_demand_share: float = None,
+    df_region_demand: pd.DataFrame | None = None,
+    region_global_demand_share: float | None = None,
     return_df_rank: bool = False,
     constraints_regional_check: bool = False,
 ):

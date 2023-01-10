@@ -34,7 +34,7 @@ class SimulationPathway:
         products: list,
         rank_types: list,
         initial_asset_data_level: str,
-        assumed_annual_production_capacity: dict,
+        assumed_annual_production_capacity: dict | float,
         emission_scopes: list,
         cuf_lower_threshold: float,
         cuf_upper_threshold: float,
@@ -43,15 +43,15 @@ class SimulationPathway:
         annual_renovation_share: float,
         regional_production_shares: dict,
         constraints_to_apply: list[str],
-        year_2050_emissions_constraint: int = np.nan,
-        technology_rampup: dict = None,
-        carbon_budget: CarbonBudget = None,
+        year_2050_emissions_constraint: int | float = np.nan,
+        technology_rampup: dict | None = None,
+        carbon_budget: CarbonBudget | None = None,
         set_co2_storage_constraint: bool = False,
-        co2_storage_constraint_type: str = None,
+        co2_storage_constraint_type: str | None = None,
         set_biomass_constraint: bool = False,
-        carbon_cost_trajectory: CarbonCostTrajectory = None,
-        technologies_maximum_global_demand_share: list = None,
-        maximum_global_demand_share: dict = None,
+        carbon_cost_trajectory: CarbonCostTrajectory | None = None,
+        technologies_maximum_global_demand_share: list | None = None,
+        maximum_global_demand_share: dict | None = None,
     ):
         # Attributes describing the pathway
         self.start_year = start_year
@@ -188,7 +188,7 @@ class SimulationPathway:
         df = self.get_stack(year).export_stack_to_df()
         self.importer.export_data(df, f"stack_{year}.csv", "stack_tracker", index=False)
 
-    def output_technology_roadmap(self, technology_layout: dict = None):
+    def output_technology_roadmap(self, technology_layout: dict | None = None):
         logger.debug("Creating technology roadmap")
         df_roadmap = self.create_technology_roadmap()
         logger.debug("Exporting technology roadmap")
@@ -224,7 +224,7 @@ class SimulationPathway:
         return df_roadmap
 
     def plot_technology_roadmap(
-        self, df_roadmap: pd.DataFrame, technology_layout: dict = None
+        self, df_roadmap: pd.DataFrame, technology_layout: dict | None = None
     ):
         """Plot the technology roadmap and save as .html"""
 
@@ -585,7 +585,7 @@ class SimulationPathway:
         }
 
     def _get_weighted_average(
-        self, df, vars, product, year, methanol_type: str = None, emissions=True
+        self, df, vars, product, year, methanol_type: str | None = None, emissions=True
     ):
         """Calculate the weighted average of variables over regions/technologies"""
         df_assets = flatten_columns(self.stacks[year].aggregate_stack(product=product))
@@ -609,7 +609,7 @@ class SimulationPathway:
         )
 
     def get_average_emissions(
-        self, product: str, year: int, methanol_type: str = None
+        self, product: str, year: int, methanol_type: str | None = None
     ) -> int:
         """
         Calculate emissions of a product, based on the assets that produce it in a year
@@ -629,7 +629,7 @@ class SimulationPathway:
         )
 
     def get_average_levelized_cost(
-        self, product: str, year: int, methanol_type: str = None
+        self, product: str, year: int, methanol_type: str | None = None
     ) -> int:
         """
         Calculate levelized cost of a product, based on the assets that produce it in a year

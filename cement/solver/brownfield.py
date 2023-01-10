@@ -90,10 +90,6 @@ def _enact_brownfield_transition(
     # asset stack is changed by the brownfield transitions
     stack = pathway.get_stack(year=year)
 
-    # Get the emissions, used for the LC scenario
-    emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year)
-    # unit emissions_limit: [Gt CO2]
-
     # Track number of assets that undergo transition
     n_assets_transitioned = 0
     n_assets_transitioned_incl_same_tech = 0
@@ -109,7 +105,7 @@ def _enact_brownfield_transition(
 
         # Find the best transition and assets candidates, that can undergo this transition. If there are no assets that
         #   can undergo the best transition, go for the next best transition
-        candidates_best_transition = []
+        candidates_best_transition: list = []
         while len(candidates_best_transition) == 0:
             # If no more transitions available, break and return pathway
             if df_rank.empty:
@@ -118,7 +114,7 @@ def _enact_brownfield_transition(
 
             # If LC pathway, check carbon budget and exit if brownfield transitions already fulfil the constraint (this
             #   minimises the investment by reducing the number of switches)
-            if pathway.pathway_name == "lc":
+            if pathway.pathway_name == "lc" and pathway.carbon_budget is not None:
                 dict_stack_emissions = stack.calculate_emissions_stack(
                     year=year,
                     df_emissions=pathway.emissions,
@@ -129,6 +125,9 @@ def _enact_brownfield_transition(
                     dict_stack_emissions["co2_scope1"]
                     + dict_stack_emissions["co2_scope2"]
                 ) / 1e3  # Gt CO2
+                # Get emission limit
+                emissions_limit = pathway.carbon_budget.get_annual_emissions_limit(year)
+                # unit emissions_limit: [Gt CO2]
                 if np.round(co2_scope1_2, 2) <= np.round(emissions_limit, 2):
                     logger.debug(
                         f"Emissions lower than budget: {np.round(co2_scope1_2,2)} <= {np.round(emissions_limit,2)}. "
@@ -140,7 +139,6 @@ def _enact_brownfield_transition(
             best_transition = select_best_transition(df_rank)
             candidates_best_transition = list(
                 filter(
-                    # todo: add filter for OPEX context
                     lambda asset: (
                         asset.technology == best_transition["technology_origin"]
                     )

@@ -436,7 +436,7 @@ def aggregate_outputs(
     df_aggregated_outputs.to_csv(export_path, index=False)
 
 
-def calculate_outputs(pathway_name: str, sensitivity: str, sector: str, products: list):
+def calculate_outputs(sector: str, products: list, pathway_name: str, sensitivity: str):
 
     importer = IntermediateDataImporter(
         pathway_name=pathway_name,
@@ -941,7 +941,7 @@ def _calculate_emission_reduction_levers(
     importer: IntermediateDataImporter,
     df_tech_roadmap: pd.DataFrame,
     df_emissions: pd.DataFrame,
-    df_emission_intensity: pd.DataFrame()
+    df_emission_intensity: pd.DataFrame,
 ) -> pd.DataFrame:
     """Calculates the levers
             - "Savings through CCU/S"
@@ -2095,9 +2095,9 @@ def _format_output_data(
     df: pd.DataFrame,
     pathway_name: str,
     sensitivity: str,
-    parameter_group: str = None,
-    parameter: str = None,
-    unit: str = None,
+    parameter_group: str | None = None,
+    parameter: str | None = None,
+    unit: str | None = None,
 ) -> pd.DataFrame:
     """
     Format output data
@@ -2179,14 +2179,14 @@ def _get_emission_factor_pre_capture(
         co2_scope1 = value_if_none
     elif MAP_EMISSION_FACTOR_PRE_CAPTURE[row.loc["technology"]] == "process_only":
         # set to process emissions
-        co2_scope1 = importer.get_imported_input_data(
+        df_process_emissions = importer.get_imported_input_data(
             input_metrics={"Shared inputs - Emissivity": ["emissivity_co2"]}
         )["emissivity_co2"]
-        co2_scope1 = co2_scope1.loc[
+        co2_scope1 = df_process_emissions.loc[
             (
-                (co2_scope1["region"] == row.loc["region"])
-                & (co2_scope1["year"] == row.loc["year"])
-                & (co2_scope1["metric"] == "Calcination process emissions")
+                (df_process_emissions["region"] == row.loc["region"])
+                & (df_process_emissions["year"] == row.loc["year"])
+                & (df_process_emissions["metric"] == "Calcination process emissions")
             ), "value"
         ].squeeze()
     else:

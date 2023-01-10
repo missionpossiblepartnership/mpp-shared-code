@@ -56,7 +56,7 @@ def remove_transition(df_rank: pd.DataFrame, transition: dict) -> pd.DataFrame:
 
 
 def remove_all_transitions_with_destination_technology(
-    df_rank: pd.DataFrame, technology_destination: str, region: str = None
+    df_rank: pd.DataFrame, technology_destination: str, region: str | None = None
 ) -> pd.DataFrame:
     """Remove all transitions with a specific destination technology from the ranking table (except for switches with
         equal origin and destination tech).
@@ -341,7 +341,7 @@ def create_dict_technology_rampup(
     maximum_asset_additions: int,
     maximum_capacity_growth_rate: float,
     years_rampup_phase: int,
-    ramp_up_tech_classifications: list = None,
+    ramp_up_tech_classifications: list | None = None,
     curve_type: str = "exponential",
 ) -> dict:
     """Create dictionary of TechnologyRampup objects with the technologies in that sector as keys. Set None if the

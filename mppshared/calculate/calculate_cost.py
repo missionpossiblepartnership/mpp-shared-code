@@ -48,7 +48,7 @@ def calculate_npv_costs(df_cost: pd.DataFrame) -> pd.DataFrame:
 
 
 def net_present_value(
-    df: pd.DataFrame, rate: float, cols: list[str] = None
+    df: pd.DataFrame, rate: float, cols: list[str] | None = None
 ) -> pd.Series:
     """Calculate net present value (NPV) of multiple dataframe columns at once.
 

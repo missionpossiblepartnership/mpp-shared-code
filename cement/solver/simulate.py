@@ -152,16 +152,16 @@ def _check_all_constraints(pathway: SimulationPathway, year: int, transition_typ
         logger.critical(f"{year}: Not all constraints fulfilled for {transition_type}")
 
 
-def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products: list):
+def simulate_pathway(sector: str, products: list, pathway_name: str, sensitivity: str):
     """
     Get data per technology, ranking data and then run the pathway simulation
     """
 
     importer = IntermediateDataImporter(
-        pathway_name=pathway_name,
-        sensitivity=sensitivity,
         sector=sector,
         products=products,
+        pathway_name=pathway_name,
+        sensitivity=sensitivity,
     )
 
     # copy config file to output folder
@@ -187,13 +187,13 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str, products:
         model_end_year=END_YEAR,
         maximum_asset_additions=TECHNOLOGY_RAMP_UP_CONSTRAINT[pathway_name][
             "init_maximum_asset_additions"
-        ],
+        ],  # type: ignore
         maximum_capacity_growth_rate=TECHNOLOGY_RAMP_UP_CONSTRAINT[pathway_name][
             "maximum_asset_growth_rate"
-        ],
+        ],  # type: ignore
         years_rampup_phase=TECHNOLOGY_RAMP_UP_CONSTRAINT[pathway_name][
             "years_rampup_phase"
-        ],
+        ],  # type: ignore
         ramp_up_tech_classifications=RAMP_UP_TECH_CLASSIFICATIONS,
         curve_type=TECHNOLOGY_RAMP_UP_CURVE_TYPE[pathway_name],
     )

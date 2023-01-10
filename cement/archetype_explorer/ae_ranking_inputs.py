@@ -124,15 +124,15 @@ def ae_get_ranking_inputs(
     # calculate carbon cost
     if AE_CARBON_COST[sensitivity_params["carbon_cost"]] is not None:
         carbon_cost_trajectory = CarbonCostTrajectory(
-            trajectory=AE_CARBON_COST[sensitivity_params["carbon_cost"]]["trajectory"],
+            trajectory=AE_CARBON_COST[sensitivity_params["carbon_cost"]]["trajectory"],     # type: ignore
             initial_carbon_cost=AE_CARBON_COST[sensitivity_params["carbon_cost"]][
                 "initial_carbon_cost"
-            ],
+            ],  # type: ignore
             final_carbon_cost=AE_CARBON_COST[sensitivity_params["carbon_cost"]][
                 "final_carbon_cost"
-            ],
-            start_year=AE_CARBON_COST[sensitivity_params["carbon_cost"]]["start_year"],
-            end_year=AE_CARBON_COST[sensitivity_params["carbon_cost"]]["end_year"],
+            ],  # type: ignore
+            start_year=AE_CARBON_COST[sensitivity_params["carbon_cost"]]["start_year"],     # type: ignore
+            end_year=AE_CARBON_COST[sensitivity_params["carbon_cost"]]["end_year"],     # type: ignore
             model_years=MODEL_YEARS,
         )
     else:

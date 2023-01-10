@@ -51,11 +51,11 @@ def calculate_tech_transitions(
     df_capacity_factor: pd.DataFrame,
     df_lifetime: pd.DataFrame,
     df_capture_rate: pd.DataFrame,
-    carbon_cost_trajectory: CarbonCostTrajectory,
+    carbon_cost_trajectory: CarbonCostTrajectory | None,
     # archetype explorer
     archetype_explorer: bool = False,
-    ae_years: tuple = None,
-    ae_switch_type: str = None,
+    ae_years: tuple | None = None,
+    ae_switch_type: str | None = None,
 ) -> pd.DataFrame:
     """
     Calculate all cost metrics for each technology switch for use in the technology ranking.
@@ -506,7 +506,7 @@ def _get_opex_variable(
     df_inputs_energy: pd.DataFrame,
     df_commodity_prices: pd.DataFrame,
     df_capture_rate: pd.DataFrame,
-    carbon_cost_trajectory: CarbonCostTrajectory,
+    carbon_cost_trajectory: CarbonCostTrajectory | None,
     # parameters
     sector: str,
     list_technologies: list,
@@ -592,12 +592,12 @@ def _get_opex_variable(
     """CCU/S OPEX (considering the different contexts)"""
 
     # CCU/S: CC process cost (energy)
-    # get unique keys as list from opex_ccus_process_metrics
-    dict_ccus_process_cost = get_unique_list_values(
-        list(chain(*[list(x.keys()) for x in opex_ccus_process_metrics_energy]))
+    # get unique keys as list from opex_ccus_process_metrics and generate dict from the unique list
+    dict_ccus_process_cost = dict.fromkeys(
+        get_unique_list_values(
+            list(chain(*[list(x.keys()) for x in opex_ccus_process_metrics_energy]))
+        )
     )
-    # generate dict from the unique list
-    dict_ccus_process_cost = dict.fromkeys(dict_ccus_process_cost)
     # fill dict with respective dataframes
     dict_ccus_process_cost["inputs_energy"] = df_inputs_energy
     dict_ccus_process_cost["commodity_prices"] = df_commodity_prices
@@ -708,10 +708,10 @@ def _get_lcox(
     df_wacc: pd.DataFrame,
     df_capacity_factor: pd.DataFrame,
     df_lifetime: pd.DataFrame,
-    investment_cycle: int = None,
+    investment_cycle: int | None = None,
     archetype_explorer: bool = False,
-    ae_years: tuple = None,
-    ae_switch_type: str = None,
+    ae_years: tuple | None = None,
+    ae_switch_type: str | None = None,
 ) -> dict:
     """Computes the LCOX values
     
@@ -843,14 +843,14 @@ def _get_lcox(
         # compute LCOX
         if not archetype_explorer:
             logger.info(f'Calculate LCOX for context "{key}"')
-            dict_capex_opex[key]["lcox"] = np.nan
+            dict_capex_opex[key]["lcox"] = np.nan   # type: ignore
             dict_capex_opex[key].apply(
                 func=(lambda x: _compute_lcox(row=x, df=df_capex_opex_extended)),
                 axis=1,
             )
         else:
             logger.info(f'Calculate LCOX for archetype explorer and context "{key}"')
-            dict_capex_opex[key]["lcox"] = np.nan
+            dict_capex_opex[key]["lcox"] = np.nan   # type: ignore
             # filter years and switch types
             idx_slice_year = dict_capex_opex[key].index.get_level_values("year").isin(ae_years)
             dict_capex_opex[key] = dict_capex_opex[key].loc[idx_slice_year, :]

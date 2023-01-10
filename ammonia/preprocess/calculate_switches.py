@@ -1,5 +1,5 @@
 """ Calculate the possible switches for each technology. """
-from typing import Any, Optional, Sequence
+from typing import Any, Sequence
 from xmlrpc.client import Boolean
 
 import pandas as pd
@@ -149,7 +149,7 @@ def create_list_from_comma_separated_entry(entry: str) -> Sequence[Any]:
     return list(entry.split(",")) if "," in entry else entry
 
 
-def get_switch_capex(series: pd.Series, df_capex: pd.DataFrame) -> Optional[float]:
+def get_switch_capex(series: pd.Series, df_capex: pd.DataFrame) -> float | None:
     """Get the right switch CAPEX based on product, technology_origin, technology_destination, year, region and type"""
 
     # Assume that decommission CAPEX is always zero

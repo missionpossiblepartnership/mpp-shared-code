@@ -92,12 +92,12 @@ def calculate_emissions(
     # unit df_scope_1_energy_nonccus: [t CO2 / t Clk]
 
     # energy emissions (CCU/S process)
-    # get unique keys as list from emissivity_ccus_process_metrics_energy
-    dict_ccus_process_emissions = get_unique_list_values(
-        list(chain(*[list(x.keys()) for x in emissivity_ccus_process_metrics_energy]))
+    # get unique keys as list from emissivity_ccus_process_metrics_energy and generate dict from the unique list
+    dict_ccus_process_emissions = dict.fromkeys(
+        get_unique_list_values(
+            list(chain(*[list(x.keys()) for x in emissivity_ccus_process_metrics_energy]))
+        )
     )
-    # generate dict from the unique list
-    dict_ccus_process_emissions = dict.fromkeys(dict_ccus_process_emissions)
     # fill dict with respective dataframes
     dict_ccus_process_emissions["inputs_energy"] = df_inputs_energy
     dict_ccus_process_emissions["emissivity"] = df_scope_1_energy
@@ -301,7 +301,7 @@ def _filter_emissivity_data_by_scope(
     dict_emissivity: dict,
     scope: str,
     idx_emissivity,
-) -> pd.DataFrame():
+) -> pd.DataFrame:
     """
 
     Args:

@@ -20,7 +20,7 @@ class IntermediateDataImporter:
         sector: str,
         products: list,
         carbon_cost_trajectory=None,
-        business_case_excel_filename: str = None,
+        business_case_excel_filename: str | None = None,
     ):
         """
 
@@ -144,7 +144,7 @@ class IntermediateDataImporter:
         self,
         input_metrics: dict,
         index: bool = False,
-        idx_per_input_metric: dict = None,
+        idx_per_input_metric: dict | None = None,
     ):
         """imports all files that are declared as metrics in INPUT_METRICS"""
         imported_input_data = {}
@@ -317,8 +317,8 @@ class IntermediateDataImporter:
 
     def get_pathway_investments(
         self,
-        pathway_name: str = None,
-        sensitivity: str = None,
+        pathway_name: str | None = None,
+        sensitivity: str | None = None,
     ):
         if pathway_name is None and sensitivity is None:
             return pd.read_csv(

@@ -46,7 +46,7 @@ logger.setLevel(LOG_LEVEL)
 
 
 def get_ranking_inputs(
-    pathway_name: str, sensitivity: str, sector: str, products: list
+    sector: str, products: list, pathway_name: str, sensitivity: str
 ):
     """Create the input files for the ranking for the three types of technology switches"""
 
@@ -69,8 +69,8 @@ def get_ranking_inputs(
     if sensitivity in POWER_PRICE_SENSITIVITIES.keys():
         # apply power price adjustments
         imported_input_data["commodity_prices"] = _apply_power_price_adjustments(
-            sensitivity_metrics=POWER_PRICE_SENSITIVITIES[sensitivity][0],
-            sensitivity_percentage_change=POWER_PRICE_SENSITIVITIES[sensitivity][1],
+            sensitivity_metrics=POWER_PRICE_SENSITIVITIES[sensitivity][0],  # type: ignore
+            sensitivity_percentage_change=POWER_PRICE_SENSITIVITIES[sensitivity][1],    # type: ignore
             df_commodity_prices=imported_input_data["commodity_prices"],
         )
 
@@ -98,15 +98,15 @@ def get_ranking_inputs(
     # calculate carbon cost
     if pathway_name in PATHWAYS_WITH_CARBON_COST:
         carbon_cost_trajectory = CarbonCostTrajectory(
-            trajectory=CARBON_COST_SENSITIVITIES[sensitivity]["trajectory"],
+            trajectory=CARBON_COST_SENSITIVITIES[sensitivity]["trajectory"],    # type: ignore
             initial_carbon_cost=CARBON_COST_SENSITIVITIES[sensitivity][
                 "initial_carbon_cost"
-            ],
+            ],  # type: ignore
             final_carbon_cost=CARBON_COST_SENSITIVITIES[sensitivity][
                 "final_carbon_cost"
-            ],
-            start_year=CARBON_COST_SENSITIVITIES[sensitivity]["start_year"],
-            end_year=CARBON_COST_SENSITIVITIES[sensitivity]["end_year"],
+            ],  # type: ignore
+            start_year=CARBON_COST_SENSITIVITIES[sensitivity]["start_year"],    # type: ignore
+            end_year=CARBON_COST_SENSITIVITIES[sensitivity]["end_year"],    # type: ignore
             model_years=MODEL_YEARS,
         )
     else:
