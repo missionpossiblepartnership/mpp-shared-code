@@ -138,7 +138,7 @@ def simulate_pathway(sector: str, pathway_name: str, sensitivity: str):
         products=PRODUCTS,
         rank_types=RANK_TYPES,
         initial_asset_data_level=INITIAL_ASSET_DATA_LEVEL,
-        assumed_annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY, # type: ignore
+        assumed_annual_production_capacity=ASSUMED_ANNUAL_PRODUCTION_CAPACITY,  # type: ignore
         technology_rampup=dict_technology_rampup,
         carbon_budget=carbon_budget,
         emission_scopes=EMISSION_SCOPES,

@@ -1,10 +1,10 @@
 """Execute the MPP Ammonia model."""
 
 # Import external libraries
-import distutils
 import itertools
 import multiprocessing as mp
 import os
+import shutil
 
 # Imports from sector-specific code
 from ammonia.config_ammonia import (
@@ -74,14 +74,12 @@ def run_model_sequential(runs):
                 carbon_cost.df_carbon_cost["year"] == END_YEAR, "carbon_cost"
             ].item()
             for folder in ["final", "intermediate", "ranking", "stack_tracker"]:
-                final_folder = (
-                    f"{SECTOR}/data/{pathway}/{sensitivity}/carbon_cost_{int(cc)}/{folder}"
-                )
+                final_folder = f"{SECTOR}/data/{pathway}/{sensitivity}/carbon_cost_{int(cc)}/{folder}"
                 if not os.path.exists(final_folder):
                     os.makedirs(final_folder)
                 if folder == "intermediate":
                     source_dir = f"{SECTOR}/data/{pathway}/{sensitivity}/{folder}"
-                    distutils.dir_util.copy_tree(source_dir, final_folder)
+                    shutil.copytree(source_dir, final_folder, dirs_exist_ok=True)
         _run_model(pathway=pathway, sensitivity=sensitivity, carbon_cost=carbon_cost)
 
 
@@ -105,7 +103,7 @@ def run_model_parallel(runs):
                     os.makedirs(final_folder)
                 if folder == "intermediate":
                     source_dir = f"{SECTOR}/data/{pathway}/{sensitivity}/{folder}"
-                    distutils.dir_util.copy_tree(source_dir, final_folder)
+                    shutil.copytree(source_dir, final_folder, dirs_exist_ok=True)
         pool.apply_async(_run_model, args=(pathway, sensitivity, carbon_cost))
     pool.close()
     pool.join()

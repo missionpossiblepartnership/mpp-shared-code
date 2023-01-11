@@ -1,20 +1,32 @@
 """Calculate technology switch-specific data for archetype explorer"""
 
+from cement.archetype_explorer.ae_config import (
+    AE_CARBON_COST,
+    AE_COMPUTE_LCOX,
+    AE_SENSITIVITY_MAPPING,
+    AE_YEARS,
+    AF_PRICE,
+    CAPEX,
+    CAPTURE_RATE,
+    ELEC_PRICE,
+    FOSSIL_PRICE,
+)
 from cement.config.config_cement import (
-    CARBON_COST_SCOPES,
-    COST_CLASSIFICATIONS,
     ALL_TECHNOLOGIES,
+    CARBON_COST_SCOPES,
+    CCUS_CONTEXT,
+    COST_CLASSIFICATIONS,
+    INVESTMENT_CYCLE,
     MODEL_YEARS,
     REGIONS,
     TRANSITION_TYPES,
-    INVESTMENT_CYCLE,
-    CCUS_CONTEXT,
 )
 from cement.config.dataframe_config_cement import (
     DF_DATATYPES_PER_COLUMN,
     IDX_PER_INPUT_METRIC,
 )
 from cement.config.import_config_cement import (
+    EMISSIVITY_CCUS_PROCESS_METRICS_ENERGY,
     EXCEL_COLUMN_RANGES,
     HEADER_BUSINESS_CASE_EXCEL,
     INPUT_METRICS,
@@ -25,7 +37,6 @@ from cement.config.import_config_cement import (
     OPEX_CCUS_EMISSIVITY_METRICS,
     OPEX_CCUS_PROCESS_METRICS_ENERGY,
     OPEX_ENERGY_METRICS,
-    EMISSIVITY_CCUS_PROCESS_METRICS_ENERGY,
 )
 from cement.preprocess.import_data import get_tech_switches
 from cement.preprocess.preprocess_emissions import calculate_emissions
@@ -35,18 +46,6 @@ from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.utility.log_utility import get_logger
-
-from cement.archetype_explorer.ae_config import (
-    AE_CARBON_COST,
-    AE_SENSITIVITY_MAPPING,
-    AE_COMPUTE_LCOX,
-    ELEC_PRICE,
-    FOSSIL_PRICE,
-    AF_PRICE,
-    CAPEX,
-    CAPTURE_RATE,
-    AE_YEARS,
-)
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -124,15 +123,15 @@ def ae_get_ranking_inputs(
     # calculate carbon cost
     if AE_CARBON_COST[sensitivity_params["carbon_cost"]] is not None:
         carbon_cost_trajectory = CarbonCostTrajectory(
-            trajectory=AE_CARBON_COST[sensitivity_params["carbon_cost"]]["trajectory"],
+            trajectory=AE_CARBON_COST[sensitivity_params["carbon_cost"]]["trajectory"],  # type: ignore
             initial_carbon_cost=AE_CARBON_COST[sensitivity_params["carbon_cost"]][
                 "initial_carbon_cost"
-            ],
+            ],  # type: ignore
             final_carbon_cost=AE_CARBON_COST[sensitivity_params["carbon_cost"]][
                 "final_carbon_cost"
-            ],
-            start_year=AE_CARBON_COST[sensitivity_params["carbon_cost"]]["start_year"],
-            end_year=AE_CARBON_COST[sensitivity_params["carbon_cost"]]["end_year"],
+            ],  # type: ignore
+            start_year=AE_CARBON_COST[sensitivity_params["carbon_cost"]]["start_year"],  # type: ignore
+            end_year=AE_CARBON_COST[sensitivity_params["carbon_cost"]]["end_year"],  # type: ignore
             model_years=MODEL_YEARS,
         )
     else:
@@ -209,8 +208,7 @@ def ae_get_ranking_inputs(
 
 
 def _apply_parameter_adjustments(
-    sensitivity_params: dict,
-    imported_input_data: dict
+    sensitivity_params: dict, imported_input_data: dict
 ) -> dict:
     """
     Adjusts the imported input data according to the following contextual parameters in ae_config.py:
@@ -232,7 +230,7 @@ def _apply_parameter_adjustments(
     df = imported_input_data["commodity_prices"].copy()
 
     idx_elec = df.index.get_level_values("metric").str.contains("Electricity")
-    df.loc[idx_elec, :] *= (1 + ELEC_PRICE[sensitivity_params["elec_price"]])
+    df.loc[idx_elec, :] *= 1 + ELEC_PRICE[sensitivity_params["elec_price"]]
 
     imported_input_data["commodity_prices"] = df.copy()
 
@@ -240,8 +238,10 @@ def _apply_parameter_adjustments(
 
     df = imported_input_data["commodity_prices"].copy()
 
-    idx_fossil = df.index.get_level_values("metric").str.contains("Coal|Natural gas", regex=True)
-    df.loc[idx_fossil, :] *= (1 + FOSSIL_PRICE[sensitivity_params["fossil_price"]])
+    idx_fossil = df.index.get_level_values("metric").str.contains(
+        "Coal|Natural gas", regex=True
+    )
+    df.loc[idx_fossil, :] *= 1 + FOSSIL_PRICE[sensitivity_params["fossil_price"]]
 
     imported_input_data["commodity_prices"] = df.copy()
 
@@ -249,14 +249,16 @@ def _apply_parameter_adjustments(
 
     df = imported_input_data["commodity_prices"].copy()
 
-    idx_af = df.index.get_level_values("metric").str.contains("Biomass|Hydrogen|Waste", regex=True)
-    df.loc[idx_af, :] *= (1 + AF_PRICE[sensitivity_params["af_price"]])
+    idx_af = df.index.get_level_values("metric").str.contains(
+        "Biomass|Hydrogen|Waste", regex=True
+    )
+    df.loc[idx_af, :] *= 1 + AF_PRICE[sensitivity_params["af_price"]]
 
     imported_input_data["commodity_prices"] = df.copy()
 
     # CAPEX #
 
-    imported_input_data["capex"] *= (1 + CAPEX[sensitivity_params["capex"]])
+    imported_input_data["capex"] *= 1 + CAPEX[sensitivity_params["capex"]]
 
     # Capture rate #
 

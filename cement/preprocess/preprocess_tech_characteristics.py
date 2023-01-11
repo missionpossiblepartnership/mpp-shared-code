@@ -1,7 +1,6 @@
 """Compiles the technology characteristics required for technology ranking"""
 
 import pandas as pd
-
 from mppshared.config import IDX_TECH_CHARACTERISTICS, LOG_LEVEL, TECH_CLASSIFICATIONS
 from mppshared.utility.log_utility import get_logger
 

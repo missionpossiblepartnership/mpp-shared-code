@@ -2,7 +2,6 @@
 
 import numpy as np
 import pandas as pd
-
 from mppshared.calculate.calculate_cost import discount_costs
 from mppshared.utility.dataframe_utility import add_column_header_suffix
 from mppshared.utility.log_utility import get_logger
@@ -408,7 +407,10 @@ def apply_technology_moratorium(
             & (df_technology_switches["technology_classification"] == "initial")
             & ~(
                 (df_technology_switches["switch_type"] == "brownfield_renovation")
-                & (df_technology_switches["technology_origin"] == df_technology_switches["technology_destination"])
+                & (
+                    df_technology_switches["technology_origin"]
+                    == df_technology_switches["technology_destination"]
+                )
             )
             & (df_technology_switches["switch_type"] != "decommission")
         )
@@ -423,17 +425,26 @@ def apply_technology_moratorium(
     # Drop technology transitions for 'transition' technologies after moratorium year + x years
     if allow_stay_same:
         banned_transitions = (
-            (df_technology_switches["year"] >= moratorium_year + transitional_period_years)
+            (
+                df_technology_switches["year"]
+                >= moratorium_year + transitional_period_years
+            )
             & (df_technology_switches["technology_classification"] == "transition")
             & ~(
                 (df_technology_switches["switch_type"] == "brownfield_renovation")
-                & (df_technology_switches["technology_origin"] == df_technology_switches["technology_destination"])
+                & (
+                    df_technology_switches["technology_origin"]
+                    == df_technology_switches["technology_destination"]
+                )
             )
             & (df_technology_switches["switch_type"] != "decommission")
         )
     else:
         banned_transitions = (
-            (df_technology_switches["year"] >= moratorium_year + transitional_period_years)
+            (
+                df_technology_switches["year"]
+                >= moratorium_year + transitional_period_years
+            )
             & (df_technology_switches["technology_classification"] == "transition")
             & (df_technology_switches["switch_type"] != "decommission")
         )

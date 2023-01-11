@@ -1,8 +1,7 @@
 """ Process outputs to standardised output table."""
 
-import pandas as pd
 import numpy as np
-
+import pandas as pd
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.solver.debugging_outputs import create_table_asset_transition_sequences
@@ -343,7 +342,7 @@ def create_table_all_data_year(
         gwp="GWP-20",
         emission_scopes=emission_scopes,
         ghgs=ghgs,
-        agg_vars=["product", "region"]
+        agg_vars=["product", "region"],
     )
     df_emissions_intensity = _calculate_emissions_intensity(
         df_stack=df_stack,
@@ -356,7 +355,7 @@ def create_table_all_data_year(
         df_emissions=df_emissions,
         emission_scopes=emission_scopes,
         ghgs=ghgs,
-        agg_vars=["product", "region"]
+        agg_vars=["product", "region"],
     )
     df_co2_captured = _calculate_co2_captured(df_stack, df_emissions)
 
@@ -449,10 +448,7 @@ def _calculate_annual_investments(
 
         # Identify newly built assets
         df.loc[
-            (
-                df["greenfield_status"]
-                & df["previous_greenfield_status"].isna()
-            ),
+            (df["greenfield_status"] & df["previous_greenfield_status"].isna()),
             ["switch_type", "technology_origin"],
         ] = ["greenfield", "New-build"]
 
@@ -988,9 +984,7 @@ def calculate_outputs(
     importer.export_data(
         df_pivot, f"simulation_outputs_{suffix}.csv", "final", index=False
     )
-    df_pivot.to_csv(
-        f"{output_write_path}/simulation_outputs_{suffix}.csv", index=False
-    )
+    df_pivot.to_csv(f"{output_write_path}/simulation_outputs_{suffix}.csv", index=False)
 
     columns = [
         "sector",

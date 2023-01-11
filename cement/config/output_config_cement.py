@@ -43,7 +43,7 @@ TECHNOLOGY_LAYOUT = {
 RESOURCE_CONSUMPTION_METRICS = {
     "Biomass (including biomass from mixed fuels)": [
         "Biomass (including biomass from mixed fuels)",
-        "CC Biomass (including biomass from mixed fuels)"
+        "CC Biomass (including biomass from mixed fuels)",
     ],
     "Coal": ["Coal", "CC Coal"],
     "Electricity": [
@@ -56,7 +56,7 @@ RESOURCE_CONSUMPTION_METRICS = {
     "Natural gas": ["Natural gas", "CC Natural gas"],
     "Waste of fossil origin (including fossil fuel from mixed fuels)": [
         "Waste of fossil origin (including fossil fuel from mixed fuels)",
-        "CC Waste of fossil origin (including fossil fuel from mixed fuels)"
+        "CC Waste of fossil origin (including fossil fuel from mixed fuels)",
     ],
     "Alternative fuels": [
         "Biomass (including biomass from mixed fuels)",
@@ -64,7 +64,7 @@ RESOURCE_CONSUMPTION_METRICS = {
         "Waste of fossil origin (including fossil fuel from mixed fuels)",
         "CC Waste of fossil origin (including fossil fuel from mixed fuels)",
         "Hydrogen",
-        "CC Hydrogen"
+        "CC Hydrogen",
     ],
 }
 

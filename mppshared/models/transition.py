@@ -1,9 +1,8 @@
 """ Class to track technology transitions of assets."""
 
-from typing import Literal, Optional
+from typing import Literal
 
 import pandas as pd
-
 from mppshared.models.asset import Asset
 
 
@@ -17,8 +16,8 @@ class TransitionRegistry:
         transition_type: Literal[
             "decommission", "brownfield_renovation", "brownfield_newbuild", "greenfield"
         ],
-        origin: Optional[Asset] = None,
-        destination: Optional[Asset] = None,
+        origin: Asset | None = None,
+        destination: Asset | None = None,
     ):
         transition = {
             "year": year,

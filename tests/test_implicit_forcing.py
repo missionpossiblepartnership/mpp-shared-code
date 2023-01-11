@@ -1,5 +1,4 @@
 import pandas as pd
-
 from mppshared.solver.implicit_forcing import (
     add_technology_classification_to_switching_table,
     apply_technology_availability_constraint,

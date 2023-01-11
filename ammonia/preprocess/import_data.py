@@ -2,7 +2,6 @@
 
 import numpy as np
 import pandas as pd
-
 from ammonia.config_ammonia import *
 from ammonia.utility.utils import (
     explode_rows_for_all_products,

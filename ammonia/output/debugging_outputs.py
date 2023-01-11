@@ -4,10 +4,6 @@ from collections import defaultdict
 import numpy as np
 import pandas as pd
 import plotly.express as px
-from pandas import CategoricalDtype
-from plotly.offline import plot
-from plotly.subplots import make_subplots
-
 from ammonia.config_ammonia import (
     AMMONIA_PER_AMMONIUM_NITRATE,
     AMMONIA_PER_UREA,
@@ -20,6 +16,9 @@ from ammonia.config_ammonia import (
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.utility.log_utility import get_logger
+from pandas import CategoricalDtype
+from plotly.offline import plot
+from plotly.subplots import make_subplots
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)

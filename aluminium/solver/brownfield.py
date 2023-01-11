@@ -4,7 +4,6 @@ from copy import deepcopy
 from operator import methodcaller
 
 import numpy as np
-
 from aluminium.config_aluminium import LOG_LEVEL, SWITCH_TYPES_UPDATE_YEAR_COMMISSIONED
 from mppshared.agent_logic.agent_logic_functions import (
     remove_all_transitions_with_destination_technology,

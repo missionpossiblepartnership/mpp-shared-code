@@ -1,25 +1,25 @@
 """Create inputs for ranking of technology switches (cost metrics, emissions, and technology characteristics)."""
 import pandas as pd
-
 from cement.config.config_cement import (
+    ALL_TECHNOLOGIES,
     CARBON_COST_SCOPES,
     CARBON_COST_SENSITIVITIES,
+    CCUS_CONTEXT,
     COMPUTE_LCOX,
     COST_CLASSIFICATIONS,
-    ALL_TECHNOLOGIES,
+    INVESTMENT_CYCLE,
     MODEL_YEARS,
     PATHWAYS_WITH_CARBON_COST,
+    POWER_PRICE_SENSITIVITIES,
     REGIONS,
     TRANSITION_TYPES,
-    INVESTMENT_CYCLE,
-    CCUS_CONTEXT,
-    POWER_PRICE_SENSITIVITIES,
 )
 from cement.config.dataframe_config_cement import (
     DF_DATATYPES_PER_COLUMN,
     IDX_PER_INPUT_METRIC,
 )
 from cement.config.import_config_cement import (
+    EMISSIVITY_CCUS_PROCESS_METRICS_ENERGY,
     EXCEL_COLUMN_RANGES,
     HEADER_BUSINESS_CASE_EXCEL,
     INPUT_METRICS,
@@ -30,7 +30,6 @@ from cement.config.import_config_cement import (
     OPEX_CCUS_EMISSIVITY_METRICS,
     OPEX_CCUS_PROCESS_METRICS_ENERGY,
     OPEX_ENERGY_METRICS,
-    EMISSIVITY_CCUS_PROCESS_METRICS_ENERGY,
 )
 from cement.preprocess.import_data import get_tech_switches
 from cement.preprocess.preprocess_emissions import calculate_emissions
@@ -46,7 +45,7 @@ logger.setLevel(LOG_LEVEL)
 
 
 def get_ranking_inputs(
-    pathway_name: str, sensitivity: str, sector: str, products: list
+    sector: str, products: list, pathway_name: str, sensitivity: str
 ):
     """Create the input files for the ranking for the three types of technology switches"""
 
@@ -69,8 +68,8 @@ def get_ranking_inputs(
     if sensitivity in POWER_PRICE_SENSITIVITIES.keys():
         # apply power price adjustments
         imported_input_data["commodity_prices"] = _apply_power_price_adjustments(
-            sensitivity_metrics=POWER_PRICE_SENSITIVITIES[sensitivity][0],
-            sensitivity_percentage_change=POWER_PRICE_SENSITIVITIES[sensitivity][1],
+            sensitivity_metrics=POWER_PRICE_SENSITIVITIES[sensitivity][0],  # type: ignore
+            sensitivity_percentage_change=POWER_PRICE_SENSITIVITIES[sensitivity][1],  # type: ignore
             df_commodity_prices=imported_input_data["commodity_prices"],
         )
 
@@ -98,15 +97,15 @@ def get_ranking_inputs(
     # calculate carbon cost
     if pathway_name in PATHWAYS_WITH_CARBON_COST:
         carbon_cost_trajectory = CarbonCostTrajectory(
-            trajectory=CARBON_COST_SENSITIVITIES[sensitivity]["trajectory"],
+            trajectory=CARBON_COST_SENSITIVITIES[sensitivity]["trajectory"],  # type: ignore
             initial_carbon_cost=CARBON_COST_SENSITIVITIES[sensitivity][
                 "initial_carbon_cost"
-            ],
+            ],  # type: ignore
             final_carbon_cost=CARBON_COST_SENSITIVITIES[sensitivity][
                 "final_carbon_cost"
-            ],
-            start_year=CARBON_COST_SENSITIVITIES[sensitivity]["start_year"],
-            end_year=CARBON_COST_SENSITIVITIES[sensitivity]["end_year"],
+            ],  # type: ignore
+            start_year=CARBON_COST_SENSITIVITIES[sensitivity]["start_year"],  # type: ignore
+            end_year=CARBON_COST_SENSITIVITIES[sensitivity]["end_year"],  # type: ignore
             model_years=MODEL_YEARS,
         )
     else:
@@ -197,7 +196,9 @@ def _apply_power_price_adjustments(
 
     df = df_commodity_prices.copy()
 
-    idx = df.index.get_level_values("metric").str.contains(sensitivity_metrics, regex=True)
-    df.loc[idx, :] *= (1 + sensitivity_percentage_change)
+    idx = df.index.get_level_values("metric").str.contains(
+        sensitivity_metrics, regex=True
+    )
+    df.loc[idx, :] *= 1 + sensitivity_percentage_change
 
     return df

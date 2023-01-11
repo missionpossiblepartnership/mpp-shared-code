@@ -1,11 +1,13 @@
-pandas==1.5.2
-numpy==1.22.0
-openpyxl==3.0.9
-plotly==5.5.0
-kaleido==0.2.1
+pandas>=1.5.2
+numpy>=1.22.0
+openpyxl>=3.0.9
+plotly>=5.5.0
+kaleido>=0.2.1
 
 pandera>=0.11.0
 future>=0.18.2
 rich>=10.16.2
 coverage>=6.4
 pytest>=7.1.2
+mypy>=0.981
+openpyxl>=3.0.10

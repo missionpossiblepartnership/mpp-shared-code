@@ -1,7 +1,6 @@
 """Calculate cost and emission metrics for every technology switch"""
 
 import pandas as pd
-
 from ammonia.config_ammonia import INPUT_METRICS, LOG_LEVEL, PREPROCESS_DATA_PATH
 from ammonia.preprocess.calculate_cost import calculate_all_cost_components
 from ammonia.preprocess.calculate_emissions import calculate_emissions_aggregate
@@ -124,6 +123,7 @@ def calculate_variables(
 
     # Calculate TCO
     df_tco = calculate_tco_lcox(
+        sensitivity=sensitivity,
         df_switch_capex=df_switch_capex,
         df_cost=df_cost,
         df_wacc=input_data["wacc"],

@@ -1,6 +1,6 @@
 # MPP Shared Industry Solver
 
-This repository contains the MPP Shared Industry Solver and the Ammonia and Aluminium models. Both models were developed as part of the [Mission Possible Partnership](https://www.missionpossiblepartnership.org) (MPP). The MPP Shared Industry Solver is a Python package that can be used to build industry decarbonization models. The Ammonia and Aluminium models are built up from modules provided by the MPP Shared Industry Solver.
+This repository contains the MPP Shared Industry Solver for the Ammonia, Aluminium, and Cement & Concrete models. All models were developed as part of the [Mission Possible Partnership](https://www.missionpossiblepartnership.org) (MPP). The MPP Shared Industry Solver is a Python package that can be used to build industry decarbonization models. The Ammonia, Aluminium, and Cement & Concrete models are built up from modules provided by the MPP Shared Industry Solver.
 
 [Read the full documentation](https://mpp.gitbook.io/mpp-industry-documentation/)
 
@@ -33,17 +33,19 @@ The main files for the MPP shared solver are in the `mppshared` package. The `mp
   - `mppshared.solver.implicit_forcing`: Contains the different functions used to simulate the implicit forcing mechanisms in the available transitions, such as filtering out non logical transitions (end-state to initial technologies), add carbon costs to the ranking metric, apply technology moratoriums, etc.
   - `mppshared.solver.ranking` Contains the functions used to create the ranking tables to be used while deciding to which technology transition. Currently, the ranking can be calculated as an histogram, or by uncertainty bins.
 
-Using this modules it is possible to build simulations like the ones for Aluminium and Ammonia. Both of these sector use the building block provided in the `mppshared` library to build their models.
+Using these modules it is possible to build simulations like the ones for Ammonia, Aluminium, and Cement & Concrete. All of them use the building blocks provided in the `mppshared` library to compose their models.
 
 ### How to run the simulations
 
-The Aluminium and Ammonia code are stored in their own folders, it is possible to run either of them directly from `main.py`, the only configuration needed is to change the name of the sector in the `main.py` file. The code will run the simulation for the sector and save the results in the `{sector}/data/{pathway}/final` folder.
+The Ammonia, Aluminium, and Cement & Concrete code modules are stored in their own folders, it is possible to run either of them directly from `main.py`, the only configuration needed is to change the name of the sector in the `main.py` file. The code will run the simulation for the sector and save the results in the `{sector}/data/{pathway}/final` folder.
 
-Each sector has a `config_{sector}.py` file to store the different configurations available to the model, such as `START_YEAR`, END_YEAR` for the simulations, pathways to run, constraints to apply, and ranking configurations.
+Each sector has a `config_{sector}.py` file to store the different configurations available to the model, such as `START_YEAR`, `END_YEAR` for the simulations, pathways to run, constraints to apply, and ranking configurations.
 
-Each sector has their own `main_{sector}.py` file that controls the different steps of the simulation and calls the different functions to load the data, apply the implicit forcing mechanisms, make the ranking tables, run the simulation, and produce the results. This functions can be called from `main.py`, inside it a parameter with the name of the sector is called and depending of the sector it runs the specified simulation.
+Each sector has their own `main_{sector}.py` file that controls the different steps of the simulation and calls the different functions to load the data, apply the implicit forcing mechanisms, make the ranking tables, run the simulation, and produce the results. These functions can be selected and called from `main.py`, inside it a parameter with the name of the sector is called and depending on the sector it runs the specified simulation.
 
-The `solver` inside each of the sectors, contains the dedicated files to run the simulation, these files are built using the classes and methods from `mppshared`.
+The `solver` directories contains the dedicated files to run the simulation for each sector, these files can be built using the classes and methods from `mppshared`.
+
+Please note that when running the Cement & Concrete model, the underlying demand data is different to the data that has been used in the Sector Transition Strategy Report due to confidentiality. More specifically, the regional clinker demand data has been dummified, leaving the global sum unchanged.
 
 ## Useful resources
 
@@ -56,6 +58,7 @@ For any questions, please contact:
 
 + [MPP Aluminium](mailto:aluminium@missionpossiblepartnership.org)
 + [MPP Ammonia](mailto:chemicals@missionpossiblepartnership.org)
++ [MPP Cement & Concrete](mailto:concrete@missionpossiblepartnership.org)
 
 ### Contributors
 

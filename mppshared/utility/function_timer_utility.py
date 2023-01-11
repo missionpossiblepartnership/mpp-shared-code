@@ -1,7 +1,6 @@
 """Script to time key functions at runtime"""
 
 import time
-from typing import Union
 
 
 def format_times(start_t: float, end_t: float) -> str:
@@ -35,14 +34,14 @@ class TimeContainerClass:
         """
         self.time_container[func_name] = timings
 
-    def return_time_container(self, return_object: bool = False) -> Union[None, dict]:
+    def return_time_container(self, return_object: bool = False) -> dict | None:
         """Returns the contents of the timer dictionary container as a printed statement or object.
 
         Args:
             return_object (bool, optional): Flag to return the dictionary object. Defaults to False.
 
         Returns:
-            Union[None, dict]: Returns a printed statement to the console and optionally a dictionary object depending
+            dict | None: Returns a printed statement to the console and optionally a dictionary object depending
                 on the `return_object` flag.
         """
         time_container = self.time_container

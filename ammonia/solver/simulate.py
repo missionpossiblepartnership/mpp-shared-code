@@ -115,7 +115,6 @@ def simulate_pathway(
         ghgs=GHGS,
         regional_production_shares=REGIONAL_PRODUCTION_SHARES,
         constraints_to_apply=CONSTRAINTS_TO_APPLY[pathway_name],
-        year_2050_emissions_constraint=None,
         technology_rampup=None,
         carbon_budget=None,
         investment_cycle=INVESTMENT_CYCLE,

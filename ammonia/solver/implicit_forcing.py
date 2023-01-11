@@ -7,7 +7,6 @@ from timeit import default_timer as timer
 
 import numpy as np
 import pandas as pd
-
 from ammonia.config_ammonia import (
     EMISSION_SCOPES,
     GHGS,
@@ -27,7 +26,9 @@ from ammonia.config_ammonia import (
 from mppshared.calculate.calculate_cost import discount_costs
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
-from mppshared.solver.implicit_forcing import add_technology_classification_to_switching_table
+from mppshared.solver.implicit_forcing import (
+    add_technology_classification_to_switching_table,
+)
 from mppshared.utility.dataframe_utility import add_column_header_suffix
 from mppshared.utility.function_timer_utility import timer_func
 from mppshared.utility.log_utility import get_logger
@@ -392,7 +393,14 @@ def apply_technology_moratorium(
 
     # Add technology classification to each destination technology
     df_tech_char_destination = df_technology_characteristics[
-        ["product", "year", "region", "technology", "technology_classification", "technology_lifetime"]
+        [
+            "product",
+            "year",
+            "region",
+            "technology",
+            "technology_classification",
+            "technology_lifetime",
+        ]
     ].rename(
         {"technology": "technology_destination"},
         axis=1,

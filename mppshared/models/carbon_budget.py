@@ -3,12 +3,11 @@ import sys
 import numpy as np
 import pandas as pd
 import plotly.express as px
-from plotly.offline import plot
-from plotly.subplots import make_subplots
-
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.utils import get_logger
+from plotly.offline import plot
+from plotly.subplots import make_subplots
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)

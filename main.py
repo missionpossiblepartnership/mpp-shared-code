@@ -1,8 +1,8 @@
 """Main script for the MPP solver, to run a sector change the SECTOR parameter to the appropriate one."""
 
 # SECTOR = "aluminium"
-SECTOR = "ammonia"
-# SECTOR = "cement"
+# SECTOR = "ammonia"
+SECTOR = "cement"
 
 
 if SECTOR == "aluminium":
@@ -19,4 +19,3 @@ elif SECTOR == "cement":
     from cement.main_cement import main
 
     main()
-

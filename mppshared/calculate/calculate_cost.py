@@ -2,7 +2,6 @@
 
 import numpy as np
 import pandas as pd
-
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger("Cost calculations")
@@ -48,7 +47,7 @@ def calculate_npv_costs(df_cost: pd.DataFrame) -> pd.DataFrame:
 
 
 def net_present_value(
-    df: pd.DataFrame, rate: float, cols: list[str] = None
+    df: pd.DataFrame, rate: float, cols: list[str] | None = None
 ) -> pd.Series:
     """Calculate net present value (NPV) of multiple dataframe columns at once.
 

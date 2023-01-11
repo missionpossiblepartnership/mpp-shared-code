@@ -60,8 +60,7 @@ IDX_PER_INPUT_METRIC = {
     + ["technology_destination"]
     + standard_idx_suffix,
     # emissivity
-    "emissivity": standard_idx_prefix
-    + ["ghg"] + standard_idx_suffix,
+    "emissivity": standard_idx_prefix + ["ghg"] + standard_idx_suffix,
     "emissivity_co2": standard_idx_prefix
     + ["emissivity_type", "scope"]
     + standard_idx_suffix,

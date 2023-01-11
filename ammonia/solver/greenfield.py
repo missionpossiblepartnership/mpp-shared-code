@@ -1,6 +1,5 @@
 """ Logic for technology transitions of type greenfield (add new Asset to AssetStack."""
 import numpy as np
-
 from ammonia.config_ammonia import (
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY_MT,
     BUILD_CURRENT_PROJECT_PIPELINE,

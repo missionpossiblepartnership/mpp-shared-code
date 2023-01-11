@@ -1,8 +1,11 @@
-import pandas as pd
-import numpy as np
 from pathlib import Path
 
-from mppshared.solver.ranking import rank_technology_histogram, rank_technology_uncertainty_bins
+import numpy as np
+import pandas as pd
+from mppshared.solver.ranking import (
+    rank_technology_histogram,
+    rank_technology_uncertainty_bins,
+)
 
 
 def test_rank_technology_histogram_greenfield():
@@ -107,9 +110,7 @@ def _uncertainty_group_test(df_group: pd.DataFrame, cost_metric: str):
     df_group_min = df_group.groupby(by=["rank"], sort=True).min()
     df_group_max = df_group.groupby(by=["rank"], sort=True).max()
     check = np.where(
-        df_group_max[cost_metric].shift() <= df_group_min[cost_metric],
-        True,
-        False
+        df_group_max[cost_metric].shift() <= df_group_min[cost_metric], True, False
     )
     check = np.delete(check, 0)
     assert np.all(check)

@@ -12,7 +12,7 @@ class CarbonCostTrajectory:
         final_carbon_cost: float,
         start_year: int,
         end_year: int,
-        model_years: range,
+        model_years: np.ndarray,
     ):
 
         # Initialize attributes
@@ -56,7 +56,7 @@ class CarbonCostTrajectory:
             df_carbon_cost.loc[
                 df_carbon_cost["year"] >= start_year, "carbon_cost"
             ] = initial_carbon_cost
-          
+
         # Linear carbon cost
         elif trajectory == "linear":
             df_carbon_cost.loc[df_carbon_cost["year"] < start_year, "carbon_cost"] = 0

@@ -1,7 +1,6 @@
 """Utility library for functions used throughout the module"""
 
 import pandas as pd
-
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger("Utils")
@@ -23,7 +22,9 @@ def get_unique_list_values(nonunique_list: list) -> list:
 
 
 def extend_to_all_technologies(
-    df: pd.DataFrame, list_technologies: list, technology_column_name: str = "technology_destination"
+    df: pd.DataFrame,
+    list_technologies: list,
+    technology_column_name: str = "technology_destination",
 ) -> pd.DataFrame:
     """
     Adds all technologies to a dataframe without "technology_destination" column

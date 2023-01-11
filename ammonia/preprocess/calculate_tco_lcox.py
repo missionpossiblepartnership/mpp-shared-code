@@ -1,12 +1,10 @@
 """Calculate TCO and LCOX for every technology switch."""
 import math
-from typing import Optional
 from xmlrpc.client import Boolean
 
 import numpy as np
 import pandas as pd
-
-from ammonia.config_ammonia import COMMON_INDEX, COST_COMPONENTS, LOG_LEVEL, END_YEAR
+from ammonia.config_ammonia import COMMON_INDEX, COST_COMPONENTS, END_YEAR, LOG_LEVEL
 from ammonia.utility.utils import load_cost_data_from_csv, set_common_multi_index
 from mppshared.utility.utils import get_logger
 
@@ -142,7 +140,7 @@ def calculate_npv_costs(df_cost: pd.DataFrame) -> pd.DataFrame:
 
 
 def net_present_value(
-    df: pd.DataFrame, rate: float, cols: list[str] = None
+    df: pd.DataFrame, rate: float, cols: list[str] | None = None
 ) -> pd.Series:
     """Calculate net present value (NPV) of multiple dataframe columns at once.
 
@@ -160,10 +158,13 @@ def net_present_value(
     return df[cols].div(value_share, axis=0).sum()
 
 
-def discount_costs(df_cost: pd.DataFrame, from_csv: Boolean = False) -> pd.DataFrame:
+def discount_costs(
+    sensitivity: str, df_cost: pd.DataFrame, from_csv: Boolean = False
+) -> pd.DataFrame:
     """Calculate NPV of selected cost columns in the cost DataFrame and sum to NPV of variable OPEX.
 
     Args:
+        sensitivity:
         df_cost (pd.DataFrame): contains columns with cost data and "lifetime", "wacc", "capacity_factor"
         from_csv (Boolean, default False): read data from .csv instead of calculating it
 
@@ -171,7 +172,9 @@ def discount_costs(df_cost: pd.DataFrame, from_csv: Boolean = False) -> pd.DataF
         pd.DataFrame: columns with NPV of various cost components, NPV of variable OPEX before and after multiplication with capacity factor
     """
     if from_csv:
-        return load_cost_data_from_csv()
+        return load_cost_data_from_csv(
+            sensitivity=sensitivity,
+        )
 
     discounting_cols = {
         "energy_electricity": ("opex_energy", "electricity"),
@@ -228,9 +231,7 @@ def discount_costs(df_cost: pd.DataFrame, from_csv: Boolean = False) -> pd.DataF
     return df_cost.join(pd.concat({"npv_over_lifetime": df_discount}, axis=1))
 
 
-def calculate_total_discounted_production(
-    rate: float, lifetime: int
-) -> Optional[float]:
+def calculate_total_discounted_production(rate: float, lifetime: int) -> float | None:
     """Calculate total discounted production assuming an annual production volume of 1 tpa."""
     if (math.isnan(lifetime)) | (math.isnan(rate)):
         return None
@@ -265,6 +266,7 @@ def add_total_discounted_production(df_cost: pd.DataFrame) -> pd.DataFrame:
 
 
 def calculate_tco_lcox(
+    sensitivity: str,
     df_switch_capex: pd.DataFrame,
     df_cost: pd.DataFrame,
     df_wacc: pd.DataFrame,
@@ -274,6 +276,7 @@ def calculate_tco_lcox(
     """Calculate TCO and LCOX for every possible technology switch from switch CAPEX, total OPEX, WACC and technology lifetime.
 
     Args:
+        sensitivity:
         df_switch_capex: all possible switches from technology_origin to technology_destination with type description
         df_cost: DataFrame with two-level column index that contains cost components
         df_wacc: contains WACC for every technology_destination
@@ -285,7 +288,8 @@ def calculate_tco_lcox(
     """
 
     # Join cost data with switch CAPEX table
-    # For switch type "decommission", there is no cost data because the destination technology is "Decommissioned", so fill with zero
+    # For switch type "decommission", there is no cost data because the destination technology is "Decommissioned", so
+    #   fill with zero
     df_switch_capex = df_switch_capex.set_index(COMMON_INDEX)
     df_cost = df_cost.join(
         pd.concat({"tech_switch": df_switch_capex}, axis=1), how="right"
@@ -342,7 +346,9 @@ def calculate_tco_lcox(
 
     # Calculate NPV of cost columns and add to cost DataFrame
     logger.info("Calculating net present costs for all business cases.")
-    df_cost = discount_costs(df_cost, from_csv=from_csv)
+    df_cost = discount_costs(
+        sensitivity=sensitivity, df_cost=df_cost, from_csv=from_csv
+    )
 
     # Switch CAPEX NPV is identical to input value because it is incurred in year 0
     df_cost["npv_over_lifetime", "switch_capex"] = df_cost[

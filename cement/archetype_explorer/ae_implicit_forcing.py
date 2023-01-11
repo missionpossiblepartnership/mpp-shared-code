@@ -1,23 +1,15 @@
 """Applies implicit forcing for archetype explorer"""
 
-# Library imports
 import pandas as pd
+from cement.archetype_explorer.ae_config import AE_LIST_TECHNOLOGIES
 
-# Shared code imports
-from cement.config.config_cement import (
-    EMISSION_SCOPES,
-    GHGS,
-    START_YEAR,
-    CCUS_CONTEXT,
-)
+from cement.config.config_cement import CCUS_CONTEXT, EMISSION_SCOPES, GHGS, START_YEAR
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.solver.implicit_forcing import (
     apply_technology_availability_constraint,
     calculate_emission_reduction,
 )
-
-from cement.archetype_explorer.ae_config import AE_LIST_TECHNOLOGIES
 
 # Initialize logger
 from mppshared.utility.log_utility import get_logger
@@ -72,7 +64,8 @@ def ae_apply_implicit_forcing(
 
     # Remove switches where technology_origin == technology_destination
     df_technology_switches = df_technology_switches.loc[
-        df_technology_switches["technology_destination"] != df_technology_switches["technology_origin"],
+        df_technology_switches["technology_destination"]
+        != df_technology_switches["technology_origin"],
         :,
     ]
 
@@ -80,16 +73,35 @@ def ae_apply_implicit_forcing(
     df_technology_switches = df_technology_switches.loc[
         (
             (
-                (df_technology_switches["technology_destination"].isin(AE_LIST_TECHNOLOGIES))
-                & (df_technology_switches["technology_origin"].isin(AE_LIST_TECHNOLOGIES))
-            ) ^ (
+                (
+                    df_technology_switches["technology_destination"].isin(
+                        AE_LIST_TECHNOLOGIES
+                    )
+                )
+                & (
+                    df_technology_switches["technology_origin"].isin(
+                        AE_LIST_TECHNOLOGIES
+                    )
+                )
+            )
+            ^ (
                 (df_technology_switches["switch_type"] == "decommission")
-                & (df_technology_switches["technology_origin"].isin(AE_LIST_TECHNOLOGIES))
-            ) ^ (
-                (df_technology_switches["technology_destination"].isin(AE_LIST_TECHNOLOGIES))
+                & (
+                    df_technology_switches["technology_origin"].isin(
+                        AE_LIST_TECHNOLOGIES
+                    )
+                )
+            )
+            ^ (
+                (
+                    df_technology_switches["technology_destination"].isin(
+                        AE_LIST_TECHNOLOGIES
+                    )
+                )
                 & (df_technology_switches["switch_type"] == "greenfield")
             )
-        ), :
+        ),
+        :,
     ]
 
     # Calculate emission deltas between origin and destination technology

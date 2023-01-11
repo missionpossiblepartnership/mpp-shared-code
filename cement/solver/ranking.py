@@ -18,7 +18,7 @@ from mppshared.solver.ranking import (
 )
 
 
-def make_rankings(pathway_name: str, sensitivity: str, sector: str, products: list):
+def make_rankings(sector: str, products: list, pathway_name: str, sensitivity: str):
     """Create the ranking for the three types of technology switches"""
 
     importer = IntermediateDataImporter(
@@ -38,7 +38,7 @@ def make_rankings(pathway_name: str, sensitivity: str, sector: str, products: li
                 pathway_name=pathway_name,
                 cost_metric=RANKING_COST_METRIC,
                 n_bins=NUMBER_OF_BINS_RANKING,
-                ranking_config=RANKING_CONFIG[rank_type][pathway_name],
+                ranking_config=RANKING_CONFIG[rank_type][pathway_name],  # type: ignore
                 emission_scopes_ranking=EMISSION_SCOPES_RANKING,
                 ghgs_ranking=GHGS_RANKING,
             )
@@ -49,7 +49,7 @@ def make_rankings(pathway_name: str, sensitivity: str, sector: str, products: li
                 pathway_name=pathway_name,
                 cost_metric=RANKING_COST_METRIC,
                 cost_metric_relative_uncertainty=COST_METRIC_RELATIVE_UNCERTAINTY,
-                ranking_config=RANKING_CONFIG[rank_type][pathway_name],
+                ranking_config=RANKING_CONFIG[rank_type][pathway_name],  # type: ignore
                 emission_scopes_ranking=EMISSION_SCOPES_RANKING,
                 ghgs_ranking=GHGS_RANKING,
                 ranking_groups=UNCERTAINTY_RANKING_GROUPS,
