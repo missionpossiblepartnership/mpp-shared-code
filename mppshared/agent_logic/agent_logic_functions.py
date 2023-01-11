@@ -394,7 +394,7 @@ def create_dict_technology_rampup(
                 curve_type=curve_type,
             )
             if technology in ["Electric kiln + direct separation", "Dry kiln + Hydrogen + direct separation"]:
-                dict_technology_rampup[technology].df_rampup *= 1.5
+                dict_technology_rampup[technology].df_rampup *= 1.5     # type: ignore
 
     return dict_technology_rampup
 

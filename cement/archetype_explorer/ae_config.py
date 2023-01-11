@@ -97,7 +97,7 @@ if compute_all:
         "capture_rate": CAPTURE_RATE,
     }
 
-    val_permutations = list(product(*all_sensitivity_dims.values()))
+    val_permutations = list(product(*all_sensitivity_dims.values()))    # type: ignore
 
     AE_SENSITIVITY_MAPPING = dict(
         zip(

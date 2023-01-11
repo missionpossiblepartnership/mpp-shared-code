@@ -656,7 +656,7 @@ def _get_opex_variable(
         ].mul(df_ov_ccus_captured_emissivity)
         # unit dict_ov_ccus: [USD / t production_output]
         # + CCU/S OPEX process (energy)
-        dict_ov_ccus[cost_classification] = dict_ov_ccus[cost_classification].add(
+        dict_ov_ccus[cost_classification] = dict_ov_ccus[cost_classification].add(  # type: ignore
             df_ov_ccus_process_energy
         )
         # unit dict_ov_ccus: [USD / t production_output]
@@ -686,16 +686,16 @@ def _get_opex_variable(
     dict_opex_variable = dict.fromkeys(dict_ov_ccus)
     for cost_classification in dict_opex_variable.keys():
         # CCU/S OPEX + energy OPEX
-        dict_opex_variable[cost_classification] = dict_ov_ccus[cost_classification].add(
+        dict_opex_variable[cost_classification] = dict_ov_ccus[cost_classification].add(    # type: ignore
             df_ov_energy
         )
         if carbon_cost_trajectory is not None:
             # + carbon cost
-            dict_opex_variable[cost_classification] = dict_opex_variable[
+            dict_opex_variable[cost_classification] = dict_opex_variable[   # type: ignore
                 cost_classification
             ].add(df_ov_carbon_cost)
         # unit dict_opex_variable: [USD / t product_output]
-        dict_opex_variable[cost_classification].sort_index(inplace=True)
+        dict_opex_variable[cost_classification].sort_index(inplace=True)    # type: ignore
 
     return dict_opex_variable
 
@@ -788,7 +788,7 @@ def _get_lcox(
             right_index=True,
             suffixes=("_opex_fixed", "_opex_variable"),
         )
-        dict_capex_opex[key].rename(
+        dict_capex_opex[key].rename(    # type: ignore
             columns={
                 "value_opex_fixed": "opex_fixed",
                 "value_opex_variable": "opex_variable",
@@ -803,7 +803,7 @@ def _get_lcox(
             left_index=True,
             right_index=True,
         )
-        dict_capex_opex[key].rename(columns={"value": "switch_capex"}, inplace=True)
+        dict_capex_opex[key].rename(columns={"value": "switch_capex"}, inplace=True)    # type: ignore
         # merge with WACC, capacity factors, and lifetime
         dict_capex_opex[key] = pd.merge(
             left=dict_capex_opex[key],
@@ -812,7 +812,7 @@ def _get_lcox(
             left_index=True,
             right_index=True,
         )
-        dict_capex_opex[key].rename(columns={"value": "wacc"}, inplace=True)
+        dict_capex_opex[key].rename(columns={"value": "wacc"}, inplace=True)    # type: ignore
         dict_capex_opex[key] = pd.merge(
             left=dict_capex_opex[key],
             right=df_capacity_factor,
@@ -820,7 +820,7 @@ def _get_lcox(
             left_index=True,
             right_index=True,
         )
-        dict_capex_opex[key].rename(columns={"value": "capacity_factor"}, inplace=True)
+        dict_capex_opex[key].rename(columns={"value": "capacity_factor"}, inplace=True)     # type: ignore
         dict_capex_opex[key] = pd.merge(
             left=dict_capex_opex[key],
             right=df_lifetime,
@@ -828,10 +828,10 @@ def _get_lcox(
             left_index=True,
             right_index=True,
         )
-        dict_capex_opex[key].rename(columns={"value": "lifetime"}, inplace=True)
+        dict_capex_opex[key].rename(columns={"value": "lifetime"}, inplace=True)    # type: ignore
         # reorder levels and sort
         dict_capex_opex[key] = (
-            dict_capex_opex[key].reorder_levels(IDX_TECH_RANKING_COLUMNS).sort_index()
+            dict_capex_opex[key].reorder_levels(IDX_TECH_RANKING_COLUMNS).sort_index()  # type: ignore
         )
 
         # create copy of dict_capex_opex[key] that copies the values of the last model year into the future to make sure
@@ -844,7 +844,7 @@ def _get_lcox(
         if not archetype_explorer:
             logger.info(f'Calculate LCOX for context "{key}"')
             dict_capex_opex[key]["lcox"] = np.nan   # type: ignore
-            dict_capex_opex[key].apply(
+            dict_capex_opex[key].apply(     # type: ignore
                 func=(lambda x: _compute_lcox(row=x, df=df_capex_opex_extended)),
                 axis=1,
             )
@@ -852,15 +852,15 @@ def _get_lcox(
             logger.info(f'Calculate LCOX for archetype explorer and context "{key}"')
             dict_capex_opex[key]["lcox"] = np.nan   # type: ignore
             # filter years and switch types
-            idx_slice_year = dict_capex_opex[key].index.get_level_values("year").isin(ae_years)
-            dict_capex_opex[key] = dict_capex_opex[key].loc[idx_slice_year, :]
-            dict_capex_opex[key] = dict_capex_opex[key].xs(
+            idx_slice_year = dict_capex_opex[key].index.get_level_values("year").isin(ae_years)     # type: ignore
+            dict_capex_opex[key] = dict_capex_opex[key].loc[idx_slice_year, :]  # type: ignore
+            dict_capex_opex[key] = dict_capex_opex[key].xs(     # type: ignore
                 key=ae_switch_type,
                 level="switch_type",
                 drop_level=False,
             )
             # calculate LCOX
-            dict_capex_opex[key].apply(
+            dict_capex_opex[key].apply(     # type: ignore
                 func=(lambda x: _compute_lcox(row=x, df=df_capex_opex_extended)),
                 axis=1,
             )
@@ -917,14 +917,14 @@ def _opex_get_ccus_context_cost_components(
             list_metrics=[key],
         )
         # rename cost_classification and value columns
-        dict_ccus_context_cost[key].rename(
+        dict_ccus_context_cost[key].rename(     # type: ignore
             columns={"cost_classification": f"{key}_cost_classification"}, inplace=True
         )
-        dict_ccus_context_cost[key].rename(
+        dict_ccus_context_cost[key].rename(     # type: ignore
             columns={"value": f"{key}_value"}, inplace=True
         )
         # drop metric column
-        dict_ccus_context_cost[key].drop(columns="metric", inplace=True)
+        dict_ccus_context_cost[key].drop(columns="metric", inplace=True)    # type: ignore
 
     # merge all dataframes in dict_ccus_context_cost
     # first merge transport and storage (they have the same context, i.e., always the same cost_classification)
@@ -985,10 +985,10 @@ def _opex_get_ccus_context_cost_components(
         columns=["ts_cost_classification", "cp_cost_classification"], inplace=True
     )
     # get unique values in cost_classification column
-    cost_classifications = list(np.unique(df_ccus_context_cost["cost_classification"]))
+    list_cost_classifications = list(np.unique(df_ccus_context_cost["cost_classification"]))
 
-    dict_ccus_context_cost = {k: None for k in cost_classifications}
-    for cost_classification in cost_classifications:
+    dict_ccus_context_cost = {k: None for k in list_cost_classifications}
+    for cost_classification in list_cost_classifications:
         df_temp = df_ccus_context_cost.copy().loc[
             df_ccus_context_cost["cost_classification"] == cost_classification
         ]
