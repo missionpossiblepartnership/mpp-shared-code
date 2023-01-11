@@ -4,18 +4,16 @@ from copy import deepcopy
 import numpy as np
 import pandas as pd
 import plotly.express as px
-from plotly.offline import plot
-from plotly.subplots import make_subplots
-
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
-
 from mppshared.models.asset import Asset, AssetStack, create_assets
 from mppshared.models.carbon_budget import CarbonBudget
 from mppshared.models.carbon_cost_trajectory import CarbonCostTrajectory
 from mppshared.models.transition import TransitionRegistry
 from mppshared.utility.dataframe_utility import flatten_columns
 from mppshared.utility.utils import get_logger
+from plotly.offline import plot
+from plotly.subplots import make_subplots
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -166,7 +164,7 @@ class SimulationPathway:
 
     def save_demand(self):
         """Save demand to .csv file"""
-        
+
         df = self.demand
         df = df[df.year <= self.end_year]
         df = df.pivot(index="product", columns="year", values="demand")
@@ -324,7 +322,7 @@ class SimulationPathway:
         region: str,
     ):
         """Get the demand for a product in a given year and region"""
-        
+
         df = self.demand
         return df.loc[
             (df["product"] == product)

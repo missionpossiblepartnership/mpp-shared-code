@@ -4,8 +4,7 @@ from xmlrpc.client import Boolean
 
 import numpy as np
 import pandas as pd
-
-from ammonia.config_ammonia import COMMON_INDEX, COST_COMPONENTS, LOG_LEVEL, END_YEAR
+from ammonia.config_ammonia import COMMON_INDEX, COST_COMPONENTS, END_YEAR, LOG_LEVEL
 from ammonia.utility.utils import load_cost_data_from_csv, set_common_multi_index
 from mppshared.utility.utils import get_logger
 
@@ -159,7 +158,9 @@ def net_present_value(
     return df[cols].div(value_share, axis=0).sum()
 
 
-def discount_costs(sensitivity: str, df_cost: pd.DataFrame, from_csv: Boolean = False) -> pd.DataFrame:
+def discount_costs(
+    sensitivity: str, df_cost: pd.DataFrame, from_csv: Boolean = False
+) -> pd.DataFrame:
     """Calculate NPV of selected cost columns in the cost DataFrame and sum to NPV of variable OPEX.
 
     Args:
@@ -171,7 +172,9 @@ def discount_costs(sensitivity: str, df_cost: pd.DataFrame, from_csv: Boolean = 
         pd.DataFrame: columns with NPV of various cost components, NPV of variable OPEX before and after multiplication with capacity factor
     """
     if from_csv:
-        return load_cost_data_from_csv(sensitivity=sensitivity,)
+        return load_cost_data_from_csv(
+            sensitivity=sensitivity,
+        )
 
     discounting_cols = {
         "energy_electricity": ("opex_energy", "electricity"),
@@ -228,9 +231,7 @@ def discount_costs(sensitivity: str, df_cost: pd.DataFrame, from_csv: Boolean = 
     return df_cost.join(pd.concat({"npv_over_lifetime": df_discount}, axis=1))
 
 
-def calculate_total_discounted_production(
-    rate: float, lifetime: int
-) -> float | None:
+def calculate_total_discounted_production(rate: float, lifetime: int) -> float | None:
     """Calculate total discounted production assuming an annual production volume of 1 tpa."""
     if (math.isnan(lifetime)) | (math.isnan(rate)):
         return None
@@ -345,7 +346,9 @@ def calculate_tco_lcox(
 
     # Calculate NPV of cost columns and add to cost DataFrame
     logger.info("Calculating net present costs for all business cases.")
-    df_cost = discount_costs(sensitivity=sensitivity, df_cost=df_cost, from_csv=from_csv)
+    df_cost = discount_costs(
+        sensitivity=sensitivity, df_cost=df_cost, from_csv=from_csv
+    )
 
     # Switch CAPEX NPV is identical to input value because it is incurred in year 0
     df_cost["npv_over_lifetime", "switch_capex"] = df_cost[

@@ -1,7 +1,6 @@
 """ Import and validate the input tables."""
 
 import pandas as pd
-
 from mppshared.config import SOLVER_INPUT_DATA_PATH, SOLVER_INPUT_TABLES
 
 

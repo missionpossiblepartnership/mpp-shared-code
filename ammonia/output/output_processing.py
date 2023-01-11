@@ -1,7 +1,6 @@
 """ Process outputs to standardised output table."""
 import numpy as np
 import pandas as pd
-
 from ammonia.config_ammonia import *
 from ammonia.output.debugging_outputs import create_table_asset_transition_sequences
 from mppshared.import_data.intermediate_data import IntermediateDataImporter

@@ -2,7 +2,6 @@
 import numpy as np
 import numpy.typing as npt
 import pandas as pd
-
 from mppshared.utility.utils import get_logger
 
 logger = get_logger(__name__)

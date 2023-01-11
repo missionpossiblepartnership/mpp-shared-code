@@ -5,21 +5,14 @@ from copy import deepcopy
 
 import numpy as np
 import pandas as pd
-
 from mppshared.agent_logic.agent_logic_functions import (
     get_constraints_to_apply,
     remove_all_transitions_with_destination_technology,
     select_best_transition,
 )
-from mppshared.config import (
-    LOG_LEVEL,
-    MAP_LOW_COST_POWER_REGIONS,
-)
+from mppshared.config import LOG_LEVEL, MAP_LOW_COST_POWER_REGIONS
 from mppshared.models.asset import Asset, AssetStack, make_new_asset
-from mppshared.models.constraints import (
-    check_co2_storage_constraint,
-    check_constraints,
-)
+from mppshared.models.constraints import check_co2_storage_constraint, check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.utils import get_logger
 
@@ -308,9 +301,7 @@ def select_asset_for_greenfield(
             if "biomass_constraint" in constraints_to_apply:
                 if not dict_constraints["biomass_constraint"]:
                     # remove all transitions with that destination technology from the ranking table
-                    logger.debug(
-                        f"Handle biomass constraint"
-                    )
+                    logger.debug(f"Handle biomass constraint")
                     df_rank = remove_all_transitions_with_destination_technology(
                         df_rank=df_rank,
                         technology_destination=asset_transition[

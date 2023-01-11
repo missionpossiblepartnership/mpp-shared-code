@@ -6,8 +6,6 @@ from operator import methodcaller
 
 import numpy as np
 import pandas as pd
-from pandera import Bool
-
 from ammonia.config_ammonia import (
     ANNUAL_RENOVATION_SHARE,
     BROWNFIELD_REBUILD_START_YEAR,
@@ -31,6 +29,7 @@ from mppshared.agent_logic.brownfield import (
 from mppshared.models.constraints import check_constraints
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger
+from pandera import Bool
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)

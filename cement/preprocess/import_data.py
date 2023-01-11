@@ -4,7 +4,6 @@
 """
 import numpy as np
 import pandas as pd
-
 from mppshared.config import LOG_LEVEL, MAP_COLUMN_NAMES
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.dataframe_utility import (
@@ -49,9 +48,6 @@ def import_all(
     Returns:
 
     """
-
-    # TODO: integrate folder and imports nicely with the DataImporter class
-    # Todo: switch to an approach per tab (too general in the current approach)
 
     # Mapping of regions to cost classification
     region_to_cost = get_region_to_capex_mapping(
@@ -248,7 +244,6 @@ def add_regions_and_filter_cost_classification(
             if pd.isnull(row["region"]):
 
                 # Identify regions to be added
-                # todo: remove this workaround
                 if metric == "opex":
                     # make sure that every region - cost classification is kept for "Variable OPEX CCU/CCS"
                     regions = model_regions

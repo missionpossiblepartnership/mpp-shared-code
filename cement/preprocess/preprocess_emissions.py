@@ -1,8 +1,8 @@
 """Calculates all emissions required for technology ranking"""
 
-import pandas as pd
 from itertools import chain
 
+import pandas as pd
 from mppshared.config import GHG_CONVERSION, IDX_EMISSIVITY, LOG_LEVEL
 from mppshared.utility.log_utility import get_logger
 from mppshared.utility.utils import (
@@ -95,7 +95,9 @@ def calculate_emissions(
     # get unique keys as list from emissivity_ccus_process_metrics_energy and generate dict from the unique list
     dict_ccus_process_emissions = dict.fromkeys(
         get_unique_list_values(
-            list(chain(*[list(x.keys()) for x in emissivity_ccus_process_metrics_energy]))
+            list(
+                chain(*[list(x.keys()) for x in emissivity_ccus_process_metrics_energy])
+            )
         )
     )
     # fill dict with respective dataframes

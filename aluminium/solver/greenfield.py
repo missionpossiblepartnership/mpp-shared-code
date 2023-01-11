@@ -7,7 +7,6 @@ from operator import methodcaller
 
 import numpy as np
 import pandas as pd
-
 from aluminium.config_aluminium import (
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
     CUF_UPPER_THRESHOLD,

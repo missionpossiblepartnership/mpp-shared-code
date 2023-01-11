@@ -1,7 +1,6 @@
 """ Process outputs to standardised output table."""
 
 import pandas as pd
-
 from aluminium.config_aluminium import *
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.solver.debugging_outputs import create_table_asset_transition_sequences

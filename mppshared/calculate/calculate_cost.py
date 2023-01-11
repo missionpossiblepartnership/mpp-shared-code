@@ -2,7 +2,6 @@
 
 import numpy as np
 import pandas as pd
-
 from mppshared.utility.log_utility import get_logger
 
 logger = get_logger("Cost calculations")

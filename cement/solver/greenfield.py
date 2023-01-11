@@ -1,7 +1,6 @@
 """ Logic for technology transitions of type greenfield (add new Asset to AssetStack."""
 
 import numpy as np
-
 from cement.config.config_cement import (
     ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
     CAPACITY_UTILISATION_FACTOR,
@@ -61,7 +60,7 @@ def greenfield(pathway: SimulationPathway, year: int) -> SimulationPathway:
             f"{year}: Building {number_new_assets} new assets in {region} to fulfil production deficit "
             f"of {deficit} Mt {product}"
         )
-        # todo: update as this is for low cost power regions
+        # only required for low cost power regions (not used here currently)
         region_rank_filter = get_region_rank_filter(
             region=region, sector=pathway.sector
         )

@@ -5,7 +5,6 @@ from copy import deepcopy
 
 import numpy as np
 import pandas as pd
-
 from cement.config.config_cement import (
     CONSTRAINTS_REGIONAL_CHECK,
     LOG_LEVEL,
@@ -14,15 +13,13 @@ from cement.config.config_cement import (
 )
 from mppshared.agent_logic.agent_logic_functions import (
     get_constraints_to_apply,
+    handle_biomass_constraint,
     remove_all_transitions_with_destination_technology,
     remove_all_transitions_with_origin_destination_technology,
     remove_transition,
     select_best_transition,
-    handle_biomass_constraint,
 )
-from mppshared.models.asset import AssetStack
 from mppshared.models.constraints import (
-    check_biomass_constraint,
     check_co2_storage_constraint,
     check_constraints,
 )
@@ -330,9 +327,7 @@ def _enact_brownfield_transition(
             if "biomass_constraint" in constraints_to_apply:
                 if not dict_constraints["biomass_constraint"]:
                     # remove all transitions with that destination technology from the ranking table
-                    logger.debug(
-                        f"Handle biomass constraint"
-                    )
+                    logger.debug(f"Handle biomass constraint")
                     df_rank = handle_biomass_constraint(
                         df_rank=df_rank,
                         destination_technology=best_transition[

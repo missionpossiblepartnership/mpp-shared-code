@@ -1,37 +1,37 @@
 """ Process outputs to standardised output table."""
 
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
-from plotly.offline import plot
-from pathlib import Path
-
 from cement.config.config_cement import (
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
+    CCUS_CONTEXT,
+    COAL_GJ_T,
+    ELECTRICITY_GJ_TWH,
     EMISSION_SCOPES,
     END_YEAR,
     GHGS,
-    MODEL_YEARS,
-    PRODUCTS,
-    START_YEAR,
-    SECTOR,
-    RECARBONATION_SHARE,
-    COAL_GJ_T,
-    NATURAL_GAS_GJ_BCM,
-    ELECTRICITY_GJ_TWH,
-    HYDROGEN_GJ_T,
-    CCUS_CONTEXT,
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
     GROSS_BIO_EMISSION_FACTOR,
+    HYDROGEN_GJ_T,
+    MODEL_YEARS,
+    NATURAL_GAS_GJ_BCM,
+    PRODUCTS,
+    RECARBONATION_SHARE,
+    SECTOR,
+    START_YEAR,
 )
 from cement.config.output_config_cement import (
-    TECHNOLOGY_LAYOUT,
-    RESOURCE_CONSUMPTION_METRICS,
-    MAP_EMISSION_FACTOR_PRE_CAPTURE,
     ASSUMED_CARBON_CAPTURE_RATE,
+    MAP_EMISSION_FACTOR_PRE_CAPTURE,
+    RESOURCE_CONSUMPTION_METRICS,
+    TECHNOLOGY_LAYOUT,
 )
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
 from mppshared.utility.log_utility import get_logger
+from plotly.offline import plot
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -58,10 +58,11 @@ def aggregate_outputs(
         df_tech_roadmap = _create_tech_roadmaps_by_region(
             importer=importer, start_year=START_YEAR, end_year=END_YEAR
         )
-        df_resource_consumption_gj = _calculate_resource_consumption_gj(importer=importer)
+        df_resource_consumption_gj = _calculate_resource_consumption_gj(
+            importer=importer
+        )
         df_resource_consumption_clkprod_only_gj = _calculate_resource_consumption_gj(
-            importer=importer,
-            clinker_production_only=True
+            importer=importer, clinker_production_only=True
         )
         df_emissions = _calculate_emissions_total(
             importer=importer,
@@ -120,13 +121,11 @@ def aggregate_outputs(
             sensitivity=sensitivity,
         )
         # emission abatement
-        df_emission_abatement_formatted = (
-            _calculate_emission_reduction_levers(
-                importer=importer,
-                df_emissions=df_emissions.copy(),
-                df_emission_intensity=df_emission_intensity.copy(),
-                df_tech_roadmap=df_tech_roadmap,
-            )
+        df_emission_abatement_formatted = _calculate_emission_reduction_levers(
+            importer=importer,
+            df_emissions=df_emissions.copy(),
+            df_emission_intensity=df_emission_intensity.copy(),
+            df_tech_roadmap=df_tech_roadmap,
         )
         df_emission_abatement_formatted = _format_output_data(
             df=df_emission_abatement_formatted,
@@ -142,11 +141,7 @@ def aggregate_outputs(
             .loc[(df_emissions["parameter"] == "co2_scope1_captured"), :]
             .set_index([x for x in df_emissions.columns if x != "value"])
             .groupby(
-                [
-                    x
-                    for x in df_emissions.columns
-                    if x not in ["technology", "value"]
-                ]
+                [x for x in df_emissions.columns if x not in ["technology", "value"]]
             )
             .sum()
             .reset_index()
@@ -161,9 +156,11 @@ def aggregate_outputs(
             unit="Mt CO2",
         )
         # get carbon captured excl. CC heat emissions
-        df_captured_emissions_excl_cc_process_formatted = _get_captured_emissions_excl_cc_process_emissions(
-            importer=importer,
-            df_tech_roadmap=df_tech_roadmap,
+        df_captured_emissions_excl_cc_process_formatted = (
+            _get_captured_emissions_excl_cc_process_emissions(
+                importer=importer,
+                df_tech_roadmap=df_tech_roadmap,
+            )
         )
         df_captured_emissions_excl_cc_process_formatted = _format_output_data(
             df=df_captured_emissions_excl_cc_process_formatted,
@@ -185,19 +182,35 @@ def aggregate_outputs(
             sensitivity=sensitivity,
         )
         # get headline emissions for web interface
-        idx = ["scenario", "sector", "product", "region", "technology", "parameter_group", "parameter", "unit"]
+        idx = [
+            "scenario",
+            "sector",
+            "product",
+            "region",
+            "technology",
+            "parameter_group",
+            "parameter",
+            "unit",
+        ]
         df_emissions_headline_excl_recarb_formatted = (
-            df_emission_abatement_formatted
-            .copy()
-            .loc[df_emission_abatement_formatted["technology"].isin(
-                ["Unabated Scope 1 emissions", "Unabated Scope 2 emissions", "Recarbonation"]
-            ), :]
+            df_emission_abatement_formatted.copy()
+            .loc[
+                df_emission_abatement_formatted["technology"].isin(
+                    [
+                        "Unabated Scope 1 emissions",
+                        "Unabated Scope 2 emissions",
+                        "Recarbonation",
+                    ]
+                ),
+                :,
+            ]
             .melt(
                 id_vars=idx,
                 value_vars=list(MODEL_YEARS),
             )
             .set_index(idx)
-            .groupby([x for x in idx if x != "technology"] + ["year"]).sum()
+            .groupby([x for x in idx if x != "technology"] + ["year"])
+            .sum()
             .reset_index()
             .pivot(
                 index=[x for x in idx if x != "technology"],
@@ -207,23 +220,32 @@ def aggregate_outputs(
             .reset_index()
         )
         df_emissions_headline_excl_recarb_formatted["technology"] = "All"
-        df_emissions_headline_excl_recarb_formatted["parameter_group"] = "Headline emissions"
-        df_emissions_headline_excl_recarb_formatted["parameter"] = "Annual emissions excl. recarbonation"
-        df_emissions_headline_excl_recarb_formatted = df_emissions_headline_excl_recarb_formatted[
-            list(df_tech_roadmap_formatted.columns)
-        ]
+        df_emissions_headline_excl_recarb_formatted[
+            "parameter_group"
+        ] = "Headline emissions"
+        df_emissions_headline_excl_recarb_formatted[
+            "parameter"
+        ] = "Annual emissions excl. recarbonation"
+        df_emissions_headline_excl_recarb_formatted = (
+            df_emissions_headline_excl_recarb_formatted[
+                list(df_tech_roadmap_formatted.columns)
+            ]
+        )
         df_emissions_headline_incl_recarb_formatted = (
-            df_emission_abatement_formatted
-            .copy()
-            .loc[df_emission_abatement_formatted["technology"].isin(
-                ["Unabated Scope 1 emissions", "Unabated Scope 2 emissions"]
-            ), :]
+            df_emission_abatement_formatted.copy()
+            .loc[
+                df_emission_abatement_formatted["technology"].isin(
+                    ["Unabated Scope 1 emissions", "Unabated Scope 2 emissions"]
+                ),
+                :,
+            ]
             .melt(
                 id_vars=idx,
                 value_vars=list(MODEL_YEARS),
             )
             .set_index(idx)
-            .groupby([x for x in idx if x != "technology"] + ["year"]).sum()
+            .groupby([x for x in idx if x != "technology"] + ["year"])
+            .sum()
             .reset_index()
             .pivot(
                 index=[x for x in idx if x != "technology"],
@@ -233,11 +255,17 @@ def aggregate_outputs(
             .reset_index()
         )
         df_emissions_headline_incl_recarb_formatted["technology"] = "All"
-        df_emissions_headline_incl_recarb_formatted["parameter_group"] = "Headline emissions"
-        df_emissions_headline_incl_recarb_formatted["parameter"] = "Annual emissions incl. recarbonation"
-        df_emissions_headline_incl_recarb_formatted = df_emissions_headline_incl_recarb_formatted[
-            list(df_tech_roadmap_formatted.columns)
-        ]
+        df_emissions_headline_incl_recarb_formatted[
+            "parameter_group"
+        ] = "Headline emissions"
+        df_emissions_headline_incl_recarb_formatted[
+            "parameter"
+        ] = "Annual emissions incl. recarbonation"
+        df_emissions_headline_incl_recarb_formatted = (
+            df_emissions_headline_incl_recarb_formatted[
+                list(df_tech_roadmap_formatted.columns)
+            ]
+        )
 
         # LCOC
         logger.info("-- Weighted average LCOC")
@@ -265,12 +293,14 @@ def aggregate_outputs(
         # get energy consumption
         df_resource_consumption_pj_formatted = df_resource_consumption_gj.copy()
         # get alternative fuels (split into waste, biomass, and hydrogen)
-        df_alternative_fuels_formatted = df_resource_consumption_pj_formatted.copy().loc[
-            df_resource_consumption_pj_formatted["parameter"].isin(
-                RESOURCE_CONSUMPTION_METRICS["Alternative fuels"]
-            ),
-            :,
-        ]
+        df_alternative_fuels_formatted = (
+            df_resource_consumption_pj_formatted.copy().loc[
+                df_resource_consumption_pj_formatted["parameter"].isin(
+                    RESOURCE_CONSUMPTION_METRICS["Alternative fuels"]
+                ),
+                :,
+            ]
+        )
         df_alternative_fuels_formatted = (
             df_alternative_fuels_formatted.set_index(
                 [x for x in df_alternative_fuels_formatted.columns if x != "value"]
@@ -289,14 +319,28 @@ def aggregate_outputs(
         # get overall resource consumption in [PJ]
         df_total_resource_consumption_pj_formatted = (
             df_resource_consumption_pj_formatted.copy()
-            .set_index([x for x in df_resource_consumption_pj_formatted.columns if x != "value"])
-            .groupby([x for x in df_resource_consumption_pj_formatted.columns if x not in ["parameter", "value"]])
+            .set_index(
+                [
+                    x
+                    for x in df_resource_consumption_pj_formatted.columns
+                    if x != "value"
+                ]
+            )
+            .groupby(
+                [
+                    x
+                    for x in df_resource_consumption_pj_formatted.columns
+                    if x not in ["parameter", "value"]
+                ]
+            )
             .sum()
             .div(1e6)
             .reset_index()
         )
         # unit df_total_resource_consumption_pj_formatted: [PJ]
-        df_total_resource_consumption_pj_formatted["parameter"] = "Total energy consumption"
+        df_total_resource_consumption_pj_formatted[
+            "parameter"
+        ] = "Total energy consumption"
         df_total_resource_consumption_pj_formatted["unit"] = "PJ"
         df_total_resource_consumption_pj_formatted = _format_output_data(
             df=df_total_resource_consumption_pj_formatted,
@@ -308,9 +352,12 @@ def aggregate_outputs(
             df_resource_consumption_pj_formatted.copy()
         )
         df_resource_consumption_pj_formatted = (
-            df_resource_consumption_pj_formatted
-            .set_index(
-                [x for x in df_resource_consumption_pj_formatted.columns if x != "value"]
+            df_resource_consumption_pj_formatted.set_index(
+                [
+                    x
+                    for x in df_resource_consumption_pj_formatted.columns
+                    if x != "value"
+                ]
             )
             .div(1e6)
             .reset_index()
@@ -322,20 +369,34 @@ def aggregate_outputs(
             sensitivity=sensitivity,
         )
         # Get resource consumption from clinker production only
-        df_resource_consumption_clkprod_only_pj_formatted = df_resource_consumption_clkprod_only_gj.copy()
+        df_resource_consumption_clkprod_only_pj_formatted = (
+            df_resource_consumption_clkprod_only_gj.copy()
+        )
         # get overall resource consumption in [PJ]
         df_total_resource_consumption_clkprod_only_pj_formatted = (
             df_resource_consumption_clkprod_only_pj_formatted.copy()
-            .set_index([x for x in df_resource_consumption_clkprod_only_pj_formatted.columns if x != "value"])
+            .set_index(
+                [
+                    x
+                    for x in df_resource_consumption_clkprod_only_pj_formatted.columns
+                    if x != "value"
+                ]
+            )
             .groupby(
-                [x for x in df_resource_consumption_clkprod_only_pj_formatted.columns if x not in ["parameter", "value"]]
+                [
+                    x
+                    for x in df_resource_consumption_clkprod_only_pj_formatted.columns
+                    if x not in ["parameter", "value"]
+                ]
             )
             .sum()
             .div(1e6)
             .reset_index()
         )
         # unit df_total_resource_consumption_clkprod_only_pj_formatted: [PJ]
-        df_total_resource_consumption_clkprod_only_pj_formatted["parameter"] = "Total energy consumption"
+        df_total_resource_consumption_clkprod_only_pj_formatted[
+            "parameter"
+        ] = "Total energy consumption"
         df_total_resource_consumption_clkprod_only_pj_formatted["unit"] = "PJ"
         df_total_resource_consumption_clkprod_only_pj_formatted = _format_output_data(
             df=df_total_resource_consumption_clkprod_only_pj_formatted,
@@ -347,9 +408,12 @@ def aggregate_outputs(
             df_resource_consumption_clkprod_only_pj_formatted.copy()
         )
         df_resource_consumption_clkprod_only_pj_formatted = (
-            df_resource_consumption_clkprod_only_pj_formatted
-            .set_index(
-                [x for x in df_resource_consumption_clkprod_only_pj_formatted.columns if x != "value"]
+            df_resource_consumption_clkprod_only_pj_formatted.set_index(
+                [
+                    x
+                    for x in df_resource_consumption_clkprod_only_pj_formatted.columns
+                    if x != "value"
+                ]
             )
             .div(1e6)
             .reset_index()
@@ -375,8 +439,7 @@ def aggregate_outputs(
 
         # Number of net zero and initial plants
         df_number_plants_formatted = _get_number_plants_by_initial_net_zero(
-            importer=importer,
-            df_tech_roadmap=df_tech_roadmap
+            importer=importer, df_tech_roadmap=df_tech_roadmap
         )
         df_number_added_plants_formatted = _get_number_added_plants_by_initial_net_zero(
             df_number_plants=df_number_plants_formatted
@@ -500,8 +563,7 @@ def calculate_outputs(sector: str, products: list, pathway_name: str, sensitivit
     """ Number of plants """
     logger.info("Post-processing number of plants")
     df_number_plants = _get_number_plants_by_initial_net_zero(
-        importer=importer,
-        df_tech_roadmap=df_tech_roadmap
+        importer=importer, df_tech_roadmap=df_tech_roadmap
     )
     importer.export_data(
         df=df_number_plants,
@@ -970,8 +1032,8 @@ def _calculate_emission_reduction_levers(
     """ compute recarbonation = production volume * recarbonation share """
 
     df_recarbonation = df_tech_roadmap.copy().loc[
-                       (df_tech_roadmap["region"] == "Global"), :
-                       ]
+        (df_tech_roadmap["region"] == "Global"), :
+    ]
     df_recarbonation.set_index(
         keys=[x for x in df_recarbonation.columns if x != "value"], inplace=True
     )
@@ -992,9 +1054,11 @@ def _calculate_emission_reduction_levers(
         keys=[x for x in df_unabated_s1_emissions.columns if x != "value"],
         inplace=True,
     )
-    df_unabated_s1_emissions = df_unabated_s1_emissions.groupby(
-        ["year", "product", "region"]
-    ).sum().sort_index()
+    df_unabated_s1_emissions = (
+        df_unabated_s1_emissions.groupby(["year", "product", "region"])
+        .sum()
+        .sort_index()
+    )
 
     # get unabated scope 2 emissions
     # unabated clinker scope 2
@@ -1030,9 +1094,11 @@ def _calculate_emission_reduction_levers(
 
     # get unabated clinker emissions before CCU/S and switch to AF and slightly adjust them to exactly match the 2020
     #   in the outputs of this model
-    df_unabated_s1_emissions_pre_clinker_levers = _get_unabated_s1_emissions_pre_clinker_levers(
-        df_emission_intensity=df_emission_intensity.copy(),
-        df_tech_roadmap=df_tech_roadmap,
+    df_unabated_s1_emissions_pre_clinker_levers = (
+        _get_unabated_s1_emissions_pre_clinker_levers(
+            df_emission_intensity=df_emission_intensity.copy(),
+            df_tech_roadmap=df_tech_roadmap,
+        )
     )
 
     # get savings in clinker production (fuel switch and energy efficiency)
@@ -1052,14 +1118,14 @@ def _calculate_emission_reduction_levers(
     ).sort_index()
 
     # potential negative values in df_savings_captured_emissions come from inaccuracies in df_fuel_switch. Correct them:
-    df_fuel_switch.loc[
-        (df_savings_captured_emissions["value"] < 0), "value"
-    ] = (
+    df_fuel_switch.loc[(df_savings_captured_emissions["value"] < 0), "value"] = (
         (
             df_unabated_s1_emissions_pre_clinker_levers.copy()
             - df_unabated_s1_emissions
             - df_energy_eff
-        ).sort_index().loc[(df_savings_captured_emissions["value"] < 0), "value"]
+        )
+        .sort_index()
+        .loc[(df_savings_captured_emissions["value"] < 0), "value"]
     )
     df_savings_captured_emissions = (
         df_unabated_s1_emissions_pre_clinker_levers.copy()
@@ -1077,18 +1143,21 @@ def _calculate_emission_reduction_levers(
     """ pull data for the three demand reduction levers as well as "Decarbonisation of electricity" """
 
     df_demand_excel_levers = df_outputs_demand_model.copy().loc[
-        df_outputs_demand_model["technology"].isin([
-            "Efficiency in design and construction",
-            "Efficiency in concrete production",
-            "Savings in cement (incl. new binders & calcined clay emissions)",
-            "Decarbonisation of electricity"
-
-        ]),
-        ["product", "year", "region", "value", "technology"]
+        df_outputs_demand_model["technology"].isin(
+            [
+                "Efficiency in design and construction",
+                "Efficiency in concrete production",
+                "Savings in cement (incl. new binders & calcined clay emissions)",
+                "Decarbonisation of electricity",
+            ]
+        ),
+        ["product", "year", "region", "value", "technology"],
     ]
 
     # aggregate
-    df_savings_clinker_production["technology"] = "Switching to alternative fuels and thermal efficiency"
+    df_savings_clinker_production[
+        "technology"
+    ] = "Switching to alternative fuels and thermal efficiency"
     df_savings_captured_emissions["technology"] = "Savings through CCU/S"
     df_unabated_s1_emissions["technology"] = "Unabated Scope 1 emissions"
     df_unabated_s2_emissions["technology"] = "Unabated Scope 2 emissions"
@@ -1135,9 +1204,9 @@ def _get_savings_in_clinker_production(
             row=x,
             importer=importer,
             df_emissions=df_emissions,
-            value_if_none=x.loc["co2_scope1"]
+            value_if_none=x.loc["co2_scope1"],
         ),
-        axis=1
+        axis=1,
     )
     df_tech_emission_factors = df_tech_emission_factors[
         idx + ["technology", "value"]
@@ -1155,6 +1224,7 @@ def _get_savings_in_clinker_production(
         start = sub_df.xs(key=START_YEAR, level="year").squeeze()
         sub_df = start - sub_df
         return sub_df
+
     df_tech_emission_factors_eff = (
         df_tech_emission_factors.copy()
         .groupby(([x for x in idx if x != "year"] + ["technology"]))
@@ -1162,10 +1232,14 @@ def _get_savings_in_clinker_production(
     )
 
     # multiply with tech roadmap
-    df_energy_eff = df_tech_roadmap.copy().mul(df_tech_emission_factors_eff).dropna(how="all")
+    df_energy_eff = (
+        df_tech_roadmap.copy().mul(df_tech_emission_factors_eff).dropna(how="all")
+    )
 
     # aggregate technologies
-    df_energy_eff = df_energy_eff.groupby([x for x in df_energy_eff.index.names if x != "technology"]).sum()
+    df_energy_eff = df_energy_eff.groupby(
+        [x for x in df_energy_eff.index.names if x != "technology"]
+    ).sum()
 
     """ 
         get savings through fuel switch as difference in average emission factor over the years weighted by technology
@@ -1173,21 +1247,20 @@ def _get_savings_in_clinker_production(
     """
 
     # get emissions by region and year and derive respective emission factors
-    df_tech_emission_factors_start_year = (
-        df_tech_emission_factors.copy()
-        .xs(key=START_YEAR, level="year")
+    df_tech_emission_factors_start_year = df_tech_emission_factors.copy().xs(
+        key=START_YEAR, level="year"
     )
     # compute weighted average emission factor
     df_fuel_switch = (
-        df_tech_roadmap
-        .mul(df_tech_emission_factors_start_year)
+        df_tech_roadmap.mul(df_tech_emission_factors_start_year)
         .reorder_levels((idx + ["technology"]))
         .dropna(how="all")
     )
     df_fuel_switch = (
-        df_fuel_switch
-        .div(
-            df_tech_roadmap.groupby([x for x in df_tech_roadmap.index.names if x != "technology"]).sum()
+        df_fuel_switch.div(
+            df_tech_roadmap.groupby(
+                [x for x in df_tech_roadmap.index.names if x != "technology"]
+            ).sum()
         )
         .groupby(idx)
         .sum()
@@ -1195,26 +1268,25 @@ def _get_savings_in_clinker_production(
         .sort_index()
     )
     # per region: get reduction due to fuel switch
-    df_fuel_switch = (
-        df_fuel_switch
-        .groupby([x for x in idx if x != "year"])
-        .apply(lambda x: _get_reduction_to_start_year(x))
+    df_fuel_switch = df_fuel_switch.groupby([x for x in idx if x != "year"]).apply(
+        lambda x: _get_reduction_to_start_year(x)
     )
     # get emission savings through fuel switch
-    df_fuel_switch = (
-        df_fuel_switch
-        .mul(
-            df_tech_roadmap.groupby([x for x in df_tech_roadmap.index.names if x != "technology"]).sum()
-        )
+    df_fuel_switch = df_fuel_switch.mul(
+        df_tech_roadmap.groupby(
+            [x for x in df_tech_roadmap.index.names if x != "technology"]
+        ).sum()
     )
 
     """ aggregate to global """
     df_fuel_switch = df_fuel_switch.groupby(
-        [x for x in df_fuel_switch.index.names if x not in ["region", "technology"]]).sum()
+        [x for x in df_fuel_switch.index.names if x not in ["region", "technology"]]
+    ).sum()
     df_fuel_switch["region"] = "Global"
     df_fuel_switch = df_fuel_switch.reset_index().set_index(idx).sort_index()
     df_energy_eff = df_energy_eff.groupby(
-        [x for x in df_energy_eff.index.names if x not in ["region", "technology"]]).sum()
+        [x for x in df_energy_eff.index.names if x not in ["region", "technology"]]
+    ).sum()
     df_energy_eff["region"] = "Global"
     df_energy_eff = df_energy_eff.reset_index().set_index(idx).sort_index()
 
@@ -1245,22 +1317,25 @@ def _get_captured_emissions_excl_cc_process_emissions(
     # get the emission factors for carbon capture setups that they would have without carbon capture
     df_tech_emission_factors["value"] = df_tech_emission_factors.apply(
         lambda x: _get_emission_factor_pre_capture(
-            row=x,
-            importer=importer,
-            df_emissions=df_emissions,
-            value_if_none=float(0)
+            row=x, importer=importer, df_emissions=df_emissions, value_if_none=float(0)
         ),
-        axis=1
+        axis=1,
     )
     df_tech_emission_factors = df_tech_emission_factors[idx + ["value"]].set_index(idx)
 
     # multiply with capture rate
-    df_capture_rate.rename(columns={"technology_destination": "technology"}, inplace=True)
+    df_capture_rate.rename(
+        columns={"technology_destination": "technology"}, inplace=True
+    )
     df_capture_rate = df_capture_rate[idx + ["value"]].set_index(idx)
     df_tech_emission_factors *= df_capture_rate
 
     # multiply with tech roadmap to get saved emissions through CCU/S in Mt CO2
-    df = df_tech_roadmap.copy().loc[(df_tech_roadmap["region"] != "Global"), :].set_index(idx)
+    df = (
+        df_tech_roadmap.copy()
+        .loc[(df_tech_roadmap["region"] != "Global"), :]
+        .set_index(idx)
+    )
     df = df.mul(df_tech_emission_factors).dropna(how="all")
 
     # aggregate
@@ -1304,8 +1379,12 @@ def _get_unabated_s1_emissions_pre_clinker_levers(
             (
                 (df_emission_intensity["region"] == "Global")
                 & (df_emission_intensity["year"] == START_YEAR)
-                & (df_emission_intensity["parameter"] == "Emissions intensity CO2E Scope1")
-            ), "value"
+                & (
+                    df_emission_intensity["parameter"]
+                    == "Emissions intensity CO2E Scope1"
+                )
+            ),
+            "value",
         ]
         .squeeze()
     )
@@ -1338,53 +1417,64 @@ def _get_biomass_captured_emissions(
         input_metrics={"Shared inputs - Emissivity": ["emissivity_co2"]}
     )["emissivity_co2"]
     df_gross_bio_emission_factor = df_gross_bio_emission_factor.loc[
-        df_gross_bio_emission_factor["metric"].str.contains("Biomass"), ["product", "year", "region", "value"]
+        df_gross_bio_emission_factor["metric"].str.contains("Biomass"),
+        ["product", "year", "region", "value"],
     ]
     df_gross_bio_emission_factor.set_index(keys=idx, inplace=True)
 
     # remaining emissions = gross emissions - net emissions
-    df_gross_bio_emission_factor = GROSS_BIO_EMISSION_FACTOR - df_gross_bio_emission_factor
+    df_gross_bio_emission_factor = (
+        GROSS_BIO_EMISSION_FACTOR - df_gross_bio_emission_factor
+    )
 
     # multiply with capture rate
     df_gross_bio_emission_factor *= ASSUMED_CARBON_CAPTURE_RATE
 
     # total emissions #
-    df_resource_consumption_gj = df_resource_consumption_gj.copy().loc[
-        (
-            (df_resource_consumption_gj["parameter"].str.contains("Biomass"))
-            & (df_resource_consumption_gj["region"] != "Global")
-        ),
-        (idx + ["value"])
-    ].set_index(keys=idx)
+    df_resource_consumption_gj = (
+        df_resource_consumption_gj.copy()
+        .loc[
+            (
+                (df_resource_consumption_gj["parameter"].str.contains("Biomass"))
+                & (df_resource_consumption_gj["region"] != "Global")
+            ),
+            (idx + ["value"]),
+        ]
+        .set_index(keys=idx)
+    )
     df_total = df_gross_bio_emission_factor.mul(df_resource_consumption_gj)
     # aggregate to global
     df_total_global = df_total.groupby([x for x in idx if x != "region"]).sum()
     df_total_global["region"] = "Global"
     df_total_global = df_total_global.reset_index().set_index(keys=idx)
     # concat
-    df_total = pd.concat([
-        df_total, df_total_global
-    ]).sort_index().div(1e6)
+    df_total = pd.concat([df_total, df_total_global]).sort_index().div(1e6)
     df_total["technology"] = "All"
     df_total = df_total.reset_index().set_index(keys=(idx + ["technology"]))
 
     # heat emissions #
-    df_resource_consumption_clkprod_only_gj = df_resource_consumption_clkprod_only_gj.copy().loc[
-        (
-            (df_resource_consumption_clkprod_only_gj["parameter"].str.contains("Biomass"))
-            & (df_resource_consumption_clkprod_only_gj["region"] != "Global")
-        ),
-        (idx + ["value"])
-    ].set_index(keys=idx)
+    df_resource_consumption_clkprod_only_gj = (
+        df_resource_consumption_clkprod_only_gj.copy()
+        .loc[
+            (
+                (
+                    df_resource_consumption_clkprod_only_gj["parameter"].str.contains(
+                        "Biomass"
+                    )
+                )
+                & (df_resource_consumption_clkprod_only_gj["region"] != "Global")
+            ),
+            (idx + ["value"]),
+        ]
+        .set_index(keys=idx)
+    )
     df_heat = df_gross_bio_emission_factor.mul(df_resource_consumption_clkprod_only_gj)
     # aggregate to global
     df_heat_global = df_heat.groupby([x for x in idx if x != "region"]).sum()
     df_heat_global["region"] = "Global"
     df_heat_global = df_heat_global.reset_index().set_index(keys=idx)
     # concat
-    df_heat = pd.concat([
-        df_heat, df_heat_global
-    ]).sort_index().div(1e6)
+    df_heat = pd.concat([df_heat, df_heat_global]).sort_index().div(1e6)
     df_heat["technology"] = "All"
     df_heat = df_heat.reset_index().set_index(keys=(idx + ["technology"]))
 
@@ -1401,11 +1491,13 @@ def _get_biomass_captured_emissions(
     df_cc_heat["parameter_group"] = "Emissions"
     df_cc_heat["parameter"] = "Captured gross biomass emissions (CC heat only)"
     df_cc_heat["unit"] = "Mt CO2"
-    df = pd.concat([
-        df_total.reset_index(),
-        df_heat.reset_index(),
-        df_cc_heat.reset_index(),
-    ])
+    df = pd.concat(
+        [
+            df_total.reset_index(),
+            df_heat.reset_index(),
+            df_cc_heat.reset_index(),
+        ]
+    )
 
     return df
 
@@ -1527,13 +1619,10 @@ def _calculate_emissions_intensity_cmtcnt(
             (df_emissions["parameter"] == "co2_scope1")
             & (df_emissions["region"] == "Global")
         ),
-        (idx + ["value"])
+        (idx + ["value"]),
     ]
     df_emissions_clinker_scope1 = (
-        df_emissions_clinker_scope1
-        .set_index(idx)
-        .groupby(idx)
-        .sum()
+        df_emissions_clinker_scope1.set_index(idx).groupby(idx).sum()
     )
 
     # get clinker scope 2 emissions
@@ -1542,46 +1631,44 @@ def _calculate_emissions_intensity_cmtcnt(
             (df_emissions["parameter"] == "co2_scope2")
             & (df_emissions["region"] == "Global")
         ),
-        (idx + ["value"])
+        (idx + ["value"]),
     ]
     df_emissions_clinker_scope2 = (
-        df_emissions_clinker_scope2
-        .set_index(idx)
-        .groupby(idx)
-        .sum()
+        df_emissions_clinker_scope2.set_index(idx).groupby(idx).sum()
     )
 
     # get concrete & cement demand (assumption: demand == production)
     df_concrete_demand = df_outputs_demand_model.copy().loc[
-        (df_outputs_demand_model["technology"] == "Concrete demand"),
-        (idx + ["value"])
+        (df_outputs_demand_model["technology"] == "Concrete demand"), (idx + ["value"])
     ]
     df_concrete_demand = df_concrete_demand.set_index(idx).sort_index()
     df_cement_demand = df_outputs_demand_model.copy().loc[
-        (df_outputs_demand_model["technology"] == "Cement demand"),
-        (idx + ["value"])
+        (df_outputs_demand_model["technology"] == "Cement demand"), (idx + ["value"])
     ]
     df_cement_demand = df_cement_demand.set_index(idx).sort_index()
 
     # get cement & concrete scope 2 emissions
     df_emissions_concrete_scope2 = df_outputs_demand_model.copy().loc[
         (df_outputs_demand_model["technology"] == "Concrete scope 2 emissions"),
-        (idx + ["value"])
+        (idx + ["value"]),
     ]
-    df_emissions_concrete_scope2 = df_emissions_concrete_scope2.set_index(idx).sort_index()
+    df_emissions_concrete_scope2 = df_emissions_concrete_scope2.set_index(
+        idx
+    ).sort_index()
     df_emissions_cement_scope2 = df_outputs_demand_model.copy().loc[
         (df_outputs_demand_model["technology"] == "Cement scope 2 emissions"),
-        (idx + ["value"])
+        (idx + ["value"]),
     ]
     df_emissions_cement_scope2 = df_emissions_cement_scope2.set_index(idx).sort_index()
 
     # compute
     df_cement_scope1 = df_emissions_clinker_scope1.div(df_cement_demand)
     df_concrete_scope1 = df_emissions_clinker_scope1.div(df_concrete_demand)
-    df_cement_scope2 = df_emissions_clinker_scope2.add(df_emissions_cement_scope2).div(df_cement_demand)
+    df_cement_scope2 = df_emissions_clinker_scope2.add(df_emissions_cement_scope2).div(
+        df_cement_demand
+    )
     df_concrete_scope2 = (
-        df_emissions_clinker_scope2
-        .add(df_emissions_cement_scope2)
+        df_emissions_clinker_scope2.add(df_emissions_cement_scope2)
         .add(df_emissions_concrete_scope2)
         .div(df_concrete_demand)
     )
@@ -1612,12 +1699,14 @@ def _calculate_emissions_intensity_cmtcnt(
     df_cement_scope2["unit"] = "tCO2/t"
     df_concrete_scope2["unit"] = "tCO2/t"
 
-    df = pd.concat([
-        df_cement_scope1,
-        df_concrete_scope1,
-        df_cement_scope2,
-        df_concrete_scope2,
-    ])
+    df = pd.concat(
+        [
+            df_cement_scope1,
+            df_concrete_scope1,
+            df_cement_scope2,
+            df_concrete_scope2,
+        ]
+    )
 
     return df
 
@@ -1637,7 +1726,9 @@ def _get_number_plants_by_initial_net_zero(
     ]
 
     # get tech characteristics to identify net-zero and initial plants
-    df_tech_char = importer.get_technology_characteristics()[idx + ["technology_classification"]]
+    df_tech_char = importer.get_technology_characteristics()[
+        idx + ["technology_classification"]
+    ]
 
     df = (
         pd.merge(
@@ -1646,38 +1737,44 @@ def _get_number_plants_by_initial_net_zero(
             how="left",
             on=idx,
         )
-        .set_index(
-            (idx + ["technology_classification"])
-        )
+        .set_index((idx + ["technology_classification"]))
         .div(ASSUMED_ANNUAL_PRODUCTION_CAPACITY)
     )
 
     # add global
-    df_global = df.groupby(
-        [x for x in df.index.names if x != "region"]
-    ).sum()
+    df_global = df.groupby([x for x in df.index.names if x != "region"]).sum()
     df_global["region"] = "Global"
-    df_global_all_techs = df.groupby(
-        [x for x in df.index.names if x not in ["region", "technology"]]
-    ).sum().reset_index()
+    df_global_all_techs = (
+        df.groupby([x for x in df.index.names if x not in ["region", "technology"]])
+        .sum()
+        .reset_index()
+    )
     df_global_all_techs["region"] = "Global"
     df_global_all_techs["technology"] = df_global_all_techs["technology_classification"]
     # aggregate
-    df_global = pd.concat([
-        df_global.reset_index().set_index(idx),
-        df_global_all_techs.set_index(idx),
-    ])
+    df_global = pd.concat(
+        [
+            df_global.reset_index().set_index(idx),
+            df_global_all_techs.set_index(idx),
+        ]
+    )
 
     # aggregate
-    df = pd.concat([
-        df.reset_index().set_index(idx).drop(columns="technology_classification"),
-        df_global.reset_index().set_index(idx).drop(columns="technology_classification"),
-    ]).sort_index()
+    df = pd.concat(
+        [
+            df.reset_index().set_index(idx).drop(columns="technology_classification"),
+            df_global.reset_index()
+            .set_index(idx)
+            .drop(columns="technology_classification"),
+        ]
+    ).sort_index()
 
     return df.reset_index()
 
 
-def _get_number_added_plants_by_initial_net_zero(df_number_plants: pd.DataFrame) -> pd.DataFrame:
+def _get_number_added_plants_by_initial_net_zero(
+    df_number_plants: pd.DataFrame,
+) -> pd.DataFrame:
 
     idx = ["product", "year", "region", "technology"]
 
@@ -1686,7 +1783,8 @@ def _get_number_added_plants_by_initial_net_zero(df_number_plants: pd.DataFrame)
         (
             (df["region"] == "Global")
             & (df["technology"].isin(["initial", "end-state"]))
-        ), :
+        ),
+        :,
     ]
     df.set_index(keys=idx, inplace=True)
 
@@ -1694,8 +1792,9 @@ def _get_number_added_plants_by_initial_net_zero(df_number_plants: pd.DataFrame)
     def _count_additions(row: pd.Series) -> pd.Series:
         row.sort_index(inplace=True)
         for i in np.arange(1, row.shape[0]):
-            row.iloc[i, 0] -= row.iloc[i-1, 1]
+            row.iloc[i, 0] -= row.iloc[i - 1, 1]
         return row
+
     df["total_plants"] = df["value"]
     df = df.groupby([x for x in idx if x != "year"]).apply(
         lambda x: _count_additions(x)
@@ -1719,7 +1818,9 @@ def _calculate_weighted_average_lcoc(
 
     # filter OPEX context
     if "opex_context" in df_cost.columns:
-        df_cost = df_cost.loc[(df_cost["opex_context"] == f"value_{CCUS_CONTEXT[0]}"), :]
+        df_cost = df_cost.loc[
+            (df_cost["opex_context"] == f"value_{CCUS_CONTEXT[0]}"), :
+        ]
 
     df = pd.DataFrame()
     # In every year, get LCOX of the asset based on the year it was commissioned and average according to desired
@@ -1877,8 +1978,7 @@ def _export_greenfield_lcoc(
 
 
 def _calculate_resource_consumption_gj(
-    importer: IntermediateDataImporter,
-    clinker_production_only: bool = False
+    importer: IntermediateDataImporter, clinker_production_only: bool = False
 ) -> pd.DataFrame:
     """Calculate the consumption of all energy resources by year and region (incl. Global).
 
@@ -1927,7 +2027,11 @@ def _calculate_resource_consumption_gj(
             if clinker_production_only:
                 df_resource = df_inputs_energy_year.loc[
                     (
-                        (df_inputs_energy_year["metric"].isin(RESOURCE_CONSUMPTION_METRICS[resource]))
+                        (
+                            df_inputs_energy_year["metric"].isin(
+                                RESOURCE_CONSUMPTION_METRICS[resource]
+                            )
+                        )
                         & (~(df_inputs_energy_year["metric"].str.contains("CC")))
                     ),
                     :,
@@ -1987,12 +2091,20 @@ def _calculate_resource_consumption_gj(
         df_resource_consumption["parameter_group"] = "Energy"
         # add electricity demand from concrete mixing and cement grinding (from demand model)
         df_cntcmt_elec = importer.get_outputs_demand_model()
-        df_cntcmt_elec = df_cntcmt_elec.loc[df_cntcmt_elec["technology"].isin(
-            ["Concrete electricity consumption", "Cement electricity consumption"]
-        )]
+        df_cntcmt_elec = df_cntcmt_elec.loc[
+            df_cntcmt_elec["technology"].isin(
+                ["Concrete electricity consumption", "Cement electricity consumption"]
+            )
+        ]
         df_cntcmt_elec["product"] = np.nan
-        df_cntcmt_elec.loc[(df_cntcmt_elec["technology"] == "Concrete electricity consumption"), "product"] = "Concrete"
-        df_cntcmt_elec.loc[(df_cntcmt_elec["technology"] == "Cement electricity consumption"), "product"] = "Cement"
+        df_cntcmt_elec.loc[
+            (df_cntcmt_elec["technology"] == "Concrete electricity consumption"),
+            "product",
+        ] = "Concrete"
+        df_cntcmt_elec.loc[
+            (df_cntcmt_elec["technology"] == "Cement electricity consumption"),
+            "product",
+        ] = "Cement"
         df_cntcmt_elec.drop(columns="technology", inplace=True)
         df_cntcmt_elec["parameter"] = "Electricity"
         df_cntcmt_elec["parameter_group"] = "Energy"
@@ -2187,14 +2299,21 @@ def _get_emission_factor_pre_capture(
                 (df_process_emissions["region"] == row.loc["region"])
                 & (df_process_emissions["year"] == row.loc["year"])
                 & (df_process_emissions["metric"] == "Calcination process emissions")
-            ), "value"
+            ),
+            "value",
         ].squeeze()
     else:
         # set to corresponding technology's emission factor
-        co2_scope1 = df_emissions.loc[(
-             (df_emissions["year"] == row.loc["year"])
-             & (df_emissions["region"] == row.loc["region"])
-             & (df_emissions["technology"] == MAP_EMISSION_FACTOR_PRE_CAPTURE[row.loc["technology"]])
-        ), "co2_scope1"].squeeze()
+        co2_scope1 = df_emissions.loc[
+            (
+                (df_emissions["year"] == row.loc["year"])
+                & (df_emissions["region"] == row.loc["region"])
+                & (
+                    df_emissions["technology"]
+                    == MAP_EMISSION_FACTOR_PRE_CAPTURE[row.loc["technology"]]
+                )
+            ),
+            "co2_scope1",
+        ].squeeze()
 
     return co2_scope1

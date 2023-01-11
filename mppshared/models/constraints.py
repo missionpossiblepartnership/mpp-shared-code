@@ -4,7 +4,6 @@ import sys
 
 import numpy as np
 import pandas as pd
-
 from ammonia.config_ammonia import END_YEAR
 from mppshared.config import (
     AMMONIA_PER_AMMONIUM_NITRATE,
@@ -105,8 +104,8 @@ def check_technology_rampup_constraint(
     transition_type: str,
 ) -> bool:
     """Check if the technology rampup between the stack passed and the previous year's stack complies with the
-        technology ramp-up trajectory"""
-    
+    technology ramp-up trajectory"""
+
     logger.info(
         f"{year}: Checking ramp-up constraint (transition type: {transition_type})"
     )
@@ -163,7 +162,7 @@ def check_constraint_regional_production(
     transition_type: str,
 ) -> bool:
     """Check constraints that regional production is at least a specified share of regional demand"""
-    
+
     logger.info(
         f"{year}: Checking regional production constraint (transition type: {transition_type})"
     )
@@ -184,7 +183,7 @@ def get_regional_production_constraint_table(
     year: int,
 ) -> pd.DataFrame:
     """Get table that compares regional production with regional demand for a given year"""
-    
+
     # Get regional production and demand
     df_regional_production = stack.get_regional_production_volume(product)
     df_demand = pathway.get_regional_demand(product=product, year=year)
@@ -472,7 +471,7 @@ def check_co2_storage_constraint(
             pathway.co2_storage_constraint_type == "total_cumulative" (will not have an impact for other types)
         return_dict: Returns dict with constraint fulfilment for every region if True. Else returns only True or False,
             depending on overall constraint fulfilment
-        
+
     Returns:
         Dict with constraint fulfilment for every region if return_dict is set to True. Else returns only True or False,
         depending on overall constraint fulfilment
@@ -654,7 +653,7 @@ def check_biomass_constraint(
         df_prod_volume = pd.DataFrame.from_dict(
             data=df_prod_volume, orient="index"
         ).reset_index()
-        df_prod_volume.columns = ["technology_destination", "value"] # type: ignore
+        df_prod_volume.columns = ["technology_destination", "value"]  # type: ignore
         df_prod_volume["region"] = region
         df_list.append(df_prod_volume)
     df_prod_volume = pd.concat(df_list, axis=0).set_index(
@@ -666,7 +665,7 @@ def check_biomass_constraint(
         ["region", "technology_destination", "value"]
     ].set_index(["region", "technology_destination"])
     biomass_consumption = (
-        df_prod_volume.mul(df_biomass_consumption).sum(axis=0).squeeze() # type: ignore
+        df_prod_volume.mul(df_biomass_consumption).sum(axis=0).squeeze()  # type: ignore
     )
 
     # check limit

@@ -2,10 +2,9 @@
 
 import numpy as np
 import pandas as pd
-
 from cement.config.config_cement import (
-    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
     ALL_TECHNOLOGIES,
+    ASSUMED_ANNUAL_PRODUCTION_CAPACITY,
     MODEL_YEARS,
     PATHWAY_DEMAND_SCENARIO_MAPPING,
     REGIONS,
@@ -130,7 +129,10 @@ def import_and_preprocess(
 
         # INITIAL ASSET STACK
         df_initial_asset_stack = _get_initial_asset_stack(
-            importer=importer, product=products, constant_plant_capacity=True, sensitivity=sensitivity
+            importer=importer,
+            product=products,
+            constant_plant_capacity=True,
+            sensitivity=sensitivity,
         )
         # export
         importer.export_data(

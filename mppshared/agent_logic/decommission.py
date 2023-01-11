@@ -3,7 +3,6 @@
 import random
 
 import pandas as pd
-
 from mppshared.agent_logic.agent_logic_functions import (
     remove_transition,
     select_best_transition,

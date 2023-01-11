@@ -56,7 +56,7 @@ class CarbonCostTrajectory:
             df_carbon_cost.loc[
                 df_carbon_cost["year"] >= start_year, "carbon_cost"
             ] = initial_carbon_cost
-          
+
         # Linear carbon cost
         elif trajectory == "linear":
             df_carbon_cost.loc[df_carbon_cost["year"] < start_year, "carbon_cost"] = 0

@@ -3,7 +3,6 @@
 import os
 
 import pandas as pd
-
 from ammonia.config_ammonia import (
     CALCULATE_FOLDER,
     COMMON_INDEX,
@@ -15,14 +14,15 @@ from ammonia.config_ammonia import (
 
 
 def write_intermediate_data_to_csv(
-    folder: str, filename: str, df: pd.DataFrame, flag_index=False
+    folder: str, filename: str, df: pd.DataFrame, flag_index: bool = False
 ):
     """Write DataFrame to .csv in INTERMEDIATE_DATA_PATH/folder.
 
     Args:
-        folder (str): name of the folder for saving (either of import, calculate_variables, TBD)
+        folder (str): Directory where the file will be saved
         filename (str): name of the DataFrame for saving
         df (pd.DataFrame): DataFrame to be saved
+        flag_index:
     """
     full_path = f"{folder}"
     if not os.path.exists(full_path):

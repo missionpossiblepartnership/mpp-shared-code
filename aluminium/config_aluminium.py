@@ -77,7 +77,7 @@ ALL_SENSITIVITIES = [
 SENSITIVITIES = {
     "bau": ["def"],  # ALL_SENSITIVITIES,
     "fa": ["def"],
-    "lc": ["def"]  # ALL_SENSITIVITIES,
+    "lc": ["def"],  # ALL_SENSITIVITIES,
 }
 INVESTMENT_CYCLE = 10  # years
 CUF_LOWER_THRESHOLD = 0.6

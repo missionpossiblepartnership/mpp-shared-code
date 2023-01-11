@@ -12,12 +12,11 @@ run_config = {
     "MAKE_RANKINGS",
     "SIMULATE_PATHWAY",
     "CALCULATE_OUTPUTS",
-
     # ARCHETYPE EXPLORER #
     "AE_IMPORT_DATA",
     "AE_CALCULATE_VARIABLES",
     "AE_APPLY_IMPLICIT_FORCING",
-}   # comment lines to adjust run configuration
+}  # comment lines to adjust run configuration
 RUN_PARALLEL = False
 LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
@@ -31,8 +30,8 @@ START_YEAR = 2020
 END_YEAR = 2050
 MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 
+# uncomment to activate a pathway/sensitivity
 PATHWAYS_SENSITIVITIES = {
-
     # MAIN MODEL #
     # "bau": ["def"],
     # "fa": ["def"],
@@ -41,7 +40,6 @@ PATHWAYS_SENSITIVITIES = {
     # "nz": ["inno"],
     # "custom": ["decelerated"],
     # "nz-late": ["nz"],
-
     # MAIN MODEL NZ SENSITIVITIES #
     # "nz": ["nz", "inno", "fossil-low", "fossil-high", "elec-low", "elec-high", "af-low", "af-high"],
     # "nz-scm-what-if": ["nz"],
@@ -52,8 +50,6 @@ PATHWAYS_SENSITIVITIES = {
     # "nz-gcca-late": ["nz"],
     # "nz-low-ramp": ["nz"],
     # "nz-high-ramp": ["nz"],
-
-
     # ARCHETYPE EXPLORER #
     # "archetype": list(np.arange(0, 972))  # 972
     # "archetype": ["000000", "000001", "000002"],
@@ -61,31 +57,40 @@ PATHWAYS_SENSITIVITIES = {
 }
 
 PATHWAYS_WITH_CARBON_COST = [
-    "lc", "nz", "custom",
-    "nz-scm-what-if", "nz-scm-stretch",
-    "nz-binder-what-if", "nz-binder-stretch",
-    "nz-gcca-early", "nz-gcca-late",
-    "nz-low-ramp", "nz-high-ramp",
+    "lc",
+    "nz",
+    "custom",
+    "nz-scm-what-if",
+    "nz-scm-stretch",
+    "nz-binder-what-if",
+    "nz-binder-stretch",
+    "nz-gcca-early",
+    "nz-gcca-late",
+    "nz-low-ramp",
+    "nz-high-ramp",
     "nz-late",
 ]
 PATHWAYS_WITH_TECHNOLOGY_MORATORIUM = [
-    "lc", "nz",
-    "nz-scm-what-if", "nz-scm-stretch",
-    "nz-binder-what-if", "nz-binder-stretch",
-    "nz-gcca-early", "nz-gcca-late",
-    "nz-low-ramp", "nz-high-ramp",
+    "lc",
+    "nz",
+    "nz-scm-what-if",
+    "nz-scm-stretch",
+    "nz-binder-what-if",
+    "nz-binder-stretch",
+    "nz-gcca-early",
+    "nz-gcca-late",
+    "nz-low-ramp",
+    "nz-high-ramp",
     "nz-late",
 ]
 
 PATHWAY_DEMAND_SCENARIO_MAPPING = {
-
     # MAIN MODEL #
     "bau": "bau",
     "fa": "gcca-early",
     "lc": "gcca",
     "nz": "gcca",
     "custom": "gcca-late",
-
     # SENSITIVITY RUNS #
     "nz-scm-what-if": "scm-what-if",
     "nz-scm-stretch": "scm-stretch",
@@ -142,7 +147,6 @@ CARBON_COST_SENSITIVITIES = {
         "start_year": 2025,
         "end_year": 2050,
     },
-
     # SENSITIVITY RUNS #
     "fossil-low": {
         "trajectory": "linear",
@@ -210,7 +214,6 @@ MAX_ANNUAL_RENOVATION_SHARE = {
     "lc": 1.0,
     "nz": 1.0,
     "custom": 1.0,
-
     # SENSITIVITY RUNS #
     "nz-scm-what-if": 1.0,
     "nz-scm-stretch": 1.0,
@@ -299,7 +302,6 @@ LIST_TECHNOLOGIES = {
     "decelerated": MATURE_TECHS,
     "nz": MATURE_TECHS,
     "inno": (MATURE_TECHS + INNO_TECHS),
-
     # sensitivity runs
     "fossil-low": MATURE_TECHS,
     "fossil-high": MATURE_TECHS,
@@ -389,7 +391,6 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
-
         # sensitivity runs #
         "nz-scm-what-if": {
             "cost": lc_weight_cost,
@@ -449,7 +450,6 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
-
         # sensitivity runs #
         "nz-scm-what-if": {
             "cost": lc_weight_cost,
@@ -509,7 +509,6 @@ RANKING_CONFIG = {
             "cost": lc_weight_cost,
             "emissions": lc_weight_emissions,
         },
-
         # sensitivity runs #
         "nz-scm-what-if": {
             "cost": lc_weight_cost,
@@ -559,7 +558,6 @@ TECHNOLOGY_RAMP_UP_CURVE_TYPE = {  # "exponential" or "rayleigh"
     "lc": "exponential",
     "nz": "rayleigh",
     "custom": "exponential",
-
     # SENSITIVITY RUNS #
     "nz-scm-what-if": "rayleigh",
     "nz-scm-stretch": "rayleigh",
@@ -599,7 +597,6 @@ TECHNOLOGY_RAMP_UP_CONSTRAINT = {
         "maximum_asset_growth_rate": 0.05,
         "years_rampup_phase": 30,
     },
-
     # SENSITIVITY RUNS #
     "nz-scm-what-if": {
         "init_maximum_asset_additions": 3.6,
@@ -694,7 +691,6 @@ CONSTRAINTS_TO_APPLY = {
         "biomass_constraint",
         "co2_storage_constraint",
     ],
-
     # sensitivity runs #
     "nz-scm-what-if": [
         # "emissions_constraint",

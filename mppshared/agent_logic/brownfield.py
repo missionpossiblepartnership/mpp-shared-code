@@ -1,7 +1,6 @@
 """ Logic for technology transitions of type brownfield rebuild and brownfield renovation."""
 
 import pandas as pd
-
 from mppshared.config import LOG_LEVEL
 from mppshared.models.simulation_pathway import SimulationPathway
 from mppshared.utility.log_utility import get_logger

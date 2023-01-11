@@ -2,7 +2,6 @@
 
 import numpy as np
 import pandas as pd
-
 from ammonia.config_ammonia import CCS_COST_COMPONENTS, INCLUDE_DAC_IN_COST
 from ammonia.preprocess.pivot_inputs import pivot_inputs
 from ammonia.utility.utils import unit_column_suffix

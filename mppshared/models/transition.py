@@ -3,7 +3,6 @@
 from typing import Literal
 
 import pandas as pd
-
 from mppshared.models.asset import Asset
 
 

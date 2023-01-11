@@ -3,7 +3,6 @@ import os
 from functools import reduce
 
 import pandas as pd
-
 from ammonia.config_ammonia import (
     CORE_DATA_PATH,
     GHGS,

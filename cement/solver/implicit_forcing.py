@@ -1,21 +1,19 @@
 """Apply implicit forcing (carbon cost, technology moratorium and other filters for technology switches)."""
 
-# Library imports
 import pandas as pd
 
-# Shared code imports
 from cement.config.config_cement import (
+    CCUS_CONTEXT,
     EMISSION_SCOPES,
     GHGS,
+    LIST_TECHNOLOGIES,
+    MARKET_ENTRY_AF_90,
+    MARKET_ENTRY_CCUS,
     PATHWAYS_WITH_TECHNOLOGY_MORATORIUM,
     REGIONS_NATURAL_GAS,
     START_YEAR,
     TECHNOLOGY_MORATORIUM,
     TRANSITIONAL_PERIOD_YEARS,
-    MARKET_ENTRY_AF_90,
-    MARKET_ENTRY_CCUS,
-    LIST_TECHNOLOGIES,
-    CCUS_CONTEXT,
 )
 from mppshared.config import LOG_LEVEL
 from mppshared.import_data.intermediate_data import IntermediateDataImporter
@@ -81,16 +79,35 @@ def apply_implicit_forcing(
     df_technology_switches = df_technology_switches.loc[
         (
             (
-                (df_technology_switches["technology_destination"].isin(LIST_TECHNOLOGIES[sensitivity]))
-                & (df_technology_switches["technology_origin"].isin(LIST_TECHNOLOGIES[sensitivity]))
-            ) ^ (
+                (
+                    df_technology_switches["technology_destination"].isin(
+                        LIST_TECHNOLOGIES[sensitivity]
+                    )
+                )
+                & (
+                    df_technology_switches["technology_origin"].isin(
+                        LIST_TECHNOLOGIES[sensitivity]
+                    )
+                )
+            )
+            ^ (
                 (df_technology_switches["switch_type"] == "decommission")
-                & (df_technology_switches["technology_origin"].isin(LIST_TECHNOLOGIES[sensitivity]))
-            ) ^ (
-                (df_technology_switches["technology_destination"].isin(LIST_TECHNOLOGIES[sensitivity]))
+                & (
+                    df_technology_switches["technology_origin"].isin(
+                        LIST_TECHNOLOGIES[sensitivity]
+                    )
+                )
+            )
+            ^ (
+                (
+                    df_technology_switches["technology_destination"].isin(
+                        LIST_TECHNOLOGIES[sensitivity]
+                    )
+                )
                 & (df_technology_switches["switch_type"] == "greenfield")
             )
-        ), :
+        ),
+        :,
     ]
 
     # Apply technology moratorium
@@ -105,23 +122,26 @@ def apply_implicit_forcing(
     # allow switches to all CCS setups after a certain market entry year
     df_technology_switches = df_technology_switches.loc[
         ~(
-             df_technology_switches["technology_destination"].str.contains("storage")
-             & (df_technology_switches["year"] < MARKET_ENTRY_CCUS)
-        ), :
+            df_technology_switches["technology_destination"].str.contains("storage")
+            & (df_technology_switches["year"] < MARKET_ENTRY_CCUS)
+        ),
+        :,
     ]
     # allow switches to all CCU setups after a certain market entry year
     df_technology_switches = df_technology_switches.loc[
         ~(
-             df_technology_switches["technology_destination"].str.contains("usage")
-             & (df_technology_switches["year"] < MARKET_ENTRY_CCUS)
-        ), :
+            df_technology_switches["technology_destination"].str.contains("usage")
+            & (df_technology_switches["year"] < MARKET_ENTRY_CCUS)
+        ),
+        :,
     ]
     # allow switches to all alternative fuels 90% setups after a certain market entry year
     df_technology_switches = df_technology_switches.loc[
         ~(
             df_technology_switches["technology_destination"].str.contains("90%")
             & (df_technology_switches["year"] < MARKET_ENTRY_AF_90)
-        ), :
+        ),
+        :,
     ]
 
     # Add technology classification

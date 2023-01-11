@@ -4,16 +4,12 @@ from collections import defaultdict
 import numpy as np
 import pandas as pd
 import plotly.express as px
+from mppshared.config import EMISSION_SCOPES_DEFAULT, LOG_LEVEL
+from mppshared.import_data.intermediate_data import IntermediateDataImporter
+from mppshared.utility.log_utility import get_logger
 from pandas import CategoricalDtype
 from plotly.offline import plot
 from plotly.subplots import make_subplots
-
-from mppshared.config import (
-    EMISSION_SCOPES_DEFAULT,
-    LOG_LEVEL,
-)
-from mppshared.import_data.intermediate_data import IntermediateDataImporter
-from mppshared.utility.log_utility import get_logger
 
 logger = get_logger(__name__)
 logger.setLevel(LOG_LEVEL)
@@ -85,7 +81,8 @@ def create_debugging_outputs(
 
     # Create outputs on newbuild capacity
     create_newbuild_capacity_outputs_by_region(
-        df_transitions=df_transitions, importer=importer,
+        df_transitions=df_transitions,
+        importer=importer,
         start_year=start_year,
         end_year=end_year,
     )

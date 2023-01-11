@@ -38,7 +38,9 @@ class TechnologyRampup:
         self.model_end_year = model_end_year
         self.technology = technology
         self.ramp_up_start_year = ramp_up_start_year
-        self.ramp_up_end_year = (ramp_up_end_year if ramp_up_end_year <= model_end_year else model_end_year)
+        self.ramp_up_end_year = (
+            ramp_up_end_year if ramp_up_end_year <= model_end_year else model_end_year
+        )
         self.init_maximum_asset_additions = init_maximum_asset_additions
         self.maximum_asset_growth_rate = maximum_asset_growth_rate
         self.curve_type = curve_type
@@ -79,17 +81,24 @@ class TechnologyRampup:
 
         # rayleigh
         elif self.curve_type == "rayleigh":
-            step = (10 / (self.ramp_up_end_year - self.ramp_up_start_year))
-            ramp_up = np.arange(0, 10 + step/2, step)
+            step = 10 / (self.ramp_up_end_year - self.ramp_up_start_year)
+            ramp_up = np.arange(0, 10 + step / 2, step)
             std = 3
             # get shape
-            ramp_up = (ramp_up / std ** 2) * np.exp((-(ramp_up ** 2)) / (2 * (std ** 2)))
+            ramp_up = (ramp_up / std**2) * np.exp(
+                (-(ramp_up**2)) / (2 * (std**2))
+            )
             # scale
-            ramp_up *= (self.init_maximum_asset_additions * (self.maximum_asset_growth_rate - 1)) / np.amax(ramp_up)
+            ramp_up *= (
+                self.init_maximum_asset_additions * (self.maximum_asset_growth_rate - 1)
+            ) / np.amax(ramp_up)
             # add baseline
             ramp_up += self.init_maximum_asset_additions
             # add to df_ramp_up
-            df_rampup.loc[self.ramp_up_start_year:(self.ramp_up_end_year + 1), "maximum_asset_additions"] = ramp_up
+            df_rampup.loc[
+                self.ramp_up_start_year : (self.ramp_up_end_year + 1),
+                "maximum_asset_additions",
+            ] = ramp_up
 
         else:
             sys.exit(f"Unknown ramp up curve type provided: {self.curve_type}")

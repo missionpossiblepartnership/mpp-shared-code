@@ -74,9 +74,7 @@ def run_model_sequential(runs):
                 carbon_cost.df_carbon_cost["year"] == END_YEAR, "carbon_cost"
             ].item()
             for folder in ["final", "intermediate", "ranking", "stack_tracker"]:
-                final_folder = (
-                    f"{SECTOR}/data/{pathway}/{sensitivity}/carbon_cost_{int(cc)}/{folder}"
-                )
+                final_folder = f"{SECTOR}/data/{pathway}/{sensitivity}/carbon_cost_{int(cc)}/{folder}"
                 if not os.path.exists(final_folder):
                     os.makedirs(final_folder)
                 if folder == "intermediate":

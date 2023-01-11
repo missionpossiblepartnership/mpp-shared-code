@@ -68,7 +68,7 @@ def decommission(pathway: SimulationPathway, year: int) -> SimulationPathway:
                     region=region,
                     year=year,
                 )
-                # TODO: check if removing this asset violates any constraints
+
             except ValueError:
                 logger.info("No more assets to decommission")
                 break

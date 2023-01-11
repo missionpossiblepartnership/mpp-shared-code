@@ -3,7 +3,6 @@ from typing import Any, Sequence
 from xmlrpc.client import Boolean
 
 import pandas as pd
-
 from ammonia.config_ammonia import (
     CALCULATE_FOLDER,
     LOG_LEVEL,

@@ -6,9 +6,8 @@ from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
 
-from rich.logging import RichHandler
-
 from mppshared.config import LOG_PATH
+from rich.logging import RichHandler
 
 LOG_FORMATTER = logging.Formatter(
     "%(asctime)s — %(name)s — %(levelname)s — %(message)s"

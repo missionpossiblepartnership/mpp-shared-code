@@ -3,7 +3,6 @@
 from operator import methodcaller
 
 import pandas as pd
-
 from mppshared.config import (
     COST_METRIC_CUF_ADJUSTMENT,
     CUF_LOWER_THRESHOLD,
@@ -109,7 +108,9 @@ def remove_all_transitions_with_origin_destination_technology(
 
 
 def handle_biomass_constraint(
-    df_rank: pd.DataFrame, destination_technology: str, origin_technology: str,
+    df_rank: pd.DataFrame,
+    destination_technology: str,
+    origin_technology: str,
 ) -> pd.DataFrame:
 
     af_43_techs = [
@@ -393,8 +394,11 @@ def create_dict_technology_rampup(
                 maximum_asset_growth_rate=maximum_capacity_growth_rate,
                 curve_type=curve_type,
             )
-            if technology in ["Electric kiln + direct separation", "Dry kiln + Hydrogen + direct separation"]:
-                dict_technology_rampup[technology].df_rampup *= 1.5     # type: ignore
+            if technology in [
+                "Electric kiln + direct separation",
+                "Dry kiln + Hydrogen + direct separation",
+            ]:
+                dict_technology_rampup[technology].df_rampup *= 1.5  # type: ignore
 
     return dict_technology_rampup
 

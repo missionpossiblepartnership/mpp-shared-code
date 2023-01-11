@@ -4,7 +4,6 @@ from functools import reduce
 
 import numpy as np
 import pandas as pd
-
 from ammonia.config_ammonia import (
     GHGS,
     LOG_LEVEL,
