@@ -398,8 +398,6 @@ def apply_technology_moratorium(
             "year",
             "region",
             "technology",
-            "technology_classification",
-            "technology_lifetime",
         ]
     ].rename(
         {"technology": "technology_destination"},
