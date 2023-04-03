@@ -51,7 +51,7 @@ def apply_implicit_forcing(
         sector: corresponds to SECTOR in config
         carbon_cost_trajectory: describes the evolution of carbon cost
     """
-    logger.info("Applying implicit forcing")
+    logger.info(f"Applying implicit forcing for {pathway_name}")
 
     # Import input tables
     importer = IntermediateDataImporter(
@@ -103,7 +103,7 @@ def apply_implicit_forcing(
             transitional_period_years=TRANSITIONAL_PERIOD_YEARS,
         )
     # Add technology classification
-    else:
+    if "technology_classification" not in df_technology_switches.columns:
         # Add the technology classification to the ranking table
         df_technology_switches = add_technology_classification_to_switching_table(
             df_technology_switches, df_technology_characteristics
@@ -398,6 +398,9 @@ def apply_technology_moratorium(
             "year",
             "region",
             "technology",
+            "technology_classification",
+            "technology_lifetime",
+            "wacc",
         ]
     ].rename(
         {"technology": "technology_destination"},
