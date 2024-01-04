@@ -20,7 +20,7 @@ run_config = {
 RUN_PARALLEL = False
 LOG_LEVEL = "DEBUG"
 MODEL_SCOPE = "Global"
-COMPUTE_LCOX = True
+COMPUTE_LCOX = False
 # define CCU/S OPEX context dimensions.
 #   IMPORTANT: Don't forget to add "opex_context" to UNCERTAINTY_RANKING_GROUPS if more than one dimension!
 CCUS_CONTEXT = ["high_low"]
@@ -33,23 +33,25 @@ MODEL_YEARS = np.arange(START_YEAR, END_YEAR + 1)
 # uncomment to activate a pathway/sensitivity
 PATHWAYS_SENSITIVITIES = {
     # MAIN MODEL #
-    # "bau": ["def"],
-    # "fa": ["def"],
-    "lc": ["def"],
+    "bau": ["def"],
+    "fa": ["def"],
+    # "lc": ["def"],
     # "nz": ["nz"],
     # "nz": ["inno"],
-    # "custom": ["decelerated"],
+    # "nz": ["nz", "inno"],
+    "custom": ["decelerated"],
     # "nz-late": ["nz"],
     # MAIN MODEL NZ SENSITIVITIES #
-    # "nz": ["nz", "inno", "fossil-low", "fossil-high", "elec-low", "elec-high", "af-low", "af-high"],
-    # "nz-scm-what-if": ["nz"],
-    # "nz-scm-stretch": ["nz"],
-    # "nz-binder-what-if": ["nz"],
-    # "nz-binder-stretch": ["nz"],
-    # "nz-gcca-early": ["nz"],
-    # "nz-gcca-late": ["nz"],
-    # "nz-low-ramp": ["nz"],
-    # "nz-high-ramp": ["nz"],
+    "nz": ["nz", "inno", "fossil-low", "fossil-high", "elec-low", "elec-high", "af-low", "af-high"],
+    "nz-scm-what-if": ["nz"],
+    "nz-scm-stretch": ["nz"],
+    "nz-binder-what-if": ["nz"],
+    "nz-binder-stretch": ["nz"],
+    "nz-gcca-early": ["nz"],
+    "nz-gcca-late": ["nz"],
+    "nz-low-ramp": ["nz"],
+    "nz-high-ramp": ["nz"],
+
     # ARCHETYPE EXPLORER #
     # "archetype": list(np.arange(0, 972))  # 972
     # "archetype": ["000000", "000001", "000002"],
