@@ -1134,6 +1134,10 @@ def _calculate_emission_reduction_levers(
         - df_energy_eff
     ).sort_index()
 
+    # set Savings through CCU/S to 0 in bau
+    if importer.pathway_name == "bau":
+        df_savings_captured_emissions["value"] = float(0)
+
     # aggregate df_fuel_switch and df_energy_eff
     df_savings_clinker_production = df_fuel_switch.add(df_energy_eff)
 
@@ -1812,7 +1816,7 @@ def _calculate_weighted_average_lcoc(
     df_cost: pd.DataFrame,
     importer: IntermediateDataImporter,
 ) -> pd.DataFrame:
-    """Calculate weighted average of LCOX across the supply mix in a given year."""
+    """Calculate weighted average of LCOX across the supply mix."""
 
     agg_vars = ["product", "region"]
 
